@@ -122,7 +122,7 @@ function sdg_text_field_cb( $args ) {
 	?>
 	<input type="text" 
 		id="<?php echo esc_attr( $args['label_for'] ); ?>" 
-		name="sdg_examples_options[<?php echo esc_attr( $args['label_for'] ); ?>]" 
+		name="sdg_options[<?php echo esc_attr( $args['label_for'] ); ?>]" 
 		value="<?php echo isset( $options[ $args['label_for'] ] ) ? $options[ $args['label_for'] ] : esc_attr( $args['default_value']); ?>" 
 		class="<?php echo isset($args['class']) ? $args['class']: '' ?>" 
 		style="<?php echo isset($args['style']) ? $args['style']: '' ?>" 
