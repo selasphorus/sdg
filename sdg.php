@@ -24,6 +24,9 @@ if ( !function_exists( 'add_action' ) ) {
 
 $plugin_path = plugin_dir_path( __FILE__ );
 
+// TODO: Check for plugin dependencies -- ACF; ?
+// TODO: Check for ACF field groups; import them from plugin copies if not found?
+
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 // Register our sdg_settings_init to the admin_init action hook.
@@ -81,6 +84,24 @@ function sdg_settings_section_callback( $args ) {
 	<?php
 }
 
+// Render a text field
+function sdg_text_field_cb( $args ) {
+	$options = get_option( 'sdg_options' );
+	
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	
+	?>
+	<input type="text" 
+		id="<?php echo esc_attr( $args['id'] ); ?>" 
+		name="sdg_options[<?php echo esc_attr( $args['name'] ); ?>]" 
+		value="<?php echo isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']); ?>" 
+		class="<?php echo isset($args['class']) ? $args['class']: '' ?>" 
+		style="<?php echo isset($args['style']) ? $args['style']: '' ?>" 
+		placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"/>
+	<?php
+}
+
 /**
  * Pill field callback function.
  *
@@ -115,25 +136,8 @@ function sdg_select_field_cb( $args ) {
 	<?php
 }
 
-
-// Render a text field -- example
-function sdg_text_field_cb( $args ) {
-	$options = get_option( 'sdg_options' );
-	
-	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
-	
-	?>
-	<input type="text" 
-		id="<?php echo esc_attr( $args['id'] ); ?>" 
-		name="sdg_options[<?php echo esc_attr( $args['name'] ); ?>]" 
-		value="<?php echo isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']); ?>" 
-		class="<?php echo isset($args['class']) ? $args['class']: '' ?>" 
-		style="<?php echo isset($args['style']) ? $args['style']: '' ?>" 
-		placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"/>
-	<?php
-}
-
+// Render a checkbox
+// TODO
 
 // Register our sdg_options_page to the admin_menu action hook.
 add_action( 'admin_menu', 'sdg_options_page' );
