@@ -121,6 +121,8 @@ function sdg_text_field_cb( $args ) {
 	$options = get_option( 'sdg_options' );
 	
 	echo "args: <pre>".print_r($args,true)."</pre>";
+	echo "options: <pre>".print_r($options,true)."</pre>";
+	
 	?>
 	<input type="text" 
 		id="<?php echo esc_attr( $args['label_for'] ); ?>" 
