@@ -119,6 +119,8 @@ function sdg_select_field_cb( $args ) {
 // Render a text field -- example
 function sdg_text_field_cb( $args ) {
 	$options = get_option( 'sdg_options' );
+	
+	echo "args: <pre>".print_r($args,true)."</pre>";
 	?>
 	<input type="text" 
 		id="<?php echo esc_attr( $args['label_for'] ); ?>" 
