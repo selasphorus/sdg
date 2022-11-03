@@ -121,9 +121,9 @@ function sdg_text_field_cb( $args ) {
 	$options = get_option( 'sdg_options' );
 	?>
 	<input type="text" 
-		id="<?php echo esc_attr( $args['id'] ); ?>" 
-		name="sdg_examples_options[<?php echo esc_attr( $args['name'] ); ?>]" 
-		value="<?php echo isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']); ?>" 
+		id="<?php echo esc_attr( $args['label_for'] ); ?>" 
+		name="sdg_examples_options[<?php echo esc_attr( $args['label_for'] ); ?>]" 
+		value="<?php echo isset( $options[ $args['label_for'] ] ) ? $options[ $args['label_for'] ] : esc_attr( $args['default_value']); ?>" 
 		class="<?php echo isset($args['class']) ? $args['class']: '' ?>" 
 		style="<?php echo isset($args['style']) ? $args['style']: '' ?>" 
 		placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"/>
