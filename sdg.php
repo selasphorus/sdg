@@ -120,8 +120,8 @@ function sdg_select_field_cb( $args ) {
 function sdg_text_field_cb( $args ) {
 	$options = get_option( 'sdg_options' );
 	
-	echo "args: <pre>".print_r($args,true)."</pre>";
-	echo "options: <pre>".print_r($options,true)."</pre>";
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
 	
 	?>
 	<input type="text" 
