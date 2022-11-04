@@ -361,7 +361,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php'; 
-    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    //if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
