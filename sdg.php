@@ -323,8 +323,9 @@ function sdg_settings_page_html() {
 }
 
 // Get plugin options -- WIP
-//$options = get_option( 'sdg_settings' );
-// if ( isset( $options['setting'] ) { }
+$options = get_option( 'sdg_settings' );
+if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } else { $modules = array(); }
+//$modules = get_option( 'sdg_modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
 //$some_option = get_option( 'key_name', 'default_value' );
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -349,7 +350,6 @@ function sdg_settings_page_html() {
 $includes = array( 'posttypes', 'taxonomies' );
 $admin_functions_filepath = $plugin_path . 'inc/'.'admin_functions.php';
 $common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
-$modules = get_option( 'modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
 
 if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
 if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "no $common_functions_filepath found"; }
@@ -359,10 +359,10 @@ foreach ( $includes as $inc ) {
     if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
 }
 
-/*foreach ( $modules as $module ) {
+foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php'; 
-    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
-}*/
+    //if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+}
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 

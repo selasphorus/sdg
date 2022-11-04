@@ -10,9 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
-if ( isset($options['sdg_modules']) ) {
-	$sdg_modules = $options['sdg_modules'];
-}
+if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
 
 // This is a test taxonomy
 function sdg_register_taxonomy_color() {
