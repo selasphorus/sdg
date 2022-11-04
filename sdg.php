@@ -198,7 +198,6 @@ function sdg_settings_page_html() {
 	<?php
 }
 
-
 // Get plugin options -- WIP
 //$options = get_option( 'sdg_settings' );
 // if ( isset( $options['setting'] ) { }
@@ -224,18 +223,12 @@ function sdg_settings_page_html() {
 // TODO: maybe: split this into several separate plugins -- SDG WooCommerce; SDG Developer Functions; &c. -- ?!? WIP ?!?
 
 $includes = array( 'posttypes', 'taxonomies' );
-$common_functions_filepath = $plugin_path . 'common_functions.php';
-
+$common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
+$admin_functions_filepath = $plugin_path . 'inc/'.'admin_functions.php';
 $modules = get_option( 'modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
-/*if ( is_dev_site() ) {    
-    $modules = array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' );
-} else {
-    $modules = array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' );
-}*/
 
-$admin_functions_filepath = $plugin_path . 'admin_functions.php';
-///if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
-///if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "no $common_functions_filepath found"; }
+if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
+if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "no $common_functions_filepath found"; }
 
 foreach ( $includes as $inc ) {
     $filepath = $plugin_path . 'inc/'.$inc.'.php'; 
