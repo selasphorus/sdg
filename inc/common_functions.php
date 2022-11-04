@@ -11,7 +11,7 @@ if ( !function_exists( 'add_action' ) ) {
 /*********** POST RELATIONSHIPS ***********/
 
 // The following function is the replacement for the old get_related_podposts fcn
-function sdg_get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' ) {
+function get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' ) {
 
 	$info = null; // init
 	

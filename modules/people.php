@@ -35,7 +35,7 @@ function get_cpt_person_content( $post_id = null ) {
     if ( has_term( 'composers', 'people_category', $post_id ) ) {
         // Get compositions
         $arr_obj_compositions = get_related_posts( $post_id, 'repertoire', 'composer' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
-        //if ( is_dev_site() ) {
+        //if ( sdg_is_dev_site() ) {
         if ( $arr_obj_compositions ) {
             
             $info .= "<h3>Compositions:</h3>";
@@ -54,7 +54,7 @@ function get_cpt_person_content( $post_id = null ) {
     
     // Find and display any associated Editions, Publications, Sermons, and/or Events
     
-    if ( is_dev_site() ) {
+    if ( sdg_is_dev_site() ) {
         
         // Editions
         $arr_obj_editions = get_related_posts( $post_id, 'edition', 'editor' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
@@ -89,7 +89,7 @@ function get_cpt_person_content( $post_id = null ) {
         $info .= '</div>';
     }
     
-    if ( is_dev_site() ) {
+    if ( sdg_is_dev_site() ) {
         
         /*
         // Get Related Events

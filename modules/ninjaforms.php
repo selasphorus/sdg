@@ -93,7 +93,7 @@ function custom_nf_email_message($message, $data, $action_settings) {
     // Add the message content
     $info .= $message;
     
-    //if (is_dev_site()) { $info .= 'data: <pre>'.print_r($data,true).'</pre>'; } // tft
+    //if (sdg_is_dev_site()) { $info .= 'data: <pre>'.print_r($data,true).'</pre>'; } // tft
     //$info .= 'action_settings: <pre>'.print_r($action_settings,true).'</pre>'; // tft
 
     // Convert the submitted form data to an associative array

@@ -16,7 +16,7 @@ if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; 
 
 if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Admin Note
-	function sdg_register_post_type_admin_note() {
+	function register_post_type_admin_note() {
 
 		$labels = array(
 			'name' => __( 'Admin Notes', 'sdg' ),
@@ -53,11 +53,11 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 		register_post_type( 'admin_note', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_admin_note' );
+	add_action( 'init', 'register_post_type_admin_note' );
 }
 
 // DB Query -- deprecated -- merged with Admin Notes
-function sdg_register_post_type_db_query() {
+function register_post_type_db_query() {
 
 	$labels = array(
 		'name' => __( 'DB Queries', 'sdg' ),
@@ -94,11 +94,11 @@ function sdg_register_post_type_db_query() {
 	register_post_type( 'db_query', $args );
 	
 }
-//add_action( 'init', 'sdg_register_post_type_db_query' );
+//add_action( 'init', 'register_post_type_db_query' );
 
 if ( in_array('data_tables', $sdg_modules ) ) {
 	// Data Table
-	function sdg_register_post_type_data_table() {
+	function register_post_type_data_table() {
 
 		$labels = array(
 			'name' => __( 'Data Tables', 'sdg' ),
@@ -135,14 +135,14 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 		register_post_type( 'data_table', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_data_table' );
+	add_action( 'init', 'register_post_type_data_table' );
 }
 
 /*** PEOPLE & ENSEMBLES ***/
 
 if ( in_array('people', $sdg_modules ) ) {
 	// Person
-	function sdg_register_post_type_person() {
+	function register_post_type_person() {
 
 		$labels = array(
 			'name' => __( 'People', 'sdg' ),
@@ -179,12 +179,12 @@ if ( in_array('people', $sdg_modules ) ) {
 		register_post_type( 'person', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_person' );
+	add_action( 'init', 'register_post_type_person' );
 }
 
 if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
-	function sdg_register_post_type_ensemble() {
+	function register_post_type_ensemble() {
 
 		$labels = array(
 			'name' => __( 'Ensembles', 'sdg' ),
@@ -221,7 +221,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 		register_post_type( 'ensemble', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_ensemble' );
+	add_action( 'init', 'register_post_type_ensemble' );
 }
 
 /*** MUSIC LIBRARY ***/
@@ -229,7 +229,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 if ( in_array('music', $sdg_modules ) ) {
 
 	// Repertoire, aka Musical Work
-	function sdg_register_post_type_repertoire() {
+	function register_post_type_repertoire() {
 
 		$labels = array(
 			'name' => __( 'Musical Works', 'sdg' ),
@@ -266,10 +266,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_post_type( 'repertoire', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_repertoire' );
+	add_action( 'init', 'register_post_type_repertoire' );
 
 	// Edition
-	function sdg_register_post_type_edition() {
+	function register_post_type_edition() {
 
 		$labels = array(
 			'name' => __( 'Editions', 'sdg' ),
@@ -306,10 +306,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_post_type( 'edition', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_edition' );
+	add_action( 'init', 'register_post_type_edition' );
 
 	// Publisher
-	function sdg_register_post_type_publisher() {
+	function register_post_type_publisher() {
 
 		$labels = array(
 			'name' => __( 'Publishers', 'sdg' ),
@@ -346,10 +346,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_post_type( 'publisher', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_publisher' );
+	add_action( 'init', 'register_post_type_publisher' );
 
 	// Publication
-	function sdg_register_post_type_publication() {
+	function register_post_type_publication() {
 
 		$labels = array(
 			'name' => __( 'Publications', 'sdg' ),
@@ -386,10 +386,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_post_type( 'publication', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_publication' );
+	add_action( 'init', 'register_post_type_publication' );
 
 	// Music List
-	function sdg_register_post_type_music_list() {
+	function register_post_type_music_list() {
 
 		$labels = array(
 			'name' => __( 'Music Lists', 'sdg' ),
@@ -426,7 +426,7 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_post_type( 'music_list', $args );
 	
 	}
-	//add_action( 'init', 'sdg_register_post_type_music_list' );
+	//add_action( 'init', 'register_post_type_music_list' );
 
 }
 
@@ -435,7 +435,7 @@ if ( in_array('music', $sdg_modules ) ) {
 if ( in_array('lectionary', $sdg_modules ) ) {
 
 	// Bible Book
-	function sdg_register_post_type_bible_book() {
+	function register_post_type_bible_book() {
 
 		$labels = array(
 			'name' => __( 'Books of the Bible', 'sdg' ),
@@ -472,10 +472,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'bible_book', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_bible_book' );
+	add_action( 'init', 'register_post_type_bible_book' );
 
 	// Reading
-	function sdg_register_post_type_reading() {
+	function register_post_type_reading() {
 
 		$labels = array(
 			'name' => __( 'Readings', 'sdg' ),
@@ -512,10 +512,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'reading', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_reading' );
+	add_action( 'init', 'register_post_type_reading' );
 
 	// Lectionary Day
-	function sdg_register_post_type_lectionary() {
+	function register_post_type_lectionary() {
 
 		$labels = array(
 			'name' => __( 'Lectionary', 'sdg' ),
@@ -553,10 +553,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'lectionary', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_lectionary' );
+	add_action( 'init', 'register_post_type_lectionary' );
 
 	// Liturgical Date
-	function sdg_register_post_type_liturgical_date() {
+	function register_post_type_liturgical_date() {
 
 		$labels = array(
 			'name' => __( 'Liturgical Calendar', 'sdg' ),
@@ -593,10 +593,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'liturgical_date', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_liturgical_date' );
+	add_action( 'init', 'register_post_type_liturgical_date' );
 
 	// Liturgical Date Calculation
-	function sdg_register_post_type_liturgical_date_calc() {
+	function register_post_type_liturgical_date_calc() {
 
 		$labels = array(
 			'name' => __( 'Liturgical Date Calculations', 'sdg' ),
@@ -633,10 +633,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'liturgical_date_calc', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_liturgical_date_calc' );
+	add_action( 'init', 'register_post_type_liturgical_date_calc' );
 
 	// Collect
-	function sdg_register_post_type_collect() {
+	function register_post_type_collect() {
 
 		$labels = array(
 			'name' => __( 'Collects', 'sdg' ),
@@ -673,10 +673,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'collect', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_collect' );
+	add_action( 'init', 'register_post_type_collect' );
 
 	// Psalms of the Day
-	function sdg_register_post_type_psalms_of_the_day() {
+	function register_post_type_psalms_of_the_day() {
 
 		$labels = array(
 			'name' => __( 'Psalms of the Day', 'sdg' ),
@@ -713,7 +713,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_post_type( 'psalms_of_the_day', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_psalms_of_the_day' );
+	add_action( 'init', 'register_post_type_psalms_of_the_day' );
 
 }
 
@@ -722,7 +722,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 if ( in_array('sermons', $sdg_modules ) ) {
 
 	// Sermon
-	function sdg_register_post_type_sermon() {
+	function register_post_type_sermon() {
 
 		$labels = array(
 			'name' => __( 'Sermons', 'sdg' ),
@@ -760,10 +760,10 @@ if ( in_array('sermons', $sdg_modules ) ) {
 		register_post_type( 'sermon', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_sermon' );
+	add_action( 'init', 'register_post_type_sermon' );
 
 	// Sermon Series
-	function sdg_register_post_type_sermon_series() {
+	function register_post_type_sermon_series() {
 
 		$labels = array(
 			'name' => __( 'Sermon Series', 'sdg' ),
@@ -800,7 +800,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 		register_post_type( 'sermon_series', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_sermon_series' );
+	add_action( 'init', 'register_post_type_sermon_series' );
 
 }
 
@@ -809,7 +809,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 if ( in_array('events', $sdg_modules ) ) {
 
 	// Event Series
-	function sdg_register_post_type_event_series() {
+	function register_post_type_event_series() {
 
 		$labels = array(
 			'name' => __( 'Event Series', 'sdg' ),
@@ -846,7 +846,7 @@ if ( in_array('events', $sdg_modules ) ) {
 		register_post_type( 'event_series', $args );
 	
 	}
-	add_action( 'init', 'sdg_register_post_type_event_series' );
+	add_action( 'init', 'register_post_type_event_series' );
 
 }
 

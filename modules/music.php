@@ -46,7 +46,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
             $x++;
         }
     } else {
-        if ( devmode_active() ) { 
+        if ( sdg_devmode_active() ) { 
             $info .= "<p>No related events were found.</p>"; // tft
         }
     }
@@ -57,7 +57,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     $related_editions = get_field('related_editions', $post_id, false);
     
     if ( $related_editions &&
-        ( ( is_dev_site() && current_user_can('read_repertoire') ) || current_user_can('read_music') ) 
+        ( ( sdg_is_dev_site() && current_user_can('read_repertoire') ) || current_user_can('read_music') ) 
        ) {
        	//-- STC
         $info .= "<h3>Edition(s) in the Saint Thomas Library:</h3>";
@@ -462,7 +462,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         //sdg_log( "[authorship_info] composers: ".print_r($composers, true) );
         
         // str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false )
-        if ( is_dev_site() ) {
+        if ( sdg_is_dev_site() ) {
             $composer_info = $composers_str;
         } else {
             $composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );

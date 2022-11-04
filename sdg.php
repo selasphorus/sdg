@@ -360,7 +360,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php'; 
-    if ( $module != "lectionary" && $module != "admin_notes" && $module != "data_tables" ) { // skip modules w/ no files
+    if ( $module != "lectionary" && $module != "ensembles" && $module != "admin_notes" && $module != "data_tables" ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
 }
@@ -489,7 +489,7 @@ add_filter('acf/settings/row_index_offset', '__return_zero');
 // TODO: update other calls to ACF functions in case this screws them up?
 
 // Certain operations should only be run in devmode
-function sdg_devmode_active() {
+function devmode_active() {
 	
 	$devmode = false; // init
 	$queenbee = get_option( 'devadmin_username', 'queenbee' );
@@ -502,7 +502,7 @@ function sdg_devmode_active() {
 	$devmode = get_query_var('devmode');
 	if ($devmode !== "" && $devmode !== "false") {      
 		return true;        
-	} else if ( $username == 'queenbee' && is_dev_site() ) { 
+	} else if ( $username == 'queenbee' && sdg_is_dev_site() ) { 
         return true;
 	}
 	
@@ -527,7 +527,7 @@ function sdg_show_troubleshooting_info ( ) {
         return false;
     }
 	
-	$devmode = devmode_active();
+	$devmode = sdg_devmode_active();
 	
 	$info = '<div class="troubleshooting">';
 	
@@ -690,7 +690,7 @@ function sdg_autocomplete_search() {
 /*** MISC ***/
 
 // Function to determine default taxonomy for a given post_type, for use with display_posts shortcode, &c.
-function sdg_get_default_taxonomy ( $post_type = null ) {
+function get_default_taxonomy ( $post_type = null ) {
     switch ($post_type) {
         case "post":
             return "category";
@@ -712,7 +712,7 @@ function sdg_get_default_taxonomy ( $post_type = null ) {
 }
 
 // Function to determine default category for given page, for purposes of Recent Posts &c.
-function sdg_get_default_category () {
+function get_default_category () {
 	
 	$default_cat = "";
 	
@@ -1444,7 +1444,7 @@ add_filter( 'document_title_parts', function( $title_parts_array ) {
 // Get Image URL from ID
 // [image_url_from_id id='#_ATT{landing_page_image}']
 add_shortcode('image_url_from_id', 'get_image_url_from_id');
-function sdg_get_image_url_from_id( $atts = [] ) {
+function get_image_url_from_id( $atts = [] ) {
     
     $args = shortcode_atts( 
         array(
@@ -1460,13 +1460,13 @@ function sdg_get_image_url_from_id( $atts = [] ) {
 }
 
 // Helper function: get link by slug
-function sdg_get_link_by_slug($slug, $type = 'post') {
+function get_link_by_slug($slug, $type = 'post') {
   $post = get_page_by_path($slug, OBJECT, $type);
   return get_permalink($post->ID);
 }
 
 //
-function sdg_restore_html( $info ) {
+function restore_html( $info ) {
 	$arr = array('&lt;'=>'<','&gt;'=>'>','&quot;'=>'"');
 	foreach ($arr as $search=>$replace) {
 		$info = str_replace($search,$replace,$info);
@@ -1475,7 +1475,7 @@ function sdg_restore_html( $info ) {
 }
 
 // Make hyperlink
-function sdg_make_link( $url, $linktext, $class = null, $target = null) {
+function make_link( $url, $linktext, $class = null, $target = null) {
 	
 	// TODO: sanitize URL?
 	$link = '<a href="'.$url.'"';
@@ -1604,7 +1604,7 @@ function sdg_selectmenu ( $args = '' ) {
 		//$info .= '<pre>'.print_r($arr_values, true).'</pre>'; // tft
 		
 		$selected = get_query_var( $select_name );
-		//if ( is_dev_site() ) { $info .= 'selected ['.$select_name.']: '.$selected.'<br />'; } // tft
+		//if ( sdg_is_dev_site() ) { $info .= 'selected ['.$select_name.']: '.$selected.'<br />'; } // tft
 		
 		// Set up the select menu
 		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform">';

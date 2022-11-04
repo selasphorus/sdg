@@ -22,7 +22,7 @@ if ( !function_exists( 'add_action' ) ) {
     
 }*/
 
-function sdg_super_sanitize_title ( $str = null ) {
+function super_sanitize_title ( $str = null ) {
     
     if ( $str === null ) { return null; }
     
@@ -137,12 +137,12 @@ function sdg_super_sanitize_title ( $str = null ) {
 }
 
 // WIP to replace pods_sanitize
-function sdg_sanitize ( $str = null ) {
+function sanitize ( $str = null ) {
     return $str;
 }
 
 // WIP-NOW
-function sdg_get_title_uid ( $post_id = null, $post_type = null, $tmp_title = null, $uid_field = 'title_for_matching' ) {
+function get_title_uid ( $post_id = null, $post_type = null, $tmp_title = null, $uid_field = 'title_for_matching' ) {
     
     sdg_log( "divline2" );
     sdg_log( "function called: get_title_uid" );
@@ -196,7 +196,7 @@ function sdg_get_title_uid ( $post_id = null, $post_type = null, $tmp_title = nu
     return $new_t4m;
 }
 
-function sdg_update_title_for_matching ( $post_id ) {
+function update_title_for_matching ( $post_id ) {
     
     sdg_log( "function: sdg_update_title_for_matching" );
     
@@ -311,7 +311,7 @@ function sdg_update_title_for_matching ( $post_id ) {
 // 1) separate out the title building bit so that it can be used independently of wp_insert_post_data
 // 2) bind this with a t4m update function
 
-function sdg_build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
+function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
     
     sdg_log( "divline2" );
     sdg_log( "function called: build_the_title" );
@@ -900,7 +900,7 @@ function sdg_build_the_title( $post_id = null, $uid_field = 'title_for_matching'
 
 
 add_filter('wp_insert_post_data', 'sdg_build_the_title_on_insert', 10, 2);
-function sdg_build_the_title_on_insert( $data, $postarr ) {
+function build_the_title_on_insert( $data, $postarr ) {
     
     sdg_log( "divline1" );
     sdg_log( "filter: wp_insert_post_data" );
@@ -924,7 +924,7 @@ function sdg_build_the_title_on_insert( $data, $postarr ) {
     $live_rep_ids = array ('167740');
     $dev_edition_ids = array();
     $live_edition_ids = array();
-    if ( is_dev_site() ) { 
+    if ( sdg_is_dev_site() ) { 
         //$test_ids = $dev_rep_ids;
         //$test_ids = $dev_edition_ids;
         $test_ids = array_merge($dev_rep_ids, $dev_edition_ids);
@@ -1076,7 +1076,7 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-function sdg_remove_bracketed_info ( $str ) {
+function remove_bracketed_info ( $str ) {
 
 	//sdg_log( "function: remove_bracketed_info" );
 
@@ -1090,7 +1090,7 @@ function sdg_remove_bracketed_info ( $str ) {
 
 // Function: clean up titles for creation of slugs and for front-end display
 add_filter( 'the_title', 'sdg_filter_the_title', 100, 2 );
-function sdg_filter_the_title( $post_title, $post_id = null ) {
+function filter_the_title( $post_title, $post_id = null ) {
  
     //sdg_log( "function: filter_the_title" );
     $post_type = ""; // init
@@ -1124,7 +1124,7 @@ function sdg_filter_the_title( $post_title, $post_id = null ) {
 }
 
 // TODO/WIP: Troubleshoot
-function sdg_make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
+function make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
 	
     sdg_log( "divline1" );
     sdg_log( "function: make_clean_title");
@@ -1236,7 +1236,7 @@ function sdg_make_clean_title( $post_id = null, $post_title = null, $return_revi
 
 // TODO: fix this for event posts being saved for the first time 
 // -- in that case, event_date not stored as metadata so must figure out how to retrieve it from the _POST array and pass it to this fcn.
-function sdg_clean_slug( $post_id ) {
+function clean_slug( $post_id ) {
     
     sdg_log( "divline1" );
     sdg_log( "function: clean_slug");
@@ -1331,7 +1331,7 @@ function sdg_clean_slug( $post_id ) {
             $new_slug = substr($new_slug, 0, -2); // trim off trailing "-2"
         }
         $new_slug .= "-".$date_str;
-    } else if ( is_dev_site() ) {
+    } else if ( sdg_is_dev_site() ) {
         //$new_slug .= "-ND";
     }
 
@@ -1373,7 +1373,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     //sdg_log( "action: save_post_event" );
     sdg_log( "function called: sdg_save_post_callback" );
     
-    if ( is_dev_site() ) {
+    if ( sdg_is_dev_site() ) {
         sdg_add_post_term( $post_id, 'dev-test-tmp', 'admin_tag', true ); // tft
     }
     
@@ -1539,7 +1539,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 // Bulk updates to titles and title_for_matching postmeta values
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
 add_shortcode('title_updates', 'sdg_run_title_updates');
-function sdg_run_title_updates ($atts = [], $content = null, $tag = '') {
+function run_title_updates ($atts = [], $content = null, $tag = '') {
     
     sdg_log( "divline2" );
     sdg_log( "function called: run_title_updates" );
@@ -1821,9 +1821,9 @@ function sdg_run_title_updates ($atts = [], $content = null, $tag = '') {
 
 
 // Function(s) to clean up titles/slugs/UIDs
-///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); } 
+///if ( sdg_is_dev_site() ) { add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); } 
 //add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
-function sdg_posts_cleanup( $atts = [] ) {
+function posts_cleanup( $atts = [] ) {
 
 	$info = ""; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -1945,7 +1945,7 @@ function sdg_posts_cleanup( $atts = [] ) {
 
             // Update the post into the database
             // TODO fix/check clean_slug fcn and then set this live for both sites again.
-            if ( is_dev_site() ) {
+            if ( sdg_is_dev_site() ) {
             //if ( $a['testing'] == 'false' ) {
                 wp_update_post( $update_args, true );                        
                 if ( is_wp_error($post_id) ) {
@@ -1978,9 +1978,9 @@ function sdg_posts_cleanup( $atts = [] ) {
 
 // TODO: clean up or eliminate the following shortcode and function -- see sdg_save_post_callback
 // Shortcode currently in use on dev site event pages
-///if ( is_dev_site() ) { add_shortcode('run_post_updates', 'sdg_run_post_updates'); }
+///if ( sdg_is_dev_site() ) { add_shortcode('run_post_updates', 'sdg_run_post_updates'); }
 //add_shortcode('run_post_updates', 'sdg_run_post_updates');
-function sdg_run_post_updates( $atts = [] ) {
+function run_post_updates( $atts = [] ) {
 
 	$a = shortcode_atts( array(
         'post_id' => get_the_ID()
@@ -1989,7 +1989,7 @@ function sdg_run_post_updates( $atts = [] ) {
     
 	$info = ""; // init
     $admin_terms = array();
-    if ( is_dev_site() ) { $admin_terms[] = 1960; } else { $admin_terms[] = 2203; } // Admin tag: slug-updated
+    if ( sdg_is_dev_site() ) { $admin_terms[] = 1960; } else { $admin_terms[] = 2203; } // Admin tag: slug-updated
     $update_args = array( 'ID' => $post_id);
     $changes_made = false;
     
@@ -2088,7 +2088,7 @@ function sdg_run_post_updates( $atts = [] ) {
 
     }
     
-    if ( devmode_active() ) {
+    if ( sdg_devmode_active() ) {
         $info = str_replace('<!-- ','<code>',$info);
         $info = str_replace(' -->','</code><br />',$info);
         $info = str_replace("\n",'<br />',$info);
@@ -2102,7 +2102,7 @@ function sdg_run_post_updates( $atts = [] ) {
 
 // Sermon updates - add related_event info
 add_shortcode( 'run_sermon_updates_fcn', 'sdg_sermon_updates' );
-function sdg_sermon_updates ( $atts = [] ) {
+function sermon_updates ( $atts = [] ) {
 
 	$info = "";
 

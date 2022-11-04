@@ -9,13 +9,12 @@ if ( !function_exists( 'add_action' ) ) {
 }
 
 /*********** CPT: LITURGICAL DATE ***********/
-function sdg_get_cpt_liturgical_date_content() {
-	
+function get_cpt_liturgical_date_content() {	
 }
 
 // Day Titles
 add_shortcode('day_title', 'sdg_get_day_title');
-function sdg_get_day_title( $atts = [], $content = null, $tag = '' ) {
+function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "\n<!-- get_day_title -->\n";
@@ -265,7 +264,7 @@ function sdg_get_day_title( $atts = [], $content = null, $tag = '' ) {
 		$height = '450';
 			
         if ( $collect != null ) {
-        //if ( $collect != null || ( is_dev_site() && ! ($litdate_content == null && $collect == null) ) ) {
+        //if ( $collect != null || ( sdg_is_dev_site() && ! ($litdate_content == null && $collect == null) ) ) {
 
             $info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
             $info .= $litdate_title;
@@ -273,7 +272,7 @@ function sdg_get_day_title( $atts = [], $content = null, $tag = '' ) {
             $info .= '<br />';
             $info .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
             $info .= 		'<h2 autofocus>'.$litdate_title.'</h2>';
-            if ( is_dev_site() ) {
+            if ( sdg_is_dev_site() ) {
                 $info .= 		$litdate_content;
             }
             if ($collect !== null) {
@@ -302,7 +301,7 @@ function sdg_get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 add_shortcode('calculate_variable_dates', 'sdg_calc_litdates');
-function sdg_calc_litdates( $atts = [] ) {
+function calc_litdates( $atts = [] ) {
 
     // TODO: build in failsafe -- run this fcn ONLY for user queenbee
     
@@ -683,7 +682,7 @@ function sdg_add_meta_boxes() {
  * 
  * @param WP_Post $post The object for the current post/page.
  */
-function sdg_liturgical_date_meta_box_callback( $post ) {
+function liturgical_date_meta_box_callback( $post ) {
 
 	// TODO: replace the following with a relative URL
 	//echo '<h4><a href="/edit.php?post_type=XXX" target="_blank">Click to Edit XXX</a></h4>';
@@ -698,9 +697,8 @@ function sdg_liturgical_date_meta_box_callback( $post ) {
 }
 
 
-
 /*********** CPT: READING ***********/
-function sdg_get_cpt_reading_content( $post_id = null ) {
+function get_cpt_reading_content( $post_id = null ) {
 	
     $info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
@@ -770,15 +768,14 @@ function sdg_get_cpt_reading_content( $post_id = null ) {
 }
 
 
-
 /*********** CPT: PSALMS OF THE DAY ***********/
-function sdg_get_cpt_psalms_of_the_day_content() {
+function get_cpt_psalms_of_the_day_content() {
 	
 }
 
 // att service: "morning_prayer" or "evening_prayer"
 add_shortcode('psalms_of_the_day', 'sdg_get_psalms_of_the_day');
-function sdg_get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
+function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
 	
     // init vars
     $info = "";
@@ -801,7 +798,7 @@ function sdg_get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
     if ( $post_type == 'event' ) {
 		$event_id = $post_id;
 	}
-    if ( devmode_active() || is_dev_site() ) {
+    if ( sdg_devmode_active() || sdg_is_dev_site() ) {
         //$info .= "post_id: $post_id; post_type: $post_type; event_id: $event_id; <br />";
     }
     
@@ -823,7 +820,7 @@ function sdg_get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
         $day_num = date( 'j', strtotime($event_date) ); // or 'd'? (w/ leading zeros)
         //$day_num = (int) substr( $event_date, strpos($event_date, " "), strpos($event_date, "@") - strpos($event_date, " ") -1 ); // tribe events version
         
-        if ( devmode_active() || is_dev_site() ) {
+        if ( sdg_devmode_active() || sdg_is_dev_site() ) {
             //$info .= "<!-- day_num: $day_num; event_date: $event_date -->"; // tft
         }
     }

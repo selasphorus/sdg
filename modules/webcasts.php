@@ -719,7 +719,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             $player .= "<!-- Google Analytics/Flowplayer -->";
             $player .= "<script>";
             $player .= "window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;";
-            if ( !is_dev_site() ) {
+            if ( !sdg_is_dev_site() ) {
                 $player .= "ga('create', 'UA-163775836-1', 'auto');";
             } else {
                 $player .= "ga('create', 'UA-163775836-2', 'auto');";
@@ -756,7 +756,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
         //cta .= '<div class="cta">Please support our webcast ministry by making a pledge to our <a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank">Annual Appeal</a> or a <a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank">one-time gift</a>.</div>';
 
         // Add call to action BEFORE audio player
-        /*if ( $src && is_dev_site() ) {
+        /*if ( $src && sdg_is_dev_site() ) {
             $info .= $cta;
         }*/
 
@@ -772,7 +772,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 
         if ($status_message !== "") {
             $info .= '<p class="message-info">'.$status_message.'</p>';
-            if ( !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
+            if ( !sdg_is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
                     && $show_cta !== false
                     && get_post_type($post_id) != 'sermon' ) { // Also don't show CTA for sermons
                 $info .= $cta;
@@ -893,7 +893,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             $player_js .= '	token    : "eyJraWQiOiJXN1M0V3ZHSjVTMHgiLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjIjoie1wiYWNsXCI6NixcImlkXCI6XCJXN1M0V3ZHSjVTMHhcIn0iLCJpc3MiOiJGbG93cGxheWVyIn0.WK4z3OP4whNB0g4y4EsSHJatsbZu3cT5je4bOUybTIjcDj_9AimhDnIw3sGGZbGfopUwxZ8XlPWKvncpvzUfWg", ';
             $player_js .= '	ui    : flowplayer.ui.USE_THIN_CONTROLBAR, ';
             $player_js .= '	ga: {';
-            if ( !is_dev_site() ) { 
+            if ( !sdg_is_dev_site() ) { 
                 $player_js .= '	    ga_instances: ["UA-163775836-1"],';
             } else {
                 $player_js .= '	    ga_instances: ["UA-163775836-2"],';
@@ -912,8 +912,8 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
         }
         
         // Add call to action beneath media player
-        if ( $player != "" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
-        //if ( (!empty($vimeo_id) || !empty($src)) && !is_dev_site() && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {    
+        if ( $player != "" && !sdg_is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
+        //if ( (!empty($vimeo_id) || !empty($src)) && !sdg_is_dev_site() && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {    
             $info .= $cta;
         }
 		

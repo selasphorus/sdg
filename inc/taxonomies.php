@@ -13,7 +13,7 @@ $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
 
 // This is a test taxonomy
-function sdg_register_taxonomy_color() {
+function register_taxonomy_color() {
      $labels = array(
          'name'              => _x( 'Colors', 'taxonomy general name' ),
          'singular_name'     => _x( 'Color', 'taxonomy singular name' ),
@@ -37,13 +37,13 @@ function sdg_register_taxonomy_color() {
      );
      register_taxonomy( 'color', [ 'sdg_dinosaur', 'post', 'repertoire', 'event' ], $args );
 }
-//add_action( 'init', 'sdg_register_taxonomy_color' );
+//add_action( 'init', 'register_taxonomy_color' );
 
 
 /*** Taxonomies for GENERAL & ADMIN USE ***/
 
 // Custom Taxonomy: Admin Tag
-function sdg_register_taxonomy_admin_tag() {
+function register_taxonomy_admin_tag() {
     //$cap = 'event_program';
     $labels = array(
         'name'              => _x( 'Admin Tags', 'taxonomy general name' ),
@@ -76,11 +76,11 @@ function sdg_register_taxonomy_admin_tag() {
     );
     register_taxonomy( 'admin_tag', [ 'admin_note', 'bible_book', 'collect', 'data_table', 'edition', 'ensemble', 'event', 'event-recurring', 'event_series', 'lectionary', 'liturgical_date', 'liturgical_date_calc', 'location', 'music_list', 'page', 'person', 'post', 'product', 'psalms_of_the_day', 'publication', 'publisher', 'reading', 'repertoire', 'sermon', 'sermon_series' ], $args );
 }
-add_action( 'init', 'sdg_register_taxonomy_admin_tag' );
+add_action( 'init', 'register_taxonomy_admin_tag' );
 
 if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Custom Taxonomy: Admin Notes Category
-	function sdg_register_taxonomy_adminnote_category() {
+	function register_taxonomy_adminnote_category() {
 		//$cap = 'event_program';
 		$labels = array(
 			'name'              => _x( 'Admin Note Categories', 'taxonomy general name' ),
@@ -113,12 +113,12 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'adminnote_category', [ 'admin_note' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_adminnote_category' );
+	add_action( 'init', 'register_taxonomy_adminnote_category' );
 }
 
 if ( in_array('data_tables', $sdg_modules ) ) {
 	// Custom Taxonomy: Data Table
-	function sdg_register_taxonomy_data_table() {
+	function register_taxonomy_data_table() {
 		//$cap = 'XXX';
 		$labels = array(
 			'name'              => _x( 'Data Tables', 'taxonomy general name' ),
@@ -151,11 +151,11 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'data_table', [ 'admin_note', 'db_query' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_data_table' );
+	add_action( 'init', 'register_taxonomy_data_table' );
 }
 
 // Custom Taxonomy: Query Tag
-function sdg_register_taxonomy_query_tag() {
+function register_taxonomy_query_tag() {
     //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Query Tags', 'taxonomy general name' ),
@@ -188,11 +188,11 @@ function sdg_register_taxonomy_query_tag() {
     );
     register_taxonomy( 'query_tag', [ 'db_query' ], $args );
 }
-//add_action( 'init', 'sdg_register_taxonomy_query_tag' );
+//add_action( 'init', 'register_taxonomy_query_tag' );
 
 if ( in_array('music', $sdg_modules ) || in_array('lectionary', $sdg_modules ) ) {
 	// Custom Taxonomy: Season
-	function sdg_register_taxonomy_season() {
+	function register_taxonomy_season() {
 		$cap = 'lectionary';
 		$labels = array(
 			'name'              => _x( 'Seasons', 'taxonomy general name' ),
@@ -225,13 +225,13 @@ if ( in_array('music', $sdg_modules ) || in_array('lectionary', $sdg_modules ) )
 		);
 		register_taxonomy( 'season', [ 'collect', 'liturgical_date', 'repertoire' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_season' );
+	add_action( 'init', 'register_taxonomy_season' );
 }
 
 /*** Taxonomies for DEFAULT POST TYPES ***/
 
 // Custom Taxonomy: Media Category
-function sdg_register_taxonomy_media_category() {
+function register_taxonomy_media_category() {
     //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Media Categories', 'taxonomy general name' ),
@@ -264,10 +264,10 @@ function sdg_register_taxonomy_media_category() {
     );
     register_taxonomy( 'media_category', [ 'attachment' ], $args );
 }
-add_action( 'init', 'sdg_register_taxonomy_media_category' );
+add_action( 'init', 'register_taxonomy_media_category' );
 
 // Custom Taxonomy: Page Tag
-function sdg_register_taxonomy_page_tag() {
+function register_taxonomy_page_tag() {
     //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Page Tags', 'taxonomy general name' ),
@@ -300,14 +300,14 @@ function sdg_register_taxonomy_page_tag() {
     );
     register_taxonomy( 'page_tag', [ 'page' ], $args );
 }
-add_action( 'init', 'sdg_register_taxonomy_page_tag' );
+add_action( 'init', 'register_taxonomy_page_tag' );
 
 
 /*** Taxonomies for PEOPLE ***/
 
 if ( in_array('people', $sdg_modules ) ) {
 	// Custom Taxonomy: People Category
-	function sdg_register_taxonomy_people_category() {
+	function register_taxonomy_people_category() {
 		$cap = 'person';
 		$labels = array(
 			'name'              => _x( 'Person Categories', 'taxonomy general name' ),
@@ -340,7 +340,7 @@ if ( in_array('people', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'people_category', [ 'person' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_people_category' );
+	add_action( 'init', 'register_taxonomy_people_category' );
 }
 
 if ( in_array('music', $sdg_modules ) ) {
@@ -348,7 +348,7 @@ if ( in_array('music', $sdg_modules ) ) {
 	/*** Taxonomies for REPERTOIRE ***/
 
 	// Custom Taxonomy: Occasion
-	function sdg_register_taxonomy_occasion() {
+	function register_taxonomy_occasion() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Occasions', 'taxonomy general name' ),
@@ -381,10 +381,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'occasion', [ 'repertoire' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_occasion' );
+	add_action( 'init', 'register_taxonomy_occasion' );
 
 	// Custom Taxonomy: Repertoire Category
-	function sdg_register_taxonomy_repertoire_category() {
+	function register_taxonomy_repertoire_category() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Rep Categories', 'taxonomy general name' ),
@@ -417,13 +417,13 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'repertoire_category', [ 'repertoire' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_repertoire_category' );
+	add_action( 'init', 'register_taxonomy_repertoire_category' );
 
 
 	/*** Taxonomies for EDITIONS ***/
 
 	// Custom Taxonomy: Instrument
-	function sdg_register_taxonomy_instrument() {
+	function register_taxonomy_instrument() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Instruments', 'taxonomy general name' ),
@@ -458,10 +458,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'instrument', [ 'edition' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_instrument' );
+	add_action( 'init', 'register_taxonomy_instrument' );
 
 	// Custom Taxonomy: Key
-	function sdg_register_taxonomy_key() {
+	function register_taxonomy_key() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Keys', 'taxonomy general name' ),
@@ -494,10 +494,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'key', [ 'edition' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_key' );
+	add_action( 'init', 'register_taxonomy_key' );
 
 	// Custom Taxonomy: Soloist
-	function sdg_register_taxonomy_soloist() {
+	function register_taxonomy_soloist() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Soloists', 'taxonomy general name' ),
@@ -530,10 +530,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'soloist', [ 'edition' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_soloist' ); // TMP disabled until I figure out how to add fields: Abbreviation (abbr) & Sort Num (sort_num)
+	add_action( 'init', 'register_taxonomy_soloist' ); // TMP disabled until I figure out how to add fields: Abbreviation (abbr) & Sort Num (sort_num)
 
 	// Custom Taxonomy: Voicing
-	function sdg_register_taxonomy_voicing() {
+	function register_taxonomy_voicing() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Voicings', 'taxonomy general name' ),
@@ -566,10 +566,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'voicing', [ 'edition' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_voicing' );
+	add_action( 'init', 'register_taxonomy_voicing' );
 
 	// Custom Taxonomy: Library Tag
-	function sdg_register_taxonomy_library_tag() {
+	function register_taxonomy_library_tag() {
 	
 		$labels = array(
 			'name'              => _x( 'Library Tags', 'taxonomy general name' ),
@@ -607,13 +607,13 @@ if ( in_array('music', $sdg_modules ) ) {
 	
 		register_taxonomy( 'library_tag', [ 'edition' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_library_tag' );
+	add_action( 'init', 'register_taxonomy_library_tag' );
 
 
 	/*** Taxonomies for PUBLICATIONS ***/
 
 	// Custom Taxonomy: Publication Category
-	function sdg_register_taxonomy_publication_category() {
+	function register_taxonomy_publication_category() {
 		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Publication Categories', 'taxonomy general name' ),
@@ -646,7 +646,7 @@ if ( in_array('music', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'publication_category', [ 'publication' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_publication_category' );
+	add_action( 'init', 'register_taxonomy_publication_category' );
 
 }
 
@@ -655,7 +655,7 @@ if ( in_array('events', $sdg_modules ) ) {
 	/*** Taxonomies for EVENT PROGRAMS ***/
 
 	// Custom Taxonomy: Person Role
-	function sdg_register_taxonomy_person_role() {
+	function register_taxonomy_person_role() {
 		$cap = 'event_program';
 		$labels = array(
 			'name'              => _x( 'Personnel Roles', 'taxonomy general name' ),
@@ -690,10 +690,10 @@ if ( in_array('events', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'person_role', [ 'event', 'event_program' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_person_role' );
+	add_action( 'init', 'register_taxonomy_person_role' );
 
 	// Custom Taxonomy: Program Label
-	function sdg_register_taxonomy_program_label() {
+	function register_taxonomy_program_label() {
 		$cap = 'event_program';
 		$labels = array(
 			'name'              => _x( 'Program Labels', 'taxonomy general name' ),
@@ -728,7 +728,7 @@ if ( in_array('events', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'program_label', [ 'event', 'event_program' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_program_label' );
+	add_action( 'init', 'register_taxonomy_program_label' );
 
 }
 
@@ -737,7 +737,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	/*** Taxonomies for LECTIONARY ***/
 
 	// Custom Taxonomy: Liturgical Date Category
-	function sdg_register_taxonomy_liturgical_date_category() {
+	function register_taxonomy_liturgical_date_category() {
 		$cap = 'lectionary';
 		$labels = array(
 			'name'              => _x( 'Lit Date Categories', 'taxonomy general name' ),
@@ -770,10 +770,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_liturgical_date_category' );
+	add_action( 'init', 'register_taxonomy_liturgical_date_category' );
 
 	// Custom Taxonomy: Service Type -- Obsolete?
-	function sdg_register_taxonomy_service_type() {
+	function register_taxonomy_service_type() {
 		$cap = 'lectionary';
 		$labels = array(
 			'name'              => _x( 'Service Types', 'taxonomy general name' ),
@@ -806,7 +806,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'service_type', [ 'lectionary' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_service_type' );
+	add_action( 'init', 'register_taxonomy_service_type' );
 
 }
 
@@ -815,7 +815,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 if ( in_array('sermons', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Sermon Topic
-	function sdg_register_taxonomy_sermon_topic() {
+	function register_taxonomy_sermon_topic() {
 		$cap = 'sermon';
 		$labels = array(
 			'name'              => _x( 'Sermon Topics', 'taxonomy general name' ),
@@ -848,7 +848,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'sermon_topic', [ 'sermon' ], $args );
 	}
-	add_action( 'init', 'sdg_register_taxonomy_sermon_topic' );
+	add_action( 'init', 'register_taxonomy_sermon_topic' );
 
 }
 ?>

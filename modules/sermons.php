@@ -374,9 +374,9 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 
 
 // Add shortcode for display of sermon filters form
-add_shortcode('sermon_filters', 'sdg_sermon_filters');
+add_shortcode('sermon_filters', 'build_sermon_filters');
 // TODO: eventually: create general function for sdg_filterform ( $menus = array() ) for creation of filter forms for other content tyeps
-function sdg_sermon_filters() {
+function build_sermon_filters() {
 	
 	$info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.esc_url( get_permalink() ).'" method="get">';
 	
@@ -388,7 +388,7 @@ function sdg_sermon_filters() {
 	// Preachers menu
 	// Limit the list to a specific set of active clergy, per their person_ids, or "Other"
     // TODO: figure out a more elegant way to do this so that it's easier to make changes
-    if ( !is_dev_site() ) {
+    if ( !sdg_is_dev_site() ) {
         // Fr. Turner 15012, Fr. Moretz 15001, Mo. Turner 15022, Fr. Shultz 282498, Mo. Lee-Pae 284270, Fr. Brown 14984, Fr. Cheng 143207, Sr. Promise 246039 -- LIVE SITE
         $author_ids = array(15012, 15001, 15022, 282498, 284270, 14984, 143207, 246039); // Fr. Bennett: 123941
     } else {
