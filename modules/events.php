@@ -1768,7 +1768,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         if ( $show_image == true ) {
             
             $classes = "post-thumbnail sdg";
-            $caption = featured_image_caption($EM_Event->ID);
+            $caption = sdg_featured_image_caption($EM_Event->ID);
 
             if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) {
                 $classes .= " has_caption";
