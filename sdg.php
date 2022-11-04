@@ -201,7 +201,7 @@ function sdg_checkbox_field_cb( $args ) {
 	
     $checked = '';
     $options = get_option( 'sdg_settings' );
-	echo "value: <pre>".print_r($value,true)."</pre>"; // tft
+	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
     
     $value   = ( !isset( $options[$args['name']] ) ) 
                 ? null : $options[$args['name']];
