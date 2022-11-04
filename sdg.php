@@ -166,7 +166,7 @@ function sdg_select_field_cb( $args ) {
 function sdg_modules_field_cb() {
 	
 	$options = get_option( 'sdg_settings' );
-	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'Events' ), 'lectionary' => __( 'Events' ), 'music' => __( 'Events' ), 'webcasts' => __( 'Events' ), 'sermons' => __( 'Events' ), 'slider' => __( 'Events' ), 'ninjaforms' => __( 'Events' ) );
+	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
 	foreach ( $modules as $name => $option ) {
 	?>
