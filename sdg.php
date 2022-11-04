@@ -174,9 +174,9 @@ function sdg_modules_field_cb() {
 			<input
 			type="checkbox"
 			id="sdg_modules_<?php echo esc_attr( $name ); ?>"
-			name="sdg_modules[<?php echo esc_attr( $name ); ?>][]"
+			name="sdg_modules[]"
 			class="<?php echo esc_attr( $name ); ?>"
-			value="<?php echo esc_attr( $value ); ?>"
+			value="<?php echo esc_attr( $name ); ?>"
 			/>
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>" class="sdg-option-label">
 			<?php echo esc_html( $modules[ $name ] ); ?>
