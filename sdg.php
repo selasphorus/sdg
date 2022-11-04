@@ -199,7 +199,7 @@ function sdg_select_field_cb( $args ) {
  */
 function sdg_checkbox_field_cb( $args ) { 
 
-	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	
     $checked = '';
     $options = get_option( 'sdg_settings' );
