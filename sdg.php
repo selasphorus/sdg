@@ -108,7 +108,7 @@ function sdg_settings_init() {
 		'sdg_modules',
 		array(
 			'label_for'         => 'sdg_modules',
-			'value'        => (empty(get_option('sdg_settings')['sdg_modules'])) ? 0 : get_option('sdg_settings')['sdg_modules'],
+			//'value'        		=> (empty(get_option('sdg_settings')['sdg_modules'])) ? 0 : get_option('sdg_settings')['sdg_modules'],
 			'class'             => 'sdg_row',
 			'sdg_custom_data' 	=> 'custom',
 		)
@@ -222,6 +222,9 @@ function sdg_modules_field_cb( $args ) {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
+	$value   = ( !isset( $options[$args['name']] ) ) 
+                ? null : $options[$args['name']];
+                
 	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	echo "value: <pre>".print_r($value,true)."</pre>"; // tft
 	if ( is_array($value) ) { echo "value is array."; }
