@@ -924,7 +924,7 @@ function build_the_title_on_insert( $data, $postarr ) {
     $live_rep_ids = array ('167740');
     $dev_edition_ids = array();
     $live_edition_ids = array();
-    if ( sdg_is_dev_site() ) { 
+    if ( is_dev_site() ) { 
         //$test_ids = $dev_rep_ids;
         //$test_ids = $dev_edition_ids;
         $test_ids = array_merge($dev_rep_ids, $dev_edition_ids);
@@ -1076,7 +1076,7 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-function remove_bracketed_info ( $str ) {
+function sdg_remove_bracketed_info ( $str ) {
 
 	//sdg_log( "function: remove_bracketed_info" );
 
@@ -1331,7 +1331,7 @@ function clean_slug( $post_id ) {
             $new_slug = substr($new_slug, 0, -2); // trim off trailing "-2"
         }
         $new_slug .= "-".$date_str;
-    } else if ( sdg_is_dev_site() ) {
+    } else if ( is_dev_site() ) {
         //$new_slug .= "-ND";
     }
 
@@ -1373,7 +1373,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     //sdg_log( "action: save_post_event" );
     sdg_log( "function called: sdg_save_post_callback" );
     
-    if ( sdg_is_dev_site() ) {
+    if ( is_dev_site() ) {
         sdg_add_post_term( $post_id, 'dev-test-tmp', 'admin_tag', true ); // tft
     }
     
@@ -1538,7 +1538,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
 // Bulk updates to titles and title_for_matching postmeta values
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
-add_shortcode('title_updates', 'sdg_run_title_updates');
+add_shortcode('title_updates', 'run_title_updates');
 function run_title_updates ($atts = [], $content = null, $tag = '') {
     
     sdg_log( "divline2" );
@@ -1821,8 +1821,8 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
 
 
 // Function(s) to clean up titles/slugs/UIDs
-///if ( sdg_is_dev_site() ) { add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); } 
-//add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
+///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'posts_cleanup'); } 
+//add_shortcode('run_posts_cleanup', 'posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
 function posts_cleanup( $atts = [] ) {
 
 	$info = ""; // init
@@ -1945,7 +1945,7 @@ function posts_cleanup( $atts = [] ) {
 
             // Update the post into the database
             // TODO fix/check clean_slug fcn and then set this live for both sites again.
-            if ( sdg_is_dev_site() ) {
+            if ( is_dev_site() ) {
             //if ( $a['testing'] == 'false' ) {
                 wp_update_post( $update_args, true );                        
                 if ( is_wp_error($post_id) ) {
@@ -1978,8 +1978,8 @@ function posts_cleanup( $atts = [] ) {
 
 // TODO: clean up or eliminate the following shortcode and function -- see sdg_save_post_callback
 // Shortcode currently in use on dev site event pages
-///if ( sdg_is_dev_site() ) { add_shortcode('run_post_updates', 'sdg_run_post_updates'); }
-//add_shortcode('run_post_updates', 'sdg_run_post_updates');
+///if ( is_dev_site() ) { add_shortcode('run_post_updates', 'run_post_updates'); }
+//add_shortcode('run_post_updates', 'run_post_updates');
 function run_post_updates( $atts = [] ) {
 
 	$a = shortcode_atts( array(
@@ -1989,7 +1989,7 @@ function run_post_updates( $atts = [] ) {
     
 	$info = ""; // init
     $admin_terms = array();
-    if ( sdg_is_dev_site() ) { $admin_terms[] = 1960; } else { $admin_terms[] = 2203; } // Admin tag: slug-updated
+    if ( is_dev_site() ) { $admin_terms[] = 1960; } else { $admin_terms[] = 2203; } // Admin tag: slug-updated
     $update_args = array( 'ID' => $post_id);
     $changes_made = false;
     
@@ -2101,7 +2101,7 @@ function run_post_updates( $atts = [] ) {
 /* *** SERMONS *** */
 
 // Sermon updates - add related_event info
-add_shortcode( 'run_sermon_updates_fcn', 'sdg_sermon_updates' );
+add_shortcode( 'run_sermon_updates_fcn', 'sermon_updates' );
 function sermon_updates ( $atts = [] ) {
 
 	$info = "";
