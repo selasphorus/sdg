@@ -78,6 +78,30 @@ function sdg_settings_init() {
 		'sdg'
 	);
 	
+	// Test checkbox field
+	add_settings_field(
+        'sdg_test_checkbox_field',
+        esc_attr__('Test Checkbox Field', 'sdg'),
+        'sdg_checkbox_field_cb',
+        'sdg',
+        'sdg_settings',
+        array( 
+            'type'         => 'checkbox',
+            'option_group' => 'sdg_settings', 
+            'name'         => 'sdg_test_checkbox_field',
+            'label_for'    => 'sdg_test_checkbox_field',
+            'value'        => (empty(get_option('sdg_settings')['sdg_test_checkbox_field']))
+            ? 0 : get_option('unitizr_options')['sdg_test_checkbox_field'],
+            'description'  => __( 'Check to test.', 
+                            'sdg' ),
+            'checked'      => (!isset(get_option('sdg_settings')['sdg_test_checkbox_field']))
+                               ? 0 : get_option('sdg_settings')['sdg_test_checkbox_field'],
+            // Used 0 in this case but will still return Boolean not[see notes below] 
+            ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
+            )
+    ); 
+
+	
 	// Register a new field in the "sdg_modules" section, inside the "sdg" page.
 	add_settings_field(
 		'sdg_modules', // As of WP 4.6 this value is used only internally.
@@ -162,6 +186,28 @@ function sdg_select_field_cb( $args ) {
 		<?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'sdg' ); ?>
 	</p>
 	<?php
+}
+
+/** 
+ * switch for 'remove styles' field
+ * @since 2.0.1
+ * @input type checkbox
+ */
+function sdg_checkbox_field_cb( $args ) { 
+    $checked = '';
+    $options = get_option($args['option_group']);
+    $value   = ( !isset( $options[$args['name']] ) ) 
+                ? null : $options[$args['name']];
+    if($value) { $checked = ' checked="checked" '; }
+        // Could use ob_start.
+        $html  = '';
+        $html .= '<input id="' . esc_attr( $args['name'] ) . '" 
+        name="' . esc_attr( $args['option_group'] . '['.$args['name'].']') .'" 
+        type="checkbox" ' . $checked . '/>';
+        $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
+        //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
+
+        echo $html;
 }
 
 function sdg_modules_field_cb( $args ) {
