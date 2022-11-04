@@ -244,8 +244,8 @@ function get_event_personnel( $atts = [] ) {
     $info = "";
     
     // *** WIP ***
-    //if ( sdg_devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
-    //if ( sdg_devmode_active() || ( is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
+    //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
+    //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
     $info .= "<!-- Event Personnel for post_id: $post_id -->";
 	if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
@@ -309,7 +309,7 @@ function get_event_personnel( $atts = [] ) {
             }
             //if ( isset($row['show_row']) ) { $show_row = $row['show_row']; } else { $show_row = 1; } // Should this row be displayed on the front end?
             
-            if ( $display == 'dev' ) { // || sdg_devmode_active()
+            if ( $display == 'dev' ) { // || devmode_active()
             
                 $row_info .= "<code>";                
                 $row_info .= "personnel row [$i]: <pre>".print_r($row, true)."</pre>";                
@@ -417,7 +417,7 @@ function get_event_personnel( $atts = [] ) {
 				$table .= '<tr class="'.$tr_class.'">';
 			}
 			
-			if ( $run_updates == true || is_dev_site() || sdg_devmode_active() ) {
+			if ( $run_updates == true || is_dev_site() || devmode_active() ) {
 				$table .= "<!-- *** START row_info *** -->";
                 $table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
                 $table .= "<!-- *** END row_info *** -->";
@@ -656,8 +656,8 @@ function get_event_program_items( $atts = [] ) {
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
 	
     /*** WIP ***/
-    //if ( sdg_devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP(?) disabled 03/25/22
-    //if ( sdg_devmode_active() || ( is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
+    //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP(?) disabled 03/25/22
+    //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
 	// Get the program item repeater field values (ACF)
     $rows = get_field('program_items', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -870,7 +870,7 @@ function get_event_program_items( $atts = [] ) {
 			}
 			
 			// Insert row_info for troubleshooting
-			if ( is_dev_site() || sdg_devmode_active() ) {
+			if ( is_dev_site() || devmode_active() ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
@@ -1849,7 +1849,7 @@ function match_widget_to_event_content ( $instance ) {
 add_filter( 'em_object_build_sql_conditions_args', 'exclude_unlisted_events',10,1);
 add_filter( 'em_content_events_args', 'exclude_unlisted_events' );
 function exclude_unlisted_events ( $args ) {
-    $args['tag'] = "-unlisted"; // 3066 (live)
+    $args['tag'] = "-unlisted"; // 3066 (stc-live)
     return $args;
 }
 

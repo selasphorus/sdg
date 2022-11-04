@@ -15,6 +15,7 @@ if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; 
 /*** GENERAL/ADMIN POST TYPES ***/
 
 if ( in_array('admin_notes', $sdg_modules ) ) {
+
 	// Admin Note
 	function register_post_type_admin_note() {
 

@@ -65,6 +65,7 @@ function register_taxonomy_admin_tag() {
         'hierarchical'      => true,
         'show_ui'           => true,
         'show_admin_column' => true,
+        'show_in_rest'      => true,
         /*'capabilities'         => array(
             'manage_terms'  =>   'manage_'.$cap.'_terms',
             'edit_terms'    =>   'edit_'.$cap.'_terms',
@@ -81,7 +82,7 @@ add_action( 'init', 'register_taxonomy_admin_tag' );
 if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Custom Taxonomy: Admin Notes Category
 	function register_taxonomy_adminnote_category() {
-		//$cap = 'event_program';
+		//$cap = 'XXX';
 		$labels = array(
 			'name'              => _x( 'Admin Note Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Admin Note Category', 'taxonomy singular name' ),
@@ -131,7 +132,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'update_item'       => __( 'Update Data Table' ),
 			'add_new_item'      => __( 'Add New Data Table' ),
 			'new_item_name'     => __( 'New Data Table Name' ),
-			'menu_name'         => __( 'Data Tables TAX' ),
+			'menu_name'         => __( 'Data Tables' ),
 		);
 		$args = array(
 			'labels'            => $labels,
@@ -149,7 +150,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'data_table' ],
 		);
-		register_taxonomy( 'data_table', [ 'admin_note', 'db_query' ], $args );
+		register_taxonomy( 'data_table', [ 'admin_note' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_data_table' );
 }
@@ -186,47 +187,9 @@ function register_taxonomy_query_tag() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'query_tag' ],
     );
-    register_taxonomy( 'query_tag', [ 'db_query' ], $args );
+    register_taxonomy( 'query_tag', [ 'admin_note' ], $args );
 }
-//add_action( 'init', 'register_taxonomy_query_tag' );
-
-if ( in_array('music', $sdg_modules ) || in_array('lectionary', $sdg_modules ) ) {
-	// Custom Taxonomy: Season
-	function register_taxonomy_season() {
-		$cap = 'lectionary';
-		$labels = array(
-			'name'              => _x( 'Seasons', 'taxonomy general name' ),
-			'singular_name'     => _x( 'Season', 'taxonomy singular name' ),
-			'search_items'      => __( 'Search Seasons' ),
-			'all_items'         => __( 'All Seasons' ),
-			'parent_item'       => __( 'Parent Season' ),
-			'parent_item_colon' => __( 'Parent Season:' ),
-			'edit_item'         => __( 'Edit Season' ),
-			'update_item'       => __( 'Update Season' ),
-			'add_new_item'      => __( 'Add New Season' ),
-			'new_item_name'     => __( 'New Season Name' ),
-			'menu_name'         => __( 'Seasons' ),
-		);
-		$args = array(
-			'labels'            => $labels,
-			'description'          => '',
-			'public'               => true,
-			'hierarchical'      => true,
-			'show_ui'           => true,
-			'show_admin_column' => true,
-			'capabilities'         => array(
-				'manage_terms'  =>   'manage_'.$cap.'_terms',
-				'edit_terms'    =>   'edit_'.$cap.'_terms',
-				'delete_terms'  =>   'delete_'.$cap.'_terms',
-				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'season' ],
-		);
-		register_taxonomy( 'season', [ 'collect', 'liturgical_date', 'repertoire' ], $args );
-	}
-	add_action( 'init', 'register_taxonomy_season' );
-}
+add_action( 'init', 'register_taxonomy_query_tag' );
 
 /*** Taxonomies for DEFAULT POST TYPES ***/
 
@@ -253,6 +216,7 @@ function register_taxonomy_media_category() {
         'hierarchical'      => true,
         'show_ui'           => true,
         'show_admin_column' => true,
+        'show_in_rest'      => true,
         /*'capabilities'         => array(
             'manage_terms'  =>   'manage_'.$cap.'_terms',
             'edit_terms'    =>   'edit_'.$cap.'_terms',
@@ -289,6 +253,7 @@ function register_taxonomy_page_tag() {
         'hierarchical'      => true,
         'show_ui'           => true,
         'show_admin_column' => true,
+        'show_in_rest'      => true,
         /*'capabilities'         => array(
             'manage_terms'  =>   'manage_'.$cap.'_terms',
             'edit_terms'    =>   'edit_'.$cap.'_terms',
@@ -329,6 +294,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
+			'show_in_rest'      => true,
 			'capabilities'         => array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
@@ -807,6 +773,43 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		register_taxonomy( 'service_type', [ 'lectionary' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_service_type' );
+	
+	// Custom Taxonomy: Season -- DISABLED! Obsolete?
+	function allsouls_register_taxonomy_season() {
+		//$cap = 'lectionary';
+		$labels = array(
+			'name'              => _x( 'Seasons', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Season', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Seasons' ),
+			'all_items'         => __( 'All Seasons' ),
+			'parent_item'       => __( 'Parent Season' ),
+			'parent_item_colon' => __( 'Parent Season:' ),
+			'edit_item'         => __( 'Edit Season' ),
+			'update_item'       => __( 'Update Season' ),
+			'add_new_item'      => __( 'Add New Season' ),
+			'new_item_name'     => __( 'New Season Name' ),
+			'menu_name'         => __( 'Seasons' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'season' ],
+		);
+		register_taxonomy( 'season', [ 'collect', 'liturgical_date', 'repertoire' ], $args );
+	}
+	//add_action( 'init', 'allsouls_register_taxonomy_season' );
 
 }
 
