@@ -1231,8 +1231,8 @@ function sdg_get_category_widget ( $post_id = null ) { // or $term_id?
 
 
 // Post Resources (ACF field)
-add_shortcode('post_sidebar_widget', 'sdg_get_post_sidebar_widget');
-function sdg_get_post_sidebar_widget ( $post_id = null ) {
+add_shortcode('post_sidebar_widget', 'get_post_sidebar_widget');
+function get_post_sidebar_widget ( $post_id = null ) {
     
     if ($post_id == null) { $post_id = get_the_ID(); }
     $info = "";
