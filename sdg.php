@@ -222,12 +222,10 @@ function sdg_modules_field_cb( $args ) {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
-	$value   = ( !isset( $options[$args['label_for']] ) ) 
-                ? null : $options[$args['label_for']];
+	$value   = ( !isset( $options[$args['label_for']] ) ) ? null : $options[$args['label_for']];
                 
 	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
-	if ( is_array($value) ) { echo "value is array."; }
 	
 	foreach ( $modules as $name => $option ) {
 		?>
@@ -238,7 +236,7 @@ function sdg_modules_field_cb( $args ) {
 			name="sdg_settings[sdg_modules][]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $name ); ?>"
-			<?php if ($value) { $checked = ' checked="checked" '; } ?>
+			<?php if ( in_array($name,$value) ) { $checked = ' checked="checked" '; } ?>
 			<?php //echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], $name, false ) ) : ( '' ); ?>
 			/>
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>" class="sdg-option-label">
