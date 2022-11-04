@@ -202,7 +202,7 @@ function sdg_checkbox_field_cb( $args ) {
 	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	
     $checked = '';
-    $options = get_option($args['sdg_settings']);
+    $options = get_option( 'sdg_settings' );
     
     $value   = ( !isset( $options[$args['name']] ) ) 
                 ? null : $options[$args['name']];
@@ -210,7 +210,7 @@ function sdg_checkbox_field_cb( $args ) {
         // Could use ob_start.
         $html  = '';
         $html .= '<input id="' . esc_attr( $args['name'] ) . '" 
-        name="' . esc_attr( $args['sdg_settings'] . '['.$args['name'].']') .'" 
+        name="sdg_settings' . esc_attr('['.$args['name'].']') .'" 
         type="checkbox" ' . $checked . '/>';
         $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
         //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
