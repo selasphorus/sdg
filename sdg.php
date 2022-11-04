@@ -1701,7 +1701,7 @@ function sdg_selectmenu ( $args = '' ) {
 }*/
 
 // Get name of post_type
-function sdg_get_post_type_str( $type = "" ) {
+function get_post_type_str( $type = "" ) {
 	if ($type === "") { $type = get_post_type(); }
 	if ($type === 'post') {
 		return "Article";
