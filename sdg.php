@@ -232,7 +232,7 @@ if ( file_exists($common_functions_filepath) ) { include_once( $common_functions
 
 foreach ( $includes as $inc ) {
     $filepath = $plugin_path . 'inc/'.$inc.'.php'; 
-    ///if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
 }
 
 /*foreach ( $modules as $module ) {
