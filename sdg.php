@@ -124,6 +124,9 @@ function sdg_settings_init() {
  * @param array $args  The settings array, defining title, id, callback.
  */
 function sdg_settings_section_callback( $args ) {
+
+	echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	
 	?>
 	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p>
 	<?php
@@ -194,6 +197,9 @@ function sdg_select_field_cb( $args ) {
  * @input type checkbox
  */
 function sdg_checkbox_field_cb( $args ) { 
+
+	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	
     $checked = '';
     $options = get_option($args['option_group']);
     $value   = ( !isset( $options[$args['name']] ) ) 
@@ -215,8 +221,7 @@ function sdg_modules_field_cb( $args ) {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
-	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-	echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	echo "args: <pre>".print_r($args,true)."</pre>"; // tft	
 	
 	foreach ( $modules as $name => $option ) {
 	?>
