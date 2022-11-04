@@ -1105,16 +1105,16 @@ function sdg_pre_get_posts( $query ) {
 
 
 // Category/Taxonomy Description as Widget
-add_shortcode('post_category_widget', 'get_category_widget');
-function get_category_widget ( $post_id = null ) { // or $term_id?
+add_shortcode('post_category_widget', 'sdg_get_category_widget');
+function sdg_get_category_widget ( $post_id = null ) { // or $term_id?
     
     //#_CATEGORYNOTES -- Events Manager
 }
 
 
 // Post Resources (ACF field)
-add_shortcode('post_sidebar_widget', 'get_post_sidebar_widget');
-function get_post_sidebar_widget ( $post_id = null ) {
+add_shortcode('post_sidebar_widget', 'sdg_get_post_sidebar_widget');
+function sdg_get_post_sidebar_widget ( $post_id = null ) {
     
     if ($post_id == null) { $post_id = get_the_ID(); }
     $info = "";
@@ -1146,8 +1146,8 @@ function get_post_sidebar_widget ( $post_id = null ) {
 }
 
 // Post Resources (ACF field)
-add_shortcode('display_post_resources', 'get_post_resources');
-function get_post_resources ( $post_id = null ) {
+add_shortcode('display_post_resources', 'sdg_get_post_resources');
+function sdg_get_post_resources ( $post_id = null ) {
     
     if ($post_id == null) { $post_id = get_the_ID(); }
     $info = "<!-- Resources for post_id: $post_id -->";
@@ -1198,8 +1198,8 @@ function get_post_resources ( $post_id = null ) {
 }
 
 // ACF: Change the gallery button label in the CMS
-add_action('acf/input/admin_footer', 'my_acf_admin_footer');
-function my_acf_admin_footer() {
+add_action('acf/input/admin_footer', 'sdg_acf_admin_footer');
+function sdg_acf_admin_footer() {
 	
 	?>
 	<script>
@@ -1227,7 +1227,7 @@ function sdg_the_content( $content ) {
  * @link https://gist.github.com/Fantikerz/5557617
  */
 //add_filter('the_content', 'remove_empty_p', 20, 1);
-function remove_empty_p( $content ) {
+function sdg_remove_empty_p( $content ) {
 	//$content = force_balance_tags( $content );
 	$content = preg_replace( '#<p>\s*+(<br\s*/*>)?\s*</p>#i', '', $content );
 	$content = preg_replace( '~\s?<p>(\s|&nbsp;)+</p>\s?~', '', $content );
@@ -1237,7 +1237,7 @@ function remove_empty_p( $content ) {
 
 /************** CUSTOM POST TYPES CONTENT ***************/
 
-function get_placeholder_img() {
+function sdg_get_placeholder_img() {
     
     $info = "";
     
@@ -1270,7 +1270,7 @@ function get_placeholder_img() {
  *
  * @return string
  */
-function debug_to_console($data, $context = 'Debug in Console') {
+function sdg_debug_to_console($data, $context = 'Debug in Console') {
 
     // Buffering to solve problems frameworks, like header() in this and not a solid return.
     ob_start();
@@ -1283,7 +1283,7 @@ function debug_to_console($data, $context = 'Debug in Console') {
 }
 
 // Convert the time string HH:MM:SS to number of seconds (for flowplayer cuepoints &c.)
-function xtime_to_seconds($str_time){
+function sdg_xtime_to_seconds($str_time){
 
 	$parsed = date_parse($str_time);
 	$num_seconds = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second'];
@@ -1326,7 +1326,7 @@ add_filter( 'document_title_parts', function( $title_parts_array ) {
 // Get Image URL from ID
 // [image_url_from_id id='#_ATT{landing_page_image}']
 add_shortcode('image_url_from_id', 'get_image_url_from_id');
-function get_image_url_from_id( $atts = [] ) {
+function sdg_get_image_url_from_id( $atts = [] ) {
     
     $args = shortcode_atts( 
         array(
@@ -1342,13 +1342,13 @@ function get_image_url_from_id( $atts = [] ) {
 }
 
 // Helper function: get link by slug
-function get_link_by_slug($slug, $type = 'post') {
+function sdg_get_link_by_slug($slug, $type = 'post') {
   $post = get_page_by_path($slug, OBJECT, $type);
   return get_permalink($post->ID);
 }
 
 //
-function restore_html( $info ) {
+function sdg_restore_html( $info ) {
 	$arr = array('&lt;'=>'<','&gt;'=>'>','&quot;'=>'"');
 	foreach ($arr as $search=>$replace) {
 		$info = str_replace($search,$replace,$info);
@@ -1357,7 +1357,7 @@ function restore_html( $info ) {
 }
 
 // Make hyperlink
-function make_link( $url, $linktext, $class = null, $target = null) {
+function sdg_make_link( $url, $linktext, $class = null, $target = null) {
 	
 	// TODO: sanitize URL?
 	$link = '<a href="'.$url.'"';
@@ -1371,7 +1371,7 @@ function make_link( $url, $linktext, $class = null, $target = null) {
 
 // Check to see if a postmeta record already exists for the specified post_type, meta_key, and meta_value.
 // Option to exclude a specific post_id from the search -- e.g. in searching to see if any *other* post has the same title_for_matching.
-function meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value, $num_posts = "-1") {
+function sdg_meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value, $num_posts = "-1") {
     
     if ( ! ($post_type && $meta_key && $meta_value) ){
         return null;
@@ -1578,7 +1578,7 @@ if ( !function_exists('str_starts_with') ) {
 }
 
 // Get name of post_type
-function get_post_type_str( $type = "" ) {
+function sdg_get_post_type_str( $type = "" ) {
 	if ($type === "") { $type = get_post_type(); }
 	if ($type === 'post') {
 		return "Article";
@@ -1651,7 +1651,7 @@ function sdg_search_filter_links ($atts = [], $content = null, $tag = '') {
 
 // Write log info to the JS console.
 // NB: this breaks the WooCommerce checkout process! And possibly other functionality -- use with caution -- related to AJAX responses...
-function console_log($output, $with_script_tags = true) {
+function sdg_console_log($output, $with_script_tags = true) {
     $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
 ');';
     if ($with_script_tags) {
