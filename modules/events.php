@@ -244,8 +244,8 @@ function get_event_personnel( $atts = [] ) {
     $info = "";
     
     // *** WIP ***
-    //if ( sdg_devmode_active() || sdg_is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
-    //if ( sdg_devmode_active() || ( sdg_is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
+    //if ( sdg_devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
+    //if ( sdg_devmode_active() || ( is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
     
     $info .= "<!-- Event Personnel for post_id: $post_id -->";
 	if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
@@ -417,7 +417,7 @@ function get_event_personnel( $atts = [] ) {
 				$table .= '<tr class="'.$tr_class.'">';
 			}
 			
-			if ( $run_updates == true || sdg_is_dev_site() || sdg_devmode_active() ) {
+			if ( $run_updates == true || is_dev_site() || sdg_devmode_active() ) {
 				$table .= "<!-- *** START row_info *** -->";
                 $table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
                 $table .= "<!-- *** END row_info *** -->";
@@ -645,7 +645,7 @@ function get_event_program_items( $atts = [] ) {
 	
 	if ($post_id == null) { $post_id = get_the_ID(); }
 	$info .= "<!-- Event Program Items for post_id: $post_id -->";
-    if ( sdg_is_dev_site() ) { $info .= "<!-- DEV -->"; } else { $info .= "<!-- NOT dev -->"; }
+    if ( is_dev_site() ) { $info .= "<!-- DEV -->"; } else { $info .= "<!-- NOT dev -->"; }
     //$info .= "<!-- display: $display -->";
     
     // What type of program is this? Service order or concert program?
@@ -656,8 +656,8 @@ function get_event_program_items( $atts = [] ) {
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
 	
     /*** WIP ***/
-    //if ( sdg_devmode_active() || sdg_is_dev_site() ) { $run_updates = true; } // TMP(?) disabled 03/25/22
-    //if ( sdg_devmode_active() || ( sdg_is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
+    //if ( sdg_devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP(?) disabled 03/25/22
+    //if ( sdg_devmode_active() || ( is_dev_site() && sdg_devmode_active() )  ) { $run_updates = true; } // ???
     
 	// Get the program item repeater field values (ACF)
     $rows = get_field('program_items', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -870,7 +870,7 @@ function get_event_program_items( $atts = [] ) {
 			}
 			
 			// Insert row_info for troubleshooting
-			if ( sdg_is_dev_site() || sdg_devmode_active() ) {
+			if ( is_dev_site() || sdg_devmode_active() ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
@@ -1671,7 +1671,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $event_title = remove_bracketed_info($event_title);
     //$event_title = htmlentities($event_title); // In case there are apostrophes (probably only possible in the short_title?)
     
-    if ( sdg_is_dev_site() ) {
+    if ( is_dev_site() ) {
         
         //$event_title = get_the_title($EM_Event->ID); // For some reason this is breaking things on the live site, but only when event titles have info in brackets with space around hyphen -- e.g. 2022 - Shrine Prayers
         
@@ -1696,7 +1696,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         //$replace = '<a href="'.$event_link.'">'.get_the_title($EM_Event->ID).'</a>';
         $replace = '<a href="'.$event_link.'">'.$event_title.'</a>';
         
-        //if ( sdg_is_dev_site() ) { $replace .= "<!-- series_id: ".$series_id."; series_title: ".$series_title." -->"; }
+        //if ( is_dev_site() ) { $replace .= "<!-- series_id: ".$series_id."; series_title: ".$series_title." -->"; }
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
