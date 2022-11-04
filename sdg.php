@@ -201,7 +201,7 @@ function sdg_checkbox_field_cb( $args ) {
 	
     $checked = '';
     $options = get_option( 'sdg_settings' );
-	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
+	//echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
     
     $value   = ( !isset( $options[$args['name']] ) ) 
                 ? null : $options[$args['name']];
@@ -224,8 +224,8 @@ function sdg_modules_field_cb( $args ) {
 	
 	$value   = ( !isset( $options[$args['label_for']] ) ) ? null : $options[$args['label_for']];
                 
-	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	//echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
 	
 	foreach ( $modules as $name => $option ) {
 		?>
