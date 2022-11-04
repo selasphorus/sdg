@@ -71,6 +71,27 @@ function sdg_settings_init() {
 		)
 	);
 	
+	// Register a new section in the "sdg" page.
+	add_settings_section(
+		'sdg_settings',
+		__( 'SDG Modules', 'sdg' ), 'sdg_modules_section_callback',
+		'sdg'
+	);
+	
+	// Register a new field in the "sdg_modules" section, inside the "sdg" page.
+	add_settings_field(
+		'sdg_modules', // As of WP 4.6 this value is used only internally.
+		__( 'Active Modules', 'sdg' ),
+		'sdg_modules_field_cb',
+		'sdg',
+		'sdg_modules',
+		array(
+			'label_for'         => 'sdg_modules',
+			'class'             => 'sdg_row',
+			'sdg_custom_data' 	=> 'custom',
+		)
+	);
+	
 }
 
 /**
@@ -81,6 +102,12 @@ function sdg_settings_init() {
 function sdg_settings_section_callback( $args ) {
 	?>
 	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p>
+	<?php
+}
+
+function sdg_modules_section_callback( $args ) {
+	?>
+	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Modules', 'sdg' ); ?></p>
 	<?php
 }
 
@@ -134,6 +161,29 @@ function sdg_select_field_cb( $args ) {
 		<?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'sdg' ); ?>
 	</p>
 	<?php
+}
+
+public function sdg_modules_field_cb() {
+	
+	$options = get_option( 'sdg_settings' );
+	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'Events' ), 'lectionary' => __( 'Events' ), 'music' => __( 'Events' ), 'webcasts' => __( 'Events' ), 'sermons' => __( 'Events' ), 'slider' => __( 'Events' ), 'ninjaforms' => __( 'Events' ) );
+	
+	foreach ( (array) $modules as $name => $option ) { ?>
+		<div class="sdg-options">
+			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
+			<?php echo esc_html( $modules[ $name ] ); ?>:
+			</label>
+			<input
+			type="checkbox"
+			id="sdg_modules_<?php echo esc_attr( $name ); ?>"
+			name="sdg_modules[<?php echo esc_attr( $name ); ?>][]"
+			class="<?php echo esc_attr( $name ); ?>"
+			value="<?php echo esc_attr( $value ); ?>"
+			placeholder="<?php esc_attr_e( 'http://' ); ?>"
+			/>
+		</div>
+		<?php
+	}
 }
 
 // Render a checkbox
