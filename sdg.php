@@ -222,11 +222,11 @@ function sdg_modules_field_cb( $args ) {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
-	$value   = ( !isset( $options[$args['name']] ) ) 
-                ? null : $options[$args['name']];
+	$value   = ( !isset( $options[$args['label_for']] ) ) 
+                ? null : $options[$args['label_for']];
                 
 	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-	echo "value: <pre>".print_r($value,true)."</pre>"; // tft
+	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
 	if ( is_array($value) ) { echo "value is array."; }
 	
 	foreach ( $modules as $name => $option ) {
