@@ -330,7 +330,7 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
-/*if ( !function_exists( 'is_dev_site' ) ) {
+if ( !function_exists( 'is_dev_site' ) ) {
     function is_dev_site() {
         
         $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
@@ -339,8 +339,7 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
         
         return false;
     }
-}*/
-
+}
 
 // Include sub-files
 // TODO: make them required? Otherwise dependencies may be an issue.
