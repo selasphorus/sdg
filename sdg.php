@@ -87,7 +87,7 @@ function sdg_settings_init() {
         'sdg_settings',
         array( 
             'type'         => 'checkbox',
-            'option_group' => 'sdg_settings', 
+            //'option_group' => 'sdg_settings', 
             'name'         => 'sdg_test_checkbox_field',
             'label_for'    => 'sdg_test_checkbox_field',
             'value'        => (empty(get_option('sdg_settings')['sdg_test_checkbox_field']))
@@ -231,7 +231,7 @@ function sdg_modules_field_cb( $args ) {
 			<input
 			type="checkbox"
 			id="sdg_modules_<?php echo esc_attr( $name ); ?>"
-			name="sdg_modules[]"
+			name="sdg_settings['sdg_modules'][]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $name ); ?>"
 			<?php if ($value) { $checked = ' checked="checked" '; } ?>
