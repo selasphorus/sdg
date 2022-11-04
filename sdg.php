@@ -40,6 +40,7 @@ function sdg_settings_init() {
 	// Register a new setting for "sdg" page.
 	register_setting( 'sdg', 'sdg_settings' );
 
+	/*
 	// Register a new section in the "sdg" page.
 	add_settings_section(
 		'sdg_settings',
@@ -71,13 +72,6 @@ function sdg_settings_init() {
 		)
 	);
 	
-	// Register a new section in the "sdg" page.
-	add_settings_section(
-		'sdg_modules',
-		__( 'SDG Modules', 'sdg' ), 'sdg_modules_section_callback',
-		'sdg'
-	);
-	
 	// Test checkbox field
 	add_settings_field(
         'sdg_test_checkbox_field',
@@ -97,7 +91,14 @@ function sdg_settings_init() {
             ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
             )
     ); 
-
+	*/
+	
+	// Register a new section in the "sdg" page.
+	add_settings_section(
+		'sdg_modules',
+		__( 'SDG Modules', 'sdg' ), 'sdg_modules_section_callback',
+		'sdg'
+	);
 	
 	// Register a new field in the "sdg_modules" section, inside the "sdg" page.
 	add_settings_field(
@@ -124,7 +125,7 @@ function sdg_settings_init() {
 function sdg_settings_section_callback( $args ) {
 
 	$options = get_option( 'sdg_settings' );
-	echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
 	
 	?>
 	<!--p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p-->
