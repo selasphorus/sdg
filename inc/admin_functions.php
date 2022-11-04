@@ -1089,7 +1089,7 @@ function sdg_remove_bracketed_info ( $str ) {
 }
 
 // Function: clean up titles for creation of slugs and for front-end display
-add_filter( 'the_title', 'sdg_filter_the_title', 100, 2 );
+add_filter( 'the_title', 'filter_the_title', 100, 2 );
 function filter_the_title( $post_title, $post_id = null ) {
  
     //sdg_log( "function: filter_the_title" );
