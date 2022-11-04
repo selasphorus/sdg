@@ -113,6 +113,7 @@ function sdg_modules_section_callback( $args ) {
 
 // Render a text field
 function sdg_text_field_cb( $args ) {
+
 	$options = get_option( 'sdg_settings' );
 	
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
@@ -163,7 +164,7 @@ function sdg_select_field_cb( $args ) {
 	<?php
 }
 
-function sdg_modules_field_cb() {
+function sdg_modules_field_cb( $args ) {
 	
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
