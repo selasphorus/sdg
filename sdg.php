@@ -221,7 +221,19 @@ function sdg_checkbox_field_cb( $args ) {
 function sdg_modules_field_cb( $args ) {
 	
 	$options = get_option( 'sdg_settings' );
-	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
+	$modules = array( 
+		'events' => __( 'Events' ), 
+		'people' => __( 'People' ), 
+		'ensembles' => __( 'Ensembles' ), 
+		'music' => __( 'Music Library' ), 
+		'webcasts' => __( 'Webcasts' ), 
+		'sermons' => __( 'Sermons' ), 
+		'lectionary' => __( 'Lectionary' ), 
+		'slider' => __( 'Slider' ), 
+		'ninjaforms' => __( 'Ninja Forms' ), 
+		'admin_notes' => __( 'Admin Notes' ), 
+		'data_tables' => __( 'Data Tables' )
+	);
 	
 	$value   = ( !isset( $options[$args['label_for']] ) ) ? null : $options[$args['label_for']];
                 

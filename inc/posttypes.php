@@ -8,70 +8,55 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
-// function to copy data from old ACF one-way to new ACF bidirectional relationship fields
-add_shortcode('convert_bidirectional_fields', 'convert_bidirectional_fields');
-function convert_bidirectional_fields ( $post_id = null, $post_type = "", $old_field_name = "", $new_field_name = "", $verbose = false ) {
-    
-    $info = "";
-    $troubleshooting = "";
-    $new_vals = false;
-    
-    $info .= ">> convert_bidirectional_fields >><br />";
-    $info .= "post_id: $post_id<br />";
-    $info .= "post_type: $post_type<br />";
-    $info .= "old_field_name: $old_field_name<br />";
-    $info .= "new_field_name: $new_field_name<br />";
-    
-    // Get current ACF values, if any
-    $arr_acf_values = get_field( $old_field_name, $post_id );
-    if( !is_array($arr_acf_values) ) {
-        $arr_acf_values = array();
-    }
-    if( !empty($arr_acf_values) ) { $info .= "[1] arr_acf_values: <pre>".print_r($arr_acf_values, true)."</pre>"; } else { $info .= "[1] arr_acf_values is empty.<br />"; }
-    
+// Get plugin options to determine which modules are active
+$options = get_option( 'sdg_settings' );
+if ( isset($options['sdg_modules']) ) {
+	$sdg_modules = $options['sdg_modules'];
 }
 
-/*** GENERAL/ADMIN ***/
+/*** GENERAL/ADMIN POST TYPES ***/
 
-// Admin Note
-function sdg_register_post_type_admin_note() {
+if ( in_array('admin_notes', $sdg_modules ) ) {
+	// Admin Note
+	function sdg_register_post_type_admin_note() {
 
-	$labels = array(
-		'name' => __( 'Admin Notes', 'sdg' ),
-		'singular_name' => __( 'Admin Note', 'sdg' ),
-		'add_new' => __( 'New Admin Note', 'sdg' ),
-		'add_new_item' => __( 'Add New Admin Note', 'sdg' ),
-		'edit_item' => __( 'Edit Admin Note', 'sdg' ),
-		'new_item' => __( 'New Admin Note', 'sdg' ),
-		'view_item' => __( 'View Admin Notes', 'sdg' ),
-		'search_items' => __( 'Search Admin Notes', 'sdg' ),
-		'not_found' =>  __( 'No Admin Notes Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Admin Notes found in Trash', 'sdg' ),
-	);
+		$labels = array(
+			'name' => __( 'Admin Notes', 'sdg' ),
+			'singular_name' => __( 'Admin Note', 'sdg' ),
+			'add_new' => __( 'New Admin Note', 'sdg' ),
+			'add_new_item' => __( 'Add New Admin Note', 'sdg' ),
+			'edit_item' => __( 'Edit Admin Note', 'sdg' ),
+			'new_item' => __( 'New Admin Note', 'sdg' ),
+			'view_item' => __( 'View Admin Notes', 'sdg' ),
+			'search_items' => __( 'Search Admin Notes', 'sdg' ),
+			'not_found' =>  __( 'No Admin Notes Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Admin Notes found in Trash', 'sdg' ),
+		);
 	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'admin_note' ),
-        'capability_type' => array('admin_note', 'admin_notes'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-groups',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-		'taxonomies' => array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'admin_note' ),
+			'capability_type' => array('admin_note', 'admin_notes'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
+			'taxonomies' => array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
 
-	register_post_type( 'admin_note', $args );
+		register_post_type( 'admin_note', $args );
 	
+	}
+	add_action( 'init', 'sdg_register_post_type_admin_note' );
 }
-add_action( 'init', 'sdg_register_post_type_admin_note' );
 
 // DB Query -- deprecated -- merged with Admin Notes
 function sdg_register_post_type_db_query() {
@@ -113,749 +98,768 @@ function sdg_register_post_type_db_query() {
 }
 //add_action( 'init', 'sdg_register_post_type_db_query' );
 
-// Data Table
-function sdg_register_post_type_data_table() {
+if ( in_array('data_tables', $sdg_modules ) ) {
+	// Data Table
+	function sdg_register_post_type_data_table() {
 
-	$labels = array(
-		'name' => __( 'Data Tables', 'sdg' ),
-		'singular_name' => __( 'Data Table', 'sdg' ),
-		'add_new' => __( 'New Data Table', 'sdg' ),
-		'add_new_item' => __( 'Add New Data Table', 'sdg' ),
-		'edit_item' => __( 'Edit Data Table', 'sdg' ),
-		'new_item' => __( 'New Data Table', 'sdg' ),
-		'view_item' => __( 'View Data Tables', 'sdg' ),
-		'search_items' => __( 'Search Data Tables', 'sdg' ),
-		'not_found' =>  __( 'No Data Tables Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Data Tables found in Trash', 'sdg' ),
-	);
+		$labels = array(
+			'name' => __( 'Data Tables', 'sdg' ),
+			'singular_name' => __( 'Data Table', 'sdg' ),
+			'add_new' => __( 'New Data Table', 'sdg' ),
+			'add_new_item' => __( 'Add New Data Table', 'sdg' ),
+			'edit_item' => __( 'Edit Data Table', 'sdg' ),
+			'new_item' => __( 'New Data Table', 'sdg' ),
+			'view_item' => __( 'View Data Tables', 'sdg' ),
+			'search_items' => __( 'Search Data Tables', 'sdg' ),
+			'not_found' =>  __( 'No Data Tables Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Data Tables found in Trash', 'sdg' ),
+		);
 	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=admin_note',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'data_table' ),
-        'capability_type' => array('admin_note', 'admin_notes'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-welcome-write-blog',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ),
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=admin_note',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'data_table' ),
+			'capability_type' => array('admin_note', 'admin_notes'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
 
-	register_post_type( 'data_table', $args );
+		register_post_type( 'data_table', $args );
 	
+	}
+	add_action( 'init', 'sdg_register_post_type_data_table' );
 }
-add_action( 'init', 'sdg_register_post_type_data_table' );
-
 
 /*** PEOPLE & ENSEMBLES ***/
 
-// Person
-function sdg_register_post_type_person() {
+if ( in_array('people', $sdg_modules ) ) {
+	// Person
+	function sdg_register_post_type_person() {
 
-	$labels = array(
-		'name' => __( 'People', 'sdg' ),
-		'singular_name' => __( 'Person', 'sdg' ),
-		'add_new' => __( 'New Person', 'sdg' ),
-		'add_new_item' => __( 'Add New Person', 'sdg' ),
-		'edit_item' => __( 'Edit Person', 'sdg' ),
-		'new_item' => __( 'New Person', 'sdg' ),
-		'view_item' => __( 'View People', 'sdg' ),
-		'search_items' => __( 'Search People', 'sdg' ),
-		'not_found' =>  __( 'No People Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No People found in Trash', 'sdg' ),
-	);
+		$labels = array(
+			'name' => __( 'People', 'sdg' ),
+			'singular_name' => __( 'Person', 'sdg' ),
+			'add_new' => __( 'New Person', 'sdg' ),
+			'add_new_item' => __( 'Add New Person', 'sdg' ),
+			'edit_item' => __( 'Edit Person', 'sdg' ),
+			'new_item' => __( 'New Person', 'sdg' ),
+			'view_item' => __( 'View People', 'sdg' ),
+			'search_items' => __( 'Search People', 'sdg' ),
+			'not_found' =>  __( 'No People Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No People found in Trash', 'sdg' ),
+		);
 	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'person' ),
-        'capability_type' => array('person', 'people'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-groups',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-		'taxonomies' => array( 'people_category', 'people_tag', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'person' ),
+			'capability_type' => array('person', 'people'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies' => array( 'people_category', 'people_tag', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
 
-	register_post_type( 'person', $args );
+		register_post_type( 'person', $args );
 	
+	}
+	add_action( 'init', 'sdg_register_post_type_person' );
 }
-add_action( 'init', 'sdg_register_post_type_person' );
 
-// Ensemble
-function sdg_register_post_type_ensemble() {
+if ( in_array('ensembles', $sdg_modules ) ) {
+	// Ensemble
+	function sdg_register_post_type_ensemble() {
 
-	$labels = array(
-		'name' => __( 'Ensembles', 'sdg' ),
-		'singular_name' => __( 'Ensemble', 'sdg' ),
-		'add_new' => __( 'New Ensemble', 'sdg' ),
-		'add_new_item' => __( 'Add New Ensemble', 'sdg' ),
-		'edit_item' => __( 'Edit Ensemble', 'sdg' ),
-		'new_item' => __( 'New Ensemble', 'sdg' ),
-		'view_item' => __( 'View Ensembles', 'sdg' ),
-		'search_items' => __( 'Search Ensembles', 'sdg' ),
-		'not_found' =>  __( 'No Ensembles Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Ensemble found in Trash', 'sdg' ),
-	);
+		$labels = array(
+			'name' => __( 'Ensembles', 'sdg' ),
+			'singular_name' => __( 'Ensemble', 'sdg' ),
+			'add_new' => __( 'New Ensemble', 'sdg' ),
+			'add_new_item' => __( 'Add New Ensemble', 'sdg' ),
+			'edit_item' => __( 'Edit Ensemble', 'sdg' ),
+			'new_item' => __( 'New Ensemble', 'sdg' ),
+			'view_item' => __( 'View Ensembles', 'sdg' ),
+			'search_items' => __( 'Search Ensembles', 'sdg' ),
+			'not_found' =>  __( 'No Ensembles Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Ensemble found in Trash', 'sdg' ),
+		);
 	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'ensemble' ),
-        'capability_type' => array('ensemble', 'ensembles'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-groups',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'ensemble' ),
+			'capability_type' => array('ensemble', 'ensembles'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
 
-	register_post_type( 'ensemble', $args );
+		register_post_type( 'ensemble', $args );
 	
+	}
+	add_action( 'init', 'sdg_register_post_type_ensemble' );
 }
-add_action( 'init', 'sdg_register_post_type_ensemble' );
-
 
 /*** MUSIC LIBRARY ***/
 
-// Repertoire, aka Musical Work
-function sdg_register_post_type_repertoire() {
+if ( in_array('music', $sdg_modules ) ) {
 
-	$labels = array(
-		'name' => __( 'Musical Works', 'sdg' ),
-		'singular_name' => __( 'Musical Work', 'sdg' ),
-		'add_new' => __( 'New Musical Work', 'sdg' ),
-		'add_new_item' => __( 'Add New Musical Work', 'sdg' ),
-		'edit_item' => __( 'Edit Musical Work', 'sdg' ),
-		'new_item' => __( 'New Musical Work', 'sdg' ),
-		'view_item' => __( 'View Musical Works', 'sdg' ),
-		'search_items' => __( 'Search Musical Works', 'sdg' ),
-		'not_found' =>  __( 'No Musical Works Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Musical Works found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'repertoire' ),
-        'capability_type' => array('musicwork', 'repertoire'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'repertoire_category', 'occasion', 'season', 'post_tag', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+	// Repertoire, aka Musical Work
+	function sdg_register_post_type_repertoire() {
 
-	register_post_type( 'repertoire', $args );
+		$labels = array(
+			'name' => __( 'Musical Works', 'sdg' ),
+			'singular_name' => __( 'Musical Work', 'sdg' ),
+			'add_new' => __( 'New Musical Work', 'sdg' ),
+			'add_new_item' => __( 'Add New Musical Work', 'sdg' ),
+			'edit_item' => __( 'Edit Musical Work', 'sdg' ),
+			'new_item' => __( 'New Musical Work', 'sdg' ),
+			'view_item' => __( 'View Musical Works', 'sdg' ),
+			'search_items' => __( 'Search Musical Works', 'sdg' ),
+			'not_found' =>  __( 'No Musical Works Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Musical Works found in Trash', 'sdg' ),
+		);
 	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'repertoire' ),
+			'capability_type' => array('musicwork', 'repertoire'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'repertoire_category', 'occasion', 'season', 'post_tag', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'repertoire', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_repertoire' );
+
+	// Edition
+	function sdg_register_post_type_edition() {
+
+		$labels = array(
+			'name' => __( 'Editions', 'sdg' ),
+			'singular_name' => __( 'Edition', 'sdg' ),
+			'add_new' => __( 'New Edition', 'sdg' ),
+			'add_new_item' => __( 'Add New Edition', 'sdg' ),
+			'edit_item' => __( 'Edit Edition', 'sdg' ),
+			'new_item' => __( 'New Edition', 'sdg' ),
+			'view_item' => __( 'View Edition', 'sdg' ),
+			'search_items' => __( 'Search Editions', 'sdg' ),
+			'not_found' =>  __( 'No Editions Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Editions found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=repertoire',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'edition' ),
+			'capability_type' => array('edition', 'editions'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'instrument', 'key', 'soloist', 'voicing', 'library_tag', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'edition', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_edition' );
+
+	// Publisher
+	function sdg_register_post_type_publisher() {
+
+		$labels = array(
+			'name' => __( 'Publishers', 'sdg' ),
+			'singular_name' => __( 'Publisher', 'sdg' ),
+			'add_new' => __( 'New Publisher', 'sdg' ),
+			'add_new_item' => __( 'Add New Publisher', 'sdg' ),
+			'edit_item' => __( 'Edit Publisher', 'sdg' ),
+			'new_item' => __( 'New Publisher', 'sdg' ),
+			'view_item' => __( 'View Publishers', 'sdg' ),
+			'search_items' => __( 'Search Publishers', 'sdg' ),
+			'not_found' =>  __( 'No Publishers Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Publishers found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=publication',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'publisher' ),
+			'capability_type' => array('publisher', 'publishers'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'publisher', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_publisher' );
+
+	// Publication
+	function sdg_register_post_type_publication() {
+
+		$labels = array(
+			'name' => __( 'Publications', 'sdg' ),
+			'singular_name' => __( 'Publication', 'sdg' ),
+			'add_new' => __( 'New Publication', 'sdg' ),
+			'add_new_item' => __( 'Add New Publication', 'sdg' ),
+			'edit_item' => __( 'Edit Publication', 'sdg' ),
+			'new_item' => __( 'New Publication', 'sdg' ),
+			'view_item' => __( 'View Publications', 'sdg' ),
+			'search_items' => __( 'Search Publications', 'sdg' ),
+			'not_found' =>  __( 'No Publications Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Publications found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'publication' ),
+			'capability_type' => array('publication', 'publications'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-book-alt',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'publication_category', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'publication', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_publication' );
+
+	// Music List
+	function sdg_register_post_type_music_list() {
+
+		$labels = array(
+			'name' => __( 'Music Lists', 'sdg' ),
+			'singular_name' => __( 'Music List', 'sdg' ),
+			'add_new' => __( 'New Music List', 'sdg' ),
+			'add_new_item' => __( 'Add New Music List', 'sdg' ),
+			'edit_item' => __( 'Edit Music List', 'sdg' ),
+			'new_item' => __( 'New Music List', 'sdg' ),
+			'view_item' => __( 'View Music Lists', 'sdg' ),
+			'search_items' => __( 'Search Music Lists', 'sdg' ),
+			'not_found' =>  __( 'No Music Lists Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Music Lists found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'music_list' ),
+			'capability_type' => array('music_list', 'music_lists'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'music_list', $args );
+	
+	}
+	//add_action( 'init', 'sdg_register_post_type_music_list' );
+
 }
-add_action( 'init', 'sdg_register_post_type_repertoire' );
-
-// Edition
-function sdg_register_post_type_edition() {
-
-	$labels = array(
-		'name' => __( 'Editions', 'sdg' ),
-		'singular_name' => __( 'Edition', 'sdg' ),
-		'add_new' => __( 'New Edition', 'sdg' ),
-		'add_new_item' => __( 'Add New Edition', 'sdg' ),
-		'edit_item' => __( 'Edit Edition', 'sdg' ),
-		'new_item' => __( 'New Edition', 'sdg' ),
-		'view_item' => __( 'View Edition', 'sdg' ),
-		'search_items' => __( 'Search Editions', 'sdg' ),
-		'not_found' =>  __( 'No Editions Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Editions found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=repertoire',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'edition' ),
-        'capability_type' => array('edition', 'editions'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'instrument', 'key', 'soloist', 'voicing', 'library_tag', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'edition', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_edition' );
-
-// Publisher
-function sdg_register_post_type_publisher() {
-
-	$labels = array(
-		'name' => __( 'Publishers', 'sdg' ),
-		'singular_name' => __( 'Publisher', 'sdg' ),
-		'add_new' => __( 'New Publisher', 'sdg' ),
-		'add_new_item' => __( 'Add New Publisher', 'sdg' ),
-		'edit_item' => __( 'Edit Publisher', 'sdg' ),
-		'new_item' => __( 'New Publisher', 'sdg' ),
-		'view_item' => __( 'View Publishers', 'sdg' ),
-		'search_items' => __( 'Search Publishers', 'sdg' ),
-		'not_found' =>  __( 'No Publishers Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Publishers found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=publication',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'publisher' ),
-        'capability_type' => array('publisher', 'publishers'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'publisher', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_publisher' );
-
-// Publication
-function sdg_register_post_type_publication() {
-
-	$labels = array(
-		'name' => __( 'Publications', 'sdg' ),
-		'singular_name' => __( 'Publication', 'sdg' ),
-		'add_new' => __( 'New Publication', 'sdg' ),
-		'add_new_item' => __( 'Add New Publication', 'sdg' ),
-		'edit_item' => __( 'Edit Publication', 'sdg' ),
-		'new_item' => __( 'New Publication', 'sdg' ),
-		'view_item' => __( 'View Publications', 'sdg' ),
-		'search_items' => __( 'Search Publications', 'sdg' ),
-		'not_found' =>  __( 'No Publications Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Publications found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'publication' ),
-        'capability_type' => array('publication', 'publications'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-book-alt',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'publication_category', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'publication', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_publication' );
-
-// Music List
-function sdg_register_post_type_music_list() {
-
-	$labels = array(
-		'name' => __( 'Music Lists', 'sdg' ),
-		'singular_name' => __( 'Music List', 'sdg' ),
-		'add_new' => __( 'New Music List', 'sdg' ),
-		'add_new_item' => __( 'Add New Music List', 'sdg' ),
-		'edit_item' => __( 'Edit Music List', 'sdg' ),
-		'new_item' => __( 'New Music List', 'sdg' ),
-		'view_item' => __( 'View Music Lists', 'sdg' ),
-		'search_items' => __( 'Search Music Lists', 'sdg' ),
-		'not_found' =>  __( 'No Music Lists Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Music Lists found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'music_list' ),
-        'capability_type' => array('music_list', 'music_lists'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'music_list', $args );
-	
-}
-//add_action( 'init', 'sdg_register_post_type_music_list' );
-
 
 /*** LECTIONARY ***/
 
-// Bible Book
-function sdg_register_post_type_bible_book() {
+if ( in_array('lectionary', $sdg_modules ) ) {
 
-	$labels = array(
-		'name' => __( 'Books of the Bible', 'sdg' ),
-		'singular_name' => __( 'Bible Book', 'sdg' ),
-		'add_new' => __( 'New Bible Book', 'sdg' ),
-		'add_new_item' => __( 'Add New Bible Book', 'sdg' ),
-		'edit_item' => __( 'Edit Bible Book', 'sdg' ),
-		'new_item' => __( 'New Bible Book', 'sdg' ),
-		'view_item' => __( 'View Books of the Bible', 'sdg' ),
-		'search_items' => __( 'Search Books of the Bible', 'sdg' ),
-		'not_found' =>  __( 'No Books of the Bible Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Books of the Bible found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'bible_book' ),
-        'capability_type' => array('bible_book', 'bible_books'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+	// Bible Book
+	function sdg_register_post_type_bible_book() {
 
-	register_post_type( 'bible_book', $args );
+		$labels = array(
+			'name' => __( 'Books of the Bible', 'sdg' ),
+			'singular_name' => __( 'Bible Book', 'sdg' ),
+			'add_new' => __( 'New Bible Book', 'sdg' ),
+			'add_new_item' => __( 'Add New Bible Book', 'sdg' ),
+			'edit_item' => __( 'Edit Bible Book', 'sdg' ),
+			'new_item' => __( 'New Bible Book', 'sdg' ),
+			'view_item' => __( 'View Books of the Bible', 'sdg' ),
+			'search_items' => __( 'Search Books of the Bible', 'sdg' ),
+			'not_found' =>  __( 'No Books of the Bible Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Books of the Bible found in Trash', 'sdg' ),
+		);
 	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'bible_book' ),
+			'capability_type' => array('bible_book', 'bible_books'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'bible_book', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_bible_book' );
+
+	// Reading
+	function sdg_register_post_type_reading() {
+
+		$labels = array(
+			'name' => __( 'Readings', 'sdg' ),
+			'singular_name' => __( 'Reading', 'sdg' ),
+			'add_new' => __( 'New Reading', 'sdg' ),
+			'add_new_item' => __( 'Add New Reading', 'sdg' ),
+			'edit_item' => __( 'Edit Reading', 'sdg' ),
+			'new_item' => __( 'New Reading', 'sdg' ),
+			'view_item' => __( 'View Readings', 'sdg' ),
+			'search_items' => __( 'Search Readings', 'sdg' ),
+			'not_found' =>  __( 'No Readings Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Readings found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'reading' ),
+			'capability_type' => array('reading', 'readings'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'reading', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_reading' );
+
+	// Lectionary Day
+	function sdg_register_post_type_lectionary() {
+
+		$labels = array(
+			'name' => __( 'Lectionary', 'sdg' ),
+			'singular_name' => __( 'Lectionary Day', 'sdg' ),
+			'add_new' => __( 'New Lectionary Day', 'sdg' ),
+			'add_new_item' => __( 'Add New Lectionary Day', 'sdg' ),
+			'edit_item' => __( 'Edit Lectionary Day', 'sdg' ),
+			'new_item' => __( 'New Lectionary Day', 'sdg' ),
+			'view_item' => __( 'View Lectionary', 'sdg' ),
+			'search_items' => __( 'Search Lectionary', 'sdg' ),
+			'not_found' =>  __( 'No Lectionary Days Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Lectionary Days found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'lectionary' ),
+			//'capability_type'    => 'lectionary',
+			'capability_type' => array('lectionary_day', 'lectionary_days'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-calendar-alt',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'lectionary', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_lectionary' );
+
+	// Liturgical Date
+	function sdg_register_post_type_liturgical_date() {
+
+		$labels = array(
+			'name' => __( 'Liturgical Calendar', 'sdg' ),
+			'singular_name' => __( 'Liturgical Date', 'sdg' ),
+			'add_new' => __( 'New Liturgical Date', 'sdg' ),
+			'add_new_item' => __( 'Add New Liturgical Date', 'sdg' ),
+			'edit_item' => __( 'Edit Liturgical Date', 'sdg' ),
+			'new_item' => __( 'New Liturgical Date', 'sdg' ),
+			'view_item' => __( 'View Liturgical Dates', 'sdg' ),
+			'search_items' => __( 'Search Liturgical Dates', 'sdg' ),
+			'not_found' =>  __( 'No Liturgical Dates Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Liturgical Dates found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'liturgical_date' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-calendar-alt',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'liturgical_date', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_liturgical_date' );
+
+	// Liturgical Date Calculation
+	function sdg_register_post_type_liturgical_date_calc() {
+
+		$labels = array(
+			'name' => __( 'Liturgical Date Calculations', 'sdg' ),
+			'singular_name' => __( 'Liturgical Date Calculation', 'sdg' ),
+			'add_new' => __( 'New Liturgical Date Calculation', 'sdg' ),
+			'add_new_item' => __( 'Add New Liturgical Date Calculation', 'sdg' ),
+			'edit_item' => __( 'Edit Liturgical Date Calculation', 'sdg' ),
+			'new_item' => __( 'New Liturgical Date Calculation', 'sdg' ),
+			'view_item' => __( 'View Liturgical Date Calculations', 'sdg' ),
+			'search_items' => __( 'Search Liturgical Date Calculations', 'sdg' ),
+			'not_found' =>  __( 'No Liturgical Date Calculations Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Liturgical Date Calculations found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'liturgical_date_calc' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-calendar-alt',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'liturgical_date_calc', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_liturgical_date_calc' );
+
+	// Collect
+	function sdg_register_post_type_collect() {
+
+		$labels = array(
+			'name' => __( 'Collects', 'sdg' ),
+			'singular_name' => __( 'Collect', 'sdg' ),
+			'add_new' => __( 'New Collect', 'sdg' ),
+			'add_new_item' => __( 'Add New Collect', 'sdg' ),
+			'edit_item' => __( 'Edit Collect', 'sdg' ),
+			'new_item' => __( 'New Collect', 'sdg' ),
+			'view_item' => __( 'View Collects', 'sdg' ),
+			'search_items' => __( 'Search Collects', 'sdg' ),
+			'not_found' =>  __( 'No Collects Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Collects found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'collect' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies' => array( 'season', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'collect', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_collect' );
+
+	// Psalms of the Day
+	function sdg_register_post_type_psalms_of_the_day() {
+
+		$labels = array(
+			'name' => __( 'Psalms of the Day', 'sdg' ),
+			'singular_name' => __( 'Psalms of the Day', 'sdg' ),
+			'add_new' => __( 'New Psalms of the Day', 'sdg' ),
+			'add_new_item' => __( 'Add New Psalms of the Day', 'sdg' ),
+			'edit_item' => __( 'Edit Psalms of the Day', 'sdg' ),
+			'new_item' => __( 'New Psalms of the Day', 'sdg' ),
+			'view_item' => __( 'View Psalms of the Day', 'sdg' ),
+			'search_items' => __( 'Search Psalms of the Day', 'sdg' ),
+			'not_found' =>  __( 'No Psalms of the Day Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Psalms of the Day found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=lectionary',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'psalms_of_the_day' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'psalms_of_the_day', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_psalms_of_the_day' );
+
 }
-add_action( 'init', 'sdg_register_post_type_bible_book' );
-
-// Reading
-function sdg_register_post_type_reading() {
-
-	$labels = array(
-		'name' => __( 'Readings', 'sdg' ),
-		'singular_name' => __( 'Reading', 'sdg' ),
-		'add_new' => __( 'New Reading', 'sdg' ),
-		'add_new_item' => __( 'Add New Reading', 'sdg' ),
-		'edit_item' => __( 'Edit Reading', 'sdg' ),
-		'new_item' => __( 'New Reading', 'sdg' ),
-		'view_item' => __( 'View Readings', 'sdg' ),
-		'search_items' => __( 'Search Readings', 'sdg' ),
-		'not_found' =>  __( 'No Readings Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Readings found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'reading' ),
-        'capability_type' => array('reading', 'readings'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'reading', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_reading' );
-
-// Lectionary Day
-function sdg_register_post_type_lectionary() {
-
-	$labels = array(
-		'name' => __( 'Lectionary', 'sdg' ),
-		'singular_name' => __( 'Lectionary Day', 'sdg' ),
-		'add_new' => __( 'New Lectionary Day', 'sdg' ),
-		'add_new_item' => __( 'Add New Lectionary Day', 'sdg' ),
-		'edit_item' => __( 'Edit Lectionary Day', 'sdg' ),
-		'new_item' => __( 'New Lectionary Day', 'sdg' ),
-		'view_item' => __( 'View Lectionary', 'sdg' ),
-		'search_items' => __( 'Search Lectionary', 'sdg' ),
-		'not_found' =>  __( 'No Lectionary Days Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Lectionary Days found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'lectionary' ),
-        //'capability_type'    => 'lectionary',
-        'capability_type' => array('lectionary_day', 'lectionary_days'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-calendar-alt',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'lectionary', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_lectionary' );
-
-// Liturgical Date
-function sdg_register_post_type_liturgical_date() {
-
-	$labels = array(
-		'name' => __( 'Liturgical Calendar', 'sdg' ),
-		'singular_name' => __( 'Liturgical Date', 'sdg' ),
-		'add_new' => __( 'New Liturgical Date', 'sdg' ),
-		'add_new_item' => __( 'Add New Liturgical Date', 'sdg' ),
-		'edit_item' => __( 'Edit Liturgical Date', 'sdg' ),
-		'new_item' => __( 'New Liturgical Date', 'sdg' ),
-		'view_item' => __( 'View Liturgical Dates', 'sdg' ),
-		'search_items' => __( 'Search Liturgical Dates', 'sdg' ),
-		'not_found' =>  __( 'No Liturgical Dates Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Liturgical Dates found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'liturgical_date' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-calendar-alt',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'liturgical_date', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_liturgical_date' );
-
-// Liturgical Date Calculation
-function sdg_register_post_type_liturgical_date_calc() {
-
-	$labels = array(
-		'name' => __( 'Liturgical Date Calculations', 'sdg' ),
-		'singular_name' => __( 'Liturgical Date Calculation', 'sdg' ),
-		'add_new' => __( 'New Liturgical Date Calculation', 'sdg' ),
-		'add_new_item' => __( 'Add New Liturgical Date Calculation', 'sdg' ),
-		'edit_item' => __( 'Edit Liturgical Date Calculation', 'sdg' ),
-		'new_item' => __( 'New Liturgical Date Calculation', 'sdg' ),
-		'view_item' => __( 'View Liturgical Date Calculations', 'sdg' ),
-		'search_items' => __( 'Search Liturgical Date Calculations', 'sdg' ),
-		'not_found' =>  __( 'No Liturgical Date Calculations Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Liturgical Date Calculations found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'liturgical_date_calc' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-calendar-alt',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'liturgical_date_calc', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_liturgical_date_calc' );
-
-// Collect
-function sdg_register_post_type_collect() {
-
-	$labels = array(
-		'name' => __( 'Collects', 'sdg' ),
-		'singular_name' => __( 'Collect', 'sdg' ),
-		'add_new' => __( 'New Collect', 'sdg' ),
-		'add_new_item' => __( 'Add New Collect', 'sdg' ),
-		'edit_item' => __( 'Edit Collect', 'sdg' ),
-		'new_item' => __( 'New Collect', 'sdg' ),
-		'view_item' => __( 'View Collects', 'sdg' ),
-		'search_items' => __( 'Search Collects', 'sdg' ),
-		'not_found' =>  __( 'No Collects Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Collects found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'collect' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-welcome-write-blog',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-		'taxonomies' => array( 'season', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'collect', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_collect' );
-
-// Psalms of the Day
-function sdg_register_post_type_psalms_of_the_day() {
-
-	$labels = array(
-		'name' => __( 'Psalms of the Day', 'sdg' ),
-		'singular_name' => __( 'Psalms of the Day', 'sdg' ),
-		'add_new' => __( 'New Psalms of the Day', 'sdg' ),
-		'add_new_item' => __( 'Add New Psalms of the Day', 'sdg' ),
-		'edit_item' => __( 'Edit Psalms of the Day', 'sdg' ),
-		'new_item' => __( 'New Psalms of the Day', 'sdg' ),
-		'view_item' => __( 'View Psalms of the Day', 'sdg' ),
-		'search_items' => __( 'Search Psalms of the Day', 'sdg' ),
-		'not_found' =>  __( 'No Psalms of the Day Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Psalms of the Day found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=lectionary',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'psalms_of_the_day' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-welcome-write-blog',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'psalms_of_the_day', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_psalms_of_the_day' );
 
 /*** SERMONS ***/
 
-// Sermon
-function sdg_register_post_type_sermon() {
+if ( in_array('sermons', $sdg_modules ) ) {
 
-	$labels = array(
-		'name' => __( 'Sermons', 'sdg' ),
-		'singular_name' => __( 'Sermon', 'sdg' ),
-		'add_new' => __( 'New Sermon', 'sdg' ),
-		'add_new_item' => __( 'Add New Sermon', 'sdg' ),
-		'edit_item' => __( 'Edit Sermon', 'sdg' ),
-		'new_item' => __( 'New Sermon', 'sdg' ),
-		'view_item' => __( 'View Sermons', 'sdg' ),
-		'search_items' => __( 'Search Sermons', 'sdg' ),
-		'not_found' =>  __( 'No Sermons Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Sermons found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => true,
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'sermon' ),
-        'capability_type' => array('sermon', 'sermons'),
-        'map_meta_cap'       => true,
-        'has_archive'        => 'sermon-archive',
-        //'has_archive'        => true,
-        'hierarchical'       => false,
-	 	'menu_icon'          => 'dashicons-welcome-write-blog',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-		'taxonomies' => array( 'sermon_topic', 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+	// Sermon
+	function sdg_register_post_type_sermon() {
 
-	register_post_type( 'sermon', $args );
+		$labels = array(
+			'name' => __( 'Sermons', 'sdg' ),
+			'singular_name' => __( 'Sermon', 'sdg' ),
+			'add_new' => __( 'New Sermon', 'sdg' ),
+			'add_new_item' => __( 'Add New Sermon', 'sdg' ),
+			'edit_item' => __( 'Edit Sermon', 'sdg' ),
+			'new_item' => __( 'New Sermon', 'sdg' ),
+			'view_item' => __( 'View Sermons', 'sdg' ),
+			'search_items' => __( 'Search Sermons', 'sdg' ),
+			'not_found' =>  __( 'No Sermons Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Sermons found in Trash', 'sdg' ),
+		);
 	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'sermon' ),
+			'capability_type' => array('sermon', 'sermons'),
+			'map_meta_cap'       => true,
+			'has_archive'        => 'sermon-archive',
+			//'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies' => array( 'sermon_topic', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'sermon', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_sermon' );
+
+	// Sermon Series
+	function sdg_register_post_type_sermon_series() {
+
+		$labels = array(
+			'name' => __( 'Sermon Series', 'sdg' ),
+			'singular_name' => __( 'Sermon Series', 'sdg' ),
+			'add_new' => __( 'New Sermon Series', 'sdg' ),
+			'add_new_item' => __( 'Add New Sermon Series', 'sdg' ),
+			'edit_item' => __( 'Edit Sermon Series', 'sdg' ),
+			'new_item' => __( 'New Sermon Series', 'sdg' ),
+			'view_item' => __( 'View Sermon Series', 'sdg' ),
+			'search_items' => __( 'Search Sermon Series', 'sdg' ),
+			'not_found' =>  __( 'No Sermon Series Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Sermon Series found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=sermon',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'sermon_series' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'sermon_series', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_sermon_series' );
+
 }
-add_action( 'init', 'sdg_register_post_type_sermon' );
 
+/*** EVENTS (extended EM) ***/
 
-/*** SERIES ***/
+if ( in_array('events', $sdg_modules ) ) {
 
-// Event Series
-function sdg_register_post_type_event_series() {
+	// Event Series
+	function sdg_register_post_type_event_series() {
 
-	$labels = array(
-		'name' => __( 'Event Series', 'sdg' ),
-		'singular_name' => __( 'Event Series', 'sdg' ),
-		'add_new' => __( 'New Event Series', 'sdg' ),
-		'add_new_item' => __( 'Add New Event Series', 'sdg' ),
-		'edit_item' => __( 'Edit Event Series', 'sdg' ),
-		'new_item' => __( 'New Event Series', 'sdg' ),
-		'view_item' => __( 'View Event Series', 'sdg' ),
-		'search_items' => __( 'Search Event Series', 'sdg' ),
-		'not_found' =>  __( 'No Event Series Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Event Series found in Trash', 'sdg' ),
-	);
+		$labels = array(
+			'name' => __( 'Event Series', 'sdg' ),
+			'singular_name' => __( 'Event Series', 'sdg' ),
+			'add_new' => __( 'New Event Series', 'sdg' ),
+			'add_new_item' => __( 'Add New Event Series', 'sdg' ),
+			'edit_item' => __( 'Edit Event Series', 'sdg' ),
+			'new_item' => __( 'New Event Series', 'sdg' ),
+			'view_item' => __( 'View Event Series', 'sdg' ),
+			'search_items' => __( 'Search Event Series', 'sdg' ),
+			'not_found' =>  __( 'No Event Series Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Event Series found in Trash', 'sdg' ),
+		);
 	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=event',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'event_series' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => 'edit.php?post_type=event',
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'event_series' ),
+			//'capability_type' => array('lectionary', 'lectionary'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-book',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
 
-	register_post_type( 'event_series', $args );
+		register_post_type( 'event_series', $args );
 	
+	}
+	add_action( 'init', 'sdg_register_post_type_event_series' );
+
 }
-add_action( 'init', 'sdg_register_post_type_event_series' );
-
-// Sermon Series
-function sdg_register_post_type_sermon_series() {
-
-	$labels = array(
-		'name' => __( 'Sermon Series', 'sdg' ),
-		'singular_name' => __( 'Sermon Series', 'sdg' ),
-		'add_new' => __( 'New Sermon Series', 'sdg' ),
-		'add_new_item' => __( 'Add New Sermon Series', 'sdg' ),
-		'edit_item' => __( 'Edit Sermon Series', 'sdg' ),
-		'new_item' => __( 'New Sermon Series', 'sdg' ),
-		'view_item' => __( 'View Sermon Series', 'sdg' ),
-		'search_items' => __( 'Search Sermon Series', 'sdg' ),
-		'not_found' =>  __( 'No Sermon Series Found', 'sdg' ),
-		'not_found_in_trash' => __( 'No Sermon Series found in Trash', 'sdg' ),
-	);
-	
-	$args = array(
-		'labels' => $labels,
-	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=sermon',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'sermon_series' ),
-        //'capability_type' => array('lectionary', 'lectionary'),
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-book',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-		'taxonomies' => array( 'admin_tag' ),
-		'show_in_rest' => true,    
-	);
-
-	register_post_type( 'sermon_series', $args );
-	
-}
-add_action( 'init', 'sdg_register_post_type_sermon_series' );
-
 
 /*** ***/
+
 
 // ACF Bi-directional fields
 // WIP!
 // https://www.advancedcustomfields.com/resources/bidirectional-relationships/
 
+//
 function bidirectional_acf_update_value( $value, $post_id, $field  ) {
 	
 	// vars
@@ -935,14 +939,43 @@ function bidirectional_acf_update_value( $value, $post_id, $field  ) {
     return $value;
     
 }
-add_filter('acf/update_value/name=repertoire_editions', 'bidirectional_acf_update_value', 10, 3);
-add_filter('acf/update_value/name=events_series', 'bidirectional_acf_update_value', 10, 3);
-add_filter('acf/update_value/name=sermons_series', 'bidirectional_acf_update_value', 10, 3);
+if ( in_array('music', $sdg_modules ) ) {
+	add_filter('acf/update_value/name=repertoire_editions', 'bidirectional_acf_update_value', 10, 3);
+}
+if ( in_array('events', $sdg_modules ) ) {
+	add_filter('acf/update_value/name=events_series', 'bidirectional_acf_update_value', 10, 3);
+}
+if ( in_array('sermons', $sdg_modules ) ) {
+	add_filter('acf/update_value/name=sermons_series', 'bidirectional_acf_update_value', 10, 3);
+}
+
 //
 //add_filter('acf/update_value/name=related_compositions', 'bidirectional_acf_update_value', 10, 3);
 //add_filter('acf/update_value/type=relationship', array($this, 'update_relationship_field'), 11, 3);
-
-
 ///
+
+// function to copy data from old ACF one-way to new ACF bidirectional relationship fields
+add_shortcode('convert_bidirectional_fields', 'convert_bidirectional_fields');
+function convert_bidirectional_fields ( $post_id = null, $post_type = "", $old_field_name = "", $new_field_name = "", $verbose = false ) {
+    
+    $info = "";
+    $troubleshooting = "";
+    $new_vals = false;
+    
+    $info .= ">> convert_bidirectional_fields >><br />";
+    $info .= "post_id: $post_id<br />";
+    $info .= "post_type: $post_type<br />";
+    $info .= "old_field_name: $old_field_name<br />";
+    $info .= "new_field_name: $new_field_name<br />";
+    
+    // Get current ACF values, if any
+    $arr_acf_values = get_field( $old_field_name, $post_id );
+    if( !is_array($arr_acf_values) ) {
+        $arr_acf_values = array();
+    }
+    if( !empty($arr_acf_values) ) { $info .= "[1] arr_acf_values: <pre>".print_r($arr_acf_values, true)."</pre>"; } else { $info .= "[1] arr_acf_values is empty.<br />"; }
+    
+}
+
 
 ?>
