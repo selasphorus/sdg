@@ -228,6 +228,7 @@ function sdg_modules_field_cb( $args ) {
 	echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
 	
 	foreach ( $modules as $name => $option ) {
+		if ( in_array($name, $value) ) { echo "$name is in value array<br />"; }
 		?>
 		<div class="sdg-options">
 			<input
@@ -236,7 +237,7 @@ function sdg_modules_field_cb( $args ) {
 			name="sdg_settings[sdg_modules][]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $name ); ?>"
-			<?php if ( in_array($name,$value) ) { $checked = ' checked="checked" '; } ?>
+			<?php if ( in_array($name, $value) ) { $checked = ' checked="checked" '; } ?>
 			<?php //echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], $name, false ) ) : ( '' ); ?>
 			/>
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>" class="sdg-option-label">
