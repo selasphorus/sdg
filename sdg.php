@@ -171,9 +171,6 @@ function sdg_modules_field_cb() {
 	foreach ( $modules as $name => $option ) {
 	?>
 		<div class="sdg-options">
-			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
-			<?php echo esc_html( $modules[ $name ] ); ?>:
-			</label>
 			<input
 			type="checkbox"
 			id="sdg_modules_<?php echo esc_attr( $name ); ?>"
@@ -182,6 +179,9 @@ function sdg_modules_field_cb() {
 			value="<?php echo esc_attr( $value ); ?>"
 			placeholder="<?php esc_attr_e( 'http://' ); ?>"
 			/>
+			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
+			<?php echo esc_html( $modules[ $name ] ); ?>:
+			</label>
 		</div>
 	<?php
 	}
