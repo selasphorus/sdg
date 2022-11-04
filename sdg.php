@@ -170,7 +170,7 @@ function sdg_modules_field_cb() {
 	
 	echo "testing";
 	
-	/*foreach ( (array) $modules as $name => $option ) {
+	foreach ( (array) $modules as $name => $option ) {
 	?>
 		<div class="sdg-options">
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
@@ -186,7 +186,7 @@ function sdg_modules_field_cb() {
 			/>
 		</div>
 	<?php
-	}*/
+	}
 }
 
 // Render a checkbox
