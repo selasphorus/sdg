@@ -168,7 +168,10 @@ public function sdg_modules_field_cb() {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'Events' ), 'lectionary' => __( 'Events' ), 'music' => __( 'Events' ), 'webcasts' => __( 'Events' ), 'sermons' => __( 'Events' ), 'slider' => __( 'Events' ), 'ninjaforms' => __( 'Events' ) );
 	
-	foreach ( (array) $modules as $name => $option ) { ?>
+	echo "testing";
+	
+	/*foreach ( (array) $modules as $name => $option ) {
+	?>
 		<div class="sdg-options">
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
 			<?php echo esc_html( $modules[ $name ] ); ?>:
@@ -182,8 +185,8 @@ public function sdg_modules_field_cb() {
 			placeholder="<?php esc_attr_e( 'http://' ); ?>"
 			/>
 		</div>
-		<?php
-	}
+	<?php
+	}*/
 }
 
 // Render a checkbox
