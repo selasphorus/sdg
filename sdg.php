@@ -1269,8 +1269,8 @@ function get_post_sidebar_widget ( $post_id = null ) {
 }
 
 // Post Resources (ACF field)
-add_shortcode('display_post_resources', 'sdg_get_post_resources');
-function sdg_get_post_resources ( $post_id = null ) {
+add_shortcode('display_post_resources', 'get_post_resources');
+function get_post_resources ( $post_id = null ) {
     
     if ($post_id == null) { $post_id = get_the_ID(); }
     $info = "<!-- Resources for post_id: $post_id -->";
