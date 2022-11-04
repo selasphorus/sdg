@@ -177,10 +177,9 @@ function sdg_modules_field_cb() {
 			name="sdg_modules[<?php echo esc_attr( $name ); ?>][]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $value ); ?>"
-			placeholder="<?php esc_attr_e( 'http://' ); ?>"
 			/>
-			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
-			<?php echo esc_html( $modules[ $name ] ); ?>:
+			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>" class="sdg-option-label">
+			<?php echo esc_html( $modules[ $name ] ); ?>
 			</label>
 		</div>
 	<?php
