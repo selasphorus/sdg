@@ -168,6 +168,9 @@ function sdg_modules_field_cb() {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
+	echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	
 	foreach ( $modules as $name => $option ) {
 	?>
 		<div class="sdg-options">
