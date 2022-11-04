@@ -242,7 +242,7 @@ function sdg_list_media_items ($atts = [] ) {
         }
         
         if ( $grouped_by == "year" ) {
-            usort($items, arr_sort('value', 'sort_date', 'DESC'));
+            usort($items, sdg_arr_sort('value', 'sort_date', 'DESC'));
         }
         
         $the_year = ""; // reset
