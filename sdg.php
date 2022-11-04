@@ -168,9 +168,7 @@ function sdg_modules_field_cb() {
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'Events' ), 'lectionary' => __( 'Events' ), 'music' => __( 'Events' ), 'webcasts' => __( 'Events' ), 'sermons' => __( 'Events' ), 'slider' => __( 'Events' ), 'ninjaforms' => __( 'Events' ) );
 	
-	echo "testing";
-	
-	foreach ( (array) $modules as $name => $option ) {
+	foreach ( $modules as $name => $option ) {
 	?>
 		<div class="sdg-options">
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>; ?>" class="sdg-option-label">
