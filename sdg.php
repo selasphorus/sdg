@@ -223,11 +223,11 @@ function sdg_settings_page_html() {
 // TODO: maybe: split this into several separate plugins -- SDG WooCommerce; SDG Developer Functions; &c. -- ?!? WIP ?!?
 
 $includes = array( 'posttypes', 'taxonomies' );
-$common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
 $admin_functions_filepath = $plugin_path . 'inc/'.'admin_functions.php';
+$common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
 $modules = get_option( 'modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
 
-if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
+//if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
 if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "no $common_functions_filepath found"; }
 
 foreach ( $includes as $inc ) {

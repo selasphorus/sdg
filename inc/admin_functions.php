@@ -1076,18 +1076,16 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-if ( !function_exists( 'sdg_remove_bracketed_info' ) ) {
-    function sdg_remove_bracketed_info ( $str ) {
+function sdg_remove_bracketed_info ( $str ) {
 
-        //sdg_log( "function: remove_bracketed_info" );
+	//sdg_log( "function: remove_bracketed_info" );
 
-        if (strpos($str, '[') !== false) { 
-            $str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str);
-            $str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str);
-        }
+	if (strpos($str, '[') !== false) { 
+		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str);
+		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str);
+	}
 
-        return $str;
-    }
+	return $str;
 }
 
 // Function: clean up titles for creation of slugs and for front-end display
@@ -1823,7 +1821,7 @@ function sdg_run_title_updates ($atts = [], $content = null, $tag = '') {
 
 
 // Function(s) to clean up titles/slugs/UIDs
-if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); } 
+///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); } 
 //add_shortcode('run_posts_cleanup', 'sdg_posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
 function sdg_posts_cleanup( $atts = [] ) {
 
@@ -1980,7 +1978,7 @@ function sdg_posts_cleanup( $atts = [] ) {
 
 // TODO: clean up or eliminate the following shortcode and function -- see sdg_save_post_callback
 // Shortcode currently in use on dev site event pages
-if ( is_dev_site() ) { add_shortcode('run_post_updates', 'sdg_run_post_updates'); }
+///if ( is_dev_site() ) { add_shortcode('run_post_updates', 'sdg_run_post_updates'); }
 //add_shortcode('run_post_updates', 'sdg_run_post_updates');
 function sdg_run_post_updates( $atts = [] ) {
 
@@ -2098,7 +2096,6 @@ function sdg_run_post_updates( $atts = [] ) {
     
     return $info;
 }
-
 
 
 /* *** SERMONS *** */
