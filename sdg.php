@@ -206,7 +206,7 @@ function sdg_settings_page_html() {
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
-if ( !function_exists( 'is_dev_site' ) ) {
+/*if ( !function_exists( 'is_dev_site' ) ) {
     function is_dev_site() {
         
         $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
@@ -215,7 +215,7 @@ if ( !function_exists( 'is_dev_site' ) ) {
         
         return false;
     }
-}
+}*/
 
 
 // Include sub-files
@@ -285,8 +285,8 @@ function sdg_scripts_method() {
 
 
 // Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
-add_filter( 'get_edit_post_link', 'add_post_type_query_var', 10, 3 );
-function add_post_type_query_var( $url, $post_id, $context ) {
+add_filter( 'get_edit_post_link', 'sdg_add_post_type_query_var', 10, 3 );
+function sdg_add_post_type_query_var( $url, $post_id, $context ) {
 
     $post_type = get_post_type( $post_id );
     
@@ -334,7 +334,7 @@ function sdg_meta_tags() {
 
 // WIP -- selectively dequeue scripts and styles for faster CMS load times
 //add_action( 'admin_init', 'selectively_dequeue_admin_scripts_and_styles' );
-function selectively_dequeue_admin_scripts_and_styles() {
+function sdg_selectively_dequeue_admin_scripts_and_styles() {
     
     // wp_deregister_style( string $handle )
     // https://developer.wordpress.org/reference/functions/wp_deregister_style/
@@ -371,7 +371,7 @@ add_filter('acf/settings/row_index_offset', '__return_zero');
 // TODO: update other calls to ACF functions in case this screws them up?
 
 // Certain operations should only be run in devmode
-function devmode_active() {
+function sdg_devmode_active() {
 	
 	$devmode = false; // init
 	$queenbee = get_option( 'devadmin_username', 'queenbee' );
@@ -392,8 +392,8 @@ function devmode_active() {
 }
 
 // Function to display troubleshooting info
-add_shortcode( 'troubleshooting', 'show_troubleshooting_info' );
-function show_troubleshooting_info ( ) {
+add_shortcode( 'troubleshooting', 'sdg_show_troubleshooting_info' );
+function sdg_show_troubleshooting_info ( ) {
 	
 	global $post;
 	global $wp_query;
@@ -624,7 +624,7 @@ function sdg_get_default_category () {
 
 ///
 
-function digit_to_word($number){
+function sdg_digit_to_word($number){
     switch($number){
         case 0:$word = "zero";break;
         case 1:$word = "one";break;
@@ -912,7 +912,7 @@ function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "
 }
 
 // Function to sort arrays by value
-function arr_sort( $sort_type = "value", $key_name = null, $order = 'ASC' ) {
+function sdg_arr_sort( $sort_type = "value", $key_name = null, $order = 'ASC' ) {
 
 	if ( $sort_type == "value" ) {
     
@@ -1569,13 +1569,13 @@ function sdg_selectmenu ( $args = '' ) {
 // WIP
 
 // This function is built in to PHP starting in v. 8.0
-if ( !function_exists('str_starts_with') ) {
+/*if ( !function_exists('str_starts_with') ) {
     
     function str_starts_with ( $haystack, $needle ) {
         return strpos( $haystack , $needle ) === 0;
     }
     
-}
+}*/
 
 // Get name of post_type
 function sdg_get_post_type_str( $type = "" ) {
