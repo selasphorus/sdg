@@ -231,7 +231,7 @@ function sdg_modules_field_cb( $args ) {
 			<input
 			type="checkbox"
 			id="sdg_modules_<?php echo esc_attr( $name ); ?>"
-			name="sdg_settings['sdg_modules'][]"
+			name="sdg_settings[sdg_modules][]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $name ); ?>"
 			<?php if ($value) { $checked = ' checked="checked" '; } ?>
