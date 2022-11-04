@@ -129,13 +129,13 @@ function sdg_settings_section_callback( $args ) {
 	echo "options: <pre>".print_r($options,true)."</pre>"; // tft
 	
 	?>
-	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p>
+	<!--p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p-->
 	<?php
 }
 
 function sdg_modules_section_callback( $args ) {
 	?>
-	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Modules', 'sdg' ); ?></p>
+	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Select modules to activate.', 'sdg' ); ?></p>
 	<?php
 }
 
