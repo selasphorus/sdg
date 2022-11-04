@@ -361,7 +361,9 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php'; 
-    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    if ( $module != "lectionary" && $module != "admin_notes" && $module != "data_tables" ) {  // tft
+    	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    }
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */

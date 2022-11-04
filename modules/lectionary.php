@@ -9,13 +9,13 @@ if ( !function_exists( 'add_action' ) ) {
 }
 
 /*********** CPT: LITURGICAL DATE ***********/
-function get_cpt_liturgical_date_content() {
+function sdg_get_cpt_liturgical_date_content() {
 	
 }
 
 // Day Titles
-add_shortcode('day_title', 'get_day_title');
-function get_day_title( $atts = [], $content = null, $tag = '' ) {
+add_shortcode('day_title', 'sdg_get_day_title');
+function sdg_get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "\n<!-- get_day_title -->\n";
@@ -301,8 +301,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 }
 
 // Function(s) to calculate variable liturgical_dates
-add_shortcode('calculate_variable_dates', 'wpsdg_calc_litdates');
-function wpsdg_calc_litdates( $atts = [] ) {
+add_shortcode('calculate_variable_dates', 'sdg_calc_litdates');
+function sdg_calc_litdates( $atts = [] ) {
 
     // TODO: build in failsafe -- run this fcn ONLY for user queenbee
     
@@ -356,7 +356,7 @@ function wpsdg_calc_litdates( $atts = [] ) {
 	$arr_posts = new WP_Query( $args );
     $posts = $arr_posts->posts;
     
-    $info .= ">>> wpsdg_calc_litdates <<<<br />";
+    $info .= ">>> sdg_calc_litdates <<<<br />";
     $info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "year: $year<br />";
     $info .= "[num posts: ".count($posts)."]<br />";
@@ -700,7 +700,7 @@ function sdg_liturgical_date_meta_box_callback( $post ) {
 
 
 /*********** CPT: READING ***********/
-function get_cpt_reading_content( $post_id = null ) {
+function sdg_get_cpt_reading_content( $post_id = null ) {
 	
     $info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
@@ -772,13 +772,13 @@ function get_cpt_reading_content( $post_id = null ) {
 
 
 /*********** CPT: PSALMS OF THE DAY ***********/
-function get_cpt_psalms_of_the_day_content() {
+function sdg_get_cpt_psalms_of_the_day_content() {
 	
 }
 
 // att service: "morning_prayer" or "evening_prayer"
-add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
-function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
+add_shortcode('psalms_of_the_day', 'sdg_get_psalms_of_the_day');
+function sdg_get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
 	
     // init vars
     $info = "";
