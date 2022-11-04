@@ -1536,8 +1536,6 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 }
 
 
-
-
 /*********** DEV/CLEANUP FUNCTIONS ***********/
 
 // Bulk updates to titles and title_for_matching postmeta values
