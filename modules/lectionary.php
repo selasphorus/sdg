@@ -13,7 +13,7 @@ function get_cpt_liturgical_date_content() {
 }
 
 // Day Titles
-add_shortcode('day_title', 'sdg_get_day_title');
+add_shortcode('day_title', 'get_day_title');
 function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
