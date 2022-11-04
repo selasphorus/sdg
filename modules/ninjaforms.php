@@ -19,7 +19,7 @@ if ( !function_exists( 'add_action' ) ) {
  * @param string $template_path Template path. (default: '').
  * @param string $default_path  Default path. (default: '').
  */
-function atc_get_template( $template_name, $args = array(), $template_path = '') { // function wc_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' )
+function sdg_get_template( $template_name, $args = array(), $template_path = '') { // function wc_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' )
     
     global $plugin_path;
     $template_path = $plugin_path.$template_path.$template_name;
@@ -35,7 +35,7 @@ function atc_get_template( $template_name, $args = array(), $template_path = '')
         include $template_path;
         
     } else {
-        stc_log("function: atc_get_template");
+        stc_log("function: sdg_get_template");
         stc_log("could not locate template file: ".$template_path);
         echo "[could not locate template file: $template_path]";
     }
@@ -43,18 +43,18 @@ function atc_get_template( $template_name, $args = array(), $template_path = '')
 }
 
 /**
- * Like atc_get_template, but returns the HTML instead of outputting.
+ * Like sdg_get_template, but returns the HTML instead of outputting.
  *
- * @see atc_get_template
+ * @see sdg_get_template
  * @since 2.5.0
  * @param string $template_name Template name.
  * @param string $template_path Template path. (default: '').
  *
  * @return string
  */
-function atc_get_template_html( $template_name, $args, $template_path = '' ) {
+function sdg_get_template_html( $template_name, $args, $template_path = '' ) {
 	ob_start();
-	atc_get_template( $template_name, $args, $template_path ); //wc_get_template( $template_name, $args, $template_path, $default_path );
+	sdg_get_template( $template_name, $args, $template_path ); //wc_get_template( $template_name, $args, $template_path, $default_path );
 	return ob_get_clean();
 }
 
@@ -80,10 +80,10 @@ function custom_nf_email_message($message, $data, $action_settings) {
     $footer_template_name = 'emails/email-footer.php';
     
     // Add header from template
-    $info .= atc_get_template_html( $header_template_name, $args, $template_path );
+    $info .= sdg_get_template_html( $header_template_name, $args, $template_path );
     
     // Add styles from template
-    $css = atc_get_template_html( $css_template_name, $args, $template_path );
+    $css = sdg_get_template_html( $css_template_name, $args, $template_path );
     $info .= '<style>' . $css . '</style>';
     
     // Get form title from submitted data; add it as a header
@@ -103,7 +103,7 @@ function custom_nf_email_message($message, $data, $action_settings) {
     }*/
     
     // Add footer from template
-    $info .= atc_get_template_html( $footer_template_name, $args, $template_path );
+    $info .= sdg_get_template_html( $footer_template_name, $args, $template_path );
     
     // Return the modified HTML email body
     return $info;

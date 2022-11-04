@@ -4,13 +4,14 @@ defined( 'ABSPATH' ) or die( 'Nope!' );
 
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
-	echo 'Hi there!  I\'m just a plugin fiel, not much I can do when called directly.';
+	echo 'Hi there!  I\'m just a plugin file, not much I can do when called directly.';
 	exit;
 }
 
 /*********** CPT: LITURGICAL DATE ***********/
-function get_cpt_liturgical_date_content() {	
-}
+
+//function get_cpt_liturgical_date_content() {	}
+
 
 // Day Titles
 add_shortcode('day_title', 'get_day_title');
@@ -299,15 +300,16 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	
 }
 
+
 // Function(s) to calculate variable liturgical_dates
-add_shortcode('calculate_variable_dates', 'sdg_calc_litdates');
+add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = [] ) {
 
     // TODO: build in failsafe -- run this fcn ONLY for user queenbee
     
 	$info = ""; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
-
+/*
 	$a = shortcode_atts( array(
         'testing' => true,
         'id' => null,
@@ -355,7 +357,7 @@ function calc_litdates( $atts = [] ) {
 	$arr_posts = new WP_Query( $args );
     $posts = $arr_posts->posts;
     
-    $info .= ">>> sdg_calc_litdates <<<<br />";
+    $info .= ">>> calc_litdates <<<<br />";
     $info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "year: $year<br />";
     $info .= "[num posts: ".count($posts)."]<br />";
@@ -368,6 +370,7 @@ function calc_litdates( $atts = [] ) {
     //$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $oabis = array('before', 'after', 'of', 'in');
+    
     
     foreach ( $posts AS $post ) {
         
@@ -656,17 +659,16 @@ function calc_litdates( $atts = [] ) {
         $info .= "<br />";
                
     } // END foreach post
-    
+    */
     return $info;
     
 }
-
 
 /**
  * Adds a box to the main column on the CPT edit screen.
  */
 //add_action( 'add_meta_boxes', 'sdg_add_meta_boxes' );
-function sdg_add_meta_boxes() {
+/*function sdg_add_meta_boxes() {
 
 	add_meta_box(
 		'calculated_dates',
@@ -675,7 +677,7 @@ function sdg_add_meta_boxes() {
 		'liturgical_date'
 	);
 
-}
+}*/
 
 /**
  * Prints the box content.
@@ -774,7 +776,7 @@ function get_cpt_psalms_of_the_day_content() {
 }
 
 // att service: "morning_prayer" or "evening_prayer"
-add_shortcode('psalms_of_the_day', 'sdg_get_psalms_of_the_day');
+add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
 function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
 	
     // init vars
@@ -798,7 +800,7 @@ function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
     if ( $post_type == 'event' ) {
 		$event_id = $post_id;
 	}
-    if ( sdg_devmode_active() || is_dev_site() ) {
+    if ( is_dev_site() ) {
         //$info .= "post_id: $post_id; post_type: $post_type; event_id: $event_id; <br />";
     }
     
@@ -820,7 +822,7 @@ function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
         $day_num = date( 'j', strtotime($event_date) ); // or 'd'? (w/ leading zeros)
         //$day_num = (int) substr( $event_date, strpos($event_date, " "), strpos($event_date, "@") - strpos($event_date, " ") -1 ); // tribe events version
         
-        if ( sdg_devmode_active() || is_dev_site() ) {
+        if ( is_dev_site() ) {
             //$info .= "<!-- day_num: $day_num; event_date: $event_date -->"; // tft
         }
     }
