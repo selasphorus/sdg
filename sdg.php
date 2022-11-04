@@ -184,10 +184,10 @@ function sdg_select_field_cb( $args ) {
 		</option>
 	</select>
 	<p class="description">
-		<?php esc_html_e( 'You take the blue pill and the story ends. You wake in your bed and you believe whatever you want to believe.', 'sdg' ); ?>
+		<?php esc_html_e( 'Blue...', 'sdg' ); ?>
 	</p>
 	<p class="description">
-		<?php esc_html_e( 'You take the red pill and you stay in Wonderland and I show you how deep the rabbit-hole goes.', 'sdg' ); ?>
+		<?php esc_html_e( 'Red...', 'sdg' ); ?>
 	</p>
 	<?php
 }
