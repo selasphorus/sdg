@@ -224,9 +224,12 @@ function sdg_modules_field_cb( $args ) {
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'People' ), 'music' => __( 'Music Library' ), 'webcasts' => __( 'Webcasts' ), 'sermons' => __( 'Sermons' ), 'lectionary' => __( 'Lectionary' ), 'slider' => __( 'Slider' ), 'ninjaforms' => __( 'Ninja Forms' ) );
 	
 	echo "args: <pre>".print_r($args,true)."</pre>"; // tft	
+	echo "value: <pre>".print_r($value,true)."</pre>"; // tft	
 	
 	foreach ( $modules as $name => $option ) {
-	?>
+		echo "name: ".$name."<br />"; // tft
+		echo "option: ".$option."<br />"; // tft
+		?>
 		<div class="sdg-options">
 			<input
 			type="checkbox"
@@ -241,7 +244,7 @@ function sdg_modules_field_cb( $args ) {
 			<?php echo esc_html( $modules[ $name ] ); ?>
 			</label>
 		</div>
-	<?php
+		<?php
 	}
 }
 
