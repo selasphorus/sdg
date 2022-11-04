@@ -206,7 +206,7 @@ function sdg_checkbox_field_cb( $args ) {
     
     $value   = ( !isset( $options[$args['name']] ) ) 
                 ? null : $options[$args['name']];
-    if($value) { $checked = ' checked="checked" '; }
+    if ($value) { $checked = ' checked="checked" '; }
         // Could use ob_start.
         $html  = '';
         $html .= '<input id="' . esc_attr( $args['name'] ) . '" 
@@ -234,7 +234,8 @@ function sdg_modules_field_cb( $args ) {
 			name="sdg_modules[]"
 			class="<?php echo esc_attr( $name ); ?>"
 			value="<?php echo esc_attr( $name ); ?>"
-			<?php echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], $name, false ) ) : ( '' ); ?>
+			<?php if ($value) { $checked = ' checked="checked" '; } ?>
+			<?php //echo isset( $options[ $args['label_for'] ] ) ? ( selected( $options[ $args['label_for'] ], $name, false ) ) : ( '' ); ?>
 			/>
 			<label for="sdg_modules_<?php echo esc_attr( $name ); ?>" class="sdg-option-label">
 			<?php echo esc_html( $modules[ $name ] ); ?>
