@@ -73,7 +73,7 @@ function sdg_settings_init() {
 	
 	// Register a new section in the "sdg" page.
 	add_settings_section(
-		'sdg_settings',
+		'sdg_modules',
 		__( 'SDG Modules', 'sdg' ), 'sdg_modules_section_callback',
 		'sdg'
 	);
@@ -163,7 +163,7 @@ function sdg_select_field_cb( $args ) {
 	<?php
 }
 
-public function sdg_modules_field_cb() {
+function sdg_modules_field_cb() {
 	
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 'events' => __( 'Events' ), 'people' => __( 'Events' ), 'lectionary' => __( 'Events' ), 'music' => __( 'Events' ), 'webcasts' => __( 'Events' ), 'sermons' => __( 'Events' ), 'slider' => __( 'Events' ), 'ninjaforms' => __( 'Events' ) );
