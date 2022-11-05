@@ -106,7 +106,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$date = date_create($sermon_date);
 		$the_date = date_format($date,"l, F d, Y \@ h:i a");
 		$info .= $the_date."<br />";
-        $info .= get_day_title( array ('the_date' => $sermon_date ) );
+        if ( function_exists('get_day_title') ) { $info .= get_day_title( array ('the_date' => $sermon_date ) ); }
 		$info .= '</div>';
         
     }
