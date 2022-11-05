@@ -40,14 +40,13 @@ function sdg_settings_init() {
 	// Register a new setting for "sdg" page.
 	register_setting( 'sdg', 'sdg_settings' );
 
-	/*
 	// Register a new section in the "sdg" page.
 	add_settings_section(
 		'sdg_settings',
 		__( 'SDG Plugin Settings', 'sdg' ), 'sdg_settings_section_callback',
 		'sdg'
 	);
-
+	/*
 	// Register a new field in the "sdg_settings" section, inside the "sdg" page.
 	add_settings_field(
 		'sdg_test_text_field',
