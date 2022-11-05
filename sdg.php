@@ -240,6 +240,8 @@ function sdg_modules_field_cb( $args ) {
 		//
 		'organs' => __( 'Organs' ), 
 		//
+		'venues' => __( 'Venues' ), 
+		//
 		'slider' => __( 'Slider' ), 
 		'ninjaforms' => __( 'Ninja Forms' ), 
 		//
