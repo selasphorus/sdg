@@ -71,27 +71,27 @@ function sdg_settings_init() {
 			'sdg_custom_data' 	=> 'custom',
 		)
 	);
+	*/
 	
-	// Test checkbox field
+	// Checkbox to designate dev site
 	add_settings_field(
-        'sdg_test_checkbox_field',
-        esc_attr__('Test Checkbox Field', 'sdg'),
-        'sdg_checkbox_field_cb',
+        'sdg_is_dev_site',
+        esc_attr__('Dev Site', 'sdg'),
+        'sdg_devsite_field_cb',
         'sdg',
         'sdg_settings',
         array( 
             'type'         => 'checkbox',
             //'option_group' => 'sdg_settings', 
-            'name'         => 'sdg_test_checkbox_field',
-            'label_for'    => 'sdg_test_checkbox_field',
-            'value'        => (empty(get_option('sdg_settings')['sdg_test_checkbox_field'])) ? 0 : get_option('sdg_settings')['sdg_test_checkbox_field'],
+            'name'         => 'sdg_is_dev_site',
+            'label_for'    => 'sdg_is_dev_site',
+            'value'        => (empty(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
             'description'  => __( 'Check to test.', 'sdg' ),
-            'checked'      => (!isset(get_option('sdg_settings')['sdg_test_checkbox_field'])) ? 0 : get_option('sdg_settings')['sdg_test_checkbox_field'],
+            'checked'      => (!isset(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
             // Used 0 in this case but will still return Boolean not[see notes below] 
             ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
             )
     ); 
-	*/
 	
 	// Register a new section in the "sdg" page.
 	add_settings_section(
@@ -195,11 +195,11 @@ function sdg_select_field_cb( $args ) {
 }
 
 /** 
- * switch for 'remove styles' field
+ * switch for 'is_dev_site' field
  * @since 2.0.1
  * @input type checkbox
  */
-function sdg_checkbox_field_cb( $args ) { 
+function sdg_devsite_field_cb( $args ) { 
 
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	
@@ -350,6 +350,7 @@ if ( !function_exists( 'is_dev_site' ) ) {
         $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
         if ( $subdomain == "dev" ) { return true; } // RS dev site
         // TODO: check options for other dev domains?
+        if ( isset($options['is_dev_site']) ) { return true; }
         
         return false;
     }
