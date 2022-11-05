@@ -343,9 +343,10 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
-if ( !function_exists( 'is_dev_site' ) ) {
+//if ( !function_exists( 'is_dev_site' ) ) {
     function is_dev_site() {
         
+        $options = get_option( 'sdg_settings' );
         $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
         if ( $subdomain == "dev" ) { return true; } // RS dev site
         // TODO: check options for other dev domains?
@@ -353,7 +354,7 @@ if ( !function_exists( 'is_dev_site' ) ) {
         
         return false;
     }
-}
+//}
 
 // Include sub-files
 // TODO: make them required? Otherwise dependencies may be an issue.
