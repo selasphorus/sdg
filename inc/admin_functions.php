@@ -899,7 +899,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 // Fires immediately after updating metadata of a specific type.
 
 
-add_filter('wp_insert_post_data', 'sdg_build_the_title_on_insert', 10, 2);
+add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
 function build_the_title_on_insert( $data, $postarr ) {
     
     sdg_log( "divline1" );
