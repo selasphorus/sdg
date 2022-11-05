@@ -115,6 +115,9 @@ function sdg_settings_init() {
 		)
 	);
 	
+	// TODO: new section/field(s) geared toward individual artist site -- see "artiste" plugin posttypes draft
+	
+	
 }
 
 /**
@@ -229,8 +232,15 @@ function sdg_modules_field_cb( $args ) {
 		'webcasts' => __( 'Webcasts' ), 
 		'sermons' => __( 'Sermons' ), 
 		'lectionary' => __( 'Lectionary' ), 
+		// 
+		'organizations' => __( 'Organizations' ), 
+		'projects' => __( 'Projects' ), 
+		'press' => __( 'Press' ), 
+		//'recordings' => __( 'Recordings' ),
+		//
 		'slider' => __( 'Slider' ), 
 		'ninjaforms' => __( 'Ninja Forms' ), 
+		//
 		'admin_notes' => __( 'Admin Notes' ), 
 		'data_tables' => __( 'Data Tables' )
 	);

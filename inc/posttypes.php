@@ -225,6 +225,179 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 	add_action( 'init', 'register_post_type_ensemble' );
 }
 
+if ( in_array('organizations', $sdg_modules ) ) {
+	// Organization
+	function register_post_type_organization() {
+
+		$labels = array(
+			'name' => __( 'Organizations', 'stc' ),
+			'singular_name' => __( 'Organization', 'stc' ),
+			'add_new' => __( 'New Organization', 'stc' ),
+			'add_new_item' => __( 'Add New Organization', 'stc' ),
+			'edit_item' => __( 'Edit Organization', 'stc' ),
+			'new_item' => __( 'New Organization', 'stc' ),
+			'view_item' => __( 'View Organizations', 'stc' ),
+			'search_items' => __( 'Search Organizations', 'stc' ),
+			'not_found' =>  __( 'No Organizations Found', 'stc' ),
+			'not_found_in_trash' => __( 'No Organizations found in Trash', 'stc' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'organization' ),
+			//'capability_type' => array('organization', 'organizations'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'organization', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_organization' );
+}
+
+/*** PROJECTS ***/
+
+if ( in_array('projects', $sdg_modules ) ) {
+
+	// Project
+	function register_post_type_project() {
+
+		$labels = array(
+			'name' => __( 'Projects', 'artiste' ),
+			'singular_name' => __( 'Project', 'artiste' ),
+			'add_new' => __( 'New Project', 'artiste' ),
+			'add_new_item' => __( 'Add New Project', 'artiste' ),
+			'edit_item' => __( 'Edit Project', 'artiste' ),
+			'new_item' => __( 'New Project', 'artiste' ),
+			'view_item' => __( 'View Projects', 'artiste' ),
+			'search_items' => __( 'Search Projects', 'artiste' ),
+			'not_found' =>  __( 'No Projects Found', 'artiste' ),
+			'not_found_in_trash' => __( 'No Projects found in Trash', 'artiste' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'project' ),
+			'capability_type' => array('project', 'projects'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies' => array( 'admin_tag', 'project_category' ), //'people_category', 'people_tag', 
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'project', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_project' );
+	
+	// Recording (Discography)
+	function register_post_type_recording() {
+
+		$labels = array(
+			'name' => __( 'Recordings', 'stc' ),
+			'singular_name' => __( 'Recording', 'stc' ),
+			'add_new' => __( 'New Recording', 'stc' ),
+			'add_new_item' => __( 'Add New Recording', 'stc' ),
+			'edit_item' => __( 'Edit Recording', 'stc' ),
+			'new_item' => __( 'New Recording', 'stc' ),
+			'view_item' => __( 'View Recording', 'stc' ),
+			'search_items' => __( 'Search Recordings', 'stc' ),
+			'not_found' =>  __( 'No Recordings Found', 'stc' ),
+			'not_found_in_trash' => __( 'No Recordings found in Trash', 'stc' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'recording' ),
+			//'capability_type' => array('publication', 'publications'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-album',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies' => array( 'recording_category', 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'recording', $args );
+	
+	}
+	//add_action( 'init', 'register_post_type_recording' );
+
+
+}
+
+/*** PRESS ***/
+
+if ( in_array('press', $sdg_modules ) ) {
+	// Press
+	function artiste_register_post_type_press() {
+
+		$labels = array(
+			'name' => __( 'Press', 'artiste' ),
+			'singular_name' => __( 'Press', 'artiste' ),
+			'add_new' => __( 'New Press Item', 'artiste' ),
+			'add_new_item' => __( 'Add New Press Item', 'artiste' ),
+			'edit_item' => __( 'Edit Press Item', 'artiste' ),
+			'new_item' => __( 'New Press Item', 'artiste' ),
+			'view_item' => __( 'View Press', 'artiste' ),
+			'search_items' => __( 'Search Press', 'artiste' ),
+			'not_found' =>  __( 'No Press Found', 'artiste' ),
+			'not_found_in_trash' => __( 'No Press found in Trash', 'artiste' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'press' ),
+			//'capability_type' => array('press', 'press'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies' => array( 'admin_tag', 'press_category' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'press', $args );
+	
+	}
+	add_action( 'init', 'artiste_register_post_type_press' );
+}
+
 /*** MUSIC LIBRARY ***/
 
 if ( in_array('music', $sdg_modules ) ) {
