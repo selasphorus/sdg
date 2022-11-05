@@ -74,7 +74,7 @@ function sdg_settings_init() {
 	
 	// Checkbox to designate dev site
 	add_settings_field(
-        'sdg_is_dev_site',
+        'is_dev_site',
         esc_attr__('Dev Site', 'sdg'),
         'sdg_devsite_field_cb',
         'sdg',
@@ -82,11 +82,11 @@ function sdg_settings_init() {
         array( 
             'type'         => 'checkbox',
             //'option_group' => 'sdg_settings', 
-            'name'         => 'sdg_is_dev_site',
-            'label_for'    => 'sdg_is_dev_site',
-            'value'        => (empty(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
+            'name'         => 'is_dev_site',
+            'label_for'    => 'is_dev_site',
+            'value'        => (empty(get_option('sdg_settings')['is_dev_site'])) ? 0 : get_option('sdg_settings')['is_dev_site'],
             'description'  => __( 'This is a dev site.', 'sdg' ),
-            'checked'      => (!isset(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
+            'checked'      => (!isset(get_option('sdg_settings')['is_dev_site'])) ? 0 : get_option('sdg_settings')['is_dev_site'],
             // Used 0 in this case but will still return Boolean not[see notes below] 
             ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
             )
