@@ -85,7 +85,7 @@ function sdg_settings_init() {
             'name'         => 'sdg_is_dev_site',
             'label_for'    => 'sdg_is_dev_site',
             'value'        => (empty(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
-            'description'  => __( 'Check to test.', 'sdg' ),
+            'description'  => __( 'This is a dev site.', 'sdg' ),
             'checked'      => (!isset(get_option('sdg_settings')['sdg_is_dev_site'])) ? 0 : get_option('sdg_settings')['sdg_is_dev_site'],
             // Used 0 in this case but will still return Boolean not[see notes below] 
             ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
