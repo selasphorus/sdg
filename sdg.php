@@ -248,7 +248,7 @@ function sdg_modules_field_cb( $args ) {
 		'data_tables' => __( 'Data Tables' )
 	);
 	
-	$value   = ( !isset( $options[$args['label_for']] ) ) ? null : $options[$args['label_for']];
+	$value   = ( !isset( $options[$args['label_for']] ) ) ? array() : $options[$args['label_for']];
                 
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	//echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft

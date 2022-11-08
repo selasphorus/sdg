@@ -1067,6 +1067,8 @@ function get_program_item_name ( $a = array() ) {
     $info .= "<!-- row: ".print_r($row, true)." -->"; // tft
     //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
     
+    $num_items = 0; // init
+    
 	if ( isset($row['program_item'][0]) ) {
         
         $info .= "<!-- isset: row['program_item'][0] -->";
