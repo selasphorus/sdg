@@ -144,12 +144,16 @@ function sdg_text_field_cb( $args ) {
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
 	
+	$value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']);
+	$class = isset($args['class']) ? $args['class'] : '';
+	$style = isset($args['style']) ? $args['style']: '';
+	
 	echo '<input type="text" 
 		id="'.esc_attr( $args['id'] ).'" 
 		name="sdg_settings['.esc_attr( $args['name'] ).']" 
-		value="'.isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']).'" 
-		class="'.isset($args['class']) ? $args['class']: "" .'" 
-		style="'.isset($args['style']) ? $args['style']: "" .'" 
+		value="'.$value.'" 
+		class="'.$class.'" 
+		style="'.$style.'" 
 		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';
 }
 
