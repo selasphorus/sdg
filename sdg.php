@@ -1416,7 +1416,7 @@ function sdg_debug_to_console($data, $context = 'Debug in Console') {
 }
 
 // Convert the time string HH:MM:SS to number of seconds (for flowplayer cuepoints &c.)
-function sdg_xtime_to_seconds($str_time){
+function xtime_to_seconds($str_time){
 
 	$parsed = date_parse($str_time);
 	$num_seconds = $parsed['hour'] * 3600 + $parsed['minute'] * 60 + $parsed['second'];
