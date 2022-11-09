@@ -543,7 +543,7 @@ function sdg_show_troubleshooting_info ( ) {
         return false;
     }
 	
-	$devmode = sdg_devmode_active();
+	$devmode = devmode_active();
 	
 	$info = '<div class="troubleshooting">';
 	

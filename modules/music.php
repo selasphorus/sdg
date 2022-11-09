@@ -46,7 +46,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
             $x++;
         }
     } else {
-        if ( sdg_devmode_active() ) { 
+        if ( devmode_active() ) { 
             $info .= "<p>No related events were found.</p>"; // tft
         }
     }
