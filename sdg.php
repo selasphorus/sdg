@@ -24,7 +24,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 $plugin_path = plugin_dir_path( __FILE__ );
 
-// TODO: Check for plugin dependencies -- ACF; EM; &?
+// TODO: Deal w/ plugin dependencies -- Display Posts; ACF; EM; &c.?
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -128,16 +128,12 @@ function sdg_settings_section_callback( $args ) {
 
 	$options = get_option( 'sdg_settings' );
 	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
-	
-	?>
-	<!--p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Test Settings Section Header', 'sdg' ); ?></p-->
-	<?php
+	//echo '<!--p id="'.esc_attr( $args['id'] ).'">'.esc_html_e( 'Test Settings Section Header', 'sdg' ).'></p-->';
+
 }
 
 function sdg_modules_section_callback( $args ) {
-	?>
-	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Select modules to activate.', 'sdg' ); ?></p>
-	<?php
+	echo '<p id="'.esc_attr( $args['id'] ).'">'.esc_html_e( 'Select modules to activate.', 'sdg' ).'</p>';
 }
 
 // Render a text field
@@ -148,15 +144,13 @@ function sdg_text_field_cb( $args ) {
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
 	
-	?>
-	<input type="text" 
-		id="<?php echo esc_attr( $args['id'] ); ?>" 
-		name="sdg_settings[<?php echo esc_attr( $args['name'] ); ?>]" 
-		value="<?php echo isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']); ?>" 
-		class="<?php echo isset($args['class']) ? $args['class']: '' ?>" 
-		style="<?php echo isset($args['style']) ? $args['style']: '' ?>" 
-		placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"/>
-	<?php
+	echo '<input type="text" 
+		id="'.esc_attr( $args['id'] ).'" 
+		name="sdg_settings['.esc_attr( $args['name'] ).']" 
+		value="'.isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']).'" 
+		class="'.isset($args['class']) ? $args['class']: "" .'" 
+		style="'.isset($args['style']) ? $args['style']: "" .'" 
+		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';
 }
 
 /**

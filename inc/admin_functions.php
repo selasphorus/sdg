@@ -1076,8 +1076,7 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-function remove_bracketed_info ( $str ) {
-//function sdg_remove_bracketed_info ( $str ) {
+function remove_bracketed_info ( $str ) { //function sdg_remove_bracketed_info ( $str ) {
 
 	//sdg_log( "function: remove_bracketed_info" );
 
