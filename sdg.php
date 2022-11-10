@@ -708,7 +708,7 @@ function sdg_autocomplete_search() {
 
 add_shortcode('top','anchor_link_top');
 function anchor_link_top() {
-    return '<a href="#top" class="up anchor_top">top</a>';
+    return '<span class="up"></span><a href="#top" class="anchor_top">top</a>';
 }
 
 // Function to determine default taxonomy for a given post_type, for use with display_posts shortcode, &c.
