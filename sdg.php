@@ -392,6 +392,9 @@ function sdg_scripts_method() {
     global $current_user;
     $current_user = wp_get_current_user();
     
+    $ver = "0.1";
+    wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', NULL, $ver );
+    
     $fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "201209"; }    
     wp_enqueue_script( 'sdg', plugins_url( 'js/sdg.js', __FILE__ ), array( 'jquery-ui-dialog' ), $ver  );
@@ -705,7 +708,7 @@ function sdg_autocomplete_search() {
 
 add_shortcode('top','anchor_link_top');
 function anchor_link_top() {
-    return '<a href="#top" class="anchor_top">top</a>';
+    return '<a href="#top" class="up anchor_top">top</a>';
 }
 
 // Function to determine default taxonomy for a given post_type, for use with display_posts shortcode, &c.
