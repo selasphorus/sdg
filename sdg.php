@@ -1508,7 +1508,7 @@ function make_link( $url, $linktext, $class = null, $target = null) {
 
 // Check to see if a postmeta record already exists for the specified post_type, meta_key, and meta_value.
 // Option to exclude a specific post_id from the search -- e.g. in searching to see if any *other* post has the same title_for_matching.
-function sdg_meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value, $num_posts = "-1") {
+function meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value, $num_posts = "-1") {
     
     if ( ! ($post_type && $meta_key && $meta_value) ){
         return null;
