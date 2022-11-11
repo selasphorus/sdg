@@ -268,12 +268,12 @@ function register_taxonomy_page_tag() {
 add_action( 'init', 'register_taxonomy_page_tag' );
 
 
-/*** Taxonomies for PEOPLE ***/
+/*** Taxonomies for eLE ***/
 
 if ( in_array('people', $sdg_modules ) ) {
 	// Custom Taxonomy: People Category
 	function register_taxonomy_people_category() {
-		$cap = 'person';
+		//$cap = 'person'; // WIP
 		$labels = array(
 			'name'              => _x( 'Person Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Person Category', 'taxonomy singular name' ),
@@ -295,12 +295,13 @@ if ( in_array('people', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-			'capabilities'         => array(
+            // CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
+			),*/
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'people_category' ],
 		);
