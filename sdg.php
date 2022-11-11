@@ -374,7 +374,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'organizations', 'organs', 'projects', 'press', 'venues' );
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'venues' );
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
