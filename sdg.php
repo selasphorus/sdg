@@ -234,6 +234,7 @@ function sdg_modules_field_cb( $args ) {
 		'projects' => __( 'Projects' ), 
 		'press' => __( 'Press' ), 
 		//'recordings' => __( 'Recordings' ),
+		'newsletters' => __( 'Newsletters' ), 
 		//
 		'organs' => __( 'Organs' ), 
 		//

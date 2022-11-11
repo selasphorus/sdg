@@ -230,16 +230,16 @@ if ( in_array('organizations', $sdg_modules ) ) {
 	function register_post_type_organization() {
 
 		$labels = array(
-			'name' => __( 'Organizations', 'stc' ),
-			'singular_name' => __( 'Organization', 'stc' ),
-			'add_new' => __( 'New Organization', 'stc' ),
-			'add_new_item' => __( 'Add New Organization', 'stc' ),
-			'edit_item' => __( 'Edit Organization', 'stc' ),
-			'new_item' => __( 'New Organization', 'stc' ),
-			'view_item' => __( 'View Organizations', 'stc' ),
-			'search_items' => __( 'Search Organizations', 'stc' ),
-			'not_found' =>  __( 'No Organizations Found', 'stc' ),
-			'not_found_in_trash' => __( 'No Organizations found in Trash', 'stc' ),
+			'name' => __( 'Organizations', 'sdg' ),
+			'singular_name' => __( 'Organization', 'sdg' ),
+			'add_new' => __( 'New Organization', 'sdg' ),
+			'add_new_item' => __( 'Add New Organization', 'sdg' ),
+			'edit_item' => __( 'Edit Organization', 'sdg' ),
+			'new_item' => __( 'New Organization', 'sdg' ),
+			'view_item' => __( 'View Organizations', 'sdg' ),
+			'search_items' => __( 'Search Organizations', 'sdg' ),
+			'not_found' =>  __( 'No Organizations Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Organizations found in Trash', 'sdg' ),
 		);
 	
 		$args = array(
@@ -275,16 +275,16 @@ if ( in_array('projects', $sdg_modules ) ) {
 	function register_post_type_project() {
 
 		$labels = array(
-			'name' => __( 'Projects', 'artiste' ),
-			'singular_name' => __( 'Project', 'artiste' ),
-			'add_new' => __( 'New Project', 'artiste' ),
-			'add_new_item' => __( 'Add New Project', 'artiste' ),
-			'edit_item' => __( 'Edit Project', 'artiste' ),
-			'new_item' => __( 'New Project', 'artiste' ),
-			'view_item' => __( 'View Projects', 'artiste' ),
-			'search_items' => __( 'Search Projects', 'artiste' ),
-			'not_found' =>  __( 'No Projects Found', 'artiste' ),
-			'not_found_in_trash' => __( 'No Projects found in Trash', 'artiste' ),
+			'name' => __( 'Projects', 'sdg' ),
+			'singular_name' => __( 'Project', 'sdg' ),
+			'add_new' => __( 'New Project', 'sdg' ),
+			'add_new_item' => __( 'Add New Project', 'sdg' ),
+			'edit_item' => __( 'Edit Project', 'sdg' ),
+			'new_item' => __( 'New Project', 'sdg' ),
+			'view_item' => __( 'View Projects', 'sdg' ),
+			'search_items' => __( 'Search Projects', 'sdg' ),
+			'not_found' =>  __( 'No Projects Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Projects found in Trash', 'sdg' ),
 		);
 	
 		$args = array(
@@ -315,16 +315,16 @@ if ( in_array('projects', $sdg_modules ) ) {
 	function register_post_type_recording() {
 
 		$labels = array(
-			'name' => __( 'Recordings', 'stc' ),
-			'singular_name' => __( 'Recording', 'stc' ),
-			'add_new' => __( 'New Recording', 'stc' ),
-			'add_new_item' => __( 'Add New Recording', 'stc' ),
-			'edit_item' => __( 'Edit Recording', 'stc' ),
-			'new_item' => __( 'New Recording', 'stc' ),
-			'view_item' => __( 'View Recording', 'stc' ),
-			'search_items' => __( 'Search Recordings', 'stc' ),
-			'not_found' =>  __( 'No Recordings Found', 'stc' ),
-			'not_found_in_trash' => __( 'No Recordings found in Trash', 'stc' ),
+			'name' => __( 'Recordings', 'sdg' ),
+			'singular_name' => __( 'Recording', 'sdg' ),
+			'add_new' => __( 'New Recording', 'sdg' ),
+			'add_new_item' => __( 'Add New Recording', 'sdg' ),
+			'edit_item' => __( 'Edit Recording', 'sdg' ),
+			'new_item' => __( 'New Recording', 'sdg' ),
+			'view_item' => __( 'View Recording', 'sdg' ),
+			'search_items' => __( 'Search Recordings', 'sdg' ),
+			'not_found' =>  __( 'No Recordings Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Recordings found in Trash', 'sdg' ),
 		);
 	
 		$args = array(
@@ -358,19 +358,19 @@ if ( in_array('projects', $sdg_modules ) ) {
 
 if ( in_array('press', $sdg_modules ) ) {
 	// Press
-	function artiste_register_post_type_press() {
+	function sdg_register_post_type_press() {
 
 		$labels = array(
-			'name' => __( 'Press', 'artiste' ),
-			'singular_name' => __( 'Press', 'artiste' ),
-			'add_new' => __( 'New Press Item', 'artiste' ),
-			'add_new_item' => __( 'Add New Press Item', 'artiste' ),
-			'edit_item' => __( 'Edit Press Item', 'artiste' ),
-			'new_item' => __( 'New Press Item', 'artiste' ),
-			'view_item' => __( 'View Press', 'artiste' ),
-			'search_items' => __( 'Search Press', 'artiste' ),
-			'not_found' =>  __( 'No Press Found', 'artiste' ),
-			'not_found_in_trash' => __( 'No Press found in Trash', 'artiste' ),
+			'name' => __( 'Press', 'sdg' ),
+			'singular_name' => __( 'Press', 'sdg' ),
+			'add_new' => __( 'New Press Item', 'sdg' ),
+			'add_new_item' => __( 'Add New Press Item', 'sdg' ),
+			'edit_item' => __( 'Edit Press Item', 'sdg' ),
+			'new_item' => __( 'New Press Item', 'sdg' ),
+			'view_item' => __( 'View Press', 'sdg' ),
+			'search_items' => __( 'Search Press', 'sdg' ),
+			'not_found' =>  __( 'No Press Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Press found in Trash', 'sdg' ),
 		);
 	
 		$args = array(
@@ -395,7 +395,51 @@ if ( in_array('press', $sdg_modules ) ) {
 		register_post_type( 'press', $args );
 	
 	}
-	add_action( 'init', 'artiste_register_post_type_press' );
+	add_action( 'init', 'sdg_register_post_type_press' );
+}
+
+/*** NEWSLETTER ***/
+
+if ( in_array('newsletter', $sdg_modules ) ) {
+	// Newsletter
+	function sdg_register_post_type_newsletter() {
+
+		$labels = array(
+			'name' => __( 'Newsletters', 'sdg' ),
+			'singular_name' => __( 'Newsletter', 'sdg' ),
+			'add_new' => __( 'New Newsletter', 'sdg' ),
+			'add_new_item' => __( 'Add New Newsletter', 'sdg' ),
+			'edit_item' => __( 'Edit Newsletter', 'sdg' ),
+			'new_item' => __( 'New Newsletter', 'sdg' ),
+			'view_item' => __( 'View Newsletter', 'sdg' ),
+			'search_items' => __( 'Search Newsletters', 'sdg' ),
+			'not_found' =>  __( 'No Newsletter Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Newsletters found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'newsletter' ),
+			//'capability_type' => array('newsletter', 'newsletter'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies' => array( 'admin_tag', 'press_category' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'newsletter', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_newsletter' );
 }
 
 /*** MUSIC LIBRARY ***/
