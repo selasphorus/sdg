@@ -234,7 +234,9 @@ function sdg_modules_field_cb( $args ) {
 		'projects' => __( 'Projects' ), 
 		'press' => __( 'Press' ), 
 		//'recordings' => __( 'Recordings' ),
-		'newsletters' => __( 'Newsletters' ), 
+		'links' => __( 'Links' ),
+		'newsletters' => __( 'Newsletters' ),
+		//'sources' => __( 'Sources' ),
 		//
 		'organs' => __( 'Organs' ), 
 		//
@@ -374,7 +376,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'venues' );
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'links', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
