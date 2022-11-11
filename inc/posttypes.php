@@ -400,7 +400,7 @@ if ( in_array('press', $sdg_modules ) ) {
 
 /*** NEWSLETTER ***/
 
-if ( in_array('newsletter', $sdg_modules ) ) {
+if ( in_array('newsletters', $sdg_modules ) ) {
 	// Newsletter
 	function sdg_register_post_type_newsletter() {
 
