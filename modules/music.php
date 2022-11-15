@@ -2125,7 +2125,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 
         // Get and display term names for "season".
         $seasons = wp_get_post_terms( $post_id, 'season', array( 'fields' => 'names' ) );
-        if ( count($seasons) > 0 ) {
+        if ( is_array($seasons) && count($seasons) > 0 ) {
             foreach ( $seasons as $season ) {
                 $rep_info .= '<span class="season">';
                 $rep_info .= $season;
