@@ -1213,7 +1213,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     $field_info .= "field_type: $field_type<br />"; // tft
                     
                     if ( !empty($field_value) ) {
-                        $field_value = sdg_sanitize($field_value);
+                        $field_value = sanitize($field_value); //$field_value = sdg_sanitize($field_value);
                     }
                     
                     //$field_info .= "field_name: $field_name<br />";                    
