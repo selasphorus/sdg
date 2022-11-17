@@ -348,10 +348,17 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
     function is_dev_site() {
         
         $options = get_option( 'sdg_settings' );
+        
+        if ( isset($options['is_dev_site']) ) { 
+            if ( $options['is_dev_site'] == 1 ) {
+                return true;
+            } else {
+                return false;
+            }            
+        }
+        
         $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
         if ( $subdomain == "dev" ) { return true; } // RS dev site
-        // TODO: check options for other dev domains?
-        if ( isset($options['is_dev_site']) ) { return true; }
         
         return false;
     }
