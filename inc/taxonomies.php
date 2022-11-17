@@ -838,7 +838,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'labels'            => $labels,
 			'description'          => '',
 			'public'               => true,
-			'hierarchical'      => true,
+			'hierarchical'      => false, // changed from true 11/17/22 because no topics had parents and AG wanted to be able to search
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'capabilities'         => array(
