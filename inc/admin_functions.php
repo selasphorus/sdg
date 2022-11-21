@@ -2299,13 +2299,22 @@ function sermon_updates ( $atts = [] ) {
 }
 
 /*** ACF Related Events ***/
-add_filter('acf/fields/post_object/result/name=related_event', 'my_acf_fields_post_object_result', 10, 4);
+add_filter('acf/fields/relationship/result', 'my_acf_fields_relationship_result', 10, 4);
+function my_acf_fields_relationship_result( $text, $post, $field, $post_id ) {
+    /*$page_views = get_field( 'page_views', $post->ID );
+    if( $page_views ) {
+        $text .= ' ' . sprintf( '(%s views)', $page_views );
+    }*/
+    $text .= ' [' . $post_id .  ']';
+    return $text;
+}
+
+/*add_filter('acf/fields/post_object/result/name=related_event', 'my_acf_fields_post_object_result', 10, 4);
 function my_acf_fields_post_object_result( $text, $post, $field, $post_id ) {
     $text .= ' [' . $post_id .  ']';
     //$text .= ' (' . $post->post_type .  ')';
     return $text;
 }
-/*
 acf/fields/post_object/result Applies to all fields.
 acf/fields/post_object/result/name={$name} Applies to all fields of a specific name.
 acf/fields/post_object/result/key={$key} Applies to all fields of a specific key.
