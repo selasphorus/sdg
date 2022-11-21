@@ -2311,7 +2311,7 @@ function my_acf_render_field( $field ) {
 //add_action('acf/render_field/type=relationship', 'my_acf_render_field');
 
 // Apply to fields named "hero_text".
-//add_action('acf/render_field/name=related_event', 'my_acf_render_field');
+add_action('acf/render_field/name=related_event', 'my_acf_render_field');
 
 
 ?>
