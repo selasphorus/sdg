@@ -196,6 +196,7 @@ function sdg_select_field_cb( $args ) {
  * @since 2.0.1
  * @input type checkbox
  */
+// TODO: make this a radio button instead
 function sdg_devsite_field_cb( $args ) { 
 
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
