@@ -2316,6 +2316,71 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
     return $args;
 }
 
+/**
+ * Add post slugs to admin search for a specific post type
+ *
+ * Rebuilds the search clauses to include post slugs.
+ *
+ * https://gist.github.com/jjeaton/41eedccdd5256cf756ec
+ *
+ * @param  string $search
+ * @param  WP_Query $query
+ * @return string
+ */
+add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
+function sdg_include_slug_in_search( $search, $query ) {
+	global $wpdb;
+
+	// Only run if we're in the admin and searching our specific post type
+	if ( $query->is_search() && $query->is_admin && 'event' === $query->query_vars['post_type'] ) {
+		$search = ''; // We will rebuild the entire clause
+		$searchand = '';
+		foreach ( $query->query_vars['search_terms'] as $term ) {
+			$like = '%' . $wpdb->esc_like( $term ) . '%';
+			$search .= $wpdb->prepare( "{$searchand}(($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_name LIKE %s))", $like, $like, $like );
+			$searchand = ' AND ';
+		}
+
+		if ( ! empty( $search ) ) {
+			$search = " AND ({$search}) ";
+			if ( ! is_user_logged_in() )
+				$search .= " AND ($wpdb->posts.post_password = '') ";
+		}
+	}
+
+	return $search;
+}
+
+/*
+function sdg_include_slug_in_search( $search, $wp_query ) {
+    global $wpdb;
+
+    if ( empty( $search ) ) {
+        return $search; // skip processing - no search term in query
+    }
+
+    $q = $wp_query->query_vars;
+    $n = ! empty( $q['exact'] ) ? '' : '%';
+    $search = '';
+    $searchand = '';
+
+    foreach ( (array) $q['search_terms'] as $term ) {
+        $term = esc_sql( $wpdb->esc_like( $term ) );
+        $search .= "{$searchand}($wpdb->posts.post_title LIKE '{$n}{$term}{$n}')";
+        $searchand = ' AND ';
+    }
+
+    if ( ! empty( $search ) ) {
+        $search = " AND ({$search}) ";
+        if ( ! is_user_logged_in() )
+            $search .= " AND ($wpdb->posts.post_password = '') ";
+    }
+
+    return $search;
+}
+add_filter( 'posts_search', 'sdg_include_slug_in_search', 500, 2 );
+*/
+
 /*add_filter('acf/fields/post_object/result/name=related_event', 'my_acf_fields_post_object_result', 10, 4);
 function my_acf_fields_post_object_result( $text, $post, $field, $post_id ) {
     $text .= ' [' . $post_id .  ']';
