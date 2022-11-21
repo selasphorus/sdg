@@ -2298,4 +2298,19 @@ function sermon_updates ( $atts = [] ) {
     
 }
 
+/*** ACF Related Events ***/
+function my_acf_render_field( $field ) {
+    echo '<p>Testing... Amphibian.</p>';
+}
+
+// Apply to all fields.
+//add_action('acf/render_field', 'my_acf_render_field');
+
+// Apply to image fields.
+//add_action('acf/render_field/type=image', 'my_acf_render_field');
+
+// Apply to fields named "hero_text".
+add_action('acf/render_field/name=related_event', 'my_acf_render_field');
+
+
 ?>
