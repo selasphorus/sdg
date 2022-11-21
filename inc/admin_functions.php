@@ -2305,7 +2305,7 @@ function my_acf_fields_relationship_result( $text, $post, $field, $post_id ) {
     if( $page_views ) {
         $text .= ' ' . sprintf( '(%s views)', $page_views );
     }*/
-    $text .= ' [' . $post_id .  ']';
+    $text .= ' [' . $post->post_name .  ']';
     return $text;
 }
 
