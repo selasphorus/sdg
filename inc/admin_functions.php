@@ -2299,9 +2299,20 @@ function sermon_updates ( $atts = [] ) {
 }
 
 /*** ACF Related Events ***/
+add_filter('acf/fields/post_object/result/name=related_event', 'my_acf_fields_post_object_result', 10, 4);
+function my_acf_fields_post_object_result( $text, $post, $field, $post_id ) {
+    $text .= ' [' . $post_id .  ']';
+    //$text .= ' (' . $post->post_type .  ')';
+    return $text;
+}
+/*
+acf/fields/post_object/result Applies to all fields.
+acf/fields/post_object/result/name={$name} Applies to all fields of a specific name.
+acf/fields/post_object/result/key={$key} Applies to all fields of a specific key.
+*/
+
 function my_acf_render_field( $field ) {
-    echo "field: <pre>".print_r($field,true)."</pre>";
-    //echo '<p>Testing... Amphibian.</p>'; // this simply adds HTML after the field is rendered, but not per 
+    //echo "field: <pre>".print_r($field,true)."</pre>"; // this simply adds HTML after the field is rendered -- no use for effecting display of relationship field options, alas 
 }
 
 // Apply to all fields.
@@ -2311,7 +2322,7 @@ function my_acf_render_field( $field ) {
 //add_action('acf/render_field/type=relationship', 'my_acf_render_field');
 
 // Apply to fields named "hero_text".
-add_action('acf/render_field/name=related_event', 'my_acf_render_field');
+//add_action('acf/render_field/name=related_event', 'my_acf_render_field');
 
 
 ?>
