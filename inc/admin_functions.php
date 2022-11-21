@@ -2306,6 +2306,16 @@ function my_acf_fields_relationship_result( $text, $post, $field, $post_id ) {
     return $text;
 }
 
+add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
+function my_acf_fields_relationship_query( $args, $field, $post_id ) {
+
+    $args['orderby'] = 'meta_value';
+    $args['order'] = 'DESC';
+    $args['meta_key'] = '_event_start_date';
+
+    return $args;
+}
+
 /*add_filter('acf/fields/post_object/result/name=related_event', 'my_acf_fields_post_object_result', 10, 4);
 function my_acf_fields_post_object_result( $text, $post, $field, $post_id ) {
     $text .= ' [' . $post_id .  ']';
