@@ -2327,7 +2327,7 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
  * @param  WP_Query $query
  * @return string
  */
-add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
+//add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
 function sdg_include_slug_in_search( $search, $query ) {
 	global $wpdb;
 
@@ -2343,8 +2343,9 @@ function sdg_include_slug_in_search( $search, $query ) {
 
 		if ( ! empty( $search ) ) {
 			$search = " AND ({$search}) ";
-			if ( ! is_user_logged_in() )
-				$search .= " AND ($wpdb->posts.post_password = '') ";
+			if ( ! is_user_logged_in() ) {
+                $search .= " AND ($wpdb->posts.post_password = '') ";
+            }
 		}
 	}
 
