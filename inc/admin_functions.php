@@ -2299,20 +2299,23 @@ function sermon_updates ( $atts = [] ) {
 }
 
 /*** ACF Related Events ***/
-//add_filter('acf/fields/relationship/result/name=related_event', 'my_acf_fields_relationship_result', 10, 4);
+add_filter('acf/fields/relationship/result/name=related_event', 'my_acf_fields_relationship_result', 10, 4);
 function my_acf_fields_relationship_result( $text, $post, $field, $post_id ) {
     $text = $post->post_name;
     //$text .= ' [' . $post->post_name .  ']';
     return $text;
 }
 
-//add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
+//add_filter('acf/fields/relationship/query/name=related_event', 'my_acf_fields_relationship_query', 10, 3);
+add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
 function my_acf_fields_relationship_query( $args, $field, $post_id ) {
 
     // TODO: check to see if args['post_type'] is event
-    $args['orderby'] = 'meta_value';
-    $args['order'] = 'DESC';
-    $args['meta_key'] = '_event_start_date';
+    if ( $args['post_type'] == 'event' ) {
+        $args['orderby'] = 'meta_value';
+        $args['order'] = 'DESC';
+        $args['meta_key'] = '_event_start_date';
+    }    
 
     return $args;
 }
@@ -2328,7 +2331,7 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
  * @param  WP_Query $query
  * @return string
  */
-//add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
+add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
 function sdg_include_slug_in_search( $search, $query ) {
 	global $wpdb;
 
