@@ -243,7 +243,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         $info .= "<!-- litdate_id: $litdate_id -->";
 
-        $args = array(
+        $collect_args = array(
             'post_type'   => 'collect',
             'post_status' => 'publish',
             'posts_per_page' => 1,
@@ -254,7 +254,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 )
             )
         );
-        $collect_post = new WP_Query( $args );
+        $collect_post = new WP_Query( $collect_args );
         $collect = $collect_post->post_content;
             
         // TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
@@ -285,6 +285,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $info .= '</div>'; //<!-- /calendar-day-desc -->
 
         } else {
+        	$info .= "<!-- no collect content found -->";
+        	$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
+        	$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
             // If no content or collect, just show the day title
             $info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
         }
