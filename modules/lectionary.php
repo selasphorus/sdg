@@ -256,9 +256,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             )
         );
         $collect = new WP_Query( $collect_args );
-        $collect_post = $collect->posts;
-        $collect_text = $collect_post->post_content;
-        //if ( $collect_post ) { $collect_text = $collect_post->post_content; }
+        $collect_post = $collect->posts[0];
+        if ( $collect_post ) { $collect_text = $collect_post->post_content; }
             
         // TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
         
