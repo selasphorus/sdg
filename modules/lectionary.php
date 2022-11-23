@@ -254,8 +254,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 )
             )
         );
-        $collect_post = new WP_Query( $collect_args );
-        $collect = $collect_post->post_content;
+        $collect = new WP_Query( $collect_args );
+        $collect_post = $collect->posts;
+        $collect_text = $collect_post->post_content;
             
         // TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
         
@@ -264,8 +265,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		$width = '650';
 		$height = '450';
 			
-        if ( $collect != null ) {
-        //if ( $collect != null || ( is_dev_site() && ! ($litdate_content == null && $collect == null) ) ) {
+        if ( $collect_text != null ) {
 
             $info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
             $info .= $litdate_title;
@@ -276,16 +276,16 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             if ( is_dev_site() ) {
                 $info .= 		$litdate_content;
             }
-            if ($collect !== null) {
+            if ($collect_text !== null) {
                 $info .= 	'<div class="calendar-day-collect">';
                 //$info .= 		'<h3>Collect:</h3>';
-                $info .= 		'<p>'.$collect.'</p>';
+                $info .= 		'<p>'.$collect_text.'</p>';
                 $info .= 	'</div>';
             }
             $info .= '</div>'; //<!-- /calendar-day-desc -->
 
         } else {
-        	$info .= "<!-- no collect content found -->";
+        	$info .= "<!-- no collect_text found -->";
         	$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
         	$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
             // If no content or collect, just show the day title
