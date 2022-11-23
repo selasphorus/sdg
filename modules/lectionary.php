@@ -286,9 +286,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $info .= '</div>'; //<!-- /calendar-day-desc -->
 
         } else {
-        	$info .= "<!-- no collect_text found -->";
-        	$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
-        	$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
+        	//$info .= "<!-- no collect_text found -->";
+        	//$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
+        	//$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
             // If no content or collect, just show the day title
             $info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
         }
