@@ -250,7 +250,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             'meta_query' => array(
                 array(
                     'key'     => 'related_liturgical_date',
-                    'value'   => $litdate_id
+                    'compare' 	=> 'LIKE',
+                    'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
                 )
             )
         );
