@@ -249,7 +249,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             'posts_per_page' => 1,
             'meta_query' => array(
                 array(
-                    'key'     => 'liturgical_date',
+                    'key'     => 'related_liturgical_date',
                     'value'   => $litdate_id
                 )
             )
