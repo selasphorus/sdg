@@ -239,7 +239,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $litdate_title = get_the_title( $litdate_id );
 		$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
         
-        $collect = null; // init
+        $collect_text = null; // init
         
         $info .= "<!-- litdate_id: $litdate_id -->";
 
@@ -257,7 +257,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         );
         $collect = new WP_Query( $collect_args );
         $collect_post = $collect->posts;
-        $collect_text = $collect_post->post_content;
+        if ( $collect_post ) { $collect_text = $collect_post->post_content; }
             
         // TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
         
@@ -266,7 +266,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		$width = '650';
 		$height = '450';
 			
-        if ( $collect_text != null ) {
+        if ( !empty($collect_text) ) {
 
             $info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
             $info .= $litdate_title;
