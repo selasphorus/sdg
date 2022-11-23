@@ -2332,7 +2332,7 @@ function sdg_include_slug_in_search( $search, $query ) {
 	global $wpdb;
 
 	// Only run if we're in the admin and searching our specific post type
-	if ( $query->is_search() && $query->is_admin && 'event' === $query->query_vars['post_type'] ) {
+	if ( $query->is_search() && $query->is_admin && 'event' == $query->query_vars['post_type'] ) {
 		$search = ''; // We will rebuild the entire clause
 		$searchand = '';
 		foreach ( $query->query_vars['search_terms'] as $term ) {
