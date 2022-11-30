@@ -240,6 +240,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // 
     if ( $litdate_id ) {
         
+        $show_title = true;
+        
         //$the_date = the_field( 'sermon_date', $post_id );
         //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
         
@@ -253,64 +255,68 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 					$date_assigned = get_sub_field('date_assigned');
 					$info .= "<!-- replacement_date: ".$replacement_date."; date_assigned: ".$date_assigned." -->";
 					if ( $date_assigned != $full_date_str ) {
-						$info .= "Don't show this date -- override in effect";
+						// Don't show this date -- override in effect
+						$show_title = false;
 					}
 				}
 			endwhile;
 		} // end if
         
-        $litdate_title = get_the_title( $litdate_id );
-		$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
-        $collect_text = ""; // init
-
-        $collect_args = array(
-            'post_type'   => 'collect',
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
-            'meta_query' => array(
-                array(
-                    'key'     => 'related_liturgical_date',
-                    'compare' 	=> 'LIKE',
-                    'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
-                )
-            )
-        );
-        $collect = new WP_Query( $collect_args );
-        $collect_post = $collect->posts[0];
-        if ( $collect_post ) { $collect_text = $collect_post->post_content; }
-            
-        // TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
+        if ( $show_title == true ) {
         
-        // If there's something other than the title available to display, then display the popup link
-        // TODO: set width and height dynamically based on browser window dimensions
-		$width = '650';
-		$height = '450';
+        	$litdate_title = get_the_title( $litdate_id );
+			$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
+			$collect_text = ""; // init
+
+			$collect_args = array(
+				'post_type'   => 'collect',
+				'post_status' => 'publish',
+				'posts_per_page' => 1,
+				'meta_query' => array(
+					array(
+						'key'     => 'related_liturgical_date',
+						'compare' 	=> 'LIKE',
+						'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+					)
+				)
+			);
+			$collect = new WP_Query( $collect_args );
+			$collect_post = $collect->posts[0];
+			if ( $collect_post ) { $collect_text = $collect_post->post_content; }
 			
-        if ( !empty($collect_text) ) {
+			// TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
+		
+			// If there's something other than the title available to display, then display the popup link
+			// TODO: set width and height dynamically based on browser window dimensions
+			$width = '650';
+			$height = '450';
+			
+			if ( !empty($collect_text) ) {
 
-            $info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
-            $info .= $litdate_title;
-            $info .= '</a>';
-            $info .= '<br />';
-            $info .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
-            $info .= 		'<h2 autofocus>'.$litdate_title.'</h2>';
-            if ( is_dev_site() ) {
-                $info .= 		$litdate_content;
-            }
-            if ($collect_text !== null) {
-                $info .= 	'<div class="calendar-day-collect">';
-                //$info .= 		'<h3>Collect:</h3>';
-                $info .= 		'<p>'.$collect_text.'</p>';
-                $info .= 	'</div>';
-            }
-            $info .= '</div>'; //<!-- /calendar-day-desc -->
+				$info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
+				$info .= $litdate_title;
+				$info .= '</a>';
+				$info .= '<br />';
+				$info .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
+				$info .= 		'<h2 autofocus>'.$litdate_title.'</h2>';
+				if ( is_dev_site() ) {
+					$info .= 		$litdate_content;
+				}
+				if ($collect_text !== null) {
+					$info .= 	'<div class="calendar-day-collect">';
+					//$info .= 		'<h3>Collect:</h3>';
+					$info .= 		'<p>'.$collect_text.'</p>';
+					$info .= 	'</div>';
+				}
+				$info .= '</div>'; //<!-- /calendar-day-desc -->
 
-        } else {
-        	//$info .= "<!-- no collect_text found -->";
-        	//$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
-        	//$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
-            // If no content or collect, just show the day title
-            $info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
+			} else {
+				//$info .= "<!-- no collect_text found -->";
+				//$info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
+				//$info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
+				// If no content or collect, just show the day title
+				$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
+			}
         }
         
     } else {
