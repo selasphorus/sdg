@@ -144,6 +144,11 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     'value'		=> $fixed_date_str,
                 ),
                 array(
+                    'key'		=> 'fixed_date_str',
+                    'compare'	=> '=',
+                    'value'		=> $fixed_date_str_alt,
+                ),
+                array(
                     'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
                     'compare'	=> '=',
                     'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
