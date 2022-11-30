@@ -250,8 +250,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 			while ( have_rows('date_assignments', $litdate_id) ) : the_row();
 				$replacement_date = get_sub_field('replacement_date'); // ACF fcn
 				if ( $replacement_date ) {
-					$date_assigned = get_sub_field('date_assigned');
-					$info .= "<!-- replacement_date found -- date_assigned: ".$date_assigned." -->";
+					//$date_assigned = get_sub_field('date_assigned');
+					//$info .= "<!-- replacement_date found -- date_assigned: ".$date_assigned." -->";
 				}
 			endwhile;
 		} // end if
