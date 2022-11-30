@@ -246,15 +246,15 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $info .= "<!-- litdate_id: $litdate_id -->";
         
         // WIP: Check to see if a replacement_date has been assigned that should negate this matc
-        /*if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+        if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
 			while ( have_rows('date_assignments', $litdate_id) ) : the_row();
 				$replacement_date = get_sub_field('replacement_date'); // ACF fcn
-				if ( $replacement_date ) {
-					$date_assigned = get_sub_field('date_assigned');
-					$info .= "<!-- replacement_date found -- date_assigned: ".$date_assigned." -->";
+				if ( $replacement_date == 1 ) {
+					//$date_assigned = get_sub_field('date_assigned');
+					//$info .= "<!-- replacement_date found -- date_assigned: ".$date_assigned." -->";
 				}
 			endwhile;
-		} // end if*/
+		} // end if
         
         $litdate_title = get_the_title( $litdate_id );
 		$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
