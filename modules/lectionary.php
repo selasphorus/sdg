@@ -122,7 +122,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
     }
     
-    // TODO: deal w/ replacement_date option (via Data Assignments field group)
+    // TODO: deal w/ replacement_date option (via Date Assignments field group)
     // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
@@ -243,12 +243,21 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         //$the_date = the_field( 'sermon_date', $post_id );
         //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
         
+        $info .= "<!-- litdate_id: $litdate_id -->";
+        
+        // WIP: Check to see if a replacement_date has been assigned that should negate this matc
+        if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+			while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+				$replacement_date = get_sub_field('replacement_date'); // ACF fcn
+				if ( $replacement_date ) {
+					$info .= "<!-- replacement_date found: ... -->";
+				}
+			endwhile;
+		} // end if
+        
         $litdate_title = get_the_title( $litdate_id );
 		$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
-        
         $collect_text = ""; // init
-        
-        $info .= "<!-- litdate_id: $litdate_id -->";
 
         $collect_args = array(
             'post_type'   => 'collect',
