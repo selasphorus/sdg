@@ -114,6 +114,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $info .= "<!-- day_num: '$day_num' -->\n"; // tft
             $fixed_date_str_alt = date("F j", $timestamp ); // day w/ out leading zeros
             $info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
+        } else {
+        	$fixed_date_str_alt = $fixed_date_str;
         }
         
         $full_date_str = date("Y-m-d", $timestamp );        
