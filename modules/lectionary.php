@@ -249,7 +249,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
 			while ( have_rows('date_assignments', $litdate_id) ) : the_row();
 				$replacement_date = get_sub_field('replacement_date'); // ACF fcn
-				if ( $replacement_date == 1 ) {
+				if ( $replacement_date ) { // == 1
 					$date_assigned = get_sub_field('date_assigned');
 					$info .= "<!-- replacement_date found -- date_assigned: ".$date_assigned." -->";
 				}
