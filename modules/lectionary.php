@@ -342,9 +342,9 @@ function calc_litdates( $atts = [] ) {
 
     // TODO: build in failsafe -- run this fcn ONLY for user queenbee
     
-	$info = "-- calculate_variable_dates --"; // init
+	$info = ">> calculate_variable_dates <<"; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
-/*
+
 	$a = shortcode_atts( array(
         'testing' => true,
         'id' => null,
@@ -406,7 +406,7 @@ function calc_litdates( $atts = [] ) {
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $oabis = array('before', 'after', 'of', 'in');
     
-    
+    /*
     foreach ( $posts AS $post ) {
         
         setup_postdata( $post );
