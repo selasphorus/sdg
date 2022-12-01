@@ -342,7 +342,7 @@ function calc_litdates( $atts = [] ) {
 
     // TODO: build in failsafe -- run this fcn ONLY for user queenbee
     
-	$info = ""; // init
+	$info = "-- calculate_variable_dates --"; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 /*
 	$a = shortcode_atts( array(
