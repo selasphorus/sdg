@@ -257,6 +257,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 					if ( $date_assigned != $full_date_str ) {
 						// Don't show this date -- override in effect
 						$show_title = false;
+						$info .= "<!-- date_assigned NE full_date_str (".$full_date_str.") >> don't show title -->";
 					}
 				}
 			endwhile;
