@@ -355,13 +355,11 @@ function calc_litdates( $atts = [] ) {
         'order' => 'ASC',
         'meta_key' => null
     ), $atts );
-    
+	
     $testing = $a['testing'];
     $num_posts = (int) $a['num_posts'];
     $year = get_query_var( 'y' );
-    if ( $year == "" ) { $year = $a['year']; }
-    //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
-    //$year = $a['year'];
+    if ( $year == "" ) { $year = $a['year']; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
     $orderby = $a['orderby'];
     $order = $a['order'];
     $meta_key = $a['meta_key'];
@@ -414,22 +412,17 @@ function calc_litdates( $atts = [] ) {
         $slug = $post->post_name;
         $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
     	
-    	/*
-        // init -- surely there's a better way to do this? -- via an array or object?
-        $calc_info = "";
+        // init
+        list( $calc_info, $calc_basis, $calc_basis_field, $calc_weekday, $calc_month, $calc_oabi, $calc_interval, $calc_date, $calc_formula ) = array( "", "", "", "", "", "", "", "", "" );
+        list( $date_calculation_str, $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "", "" );
+        list( $date_calculation_str, $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "", "" );
+        
         $changes_made = false;
-        $date_calculation_str = "";
-        $calc_basis = "";
-        $calc_basis_field = "";
-        $calc_weekday = "";
-        $calc_month = "";
-        $calc_oabi = ""; // before/after/of/in the basis_date/season?
-        $calc_interval = "";
-        $basis_date_str = "";
-        $basis_date = "";
-        $basis_date_weekday = "";
-        $calc_date = "";
-        $calc_formula = "";
+        
+        ///$calc_info = "";  $calc_basis = ""; $calc_basis_field = ""; $calc_weekday = ""; $calc_month = ""; 
+        ///$calc_oabi = ""; // before/after/of/in the basis_date/season? 
+        ///$calc_interval = ""; $calc_date = ""; $calc_formula = "";
+        //$date_calculation_str = ""; $basis_date_str = ""; $basis_date = ""; $basis_date_weekday = "";
         
         // Get date_calculation info & break it down
         $date_calculation_str = get_post_meta( $post_id, 'date_calculation', true );
@@ -527,6 +520,8 @@ function calc_litdates( $atts = [] ) {
             }
             //$info .= $indent."calc_oabi: $calc_oabi<br />"; // tft
 
+			// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
+			
             // ** Determine the calc_interval -- number of days/weeks...
             if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
@@ -690,7 +685,7 @@ function calc_litdates( $atts = [] ) {
         } else {
             $info .= "calc_date_str is empty.<br />";
         }
-        */
+        /**/
         $info .= "<br />";
              
     } // END foreach post
