@@ -406,7 +406,6 @@ function calc_litdates( $atts = [] ) {
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $oabis = array('before', 'after', 'of', 'in');
     
-    /*
     foreach ( $posts AS $post ) {
         
         setup_postdata( $post );
@@ -414,7 +413,8 @@ function calc_litdates( $atts = [] ) {
         $post_title = $post->post_title;
         $slug = $post->post_name;
         $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
-    
+    	
+    	/*
         // init -- surely there's a better way to do this? -- via an array or object?
         $calc_info = "";
         $changes_made = false;
@@ -692,9 +692,9 @@ function calc_litdates( $atts = [] ) {
         }
         
         $info .= "<br />";
-               
+        */      
     } // END foreach post
-    */
+    
     return $info;
     
 }
