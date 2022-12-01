@@ -690,9 +690,9 @@ function calc_litdates( $atts = [] ) {
         } else {
             $info .= "calc_date_str is empty.<br />";
         }
-        
+        */
         $info .= "<br />";
-        */      
+             
     } // END foreach post
     
     return $info;
