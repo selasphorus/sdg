@@ -260,6 +260,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 						$info .= "<!-- date_assigned NE full_date_str (".$full_date_str.") >> don't show title -->";
 					} else {
 						$show_title = true;
+						$info .= "<!-- date_assigned == full_date_str (".$full_date_str.") >> DO show title -->";
 						break;
 					}
 				}
