@@ -460,6 +460,7 @@ function calc_litdates( $atts = [] ) {
         );
         $liturgical_date_calc_post = new WP_Query( $args );
         $liturgical_date_calc_id = $liturgical_date_calc_post->ID;
+        $calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />";
         
         // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
         if ( $calc_basis == 'christmas' ) {
