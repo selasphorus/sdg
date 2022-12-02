@@ -480,6 +480,7 @@ function calc_litdates( $atts = [] ) {
         if ( $calc_basis == "epiphany" || $calc_basis == "advent" || $calc_basis == "pentecost" ) {
             // Get the Advent Sunday date
             $advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
+            $calc_info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />";
         } else if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
             // Get the Ash Wednesday date
             $ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
