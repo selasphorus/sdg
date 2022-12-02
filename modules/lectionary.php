@@ -692,6 +692,7 @@ function calc_litdates( $atts = [] ) {
             $info .= "calc_date_str is empty.<br />";
         }
         */
+        $info .= $calc_info;
         $info .= "<br />";
              
     } // END foreach post
