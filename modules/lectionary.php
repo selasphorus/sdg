@@ -463,10 +463,15 @@ function calc_litdates( $atts = [] ) {
             )
         );
         $result = new WP_Query( $args );
-        $liturgical_date_calc_post = $result->posts[0];
-        //$calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; // tft
-        $liturgical_date_calc_id = $liturgical_date_calc_post->ID;
-        $calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+        if ( $result ) {
+        	$liturgical_date_calc_post = $result->posts[0];
+        	//$calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; // tft
+        	$liturgical_date_calc_id = $liturgical_date_calc_post->ID;
+        	$calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+        } else {
+        	$calc_info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />";
+        	$liturgical_date_calc_id = null;
+        }
         
         // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
         if ( $calc_basis == 'christmas' ) {
@@ -475,11 +480,8 @@ function calc_litdates( $atts = [] ) {
             $basis_date_str = $year."-01-06";
             $num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
         } else {
-            if ( $liturgical_date_calc_post && !empty($calc_basis_field) ) {
+            if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
                 $basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
-                //$calc_info .= $indent."basis_date_str: [$basis_date_str]<br />";
-            } else {
-                $calc_info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />";
             }
         }
     
@@ -496,7 +498,7 @@ function calc_litdates( $atts = [] ) {
         if ( $basis_date_str == "" ) {
             $basis_date_str = "$year-01-01";
         }
-        $calc_info .= $indent.'<span class="notice">'."basis_date: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
+        $calc_info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
         
         /*
         // Get the basis_date from the string version
