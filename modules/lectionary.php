@@ -458,7 +458,8 @@ function calc_litdates( $atts = [] ) {
                 )
             )
         );
-        $liturgical_date_calc_post = new WP_Query( $args );
+        $result = new WP_Query( $args );
+        $liturgical_date_calc_post = $result->posts[0];
         $calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />";
         $liturgical_date_calc_id = $liturgical_date_calc_post->ID;
         $calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />";
