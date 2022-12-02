@@ -420,7 +420,6 @@ function calc_litdates( $atts = [] ) {
         // init
         list( $calc_info, $calc_basis, $calc_basis_field, $calc_weekday, $calc_month, $calc_oabi, $calc_interval, $calc_date, $calc_formula ) = array( "", "", "", "", "", "", "", "", "" );
         list( $date_calculation_str, $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "", "" );
-        list( $date_calculation_str, $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "", "" );
         
         $changes_made = false;
         
@@ -434,7 +433,7 @@ function calc_litdates( $atts = [] ) {
         $date_calculation_str = str_replace('christmas day', 'christmas', strtolower($date_calculation_str) );
         $date_calculation_str = str_replace('the epiphany', 'epiphany', strtolower($date_calculation_str) );
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
-        //$calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
+        $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
         
         // Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
         foreach ( $liturgical_bases AS $basis => $basis_field ) {
@@ -476,7 +475,7 @@ function calc_litdates( $atts = [] ) {
             $basis_date_str = $year."-01-06";
             $num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
         } else {
-            if ( $liturgical_date_calc_post ) {
+            if ( $liturgical_date_calc_post && !empty($calc_basis_field) ) {
                 $basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
                 //$calc_info .= $indent."basis_date_str: [$basis_date_str]<br />";
             } else {
