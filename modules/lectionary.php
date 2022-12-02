@@ -500,7 +500,6 @@ function calc_litdates( $atts = [] ) {
         }
         $calc_info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
         
-        /*
         // Get the basis_date from the string version
         $basis_date = strtotime($basis_date_str);
         $basis_date_weekday = strtolower( date('l', $basis_date) );
@@ -697,6 +696,7 @@ function calc_litdates( $atts = [] ) {
         } else {
             $info .= "calc_date_str is empty.<br />";
         }
+        /*
         */
         $info .= $calc_info;
         $info .= "<br />";
