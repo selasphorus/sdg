@@ -340,7 +340,12 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = [] ) {
 
-    // TODO: build in failsafe -- run this fcn ONLY for user queenbee
+    // TODO: build in failsafe -- run this fcn ONLY for user stcdev/queenbee
+    
+    $current_user = wp_get_current_user();
+    if ( $current_user->user_login != 'stcdev' ) {
+    	return "You are not authorized to run this operation.<br />";    
+    }
     
 	$info = ""; // init >> calculate_variable_dates <<
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
