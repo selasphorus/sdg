@@ -351,7 +351,7 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
         $options = get_option( 'sdg_settings' );
         
         if ( isset($options['is_dev_site']) ) { 
-            if ( $options['is_dev_site'] == 1 ) {
+            if ( !empty($options['is_dev_site']) ) {
                 return true;
             } else {
                 return false;
