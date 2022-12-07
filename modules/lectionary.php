@@ -609,7 +609,7 @@ function calc_litdates( $atts = [] ) {
                 }
             }
             
-            $calc_info .= $indent.">> date_calculation_str: $date_calculation_str<br />"; // tft
+            //$calc_info .= $indent.">> date_calculation_str: $date_calculation_str<br />"; // tft
             //$calc_info .= $indent.">> [$calc_interval] -- [$calc_weekday] -- [$calc_oabi] -- [$calc_basis_field]<br />"; // tft
             $calc_info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
             //$calc_info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
