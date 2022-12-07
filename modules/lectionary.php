@@ -615,7 +615,7 @@ function calc_litdates( $atts = [] ) {
                 if ( $calc_oabi != "after" && $calc_date == "" ) {
                     $calc_formula = $date_calculation_str;               
                 } else {
-                	$calc_info .= $indent."Unable to determine calc_formula -- calc_oabi: $calc_oabi; $calc_date: $calc_date<br />";
+                	$calc_info .= $indent."Unable to determine calc_formula -- calc_oabi: $calc_oabi; calc_date: $calc_date<br />";
                 }
             }
             
