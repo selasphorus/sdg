@@ -596,7 +596,7 @@ function calc_litdates( $atts = [] ) {
                     } else if ( $calc_oabi == "after" ) { 
                         $calc_formula = "next Sunday";
                     } else if ( $first_sunday ) {
-                        $calc_date = $first_sunday; // e.g. "First Sunday of Advent"
+                        $calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
                     } 
 
                 } else if ( $calc_basis != "" && $calc_oabi == ( "before" || "after") ) {
@@ -610,12 +610,12 @@ function calc_litdates( $atts = [] ) {
             }
             
             // If there's no $calc_formula yet, use the date_calculation_str directly
-            if ( $calc_formula == "" ) { // && $calc_date == ""
+            if ( empty($calc_formula) && empty($calc_date) ) {
                 $calc_info .= $indent."calc based directly on date_calculation_str<br />"; // .'<span class="notice">'.'</span>'
-                if ( $calc_oabi != "after" && $calc_date == "" ) {
+                if ( $calc_oabi != "after" ) {
                     $calc_formula = $date_calculation_str;               
                 } else {
-                	$calc_info .= $indent."Unable to determine calc_formula -- calc_oabi: \"$calc_oabi\"; calc_date: $calc_date<br />";
+                	//$calc_info .= $indent."Unable to determine calc_formula -- calc_oabi: \"$calc_oabi\"; calc_date: $calc_date<br />";
                 }
             }
             
@@ -625,7 +625,7 @@ function calc_litdates( $atts = [] ) {
             //$calc_info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
             //
             // Do the actual calculation
-            if ( $calc_formula != "" && $basis_date != "" ) {
+            if ( empty($calc_date) && $calc_formula != "" && $basis_date != "" ) {
                 $calc_date = strtotime("$calc_formula", $basis_date);
                 //$calc_info .= $indent.'strtotime("'.$calc_formula.'",$basis_date)<br />';
                 //$calc_info .= $indent."calc_date -- ".$calc_date.' = strtotime("'.$calc_formula.'", '.$basis_date.')<br />'; // tft
@@ -636,18 +636,23 @@ function calc_litdates( $atts = [] ) {
             }
             
             // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
-            // e.g. does this supposed Sunday of advent run into Lent?
             if ( $calc_basis == "epiphany" ) {
+            
+            	// Make sure this supposed date in the Epiphany season doesn't run into Lent
                 $calc_info .= $indent."There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
                 if ( $calc_date > strtotime($ash_wednesday_date) ) { //if ( (int) $calc_interval > (int) $num_sundays_after_epiphany ) {
                     $calc_info .= $indent.'<span class="warning">Uh oh! That\'s too many Sundays.</span><br />'; // tft
                     $calc_info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calc_date).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
                     $calc_date = "N/A";
                 }
+                
             } else if ( $calc_basis == "lent" ) {
-                // make sure this doesn't overlap w/ holy week
+            
+                // TODO: make sure date doesn't overlap w/ holy week
+                
             } else if ( $calc_basis == "pentecost" ) {
                 
+                // Make sure this supposed date in Ordinary Time/Pentecost season isn't actually in Advent
                 // Pentecost: "This season ends on the Saturday before the First Sunday of Advent."                
                 // TODO -- figure out if this is the LAST Sunday of Pentecost?
                 
