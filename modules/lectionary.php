@@ -658,8 +658,7 @@ function calc_litdates( $atts = [] ) {
             $calc_info .= $indent."calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
         } else {
             $calc_date_str = "";
-            $calc_info .= $indent."calc_date N/A<br />"; // tft
-            $info .= $calc_info;
+            $calc_info .= $indent."calc_date N/A<br />"; // tft            
         }
         
         // 3. Save dates to ACF repeater field row for date_calculatedday_
@@ -696,11 +695,10 @@ function calc_litdates( $atts = [] ) {
 
             }
         } else {
+        	$info .= $calc_info;
             $info .= "calc_date_str is empty.<br />";
         }
-        /*
-        */
-        $info .= $calc_info;
+        
         $info .= "<br />";
              
     } // END foreach post
