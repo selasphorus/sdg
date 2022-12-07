@@ -352,6 +352,7 @@ function calc_litdates( $atts = [] ) {
 
 	$a = shortcode_atts( array(
         'testing' => true,
+        'verbose' => false,
         'id' => null,
         'year' => date('Y'),
         'num_posts' => 10,
@@ -362,6 +363,7 @@ function calc_litdates( $atts = [] ) {
     ), $atts );
 	
     $testing = $a['testing'];
+    $verbose = $a['verbose'];
     $num_posts = (int) $a['num_posts'];
     $year = get_query_var( 'y' );
     if ( $year == "" ) { $year = $a['year']; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
@@ -396,7 +398,7 @@ function calc_litdates( $atts = [] ) {
     $posts = $arr_posts->posts;
     
     $info .= ">>> calc_litdates <<<<br />";
-    $info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
+    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "year: $year<br />";
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "args: <pre>".print_r( $args, true )."</pre>";
@@ -446,7 +448,7 @@ function calc_litdates( $atts = [] ) {
         if ( $calc_basis != "" ) {            
             //$calc_info .= $indent."calc_basis: $calc_basis // $calc_basis_field<br />"; // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
         } else {
-            $calc_info .= $indent."No calc_basis found.<br />";
+            if ( $verbose == "true" ) { $calc_info .= $indent."No calc_basis found.<br />"; }
         }
         
         // Find the liturgical_date_calc post for the selected year
@@ -467,9 +469,9 @@ function calc_litdates( $atts = [] ) {
         	$liturgical_date_calc_post = $result->posts[0];
         	//$calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; // tft
         	$liturgical_date_calc_id = $liturgical_date_calc_post->ID;
-        	$calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+        	if ( $verbose == "true" ) { $calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
         } else {
-        	$calc_info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />";
+        	if ( $verbose == "true" ) { $calc_info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />"; }
         	$liturgical_date_calc_id = null;
         }
         
@@ -489,7 +491,7 @@ function calc_litdates( $atts = [] ) {
         if ( $calc_basis == "epiphany" || $calc_basis == "advent" || $calc_basis == "pentecost" ) {
             // Get the Advent Sunday date
             $advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
-            $calc_info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />";
+            if ( $verbose == "true" ) { $calc_info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />"; }
         } else if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
             // Get the Ash Wednesday date
             $ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
@@ -498,7 +500,7 @@ function calc_litdates( $atts = [] ) {
         if ( $basis_date_str == "" ) {
             $basis_date_str = "$year-01-01";
         }
-        $calc_info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
+        //$calc_info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
         
         // Get the basis_date from the string version
         $basis_date = strtotime($basis_date_str);
@@ -573,7 +575,7 @@ function calc_litdates( $atts = [] ) {
                     if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
                 } else if ( $basis_date ) {
                     $first_sunday = $basis_date;
-                    $calc_info .= $indent."first_sunday is equal to basis_date.<br />"; // tft
+                    if ( $verbose == "true" ) { $calc_info .= $indent."first_sunday is equal to basis_date.<br />"; }
                 }
 
                 if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
