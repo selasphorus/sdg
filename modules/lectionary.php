@@ -655,7 +655,7 @@ function calc_litdates( $atts = [] ) {
                     $calc_info .= $indent.'<span class="warning">'."Uh oh! ".date('Y-m-d',$calc_date)." conflicts with Advent. Advent Sunday is $advent_sunday_date.</span><br />"; // tft
                     $calc_date = "N/A";
                 } else {
-                    $calc_info .= $indent."(Advent begins on $advent_sunday_date.)<br />"; // tft
+                    $calc_info .= $indent."Ok -- Advent begins on $advent_sunday_date.<br />"; // tft
                 }
             }
 
