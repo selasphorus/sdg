@@ -492,10 +492,16 @@ function calc_litdates( $atts = [] ) {
             // Get the Advent Sunday date
             $advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
             if ( $verbose == "true" ) { $calc_info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />"; }
-        } else if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
+        }
+        
+        if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
             // Get the Ash Wednesday date
             $ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
-            if ( empty($ash_wednesday_date) ) { $calc_info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
+            if ( empty($ash_wednesday_date) ) { 
+            	$calc_info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+            } else {
+            	if ( $verbose == "true" ) { $calc_info .= $indent."ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
+            }
         }
 
         if ( $basis_date_str == "" ) {
