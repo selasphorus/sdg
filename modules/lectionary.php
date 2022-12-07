@@ -506,12 +506,13 @@ function calc_litdates( $atts = [] ) {
         $basis_date = strtotime($basis_date_str);
         $basis_date_weekday = strtolower( date('l', $basis_date) );
         
-        $calc_info .= $indent."basis_date: $basis_date_str ($basis_date_weekday) ($calc_basis // $calc_basis_field)<br />"; // .'<span class="notice">'.'</span>'
+        if ( $verbose == "true" ) { $calc_info .= $indent."basis_date: $basis_date_str ($basis_date_weekday) ($calc_basis // $calc_basis_field)<br />"; } // .'<span class="notice">'.'</span>'
         
         // Check to see if the date to be calculated is in fact the same as the base date
         if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
             
             $calc_date = $basis_date;
+            $calc_info .= $indent."date to be calculated is same as basis_date.<br />";
             
         } else {
             
