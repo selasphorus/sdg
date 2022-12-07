@@ -715,7 +715,7 @@ function calc_litdates( $atts = [] ) {
             }
         } else {
         	$info .= $calc_info;
-            $info .= "calc_date_str is empty.<br />";
+            //$info .= "calc_date_str is empty.<br />";
         }
         
         $info .= "<br />";
