@@ -495,6 +495,7 @@ function calc_litdates( $atts = [] ) {
         } else if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
             // Get the Ash Wednesday date
             $ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
+            if ( empty($ash_wednesday_date) ) { $calc_info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
         }
 
         if ( $basis_date_str == "" ) {
