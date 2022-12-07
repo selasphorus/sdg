@@ -621,18 +621,22 @@ function calc_litdates( $atts = [] ) {
             
             //$calc_info .= $indent.">> date_calculation_str: $date_calculation_str<br />"; // tft
             //$calc_info .= $indent.">> [$calc_interval] -- [$calc_weekday] -- [$calc_oabi] -- [$calc_basis_field]<br />"; // tft
-            $calc_info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
             //$calc_info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
             //
-            // Do the actual calculation
-            if ( empty($calc_date) && $calc_formula != "" && $basis_date != "" ) {
-                $calc_date = strtotime("$calc_formula", $basis_date);
+            // calc_date not yet determined >> do the actual calculation using the formula and basis_date
+            if ( empty($calc_date) ) {
+            
+            	$calc_info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
+            	
+            	if ( $calc_formula != "" && $basis_date != "" ) {
+            		$calc_date = strtotime("$calc_formula", $basis_date);
+            	} else {
+            		$calc_info .= $indent."Can't do calc -- calc_formula or basis_date is empty.<br />";
+            	}
                 //$calc_info .= $indent.'strtotime("'.$calc_formula.'",$basis_date)<br />';
                 //$calc_info .= $indent."calc_date -- ".$calc_date.' = strtotime("'.$calc_formula.'", '.$basis_date.')<br />'; // tft
                 // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
                 // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
-            } else {
-                $calc_info .= $indent."Can't do calc -- calc_formula or basis_date is empty.<br />";
             }
             
             // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
