@@ -175,9 +175,12 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     $litdate_id = null; // init
     
-    // ... multiple matches? prioritize... pick one and then fetch the ONE litdate, collect, &c.
     // WIP
-    if ( $num_litdate_posts == 1 ) {
+    if ( $num_litdate_posts == 0 ) {
+    
+    	$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+    	
+    } else if ( $num_litdate_posts == 1 ) {
         
         $litdate_post = $litdate_posts[0];
         $litdate_id = $litdate_post->ID;
@@ -185,6 +188,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         //$litdate_post_id = $litdate_posts[0]['ID'];
         
     } else if ( $num_litdate_posts > 1 ) {
+        
+        // ... multiple matches? prioritize... pick one and then fetch the ONE litdate, collect, &c.
         
         $litdates = array();
         
