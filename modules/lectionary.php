@@ -160,6 +160,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     'compare'	=> '=',
                     'value'		=> $full_date_str,
                 ),
+                // The following parameters can be phased out eventually once the DB is updated to standardize the date formats
                 array(
                     'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
                     'compare'	=> '=',
