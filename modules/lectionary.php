@@ -154,13 +154,21 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
                     'compare'	=> '=',
                     'value'		=> $full_date_str,
-                    //'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
                 ),
                 array(
                     'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
                     'compare'	=> '=',
                     'value'		=> $full_date_str,
-                    //'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+                ),,
+                array(
+                    'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+                    'compare'	=> '=',
+                    'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+                ),
+                array(
+                    'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+                    'compare'	=> '=',
+                    'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
                 ),
             )
           ),
