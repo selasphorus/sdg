@@ -673,7 +673,8 @@ function calc_litdates( $atts = [] ) {
         }
         
         if ( $calc_date != "N/A" ) {
-            $calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
+            $calc_date_str = date('Y-m-d', $calc_date);
+            //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
             $calc_info .= $indent."calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
         } else {
             $calc_date_str = "";
