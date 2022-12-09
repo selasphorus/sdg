@@ -159,7 +159,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
                     'compare'	=> '=',
                     'value'		=> $full_date_str,
-                ),,
+                ),
                 array(
                     'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
                     'compare'	=> '=',
