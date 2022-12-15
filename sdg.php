@@ -247,7 +247,9 @@ function sdg_modules_field_cb( $args ) {
 		'ninjaforms' => __( 'Ninja Forms' ), 
 		//
 		'admin_notes' => __( 'Admin Notes' ), 
-		'data_tables' => __( 'Data Tables' )
+		'data_tables' => __( 'Data Tables' ), 
+		//
+		'inventory' => __( 'Inventory' ), 
 	);
 	
 	$value   = ( !isset( $options[$args['label_for']] ) ) ? array() : $options[$args['label_for']];
@@ -384,7 +386,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'links', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'inventory', 'links', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
