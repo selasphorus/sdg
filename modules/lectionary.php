@@ -644,6 +644,10 @@ function calc_litdates( $atts = [] ) {
             
             	$calc_info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
             	
+            	// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+            	// Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
+            	//
+            	
             	if ( $calc_formula != "" && $basis_date != "" ) {
             		$calc_date = strtotime("$calc_formula", $basis_date);
             	} else {
