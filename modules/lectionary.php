@@ -544,7 +544,13 @@ function calc_litdates( $atts = [] ) {
             // What's the weekday for the date to be calculated?
             foreach ( $weekdays AS $weekday ) {
                 if (stripos($date_calculation_str, $weekday) !== false) {
-                    $calc_weekday = strtolower($weekday);
+                	$calc_info .= $indent."weekday '$weekday' found in date_calculation_str<br />";
+                    if ( empty($calc_weekday) ) {
+                    	$calc_weekday = strtolower($weekday);
+                    } else {
+                    	// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+                    	//$calc_info .= $indent."Multiple weekdays found in date_calculation_str<br />";
+                    }
                 }
             }
             //$info .= $indent."calc_weekday: $calc_weekday<br />"; // tft
@@ -601,7 +607,9 @@ function calc_litdates( $atts = [] ) {
                     $first_sunday = $basis_date;
                     if ( $verbose == "true" ) { $calc_info .= $indent."first_sunday is equal to basis_date.<br />"; }
                 }
-
+                
+                // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+                
                 if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
 
                     if ( ($calc_interval > 1 && $calc_oabi != "before") || ($calc_interval == 1 && $calc_oabi == ("after" || "in") ) ) {
