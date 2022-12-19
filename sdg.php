@@ -158,7 +158,7 @@ function sdg_text_field_cb( $args ) {
 }
 
 /**
- * Pill field callback function.
+ * Pill field callback function -- EXAMPLE/MODEl FIELD
  *
  * WordPress has magic interaction with the following keys: label_for, class.
  * - the "label_for" key value is used for the "for" attribute of the <label>.
@@ -344,6 +344,10 @@ $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } else { $modules = array(); }
 //$modules = get_option( 'sdg_modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
 //$some_option = get_option( 'key_name', 'default_value' );
+
+
+// WIP/TODO: loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
+
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
