@@ -8,6 +8,32 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+/**
+ * Adds a submenu page under a custom post type parent.
+ */
+function sermons_register_ref_page() {
+    add_submenu_page(
+        'edit.php?post_type=sermon',
+        __( 'Sermons CPT Options', 'sdg' ),
+        __( 'Sermons Options', 'sdg' ),
+        'manage_options',
+        'sermons-shortcode-ref',
+        'sermons_ref_page_callback'
+    );
+}
+
+/**
+ * Display callback for the submenu page.
+ */
+function sermons_ref_page_callback() { 
+    ?>
+    <div class="wrap">
+        <h1><?php _e( 'Sermons CPT Options', 'sdg' ); ?></h1>
+        <p><?php _e( 'Helpful stuff here', 'sdg' ); ?></p>
+    </div>
+    <?php
+}
+
 /*********** CPT: SERMON ***********/
 function get_cpt_sermon_meta( $post_id = null ) {
 	
