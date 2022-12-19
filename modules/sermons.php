@@ -17,6 +17,7 @@ add_action( 'admin_menu', 'sermons_register_options_page' );
  * Adds a submenu page under a custom post type parent.
  */
 function sermons_register_options_page() {
+    
     add_submenu_page(
         'edit.php?post_type=sermon',
         __( 'Sermons CPT Options', 'sdg' ),
@@ -25,18 +26,53 @@ function sermons_register_options_page() {
         'sermons-cpt-options',
         'sermons_options_page_callback'
     );
+    
 }
 
 /**
  * Display callback for the submenu page.
  */
 function sermons_options_page_callback() { 
-    ?>
-    <div class="wrap">
-        <h1><?php _e( 'Sermons CPT Options', 'sdg' ); ?></h1>
-        <p><?php _e( 'Helpful stuff here', 'sdg' ); ?></p>
-    </div>
-    <?php
+    
+    // check user capabilities
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	// add error/update messages
+
+	// check if the user have submitted the settings
+	// WordPress will add the "settings-updated" $_GET parameter to the url
+	if ( isset( $_GET['settings-updated'] ) ) {
+		// add settings saved message with the class of "updated"
+		add_settings_error( 'sdg_messages', 'sdg_message', __( 'Settings Saved', 'sdg' ), 'updated' );
+	}
+
+	// show error/update messages
+	settings_errors( 'sdg_messages' );
+	
+	// Include the form to display the setting fields
+	//require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/sdg-admin-settings.php';
+	
+	?>
+	<div class="wrap">
+		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
+		<form action="options.php" method="post">
+			<?php
+			// output security fields for the registered setting "sdg"
+			settings_fields( 'sdg_sermons' );
+			
+			// output setting sections and their fields
+			// (sections are registered for "sdg", each field is registered to a specific section)
+			do_settings_sections( 'sdg_sermons' );
+			
+			// output save settings button
+			submit_button( 'Save Settings' );
+			?>
+		</form>
+	</div>
+	<?php
+	
 }
 
 /**
