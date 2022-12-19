@@ -10,6 +10,54 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: SERMON ***********/
 
+/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
+
+// Register our sdg_settings_init to the admin_init action hook.
+add_action( 'admin_init', 'sdg_sermons_settings_init' );
+
+/**
+ * Custom option and settings
+ */
+function sdg_sermons_settings_init() {
+
+	// Register a new setting for "sdg_sermons" page.
+	register_setting( 'sdg_sermons', 'sdg_sermons_settings' ); // register_setting( string $option_group, string $option_name, array $args = array() )
+
+	// Register a new section in the "sdg_sermons" page.
+	//add_settings_section( string $id, string $title, callable $callback, string $page, array $args = array() )
+	add_settings_section(
+		'sdg_sermons_settings',
+		__( 'SDG Sermons Module Settings', 'sdg' ), 
+		'sdg_sermons_settings_section_callback',
+		'sdg_sermons'
+	);
+	
+	// Register a new field in the "sdg_settings" section, inside the "sdg_sermons" page.
+	//add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
+	add_settings_field(
+		'sdg_test_text_field',
+		__( 'Test Text Field', 'sdg' ),
+		'sdg_text_field_cb',
+		'sdg_sermons',
+		'sdg_sermons_settings',
+		['id' => 'sdg_test_text_field', 'name' => 'sdg_test_text_field', 'placeholder' => __('Test Text Field', 'sdg'), 'default_value' => 'test_value', 'class' => 'form-field form-required', 'style' => 'width:15rem']
+	);
+	
+}
+
+/**
+ * Settings section callback function.
+ *
+ * @param array $args  The settings array, defining title, id, callback.
+ */
+function sdg_sermons_settings_section_callback( $args ) {
+
+	$options = get_option( 'sdg_sermons_settings' );
+	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	//echo '<!--p id="'.esc_attr( $args['id'] ).'">'.esc_html_e( 'Test Settings Section Header', 'sdg' ).'></p-->';
+
+}
+
 // Register our options page to the admin_menu action hook.
 add_action( 'admin_menu', 'sermons_register_options_page' );
 
@@ -17,7 +65,9 @@ add_action( 'admin_menu', 'sermons_register_options_page' );
  * Adds a submenu page under a custom post type parent.
  */
 function sermons_register_options_page() {
-    
+
+	// Fcn add_submenu_page is similar to add_options_page, but with control over placement in CMS as submenu of CPT instead of options-general.php
+    //add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $callback = '', int|float $position = null ): string|false
     add_submenu_page(
         'edit.php?post_type=sermon',
         __( 'Sermons CPT Options', 'sdg' ),
