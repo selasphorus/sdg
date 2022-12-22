@@ -35,13 +35,18 @@ function sdg_sermons_settings_init() {
 	// Register a new field in the "sdg_settings" section, inside the "sdg_sermons" page.
 	//add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
 	add_settings_field(
-		'sdg_test_text_field',
-		__( 'Test Text Field', 'sdg' ),
-		'sdg_text_field_cb',
+		'sdg_sermons_archive_content',
+		__( 'Archive Content', 'sdg' ),
+		'sdg_archive_content_field_cb',
 		'sdg_sermons',
 		'sdg_sermons_settings',
-		['id' => 'sdg_test_text_field', 'name' => 'sdg_test_text_field', 'placeholder' => __('Test Text Field', 'sdg'), 'default_value' => 'test_value', 'class' => 'form-field form-required', 'style' => 'width:15rem']
+		['id' => 'sdg_sermons_archive_content', 'name' => 'sdg_sermons_archive_content', 'placeholder' => __('Archive Content', 'sdg'), 'default_value' => '', 'class' => 'form-field form-required', 'style' => 'width:25rem']
 	);
+	
+	// WIP/TODO: image field -- for archive featured image
+	
+	// WIP/TODO: text area (WYSIWYG?) for top-of-page content
+	
 	
 }
 
@@ -124,6 +129,29 @@ function sermons_options_page_callback() {
 	<?php
 	
 }
+
+// Render a text field
+function sdg_archive_content_field_cb( $args ) {
+
+	$options = get_option( 'sdg_sermons_settings' );
+	
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	//echo "options: <pre>".print_r($options,true)."</pre>"; // tft
+	
+	$value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']);
+	$class = isset($args['class']) ? $args['class'] : '';
+	$style = isset($args['style']) ? $args['style']: '';
+	
+	echo '<input type="textarea" 
+		id="'.esc_attr( $args['id'] ).'" 
+		name="sdg_settings['.esc_attr( $args['name'] ).']" 
+		value="'.$value.'" 
+		class="'.$class.'" 
+		style="'.$style.'" 
+		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';
+}
+
+/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 /**
  *
