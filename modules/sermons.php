@@ -142,13 +142,21 @@ function sdg_archive_content_field_cb( $args ) {
 	$class = isset($args['class']) ? $args['class'] : '';
 	$style = isset($args['style']) ? $args['style']: '';
 	
-	echo '<input type="textarea" 
+	echo '<textarea 
 		id="'.esc_attr( $args['id'] ).'" 
 		name="sdg_settings['.esc_attr( $args['name'] ).']" 
 		value="'.$value.'" 
 		class="'.$class.'" 
 		style="'.$style.'" 
 		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';
+		
+	/*echo '<input type="text" 
+		id="'.esc_attr( $args['id'] ).'" 
+		name="sdg_settings['.esc_attr( $args['name'] ).']" 
+		value="'.$value.'" 
+		class="'.$class.'" 
+		style="'.$style.'" 
+		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';*/
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
