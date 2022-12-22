@@ -148,7 +148,7 @@ function sdg_archive_content_field_cb( $args ) {
 		value="'.$value.'" 
 		class="'.$class.'" 
 		style="'.$style.'" 
-		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';
+		placeholder="'.esc_attr( $args['placeholder'] ).'"></textarea>';
 		
 	/*echo '<input type="text" 
 		id="'.esc_attr( $args['id'] ).'" 
