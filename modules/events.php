@@ -2118,7 +2118,7 @@ function get_special_date_content( $the_date = null ) {
     
     //$post_id = (int) $args['post_id'];
     //$series_id = (int) $args['series_id'];
-    $the_date = $args['the_date'];
+    //$the_date = $args['the_date'];
     $info .= "<!-- the_date: '$the_date' -->\n";
     $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
     
