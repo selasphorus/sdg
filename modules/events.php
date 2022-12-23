@@ -2099,21 +2099,22 @@ add_filter('em_cp_event_recurring_public','__return_true');
 
 // Event archives -- top-of-page content
 
-// Day Titles
-add_shortcode('special_date_content', 'get_special_date_content');
-function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
+// Special Date Content
+//add_shortcode('special_date_content', 'get_special_date_content');
+//function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
+function get_special_date_content( $the_date = null ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "\n<!-- get_special_date_content -->\n";
     
-    $args = shortcode_atts( 
+    /*$args = shortcode_atts( 
         array(
             //'post_id'   => get_the_ID(),
             //'series_id' => null,
             'the_date'  => null,
         ), 
         $atts
-    );
+    );*/
     
     //$post_id = (int) $args['post_id'];
     //$series_id = (int) $args['series_id'];
