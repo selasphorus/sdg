@@ -2118,12 +2118,10 @@ function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
     //$post_id = (int) $args['post_id'];
     //$series_id = (int) $args['series_id'];
     $the_date = $args['the_date'];
+    $info .= "<!-- the_date: '$the_date' -->\n";
+    $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
     
     if ($the_date == "2022-12-24") {
-        
-        // Otherwise, format the date and continue.
-        $info .= "<!-- the_date: '$the_date' -->\n";
-        $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
         
         $timestamp = strtotime($the_date);
         $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
