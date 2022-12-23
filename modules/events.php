@@ -2128,8 +2128,8 @@ function get_special_date_content( $the_date = null ) {
         $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
         
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
-        $info .= '<div class="message centered narrow">';
-        $info .= "<p>Saint Thomas Church will be open to the public during the following hours on Christmas Eve:<br />";
+        $info .= '<div class="message centered">';
+        $info .= '<p class="narrow">Saint Thomas Church will be open to the public during the following hours on Christmas Eve:<br />';
         $info .= "10am-1pm<br />3pm-6:30pm<br />9:30pm-12:30am</p>";
         $info .= '</div>';
     }
