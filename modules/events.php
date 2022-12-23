@@ -2097,6 +2097,47 @@ add_filter('em_cp_event_recurring_public','__return_true');
 
 /***** wip *****/
 
+// Event archives -- top-of-page content
+
+// Day Titles
+add_shortcode('special_date_content', 'get_special_date_content');
+function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
+
+    // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
+	$info = "\n<!-- get_special_date_content -->\n";
+    
+    $args = shortcode_atts( 
+        array(
+            //'post_id'   => get_the_ID(),
+            //'series_id' => null,
+            'the_date'  => null,
+        ), 
+        $atts
+    );
+    
+    //$post_id = (int) $args['post_id'];
+    //$series_id = (int) $args['series_id'];
+    $the_date = $args['the_date'];
+    
+    if ($the_date == "2022-12-24") {
+        
+        // Otherwise, format the date and continue.
+        $info .= "<!-- the_date: '$the_date' -->\n";
+        $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
+        
+        $timestamp = strtotime($the_date);
+        $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
+        
+        $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
+        $info .= "<p>Saint Thomas Church will be open to the public during the following hours on Christmas Eve:<br />";
+        $info .= "10am-1pm<br />3pm-6:30pm<br />9:30pm-12:30am</p>";
+        
+    }
+	
+	return $info;
+	
+}
+
 // Add "series" to acceptable EM search parameters (attributes)
 add_filter('em_events_get_default_search','sdg_custom_event_search_parameters',1,2);
 add_filter('em_calendar_get_default_search','sdg_custom_event_search_parameters',1,2);
