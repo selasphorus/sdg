@@ -524,6 +524,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
                 } else if ( $format != "edition_title" && $format != "concert_item"  ) {
                     $composer_info = "by ".$composer_info;
                 }
+                $composer_info = '<span class="composer">'.$composer_info.'</span>';
             }
 
         }
