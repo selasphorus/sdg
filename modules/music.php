@@ -555,11 +555,11 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
             $info .= "Arranger(s): ".$arranger_info."<br />";
         } else {
             if ( $authorship_info != "" ) {
-                $authorship_info .= ", ";
+                //$authorship_info .= ", ";
             } else if ( $format != 'edition_title' && $format != "concert_item" ) {
                 $authorship_info .= " -- ";
             }
-            $authorship_info .= "arr. ".$arranger_info;
+            $authorship_info .= '<span class="arranger">arr. '.$arranger_info.'</span>'; //$authorship_info .= "arr. ".$arranger_info;
         }
 
     }
@@ -574,11 +574,11 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
                 $info .= "Transcriber(s): ".$transcriber_info."<br />";
             } else {
                 if ( $authorship_info != "" ) {
-                    $authorship_info .= ", ";
+                    //$authorship_info .= ", ";
                 } else if ( $format != 'edition_title' && $format != "concert_item" ) {
                     $authorship_info .= " -- ";
                 }
-                $authorship_info .= "transcr. ".$transcriber_info;
+                $authorship_info .= '<span class="transcriber">transcr. '.$transcriber_info.'</span>'; //$authorship_info .= "transcr. ".$transcriber_info;
             }
         }
         
@@ -592,7 +592,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         if ( $is_single_work == true && $librettist_info != "") {
             $info .= "Librettist(s): ".$librettist_info."<br />";
         } else {
-            $authorship_info .= ", text by ".$librettist_info;
+            $authorship_info .= '<span class="librettist">text by '.$librettist_info.'</span>'; //$authorship_info .= ", text by ".$librettist_info;
         }
 
     }
@@ -605,7 +605,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         if ( $is_single_work == true && $translator_info != "") {
             $info .= "Translator(s): ".$translator_info."<br />";
         } else {
-            $authorship_info .= ", transl. ".$translator_info;
+            $authorship_info .= '<span class="librettist">transl. '.$translator_info.'</span>'; //$authorship_info .= ", transl. ".$translator_info;
         }
 
     }
