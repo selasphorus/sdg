@@ -479,7 +479,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 
             }
             
-        } else if ( $webcast_format == "youtube" ) {
+        } else if ( $webcast_format == "youtube" && ( $webcast_status == "live" || $webcast_status == "on_demand" ) ) {
             
             $player_status = "ready";
             if ( $status_only == false ) {
