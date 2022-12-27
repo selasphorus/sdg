@@ -403,7 +403,7 @@ if( function_exists('acf_add_options_page') ) {
     
     	$cpt_name = $module;
     	// Make it singular -- remove trailing "s"
-    	if ( substr($cpt_name, -1) == "s" ) { $cpt_name = substr($info, 0, -1); }
+    	if ( substr($cpt_name, -1) == "s" ) { $cpt_name = substr($cpt_name, 0, -1); }
 		
 		acf_add_options_sub_page(array(
 			'page_title'     => ucfirst($cpt_name).' CPT Options',
