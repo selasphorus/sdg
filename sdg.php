@@ -346,18 +346,6 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
 //$some_option = get_option( 'key_name', 'default_value' );
 
 
-// WIP/TODO: loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
-
-if( function_exists('acf_add_options_page') ) {
-    
-    acf_add_options_sub_page(array(
-        'page_title'     => 'Sermons CPT Options',
-        'menu_title'    => 'Sermons Options',
-        'menu_slug' 	=> 'sermons-cpt-options',
-        'parent_slug'    => 'edit.php?post_type=sermon',
-    ));
-
-}
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
@@ -404,6 +392,29 @@ foreach ( $modules as $module ) {
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
+}
+
+
+// WIP/TODO: loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
+
+if( function_exists('acf_add_options_page') ) {
+    
+    foreach ( $modules as $module ) {
+    
+    	$cpt_name = $module;
+    	// Make it singular -- remove trailing "s"
+    	if ( substr($cpt_name, -1) == "s" ) { $cpt_name = substr($info, 0, -1); }
+		
+		acf_add_options_sub_page(array(
+			'page_title'     => ucfirst($cpt_name).' CPT Options',
+			'menu_title'    => ucfirst($cpt_name).' Options',
+			'menu_slug' 	=> $module.'-cpt-options',
+			'parent_slug'    => 'edit.php?post_type='.$cpt_name,
+		));
+	}
+
+    
+
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
