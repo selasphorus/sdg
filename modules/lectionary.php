@@ -725,6 +725,7 @@ function calc_litdates( $atts = [] ) {
                         // Already in there
                         $newrow = false;
                         $info .= $indent."Old news. This date_calculated ($calc_date_str) is already in the database.<br />"; // tft
+                        if ( $verbose == "true" ) { $info .= $calc_info; }
                     } else {
                     	//$info .= $indent."Old date_calculated: $date_calculated.<br />"; // tft
                     }
