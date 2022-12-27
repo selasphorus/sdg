@@ -348,6 +348,15 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
 
 // WIP/TODO: loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
 
+if( function_exists('acf_add_options_page') ) {
+    
+    acf_add_options_sub_page(array(
+        'page_title'     => 'Sermons CPT Options',
+        'menu_title'    => 'sermons-cpt-options',
+        'parent_slug'    => 'edit.php?post_type=sermon',
+    ));
+
+}
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 

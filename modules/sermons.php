@@ -12,8 +12,10 @@ if ( !function_exists( 'add_action' ) ) {
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
+// WIP -- handle options via ACF instead -- see sdg.php
+
 // Register our sdg_settings_init to the admin_init action hook.
-add_action( 'admin_init', 'sdg_sermons_settings_init' );
+//add_action( 'admin_init', 'sdg_sermons_settings_init' );
 
 /**
  * Custom option and settings
@@ -64,12 +66,13 @@ function sdg_sermons_settings_section_callback( $args ) {
 }
 
 // Register our options page to the admin_menu action hook.
-add_action( 'admin_menu', 'sermons_register_options_page' );
+//add_action( 'admin_menu', 'sermons_register_options_page' );
 
 /**
  * Adds a submenu page under a custom post type parent.
  */
-function sermons_register_options_page() {
+ 
+/*function sermons_register_options_page() {
 
 	// Fcn add_submenu_page is similar to add_options_page, but with control over placement in CMS as submenu of CPT instead of options-general.php
     //add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $callback = '', int|float $position = null ): string|false
@@ -82,12 +85,13 @@ function sermons_register_options_page() {
         'sermons_options_page_callback'
     );
     
-}
+}*/
 
 /**
  * Display callback for the submenu page.
  */
-function sermons_options_page_callback() { 
+ 
+/*function sermons_options_page_callback() { 
     
     // check user capabilities
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -150,14 +154,8 @@ function sdg_archive_content_field_cb( $args ) {
 		style="'.$style.'" 
 		placeholder="'.esc_attr( $args['placeholder'] ).'"></textarea>';
 		
-	/*echo '<input type="text" 
-		id="'.esc_attr( $args['id'] ).'" 
-		name="sdg_settings['.esc_attr( $args['name'] ).']" 
-		value="'.$value.'" 
-		class="'.$class.'" 
-		style="'.$style.'" 
-		placeholder="'.esc_attr( $args['placeholder'] ).'"/>';*/
 }
+*/
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
