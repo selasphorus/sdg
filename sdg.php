@@ -409,9 +409,9 @@ if( function_exists('acf_add_options_page') ) {
 			'page_title'     => ucfirst($cpt_name).' CPT Options',
 			'menu_title'    => ucfirst($cpt_name).' Archive Options',
 			'menu_slug' 	=> $module.'-cpt-options',
-			//'parent_slug'    => 'edit.php?post_type=sermon',
 			'parent_slug'    => 'edit.php?post_type='.$cpt_name,
 		));
+		
 	}
 
     
