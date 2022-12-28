@@ -560,7 +560,13 @@ function calc_litdates( $atts = [] ) {
             // ** Does the date to be calculated fall before/after/of/in the basis_date/season?
             foreach ( $oabis AS $oabi ) {
                 if (stripos($date_calculation_str, $oabi) !== false) {
-                    $calc_oabi = strtolower($oabi);
+                	$calc_info .= $indent."oabi '$oabi' found in date_calculation_str<br />";
+                    if ( empty($oabi) ) {
+                    	$calc_oabi = strtolower($oabi);
+                    } else {
+                    	// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+                    	//$calc_info .= $indent."Multiple oabi found in date_calculation_str<br />";
+                    }
                 }
             }
             if ( $verbose == "true" ) { $calc_info .= $indent."calc_oabi: $calc_oabi<br />"; }
