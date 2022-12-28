@@ -569,7 +569,7 @@ function calc_litdates( $atts = [] ) {
                     // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
                     // Are there multiple instances of the substr in the str?
                     if ( substr_count($date_calculation_str, $oabi) > 1 ) { // substr_count(string,substring,start,length)
-                    	$calc_info .= $indent."There multiple instances of $oabi in the date_calculation_str ('date_calculation_str')<br />";
+                    	$calc_info .= $indent."There multiple instances of '$oabi' in the date_calculation_str ('date_calculation_str')<br />";
                     }
                 }
             }
