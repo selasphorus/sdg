@@ -555,7 +555,7 @@ function calc_litdates( $atts = [] ) {
                     }
                 }
             }
-            //$info .= $indent."calc_weekday: $calc_weekday<br />"; // tft
+            if ( $verbose == "true" ) { $calc_info .= $indent."calc_weekday: $calc_weekday<br />"; }
 
             // ** Does the date to be calculated fall before/after/of/in the basis_date/season?
             foreach ( $oabis AS $oabi ) {
@@ -563,14 +563,14 @@ function calc_litdates( $atts = [] ) {
                     $calc_oabi = strtolower($oabi);
                 }
             }
-            //$info .= $indent."calc_oabi: $calc_oabi<br />"; // tft
+            if ( $verbose == "true" ) { $calc_info .= $indent."calc_oabi: $calc_oabi<br />"; }
 
 			// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 			
             // ** Determine the calc_interval -- number of days/weeks...
             if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
-                //$info .= $indent."date_calculation_str contains numbers.<br />";          
+                if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }       
                 $calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_oabi, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
                 $calc_interval = trim( $calc_interval );
                 
