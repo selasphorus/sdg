@@ -746,6 +746,8 @@ function calc_litdates( $atts = [] ) {
         if ( $calc ) {
         	$calc_date = $calc['calc_date'];
         	$calc_info .= $calc['calc_info'];
+        } else {
+        	$calc_info .= "calc_date_from_str failed<br />";
         }
                 
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
