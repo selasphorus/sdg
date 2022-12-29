@@ -546,7 +546,7 @@ function calc_litdates( $atts = [] ) {
             
             // Does the date to be calculated fall before/after/of/in the basis_date/season?
             foreach ( $boias AS $boia ) {
-            	if ( preg_match_all('/$boia/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
+            	if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
             		if ( $verbose == "true" ) { $calc_info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
             	}
             	
