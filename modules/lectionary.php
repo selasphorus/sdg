@@ -362,7 +362,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 	
 	// init vars
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
-    //$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
     
@@ -377,11 +377,14 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 		$component_info = "";
 		if ( array_key_exists($component, $liturgical_bases) ) {
 			$component_info .= $indent."component '".$component."' is liturgical_base<br />";
+		} else if ( in_array($component, $months) ) {
+			$component_info .= $indent."component '".$component."' is month<br />";
 		} else if ( in_array($component, $weekdays) ) {
 			$component_info .= $indent."component '".$component."' is weekday<br />";
 		} else if ( in_array($component, $boias) ) {
 			$component_info .= $indent."component '".$component."' is boia<br />";
-		} else if ( preg_match_all('/(first)(last)([0-9]+)/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
+		} else if ( preg_match('/([0-9]+)/', $component) ) {
+		//} else if ( preg_match_all('/(first)(last)([0-9]+)/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
 		//} else if ( preg_match_all('/[0-9]+/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
 			$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 		} else {
