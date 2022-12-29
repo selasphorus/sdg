@@ -583,7 +583,7 @@ function calc_litdates( $atts = [] ) {
             //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
                 if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }
-                if ( $verbose == "true" ) { $calc_info .= $indent."matches: ".print_r($matches, true)."<br />"; }
+                if ( $verbose == "true" ) { $calc_info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
                 
                 // Extract the calc_interval integer from the string by getting rid of everything else
                 // WIP deal w/ multiple value possibilities for weekday, boia
