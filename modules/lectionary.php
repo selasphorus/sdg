@@ -353,107 +353,29 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	
 }
 
-
 // Function(s) to calculate variable liturgical_dates
-add_shortcode('calculate_variable_dates', 'calc_litdates');
-function calc_litdates( $atts = [] ) {
 
-    // TODO: build in failsafe -- run this fcn ONLY for user stcdev/queenbee
-    
-    $current_user = wp_get_current_user();
-    if ( $current_user->user_login != 'stcdev' ) {
-    	return "You are not authorized to run this operation.<br />";    
-    }
-    
-	$info = ""; // init >> calculate_variable_dates <<
-    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+function calc_date_from_str( $str = null ) {
 
-	$a = shortcode_atts( array(
-        'testing' => true,
-        'verbose' => false,
-        'id' => null,
-        'year' => date('Y'),
-        'num_posts' => 10,
-        'admin_tag_slug' => 'dates-calculated', // 'programmatically-updated'
-        'orderby' => 'title',
-        'order' => 'ASC',
-        'meta_key' => null
-    ), $atts );
+	$calc = array();
+	if ( $str ) { $date_calculation_str = $str; } else { return false; }
 	
-    $testing = $a['testing'];
-    $verbose = $a['verbose'];
-    $num_posts = (int) $a['num_posts'];
-    $year = get_query_var( 'y' );
-    if ( $year == "" ) { $year = $a['year']; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
-    $orderby = $a['orderby'];
-    $order = $a['order'];
-    $meta_key = $a['meta_key'];
-    $admin_tag_slug = $a['admin_tag_slug'];
-    
-	$args = array(
-		'post_type' => 'liturgical_date',
-		'post_status' => 'publish',
-        'posts_per_page' => $num_posts,
-        'meta_query' => array(
-            'relation' => 'AND',
-            array(
-                'key'   => "date_type", 
-                'value' => 'variable',
-            ),
-            array(
-                'key'   => "date_calculation",
-                'compare' => 'EXISTS'
-            )
-        ),
-        'orderby'	=> $orderby,
-        'order'	=> $order,
-	);
-    
-    //if ( $a['id'] !== null ) { $args['p'] = $a['id']; }
-    if ( $a['id'] !== null ) { $args['post__in'] = explode(', ', $a['id']); }
-    if ( $a['meta_key'] !== null ) { $args['meta_key'] = $meta_key; }
-    
-	$arr_posts = new WP_Query( $args );
-    $posts = $arr_posts->posts;
-    
-    $info .= ">>> calc_litdates <<<<br />";
-    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
-    $info .= "year: $year<br />";
-    $info .= "[num posts: ".count($posts)."]<br />";
-    //$info .= "args: <pre>".print_r( $args, true )."</pre>";
-    $info .= "<!-- args: <pre>".print_r( $args, true )."</pre> -->";
-    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
-    $info .= "<br />";
-    
-    $liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
+	// init vars
+	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     //$months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
     
-    foreach ( $posts AS $post ) {
-        
-        setup_postdata( $post );
-        $post_id = $post->ID;
-        $post_title = $post->post_title;
-        $slug = $post->post_name;
-        $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
-    	
-        // init
-        list( $calc_info, $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", "", "", "" );
-        list( $date_calculation_str, $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "", "" );
-        $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
-        
-        $changes_made = false;
-        $complex_formula = false;
-        
-        // Get date_calculation info & break it down
-        $date_calculation_str = get_post_meta( $post_id, 'date_calculation', true );
-        $date_calculation_str = str_replace('christmas day', 'christmas', strtolower($date_calculation_str) );
-        $date_calculation_str = str_replace('the epiphany', 'epiphany', strtolower($date_calculation_str) );
-        //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
-        $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
-        
-        // Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
+    list( $calc_info, $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", "", "", "" );
+    list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
+    $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
+
+	$calc_components = explode(" ", $date_calculation_str);
+	if ( $verbose == "true" ) { $calc_info .= $indent."calc_components: ".print_r($calc_components,true)."<br />"; }
+	
+	/*
+	// calc_basis
+	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
         foreach ( $liturgical_bases AS $basis => $basis_field ) {
             if (stripos($date_calculation_str, $basis) !== false) {
                 $calc_basis = $basis;
@@ -720,7 +642,112 @@ function calc_litdates( $atts = [] ) {
             }
 
         }
+        */
         
+    $calc['calc_date'] = $calc_date;
+    $calc['calc_info'] = $calc_info;
+    
+    return $calc;
+
+}
+
+add_shortcode('calculate_variable_dates', 'calc_litdates');
+function calc_litdates( $atts = [] ) {
+
+    // TODO: build in failsafe -- run this fcn ONLY for user stcdev/queenbee
+    
+    $current_user = wp_get_current_user();
+    if ( $current_user->user_login != 'stcdev' ) {
+    	return "You are not authorized to run this operation.<br />";    
+    }
+    
+	$info = ""; // init >> calculate_variable_dates <<
+    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+
+	$a = shortcode_atts( array(
+        'testing' => true,
+        'verbose' => false,
+        'id' => null,
+        'year' => date('Y'),
+        'num_posts' => 10,
+        'admin_tag_slug' => 'dates-calculated', // 'programmatically-updated'
+        'orderby' => 'title',
+        'order' => 'ASC',
+        'meta_key' => null
+    ), $atts );
+	
+    $testing = $a['testing'];
+    $verbose = $a['verbose'];
+    $num_posts = (int) $a['num_posts'];
+    $year = get_query_var( 'y' );
+    if ( $year == "" ) { $year = $a['year']; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
+    $orderby = $a['orderby'];
+    $order = $a['order'];
+    $meta_key = $a['meta_key'];
+    $admin_tag_slug = $a['admin_tag_slug'];
+    
+	$args = array(
+		'post_type' => 'liturgical_date',
+		'post_status' => 'publish',
+        'posts_per_page' => $num_posts,
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key'   => "date_type", 
+                'value' => 'variable',
+            ),
+            array(
+                'key'   => "date_calculation",
+                'compare' => 'EXISTS'
+            )
+        ),
+        'orderby'	=> $orderby,
+        'order'	=> $order,
+	);
+    
+    //if ( $a['id'] !== null ) { $args['p'] = $a['id']; }
+    if ( $a['id'] !== null ) { $args['post__in'] = explode(', ', $a['id']); }
+    if ( $a['meta_key'] !== null ) { $args['meta_key'] = $meta_key; }
+    
+	$arr_posts = new WP_Query( $args );
+    $posts = $arr_posts->posts;
+    
+    $info .= ">>> calc_litdates <<<<br />";
+    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
+    $info .= "year: $year<br />";
+    $info .= "[num posts: ".count($posts)."]<br />";
+    //$info .= "args: <pre>".print_r( $args, true )."</pre>";
+    $info .= "<!-- args: <pre>".print_r( $args, true )."</pre> -->";
+    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
+    $info .= "<br />";
+    
+    foreach ( $posts AS $post ) {
+        
+        setup_postdata( $post );
+        $post_id = $post->ID;
+        $post_title = $post->post_title;
+        $slug = $post->post_name;
+        $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
+    	
+        // init
+        $calc_info = "";
+        
+        $changes_made = false;
+        $complex_formula = false;
+        
+        // Get date_calculation info & break it down
+        $date_calculation_str = get_post_meta( $post_id, 'date_calculation', true );
+        $date_calculation_str = str_replace('christmas day', 'christmas', strtolower($date_calculation_str) );
+        $date_calculation_str = str_replace('the epiphany', 'epiphany', strtolower($date_calculation_str) );
+        //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
+        $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
+        
+        $calc = calc_date_from_str($date_calculation_str);
+        if ( $calc ) {
+        	$calc_date = $calc['calc_date'];
+        	$calc_info .= $calc['calc_info'];
+        }
+                
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
             $calc_date_str = date('Y-m-d', $calc_date);
             //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
