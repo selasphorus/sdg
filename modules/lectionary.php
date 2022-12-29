@@ -375,7 +375,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 	
 	foreach ( $calc_components as $component ) {
 		$component_info = "";
-		if ( in_array($component, $liturgical_bases) ) {
+		if ( array_key_exists($component, $liturgical_bases) ) {
 			$component_info .= $indent."component '".$component."' is liturgical_base<br />";
 		} else if ( in_array($component, $weekdays) ) {
 			$component_info .= $indent."component '".$component."' is weekday<br />";
