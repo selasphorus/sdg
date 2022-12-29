@@ -547,37 +547,24 @@ function calc_litdates( $atts = [] ) {
             // Does the date to be calculated fall before/after/of/in the basis_date/season?
             foreach ( $boias AS $boia ) {
             	if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
+            		$calc_info .= $indent."boia '$boia' found in date_calculation_str<br />";
+            		$calc_boia[] = strtolower($boia);
+            		if ( count($matches) > 1 ) { $complex_formula = true; }
             		if ( $verbose == "true" ) { $calc_info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
             	}
-            	
-                if (stripos($date_calculation_str, $boia) !== false) {
-                	$calc_info .= $indent."boia '$boia' found in date_calculation_str at position ".stripos($date_calculation_str, $boia)."<br />";
-                    $calc_boia[] = strtolower($boia);
-                    // Is this the only boia?
-                    if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
-                    	$complex_formula = true;
-                    	$calc_info .= $indent.$indent."There multiple instances of '$boia' in the date_calculation_str ('$date_calculation_str')<br />";
-                    } else if ( !empty($calc_boia) ) {
-                    	$complex_formula = true;
-                    	$calc_info .= $indent.$indent."Multiple boia found in date_calculation_str<br />";
-                    }
-                }
             }
             if ( $verbose == "true" ) { $calc_info .= $indent."calc_boia: ".print_r($calc_boia, true)."<br />"; }
-			if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; }
+			if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; } else { $complex_formula = true; }
 			
             // What's the weekday for the date to be calculated?
             foreach ( $weekdays AS $weekday ) {
                 if (stripos($date_calculation_str, $weekday) !== false) {
                 	$calc_info .= $indent.$indent."weekday '$weekday' found in date_calculation_str<br />";
-                    if ( !empty($calc_weekday) ) {
-                    	$calc_info .= $indent.$indent."Multiple weekdays found in date_calculation_str<br />";
-                    }
                     $calc_weekday[] = strtolower($weekday);
                 }
             }
             if ( $verbose == "true" ) { $calc_info .= $indent."calc_weekday: ".print_r($calc_weekday, true)."<br />"; }
-			if ( count($calc_weekday) == 1 ) { $calc_weekday = $calc_weekday[0]; }
+			if ( count($calc_weekday) == 1 ) { $calc_weekday = $calc_weekday[0]; } else { $complex_formula = true; }
 			
 			
 			// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
@@ -595,7 +582,7 @@ function calc_litdates( $atts = [] ) {
                 if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
                 	$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
                 	$calc_interval = trim( $calc_interval );
-                }                
+                }          
                 
                 //if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
                 if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
