@@ -596,7 +596,7 @@ function calc_litdates( $atts = [] ) {
                 if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
                     $calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
                 }
-                if ( $verbose == "true" ) { $info .= $indent."calc_interval: $calc_interval<br />"; }
+                if ( $verbose == "true" && !empty($calc_interval) ) { $calc_info .= $indent."calc_interval: $calc_interval<br />"; }
                 
             } else if ( strpos(strtolower($date_calculation_str), 'last') !== false ) {
                 
