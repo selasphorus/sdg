@@ -770,8 +770,7 @@ function calc_litdates( $atts = [] ) {
                     if ( $date_calculated == $calc_date_str ) {
                         // Already in there
                         $newrow = false;
-                        if ( $verbose == "true" ) { $info .= $calc_info; }
-                        $info .= $indent."+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />".$indent."+++<br />"; // tft
+                        $calc_info .= $indent."+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />".$indent."+++<br />"; // tft
                     } else {
                     	//$info .= $indent."Old date_calculated: $date_calculated.<br />"; // tft
                     }
@@ -784,7 +783,7 @@ function calc_litdates( $atts = [] ) {
                     'date_calculated' => $calc_date_str
                 );
 
-                $info .= $calc_info;
+                
                 //$info .= "About to add row to post_id $post_id: <pre>".print_r( $row, true )."</pre>";
                 if ( $testing != "true" ) {
                     if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
@@ -794,10 +793,10 @@ function calc_litdates( $atts = [] ) {
 
             }
         } else {
-        	$info .= $calc_info;
-            //$info .= "calc_date_str is empty.<br />";
+        	$info .= "calc_date_str is empty.<br />";
         }
         
+        $info .= $calc_info;
         $info .= "<br />";
              
     } // END foreach post
