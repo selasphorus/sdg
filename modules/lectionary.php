@@ -567,7 +567,7 @@ function calc_litdates( $atts = [] ) {
                 if (stripos($date_calculation_str, $weekday) !== false) {
                 	$calc_info .= $indent."weekday '$weekday' found in date_calculation_str<br />";
                     if ( !empty($calc_weekday) ) {
-                    	//$calc_info .= $indent."Multiple weekdays found in date_calculation_str<br />";
+                    	$calc_info .= $indent."Multiple weekdays found in date_calculation_str<br />";
                     }
                     $calc_weekday[] = strtolower($weekday);
                 }
