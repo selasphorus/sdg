@@ -548,18 +548,18 @@ function calc_litdates( $atts = [] ) {
             foreach ( $boias AS $boia ) {
                 if (stripos($date_calculation_str, $boia) !== false) {
                 	$calc_info .= $indent."boia '$boia' found in date_calculation_str<br />";
-                    if ( empty($calc_boia) ) {
-                    	$calc_boia = strtolower($boia);
+                    $calc_boia[] = strtolower($boia);
+                    if ( !empty($calc_boia) ) {
+                    	$complex_formula = true;
+                    	$calc_info .= $indent."Multiple boia found in date_calculation_str<br />";
                     } else if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
                     	$complex_formula = true;
                     	$calc_info .= $indent."There multiple instances of '$boia' in the date_calculation_str ('$date_calculation_str')<br />";
-                    } else {
-                    	$complex_formula = true;
-                    	$calc_info .= $indent."Multiple boia found in date_calculation_str<br />";
                     }
                 }
             }
-            if ( $verbose == "true" ) { $calc_info .= $indent."calc_boia: $calc_boia<br />"; }
+            if ( $verbose == "true" ) { $calc_info .= $indent."calc_boia: ".print_r($calc_boia, true)."<br />"; }
+			if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; }
 			
             // What's the weekday for the date to be calculated?
             foreach ( $weekdays AS $weekday ) {
@@ -577,11 +577,13 @@ function calc_litdates( $atts = [] ) {
 			
 			// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 			
+			
             // ** Determine the calc_interval -- number of days/weeks...
-            if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
+            if ( preg_match_all('/([0-9]+)/', $date_calculation_str, $matches) ) {
+            //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
                 if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }
-                // WIP/TODO: does it contain more than one number?
+                if ( $verbose == "true" ) { $calc_info .= $indent."matches: ".print_r($matches, true)."<br />"; }
                 
                 // Extract the calc_interval integer from the string by getting rid of everything else
                 // WIP deal w/ multiple value possibilities for weekday, boia
