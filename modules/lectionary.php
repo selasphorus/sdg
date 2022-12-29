@@ -582,7 +582,9 @@ function calc_litdates( $atts = [] ) {
                 if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
                 	$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
                 	$calc_interval = trim( $calc_interval );
-                }          
+                } else {
+                	$calc_interval = null; // tft
+                }
                 
                 //if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
                 if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
@@ -599,17 +601,10 @@ function calc_litdates( $atts = [] ) {
                 } else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
                     $calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
                 } else if ( $date_calculation_str == "last sunday before advent" ) {
-                    $calc_formula = "previous Sunday";//$calc_formula = "Sunday before";
+                    $calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
                 }
                 
             }
-            
-            
-			if ( $complex_formula == true ) {
-				// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
-				// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
-				
-			}
             
             // If the calc_formula hasn't already been determined, build it
             if ( $calc_formula == "" ) {
@@ -627,27 +622,34 @@ function calc_litdates( $atts = [] ) {
                     if ( $verbose == "true" ) { $calc_info .= $indent."first_sunday is equal to basis_date.<br />"; }
                 }
                 
-                // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+				if ( $complex_formula == true ) {
+					
+					// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+					// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
+					
+				} else {
+				
+					if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
+
+						if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
+							$calc_formula = "+".$calc_interval." weeks";
+							$basis_date = $first_sunday;                    
+						} else if ( $calc_boia == "before" ) { 
+							$calc_formula = "previous Sunday";
+						} else if ( $calc_boia == "after" ) { 
+							$calc_formula = "next Sunday";
+						} else if ( $first_sunday ) {
+							$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
+						} 
+
+					} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
+					
+						//$calc_info .= $indent."setting prev/next<br />"; // tft
+						// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
+						if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
+						$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+					}
                 
-                if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
-
-                    if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
-                        $calc_formula = "+".$calc_interval." weeks";
-                        $basis_date = $first_sunday;                    
-                    } else if ( $calc_boia == "before" ) { 
-                        $calc_formula = "previous Sunday";
-                    } else if ( $calc_boia == "after" ) { 
-                        $calc_formula = "next Sunday";
-                    } else if ( $first_sunday ) {
-                        $calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
-                    } 
-
-                } else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
-                    
-                    //$calc_info .= $indent."setting prev/next<br />"; // tft
-                    // e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
-                    if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
-                    $calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
                 }
                 
             }
