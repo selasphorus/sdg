@@ -373,6 +373,23 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 	$calc_components = explode(" ", $date_calculation_str);
 	if ( $verbose == "true" ) { $calc_info .= $indent."calc_components: ".print_r($calc_components,true)."<br />"; }
 	
+	foreach ( $calc_components as $component ) {
+		$component_info = "";
+		if ( in_array($component, $liturgical_bases) ) {
+			$component_info .= $indent."component '".$component."' is liturgical_base<br />";
+		} else if ( in_array($component, $weekdays) ) {
+			$component_info .= $indent."component '".$component."' is weekday<br />";
+		} else if ( in_array($component, $boias) ) {
+			$component_info .= $indent."component '".$component."' is boia<br />";
+		} else if ( preg_match_all('/(first)(last)([0-9]+)/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
+		//} else if ( preg_match_all('/[0-9]+/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
+			$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
+		} else {
+			$component_info .= $indent."component '".$component."' is ???<br />";
+		}
+		if ( $verbose == "true" ) { $calc_info .= $component_info; }
+	}
+	
 	/*
 	// calc_basis
 	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
