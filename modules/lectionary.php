@@ -580,7 +580,7 @@ function calc_litdates( $atts = [] ) {
 			
 			
             // ** Determine the calc_interval -- number of days/weeks...
-            if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches) ) {
+            if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
             //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
                 if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }
