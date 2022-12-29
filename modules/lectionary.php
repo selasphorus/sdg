@@ -579,7 +579,7 @@ function calc_litdates( $atts = [] ) {
 			
 			
             // ** Determine the calc_interval -- number of days/weeks...
-            if ( preg_match_all('/([0-9]+)/', $date_calculation_str, $matches) ) {
+            if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches) ) {
             //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
                 
                 if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }
@@ -587,11 +587,13 @@ function calc_litdates( $atts = [] ) {
                 
                 // Extract the calc_interval integer from the string by getting rid of everything else
                 // WIP deal w/ multiple value possibilities for weekday, boia
-                $calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
-                $calc_interval = trim( $calc_interval );
+                if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
+                	$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
+                	$calc_interval = trim( $calc_interval );
+                }                
                 
                 //if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
-                if ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) {
+                if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
                     $calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
                 }
                 //$info .= $indent."calc_interval: $calc_interval<br />"; // tft
