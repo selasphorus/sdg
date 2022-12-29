@@ -552,10 +552,10 @@ function calc_litdates( $atts = [] ) {
                     // Is this the only boia?
                     if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
                     	$complex_formula = true;
-                    	$calc_info .= $indent."There multiple instances of '$boia' in the date_calculation_str ('$date_calculation_str')<br />";
+                    	$calc_info .= $indent.$indent."There multiple instances of '$boia' in the date_calculation_str ('$date_calculation_str')<br />";
                     } else if ( !empty($calc_boia) ) {
                     	$complex_formula = true;
-                    	$calc_info .= $indent."Multiple boia found in date_calculation_str<br />";
+                    	$calc_info .= $indent.$indent."Multiple boia found in date_calculation_str<br />";
                     }
                 }
             }
@@ -565,9 +565,9 @@ function calc_litdates( $atts = [] ) {
             // What's the weekday for the date to be calculated?
             foreach ( $weekdays AS $weekday ) {
                 if (stripos($date_calculation_str, $weekday) !== false) {
-                	$calc_info .= $indent."weekday '$weekday' found in date_calculation_str<br />";
+                	$calc_info .= $indent.$indent."weekday '$weekday' found in date_calculation_str<br />";
                     if ( !empty($calc_weekday) ) {
-                    	$calc_info .= $indent."Multiple weekdays found in date_calculation_str<br />";
+                    	$calc_info .= $indent.$indent."Multiple weekdays found in date_calculation_str<br />";
                     }
                     $calc_weekday[] = strtolower($weekday);
                 }
