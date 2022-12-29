@@ -355,7 +355,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 
-function calc_date_from_str( $str = null ) {
+function calc_date_from_str( $str = null, $verbose = false ) {
 
 	$calc = array();
 	if ( $str ) { $date_calculation_str = $str; } else { return false; }
@@ -742,7 +742,7 @@ function calc_litdates( $atts = [] ) {
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
         $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
         
-        $calc = calc_date_from_str($date_calculation_str);
+        $calc = calc_date_from_str($date_calculation_str, $verbose);
         if ( $calc ) {
         	$calc_date = $calc['calc_date'];
         	$calc_info .= $calc['calc_info'];
