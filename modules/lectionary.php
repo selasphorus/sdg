@@ -549,12 +549,13 @@ function calc_litdates( $atts = [] ) {
                 if (stripos($date_calculation_str, $boia) !== false) {
                 	$calc_info .= $indent."boia '$boia' found in date_calculation_str<br />";
                     $calc_boia[] = strtolower($boia);
-                    if ( !empty($calc_boia) ) {
-                    	$complex_formula = true;
-                    	$calc_info .= $indent."Multiple boia found in date_calculation_str<br />";
-                    } else if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
+                    // Is this the only boia?
+                    if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
                     	$complex_formula = true;
                     	$calc_info .= $indent."There multiple instances of '$boia' in the date_calculation_str ('$date_calculation_str')<br />";
+                    } else if ( !empty($calc_boia) ) {
+                    	$complex_formula = true;
+                    	$calc_info .= $indent."Multiple boia found in date_calculation_str<br />";
                     }
                 }
             }
