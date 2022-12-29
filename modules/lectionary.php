@@ -547,7 +547,7 @@ function calc_litdates( $atts = [] ) {
             // Does the date to be calculated fall before/after/of/in the basis_date/season?
             foreach ( $boias AS $boia ) {
                 if (stripos($date_calculation_str, $boia) !== false) {
-                	$calc_info .= $indent."boia '$boia' found in date_calculation_str<br />";
+                	$calc_info .= $indent."boia '$boia' found in date_calculation_str at position ".stripos($date_calculation_str, $boia) ."<br />";
                     $calc_boia[] = strtolower($boia);
                     // Is this the only boia?
                     if ( substr_count($date_calculation_str, $boia) > 1 ) { // substr_count(string,substring,start,length)
