@@ -383,10 +383,11 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 			$component_info .= $indent."component '".$component."' is weekday<br />";
 		} else if ( in_array($component, $boias) ) {
 			$component_info .= $indent."component '".$component."' is boia<br />";
-		} else if ( preg_match('/([0-9]+)/', $component) ) {
+		} else if ( preg_match('/(first)(last)([0-9]+)/', $component) ) {
 		//} else if ( preg_match_all('/(first)(last)([0-9]+)/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
 		//} else if ( preg_match_all('/[0-9]+/', $component, $matches, PREG_OFFSET_CAPTURE) ) {
-			$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
+			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
+			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 		} else {
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
