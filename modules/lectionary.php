@@ -389,7 +389,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 		//} else if () { // first, last, second....
-		} else if ($component == "the" ) ) { // wip
+		} else if ($component == "the" ) { // wip
 			$component_info .= $indent."component '".$component."' is expendable<br />";
 		} else {
 			$component_info .= $indent."component '".$component."' is ???<br />";
