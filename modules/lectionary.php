@@ -208,10 +208,11 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             if ( $terms ) {
                 
+                $info .= " >> ";
                 foreach ( $terms as $term ) {
                     //$priority = get_term_meta($term->term_id, 'priority', true);
                     //$info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
-                    $info .= $term->slug." ";
+                    $info .= $term->name." ";
                 }
                 
             }
