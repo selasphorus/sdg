@@ -130,6 +130,8 @@ function get_lit_dates ( $args ) {
     
     $litdates['info'] = $info;
     $litdates['posts'] = $litdate_posts;
+    
+    return $litdates;
 	
 }
 
