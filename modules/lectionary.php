@@ -82,51 +82,58 @@ function get_lit_dates ( $args ) {
     $litdate_args = array(
         'post_type'		=> 'liturgical_date',
         'post_status'   => 'publish',
-        'meta_query'	=> array(
-            'relation' => 'AND',
-            array(
-                'key'		=> 'day_title',
-                'compare'	=> '=',
-                'value'		=> '1',
-            ),
-            array(
-                'relation'  => 'OR',
-                array(
-                    'key'		=> 'fixed_date_str',
-                    'compare'	=> '=',
-                    'value'		=> $fixed_date_str,
-                ),
-                array(
-                    'key'		=> 'fixed_date_str',
-                    'compare'	=> '=',
-                    'value'		=> $fixed_date_str_alt,
-                ),
-                array(
-                    'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-                    'compare'	=> '=',
-                    'value'		=> $full_date_str,
-                ),
-                array(
-                    'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-                    'compare'	=> '=',
-                    'value'		=> $full_date_str,
-                ),
-                // The following parameters can be phased out eventually once the DB is updated to standardize the date formats
-                array(
-                    'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-                    'compare'	=> '=',
-                    'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-                ),
-                array(
-                    'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-                    'compare'	=> '=',
-                    'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-                ),
-            )
-          ),
-      );
+    );
     
-    //$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+    $meta_query = array();
+    $meta_query['relation'] = 'AND';
+    
+    if ( $day_titles_only == true ) {
+    	$meta_query[] = array(
+			'key'		=> 'day_title',
+			'compare'	=> '=',
+			'value'		=> '1',
+		);
+    }
+    
+    $meta_query[] = array(
+            
+		array(
+			'relation'  => 'OR',
+			array(
+				'key'		=> 'fixed_date_str',
+				'compare'	=> '=',
+				'value'		=> $fixed_date_str,
+			),
+			array(
+				'key'		=> 'fixed_date_str',
+				'compare'	=> '=',
+				'value'		=> $fixed_date_str_alt,
+			),
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> $full_date_str,
+			),
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> $full_date_str,
+			),
+			// The following parameters can be phased out eventually once the DB is updated to standardize the date formats
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),
+		)
+    );
+    
+    $info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
     $arr_posts = new WP_Query( $litdate_args );
     $litdate_posts = $arr_posts->posts;
     
@@ -156,7 +163,23 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     $year = (int) $args['year'];
     $month = (int) $args['month'];
     
+    // Get litdate posts according to date
+    $litdate_args = array( 'year' => $year, 'month' => $month );
+    $litdates = get_lit_dates( $litdate_args );
     
+    $litdate_posts = $litdates['posts'];
+    //$info .= $litdates['info'];
+    
+    foreach ( $litdate_posts AS $litdate_post ) {
+            
+		$litdate_post_id = $litdate_post->ID;
+		$info .= "[".$litdate_post_id."] ".$litdate_post->post_title."<br />"; // tft
+		
+		// Get date_type (fixed, calculated, assigned)
+		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
+		$info .= "date_type: ".$date_type."<br />"; // tft
+					
+	}
     
     return $info;
     
