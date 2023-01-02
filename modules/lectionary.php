@@ -186,7 +186,12 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         foreach ( $date_posts AS $lit_date ) {
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
-			$info .= "[".$litdate_id."] ".$lit_date->post_title."<br />"; // tft
+        	$classes = "";
+        	if ( get_post_meta($litdate_id, 'day_title') == 1 ) { $classes .= "day_title"; }
+        	//
+			$info .= '<p class="'.$classes.'">';
+			$info .= "[".$litdate_id."] ".$lit_date->post_title."";
+			$info .= '</p>';
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
@@ -359,7 +364,6 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 }
                 
             }
-            
             
             $info .= "<!-- top_priority: ".$top_priority." -->"; // tft
             $litdates[$top_priority] = $litdate_post_id;
