@@ -188,7 +188,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	$litdate_id = $lit_date->ID;
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
-        	if ( $day_title == "1" ) { $classes .= " day_title"; }
+        	if ( $day_title == "1" ) { $classes .= " nb"; }
         	//
 			$info .= '<p class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title;
