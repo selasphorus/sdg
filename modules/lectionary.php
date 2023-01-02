@@ -195,7 +195,8 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 		// Get date_type (fixed, calculated, assigned)
 		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
 		$info .= "date_type: ".$date_type."<br />"; // tft*/
-					
+		
+		if ( !empty($date_posts)) { $info .= "<br />"; }
 	}
     
     return $info;
