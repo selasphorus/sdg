@@ -186,8 +186,8 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         foreach ( $date_posts AS $lit_date ) {
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
-        	$classes = "";
-        	if ( get_post_meta($litdate_id, 'day_title') == 1 ) { $classes .= "day_title"; }
+        	$classes = "litdate";
+        	if ( get_post_meta($litdate_id, 'day_title') == 1 ) { $classes .= " day_title"; }
         	//
 			$info .= '<p class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title."";
@@ -201,7 +201,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
 		$info .= "date_type: ".$date_type."<br />"; // tft*/
 		
-		if ( !empty($date_posts)) { $info .= "<br />"; }
+		//if ( !empty($date_posts)) { $info .= "<br />"; }
 	}
     
     return $info;
