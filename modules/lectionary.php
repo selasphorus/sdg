@@ -12,6 +12,10 @@ if ( !function_exists( 'add_action' ) ) {
 
 function get_lit_dates ( $args ) {
 
+	// init
+	$litdates = array();
+	$info = "";
+	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
 	if ( isset($args['date']) ) { $date = $args['date']; } else { $date = null; }
@@ -124,7 +128,8 @@ function get_lit_dates ( $args ) {
     $arr_posts = new WP_Query( $litdate_args );
     $litdate_posts = $arr_posts->posts;
     
-    return $litdate_posts;	
+    $litdates['info'] = $info;
+    $litdates['posts'] = $litdate_posts;
 	
 }
 
@@ -245,7 +250,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Get litdate posts according to date
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
-    $litdate_posts = get_lit_dates( $litdate_args );
+    $litdates = get_lit_dates( $litdate_args );
+    $litdate_posts = $litdates['posts'];
+    $info .= $litdates['info'];
     $num_litdate_posts = count($litdate_posts);
     //$info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
     $info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
