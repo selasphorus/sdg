@@ -78,7 +78,7 @@ function get_lit_dates ( $args ) {
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
     /// Build single query to searh for any liturgical dates that match, whether dates are fixed, calculated, or manually assigned
-    
+    /*
     $litdate_args = array(
         'post_type'		=> 'liturgical_date',
         'post_status'   => 'publish',
@@ -138,9 +138,9 @@ function get_lit_dates ( $args ) {
     $info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
     $arr_posts = new WP_Query( $litdate_args );
     $litdate_posts = $arr_posts->posts;
-    
+    */
     $litdates['info'] = $info;
-    $litdates['posts'] = $litdate_posts;
+    //$litdates['posts'] = $litdate_posts;
     
     return $litdates;
 	
@@ -170,8 +170,8 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     $litdates = get_lit_dates( $litdate_args );
     
     $litdate_posts = $litdates['posts'];
-    //$info .= $litdates['info'];
-    
+    $info .= $litdates['info'];
+    /*
     foreach ( $litdate_posts AS $litdate_post ) {
             
 		$litdate_post_id = $litdate_post->ID;
@@ -181,7 +181,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
 		$info .= "date_type: ".$date_type."<br />"; // tft
 					
-	}
+	}*/
     
     return $info;
     
