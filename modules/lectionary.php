@@ -206,7 +206,16 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	//
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
-            $info .= implode(" ",$terms);
+            if ( $terms ) {
+                
+                foreach ( $terms as $term ) {
+                    //$priority = get_term_meta($term->term_id, 'priority', true);
+                    //$info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
+                    $info .= $term->slug." ";
+                }
+                
+            }
+            //$info .= implode(" ",$terms);
             //
 			$info .= '<br />';
         }
