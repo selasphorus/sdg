@@ -196,7 +196,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	}
         	
         	if ( $num_day_titles > 1 ) {
-        		$classes .= " nb";
+        		$classes .= " conflict";
         	}
         	//
 			$info .= '<span class="'.$classes.'">';
