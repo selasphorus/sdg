@@ -146,7 +146,7 @@ function get_lit_dates ( $args ) {
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
     $litdates['info'] = $info;
-    //$litdates['posts'] = $litdate_posts;
+    $litdates['posts'] = $litdate_posts;
     
     return $litdates;
 	
