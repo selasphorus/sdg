@@ -13,8 +13,9 @@ if ( !function_exists( 'add_action' ) ) {
 function get_lit_dates ( $args ) {
 
 	// init
-	$litdates = array();
 	$info = "";
+	$litdates = array();
+	$litdate_posts = array();
 	
 	$info = "\n<!-- get_lit_dates -->\n";
 	
@@ -52,74 +53,49 @@ function get_lit_dates ( $args ) {
 		$info .= "<!-- start_date: '$start_date'; end_date: '$end_date' -->\n"; // tft
 		
 	}
-	
-	// Format the date(s)
-    $info .= "<!-- start_date: '$start_date' -->\n";
-    //$info .= "<!-- print_r date: '".print_r($date, true)."' -->\n"; // tft
-        
+    
     // Loop through all dates in range from start to end
-    //$start = new DateTime($start_date);
     $start = strtotime($start_date);
-	//$end = new DateTime($end_date);
     $end = strtotime($end_date);
 
 	while ($start <= $end) {
-	//while ($start <= $end) {
 		
-		
-        $info .= "<!-- timestamp: '$start' -->\n"; // tft
+		// Build  query to search for any liturgical dates that match, whether dates are fixed, calculated, or manually assigned
+    
+		$litdate_args = array(
+			'post_type'		=> 'liturgical_date',
+			'post_status'   => 'publish',
+		);
+	
+		$meta_query = array();
+		$meta_query['relation'] = 'AND';
+	
+		if ( $day_titles_only == true ) {
+			$meta_query[] = array(
+				'key'		=> 'day_title',
+				'compare'	=> '=',
+				'value'		=> '1',
+			);
+		}
+    
+        //$info .= "<!-- timestamp: '$start' -->\n"; // tft
         
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
-        $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
+        //$info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
         
-		// go to the next day
-		$start = strtotime("+1 day", $start);
-		//$start->add(new DateInterval('P1D'));
-	}
-	/*
-        $timestamp = strtotime($date);
-        $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
-        
-        $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
-        $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
-        
-        $day_num = intval(date("j", $timestamp ));
+        $day_num = intval(date("j", $start ));
         if ( $day_num < 10 ) {
-            $info .= "<!-- day_num: '$day_num' -->\n"; // tft
-            $fixed_date_str_alt = date("F j", $timestamp ); // day w/ out leading zeros
-            $info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
+            //$info .= "<!-- day_num: '$day_num' -->\n"; // tft
+            $fixed_date_str_alt = date("F j", $start ); // day w/ out leading zeros
+            //$info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
         } else {
         	$fixed_date_str_alt = $fixed_date_str;
         }
         
-        $full_date_str = date("Y-m-d", $timestamp );        
-        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
-    */
-	// TODO: deal w/ replacement_date option (via Date Assignments field group)
-    // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
-    // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
-    
-    /// Build single query to searh for any liturgical dates that match, whether dates are fixed, calculated, or manually assigned
-    /*
-    $litdate_args = array(
-        'post_type'		=> 'liturgical_date',
-        'post_status'   => 'publish',
-    );
-    
-    $meta_query = array();
-    $meta_query['relation'] = 'AND';
-    
-    if ( $day_titles_only == true ) {
-    	$meta_query[] = array(
-			'key'		=> 'day_title',
-			'compare'	=> '=',
-			'value'		=> '1',
-		);
-    }
-    
-    $meta_query[] = array(
-            
-		array(
+        $full_date_str = date("Y-m-d", $start );        
+        //$info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+        
+        $meta_query[] = array(
 			'relation'  => 'OR',
 			array(
 				'key'		=> 'fixed_date_str',
@@ -152,17 +128,25 @@ function get_lit_dates ( $args ) {
 				'compare'	=> '=',
 				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
 			),
-		)
-    );
+    	);
     
-    $litdate_args['meta_query'] = $meta_query;
+		$litdate_args['meta_query'] = $meta_query;
+	
+		$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		$arr_posts = new WP_Query( $litdate_args );
+		$litdate_posts[$full_date_str] = $arr_posts->posts;
+        
+		// go to the next day
+		$start = strtotime("+1 day", $start);
+	}
+	
+	
+	// TODO: deal w/ replacement_date option (via Date Assignments field group)
+    // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
+    // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
-    $info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
-    $arr_posts = new WP_Query( $litdate_args );
-    $litdate_posts = $arr_posts->posts;
-    */
     $litdates['info'] = $info;
-    //$litdates['posts'] = $litdate_posts;
+    $litdates['posts'] = $litdate_posts;
     
     return $litdates;
 	
