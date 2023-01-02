@@ -93,7 +93,7 @@ function get_lit_dates ( $args ) {
         }
         
         $full_date_str = date("Y-m-d", $start );        
-        //$info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
         
         $meta_query[] = array(
 			'relation'  => 'OR',
@@ -132,7 +132,7 @@ function get_lit_dates ( $args ) {
     
 		$litdate_args['meta_query'] = $meta_query;
 	
-		$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		//$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
 		$arr_posts = new WP_Query( $litdate_args );
 		$litdate_posts[$full_date_str] = $arr_posts->posts;
         
@@ -146,7 +146,7 @@ function get_lit_dates ( $args ) {
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
     $litdates['info'] = $info;
-    $litdates['posts'] = $litdate_posts;
+    //$litdates['posts'] = $litdate_posts;
     
     return $litdates;
 	
