@@ -175,19 +175,21 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     $litdate_args = array( 'year' => $year, 'month' => $month );
     $litdates = get_lit_dates( $litdate_args );
     
-    $litdate_posts = $litdates['posts'];
+    $posts = $litdates['posts'];
     $info .= $litdates['info'];
-    /*
-    foreach ( $litdate_posts AS $litdate_post ) {
-            
-		$litdate_post_id = $litdate_post->ID;
+    
+    foreach ( $posts AS $date => $date_posts ) {
+        
+        $info .= "date: $date<br />";    
+        
+		/*$litdate_post_id = $litdate_post->ID;
 		$info .= "[".$litdate_post_id."] ".$litdate_post->post_title."<br />"; // tft
 		
 		// Get date_type (fixed, calculated, assigned)
 		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
-		$info .= "date_type: ".$date_type."<br />"; // tft
+		$info .= "date_type: ".$date_type."<br />"; // tft*/
 					
-	}*/
+	}
     
     return $info;
     
