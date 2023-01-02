@@ -190,10 +190,10 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
         	if ( $day_title == "1" ) { $classes .= " nb"; }
         	//
-			$info .= '<p class="'.$classes.'">';
+			$info .= '<span class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title;
 			//$info .=" (".print_r($day_title, true).")";
-			$info .= '</p>';
+			$info .= '</span><br />';
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
@@ -203,7 +203,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 		$date_type = get_post_meta( $litdate_post_id, 'date_type', true );
 		$info .= "date_type: ".$date_type."<br />"; // tft*/
 		
-		//if ( !empty($date_posts)) { $info .= "<br />"; }
+		if ( !empty($date_posts)) { $info .= "<br />"; }
 	}
     
     return $info;
