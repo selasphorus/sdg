@@ -63,7 +63,7 @@ function get_lit_dates ( $args ) {
 
 	while ($start <= $end) {
 		
-		$info .= "<!-- timestamp: '$start' -->\n"; // tft
+		//$info .= "<!-- timestamp: '$start' -->\n"; // tft
         
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
         $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
