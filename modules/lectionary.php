@@ -184,9 +184,9 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         //$info .= print_r($date_posts, true);
         
         foreach ( $date_posts AS $lit_date ) {
-        	$info .= print_r($lit_date, true);
-        	//$litdate_id = $lit_date->ID;
-			//$info .= "[".$litdate_id."] ".$lit_date->post_title."<br />"; // tft
+        	//$info .= print_r($lit_date, true);
+        	$litdate_id = $lit_date->ID;
+			$info .= "[".$litdate_id."] ".$lit_date->post_title."<br />"; // tft
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
