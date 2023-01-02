@@ -25,34 +25,14 @@ function get_lit_dates ( $args ) {
 	if ( isset($args['month']) ) { $month = $args['month']; } else { $month = null; }
 	if ( isset($args['day_titles_only']) ) { $day_titles_only = $args['day_titles_only']; } else { $day_titles_only = false; }
 	
+	$start_date = null;
+	$end_date = null;
+		
 	if ( !empty($date) ) {
 		
-		// format the date
-        $info .= "<!-- date: '$date' -->\n";
-        $info .= "<!-- print_r date: '".print_r($date, true)."' -->\n"; // tft
-        
-        $timestamp = strtotime($date);
-        $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
-        
-        $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
-        $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
-        
-        $day_num = intval(date("j", $timestamp ));
-        if ( $day_num < 10 ) {
-            $info .= "<!-- day_num: '$day_num' -->\n"; // tft
-            $fixed_date_str_alt = date("F j", $timestamp ); // day w/ out leading zeros
-            $info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
-        } else {
-        	$fixed_date_str_alt = $fixed_date_str;
-        }
-        
-        $full_date_str = date("Y-m-d", $timestamp );        
-        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+		$start_date = $end_date = $date;
 	
 	} else {
-	
-		$start_date = null;
-		$end_date = null;
 	
 		if ( empty($year) ) {
 			// For now, default to current year
@@ -73,6 +53,43 @@ function get_lit_dates ( $args ) {
 		
 	}
 	
+	// Format the date(s)
+    $info .= "<!-- start_date: '$start_date' -->\n";
+    //$info .= "<!-- print_r date: '".print_r($date, true)."' -->\n"; // tft
+        
+    // Loop through all dates in range from start to end
+    $start = new DateTime($start_date);
+	$end = new DateTime($end_date);
+
+	while ($start <= $end) {
+		
+		$info .= "<!-- timestamp: '$start' -->\n"; // tft
+        
+        $fixed_date_str = date("F d", $start ); // day w/ leading zeros
+        $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
+        
+		// go to the next day
+		$start->add(new DateInterval('P1D'));
+	}
+	/*
+        $timestamp = strtotime($date);
+        $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
+        
+        $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
+        $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
+        
+        $day_num = intval(date("j", $timestamp ));
+        if ( $day_num < 10 ) {
+            $info .= "<!-- day_num: '$day_num' -->\n"; // tft
+            $fixed_date_str_alt = date("F j", $timestamp ); // day w/ out leading zeros
+            $info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
+        } else {
+        	$fixed_date_str_alt = $fixed_date_str;
+        }
+        
+        $full_date_str = date("Y-m-d", $timestamp );        
+        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+    */
 	// TODO: deal w/ replacement_date option (via Date Assignments field group)
     // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
