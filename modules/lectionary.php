@@ -180,8 +180,13 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     
     foreach ( $posts AS $date => $date_posts ) {
         
-        $info .= "$date<br />";    
-        $info .= print_r($date_posts, true);
+        $info .= "$date<br />"; 
+        //$info .= print_r($date_posts, true);
+        
+        foreach ( $date_posts AS $lit_date ) {
+        	$litdate_id = $litdate_post->ID;
+			$info .= "[".$litdate_id."] ".$litdate->post_title."<br />"; // tft
+        }
         
 		/*$litdate_post_id = $litdate_post->ID;
 		$info .= "[".$litdate_post_id."] ".$litdate_post->post_title."<br />"; // tft
