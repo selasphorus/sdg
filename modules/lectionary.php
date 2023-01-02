@@ -186,6 +186,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         $num_day_titles = 0;
         
         foreach ( $date_posts AS $lit_date ) {
+        
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
         	$classes = "litdate";
@@ -194,7 +195,6 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         		$classes .= " nb";
         		$num_day_titles++;
         	}
-        	
         	if ( $num_day_titles > 1 ) {
         		$classes .= " conflict";
         	}
@@ -202,7 +202,13 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 			$info .= '<span class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title;
 			//$info .=" (".print_r($day_title, true).")";
-			$info .= '</span><br />';
+			$info .= '</span>';			
+        	//
+        	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
+            //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
+            $info .= implode(" ",$terms);
+            //
+			$info .= '<br />';
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
