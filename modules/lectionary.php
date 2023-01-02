@@ -183,12 +183,21 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         if ( !empty($date_posts)) { $info .= "$date<br />"; }
         //$info .= print_r($date_posts, true);
         
+        $num_day_titles = 0;
+        
         foreach ( $date_posts AS $lit_date ) {
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
-        	if ( $day_title == "1" ) { $classes .= " nb"; }
+        	if ( $day_title == "1" ) { 
+        		$classes .= " nb";
+        		$num_day_titles++;
+        	}
+        	
+        	if ( $num_day_titles > 1 ) {
+        		$classes .= " nb";
+        	}
         	//
 			$info .= '<span class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title;
