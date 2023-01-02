@@ -10,100 +10,22 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
-//function get_cpt_liturgical_date_content() {	}
+function get_lit_dates ( $args ) {
 
-
-// Day Titles
-add_shortcode('day_title', 'get_day_title');
-function get_day_title( $atts = [], $content = null, $tag = '' ) {
-
-    // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
-	$info = "\n<!-- get_day_title -->\n";
-    
-    $args = shortcode_atts( 
-        array(
-            'post_id'   => get_the_ID(),
-            'series_id' => null,
-            'the_date'  => null,
-        ), 
-        $atts
-    );
-    
-    $post_id = (int) $args['post_id'];
-    $series_id = (int) $args['series_id'];
-    $the_date = $args['the_date'];
-    $hide_day_titles = 0; // init
-
-    if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $info .= "<!-- post_id: ".$post_id." -->\n"; // tft
-    if ( $series_id ) { $info .= "<!-- series_id: ".$series_id." -->\n"; }
-    //$info .= "<!-- the_date: ".$the_date." -->\n"; // tft
-    
-    // Check to see if day titles are to be hidden for the entire event series, if any
-    if ( $series_id ) { 
-    	$hide_day_titles = get_post_meta( $series_id, 'hide_day_titles', true );
-    }
-    
-    // If there is no series-wide ban on displaying the titles, then should we display them for this particular post?
-    if ( $hide_day_titles == 0 ) {
-    	$hide_day_titles = get_post_meta( $post_id, 'hide_day_titles', true );
-    }
-    //$info .= "<!-- hide_day_titles: [$hide_day_titles] -->";
-    
-    if ( $hide_day_titles == 1 ) { 
-        $info .= "<!-- hide_day_titles is set to true for this post/event -->";
-        return $info;
-    } else {
-        //$info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
-    }
-    
-	if ($the_date == null) {
-        
-        $info .= "<!-- the_date is null -- get the_date -->"; // tft
+	// Set vars
+	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
+	if ( isset($args['date']) ) { $date = $args['date']; } else { $date = null; }
+	if ( isset($args['year']) ) { $year = $args['year']; } else { $year = null; }
+	if ( isset($args['month']) ) { $month = $args['month']; } else { $month = null; }
+	if ( isset($args['day_titles_only']) ) { $day_titles_only = $args['day_titles_only']; } else { $day_titles_only = false; }
+	
+	if ( !empty($date) ) {
 		
-        // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
-        if ( $post_id === null ) {
-            
-            return "<!-- no post -->";
-            
-        } else {
-            
-            $post = get_post( $post_id );
-            $post_type = $post->post_type;
-            $info .= "<!-- post_type: ".$post_type." -->"; // tft
-
-            if ( $post_type == 'event' ) {
-                
-                $date_str = get_post_meta( $post_id, '_event_start_date', true );
-                $the_date = strtotime($date_str);
-                
-            } else if ( $post_type == 'sermon' ) {
-                
-                $info .= "<!-- sermon -->";
-                $the_date = the_field( 'sermon_date', $post_id );
-                //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
-                
-            } else {
-                //$info .= "post_id: ".$post_id."<br />"; // tft
-                //$info .= "post_type: ".$post_type."<br />"; // tft
-            }
-        }
+		// format the date
+        $info .= "<!-- date: '$date' -->\n";
+        $info .= "<!-- print_r date: '".print_r($date, true)."' -->\n"; // tft
         
-	}    
-    
-    if ( $the_date == null ) {
-        
-        // If still no date has been found, give up.
-        $info .= "<!-- no date available for which to find day_title -->\n"; // tft
-        return $info;
-        
-    } else {
-        
-        // Otherwise, format the date and continue.
-        $info .= "<!-- the_date: '$the_date' -->\n";
-        $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
-        
-        $timestamp = strtotime($the_date);
+        $timestamp = strtotime($date);
         $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
         
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
@@ -120,9 +42,32 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         $full_date_str = date("Y-m-d", $timestamp );        
         $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
-    }
-    
-    // TODO: deal w/ replacement_date option (via Date Assignments field group)
+	
+	} else {
+	
+		$start_date = null;
+		$end_date = null;
+	
+		if ( empty($year) ) {
+			// For now, default to current year
+			// TODO: If month is set but not year, attempt to find all lit dates which may occur in the given month, taking into account variability that may range over multiple months
+			$year = date('Y');
+		}
+		
+		if ( empty($month) ) {
+			$start_date = $year."-01-01";
+			$end_date = $year."-12-31";
+		} else {
+			$start_date = $year."-".$month."-01";
+			$end_date = $year."-".$month."-31";
+			// TODO: set last day depending on number of days in month, not default to 31 (necessary?)
+		}
+		
+		$info .= "<!-- start_date: '$start_date'; end_date: '$end_date' -->\n"; // tft
+		
+	}
+	
+	// TODO: deal w/ replacement_date option (via Date Assignments field group)
     // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
@@ -178,6 +123,129 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
     $arr_posts = new WP_Query( $litdate_args );
     $litdate_posts = $arr_posts->posts;
+    
+    return $litdate_posts;	
+	
+}
+
+
+// Lit Dates overview
+add_shortcode('list_lit_dates', 'get_lit_dates_list');
+function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
+
+	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
+	$info = "\n<!-- get_lit_dates -->\n";
+    
+    $args = shortcode_atts( 
+        array(
+            'year'   => date('Y'),
+            'month' => null
+        ), 
+        $atts
+    );
+    
+    $year = (int) $args['year'];
+    $month = (int) $args['month'];
+    
+    
+    
+    return $info;
+    
+} 
+
+
+//function get_cpt_liturgical_date_content() {	}
+
+
+// Day Titles
+add_shortcode('day_title', 'get_day_title');
+function get_day_title( $atts = [], $content = null, $tag = '' ) {
+
+    // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
+	$info = "\n<!-- get_day_title -->\n";
+    
+    $args = shortcode_atts( 
+        array(
+            'post_id'   => get_the_ID(),
+            'series_id' => null,
+            'the_date'  => null,
+        ), 
+        $atts
+    );
+    
+    $post_id = (int) $args['post_id'];
+    $series_id = (int) $args['series_id'];
+    $the_date = $args['the_date'];
+    $hide_day_titles = 0; // init
+
+    if ( $post_id === null ) { $post_id = get_the_ID(); }
+    $info .= "<!-- post_id: ".$post_id." -->\n"; // tft
+    if ( $series_id ) { $info .= "<!-- series_id: ".$series_id." -->\n"; }
+    //$info .= "<!-- the_date: ".$the_date." -->\n"; // tft
+    
+    // Check to see if day titles are to be hidden for the entire event series, if any
+    if ( $series_id ) { 
+    	$hide_day_titles = get_post_meta( $series_id, 'hide_day_titles', true );
+    }
+    
+    // If there is no series-wide ban on displaying the titles, then should we display them for this particular post?
+    if ( $hide_day_titles == 0 ) {
+    	$hide_day_titles = get_post_meta( $post_id, 'hide_day_titles', true );
+    }
+    //$info .= "<!-- hide_day_titles: [$hide_day_titles] -->";
+    
+    if ( $hide_day_titles == 1 ) { 
+        $info .= "<!-- hide_day_titles is set to true for this post/event -->";
+        return $info;
+    } else {
+        //$info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
+    }
+    
+	if ( $the_date == null ) {
+        
+        $info .= "<!-- the_date is null -- get the_date -->"; // tft
+		
+        // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
+        if ( $post_id === null ) {
+            
+            return "<!-- no post -->";
+            
+        } else {
+            
+            $post = get_post( $post_id );
+            $post_type = $post->post_type;
+            $info .= "<!-- post_type: ".$post_type." -->"; // tft
+
+            if ( $post_type == 'event' ) {
+                
+                $date_str = get_post_meta( $post_id, '_event_start_date', true );
+                $the_date = strtotime($date_str);
+                
+            } else if ( $post_type == 'sermon' ) {
+                
+                $info .= "<!-- sermon -->";
+                $the_date = the_field( 'sermon_date', $post_id );
+                //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
+                
+            } else {
+                //$info .= "post_id: ".$post_id."<br />"; // tft
+                //$info .= "post_type: ".$post_type."<br />"; // tft
+            }
+        }
+        
+	}    
+    
+    if ( $the_date == null ) {
+        
+        // If still no date has been found, give up.
+        $info .= "<!-- no date available for which to find day_title -->\n"; // tft
+        return $info;
+        
+    }
+    
+    // Get litdate posts according to date
+    $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
+    $litdate_posts = get_lit_dates( $litdate_args );
     $num_litdate_posts = count($litdate_posts);
     //$info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
     $info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
@@ -225,9 +293,16 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     $priority = get_term_meta($term->term_id, 'priority', true);
                     $info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
 
-                    if ( !empty($priority) && $priority < $top_priority) { 
-                        $top_priority = $priority;
-                        $info .= "<!-- NEW top_priority: ".$top_priority." -->"; // tft
+                    if ( !empty($priority) ) {
+                    	if ( $priority > $top_priority ) {
+                    		$top_priority = $priority;
+                        	$info .= "<!-- NEW top_priority: ".$top_priority." -->"; // tft
+                        } else if ( $priority == $top_priority ) {
+                        	$info .= "<!-- priority is same as top_priority -->"; // tft
+                    	} else {
+                    		$info .= "<!-- priority is lower than top_priority -->"; // tft
+                    	}
+                        
                     }
                 }
                 
@@ -394,6 +469,8 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 		}
 		if ( $verbose == "true" ) { $calc_info .= $component_info; }
 	}
+	
+	// WIP!!!
 	
 	/*
 	// calc_basis
