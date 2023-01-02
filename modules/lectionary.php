@@ -180,7 +180,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     
     foreach ( $posts AS $date => $date_posts ) {
         
-        $info .= "$date<br />"; 
+        if ( !empty($date_posts)) { $info .= "$date<br />"; }
         //$info .= print_r($date_posts, true);
         
         foreach ( $date_posts AS $lit_date ) {
