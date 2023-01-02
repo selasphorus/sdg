@@ -16,6 +16,8 @@ function get_lit_dates ( $args ) {
 	$litdates = array();
 	$info = "";
 	
+	$info = "\n<!-- get_lit_dates -->\n";
+	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
 	if ( isset($args['date']) ) { $date = $args['date']; } else { $date = null; }
@@ -141,7 +143,7 @@ add_shortcode('list_lit_dates', 'get_lit_dates_list');
 function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
-	$info = "\n<!-- get_lit_dates -->\n";
+	$info = "\n<!-- get_lit_dates_list -->\n";
     
     $args = shortcode_atts( 
         array(
