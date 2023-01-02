@@ -58,18 +58,23 @@ function get_lit_dates ( $args ) {
     //$info .= "<!-- print_r date: '".print_r($date, true)."' -->\n"; // tft
         
     // Loop through all dates in range from start to end
-    $start = new DateTime($start_date);
-	$end = new DateTime($end_date);
+    //$start = new DateTime($start_date);
+    $start = strtotime($start_date);
+	//$end = new DateTime($end_date);
+    $end = strtotime($end_date);
 
 	while ($start <= $end) {
+	//while ($start <= $end) {
 		
-		//$info .= "<!-- timestamp: '$start' -->\n"; // tft
+		
+        $info .= "<!-- timestamp: '$start' -->\n"; // tft
         
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
         $info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
         
 		// go to the next day
-		$start->add(new DateInterval('P1D'));
+		$start = strtotime("+1 day", $start);
+		//$start->add(new DateInterval('P1D'));
 	}
 	/*
         $timestamp = strtotime($date);
