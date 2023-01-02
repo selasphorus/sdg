@@ -133,6 +133,8 @@ function get_lit_dates ( $args ) {
 		)
     );
     
+    $litdate_args['meta_query'] = $meta_query;
+    
     $info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
     $arr_posts = new WP_Query( $litdate_args );
     $litdate_posts = $arr_posts->posts;
