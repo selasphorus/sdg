@@ -1097,7 +1097,6 @@ function sdg_arr_sort( $sort_type = "value", $key_name = null, $order = 'ASC' ) 
     
     	// Sort by value
         return function ( $a, $b ) use ( $key_name, $order ) {
-
             if ( $order == "DESC" ) {
                 return ($a[$key_name] > $b[$key_name]) ? -1 : 1; 
             } else {
@@ -1111,7 +1110,13 @@ function sdg_arr_sort( $sort_type = "value", $key_name = null, $order = 'ASC' ) 
         return function ( $a, $b ) {
 
 			if ($a==$b) return 0;
-			return ($a < $b) ? -1 : 1;
+			//return ($a < $b) ? -1 : 1;
+			
+			if ( $order == "DESC" ) {
+                return ($a > $b) ? -1 : 1;
+            } else {
+                return ($a < $b) ? -1 : 1;
+            }
             
         };
         
