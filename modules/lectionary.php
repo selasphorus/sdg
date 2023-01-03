@@ -224,11 +224,11 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
                 	// TODO: first, reorder the litdates by priority; THEN build the list
                     $priority = get_term_meta($term->term_id, 'priority', true);
                     //$info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
-                    if ( $i>1 && $i < count($terms) ) { $info .= "; "; } else { $info .= "[$i]"; }
                     $info .= $term->name;
                     if ( !empty($priority) ) { $info .= "(".$priority.")"; }
                     //$info .= "&nbsp;";
                     $i++;
+                    if ( $i > 1 && $i < count($terms) ) { $info .= "; "; } else { $info .= "[$i]"; }
                 }
                 
             }
