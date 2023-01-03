@@ -218,15 +218,15 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             if ( $terms ) {
-                $info .= " >> ";
+                $info .= " >> [".count($terms)."]";
                 $i = 1;
                 foreach ( $terms as $term ) {
                 	// TODO: first, reorder the litdates by priority; THEN build the list
                     $priority = get_term_meta($term->term_id, 'priority', true);
                     //$info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
-                    $info .= "term: ".print_r($term, true)." "; // tft
-                    ///$info .= $term->name;
-                    ///if ( !empty($priority) ) { $info .= "(".$priority.")"; }
+                    //$info .= "term: ".print_r($term, true)." "; // tft
+                    $info .= $term->name;
+                    if ( !empty($priority) ) { $info .= "(".$priority.")"; }
                     //$info .= "&nbsp;";
                     if ( $i > 1 && $i < count($terms) ) { $info .= "; "; } else { $info .= "[$i]"; }
                     $i++;
