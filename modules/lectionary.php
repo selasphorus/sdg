@@ -402,7 +402,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $terms = get_the_terms( $litdate_post_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             
-            $top_priority = 0;
+            $top_priority = 100;
             if ( $terms ) {
                 
                 foreach ( $terms as $term ) {
