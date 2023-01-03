@@ -402,31 +402,31 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $terms = get_the_terms( $litdate_post_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             
-            $top_priority = 100;
+            $priority = 999;
             if ( $terms ) {
                 
                 foreach ( $terms as $term ) {
-                    $priority = get_term_meta($term->term_id, 'priority', true);
-                    $info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
+                    $term_priority = get_term_meta($term->term_id, 'priority', true);
+                    $info .= "<!-- term: ".$term->slug." :: term_priority: ".$term_priority." -->"; // tft
 
-                    if ( !empty($priority) ) {
-                    	if ( $priority > $top_priority ) {
-                    		$top_priority = $priority;
-                        	$info .= "<!-- NEW top_priority: ".$top_priority." -->"; // tft
-                        } else if ( $priority == $top_priority ) {
-                        	$info .= "<!-- priority is same as top_priority -->"; // tft
+                    if ( !empty($term_priority) ) {
+                    	if ( $term_priority < $priority ) { // top priority is lowest number
+                    		$priority = $term_priority;
+                        	$info .= "<!-- NEW priority: ".$priority." -->"; // tft
+                        } else if ( $term_priority == $top_priority ) {
+                        	$info .= "<!-- term_priority is same as priority -->"; // tft
                     	} else {
-                    		$info .= "<!-- priority is lower than top_priority -->"; // tft
+                    		$info .= "<!-- term_priority is higher than priority -->"; // tft
                     	}                        
                     } else {
-                    	$info .= "<!-- priority is not set for term ".$term->slug." -->";
+                    	$info .= "<!-- term_priority is not set for term ".$term->slug." -->";
                     }
                 }
                 
             }
             
-            $info .= "<!-- top_priority: ".$top_priority." -->"; // tft
-            $key = $top_priority."-".$litdate_post_id; // this will cause sort by priority num, then by litdate_id
+            $info .= "<!-- priority: ".$priority." -->"; // tft
+            $key = $priority."-".$litdate_post_id; // this will cause sort by priority num, then by litdate_id
             $litdates[$key] = $litdate_post_id;
             //$litdates[$top_priority] = $litdate_post_id;
             //
