@@ -178,8 +178,23 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         $atts
     );
     
-    $year = (int) $args['year'];
-    $month = (int) $args['month'];
+    // Set year
+    if ( $args['year'] == "this_year" ) {
+    	$month = date('Y');
+    } else if ( $args['year'] == "next_year" ) {
+    	$month = date('Y')+1;
+    } else {
+    	$year = (int) $args['year'];
+    }
+    
+    // Set month
+    if ( $args['month'] == "this_month" ) {
+    	$month = date('m');
+    } else if ( $args['month'] == "next_month" ) {
+    	$month = date('m')+1;
+    } else {
+    	$month = (int) $args['month'];
+    }
     
     // Get litdate posts according to date
     $litdate_args = array( 'year' => $year, 'month' => $month );
