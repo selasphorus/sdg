@@ -344,7 +344,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $litdates = get_lit_dates( $litdate_args );
     if ( isset($litdates['posts'][$the_date]) ) { 
     	$litdate_posts = $litdates['posts'][$the_date];
-	} else if ( isset($litdates['posts']) ) { 
+	} else if ( isset($litdates['posts']) ) {
+		$litdate_posts = $litdates['posts'];
 		$info .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
 	} else {
 		$litdate_posts = array(); // empty
