@@ -69,7 +69,8 @@ function get_lit_dates ( $args ) {
 			'order'			=> 'DESC',
 			'meta_key' 		=> 'day_title',
 		);
-	
+		// TODO: build more complex orderby: day_title; category priority (maybe not poss); ID?
+		
 		$meta_query = array();
 		$meta_query['relation'] = 'AND';
 	
@@ -148,6 +149,12 @@ function get_lit_dates ( $args ) {
     // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
+    // TODO: reorder the litdates by category->priority before returning the array?
+    /*foreach ( $litdate_posts as $post ) {
+    	//
+    }
+    */
+    
     $litdates['info'] = $info;
     $litdates['posts'] = $litdate_posts;
     
@@ -197,10 +204,11 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	if ( $day_title == "1" ) { 
         		$classes .= " nb";
         		$num_day_titles++;
+        		if ( $num_day_titles > 1 ) {
+					$classes .= " conflict";
+				}
         	}
-        	if ( $num_day_titles > 1 ) {
-        		$classes .= " conflict";
-        	}
+        	
         	//
 			$info .= '<span class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ".$lit_date->post_title;
@@ -212,6 +220,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
             if ( $terms ) {
                 
                 foreach ( $terms as $term ) {
+                	// TODO: first, reorder the litdates by priority; THEN build the list
                     $priority = get_term_meta($term->term_id, 'priority', true);
                     //$info .= "<!-- term: ".$term->slug." :: priority: ".$priority." -->"; // tft
                     $info .= " >> ";
