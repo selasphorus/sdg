@@ -342,12 +342,16 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Get litdate posts according to date
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
-    $litdate_posts = $litdates['posts'][$the_date];
-    $info .= $litdates['info'];
+    if ( $litdates['posts'] ) { 
+    	$litdate_posts = $litdates['posts'][$the_date];
+	} else {
+		$litdate_posts = array(); // empty
+	}
     $num_litdate_posts = count($litdate_posts);
     //$info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
     $info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
-
+    if ( $litdates['info'] ) { $info .= $litdates['info']; }
+    
     // If some posts were retrieved for dates calculated and/or assigned
     
     $litdate_id = null; // init
