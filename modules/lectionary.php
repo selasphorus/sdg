@@ -65,6 +65,9 @@ function get_lit_dates ( $args ) {
 		$litdate_args = array(
 			'post_type'		=> 'liturgical_date',
 			'post_status'   => 'publish',
+			'orderby'		=> 'meta_value',
+			'order'			=> 'DESC',
+			'meta_key' 		=> 'day_title',
 		);
 	
 		$meta_query = array();
