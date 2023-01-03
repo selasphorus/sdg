@@ -190,7 +190,11 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     
     foreach ( $posts AS $date => $date_posts ) {
         
-        if ( !empty($date_posts)) { $info .= date('l, F j Y',strtotime($date))."<br />"; }
+        if ( !empty($date_posts)) {
+        	$info .= '<a href="/events/'.date('Y-m-d',strtotime($date)).'/" target="_blank">';
+        	$info .= date('l, F j, Y',strtotime($date));
+        	$info .= "</a><br />";
+        }
         //$info .= print_r($date_posts, true);
         
         $num_day_titles = 0;
