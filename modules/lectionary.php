@@ -342,7 +342,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Get litdate posts according to date
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
-    $litdate_posts = $litdates['posts'];
+    $litdate_posts = $litdates['posts'][0];
     $info .= $litdates['info'];
     $num_litdate_posts = count($litdate_posts);
     //$info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
