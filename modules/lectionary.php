@@ -342,7 +342,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Get litdate posts according to date
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
-    if ( $litdates['posts'] ) { 
+    if ( isset($litdates['posts'][$the_date]) ) { 
     	$litdate_posts = $litdates['posts'][$the_date];
 	} else {
 		$litdate_posts = array(); // empty
