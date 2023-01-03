@@ -348,7 +348,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	} else if ( isset($litdates['posts']) ) {
 		$litdate_posts = $litdates['posts'];
 		$info .= "<!-- litdates['posts'][$date_str] not set -->";
-		$info .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
+		//$info .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
 	} else {
 		$litdate_posts = array(); // empty
 	}
@@ -370,7 +370,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         $litdate_post = $litdate_posts[0];
         $litdate_id = $litdate_post->ID;
-        $info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
+        $info .= "<!-- Single litdate_post found (id: $litdate_id) -->"; // tft
+        //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
         //$litdate_post_id = $litdate_posts[0]['ID'];
         
     } else if ( $num_litdate_posts > 1 ) {
