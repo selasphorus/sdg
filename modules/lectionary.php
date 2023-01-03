@@ -228,7 +228,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
                     $info .= $term->name;
                     if ( !empty($priority) ) { $info .= "(".$priority.")"; }
                     //$info .= "&nbsp;";
-                    if ( $i > 1 && $i < count($terms) ) { $info .= "; "; } else { $info .= "[$i]"; }
+                    if ( $i >= 1 && $i < count($terms) && count($terms) > 1 ) { $info .= "; "; } else { $info .= "[$i]"; }
                     $i++;
                 }
                 
