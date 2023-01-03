@@ -50,9 +50,9 @@ function get_lit_dates ( $args ) {
 			// TODO: set last day depending on number of days in month, not default to 31 (necessary?)
 		}
 		
-		$info .= "<!-- start_date: '$start_date'; end_date: '$end_date' -->\n"; // tft
-		
 	}
+	
+	$info .= "<!-- start_date: '$start_date'; end_date: '$end_date' -->\n"; // tft
     
     // Loop through all dates in range from start to end
     $start = strtotime($start_date);
