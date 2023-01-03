@@ -238,7 +238,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             if ( $terms ) {
-            	$info .= '<span class="terms">';
+            	$info .= '<span class="terms smaller">';
                 $info .= " >> ";
                 $i = 1;
                 foreach ( $terms as $term ) {
