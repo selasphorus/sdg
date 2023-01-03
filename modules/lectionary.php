@@ -350,7 +350,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	} else {
 		$litdate_posts = array(); // empty
 	}
-    $num_litdate_posts = count($litdate_posts);
+    if ( is_array($litdate_posts) ) { $num_litdate_posts = count($litdate_posts); } else { $num_litdate_posts = 0; }
     //$info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
     $info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
     if ( $litdates['info'] ) { $info .= $litdates['info']; }
