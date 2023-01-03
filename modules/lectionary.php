@@ -231,13 +231,14 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	//
 			$info .= '<span class="'.$classes.'">';
 			$info .= "[".$litdate_id."] ";
-			$info .= '</span>';			
+			$info .= '</span>';		
 			$info .= $lit_date->post_title;
 			//$info .=" (".print_r($day_title, true).")";
         	//
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             if ( $terms ) {
+            	$info .= '<span class="terms">';
                 $info .= " >> ";
                 $i = 1;
                 foreach ( $terms as $term ) {
@@ -251,7 +252,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
                     if ( $i >= 1 && $i < count($terms) && count($terms) > 1 ) { $info .= "; "; } //else { $info .= "[$i]"; }
                     $i++;
                 }
-                
+                $info .= '</span>';	
             }
             //$info .= implode(" ",$terms);
             //
