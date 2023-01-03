@@ -218,7 +218,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             if ( $terms ) {
-                $info .= " >> [".count($terms)."]";
+                $info .= " >> ";
                 $i = 1;
                 foreach ( $terms as $term ) {
                 	// TODO: first, reorder the litdates by priority; THEN build the list
@@ -228,7 +228,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
                     $info .= $term->name;
                     if ( !empty($priority) ) { $info .= "(".$priority.")"; }
                     //$info .= "&nbsp;";
-                    if ( $i >= 1 && $i < count($terms) && count($terms) > 1 ) { $info .= "; "; } else { $info .= "[$i]"; }
+                    if ( $i >= 1 && $i < count($terms) && count($terms) > 1 ) { $info .= "; "; } //else { $info .= "[$i]"; }
                     $i++;
                 }
                 
