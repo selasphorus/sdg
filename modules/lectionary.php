@@ -417,15 +417,18 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                         	$info .= "<!-- priority is same as top_priority -->"; // tft
                     	} else {
                     		$info .= "<!-- priority is lower than top_priority -->"; // tft
-                    	}
-                        
+                    	}                        
+                    } else {
+                    	$info .= "<!-- priority is not set for term ".$term->slug." -->";
                     }
                 }
                 
             }
             
             $info .= "<!-- top_priority: ".$top_priority." -->"; // tft
-            $litdates[$top_priority] = $litdate_post_id;
+            $key = $top_priority."-".$litdate_post_id; // this will cause sort by priority num, then by litdate_id
+            $litdates[$key] = $litdate_post_id;
+            //$litdates[$top_priority] = $litdate_post_id;
             //
             
         }
