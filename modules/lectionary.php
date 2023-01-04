@@ -12,6 +12,8 @@ if ( !function_exists( 'add_action' ) ) {
 
 function get_lit_dates ( $args ) {
 
+	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
+	
 	// init
 	$info = "";
 	$litdates = array();
@@ -160,7 +162,7 @@ function get_lit_dates ( $args ) {
     // date_assignments: "Use this field to override the default Fixed Date or automatic Date Calculation."
     // replacement_date: "Check the box if this is the ONLY date of observance during the calendar year in question. Otherwise the custom date assignment will be treated as an ADDITIONAL date of observance."
     
-    // TODO: reorder the litdates by category->priority before returning the array?
+    // WIP/TODO: reorder the litdates by category->priority before returning the array?
     /*foreach ( $litdate_posts as $post ) {
     	//
     }
@@ -178,7 +180,6 @@ function get_lit_dates ( $args ) {
 add_shortcode('list_lit_dates', 'get_lit_dates_list');
 function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 
-	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "\n<!-- get_lit_dates_list -->\n";
     
     $args = shortcode_atts( 
@@ -241,11 +242,12 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	
         	//
 			$info .= '<span class="'.$classes.'">';
-			$info .= '<a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">';
+			$info .= '<a href="'.get_permalink($litdate_id).'" class="subtle" target="_blank">';
 			$info .= "[".$litdate_id."] ";
 			$info .= '</a>';
-			$info .= '</span>';		
-			$info .= $lit_date->post_title;
+			$info .= '</span>';
+			$info .= $lit_date->post_title;			
+			$info .= '<a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">Edit</a>';
 			//$info .=" (".print_r($day_title, true).")";
 			// TODO: determine/show if this is calc date, override date, &c.
         	//
