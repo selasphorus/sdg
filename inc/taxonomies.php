@@ -725,7 +725,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'public'               => true,
 			'hierarchical'      => true,
 			'show_ui'           => true,
-			'show_admin_column' => true,
+			'show_in_menu'      => 'edit.php?post_type=liturgical_date',
+			//'show_admin_column' => true,
 			'capabilities'         => array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
@@ -735,7 +736,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
 		);
-		register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args );
+		register_taxonomy( 'liturgical_date_category', [ 'lectionary', 'liturgical_date' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_liturgical_date_category' );
 
