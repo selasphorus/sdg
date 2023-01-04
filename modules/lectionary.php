@@ -65,11 +65,12 @@ function get_lit_dates ( $args ) {
 		$litdate_args = array(
 			'post_type'		=> 'liturgical_date',
 			'post_status'   => 'publish',
-			'orderby'		=> 'meta_value',
-			'order'			=> 'DESC',
+			'orderby'  => array( 'meta_value' => 'DESC', 'ID' => 'ASC' ),
+			//'orderby'		=> 'meta_value',
+			//'order'			=> 'DESC',
 			'meta_key' 		=> 'day_title',
 		);
-		// TODO: build more complex orderby: day_title; category priority (maybe not poss); ID?
+		// TODO: build more complex orderby: day_title; ID? (category priority (maybe not poss)?)
 		
 		$meta_query = array();
 		$meta_query['relation'] = 'AND';
