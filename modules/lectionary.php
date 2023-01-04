@@ -451,7 +451,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         }
         
         $info .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
-        uksort($litdates, sdg_arr_sort( 'key', null, 'DESC' ));
+        uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
         $info .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
         
         // Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
