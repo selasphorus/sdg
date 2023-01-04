@@ -586,7 +586,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         // TODO: extract this out as a separate small function to check the actual display date for this litdate for the year in question
         
-        $show_title = show_litdate_on_date( $litdate_id, $full_date_str );
+        $show_title = show_litdate_on_date( $litdate_id, $date_str );
         
         if ( $show_title == true ) {
         
