@@ -363,8 +363,10 @@ function get_display_date ( $litdate_id = null, $year = null ) {
 // WIP!
 // Check to see if litdate has been assigned to another date to override the given date
 // This function is used to check litdates that have already been found to match the given date, via assignment or calculation
-function show_litdate_on_date( $litdate_id = null, $full_date_str = date('Y-m-d') );
+function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO set default: date('Y-m-d')
 
+	$info = "";
+	//
 	$info .= "<!-- litdate_id: $litdate_id -->";
 	
 	// Get date assignments; check to see if one is designated as a replacement_date that should negate the date match
@@ -375,15 +377,15 @@ function show_litdate_on_date( $litdate_id = null, $full_date_str = date('Y-m-d'
 				// TODO: get year of date_assigned and check it against full_date_str only if years match
 				$date_assigned = get_sub_field('date_assigned');
 				$year_assigned = substr($date_assigned, 0, 4);
-				$year_to_match = substr($full_date_str, 0, 4);
-				$info .= "<!-- replacement_date: ".$replacement_date."; date_assigned: ".$date_assigned."; full_date_str: ".$full_date_str." -->";
+				$year_to_match = substr($date_str, 0, 4);
+				$info .= "<!-- replacement_date: ".$replacement_date."; date_assigned: ".$date_assigned."; date_str: ".$date_str." -->";
 				if ( $date_assigned == $year_to_match ) {
-					if ( $date_assigned != $full_date_str ) {
+					if ( $date_assigned != $date_str ) {
 						// Don't show this date -- override in effect
-						$info .= "<!-- date_assigned NE full_date_str (".$full_date_str.") >> don't show title -->";
+						$info .= "<!-- date_assigned NE date_str (".$date_str.") >> don't show title -->";
 						return false;
 					} else {
-						$info .= "<!-- date_assigned == full_date_str (".$full_date_str.") >> DO show title -->";
+						$info .= "<!-- date_assigned == date_str (".$date_str.") >> DO show title -->";
 						return true;
 					}
 				}
