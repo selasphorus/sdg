@@ -231,7 +231,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	
         	//
 			$info .= '<span class="'.$classes.'">';
-			$info .= '<a href="'.get_edit_post_link($litdate_id).'">';
+			$info .= '<a href="'.get_edit_post_link($litdate_id).'" class="subtle">';
 			$info .= "[".$litdate_id."] ";
 			$info .= '</a>';
 			$info .= '</span>';		
