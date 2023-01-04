@@ -736,7 +736,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
 		);
-		register_taxonomy( 'liturgical_date_category', [ 'lectionary', 'liturgical_date' ], $args );
+		register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args ); // 'lectionary', 
 	}
 	add_action( 'init', 'register_taxonomy_liturgical_date_category' );
 
