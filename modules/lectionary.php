@@ -16,25 +16,30 @@ function get_lit_dates ( $args ) {
 	$info = "";
 	$litdates = array();
 	$litdate_posts = array();
+	$date = null;
+	$year = null;
+	$month = null;
+	$day_titles_only = false;
+	$start_date = null;
+	$end_date = null;
 	
 	$info = "\n<!-- get_lit_dates -->\n";
 	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
-	if ( isset($args['date']) ) { $date = $args['date']; } else { $date = null; }
-	if ( isset($args['year']) ) { $year = $args['year']; } else { $year = null; }
-	if ( isset($args['month']) ) { $month = $args['month']; } else { $month = null; }
-	if ( isset($args['day_titles_only']) ) { $day_titles_only = $args['day_titles_only']; } else { $day_titles_only = false; }
+	if ( isset($args['date']) ) {
 	
-	$start_date = null;
-	$end_date = null;
-		
-	if ( !empty($date) ) {
-		
+		$date = $args['date'];
 		$start_date = $end_date = $date;
-	
+		$year = substr($date,0,4);
+		$month = substr($date,5,2);
+		
 	} else {
 	
+		if ( isset($args['year']) ) { $year = $args['year']; }
+		if ( isset($args['month']) ) { $month = $args['month']; }
+		if ( isset($args['day_titles_only']) ) { $day_titles_only = $args['day_titles_only']; }	
+		
 		if ( empty($year) ) {
 			// For now, default to current year
 			// TODO: If month is set but not year, attempt to find all lit dates which may occur in the given month, taking into account variability that may range over multiple months
@@ -52,7 +57,7 @@ function get_lit_dates ( $args ) {
 		
 	}
 	
-	$info .= "<!-- start_date: '$start_date'; end_date: '$end_date' -->\n"; // tft
+	$info .= "<!-- start_date: '$start_date'; end_date: '$end_date'; year: '$year'; month: '$month' -->\n"; // tft
     
     // Loop through all dates in range from start to end
     $start = strtotime($start_date);
@@ -61,16 +66,17 @@ function get_lit_dates ( $args ) {
 	while ($start <= $end) {
 		
 		// Build  query to search for any liturgical dates that match, whether dates are fixed, calculated, or manually assigned
+		// TODO: consider running separate queries for fixed, assigned, calc?
+		// 
     
 		$litdate_args = array(
 			'post_type'		=> 'liturgical_date',
 			'post_status'   => 'publish',
-			'orderby'  => array( 'meta_value' => 'DESC', 'ID' => 'ASC' ),
+			'orderby'  => array( 'meta_value' => 'DESC', 'ID' => 'ASC' ), // would title be better than ID as fallback?
 			//'orderby'		=> 'meta_value',
 			//'order'			=> 'DESC',
 			'meta_key' 		=> 'day_title',
 		);
-		// TODO: build more complex orderby: day_title; ID? (category priority (maybe not poss)?)
 		
 		$meta_query = array();
 		$meta_query['relation'] = 'AND';
@@ -82,66 +88,70 @@ function get_lit_dates ( $args ) {
 				'value'		=> '1',
 			);
 		}
-    
-        //$info .= "<!-- timestamp: '$start' -->\n"; // tft
         
+        // Prep meta_sub_query which will check for various kinds of date matches
+        $meta_sub_query = array( 'relation'  => 'OR' );
+        
+        // Add meta_query components for fixed dates
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
         //$info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
-        
-        $day_num = intval(date("j", $start ));
+        $meta_sub_query[] = array(
+			'key'		=> 'fixed_date_str',
+			'compare'	=> '=',
+			'value'		=> $fixed_date_str,
+		);
+		
+		// Add alt component in case day num has been stored without leading zero
+		$day_num = intval(date("j", $start ));
         if ( $day_num < 10 ) {
             //$info .= "<!-- day_num: '$day_num' -->\n"; // tft
             $fixed_date_str_alt = date("F j", $start ); // day w/ out leading zeros
             //$info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
-        } else {
-        	$fixed_date_str_alt = $fixed_date_str;
-        }
-        
-        $full_date_str = date("Y-m-d", $start );        
-        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
-        
-        $meta_query[] = array(
-			'relation'  => 'OR',
-			array(
-				'key'		=> 'fixed_date_str',
-				'compare'	=> '=',
-				'value'		=> $fixed_date_str,
-			),
-			array(
+            $meta_sub_query[] = array(
 				'key'		=> 'fixed_date_str',
 				'compare'	=> '=',
 				'value'		=> $fixed_date_str_alt,
-			),
-			array(
-				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-				'compare'	=> '=',
-				'value'		=> $full_date_str,
-			),
-			array(
-				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-				'compare'	=> '=',
-				'value'		=> $full_date_str,
-			),
-			// The following parameters can be phased out eventually once the DB is updated to standardize the date formats
-			array(
-				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-				'compare'	=> '=',
-				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-			),
-			array(
-				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-				'compare'	=> '=',
-				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-			),
-    	);
-    
+			);
+        }
+        
+        // Format date_str
+        $full_date_str = date("Y-m-d", $start );        
+        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+        
+        // Add meta_query components for date calculations and assignments        
+		$meta_sub_query[] = array(
+			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> $full_date_str,
+		);
+		$meta_sub_query[] = array(
+			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> $full_date_str,
+		);
+		// The following parameters can be phased out eventually once the DB is updated to standardize the date formats
+		$meta_sub_query[] = array(
+			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+		);
+		$meta_sub_query[] = array(
+			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+		);
+        
+        // Add sub_query to meta_query
+    	$meta_query[] = $meta_sub_query;
+    	
 		$litdate_args['meta_query'] = $meta_query;
 	
+		// Run the query
 		//$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
 		$arr_posts = new WP_Query( $litdate_args );
 		$litdate_posts[$full_date_str] = $arr_posts->posts;
         
-		// go to the next day
+		// Go to the next day
 		$start = strtotime("+1 day", $start);
 	}
 	
@@ -231,12 +241,13 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         	
         	//
 			$info .= '<span class="'.$classes.'">';
-			$info .= '<a href="'.get_edit_post_link($litdate_id).'" class="subtle">';
+			$info .= '<a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">';
 			$info .= "[".$litdate_id."] ";
 			$info .= '</a>';
 			$info .= '</span>';		
 			$info .= $lit_date->post_title;
 			//$info .=" (".print_r($day_title, true).")";
+			// TODO: determine/show if this is calc date, override date, &c.
         	//
         	$terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
@@ -260,6 +271,12 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
             //$info .= implode(" ",$terms);
             //
 			$info .= '<br />';
+			/*if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+				while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+					$replacement_date = get_sub_field('replacement_date'); // ACF fcn
+					if ( $replacement_date == "1") {}
+				endwhile;
+			} // end if*/
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
@@ -276,9 +293,106 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     
 } 
 
+function get_cpt_liturgical_date_content( $post_id = null ) {
+	
+	// init
+	$info = "";
+	if ($post_id === null) { $post_id = get_the_ID(); }
+	$litdate_id = $post_id;
+	
+	$info .= '<!-- cpt_liturgical_date_content -->';
+    $info .= '<!-- litdate_id: '.$litdate_id.' -->';
+    
+    if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+			$date_assigned = get_sub_field('date_assigned');
+			$replacement_date = get_sub_field('replacement_date');
+			if ( $replacement_date == "1") {}
+		endwhile;
+	} // end if
+	
+	return $info;
+}
 
-//function get_cpt_liturgical_date_content() {	}
+// WIP
+function get_display_date ( $litdate_id = null, $year = null ) {
+	
+	$info = "";
+	
+	// Get date_type (fixed, calculated, assigned)
+    $date_type = get_post_meta( $litdate_post_id, 'date_type', true );
+    $info .= "<!-- date_type: ".$date_type." -->"; // tft
+            
+	// get fixed date
+	if ( $date_type == "fixed" ) {
+		//
+	}
+	
+	// get date assignments
+	/*
+	if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+			$date_assigned = get_sub_field('date_assigned');
+			$replacement_date = get_sub_field('replacement_date');
+			$year_assigned = substr($date_assigned, 0, 4);
+			if ( $replacement_date == "1") {}
+		endwhile;
+	} // end if
+	*/
+	
+	// get date calculations
+	/*
+	if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_calculations', $post_id) ) : the_row();
+			$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+			if ( $date_calculated == $calc_date_str ) {
+				// Already in there
+				$newrow = false;
+				$calc_info .= $indent."+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />".$indent."+++<br />"; // tft
+			} else {
+				//$info .= $indent."Old date_calculated: $date_calculated.<br />"; // tft
+			}
+		endwhile;
+	} // end if
+	*/
+	
+	// 1st assignment override, 2nd calc or fixed date (priority)
+	//
+}
 
+// WIP!
+// Check to see if litdate has been assigned to another date to override the given date
+// This function is used to check litdates that have already been found to match the given date, via assignment or calculation
+function show_litdate_on_date( $litdate_id = null, $full_date_str = date('Y-m-d') );
+
+	$info .= "<!-- litdate_id: $litdate_id -->";
+	
+	// Get date assignments; check to see if one is designated as a replacement_date that should negate the date match
+	if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+			$replacement_date = get_sub_field('replacement_date'); // ACF fcn
+			if ( $replacement_date == "1") {
+				// TODO: get year of date_assigned and check it against full_date_str only if years match
+				$date_assigned = get_sub_field('date_assigned');
+				$year_assigned = substr($date_assigned, 0, 4);
+				$year_to_match = substr($full_date_str, 0, 4);
+				$info .= "<!-- replacement_date: ".$replacement_date."; date_assigned: ".$date_assigned."; full_date_str: ".$full_date_str." -->";
+				if ( $date_assigned == $year_to_match ) {
+					if ( $date_assigned != $full_date_str ) {
+						// Don't show this date -- override in effect
+						$info .= "<!-- date_assigned NE full_date_str (".$full_date_str.") >> don't show title -->";
+						return false;
+					} else {
+						$info .= "<!-- date_assigned == full_date_str (".$full_date_str.") >> DO show title -->";
+						return true;
+					}
+				}
+			}
+		endwhile;
+	} // end if
+	
+	return true;
+}
 
 // Day Titles
 add_shortcode('day_title', 'get_day_title');
@@ -468,32 +582,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // 
     if ( $litdate_id ) {
         
-        $show_title = true;
+        // TODO: extract this out as a separate small function to check the actual display date for this litdate for the year in question
         
-        //$the_date = the_field( 'sermon_date', $post_id );
-        //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
-        
-        $info .= "<!-- litdate_id: $litdate_id -->";
-        
-        // WIP: Check to see if a replacement_date has been assigned that should negate this matc
-        if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
-			while ( have_rows('date_assignments', $litdate_id) ) : the_row();
-				$replacement_date = get_sub_field('replacement_date'); // ACF fcn
-				if ( $replacement_date == "1") {
-					$date_assigned = get_sub_field('date_assigned');
-					$info .= "<!-- replacement_date: ".$replacement_date."; date_assigned: ".$date_assigned." -->";
-					if ( $date_assigned != $full_date_str ) {
-						// Don't show this date -- override in effect
-						$show_title = false;
-						$info .= "<!-- date_assigned NE full_date_str (".$full_date_str.") >> don't show title -->";
-					} else {
-						$show_title = true;
-						$info .= "<!-- date_assigned == full_date_str (".$full_date_str.") >> DO show title -->";
-						break;
-					}
-				}
-			endwhile;
-		} // end if
+        $show_title = show_litdate_on_date( $litdate_id, $full_date_str );
         
         if ( $show_title == true ) {
         
