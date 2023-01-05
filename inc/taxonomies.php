@@ -268,7 +268,7 @@ function register_taxonomy_page_tag() {
 add_action( 'init', 'register_taxonomy_page_tag' );
 
 
-/*** Taxonomies for eLE ***/
+/*** Taxonomies for PEOPLE ***/
 
 if ( in_array('people', $sdg_modules ) ) {
 	// Custom Taxonomy: People Category
@@ -935,6 +935,87 @@ if ( in_array('organs', $sdg_modules ) ) {
 		register_taxonomy( 'action_type', [ 'organ' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_action_type' );
+}
+
+/*** Taxonomies for LINKS ***/
+
+if ( in_array('links', $sdg_modules ) ) {
+
+	// Custom Taxonomy: Link Category WIP
+	function register_taxonomy_link_category() {
+		//$cap = 'link'; // WIP
+		$labels = array(
+			'name'              => _x( 'Link Categories', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Link Category', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Link Categories' ),
+			'all_items'         => __( 'All Link Categories' ),
+			'parent_item'       => __( 'Parent Link Category' ),
+			'parent_item_colon' => __( 'Parent Link Category:' ),
+			'edit_item'         => __( 'Edit Link Category' ),
+			'update_item'       => __( 'Update Link Category' ),
+			'add_new_item'      => __( 'Add New Link Category' ),
+			'new_item_name'     => __( 'New Link Category Name' ),
+			'menu_name'         => __( 'Link Categories' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+            // CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'link_category' ],
+		);
+		register_taxonomy( 'link_category', [ 'link' ], $args );
+	}
+	add_action( 'init', 'register_taxonomy_link_category' );
+	
+	// Custom Taxonomy: Link Tag (WIP ??? does it need to be that specific, or would generic tags do just as well?)
+	function register_taxonomy_link_tag() {
+		//$cap = 'link';
+		$labels = array(
+			'name'              => _x( 'Link Tags', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Link Tag', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Link Tags' ),
+			'all_items'         => __( 'All Link Tags' ),
+			'parent_item'       => __( 'Parent Link Tag' ),
+			'parent_item_colon' => __( 'Parent Link Tag:' ),
+			'edit_item'         => __( 'Edit Link Tag' ),
+			'update_item'       => __( 'Update Link Tag' ),
+			'add_new_item'      => __( 'Add New Link Tag' ),
+			'new_item_name'     => __( 'New Link Tag Name' ),
+			'menu_name'         => __( 'Link Tags' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => false, // changed from true 11/17/22 because no topics had parents and AG wanted to be able to search
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			// CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'link_tag' ],
+		);
+		register_taxonomy( 'link_tag', [ 'link' ], $args );
+	}
+	add_action( 'init', 'register_taxonomy_link_tag' );
+	
 }
 
 ?>
