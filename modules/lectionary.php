@@ -224,8 +224,11 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
         }
         //$info .= print_r($date_posts, true);
         
+        // TODO: order the date_posts? (according to priority &c.) -- or should that happen via get_lit_dates
+        
         $num_day_titles = 0;
         
+        $i = 1;
         foreach ( $date_posts AS $lit_date ) {
         
         	//$info .= print_r($lit_date, true);
@@ -279,6 +282,8 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 					if ( $replacement_date == "1") {}
 				endwhile;
 			} // end if*/
+			
+			$i++;
         }
         
 		/*$litdate_post_id = $litdate_post->ID;
