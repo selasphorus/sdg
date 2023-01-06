@@ -290,7 +290,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$field_name = $group_field['name'];
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
+				if ( is_array($p1_val) ) { $p1_val = print_r($p1_val,true); } // tft
 				$p2_val = get_field($field_name, $p2->ID, false);
+				if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
 				
 				if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 				
