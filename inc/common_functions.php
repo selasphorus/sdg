@@ -158,9 +158,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     $post_ids_str = $a['post_ids'];
     // Check to see if any post_ids have been designated via the shortcode attributes
-    if ( $post_ids_str ) {        
+    if ( !empty($post_ids_str) ) {        
         // Turn the list into an array
         $post_ids = sdg_att_explode( $post_ids_str );
+    } else {
+    	$post_ids = array();
     }
     
     $troubleshooting .= 'post_ids: <pre>'.print_r($post_ids,true).'</pre>'; // tft
