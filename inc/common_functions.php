@@ -262,7 +262,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			$info .= '<tr>';
 			$info .= '<td>'.$field.'</td>';
-			$info .= '<td>'.print_r($p1->$field,true).'</td>'.'<td class="notice">'.$merge_value.'</td>'.'<td>'.print_r($p2->$field,true).'</td>';
+			$info .= '<td>'.print_r($p1->$field,true).'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.print_r($p2->$field,true).'</td>';
 			//$info .= '<td>'.print_r($p1->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field_name,true).'</td>';
 			//$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
 			$info .= '</tr>';
