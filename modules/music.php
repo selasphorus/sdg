@@ -2172,7 +2172,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         
         $info .= '<tr>';
         //
-        $info .= '<td class="">';
+        $info .= '<td class="" style="width: 1.5rem;">'; // TODO: replace inline style w/ proper class
+        $info .= "*";
         $info .= '</td>';
         //
         $info .= '<td class="repertoire">';
