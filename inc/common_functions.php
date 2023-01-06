@@ -204,6 +204,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
 			$troubleshooting .= "Num arr_posts: [".count($arr_posts)."]<br />";
 			//$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+			
+			if ( count($arr_posts) > 2 ) {
+				$troubleshooting .= "That's too many posts! I can only handle two at a time.<br />";
+			}
 		
 			//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
 			$troubleshooting .= $posts_info['info']."<hr />";
@@ -238,6 +242,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
         
     $info .= '<form class="sdg_merge_form '.$form_type.'">';
+    
+    if ( count($arr_posts) == 2 ) {
+		$info .= '<table>';
+		$info .= '<tr><th><th><th>Merged<th><th><th></tr>';
+		$info .= '<tr>';
+		$info .= '<td>'.$arr_posts[0]->post_title.'</td>'.'<td></td>'.'<td>'.$arr_posts[1]->post_title.'</td>';
+		$info .= '</tr>';
+		
+		$info .= '</table>';
+    }
     
     /*
         // Loop through the field names and create the actual form fields
