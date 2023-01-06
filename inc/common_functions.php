@@ -203,7 +203,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // Get all ACF field groups associated with the post_type
     $field_groups = acf_get_field_groups( array( 'post_type' => $post_type ) );
-    $troubleshooting .= "field_groups for post_type '$post_type': <pre>".print_r($field_groups,true)."</pre>";
+    //$troubleshooting .= "field_groups for post_type '$post_type': <pre>".print_r($field_groups,true)."</pre>";
+    foreach ( $field_groups as $field_group ) {
+    	$troubleshooting .= $field_group['title']."<br />";
+    }
     
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
