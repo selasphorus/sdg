@@ -201,9 +201,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		if ( isset($posts_info['arr_posts']) ) {
 		
 			$arr_posts = $posts_info['arr_posts']->posts;
-			//$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
 			$troubleshooting .= "Num arr_posts: [".count($arr_posts)."]<br />";
-			//$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+			$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 			if ( count($arr_posts) > 2 ) {
 				$troubleshooting .= "That's too many posts! I can only handle two at a time.<br />";
@@ -223,6 +222,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	}
         
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
+    $arr_core_fields = array( 'post_title', 'content', 'excerpt', 'post_thumbnail' );
     // post_title, content, excerpt, post_thumbnail (featured image)
     // author, post_status, date published, date last modified -- read only?
     //$arr_fields = get_fields...;
@@ -244,13 +244,22 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $info .= '<form class="sdg_merge_form '.$form_type.'">';
     
     if ( count($arr_posts) == 2 ) {
+    
 		$info .= '<table>';
 		$info .= '<tr><th></th><th>Merged</th><th></th></tr>';
 		
-		$info .= '<tr>';
-		$info .= '<td>'.$arr_posts[0]->post_title.'</td>'.'<td></td>'.'<td>'.$arr_posts[1]->post_title.'</td>';
-		$info .= '</tr>';
+		// TODO: make a nice efficient loop or loops -- one for basic, second for meta values?
+		foreach ( $arr_core_fields as $field ) {
+			/*
+			$field_name = 'post_title';
 		
+			if () { $merge_value = ""; }
+			$info .= '<tr>';
+			$info .= '<td>'.$arr_posts[0]->post_title.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->post_title.'</td>';
+			$info .= '</tr>';
+			*/
+		}
+				
 		$info .= '</table>';
     }
     
