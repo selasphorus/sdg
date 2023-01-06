@@ -258,15 +258,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '<tr><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
 		// TODO: make a nice efficient loop or loops -- one for basic, second for meta values?
-		foreach ( $arr_core_fields as $field ) {
+		foreach ( $arr_core_fields as $field_name ) {
 			
-			if ( !empty($p1->$field) ) { $merge_value = $p1->$field; } else { $merge_value = $p2->$field; }
+			$p1_val = $p1->$field_name;
+			$p2_val = $p2->$field_name;
+			
+			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 			
 			$info .= '<tr>';
 			$info .= '<td>'.$field.'</td>';
-			$info .= '<td>'.print_r($p1->$field,true).'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.print_r($p2->$field,true).'</td>';
-			//$info .= '<td>'.print_r($p1->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field_name,true).'</td>';
-			//$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
+			$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
 			$info .= '</tr>';
 		}
 		
@@ -289,8 +290,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$p1_val = get_field($field_name, $p1->ID, false);
 				$p2_val = get_field($field_name, $p2->ID, false);
 				
+				if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
+				
 				$info .= '<tr>';
-				$info .= '<td>'.$field.'</td>';
+				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
 				$info .= '</tr>';
 			
