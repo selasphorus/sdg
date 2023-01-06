@@ -244,7 +244,14 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $info .= '<form class="sdg_merge_form '.$form_type.'">';
     
     if ( count($arr_posts) == 2 ) {
-    
+		
+		// TODO: give user choice of which post to treat as primary?
+		$p1 = $arr_posts[0];
+		$p2 = $arr_posts[1];
+    	
+    	$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
+    	$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
+    	
 		$info .= '<table>';
 		$info .= '<tr><th></th><th>Merged</th><th></th></tr>';
 		
@@ -256,11 +263,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if () { $merge_value = ""; }
 			*/
 			$merge_value = $field; // tft
-			
+			/*
 			$info .= '<tr>';
-			$info .= '<td>'.print_r($arr_posts[0]->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($arr_posts[1]->$field_name,true).'</td>';
+			$info .= '<td>'.print_r($p1->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field_name,true).'</td>';
 			//$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
 			$info .= '</tr>';
+			*/
 		}
 				
 		$info .= '</table>';
