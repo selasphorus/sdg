@@ -263,9 +263,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if () { $merge_value = ""; }
 			*/
 			$merge_value = $field; // tft
+			//$p1_value = get_post_field( $field, $p1->ID );
 			
 			$info .= '<tr>';
-			$info .= '<td>'.print_r($p1->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field_name,true).'</td>';
+			$info .= '<td>'.print_r($p1->$field,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field,true).'</td>';
+			//$info .= '<td>'.print_r($p1->$field_name,true).'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.print_r($p2->$field_name,true).'</td>';
 			//$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
 			$info .= '</tr>';
 		}
