@@ -2201,7 +2201,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 		$related_events_info = $related_events['info'];
 	
 		if ( $event_posts ) {
-			$info .= "<br /><em>This work appears in [".count($event_posts)."] event program(s).</em>";
+			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_posts).'] event program(s).</span>';
 		}
         
         if ( $rep_info != "" ) {
