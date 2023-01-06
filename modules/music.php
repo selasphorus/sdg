@@ -1793,7 +1793,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             	// Check to see if component relates to repertoire_category
             	if ( $post_type == "repertoire" ) {
             		
-            		$troubleshooting .= "tq component: <pre>".print_r($component,true)."</pre>";
+            		$troubleshooting .= "component: <pre>".print_r($component,true)."</pre>";
             		
 					/*// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
 					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
