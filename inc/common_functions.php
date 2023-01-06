@@ -180,7 +180,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // Turn the list of IDs into a proper array
     if ( !empty($a['ids']) ) {
     	$post_ids         = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
-		$args['post__in'] = $a['ids']; // pass string as arg to be processed by birdhive_get_posts
+		$args['ids'] = $a['ids']; // pass string as arg to be processed by birdhive_get_posts
     }
     
     if ( count($post_ids) < 1 ) {
