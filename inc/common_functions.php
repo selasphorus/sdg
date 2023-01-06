@@ -151,7 +151,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     $a = shortcode_atts( array(
 		'post_type'    => 'post',
-		'fields'       => null,
+		'post_ids'     => "",
         'form_type'    => 'simple_search',
         'limit'        => '-1'
     ), $atts );
