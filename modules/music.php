@@ -1690,6 +1690,21 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         
         if ( $post_type == "repertoire" ) {
         	// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
+        	// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+        	$query_component = array (
+				'taxonomy' => 'repertoire_category',
+                'field'    => 'slug',
+				'terms'    => array('organ-works'),
+                'operator' => 'NOT IN',
+                //'include_children' => true,
+			);
+			
+			// Add query component to the appropriate components array
+			if ( $query_assignment == "primary" ) {
+				$tq_components_primary[] = $query_component;
+			} else {
+				$tq_components_related[] = $query_component;
+			}
         }
         
         //$troubleshooting .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
