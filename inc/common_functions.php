@@ -160,6 +160,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $form_type = $a['form_type'];
     $limit = $a['limit'];
     
+	// Set post_status options based on user role
+	if ( current_user_can('read_repertoire') ) {
+		$post_status = array( 'publish', 'private', 'draft' );
+	} else {
+		$post_status = 'publish';
+	}
+    
     // Set up basic query args for retrieval of posts to merge
     $args = array(
 		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
@@ -167,7 +174,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		'posts_per_page'  => $limit, //-1, //$posts_per_page,
         'orderby'         => 'title',
         'order'           => 'ASC',
-        'return_fields'   => 'ids',
+        //'return_fields'   => 'ids', // ?
 	);
 	
     // Turn the list of IDs into a proper array
@@ -180,16 +187,177 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$troubleshooting .= "Not enough post_ids submitted.<br />";
     }
     
-    
     //$info .= "form_type: $form_type<br />"; // tft
 
-	// Set post_status options based on user role
-	if ( current_user_can('read_repertoire') ) {
-		$post_status = array( 'publish', 'private', 'draft' );
-	} else {
-		$post_status = 'publish';
-	}
-    
+    // If post_ids have been submitted, then run the query
+    if ( count($post_ids) > 1 ) {
+            
+            $troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+            
+            // Get posts matching the assembled args
+            // =====================================
+            $posts_info = birdhive_get_posts( $args );
+            
+            if ( isset($posts_info['arr_posts']) ) {
+                
+                $arr_posts = $posts_info['arr_posts']->posts;
+                //$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
+                //$troubleshooting .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
+                //$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+                
+                $info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
+                //$troubleshooting .= $posts_info['info']."<hr />";
+                //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+                
+                // Print last SQL query string
+                global $wpdb;
+                $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+                //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+                
+            }
+            
+            /*
+            if ( $args_related ) {
+                
+                $troubleshooting .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
+                
+                $troubleshooting .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
+                //$related_posts_info = birdhive_get_posts( $args_related );
+                
+                if ( isset($related_posts_info['arr_posts']) ) {
+                
+                    $arr_related_post_ids = $related_posts_info['arr_posts']->posts;
+                    $troubleshooting .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
+                    //$troubleshooting .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
+
+                    $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
+                    //$troubleshooting .= $related_posts_info['info']."<hr />";
+                    //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+
+                    // Print last SQL query string
+                    global $wpdb;
+                    $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+                    //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+                    
+                    // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
+                    if ( !empty($arr_post_ids) ) {
+                        
+                        $related_post_field_name = "repertoire_editions"; // TODO: generalize!
+                        
+                        $full_match_ids = array(); // init
+                        
+                        // Search through the smaller of the two data sets and find posts that overlap both sets; return only those
+                        // TODO: eliminate redundancy
+                        if ( count($arr_post_ids) > count($arr_related_post_ids) ) {
+                            // more rep than edition records
+                            $troubleshooting .= "more rep than edition records >> loop through arr_related_post_ids<br />";
+                            foreach ( $arr_related_post_ids as $tmp_id ) {
+                                $troubleshooting .= "tmp_id: $tmp_id<br />";
+                                $tmp_posts = get_field($related_post_field_name, $tmp_id); // repertoire_editions
+                                if ( empty($tmp_posts) ) { $tmp_posts = get_field('musical_work', $tmp_id); } // WIP/tmp
+                                if ( $tmp_posts ) {
+                                    foreach ( $tmp_posts as $tmp_match ) {
+                                        // Get the ID
+                                        if ( is_object($tmp_match) ) {
+                                            $tmp_match_id = $tmp_match->ID;
+                                        } else {
+                                            $tmp_match_id = $tmp_match;
+                                        }
+                                        // Look
+                                        if ( in_array($tmp_match_id, $arr_post_ids) ) {
+                                            // it's a full match -- keep it
+                                            $full_match_ids[] = $tmp_match_id;
+                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- FOUND in arr_post_ids<br />";
+                                        } else {
+                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- NOT found in arr_post_ids<br />";
+                                        }
+                                    }
+                                } else {
+                                    $troubleshooting .= "No $related_post_field_name records found matching related_post_id $tmp_id<br />";
+                                }
+                            }
+                        } else {
+                            // more editions than rep records
+                            $troubleshooting .= "more editions than rep records >> loop through arr_post_ids<br />";
+                            foreach ( $arr_post_ids as $tmp_id ) {
+                                $tmp_posts = get_field($related_post_field_name, $tmp_id); // repertoire_editions
+                                if ( empty($tmp_posts) ) { $tmp_posts = get_field('related_editions', $tmp_id); } // WIP/tmp
+                                if ( $tmp_posts ) {
+                                    foreach ( $tmp_posts as $tmp_match ) {
+                                        // Get the ID
+                                        if ( is_object($tmp_match) ) {
+                                            $tmp_match_id = $tmp_match->ID;
+                                        } else {
+                                            $tmp_match_id = $tmp_match;
+                                        }
+                                        // Look for a match in arr_post_ids
+                                        if ( in_array($tmp_match_id, $arr_related_post_ids) ) {
+                                            // it's a full match -- keep it
+                                            $full_match_ids[] = $tmp_match_id;
+                                        } else {
+                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- NOT in arr_related_post_ids<br />";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        //$arr_post_ids = array_merge($arr_post_ids, $arr_related_post_ids); // Merge $arr_related_posts into arr_post_ids -- nope, too simple
+                        $arr_post_ids = $full_match_ids;
+                        $troubleshooting .= "Num full_match_ids: [".count($full_match_ids)."]".'</div>';
+                        
+                    } else {
+                        $arr_post_ids = $arr_related_post_ids;
+                    }
+
+                }
+            }
+            */
+            
+            // 
+            
+            /*if ( !empty($arr_post_ids) ) {
+                    
+                //$troubleshooting .= "Num matching posts found (raw results): [".count($arr_post_ids)."]"; 
+                $info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_post_ids)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
+                $info .= format_search_results($arr_post_ids);
+
+            } else {
+                
+                $info .= "No matching items found.<br />";
+                
+            } // END if ( !empty($arr_post_ids) )*/
+            
+            
+            /*if ( isset($posts_info['arr_posts']) ) {
+                
+                $arr_posts = $posts_info['arr_posts'];//$posts_info['arr_posts']->posts; // Retrieves an array of WP_Post Objects
+                
+                $troubleshooting .= $posts_info['info']."<hr />";
+                //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+                
+                if ( !empty($arr_posts) ) {
+                    
+                    $troubleshooting .= "Num matching posts found (raw results): [".count($arr_posts->posts)."]"; 
+                    //$info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_posts->posts)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
+               
+                    if ( count($arr_posts->posts) == 0 ) { // || $form_type == "advanced_search"
+                        //$troubleshooting .= "args: <pre>".print_r($args,true)."</pre>"; // tft
+                    }
+                    
+                    // Print last SQL query string
+                    global $wpdb;
+                    $troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+
+                    $info .= format_search_results($arr_posts);
+                    
+                } // END if ( !empty($arr_posts) )
+                
+            } else {
+                $troubleshooting .= "No arr_posts retrieved.<br />";
+            }*/
+            
+        }
+        
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
     // post_title, content, excerpt, post_thumbnail (featured image)
     // author, post_status, date published, date last modified -- read only?
@@ -903,177 +1071,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
         */
         
         
-        // If post_ids have been submitted, then run the query
-        if ( count($post_ids) > 1 ) {
-            
-            $troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
-            
-            // Get posts matching the assembled args
-            // =====================================
-            /*if ( $form_type == "advanced_search" ) {
-                //$troubleshooting .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
-                $posts_info = birdhive_get_posts( $args );
-            } else {
-                $posts_info = birdhive_get_posts( $args );
-            }*/
-            
-            /*if ( isset($posts_info['arr_posts']) ) {
-                
-                $arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
-                $troubleshooting .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-                //$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
-                
-                $info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-                //$troubleshooting .= $posts_info['info']."<hr />";
-                //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
-                
-                // Print last SQL query string
-                global $wpdb;
-                $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-                //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
-                
-            }*/
-            /*
-            if ( $args_related ) {
-                
-                $troubleshooting .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
-                
-                $troubleshooting .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
-                //$related_posts_info = birdhive_get_posts( $args_related );
-                
-                if ( isset($related_posts_info['arr_posts']) ) {
-                
-                    $arr_related_post_ids = $related_posts_info['arr_posts']->posts;
-                    $troubleshooting .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
-                    //$troubleshooting .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
-
-                    $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
-                    //$troubleshooting .= $related_posts_info['info']."<hr />";
-                    //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
-
-                    // Print last SQL query string
-                    global $wpdb;
-                    $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-                    //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
-                    
-                    // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
-                    if ( !empty($arr_post_ids) ) {
-                        
-                        $related_post_field_name = "repertoire_editions"; // TODO: generalize!
-                        
-                        $full_match_ids = array(); // init
-                        
-                        // Search through the smaller of the two data sets and find posts that overlap both sets; return only those
-                        // TODO: eliminate redundancy
-                        if ( count($arr_post_ids) > count($arr_related_post_ids) ) {
-                            // more rep than edition records
-                            $troubleshooting .= "more rep than edition records >> loop through arr_related_post_ids<br />";
-                            foreach ( $arr_related_post_ids as $tmp_id ) {
-                                $troubleshooting .= "tmp_id: $tmp_id<br />";
-                                $tmp_posts = get_field($related_post_field_name, $tmp_id); // repertoire_editions
-                                if ( empty($tmp_posts) ) { $tmp_posts = get_field('musical_work', $tmp_id); } // WIP/tmp
-                                if ( $tmp_posts ) {
-                                    foreach ( $tmp_posts as $tmp_match ) {
-                                        // Get the ID
-                                        if ( is_object($tmp_match) ) {
-                                            $tmp_match_id = $tmp_match->ID;
-                                        } else {
-                                            $tmp_match_id = $tmp_match;
-                                        }
-                                        // Look
-                                        if ( in_array($tmp_match_id, $arr_post_ids) ) {
-                                            // it's a full match -- keep it
-                                            $full_match_ids[] = $tmp_match_id;
-                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- FOUND in arr_post_ids<br />";
-                                        } else {
-                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- NOT found in arr_post_ids<br />";
-                                        }
-                                    }
-                                } else {
-                                    $troubleshooting .= "No $related_post_field_name records found matching related_post_id $tmp_id<br />";
-                                }
-                            }
-                        } else {
-                            // more editions than rep records
-                            $troubleshooting .= "more editions than rep records >> loop through arr_post_ids<br />";
-                            foreach ( $arr_post_ids as $tmp_id ) {
-                                $tmp_posts = get_field($related_post_field_name, $tmp_id); // repertoire_editions
-                                if ( empty($tmp_posts) ) { $tmp_posts = get_field('related_editions', $tmp_id); } // WIP/tmp
-                                if ( $tmp_posts ) {
-                                    foreach ( $tmp_posts as $tmp_match ) {
-                                        // Get the ID
-                                        if ( is_object($tmp_match) ) {
-                                            $tmp_match_id = $tmp_match->ID;
-                                        } else {
-                                            $tmp_match_id = $tmp_match;
-                                        }
-                                        // Look for a match in arr_post_ids
-                                        if ( in_array($tmp_match_id, $arr_related_post_ids) ) {
-                                            // it's a full match -- keep it
-                                            $full_match_ids[] = $tmp_match_id;
-                                        } else {
-                                            $troubleshooting .= "$related_post_field_name tmp_match_id: $tmp_match_id -- NOT in arr_related_post_ids<br />";
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //$arr_post_ids = array_merge($arr_post_ids, $arr_related_post_ids); // Merge $arr_related_posts into arr_post_ids -- nope, too simple
-                        $arr_post_ids = $full_match_ids;
-                        $troubleshooting .= "Num full_match_ids: [".count($full_match_ids)."]".'</div>';
-                        
-                    } else {
-                        $arr_post_ids = $arr_related_post_ids;
-                    }
-
-                }
-            }
-            */
-            
-            // 
-            
-            /*if ( !empty($arr_post_ids) ) {
-                    
-                //$troubleshooting .= "Num matching posts found (raw results): [".count($arr_post_ids)."]"; 
-                $info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_post_ids)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
-                $info .= format_search_results($arr_post_ids);
-
-            } else {
-                
-                $info .= "No matching items found.<br />";
-                
-            } // END if ( !empty($arr_post_ids) )*/
-            
-            
-            /*if ( isset($posts_info['arr_posts']) ) {
-                
-                $arr_posts = $posts_info['arr_posts'];//$posts_info['arr_posts']->posts; // Retrieves an array of WP_Post Objects
-                
-                $troubleshooting .= $posts_info['info']."<hr />";
-                //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
-                
-                if ( !empty($arr_posts) ) {
-                    
-                    $troubleshooting .= "Num matching posts found (raw results): [".count($arr_posts->posts)."]"; 
-                    //$info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_posts->posts)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
-               
-                    if ( count($arr_posts->posts) == 0 ) { // || $form_type == "advanced_search"
-                        //$troubleshooting .= "args: <pre>".print_r($args,true)."</pre>"; // tft
-                    }
-                    
-                    // Print last SQL query string
-                    global $wpdb;
-                    $troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
-
-                    $info .= format_search_results($arr_posts);
-                    
-                } // END if ( !empty($arr_posts) )
-                
-            } else {
-                $troubleshooting .= "No arr_posts retrieved.<br />";
-            }*/
-            
-        }
+        
 		
     $info .= '<div class="troubleshootingX">';
     $info .= $troubleshooting;
