@@ -152,7 +152,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $a = shortcode_atts( array(
 		'post_type'    => 'post',
 		'post_ids'     => null,
-        'form_type'    => 'simple_search',
+        'form_type'    => 'simple_merge',
         'limit'        => '-1'
     ), $atts );
     
@@ -177,10 +177,17 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     //$info .= "form_type: $form_type<br />"; // tft
 
+	// Set post_status options based on user role
+	if ( current_user_can('read_repertoire') ) {
+		$post_status = array( 'publish', 'private', 'draft' );
+	} else {
+		$post_status = 'publish';
+	}	
+	
     // Set up basic query args
     $args = array(
 		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
-		'post_status'     => 'publish',
+		'post_status'     => $post_status,
 		'posts_per_page'  => $limit, //-1, //$posts_per_page,
         'orderby'         => 'title',
         'order'           => 'ASC',
@@ -188,20 +195,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
         //ids = post_ids // WIP
 	);
     
-    /*    
-        // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
-        //$arr_fields = get_fields...;
-        //$info .= print_r($arr_fields, true); // tft
+    // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
+    // post_title, content, excerpt, post_thumbnail (featured image)
+    // author, post_status, date published, date last modified -- read only?
+    //$arr_fields = get_fields...;
+    //$info .= print_r($arr_fields, true); // tft
+    
+    // Get all ACF field groups associated with the post_type
+    $field_groups = acf_get_field_groups( array( 'post_type' => $post_type ) );
+    $troubleshooting .= "field_groups for post_type '$post_type': <pre>".print_r($field_groups,true)."</pre>";
+    
+    // Get all taxonomies associated with the post_type
+    $taxonomies = get_object_taxonomies( $post_type );
+    $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
         
-        $info .= '<form class="sdg_merge_form '.$form_type.'">';
-        
-        // Get all ACF field groups associated with the post_type
-        $field_groups = acf_get_field_groups( array( 'post_type' => $post_type ) );
-        
-        // Get all taxonomies associated with the post_type
-        $taxonomies = get_object_taxonomies( $post_type );
-        //$info .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>"; // tft
-        
+    $info .= '<form class="sdg_merge_form '.$form_type.'">';
+    
+    /*
         // Loop through the field names and create the actual form fields
         foreach ( $arr_fields as $arr_field ) {
             
@@ -824,7 +834,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                     $info .= $input_html;
                     
                 } else {
-                    $input_class = "simple_search";
+                    $input_class = "simple_merge";
                     $info .= '<input type="text" id="'.$field_name.'" name="'.$field_name.'" placeholder="'.$placeholder.'" value="'.$field_value.'" class="'.$input_class.'" />';
                 }
                 
