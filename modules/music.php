@@ -1688,27 +1688,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         $mq_components = array();
         $tq_components = array();
         
-        if ( $post_type == "repertoire" ) {
-        	// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
-        	// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
-        	$query_component = array (
-				'taxonomy' => 'repertoire_category',
-                'field'    => 'slug',
-				'terms'    => array('organ-works'),
-                'operator' => 'NOT IN',
-                //'include_children' => true,
-			);
-			
-			// Add query component to the appropriate components array
-			if ( $query_assignment == "primary" ) {
-				$tq_components_primary[] = $query_component;
-			} else {
-				$tq_components_related[] = $query_component;
-			}
-        }
-        
         //$troubleshooting .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
-        $troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
+        //$troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
         //$troubleshooting .= "mq_components_related: <pre>".print_r($mq_components_related,true)."</pre>"; // tft
         //$troubleshooting .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; // tft
         
@@ -1819,6 +1800,24 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 $tax_query['relation'] = $search_operator;
             }
             foreach ( $tq_components_primary AS $component ) {
+            
+            	// Check to see if component relates to repertoire_category
+            	 
+            	if ( $post_type == "repertoire" ) {
+            		
+            		$troubleshooting .= "tq component: <pre>".print_r($component,true)."</pre>";
+            		
+					/*// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
+					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+					$query_component = array (
+						'taxonomy' => 'repertoire_category',
+						'field'    => 'slug',
+						'terms'    => array('organ-works'),
+						'operator' => 'NOT IN',
+						//'include_children' => true,
+					);
+					*/
+				}
                 $tax_query[] = $component;
             }
             if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
