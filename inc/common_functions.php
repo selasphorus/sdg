@@ -146,7 +146,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	$info = "";
     $troubleshooting = "";
     
-    $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; // tft
+    if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
     $a = shortcode_atts( array(
@@ -165,7 +165,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$post_ids = array();
     }
     
-    $troubleshooting .= 'post_ids: <pre>'.print_r($post_ids,true).'</pre>'; // tft
+    if ( !empty($post_ids) ) { $troubleshooting .= 'post_ids: <pre>'.print_r($post_ids,true).'</pre>'; }
     
     if ( count($post_ids) < 1 ) {
     	$troubleshooting .= "Not enough post_ids submitted.<br />";
