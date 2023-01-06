@@ -156,24 +156,30 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
         'limit'        => '-1'
     ), $atts );
     
-    $post_ids_str = $a['ids'];
-    // Check to see if any post_ids have been designated via the shortcode attributes
-    if ( !empty($post_ids_str) ) {        
-        // Turn the list into an array
-        $post_ids = sdg_att_explode( $post_ids_str );
-    } else {
-    	$post_ids = array();
-    }
+    $post_type = $a['post_type'];
+    $form_type = $a['form_type'];
+    $limit = $a['limit'];
     
-    if ( !empty($post_ids) ) { $troubleshooting .= 'post_ids: <pre>'.print_r($post_ids,true).'</pre>'; }
+    // Set up basic query args for retrieval of posts to merge
+    $args = array(
+		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+		'post_status'     => $post_status,
+		'posts_per_page'  => $limit, //-1, //$posts_per_page,
+        'orderby'         => 'title',
+        'order'           => 'ASC',
+        'return_fields'   => 'ids',
+	);
+	
+    // Turn the list of IDs into a proper array
+    if ( !empty($a['ids']) ) {
+    	$post_ids         = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
+		$args['post__in'] = $post_ids;
+    }
     
     if ( count($post_ids) < 1 ) {
     	$troubleshooting .= "Not enough post_ids submitted.<br />";
     }
     
-    $post_type = $a['post_type'];
-    $form_type = $a['form_type'];
-    $limit = $a['limit'];
     
     //$info .= "form_type: $form_type<br />"; // tft
 
@@ -182,18 +188,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$post_status = array( 'publish', 'private', 'draft' );
 	} else {
 		$post_status = 'publish';
-	}	
-	
-    // Set up basic query args
-    $args = array(
-		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
-		'post_status'     => $post_status,
-		'posts_per_page'  => $limit, //-1, //$posts_per_page,
-        'orderby'         => 'title',
-        'order'           => 'ASC',
-        'return_fields'   => 'ids',
-        //ids = post_ids // WIP
-	);
+	}
     
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
     // post_title, content, excerpt, post_thumbnail (featured image)
