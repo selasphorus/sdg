@@ -2160,7 +2160,10 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
     $info .= '<table class="choirplanner search_results">';
-    $info .= '<tr><th></th><th>Musical Work</th><th>Editions</th></tr>';
+    $info .= '<tr>';
+    $info .= '<th class="" style="width: 1.5rem;"></th>'; // TODO: replace inline style w/ proper class
+    $info .= '<th>Musical Work</th><th>Editions</th>';
+    $info .= '</tr>';
     
     foreach ( $rep_ids as $rep_id ) {
         
@@ -2172,7 +2175,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         
         $info .= '<tr>';
         //
-        $info .= '<td class="" style="width: 1.5rem;">'; // TODO: replace inline style w/ proper class
+        $info .= '<td class="">';
         $info .= "*";
         $info .= '</td>';
         //
