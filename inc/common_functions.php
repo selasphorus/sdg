@@ -265,10 +265,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 			
-			$info .= '<tr>';
-			$info .= '<td>'.$field.'</td>';
-			$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
-			$info .= '</tr>';
+			if ( !(empty($p1_val) && empty($p2_val)) ) { 
+				$info .= '<tr>';
+				$info .= '<td>'.$field.'</td>';
+				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
+				$info .= '</tr>';
+			}
 		}
 		
 		foreach ( $field_groups as $group ) {
@@ -292,10 +294,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 				
-				$info .= '<tr>';
-				$info .= '<td>'.$field_name.'</td>';
-				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
-				$info .= '</tr>';
+				if ( !(empty($p1_val) && empty($p2_val)) ) {
+					$info .= '<tr>';
+					$info .= '<td>'.$field_name.'</td>';
+					$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
+					$info .= '</tr>';
+				}
 			
 				/*
 				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
