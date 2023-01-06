@@ -202,7 +202,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                 
                 $arr_posts = $posts_info['arr_posts']->posts;
                 //$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
-                //$troubleshooting .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
+                $troubleshooting .= "Num arr_posts: [".count($arr_posts)."]<br />";
                 //$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
                 
                 //$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
