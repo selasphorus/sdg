@@ -171,7 +171,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $args = array(
 		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
 		'post_status'     => $post_status,
-		'posts_per_page'  => $limit, //-1, //$posts_per_page,
+		//'posts_per_page'  => $limit, //-1, //$posts_per_page,
         'orderby'         => 'title',
         'order'           => 'ASC',
         //'return_fields'   => 'ids', // ?
@@ -210,9 +210,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                 //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
                 
                 // Print last SQL query string
-                global $wpdb;
+                //global $wpdb;
                 //$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-                $troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+                //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
                 
             }
             
