@@ -22,7 +22,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
         $info .= $rep_info;
     }
     
-    // Get Related Events
+    // Related Events
     $related_events = get_related_events ( "program_item", $post_id );
     $event_posts = $related_events['event_posts'];
     $related_events_info = $related_events['info'];
@@ -53,7 +53,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     
     wp_reset_query();
     
-    // Get Related Editions
+    // Related Editions
     $related_editions = get_field('related_editions', $post_id, false);
     
     if ( $related_editions &&
@@ -67,6 +67,33 @@ function get_cpt_repertoire_content( $post_id = null ) {
             $info .= make_link( get_the_permalink($edition_id), get_the_title($edition_id) ) . "<br />";
         }        
     }
+    
+    // Possible Duplicate Posts
+    /*$dupes = get_possible_duplicate_posts ( $post_id );
+    $duplicate_posts = $dupes['posts'];
+    $duplicate_posts_info = $dupes['info'];
+    
+    if ( $duplicate_posts ) { 
+        
+        $info .= "<h3>Possible Duplicate(s):</h3>";
+        $x = 1;
+        foreach($duplicate_posts as $duplicate_post) { 
+        
+            setup_postdata($duplicate_post);
+            //$info .= "[$x] duplicate_post: <pre>".print_r($duplicate_post, true)."</pre>"; // tft
+            $duplicate_post_id = $duplicate_post->ID;
+            
+            $info .= make_link( get_the_permalink($duplicate_post_id), $duplicate_post->post_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            
+            // TODO: build in merge options
+                        
+            $x++;
+        }
+    } else {
+        if ( devmode_active() ) { 
+            $info .= "<p>No duplicate posts were found.</p>"; // tft
+        }
+    }*/
     
     //$info .= "test"; // tft
 	
@@ -1794,7 +1821,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             	if ( $post_type == "repertoire" ) {
             		
             		$troubleshooting .= "component: <pre>".print_r($component,true)."</pre>";
-            		
+            		if ( $component['taxonomy'] == "repertoire_category" ) {
+            			//$component['terms']
+            			// Add 'AND' relation...
+            		}
 					/*// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
 					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
 					$query_component = array (
@@ -1804,6 +1834,21 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 						'operator' => 'NOT IN',
 						//'include_children' => true,
 					);
+					*/
+					/*
+					'tax_query'      => array(
+						'relation' => 'OR',
+						array(
+							'taxonomy' => 'product_type',
+							'field'    => 'slug',
+							'terms'    => array( 'simple', 'product_variation' ),
+							'operator' => 'IN',
+						),
+						array(
+							'taxonomy' => 'product_type',
+							'operator' => 'NOT EXISTS',
+						),
+					),
 					*/
 				}
 				
@@ -2115,7 +2160,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
     $info .= '<table class="choirplanner search_results">';
-    $info .= '<tr><th>Musical Work</th><th>Editions</th></tr>';
+    $info .= '<tr><th></th><th>Musical Work</th><th>Editions</th></tr>';
     
     foreach ( $rep_ids as $rep_id ) {
         
@@ -2126,6 +2171,10 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         if ( empty($title)) { $title = $post_title; }
         
         $info .= '<tr>';
+        //
+        $info .= '<td class="">';
+        $info .= '</td>';
+        //
         $info .= '<td class="repertoire">';
         $info .= '<div class="rep_item">';
         $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
