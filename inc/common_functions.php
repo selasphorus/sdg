@@ -240,8 +240,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
     $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
-        
+    
     $info .= '<form class="sdg_merge_form '.$form_type.'">';
+    
+    // TODO: add field(s) for submitting post_ids for merging?
     
     if ( count($arr_posts) == 2 ) {
 		
@@ -267,6 +269,51 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
 			$info .= '</tr>';
 		}
+		
+		foreach ( $field_groups as $group ) {
+
+			$group_key = $group['key'];
+			//$info .= "group: <pre>".print_r($group,true)."</pre>"; // tft
+			$group_title = $group['title'];
+			$group_fields = acf_get_fields($group_key); // Get all fields associated with the group
+			//$field_info .= "<hr /><strong>".$group_title."/".$group_key."] ".count($group_fields)." group_fields</strong><br />"; // tft
+
+			$i = 0;
+			foreach ( $group_fields as $group_field ) {
+
+				$i++;
+				
+				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
+				$field_name = $group_field['name'];
+				
+				$p1_val = get_field($field_name, $p1->ID, false);
+				$p2_val = get_field($field_name, $p2->ID, false);
+				
+				$info .= '<tr>';
+				$info .= '<td>'.$field.'</td>';
+				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
+				$info .= '</tr>';
+			
+				/*
+				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
+				$field_info .= "[$i] group_field: ".$group_field['key']."<br />";
+				$field_info .= "label: ".$group_field['label']."<br />";
+				$field_info .= "name: ".$group_field['name']."<br />";
+				$field_info .= "type: ".$group_field['type']."<br />";
+				if ( $group_field['type'] == "relationship" ) { $field_info .= "post_type: ".print_r($group_field['post_type'],true)."<br />"; }
+				if ( $group_field['type'] == "select" ) { $field_info .= "choices: ".print_r($group_field['choices'],true)."<br />"; }
+				$field_info .= "<br />";
+				//$field_info .= "[$i] group_field: ".$group_field['key']."/".$group_field['label']."/".$group_field['name']."/".$group_field['type']."/".$group_field['post_type']."<br />";
+				*/
+
+			}
+
+			if ( $field ) { 
+				//$field_info .= "break.<br />";
+				break;  // Once the field has been matched to a post_type field, there's no need to continue looping
+			}
+
+		} // END foreach ( $field_groups as $group )
 				
 		$info .= '</table>';
     }
