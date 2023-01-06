@@ -1073,7 +1073,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
             
         }
 
-    $info .= '<div class="troubleshooting">';
+    $info .= '<div class="troubleshootingX">';
     $info .= $troubleshooting;
     $info .= '</div>';
     
