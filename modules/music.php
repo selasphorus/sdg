@@ -1687,8 +1687,13 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         $args_related = null; // init
         $mq_components = array();
         $tq_components = array();
+        
+        if ( $post_type == "repertoire" ) {
+        	// TODO: exclude all posts with repertoire_category = "organ-works" (and children)
+        }
+        
         //$troubleshooting .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
-        //$troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
+        $troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
         //$troubleshooting .= "mq_components_related: <pre>".print_r($mq_components_related,true)."</pre>"; // tft
         //$troubleshooting .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; // tft
         
@@ -2188,7 +2193,17 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 $rep_info .= '</span>';
             }
         }
-
+        
+        // Get and display note of num event programs which include this work, if any
+        // Get Related Events
+		$related_events = get_related_events ( "program_item", $post_id );
+		$event_posts = $related_events['event_posts'];
+		$related_events_info = $related_events['info'];
+	
+		if ( $event_posts ) {
+			$info .= "Appears in ".count($event_posts)." event programs.";
+		}
+        
         if ( $rep_info != "" ) {
             $info .= "<br />".$rep_info;
         }
