@@ -151,12 +151,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     $a = shortcode_atts( array(
 		'post_type'    => 'post',
-		'post_ids'     => null,
+		'ids'     => null,
         'form_type'    => 'simple_merge',
         'limit'        => '-1'
     ), $atts );
     
-    $post_ids_str = $a['post_ids'];
+    $post_ids_str = $a['ids'];
     // Check to see if any post_ids have been designated via the shortcode attributes
     if ( !empty($post_ids_str) ) {        
         // Turn the list into an array
