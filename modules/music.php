@@ -1689,9 +1689,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         $tq_components = array();
         
         //$troubleshooting .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
-        //$troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
+        $troubleshooting .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
         //$troubleshooting .= "mq_components_related: <pre>".print_r($mq_components_related,true)."</pre>"; // tft
-        //$troubleshooting .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; // tft
+        $troubleshooting .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; // tft
         
         // If field values were found related to both post types,
         // AND if we're searching for posts that match ALL terms (search_operator: "and"),
