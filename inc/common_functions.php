@@ -205,13 +205,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                 //$troubleshooting .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
                 //$troubleshooting .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
                 
-                $info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
+                $info .= '<div class="troubleshootingX">'.$posts_info['info'].'</div>';
                 //$troubleshooting .= $posts_info['info']."<hr />";
                 //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
                 
                 // Print last SQL query string
                 global $wpdb;
-                $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+                $info .= '<div class="troubleshootingX">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
                 //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
                 
             }
