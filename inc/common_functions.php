@@ -254,10 +254,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_name = 'post_title';
 		
 			if () { $merge_value = ""; }
-			$info .= '<tr>';
-			$info .= '<td>'.$arr_posts[0]->post_title.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->post_title.'</td>';
-			$info .= '</tr>';
 			*/
+			$info .= '<tr>';
+			$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
+			$info .= '</tr>';
 		}
 				
 		$info .= '</table>';
