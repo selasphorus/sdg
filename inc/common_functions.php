@@ -255,6 +255,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 			if () { $merge_value = ""; }
 			*/
+			$merge_value = $field; // tft
+			
 			$info .= '<tr>';
 			$info .= '<td>'.$arr_posts[0]->$field_name.'</td>'.'<td>'.$merge_value.'</td>'.'<td>'.$arr_posts[1]->$field_name.'</td>';
 			$info .= '</tr>';
