@@ -263,6 +263,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p1_val = $p1->$field_name;
 			$p2_val = $p2->$field_name;
 			
+			// TODO: compare values/merge arrays
 			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) { 
@@ -294,6 +295,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$p2_val = get_field($field_name, $p2->ID, false);
 				if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
 				
+				// TODO: compare values/merge arrays
 				if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 				
 				if ( !(empty($p1_val) && empty($p2_val)) ) {
@@ -335,6 +337,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p2_val = $p2_terms;
 			if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
 			
+			// TODO: compare values/merge arrays
 			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
 			
 			/* e.g.
