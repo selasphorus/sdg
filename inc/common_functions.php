@@ -906,22 +906,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}
 		if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
         */
-            
+        
+        
         // If post_ids have been submitted, then run the query
         if ( count($post_ids) > 1 ) {
             
             $troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
             
             // Get posts matching the assembled args
-            /* ===================================== */
-            if ( $form_type == "advanced_search" ) {
+            // =====================================
+            /*if ( $form_type == "advanced_search" ) {
                 //$troubleshooting .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
                 $posts_info = birdhive_get_posts( $args );
             } else {
                 $posts_info = birdhive_get_posts( $args );
-            }
+            }*/
             
-            if ( isset($posts_info['arr_posts']) ) {
+            /*if ( isset($posts_info['arr_posts']) ) {
                 
                 $arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
                 $troubleshooting .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
@@ -936,8 +937,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                 $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
                 //$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
                 
-            }
-            
+            }*/
+            /*
             if ( $args_related ) {
                 
                 $troubleshooting .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
@@ -1032,10 +1033,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
                 }
             }
+            */
             
             // 
             
-            if ( !empty($arr_post_ids) ) {
+            /*if ( !empty($arr_post_ids) ) {
                     
                 //$troubleshooting .= "Num matching posts found (raw results): [".count($arr_post_ids)."]"; 
                 $info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_post_ids)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
@@ -1045,7 +1047,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
                 
                 $info .= "No matching items found.<br />";
                 
-            } // END if ( !empty($arr_post_ids) )
+            } // END if ( !empty($arr_post_ids) )*/
             
             
             /*if ( isset($posts_info['arr_posts']) ) {
@@ -1077,7 +1079,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
             }*/
             
         }
-
+		
     $info .= '<div class="troubleshootingX">';
     $info .= $troubleshooting;
     $info .= '</div>';
