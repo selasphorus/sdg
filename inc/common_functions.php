@@ -231,11 +231,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // Get all ACF field groups associated with the post_type
     $field_groups = acf_get_field_groups( array( 'post_type' => $post_type ) );
     //$troubleshooting .= "field_groups for post_type '$post_type': <pre>".print_r($field_groups,true)."</pre>";
-    $troubleshooting .= "field_groups for post_type '$post_type': <pre>";
+    /*$troubleshooting .= "field_groups for post_type '$post_type': <pre>";
     foreach ( $field_groups as $field_group ) {
     	$troubleshooting .= $field_group['title']."<br />";
     }
-    $troubleshooting .= "</pre>";
+    $troubleshooting .= "</pre>";*/
     
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
@@ -267,7 +267,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) { 
 				$info .= '<tr>';
-				$info .= '<td>'.$field.'</td>';
+				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
 				$info .= '</tr>';
 			}
@@ -323,7 +323,44 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 
 		} // END foreach ( $field_groups as $group )
-				
+		
+		foreach ( $taxonomies as $taxonomy ) {
+			
+			// Get terms... WIP
+			$p1_terms = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
+			$p2_terms = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
+			
+			$p1_val = $p1_terms;
+			if ( is_array($p1_val) ) { $p1_val = print_r($p1_val,true); } // tft
+			$p2_val = $p2_terms;
+			if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
+			
+			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
+			
+			/* e.g.
+			$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
+			if ( count($rep_categories) > 0 ) {
+				foreach ( $rep_categories as $category ) {
+					if ( $category != "Choral Works" ) {
+						$rep_info .= '<span class="category">';
+						$rep_info .= $category;
+						$rep_info .= '</span>';
+					}                
+				}
+				//$rep_info .= "Categories: ";
+				//$rep_info .= implode(", ",$rep_categories);
+				//$rep_info .= "<br />";
+			}
+			*/
+			
+			if ( !(empty($p1_val) && empty($p2_val)) ) { 
+				$info .= '<tr>';
+				$info .= '<td>'.$taxonomy.'</td>';
+				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
+				$info .= '</tr>';
+			}
+		}
+			
 		$info .= '</table>';
     }
     
