@@ -245,7 +245,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     if ( count($arr_posts) == 2 ) {
 		$info .= '<table>';
-		$info .= '<tr><th><th><th>Merged<th><th><th></tr>';
+		$info .= '<tr><th></th><th>Merged</th><th></th></tr>';
+		
 		$info .= '<tr>';
 		$info .= '<td>'.$arr_posts[0]->post_title.'</td>'.'<td></td>'.'<td>'.$arr_posts[1]->post_title.'</td>';
 		$info .= '</tr>';
