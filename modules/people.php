@@ -165,17 +165,17 @@ function get_person_dates( $post_id, $styled = false ) {
     $death_year = get_post_meta( $post_id, 'death_year', true );
     $dates = get_post_meta( $post_id, 'dates', true );
 
-    if ( $birth_year != "" && $death_year != "" ) {
+    if ( !empty($birth_year) && !empty($death_year) ) {
         $info .= "(".$birth_year."-".$death_year.")";
-    } else if ( $birth_year != "" ) {
+    } else if ( !empty($birth_year) ) {
         $info .= "(b. ".$birth_year.")";
-    } else if ( $death_year != "" ) {
+    } else if ( !empty($death_year) ) {
         $info .= "(d. ".$death_year.")";
-    } else if ( $dates != "" ) {
+    } else if ( !empty($dates) ) {
         $info .= "(".$dates.")";
     }
     
-    if ( $info != "") {
+    if ( !empty($info) ) {
         if ( $styled == true ) {
             $info = ' <span class="person_dates">'.$info.'</span>';
         } else {
