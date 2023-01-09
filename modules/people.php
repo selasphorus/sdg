@@ -29,9 +29,9 @@ function get_cpt_person_content( $post_id = null ) {
         $info .= $dates; 
     }
     
-    $info .= "<!-- content -->";
+    /*$info .= "<!-- content -->";
     $info .= get_the_content($post_id);
-    $info .= "<!-- /content -->";
+    $info .= "<!-- /content -->";*/
     
     // TODO: consider eliminating check for has_term, in case someone forgot to apply the appropriate category
     if ( has_term( 'composers', 'people_category', $post_id ) ) {
