@@ -13,6 +13,8 @@ if ( !function_exists( 'add_action' ) ) {
 
 function get_cpt_person_content( $post_id = null ) {
 	
+	// This function retrieves supplementary info -- the regular content template (content.php) handles title, content, featured image
+	
     $info = ""; // init
     if ($post_id === null) { $post_id = get_the_ID(); }
     
@@ -20,24 +22,17 @@ function get_cpt_person_content( $post_id = null ) {
         return false;
     }
     
-    // Person name (post title)
-    //$info .= get_the_title($post_id);
-    
+    /*
+    // TODO: figure out where to put this -- probably appended to post_title?
     $dates = get_person_dates( $post_id, true );
     if ( $dates && $dates != "" && $dates != "(-)" ) { 
-        //$info .= get_the_title($post_id);
         $info .= $dates; 
-    }
-    
-    /*$info .= "<!-- content -->";
-    $info .= get_the_content($post_id);
-    $info .= "<!-- /content -->";*/
+    }*/
     
     // TODO: consider eliminating check for has_term, in case someone forgot to apply the appropriate category
     if ( has_term( 'composers', 'people_category', $post_id ) ) {
         // Get compositions
         $arr_obj_compositions = get_related_posts( $post_id, 'repertoire', 'composer' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
-        //if ( is_dev_site() ) {
         if ( $arr_obj_compositions ) {
             
             $info .= "<h3>Compositions:</h3>";
@@ -49,7 +44,6 @@ function get_cpt_person_content( $post_id = null ) {
                 $info .= make_link( get_permalink($composition->ID), $rep_info )."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
             }
         }
-        //}
     }
     
     // TODO: arranger, transcriber, translator, librettist
