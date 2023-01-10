@@ -339,8 +339,10 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
 		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id ) ) { 
+			$info .= "<!-- No fixed_date_str found. -->";
 			$fixed_date_str = ""; 
 		} else {
+			$info .= "<!-- fixed_date_str: ".$fixed_date_str." -->";
 			$dates[] = $fixed_date_str;
 		}		
 	} else {
@@ -364,6 +366,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 			$date_assigned = get_sub_field('date_assigned');
 			$replacement_date = get_sub_field('replacement_date');
 			$year_assigned = substr($date_assigned, 0, 4);
+			$info .= "<!-- date_assigned: ".$date_assigned." (".$year_assigned.") -->";
 			if ( $year_assigned == $year ) {
 				if ( $replacement_date == "1" ) {
 					if ( $date_assigned != $fixed_date_str ) {
