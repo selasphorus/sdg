@@ -264,7 +264,20 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p2_val = $p2->$field_name;
 			
 			// TODO: compare values/merge arrays
-			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
+			if ( !empty($p1_val) ) {
+				if ( !empty($p2_val) ) {
+					// If both values are arrays, then merge them
+					if ( is_array($p1_val) && is_array($p2_val) ) {
+						$merge_value = array_unique(array_merge($p1_val, $p1_val));
+					} else {
+						//$merge_value = $p1_val;
+					}
+				} else {
+					$merge_value = $p1_val;
+				}				
+			} else {
+				$merge_value = $p2_val;
+			}
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) { 
 				$info .= '<tr>';
