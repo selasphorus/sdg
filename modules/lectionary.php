@@ -514,6 +514,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
     $date_str = date("Y-m-d",strtotime($the_date));
+    $year = substr($date_str, 0, 4); // for checking display_dates later in the fcn
     //
     if ( isset($litdates['posts'][$date_str]) ) { 
     	$litdate_posts = $litdates['posts'][$date_str];
@@ -534,31 +535,11 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $litdate_id = null; // init
     
     // WIP
-    if ( $num_litdate_posts == 0 ) {
+    if ( $num_litdate_posts == 0 ) {    
+    	$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->";
+    }
     
-    	$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
-    	
-    } else if ( $num_litdate_posts == 1 ) {
-        
-        $litdate_post = $litdate_posts[0];
-        $litdate_id = $litdate_post->ID;
-        $info .= "<!-- Single litdate_post found (id: $litdate_id) -->"; // tft
-        // Make sure this litdate should in fact be shown on this date this year
-        // TODO: make this more efficient and reusable
-        $year = substr($date_str, 0, 4);
-        $display_dates_info = get_display_dates ( $litdate_id, $year );
-        $info .= $display_dates_info['info'];
-        $display_dates = $display_dates_info['dates'];
-        $info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
-        if ( !in_array($date_str, $display_dates) ) {
-        	$info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
-        	// Therefore don't show it.
-        	$litdate_id = null;
-        }
-        //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
-        //$litdate_post_id = $litdate_posts[0]['ID'];
-        
-    } else if ( $num_litdate_posts > 1 ) {
+    if ( $num_litdate_posts > 0 ) {
         
         // ... multiple matches? prioritize... pick one and then fetch the ONE litdate, collect, &c.
         
@@ -570,8 +551,17 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $litdate_id = $litdate_post->ID;
             $info .= "<!-- litdate_post->ID: ".$litdate_id." -->"; // tft
             
-            // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden
-            //WIP $display_dates = get_display_dates ( $litdate_id, $year );
+            // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
+			$display_dates_info = get_display_dates ( $litdate_id, $year );
+			$info .= $display_dates_info['info'];
+			$display_dates = $display_dates_info['dates'];
+			$info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
+			if ( !in_array($date_str, $display_dates) ) {
+				$info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
+				// Therefore don't show it.
+				next;
+			}
+            
             // Get date_type (fixed, calculated, assigned)
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
             $info .= "<!-- date_type: ".$date_type." -->"; // tft
