@@ -334,11 +334,15 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	
 	// Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $post_id, 'date_type', true );
-    $info .= "<!-- litdate post_id: ".$post_id."; date_type: ".$date_type." -->"; // tft
+    $info .= "<!-- litdate post_id: ".$post_id."; date_type: ".$date_type." -->";
          
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
-		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id )  ) { $fixed_date_str = ""; }
+		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id ) ) { 
+			$fixed_date_str = ""; 
+		} else {
+			$dates[] = $fixed_date_str;
+		}		
 	} else {
 		// For variable dates, get date calculations
 		// TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
@@ -369,7 +373,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 						break;
 					}
 				} else {
-					$dates[] = $fixed_date_str;
+					$dates[] = $date_assigned;
 				}
 			}
 		endwhile;
