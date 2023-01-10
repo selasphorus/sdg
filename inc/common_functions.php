@@ -312,6 +312,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// If both values are arrays, then merge them
 				if ( is_array($p1_val) && is_array($p2_val) ) {
 					$merge_value = array_unique(array_merge($p1_val, $p1_val));
+					$info .= "Merged arrays!";
 				} else if ( !empty($p1_val) ) {
 					// If p1_val is not empty, then compare it to p2_val
 					if ( !empty($p2_val) ) {
