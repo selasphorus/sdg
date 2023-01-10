@@ -394,11 +394,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( is_array($p2_val) ) { $p2_val_str = print_r($p2_val,true)."*"; } else { $p2_val_str = $p2_val; }
 			if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true)."*"; } else { $merge_value_str = $merge_value; }
 			
+			if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
+			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
 				$info .= '<tr>';
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
-				$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span> ['.$merge_info.']</td>'.'<td>'.$p2_val_str.'</td>';
+				$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>'.'<td>'.$p2_val_str.'</td>';
 				$info .= '</tr>';
 			}
 				
