@@ -546,7 +546,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $year = substr($date_str, 0, 4);
         $display_dates_info = get_display_dates ( $litdate_id, $year );
         $info .= $display_dates_info['info'];
-        $info .= "<!-- display_dates: <pre>".print_r($display_dates['dates'], true)."</pre> -->";
+        $info .= "<!-- display_dates: <pre>".print_r($display_dates_info['dates'], true)."</pre> -->";
         //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
         //$litdate_post_id = $litdate_posts[0]['ID'];
         
