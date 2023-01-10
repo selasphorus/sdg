@@ -300,19 +300,20 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			foreach ( $group_fields as $group_field ) {
 
 				$merge_value = null; // init
+				$merge_info = "";
 				
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
-				//if ( is_array($p1_val) ) { $p1_val = print_r($p1_val,true); } // tft
+				if ( is_array($p1_val) ) { $p1_val_str = print_r($p1_val,true)."*"; } else { $p1_val_str = $p1_val; }
 				$p2_val = get_field($field_name, $p2->ID, false);
-				//if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
+				if ( is_array($p2_val) ) { $p2_val_str = print_r($p2_val,true)."*"; } else { $p2_val_str = $p2_val; }
 				
 				// If both values are arrays, then merge them
 				if ( is_array($p1_val) && is_array($p2_val) ) {
 					$merge_value = array_unique(array_merge($p1_val, $p1_val));
-					$info .= "Merged arrays!";
+					$merge_info .= "Merged arrays!";
 				} else if ( !empty($p1_val) ) {
 					// If p1_val is not empty, then compare it to p2_val
 					if ( !empty($p2_val) ) {
@@ -324,12 +325,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$merge_value = $p2_val;
 				}
 				
-				if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true); } else { $merge_value_str = $merge_value; }
+				if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true)."*"; } else { $merge_value_str = $merge_value; }
 				
 				if ( !(empty($p1_val) && empty($p2_val)) ) {
 					$info .= '<tr>';
 					$info .= '<td>'.$field_name.'</td>';
-					$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value_str.'</td>'.'<td>'.$p2_val.'</td>';
+					$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span> ['.$merge_info.']</td>'.'<td>'.$p2_val_str.'</td>';
 					$info .= '</tr>';
 				}
 			
