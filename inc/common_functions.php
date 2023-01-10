@@ -390,7 +390,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_type = $values[0];
 			$p1_val = $values[1];
 			$p2_val = $values[2];
-			$merge_val = $values[3];
+			$merge_value = $values[3];
 			$merge_info = $values[4];
 			
 			if ( is_array($p1_val) ) { $p1_val_str = print_r($p1_val,true)."*"; } else { $p1_val_str = $p1_val; }
