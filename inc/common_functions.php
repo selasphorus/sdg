@@ -137,7 +137,7 @@ function get_possible_duplicate_posts( $post_id = null, $return = 'all' ) {
 }
 
 // WIP
-function merge_field_values ( $p1_val = null, $p1_val = null ) {
+function merge_field_values ( $p1_val = null, $p2_val = null ) {
 
 	// init
 	$arr_info = array();
@@ -163,10 +163,10 @@ function merge_field_values ( $p1_val = null, $p1_val = null ) {
 	
 	$arr_info['info'] = $info;
 	$arr_info['merge_value'] = $merge_value;
-	$arr_info['merge_info'] = $merge_info; // ???
+	$arr_info['merge_info'] = $merge_info; // ???*/
 	
 	return $arr_info;
-			
+		
 }
 // Function to merge duplicate records
 
@@ -288,7 +288,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	
-    	// TODO: make a nice efficient loop or loops -- one for basic, second for meta values?
 		foreach ( $arr_core_fields as $field_name ) {
 			
 			$p1_val = $p1->$field_name;
@@ -383,9 +382,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			*/
 		}
 			
-			
 		$info .= '<table>';
-		$info .= '<tr><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
+		$info .= '<tr><th>Field Type</th><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
 		foreach ( $arr_fields as $field_name => $values ) {
 		
@@ -1103,9 +1101,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
         */
         
-        
-        
-		
+    
     $info .= '<div class="troubleshootingX">';
     $info .= $troubleshooting;
     $info .= '</div>';
