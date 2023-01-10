@@ -601,17 +601,21 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
         }
         
-        $info .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
-        uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
-        $info .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
+        if ( count($litdates) > 0 ) {
         
-        // Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
-        //$firstKey = array_key_first($array);
-        
-        $top_key = array_key_first($litdates);
-        $info .= "<!-- top_key: ".$top_key." -->"; // tft
-        $litdate_id = $litdates[$top_key];
-        $info .= "<!-- litdate_id: ".$litdate_id." -->"; // tft
+        	$info .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
+        	uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
+        	$info .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
+       
+			// Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
+			//$firstKey = array_key_first($array);
+		
+			$top_key = array_key_first($litdates);
+			$info .= "<!-- top_key: ".$top_key." -->"; // tft
+			$litdate_id = $litdates[$top_key];
+			$info .= "<!-- litdate_id: ".$litdate_id." -->"; // tft
+			
+        }
     }
     
     // 
@@ -680,7 +684,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
     } else {
 		
-        $info .= "<!-- no litdate found -->";
+        $info .= "<!-- no litdate found for display -->";
 		//$info .= "<!-- params: <pre>".print_r($params, true)."</pre> -->";
         
 	}
