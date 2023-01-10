@@ -10,6 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+// Get liturgical date records matching given date or date range (given month & year)
 function get_lit_dates ( $args ) {
 
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
@@ -164,7 +165,7 @@ function get_lit_dates ( $args ) {
     
     // WIP/TODO: reorder the litdates by category->priority before returning the array?
     /*foreach ( $litdate_posts as $post ) {
-    	//
+    	$display_dates = get_display_dates ( $post->ID, $year )
     }
     */
     
@@ -322,49 +323,62 @@ function get_cpt_liturgical_date_content( $post_id = null ) {
 }
 
 // WIP
-function get_display_date ( $litdate_id = null, $year = null ) {
+// A liturgical date may correspond to multiple dates in a year, if dates have been both assigned and calculated,
+// or if a date has been assigned to replace the fixed date
+// The following function determines which of the date(s) is active -- could be multiple, if date assigned is NOT a replacement_date
+function get_display_dates ( $post_id = null, $year = null ) {
 	
 	$info = "";
+	$dates = array();
+	$arr_info = array();
 	
 	// Get date_type (fixed, calculated, assigned)
-    $date_type = get_post_meta( $litdate_post_id, 'date_type', true );
-    $info .= "<!-- date_type: ".$date_type." -->"; // tft
+    $date_type = get_post_meta( $post_id, 'date_type', true );
+    $info .= "<!-- litdate post_id: ".$post_id."; date_type: ".$date_type." -->"; // tft
             
-	// get fixed date
+	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
-		//
+		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id )  ) { $fixed_date_str = ""; }
+	} else {
+		// For variable dates, get date calculations
+		// TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
+		if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+			while ( have_rows('date_calculations', $post_id) ) : the_row();
+				$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+				$year_calculated = substr($date_calculated, 0, 4);
+				if ( $year_calculated == $year ) {
+					$dates[] = $date_calculated;
+				}
+			endwhile;
+		} // end if
 	}
 	
-	// get date assignments
-	/*
-	if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
-		while ( have_rows('date_assignments', $litdate_id) ) : the_row();
+	// get date assignments to see if there is a replacement_date to override the fixed_date_str
+	// TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
+	if ( have_rows('date_assignments', $post_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_assignments', $post_id) ) : the_row();
 			$date_assigned = get_sub_field('date_assigned');
 			$replacement_date = get_sub_field('replacement_date');
 			$year_assigned = substr($date_assigned, 0, 4);
-			if ( $replacement_date == "1") {}
+			if ( $year_assigned == $year ) {
+				if ( $replacement_date == "1" &&  ) {
+					if ( $date_assigned != $fixed_date_str ) {
+						$info .= "<!-- replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year." -->";
+						$fixed_date_str = $date_assigned;
+						$dates = array($fixed_date_str); // Since this is a replacement_date it should be the only one displayed in the given year -- don't add it to array; replace the array
+						break;
+					}
+				} else {
+					$dates[] = $fixed_date_str;
+				}
+			}			
 		endwhile;
 	} // end if
-	*/
 	
-	// get date calculations
-	/*
-	if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-		while ( have_rows('date_calculations', $post_id) ) : the_row();
-			$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-			if ( $date_calculated == $calc_date_str ) {
-				// Already in there
-				$newrow = false;
-				$calc_info .= $indent."+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />".$indent."+++<br />"; // tft
-			} else {
-				//$info .= $indent."Old date_calculated: $date_calculated.<br />"; // tft
-			}
-		endwhile;
-	} // end if
-	*/
+	$arr_info['info'] = $info;
+	$arr_info['dates'] = $dates;
+	return $arr_info;
 	
-	// 1st assignment override, 2nd calc or fixed date (priority)
-	//
 }
 
 // WIP!
@@ -493,6 +507,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
     $date_str = date("Y-m-d",strtotime($the_date));
+    //
     if ( isset($litdates['posts'][$date_str]) ) { 
     	$litdate_posts = $litdates['posts'][$date_str];
 	} else if ( isset($litdates['posts']) ) {
@@ -521,6 +536,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $litdate_post = $litdate_posts[0];
         $litdate_id = $litdate_post->ID;
         $info .= "<!-- Single litdate_post found (id: $litdate_id) -->"; // tft
+        $display_dates = get_display_dates ( $litdate_id, $year );
+        $info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
         //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
         //$litdate_post_id = $litdate_posts[0]['ID'];
         
@@ -533,15 +550,17 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         // ...loop through, check for holy days vs saints and martyrs... check for override settings...
         foreach ( $litdate_posts AS $litdate_post ) {
             
-            $litdate_post_id = $litdate_post->ID;
-            $info .= "<!-- litdate_post->ID: ".$litdate_post_id." -->"; // tft
+            $litdate_id = $litdate_post->ID;
+            $info .= "<!-- litdate_post->ID: ".$litdate_id." -->"; // tft
             
+            // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden
+            //WIP $display_dates = get_display_dates ( $litdate_id, $year );
             // Get date_type (fixed, calculated, assigned)
-            $date_type = get_post_meta( $litdate_post_id, 'date_type', true );
+            $date_type = get_post_meta( $litdate_id, 'date_type', true );
             $info .= "<!-- date_type: ".$date_type." -->"; // tft
             
             // Get category/priority
-            $terms = get_the_terms( $litdate_post_id, 'liturgical_date_category' );
+            $terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
             //$info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             
             $priority = 999;
@@ -568,8 +587,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             }
             
             $info .= "<!-- priority: ".$priority." -->"; // tft
-            $key = $priority."-".$litdate_post_id; // this will cause sort by priority num, then by litdate_id
-            $litdates[$key] = $litdate_post_id;
+            $key = $priority."-".$litdate_id; // this will cause sort by priority num, then by litdate_id
+            $litdates[$key] = $litdate_id;
             //$litdates[$top_priority] = $litdate_post_id;
             //
             
