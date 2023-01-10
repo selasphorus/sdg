@@ -335,7 +335,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	// Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $post_id, 'date_type', true );
     $info .= "<!-- litdate post_id: ".$post_id."; date_type: ".$date_type." -->"; // tft
-            
+         
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
 		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id )  ) { $fixed_date_str = ""; }
@@ -361,7 +361,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 			$replacement_date = get_sub_field('replacement_date');
 			$year_assigned = substr($date_assigned, 0, 4);
 			if ( $year_assigned == $year ) {
-				if ( $replacement_date == "1" &&  ) {
+				if ( $replacement_date == "1" ) {
 					if ( $date_assigned != $fixed_date_str ) {
 						$info .= "<!-- replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year." -->";
 						$fixed_date_str = $date_assigned;
@@ -371,7 +371,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 				} else {
 					$dates[] = $fixed_date_str;
 				}
-			}			
+			}
 		endwhile;
 	} // end if
 	
@@ -536,8 +536,10 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $litdate_post = $litdate_posts[0];
         $litdate_id = $litdate_post->ID;
         $info .= "<!-- Single litdate_post found (id: $litdate_id) -->"; // tft
-        $display_dates = get_display_dates ( $litdate_id, $year );
-        $info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
+        $year = substr($date_str, 0, 4);
+        $display_dates_info = get_display_dates ( $litdate_id, $year );
+        $info .= $display_dates_info['info'];
+        $info .= "<!-- display_dates: <pre>".print_r($display_dates['dates'], true)."</pre> -->";
         //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
         //$litdate_post_id = $litdate_posts[0]['ID'];
         
