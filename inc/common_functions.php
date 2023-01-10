@@ -353,17 +353,14 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		foreach ( $taxonomies as $taxonomy ) {
 			
 			// Get terms... WIP
-			$p1_terms = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
-			$p2_terms = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
-			
-			$p1_val = $p1_terms;
-			$p2_val = $p2_terms;
+			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
+			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
 			
 			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
 			$merge_info = $merged['info'];
 		
-			$arr_fields[$field_name] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
+			$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 			/* e.g.
 			$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
