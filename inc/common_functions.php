@@ -137,6 +137,37 @@ function get_possible_duplicate_posts( $post_id = null, $return = 'all' ) {
 }
 
 // WIP
+function merge_field_values ( $p1_val = null, $p1_val = null ) {
+
+	// init
+	$arr_info = array();
+	$merge_value = null;
+	$info = "";
+	$merge_info = ""; // ???
+	
+	// Compare values/merge arrays
+	// If both values are arrays, then merge them
+	if ( is_array($p1_val) && is_array($p2_val) ) {
+		$merge_value = array_unique(array_merge($p1_val, $p1_val));
+		$merge_info .= "Merged arrays!";
+	} else if ( !empty($p1_val) ) {
+		// If p1_val is not empty, then compare it to p2_val
+		if ( !empty($p2_val) ) {
+			//compare... WIP
+		} else {
+			$merge_value = $p1_val;
+		}				
+	} else if ( !empty($p2_val) ) {
+		$merge_value = $p2_val;
+	}
+	
+	$arr_info['info'] = $info;
+	$arr_info['merge_value'] = $merge_value;
+	$arr_info['merge_info'] = $merge_info; // ???
+	
+	return $arr_info;
+			
+}
 // Function to merge duplicate records
 
 add_shortcode('sdg_merge_form', 'sdg_merge_form');
@@ -241,6 +272,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $taxonomies = get_object_taxonomies( $post_type );
     $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
     
+    // TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
+    
     $info .= '<form class="sdg_merge_form '.$form_type.'">';
     
     // TODO: add field(s) for submitting post_ids for merging?
@@ -250,42 +283,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// TODO: give user choice of which post to treat as primary?
 		$p1 = $arr_posts[0];
 		$p2 = $arr_posts[1];
+		$arr_fields = array(); // field_name; field_type: core, acf, or taxonomy; values
     	
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	
-		$info .= '<table>';
-		$info .= '<tr><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
-		
-		// TODO: make a nice efficient loop or loops -- one for basic, second for meta values?
+    	// TODO: make a nice efficient loop or loops -- one for basic, second for meta values?
 		foreach ( $arr_core_fields as $field_name ) {
 			
 			$p1_val = $p1->$field_name;
 			$p2_val = $p2->$field_name;
 			
-			// TODO: compare values/merge arrays
-			// TODO: 
-			if ( !empty($p1_val) ) {
-				if ( !empty($p2_val) ) {
-					// If both values are arrays, then merge them
-					if ( is_array($p1_val) && is_array($p2_val) ) {
-						$merge_value = array_unique(array_merge($p1_val, $p1_val));
-					} else {
-						//$merge_value = $p1_val;
-					}
-				} else {
-					$merge_value = $p1_val;
-				}				
-			} else {
-				$merge_value = $p2_val;
-			}
+			$merged = merge_field_values($p1_val, $p2_val);
+			$merge_value = $merged['merge_value'];
+			$merge_info = $merged['info'];
 			
-			if ( !(empty($p1_val) && empty($p2_val)) ) { 
-				$info .= '<tr>';
-				$info .= '<td>'.$field_name.'</td>';
-				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
-				$info .= '</tr>';
-			}
+			$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
+			
 		}
 		
 		foreach ( $field_groups as $group ) {
@@ -306,33 +320,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$field_name = $group_field['name'];
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
-				if ( is_array($p1_val) ) { $p1_val_str = print_r($p1_val,true)."*"; } else { $p1_val_str = $p1_val; }
 				$p2_val = get_field($field_name, $p2->ID, false);
-				if ( is_array($p2_val) ) { $p2_val_str = print_r($p2_val,true)."*"; } else { $p2_val_str = $p2_val; }
 				
-				// If both values are arrays, then merge them
-				if ( is_array($p1_val) && is_array($p2_val) ) {
-					$merge_value = array_unique(array_merge($p1_val, $p1_val));
-					$merge_info .= "Merged arrays!";
-				} else if ( !empty($p1_val) ) {
-					// If p1_val is not empty, then compare it to p2_val
-					if ( !empty($p2_val) ) {
-						//
-					} else {
-						$merge_value = $p1_val;
-					}				
-				} else if ( !empty($p2_val) ) {
-					$merge_value = $p2_val;
-				}
-				
-				if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true)."*"; } else { $merge_value_str = $merge_value; }
-				
-				if ( !(empty($p1_val) && empty($p2_val)) ) {
-					$info .= '<tr>';
-					$info .= '<td>'.$field_name.'</td>';
-					$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span> ['.$merge_info.']</td>'.'<td>'.$p2_val_str.'</td>';
-					$info .= '</tr>';
-				}
+				$merged = merge_field_values($p1_val, $p2_val);
+				$merge_value = $merged['merge_value'];
+				$merge_info = $merged['info'];
+			
+				$arr_fields[$field_name] = array("acf_field", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 				/*
 				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
@@ -364,12 +358,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p2_terms = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
 			
 			$p1_val = $p1_terms;
-			if ( is_array($p1_val) ) { $p1_val = print_r($p1_val,true); } // tft
 			$p2_val = $p2_terms;
-			if ( is_array($p2_val) ) { $p2_val = print_r($p2_val,true); } // tft
 			
-			// TODO: compare values/merge arrays
-			if ( !empty($p1_val) ) { $merge_value = $p1_val; } else { $merge_value = $p2_val; }
+			$merged = merge_field_values($p1_val, $p2_val);
+			$merge_value = $merged['merge_value'];
+			$merge_info = $merged['info'];
+		
+			$arr_fields[$field_name] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 			/* e.g.
 			$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
@@ -386,15 +381,34 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//$rep_info .= "<br />";
 			}
 			*/
-			
-			if ( !(empty($p1_val) && empty($p2_val)) ) { 
-				$info .= '<tr>';
-				$info .= '<td>'.$taxonomy.'</td>';
-				$info .= '<td>'.$p1_val.'</td>'.'<td class="nb">'.$merge_value.'</td>'.'<td>'.$p2_val.'</td>';
-				$info .= '</tr>';
-			}
 		}
 			
+			
+		$info .= '<table>';
+		$info .= '<tr><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
+		
+		foreach ( $arr_fields as $field_name => $values ) {
+		
+			$field_type = $values[0];
+			$p1_val = $values[1];
+			$p2_val = $values[2];
+			$merge_val = $values[3];
+			$merge_info = $values[4];
+			
+			if ( is_array($p1_val) ) { $p1_val_str = print_r($p1_val,true)."*"; } else { $p1_val_str = $p1_val; }
+			if ( is_array($p2_val) ) { $p2_val_str = print_r($p2_val,true)."*"; } else { $p2_val_str = $p2_val; }
+			if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true)."*"; } else { $merge_value_str = $merge_value; }
+			
+			if ( !(empty($p1_val) && empty($p2_val)) ) {
+				$info .= '<tr>';
+				$info .= '<td>'.$field_type.'</td>';
+				$info .= '<td>'.$field_name.'</td>';
+				$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span> ['.$merge_info.']</td>'.'<td>'.$p2_val_str.'</td>';
+				$info .= '</tr>';
+			}
+				
+		}
+		
 		$info .= '</table>';
     }
     
