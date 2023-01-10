@@ -143,13 +143,12 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 	$arr_info = array();
 	$merge_value = null;
 	$info = "";
-	$merge_info = ""; // ???
 	
 	// Compare values/merge arrays
 	// If both values are arrays, then merge them
 	if ( is_array($p1_val) && is_array($p2_val) ) {
 		$merge_value = array_unique(array_merge($p1_val, $p1_val));
-		$merge_info .= "Merged arrays!";
+		$info .= "Merged arrays!";
 	} else if ( !empty($p1_val) ) {
 		// If p1_val is not empty, then compare it to p2_val
 		if ( !empty($p2_val) ) {
@@ -168,7 +167,6 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 	
 	$arr_info['info'] = $info;
 	$arr_info['merge_value'] = $merge_value;
-	$arr_info['merge_info'] = $merge_info; // ???*/
 	
 	return $arr_info;
 		
