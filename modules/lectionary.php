@@ -559,6 +559,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 			if ( !in_array($date_str, $display_dates) ) {
 				$info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
 				// Therefore don't show it.
+				$litdate_id = null;
 				continue;
 			}
             
