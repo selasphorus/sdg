@@ -156,8 +156,11 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 			//compare... WIP
 			if ( $p1_val == $p2_val ) {
 				$merge_value = $p1_val; // They're identical
+				$info .= "==";
 			} else {
-				//
+				$merge_value = $p1_val;
+				$info .= "+";
+				// TODO: save p2_val as backup?
 			}
 		} else {
 			$merge_value = $p1_val;
