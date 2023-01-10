@@ -154,6 +154,11 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 		// If p1_val is not empty, then compare it to p2_val
 		if ( !empty($p2_val) ) {
 			//compare... WIP
+			if ( $p1_val == $p2_val ) {
+				$merge_value = $p1_val; // They're identical
+			} else {
+				//
+			}
 		} else {
 			$merge_value = $p1_val;
 		}				
