@@ -543,6 +543,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $litdate_post = $litdate_posts[0];
         $litdate_id = $litdate_post->ID;
         $info .= "<!-- Single litdate_post found (id: $litdate_id) -->"; // tft
+        // Make sure this litdate should in fact be shown on this date this year
+        // TODO: make this more efficient and reusable
         $year = substr($date_str, 0, 4);
         $display_dates_info = get_display_dates ( $litdate_id, $year );
         $info .= $display_dates_info['info'];
@@ -550,6 +552,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
         if ( !in_array($date_str, $display_dates) ) {
         	$info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
+        	// Therefore don't show it.
+        	$litdate_id = null;
         }
         //$info .= "<!-- Single litdate_post found: <pre>".print_r($litdate_post, true)."</pre> -->"; // tft
         //$litdate_post_id = $litdate_posts[0]['ID'];
