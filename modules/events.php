@@ -75,9 +75,9 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
                 'value' 	=> '"' . $term_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
             )
         ),
-        'orderby'	=> 'meta_value',
+        /*'orderby'	=> 'meta_value',
 		'order'     => 'DESC',
-		'meta_key' 	=> '_event_start_date',
+		'meta_key' 	=> '_event_start_date',*/
 		'fields' => $return_fields,
     );
     
