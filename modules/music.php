@@ -2161,7 +2161,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= '<table class="choirplanner search_results">';
     $info .= '<tr>';
-    $info .= '<th class="" style="width: 1.5rem;"></th>'; // TODO: replace inline style w/ proper class
+    $info .= '<th class="actions"></th>'; // TODO: replace inline style w/ proper class
     $info .= '<th>Musical Work</th><th>Editions</th>';
     $info .= '</tr>';
     
