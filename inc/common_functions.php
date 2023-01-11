@@ -309,7 +309,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	$info .= "<pre>";
     	$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1->ID."<br />";
-    	$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2->ID."<br /><br />";
+    	$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2->ID."<br />";
     	$info .= "</pre>";
     	/*$info .= '<table>';
 		$info .= '<tr>';
@@ -409,7 +409,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			*/
 		}
 			
-		$info .= '<table>';
+		$info .= '<table class="pre">';
 		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
 		foreach ( $arr_fields as $field_name => $values ) {
