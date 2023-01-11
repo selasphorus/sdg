@@ -387,7 +387,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}
 			
 		$info .= '<table>';
-		$info .= '<tr><th>Field Type</th><th>Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
+		$info .= '<tr><th colspan="2">1</th><th colspan="2">2</th></tr>';
+		$info .= '<tr><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
 		foreach ( $arr_fields as $field_name => $values ) {
 		
