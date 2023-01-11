@@ -42,7 +42,8 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 }
 
 // WIP: Get Related Events based on program info
-function get_related_events ( $meta_field, $term_id ) {
+// TODO: make this not so terribly slow!!!
+function get_related_events ( $meta_field = null, $term_id = null, $return_fields = 'ids' ) {
 
     // Init vars
     $arr_results = array();
@@ -77,6 +78,7 @@ function get_related_events ( $meta_field, $term_id ) {
         'orderby'	=> 'meta_value',
 		'order'     => 'DESC',
 		'meta_key' 	=> '_event_start_date',
+		'fields' => $fields,
     );
     
     $query = new WP_Query( $args );

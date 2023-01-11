@@ -32,10 +32,10 @@ function get_cpt_repertoire_content( $post_id = null ) {
         //-- STC
         $info .= "<h3>Performances at Saint Thomas Church:</h3>";
         $x = 1;
-        foreach($event_posts as $event_post) { 
-            setup_postdata($event_post);
+        foreach($event_posts as $event_post_id) { 
+            //setup_postdata($event_post);
             //$info .= "[$x] event_post: <pre>".print_r($event_post, true)."</pre>"; // tft
-            $event_post_id = $event_post->ID;
+            //$event_post_id = $event_post->ID;
             
             // TODO: modify to show title & event date as link text
             $event_title = get_the_title($event_post_id);
@@ -2283,11 +2283,11 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         // Get and display note of num event programs which include this work, if any
         // Get Related Events
 		$related_events = get_related_events ( "program_item", $post_id );
-		$event_posts = $related_events['event_posts'];
+		$event_post_ids = $related_events['event_posts'];
 		$related_events_info = $related_events['info'];
 	
-		if ( $event_posts ) {
-			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_posts).'] event program(s).</span>';
+		if ( $event_post_ids ) {
+			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
 		}
         
         if ( $rep_info != "" ) {

@@ -175,8 +175,8 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 	return $arr_info;
 		
 }
-// Function to merge duplicate records
 
+// Function to merge duplicate records
 add_shortcode('sdg_merge_form', 'sdg_merge_form');
 //function sdg_merge_form ( $post_ids = array() ) {
 function sdg_merge_form ($atts = [], $content = null, $tag = '') {
@@ -318,6 +318,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '</tr>';
 		$info .= '</table>';*/
 		
+		// Get core values for both posts
 		foreach ( $arr_core_fields as $field_name ) {
 			
 			$p1_val = $p1->$field_name;
@@ -331,6 +332,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 		}
 		
+		// Get meta values for both posts
 		foreach ( $field_groups as $group ) {
 
 			$group_key = $group['key'];
@@ -380,6 +382,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
 		} // END foreach ( $field_groups as $group )
 		
+		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
 			// Get terms... WIP
@@ -408,7 +411,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 			*/
 		}
-			
+		
+		// Get related posts for both posts (events, &c?)
+		// WIP
+		
+		
 		$info .= '<table class="pre">';
 		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
