@@ -423,7 +423,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
 			if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
 			if ( is_array($merge_value) ) { $merge_value_str = "<pre>".print_r($merge_value,true)."</pre>"; } else { $merge_value_str = $merge_value; }
-			
+			if ( $p1_val == $merge_value ) { $p1_class = "merged_val"; } else { $p1_class = "tbx"; }
+			if ( $p2_val == $merge_value ) { $p2_class = "merged_val"; } else { $p2_class = "tbx"; }
 			if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
@@ -431,7 +432,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td></td>';
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
-				$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>'.'<td>'.$p2_val_str.'</td>';
+				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
+				$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
+				$info .= '<td class="'.$p2_class.'">'.$p2_val_str.'</td>';
 				$info .= '</tr>';
 			}
 				
