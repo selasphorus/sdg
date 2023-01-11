@@ -292,8 +292,19 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$p2 = $arr_posts[1];
 		$arr_fields = array(); // field_name; field_type: core, acf, or taxonomy; values
     	
+    	// Get and compare last modified dates
+    	$p1_modified = $p1->post_modified;
+    	$p2_modified = $p2->post_modified;
+    	// Prioritize the post which was most recently modified by putting it in first position
+    	// In other words, swap p1/p2 if second post is newer
+    	if ( $p1_modified < $p2_modified ) {
+    		$p1 = $arr_posts[1];
+			$p2 = $arr_posts[0];
+    	}
+    	
+    	// Assemble general post info for table header
     	$p1_info = "[".$p1->ID."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
-    	$p2_info = "[".$p2->ID."] ".$p2->post_modified." (".$p2->post_author.")";
+    	$p2_info = "[".$p2->ID."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	
