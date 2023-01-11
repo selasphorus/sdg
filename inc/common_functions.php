@@ -292,6 +292,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$p2 = $arr_posts[1];
 		$arr_fields = array(); // field_name; field_type: core, acf, or taxonomy; values
     	
+    	$p1_info = "[".$p1->ID."]".$p1->post_modified." ()";
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	
@@ -387,7 +388,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}
 			
 		$info .= '<table>';
-		$info .= '<tr><th colspan="3">1</th><th colspan="3">2</th></tr>';
+		$info .= '<tr><th colspan="3">'.$p1_info.'</th><th colspan="3">'.$p2_info.'</th></tr>';
 		$info .= '<tr><th></th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
 		foreach ( $arr_fields as $field_name => $values ) {
@@ -406,6 +407,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
 				$info .= '<tr>';
+				$info .= '<td></td>';
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td>'.$p1_val_str.'</td>'.'<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>'.'<td>'.$p2_val_str.'</td>';
