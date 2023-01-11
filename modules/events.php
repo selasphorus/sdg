@@ -78,7 +78,7 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
         'orderby'	=> 'meta_value',
 		'order'     => 'DESC',
 		'meta_key' 	=> '_event_start_date',
-		'fields' => $fields,
+		'fields' => $return_fields,
     );
     
     $query = new WP_Query( $args );
