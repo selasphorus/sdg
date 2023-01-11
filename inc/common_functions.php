@@ -307,8 +307,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$p2_info = "[".$p2->ID."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
-    	$info .= "Post #1: ID".$p1->ID."; Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."<br />";
-    	$info .= "Post #2: ID".$p2->ID."; Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."<br />";
+    	$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1->ID."<br />";
+    	$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2->ID."<br />";
     	/*$info .= '<table>';
 		$info .= '<tr>';
 		$info .= '<th>'.$p1->ID.'</th><th>'.$p1->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p1->post_author).'</th>';
