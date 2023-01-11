@@ -2104,7 +2104,6 @@ add_filter('em_cp_event_recurring_public','__return_true');
 //function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
 function get_special_date_content( $the_date = null ) {
 
-    // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "\n<!-- get_special_date_content -->\n";
     
     /*$args = shortcode_atts( 
@@ -2122,6 +2121,30 @@ function get_special_date_content( $the_date = null ) {
     $info .= "<!-- the_date: '$the_date' -->\n";
     $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
     
+    // TODO: make this a real thing that retrieves content from the DB based on the date...
+    // via meta_query
+    // WIP...
+    
+    // Build query args
+    /*$args = array(
+        'posts_per_page'=> -1,
+        'post_type'		=> 'event', // ???
+        'meta_query'	=> array(
+            array(
+                'key'		=> $meta_key,
+                'compare' 	=> 'LIKE',
+                'value' 	=> $the_date,
+            )
+        ),
+        'orderby'	=> 'meta_value',
+		'order'     => 'DESC',
+		'meta_key' 	=> '_event_start_date',
+    );
+    
+    $query = new WP_Query( $args );
+    $posts = $query->posts;
+    // WIP...
+    */
     if ($the_date == "2022-12-24") {
         
         $timestamp = strtotime($the_date);
