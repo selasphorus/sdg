@@ -308,7 +308,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
     	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
     	$info .= '<table>';
-		$info .= '<tr><th>'.$p1_info.'</th><th>'.$p2_info.'</th></tr>';
+		$info .= '<tr>';
+		$info .= '<th>'.$p1->ID.'</th><th>'.$p1->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p1->post_author).'</th>';
+		$info .= '<th>'.$p2->ID.'</th><th>'.$p2->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p2->post_author).'</th>';
+		$info .= '</tr>';
 		$info .= '</table>';
 		
 		foreach ( $arr_core_fields as $field_name ) {
