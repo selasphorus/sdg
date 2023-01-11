@@ -2159,6 +2159,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
+    $info .= '<form id="cp_merge">';
+    //$info .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF']).'" class="sdg_search_form '.$form_type.'">';
     $info .= '<table class="choirplanner search_results">';
     $info .= '<tr>';
     $info .= '<th class="actions" style="width: 2rem;"></th>'; // TODO: replace inline style w/ proper class definition
@@ -2453,6 +2455,9 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     } // END foreach ( $posts as $post )
     
     $info .= "</table>";
+    
+    $info .= '<input type="submit" value="Merge Selected">';
+    $info .= "</form>";
     
     return $info;
     
