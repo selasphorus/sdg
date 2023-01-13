@@ -1518,12 +1518,16 @@ if ( in_array('links', $sdg_modules ) ) {
 /*** ***/
 
 
+//
+if ( in_array('music', $sdg_modules ) ) {
+	add_filter('acf/update_value/name=repertoire_editions', 'bidirectional_acf_update_value', 10, 3);
+	//add_action('acf/save_post', 'acf_update_related_field_on_save'); // WIP
+}
+
 // ACF Bi-directional fields
 // WIP!
 // https://www.advancedcustomfields.com/resources/bidirectional-relationships/
-
-//
-function bidirectional_acf_update_value( $value, $post_id, $field  ) {
+function bidirectional_acf_update_value( $value, $post_id, $field  ) {	
 	
 	// vars
 	$field_name = $field['name'];
@@ -1602,9 +1606,25 @@ function bidirectional_acf_update_value( $value, $post_id, $field  ) {
     return $value;
     
 }
-if ( in_array('music', $sdg_modules ) ) {
-	add_filter('acf/update_value/name=repertoire_editions', 'bidirectional_acf_update_value', 10, 3);
+
+// WIP!
+function acf_update_related_field_on_save ( $post_id ) {	
+	
+	// TODO: figure out how to handle repeater field sub_fields -- e.g. repertoire_events << event program_items
+	
+	// Get newly saved values.
+    $values = get_fields( $post_id );
+
+    // Check the new value of a specific field.
+    /*
+    $program_items = get_field('program_items', $post_id);
+    $hero_image = get_field('hero_image', $post_id);
+    if( $hero_image ) {
+        // Do something...
+    }*/
+	
 }
+
 if ( in_array('events', $sdg_modules ) ) {
 	add_filter('acf/update_value/name=events_series', 'bidirectional_acf_update_value', 10, 3);
 }
