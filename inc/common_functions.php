@@ -188,10 +188,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
     $a = shortcode_atts( array(
-		'post_type'    => 'post',
-		'ids'     => null,
-        'form_type'    => 'simple_merge',
-        'limit'        => '-1'
+		'post_type'	=> 'post',
+		'ids'     	=> array(),
+        'form_type'	=> 'simple_merge',
+        'limit'    	=> '-1'
     ), $atts );
     
     $post_type = $a['post_type'];
@@ -217,9 +217,17 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
     // Turn the list of IDs into a proper array
     if ( !empty($a['ids']) ) {
-    	$post_ids         = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
-		$args['ids'] = $a['ids']; // pass string as arg to be processed by birdhive_get_posts
+    	$str_ids = $a['ids'];
+    	$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
+    } else if (isset($_POST['ids'])) {
+		$post_ids = $_POST['ids'];
+		$str_ids = implode($_POST['ids']);
+    } else {
+    	$post_ids = array();
+    	$str_ids = "";
     }
+    
+	$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
     
     if ( count($post_ids) < 1 ) {
     	$troubleshooting .= "Not enough post_ids submitted.<br />";
