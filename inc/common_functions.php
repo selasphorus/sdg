@@ -484,7 +484,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
 				$info .= '<td>'.$field_cat.'</td>';
 				$info .= '<td>'.$field_name;
-				if ( !empty($field_label) ) { $info .= ' ('.$field_label.')'; }
+				if ( !empty($field_label) ) { $info .= '<br />('.$field_label.')'; }
 				$info .= '</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
 				// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
