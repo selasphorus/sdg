@@ -255,7 +255,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 			if ( count($arr_posts) > 2 ) {
-				$troubleshooting .= "That's too many posts! I can only handle two at a time.<br />";
+				$troubleshooting .= "<p>That's too many posts! I can only handle two at a time.</p>";
 			}
 		
 			//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
