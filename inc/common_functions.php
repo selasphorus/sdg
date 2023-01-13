@@ -304,7 +304,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// TODO: give user choice of which post to treat as primary?
 		$p1 = $arr_posts[0];
 		$p2 = $arr_posts[1];
-		$arr_fields = array(); // field_name; field_type: core, acf, or taxonomy; values
+		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
     	
     	// Get and compare last modified dates
     	$p1_modified = $p1->post_modified;
@@ -339,6 +339,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get core values for both posts
 		foreach ( $arr_core_fields as $field_name ) {
 			
+			$field_type = "TMP";
+			
 			$p1_val = $p1->$field_name;
 			$p2_val = $p2->$field_name;
 			
@@ -346,7 +348,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$merge_value = $merged['merge_value'];
 			$merge_info = $merged['info'];
 			
-			$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
+			$arr_fields[$field_name] = array('field_cat' => "core_field", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+			//$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 		}
 		
@@ -367,6 +370,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
+				$field_type = "TMP";
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
 				$p2_val = get_field($field_name, $p2->ID, false);
@@ -375,7 +379,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$merge_value = $merged['merge_value'];
 				$merge_info = $merged['info'];
 			
-				$arr_fields[$field_name] = array("acf_field", $p1_val, $p2_val, $merge_value, $merge_info);
+				$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+				//$arr_fields[$field_name] = array("acf_field", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 				/*
 				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
@@ -403,15 +408,18 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
+			$field_type = "TMP";
+			
 			// Get terms... WIP
 			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
 			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
 			
 			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
-			$merge_info = $merged['info'];
+			$merge_info = $merged['info'];			
 		
-			$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
+			$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+			//$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 			/* e.g.
 			$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
@@ -439,11 +447,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		foreach ( $arr_fields as $field_name => $values ) {
 		
-			$field_type = $values[0];
-			$p1_val = $values[1];
-			$p2_val = $values[2];
-			$merge_value = $values[3];
-			$merge_info = $values[4];
+			$field_cat = $values['field_cat'];
+			$field_type = $values['field_type'];
+			$p1_val = $values['p1_val'];
+			$p2_val = $values['p2_val'];
+			$merge_value = $values['merge_val'];
+			$merge_info = $values['merge_info'];
 			
 			if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
 			if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
@@ -456,7 +465,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//if ( is_array($merge_value) ) { $merge_value_str = "<pre>".print_r($merge_value,true)."</pre>"; } else { $merge_value_str = $merge_value; }
 			if ( $p1_val == $merge_value ) { $p1_class = "merged_val"; } else { $p1_class = "tbx"; }
 			if ( $p2_val == $merge_value ) { $p2_class = "merged_val"; } else { $p2_class = "tbx"; }
-			if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
+			if ( !empty($merge_info) ) { $merge_info = ' <span class="merge_info">'.$merge_info.'</span>'; }
+			//if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
 				$info .= '<tr>';
@@ -464,7 +474,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
+				// TODO: set input type based on field details -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
+				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
+				//$readonly = " readonly";
+				//$input_class = ' class="readonly"';
 				$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
+				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
 				$info .= '<td class="'.$p2_class.'">'.$p2_val_str.'</td>';
