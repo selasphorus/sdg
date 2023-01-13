@@ -370,7 +370,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
-				$field_type = "TMP";
+				$field_obj = get_field_object($field_name);
+				$field_type = $field_obj['type'];
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
 				$p2_val = get_field($field_name, $p2->ID, false);
@@ -481,7 +482,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( $field_type == "text" ) {
 					$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				} else {
-					$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
+					$info .= '<td>field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
 				}				
 				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
