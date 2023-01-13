@@ -295,7 +295,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
-    $info .= '<form class="sdg_merge_form '.$form_type.'">'; // action? method?
+    $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     
     // TODO: add field(s) for submitting post_ids for merging?
     
