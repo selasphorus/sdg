@@ -471,10 +471,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
 				$info .= '<tr>';
 				$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
-				$info .= '<td>'.$field_type.'</td>';
+				$info .= '<td>'.$field_cat.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
-				// TODO: set input type based on field details -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
+				// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
 				//$readonly = " readonly";
 				//$input_class = ' class="readonly"';
