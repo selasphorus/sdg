@@ -382,7 +382,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$field_type = $field_obj['type'];
 						$info .= "Field object ($field_name): <pre>".print_r($field_obj,true)."</pre><br />";
 					} else {
-						$field_type = "ACF_TMP";
+						$field_type = "ACF_TMP ($field_name)";
 					}
 				
 				}
