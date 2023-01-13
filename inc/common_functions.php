@@ -339,7 +339,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get core values for both posts
 		foreach ( $arr_core_fields as $field_name ) {
 			
-			$field_type = "TMP";
+			$field_type = "text";
 			
 			$p1_val = $p1->$field_name;
 			$p2_val = $p2->$field_name;
@@ -478,7 +478,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
 				//$readonly = " readonly";
 				//$input_class = ' class="readonly"';
-				$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
+				if ( $field_type == "text" ) {
+					$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
+				} else {
+					$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
+				}				
 				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
