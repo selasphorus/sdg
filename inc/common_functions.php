@@ -265,6 +265,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		}
 	
+	} else {
+		$arr_posts = array(); // empty array to avoid counting errors later, in case no posts were retrieved
 	}
         
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
