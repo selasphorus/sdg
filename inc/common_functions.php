@@ -450,7 +450,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
 				$info .= '<tr>';
-				$info .= '<td>'.'<input type="hidden" value="test_val">'.'</td>';
+				$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
