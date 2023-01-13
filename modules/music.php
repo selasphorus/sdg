@@ -2159,7 +2159,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
-    $info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">';
+    $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
+    //$info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">'; // This works fine, but ids are lost on refresh of merge page. Pass them via GET instead for more flexibility.
     //$info .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF']).'" class="sdg_search_form '.$form_type.'">';
     $info .= '<table class="choirplanner search_results">';
     $info .= '<tr>';
@@ -2178,7 +2179,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '<tr>';
         //
         $info .= '<td class="actions">';
-        $info .= '<input type="checkbox" id="merge-'.$post_id.'" name="ids[]" value="'.$post_id.'" />';
+        $info .= '<input type="checkbox" id="merge-'.$post_id.'" name="ids[]" value="'.$post_id.'" />'; // If using form action POST
         //$info .= '<input type="checkbox" id="merge-'.$post_id.'" name="merge-'.$post_id.'" value="'.$post_id.'" />';
         $info .= '</td>';
         //
