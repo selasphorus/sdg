@@ -453,7 +453,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		// Build the table for review of post & merge values		
 		$info .= '<table class="pre">';
-		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
+		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merge Value</th><th>P2 Value</th></tr>';
 		
 		foreach ( $arr_fields as $field_name => $values ) {
 		
@@ -491,6 +491,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
 				//$readonly = " readonly";
 				//$input_class = ' class="readonly"';
+				// Deal w/ title_for_matching -- will be auto-regenerated, so manual editing is pointless
+				//field_type: relationship
+				//field_type: number -- e.g. choirplanner_id (legacy data)
+				//
 				if ( $field_type == "text" || $field_type == "textarea" ) {
 					$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				} else {
