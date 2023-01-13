@@ -372,6 +372,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$field_name = $group_field['name'];
 				$field_obj = get_field_object($field_name);
 				$field_type = $field_obj['type'];
+				$info .= "Field object: ".print_r($field_obj,true)."<br />";
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
 				$p2_val = get_field($field_name, $p2->ID, false);
