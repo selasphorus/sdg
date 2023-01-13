@@ -251,7 +251,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		if ( isset($posts_info['arr_posts']) ) {
 		
 			$arr_posts = $posts_info['arr_posts']->posts;
-			$troubleshooting .= "Num arr_posts: [".count($arr_posts)."]<br />";
+			$troubleshooting .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
 			//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 			if ( count($arr_posts) > 2 ) {
