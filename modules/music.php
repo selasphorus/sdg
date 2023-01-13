@@ -2159,7 +2159,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
-    $info .= '<form id="cp_merge">';
+    $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
     //$info .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF']).'" class="sdg_search_form '.$form_type.'">';
     $info .= '<table class="choirplanner search_results">';
     $info .= '<tr>';
