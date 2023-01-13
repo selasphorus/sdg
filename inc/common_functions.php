@@ -332,6 +332,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '</tr>';
 		$info .= '</table>';*/
 		
+		// TODO: tag which fields are ok to edit manually, to avoid trouble -- e.g. editions; choirplanner_id, &c. should be RO
+		// TODO: include editing instructions -- e.g. separate category list with semicolons (not commas!)
+		
+		
 		// Get core values for both posts
 		foreach ( $arr_core_fields as $field_name ) {
 			
@@ -443,7 +447,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
 			if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
-			if ( is_array($merge_value) ) { $merge_value_str = print_r($merge_value,true); } else { $merge_value_str = $merge_value; }
+			if ( is_array($merge_value) ) { $merge_value_str = explode("; ",$merge_value); } else { $merge_value_str = $merge_value; }
 			//if ( is_array($merge_value) ) { $merge_value_str = "<pre>".print_r($merge_value,true)."</pre>"; } else { $merge_value_str = $merge_value; }
 			if ( $p1_val == $merge_value ) { $p1_class = "merged_val"; } else { $p1_class = "tbx"; }
 			if ( $p2_val == $merge_value ) { $p2_class = "merged_val"; } else { $p2_class = "tbx"; }
