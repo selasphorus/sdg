@@ -371,8 +371,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
 				$field_obj = get_field_object($field_name);
-				$field_type = $field_obj['type'];
-				$info .= "Field object: ".print_r($field_obj,true)."<br />";
+				if ( $field_obj ) {
+					$field_type = $field_obj['type'];
+					$info .= "Field object: <pre>".print_r($field_obj,true)."</pre><br />";
+				} else {
+					$field_type = "ACF_TMP";
+				}
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
 				$p2_val = get_field($field_name, $p2->ID, false);
