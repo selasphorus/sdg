@@ -376,9 +376,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$p2_val = get_field($field_name, $p2->ID, false);
 				
 				// If a value was retrieved for either post, then display more info about the field object (tft)
-				/*if ( $p1_val || $p1_val ) {				
-					//$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
-				}*/
+				if ( $p1_val || $p1_val ) {				
+					if ( $field_name == "choir_voicing" ) {
+					$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
+					}					
+				}
 				
 				$merged = merge_field_values($p1_val, $p2_val);
 				$merge_value = $merged['merge_value'];
@@ -483,7 +485,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
 				//$readonly = " readonly";
 				//$input_class = ' class="readonly"';
-				if ( $field_type == "text" ) {
+				if ( $field_type == "text" || $field_type == "textarea" ) {
 					$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				} else {
 					$info .= '<td>field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
