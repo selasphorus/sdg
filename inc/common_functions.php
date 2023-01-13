@@ -340,6 +340,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		foreach ( $arr_core_fields as $field_name ) {
 			
 			$field_type = "text";
+			$field_label = ""; // tft
 			
 			$p1_val = $p1->$field_name;
 			$p2_val = $p2->$field_name;
@@ -348,7 +349,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$merge_value = $merged['merge_value'];
 			$merge_info = $merged['info'];
 			
-			$arr_fields[$field_name] = array('field_cat' => "core_field", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+			$arr_fields[$field_name] = array('field_cat' => "core_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
 			//$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 		}
@@ -370,6 +371,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
+				$field_label = $group_field['label'];
 				$field_type = $group_field['type'];
 				
 				$p1_val = get_field($field_name, $p1->ID, false);
@@ -378,15 +380,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// If a value was retrieved for either post, then display more info about the field object (tft)
 				if ( $p1_val || $p1_val ) {				
 					if ( $field_name == "choir_voicing" ) {
-					$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
+					//$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
 					}					
 				}
 				
 				$merged = merge_field_values($p1_val, $p2_val);
-				$merge_value = $merged['merge_value'];
+				$merge_val = $merged['merge_value'];
 				$merge_info = $merged['info'];
 			
-				$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+				$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_val, 'merge_info' => $merge_info );
 				//$arr_fields[$field_name] = array("acf_field", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 				/*
@@ -416,6 +418,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		foreach ( $taxonomies as $taxonomy ) {
 			
 			$field_type = "TMP";
+			$field_label = "";
 			
 			// Get terms... WIP
 			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
@@ -423,9 +426,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
-			$merge_info = $merged['info'];			
+			$merge_info = $merged['info'];
 		
-			$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+			$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
 			//$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
 			
 			/* e.g.
@@ -456,6 +459,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 			$field_cat = $values['field_cat'];
 			$field_type = $values['field_type'];
+			$field_label = $values['field_label'];
 			$p1_val = $values['p1_val'];
 			$p2_val = $values['p2_val'];
 			$merge_value = $values['merge_val'];
@@ -479,7 +483,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<tr>';
 				$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
 				$info .= '<td>'.$field_cat.'</td>';
-				$info .= '<td>'.$field_name.'</td>';
+				$info .= '<td>'.$field_name.'('.$field_label.')'.'</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
 				// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
