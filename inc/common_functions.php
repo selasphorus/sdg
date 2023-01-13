@@ -185,6 +185,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $troubleshooting = "";
     
     if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
+    if ( !empty($_POST) ) { $troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>'; }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
     $a = shortcode_atts( array(
@@ -222,7 +223,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     } else if (isset($_GET['ids'])) {
 		$post_ids = $_GET['ids'];
 		$str_ids = implode(", ", $_GET['ids']);
-		$troubleshooting .= print_r($_GET['ids'], true);
     } else if (isset($_POST['ids'])) {
 		$post_ids = $_POST['ids'];
 		$str_ids = implode(", ", $_POST['ids']);
@@ -242,7 +242,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // If post_ids have been submitted, then run the query
     if ( count($post_ids) > 1 ) {
             
-		$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+		//$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
 	
 		// Get posts matching the assembled args
 		// =====================================
@@ -295,7 +295,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
-    $info .= '<form class="sdg_merge_form '.$form_type.'">';
+    $info .= '<form class="sdg_merge_form '.$form_type.'">'; // action? method?
     
     // TODO: add field(s) for submitting post_ids for merging?
     
@@ -429,7 +429,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get related posts for both posts (events, &c?)
 		// WIP
 		
-		
+		// Build the table for review of post & merge values		
 		$info .= '<table class="pre">';
 		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merged</th><th>P2 Value</th></tr>';
 		
