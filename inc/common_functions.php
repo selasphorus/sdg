@@ -221,7 +221,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
     } else if (isset($_GET['ids'])) {
 		$post_ids = $_GET['ids'];
-		$str_ids = implode(", ", $_GET['ids']);
+		//$str_ids = implode(", ", $_GET['ids']);
+		$troubleshooting .= print_r($_GET['ids'], true);
     } else if (isset($_POST['ids'])) {
 		$post_ids = $_POST['ids'];
 		$str_ids = implode(", ", $_POST['ids']);
