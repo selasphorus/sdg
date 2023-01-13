@@ -2178,7 +2178,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '<tr>';
         //
         $info .= '<td class="actions">';
-        $info .= '<input type="checkbox" id="merge-'.$post_id.'" name="merge-'.$post_id.'" value="'.$post_id.'" />';
+        $info .= '<input type="checkbox" id="merge-'.$post_id.'" name="merge[]" value="'.$post_id.'" />';
+        //$info .= '<input type="checkbox" id="merge-'.$post_id.'" name="merge-'.$post_id.'" value="'.$post_id.'" />';
         $info .= '</td>';
         //
         $info .= '<td class="repertoire">';
