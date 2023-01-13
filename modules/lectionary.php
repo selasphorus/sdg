@@ -344,6 +344,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 		} else {
 			$info .= "<!-- fixed_date_str: ".$fixed_date_str." -->";
 			$formatted_fixed_date_str = date("Y-m-d",strtotime($fixed_date_str));
+			$info .= "<!-- formatted_fixed_date_str: ".$formatted_fixed_date_str." -->";
 			$dates[] = $formatted_fixed_date_str;
 		}		
 	} else {
