@@ -454,7 +454,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td>'.$field_type.'</td>';
 				$info .= '<td>'.$field_name.'</td>';
 				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
-				$info .= '<td><textarea name="'.$field_name.'" rows="10" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
+				$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
 				$info .= '<td class="'.$p2_class.'">'.$p2_val_str.'</td>';
