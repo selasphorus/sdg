@@ -932,31 +932,45 @@ function get_event_program_items( $atts = [] ) {
 				
 				if ( isset($row['program_item'][0]) ) {
 					foreach ( $row['program_item'] as $program_item_obj_id ) {
+						
 						$item_post_type = get_post_type( $program_item_obj_id );
+						$updates = false;
+						
 						if ( $item_post_type == 'repertoire' ) {
 							$troubleshooting .= "Found a rep item with ID:".$program_item_obj_id."<br />";
 							$repertoire_events = get_field('repertoire_events', $program_item_obj_id, false);
 							if ( !empty($repertoire_events) ) {
-								$troubleshooting .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre><br />";
-								// WIP -- Check to see if post_id is already saved to rep record? or just add it?
-								// add new ID to the array
+								$troubleshooting .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre><br />";								
 								if ( !is_array($repertoire_events) ) {
 									// If it's not an array already, make it one
 									$repertoire_events = explode( ", ",$repertoire_events );
 								}
-								$repertoire_events[] = $post_id;
+								// Add the event post_id if it's not already there
+								if ( !in_array( $post_id, $repertoire_events ) ) {
+									$repertoire_events[] = $post_id;
+									$updates = true;
+								} else {
+									$troubleshooting .= "This event id is already in the array.<br />";	
+								}
 							} else {
 								$troubleshooting .= "This rep item currently has no repertoire_events.<br />";
 								// No related_events set yet, so add the post_id
-								$repertoire_events = array($post_id);								
+								$repertoire_events = array($post_id);	
+								$updates = true;							
 							}
-							if ( update_field('repertoire_events', $repertoire_events, $program_item_obj_id ) ) {
-								$troubleshooting .= "Success! Added this event to the repertoire_events array<br />";
+							if ( $updates == true ) {
+								if ( update_field('repertoire_events', $repertoire_events, $program_item_obj_id ) ) {
+									$troubleshooting .= "Success! repertoire_events field updated<br />";
+								} else {
+									$troubleshooting .= "phooey. update failed.<br />";
+								}
 							} else {
-								$troubleshooting .= "phooey. update failed.<br />";
+								$troubleshooting .= "No update needed.<br />";
 							}
+							
 						}
 						$troubleshooting .= "+++++<br />";
+						
 					}
 				}
     
