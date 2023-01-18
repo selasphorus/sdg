@@ -2462,8 +2462,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     if ( is_dev_site() ) {
 		$info .= '<input type="submit" value="Merge Selected">';
-		$info .= "</form>";
     }
+	$info .= "</form>";
     
     return $info;
     
