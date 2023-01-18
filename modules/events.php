@@ -953,7 +953,8 @@ function get_event_program_items( $atts = [] ) {
 									$troubleshooting .= "phooey. update failed.<br />";
 								}
 							}
-						}	
+						}
+						$troubleshooting .= "+++++<br />";
 					}
 				}
     
