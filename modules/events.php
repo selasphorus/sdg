@@ -940,16 +940,17 @@ function get_event_program_items( $atts = [] ) {
 								$troubleshooting .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre><br />";
 								// WIP -- Check to see if post_id is already saved to rep record? or just add it?
 								// add new ID to the array
-								$repertoire_events[] = $post_id;
+								/*$repertoire_events[] = $post_id;
 								if ( update_field('repertoire_events', $repertoire_events, $program_item_obj_id ) ) {
 									$troubleshooting .= "Success! Added this event to the repertoire_events array<br />";
 								} else {
 									$troubleshooting .= "phooey. update failed.<br />";
-								}
+								}*/
 							} else {
 								$troubleshooting .= "This rep item currently has no repertoire_events.<br />";
 								// No related_events set yet, so add the post_id
-								if ( update_field('repertoire_events', $post_id, $program_item_obj_id ) ) {
+								$repertoire_events = array($post_id);
+								if ( update_field('repertoire_events', $repertoire_events, $program_item_obj_id ) ) {
 									$troubleshooting .= "Success! Added this event to the repertoire_events array<br />";
 								} else {
 									$troubleshooting .= "phooey. update failed.<br />";
