@@ -639,6 +639,7 @@ function get_event_program_items( $atts = [] ) {
     $run_updates = $a['run_updates'];
     $display = $a['display'];
     $info = "";
+    $troubleshooting = "";
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
     $groupings = false;
@@ -924,6 +925,31 @@ function get_event_program_items( $atts = [] ) {
 				$table .= '</tr>';
 			}
 			
+			// WIP -- figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
+			if ( is_dev_site() ) {
+			
+				$rows = get_field('program_items', $post_id);
+				
+				if ( isset($row['program_item'][0]) ) {
+					foreach ( $row['program_item'] as $program_item_obj_id ) {
+						$item_post_type = get_post_type( $program_item_obj_id );
+						if ( $item_post_type == 'repertoire' ) {
+							$troubleshooting .= "Found a rep item with ID:".$program_item_obj_id."<br />";
+							$rep_related_events = get_field('related_events', $program_item_obj_id);
+							if ( $rep_related_events ) {
+								// Check to see if post_id is already saved to rep record
+								$troubleshooting .= "This rep item currently has no related_events.<br />";
+							} else {
+								// No related_events set yet, so add the post_id
+								$troubleshooting .= "This rep item currently has the following related_events: <pre>".print_r($rep_related_events,true)."</pre><br />";
+								//update_field('related_events', $post_id, $program_item_obj_id );
+							}
+						}	
+					}
+				}
+    
+			}
+			
 			// --------------------
             
             $i++;
@@ -946,6 +972,10 @@ function get_event_program_items( $atts = [] ) {
         $info = str_replace('<!-- ','',$info);
         $info = str_replace(' -->','<br />',$info);
         $info .= '</p>';
+    }
+    
+    if ( is_dev_site() ) {
+    	$info .= $troubleshooting;
     }
     
 	return $info;
