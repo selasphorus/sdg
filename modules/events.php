@@ -937,10 +937,12 @@ function get_event_program_items( $atts = [] ) {
 						$updates = false;
 						
 						if ( $item_post_type == 'repertoire' ) {
+						
 							$troubleshooting .= "Found a rep item with ID:".$program_item_obj_id."<br />";
 							$repertoire_events = get_field('repertoire_events', $program_item_obj_id, false);
+							
 							if ( !empty($repertoire_events) ) {
-								$troubleshooting .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre><br />";								
+								$troubleshooting .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre>";								
 								if ( !is_array($repertoire_events) ) {
 									// If it's not an array already, make it one
 									$repertoire_events = explode( ", ",$repertoire_events );
@@ -969,7 +971,7 @@ function get_event_program_items( $atts = [] ) {
 							}
 							
 						}
-						$troubleshooting .= "+++++<br />";
+						$troubleshooting .= "+++++<br /><br />";
 						
 					}
 				}
