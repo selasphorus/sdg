@@ -2284,16 +2284,18 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         
         // Get and display note of num event programs which include this work, if any
         // Get Related Events
-		$related_events = get_related_events ( "program_item", $post_id );
-		$event_post_ids = $related_events['event_posts'];
-		$related_events_info = $related_events['info'];
+        if ( is_dev_site() ) {
+			$related_events = get_related_events ( "program_item", $post_id );
+			$event_post_ids = $related_events['event_posts'];
+			$related_events_info = $related_events['info'];
 	
-		if ( $event_post_ids ) {
-			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
-		}
-        
-        if ( $rep_info != "" ) {
-            $info .= "<br />".$rep_info;
+			if ( $event_post_ids ) {
+				$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
+			}
+		
+			if ( $rep_info != "" ) {
+				$info .= "<br />".$rep_info;
+			}
         }
 
         $info .= '</td>';
