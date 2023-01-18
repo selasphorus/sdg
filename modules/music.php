@@ -2285,6 +2285,15 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         // Get and display note of num event programs which include this work, if any
         // Get Related Events
         if ( is_dev_site() ) {
+        
+        	// New way
+        	$repertoire_events = get_field('repertoire_events', $post_id, false);
+        	if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
+				$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
+			}
+        	
+        	// Old way
+        	/*
 			$related_events = get_related_events ( "program_item", $post_id );
 			$event_post_ids = $related_events['event_posts'];
 			$related_events_info = $related_events['info'];
@@ -2292,7 +2301,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 			if ( $event_post_ids ) {
 				$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
 			}
-		
+			*/
+			
 			if ( $rep_info != "" ) {
 				$info .= "<br />".$rep_info;
 			}
