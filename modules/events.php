@@ -935,11 +935,13 @@ function get_event_program_items( $atts = [] ) {
 						$item_post_type = get_post_type( $program_item_obj_id );
 						if ( $item_post_type == 'repertoire' ) {
 							$troubleshooting .= "Found a rep item with ID:".$program_item_obj_id."<br />";
-							$rep_related_events = get_field('related_events', $program_item_obj_id);
+							$rep_related_events = get_field('related_events', $program_item_obj_id, false);
 							if ( !empty($rep_related_events) ) {
 								$troubleshooting .= "This rep item currently has the following related_events: <pre>".print_r($rep_related_events,true)."</pre><br />";
 								// WIP -- Check to see if post_id is already saved to rep record? or just add it?
-								if ( update_field('related_events', $post_id, $program_item_obj_id ) ) {
+								// add new ID to the array
+								$rep_related_events[] = $post_id;
+								if ( update_field('related_events', $rep_related_events, $program_item_obj_id ) ) {
 									$troubleshooting .= "Success! Added this event to the related_events array<br />";
 								} else {
 									$troubleshooting .= "phooey. update failed.<br />";
