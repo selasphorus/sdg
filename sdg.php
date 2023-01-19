@@ -1959,4 +1959,18 @@ function sdg_post_type_access_limiter(){
     }
 }
 
+
+function surprise() {
+
+	// Set up an array of fun words and things...
+	$surprises = array();
+	
+	// Pick one at random
+	$surprise = array_rand($surprises, 1);
+	
+	// Surprise!
+	return $surprise;	
+
+}
+
 ?>
