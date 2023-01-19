@@ -2360,7 +2360,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 				$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
 			} else {
 				// Field repertoire_events is empty -> check to see if updates are in order
-				if ( $i < 5 ) { $info .= '<br />{'.$i.'}<p class="nb orange">'.update_repertoire_events( $post_id, false ).'</p>'; } // For dev, at least, limit number of records that are processed, because the queries may be slow
+				if ( $i < 5 ) { $info .= '<br />{'.$i.'}<p class="orange">'.update_repertoire_events( $post_id, false ).'</p>'; } // For dev, at least, limit number of records that are processed, because the queries may be slow
 				//$info .= update_repertoire_events( $post_id, false );
 			}
         	
