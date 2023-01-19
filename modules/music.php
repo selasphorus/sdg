@@ -2290,6 +2290,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         	$repertoire_events = get_field('repertoire_events', $post_id, false);
         	if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
 				$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
+			} else {
+				//
 			}
         	
         	// Old way
