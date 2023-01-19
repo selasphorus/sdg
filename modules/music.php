@@ -58,6 +58,7 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 	if ( $updates == true ) {
 		if ( update_field('repertoire_events', $repertoire_events, $rep_id ) ) {
 			$info .= "Success! repertoire_events field updated<br />";
+			$info .= "Updated repertoire_events: <pre>".print_r($repertoire_events,true)."</pre>";
 		} else {
 			$info .= "phooey. update failed.<br />";
 		}
