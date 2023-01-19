@@ -544,8 +544,8 @@ function build_sermon_filters() {
 	// Limit the list to a specific set of active clergy, per their person_ids, or "Other"
     // TODO: figure out a more elegant way to do this so that it's easier to make changes
     if ( !is_dev_site() ) {
-        // Fr. Turner 15012, Fr. Moretz 15001, Mo. Turner 15022, Fr. Shultz 282498, Mo. Lee-Pae 284270, Fr. Brown 14984, Fr. Cheng 143207, Sr. Promise 246039 -- LIVE SITE
-        $author_ids = array(15012, 15001, 15022, 282498, 284270, 14984, 143207, 246039); // Fr. Bennett: 123941
+        // Fr. Turner 15012, Fr. Brown 14984, Fr. Cheng 143207, Fr. Gioia 305654, Mo. Lee-Pae 284270, Fr. Moretz 15001, Sr. Promise 246039, Fr. Shultz 282498, Mo. Turner 15022 -- LIVE SITE
+        $author_ids = array(15012, 14984, 143207, 305654, 284270, 15001, 246039, 282498, 15022); // Fr. Bennett: 123941
     } else {
         // Fr. Turner, Fr. Moretz, Fr. Brown, Fr. Cheng, Mo. Turner, Sr. Promise -- DEV SITE
         $author_ids = array(15012, 15001, 14984, 143207, 15022, 147858); // Fr. Bennett:
