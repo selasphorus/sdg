@@ -8,7 +8,70 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+
 /*********** CPT: REPERTOIRE (aka Musical Works) ***********/
+
+/* ~~~ Admin/Dev functions ~~~ */
+function update_repertoire_events( $rep_id = null, $arr_event_ids = array() ) {
+	
+	$info = "";
+	$updates = false;
+	
+	$info .= "About to update repertoire_events for rep item with ID:".$rep_id."<br />";
+	
+	// get the repertoire_events field contents for the rep item
+	$repertoire_events = get_field('repertoire_events', $rep_id, false);
+	
+	if ( !empty($repertoire_events) ) {
+		$info .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre>";								
+		if ( !is_array($repertoire_events) ) { $repertoire_events = explode( ", ",$repertoire_events ); } // If it's not an array already, make it one		
+	} else {
+		$info .= "This rep item currently has no repertoire_events.<br />";
+		$repertoire_events = array(); // No repertoire_events set yet, so prep an empty array
+	}
+	
+	// Check to see if any event_ids were submitted and proceed accordingly
+	if ( empty($arr_event_ids) ) {
+	
+		// No event_ids were submitted -> run a query to find ALL event_ids for events with programs containing the rep_id		
+		$related_events = get_related_events ( "program_item", $rep_id );
+		$arr_event_ids = $related_events['event_posts'];
+		//$related_events_info = $related_events['info'];
+	
+		if ( empty($arr_event_ids) ) {
+			$info .= "No related events were found using the get_related_events fcn.<br />"; // tft
+		}
+    
+	}
+
+	// Check event_ids to see if they're already in the repertoire_events array and add them if not
+	foreach($arr_event_ids as $event_id) {
+		if ( !in_array( $event_id, $repertoire_events ) ) {
+			$repertoire_events[] = $event_id;
+			$updates = true;
+		} else {
+			$info .= "The event_id [$event_id] is already in the array.<br />";	
+		}
+	}
+	
+	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
+	if ( $updates == true ) {
+		if ( update_field('repertoire_events', $repertoire_events, $rep_id ) ) {
+			$info .= "Success! repertoire_events field updated<br />";
+		} else {
+			$info .= "phooey. update failed.<br />";
+		}
+	} else {
+		$info .= "No update needed.<br />";
+	}
+	
+	$info .= "+++++<br /><br />";
+	
+	return $info;
+							
+}
+
+/* ~~~ Display functions ~~~ */
 
 function get_cpt_repertoire_content( $post_id = null ) {
 	
@@ -2168,6 +2231,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= '<th>Musical Work</th><th>Editions</th>';
     $info .= '</tr>';
     
+    $i = 0;
+    
     foreach ( $rep_ids as $rep_id ) {
         
         $post_id = $rep_id;
@@ -2292,7 +2357,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 				$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
 			} else {
 				// Field repertoire_events is empty -> check to see if updates are in order
-				$info .= update_repertoire_events($post_id);
+				if ( $i < 3 ) { $info .= '<br /><span class="nb orange">'.update_repertoire_events( array($post_id) ).'</span>'; } // For dev, at least, limit number of records that are processed, because the queries may be slow
+				//$info .= update_repertoire_events( array($post_id) );
 			}
         	
         	// Old way
@@ -2466,9 +2532,10 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= $editions;
         
         $info .= '</td>';
-
         $info .= '</tr>';
-
+        
+        $i++;
+        
     } // END foreach ( $posts as $post )
     
     $info .= "</table>";
