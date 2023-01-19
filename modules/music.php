@@ -12,7 +12,7 @@ if ( !function_exists( 'add_action' ) ) {
 /*********** CPT: REPERTOIRE (aka Musical Works) ***********/
 
 /* ~~~ Admin/Dev functions ~~~ */
-function update_repertoire_events( $rep_id = null, $arr_event_ids = array() ) {
+function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $arr_event_ids = array() ) {
 	
 	$info = "";
 	$updates = false;
@@ -31,7 +31,7 @@ function update_repertoire_events( $rep_id = null, $arr_event_ids = array() ) {
 	}
 	
 	// Check to see if any event_ids were submitted and proceed accordingly
-	if ( empty($arr_event_ids) ) {
+	if ( empty($arr_event_ids) && $run_slow_queries == true ) {
 	
 		// No event_ids were submitted -> run a query to find ALL event_ids for events with programs containing the rep_id		
 		$related_events = get_related_events ( "program_item", $rep_id );
@@ -86,16 +86,18 @@ function get_cpt_repertoire_content( $post_id = null ) {
     }
     
     // Related Events
-    $related_events = get_related_events ( "program_item", $post_id );
-    $event_posts = $related_events['event_posts'];
-    $related_events_info = $related_events['info'];
+    $repertoire_events = get_field('repertoire_events', $post_id, false);
+	if ( empty($repertoire_events) && is_dev_site() ) {
+		// Field repertoire_events is empty -> check to see if updates are in order
+		$info .= update_repertoire_events( $post_id );
+	}
     
-    if ( $event_posts ) { 
+    if ( $repertoire_events ) { 
         //global $post;
         //-- STC
         $info .= "<h3>Performances at Saint Thomas Church:</h3>";
         $x = 1;
-        foreach($event_posts as $event_post_id) { 
+        foreach($repertoire_events as $event_post_id) { 
             //setup_postdata($event_post);
             //$info .= "[$x] event_post: <pre>".print_r($event_post, true)."</pre>"; // tft
             //$event_post_id = $event_post->ID;
@@ -2357,8 +2359,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 				$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
 			} else {
 				// Field repertoire_events is empty -> check to see if updates are in order
-				if ( $i < 5 ) { $info .= '<br />{'.$i.'}<p class="nb orange">'.update_repertoire_events($post_id).'</p>'; } // For dev, at least, limit number of records that are processed, because the queries may be slow
-				//$info .= update_repertoire_events( array($post_id) );
+				if ( $i < 5 ) { $info .= '<br />{'.$i.'}<p class="nb orange">'.update_repertoire_events( $post_id, false ).'</p>'; } // For dev, at least, limit number of records that are processed, because the queries may be slow
+				//$info .= update_repertoire_events( $post_id, false );
 			}
         	
         	// Old way
@@ -2379,7 +2381,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 
         $info .= '</td>';
 
-        
+        // Related Editions
         $related_editions = get_field('repertoire_editions', $post_id, false);
         if ( empty($related_editions) ) {
             $related_editions = get_field('related_editions', $post_id, false);
