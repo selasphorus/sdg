@@ -90,7 +90,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     $repertoire_events = get_field('repertoire_events', $post_id, false);
 	if ( empty($repertoire_events) && is_dev_site() ) {
 		// Field repertoire_events is empty -> check to see if updates are in order
-		$info .= update_repertoire_events( $post_id );
+		$info .= '<div class="orange">'.update_repertoire_events( $post_id ).'</div>';
 	}
     
     if ( $repertoire_events ) { 
