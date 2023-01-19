@@ -1521,7 +1521,9 @@ if ( in_array('links', $sdg_modules ) ) {
 //
 if ( in_array('music', $sdg_modules ) ) {
 	add_filter('acf/update_value/name=repertoire_editions', 'bidirectional_acf_update_value', 10, 3);
-	//add_action('acf/save_post', 'acf_update_related_field_on_save'); // WIP
+	if ( is_dev_site() ) {
+		//add_action('acf/save_post', 'acf_update_related_field_on_save'); // WIP
+	}
 }
 
 // ACF Bi-directional fields
@@ -1612,16 +1614,29 @@ function acf_update_related_field_on_save ( $post_id ) {
 	
 	// TODO: figure out how to handle repeater field sub_fields -- e.g. repertoire_events << event program_items
 	
-	// Get newly saved values.
-    $values = get_fields( $post_id );
+	// Get newly saved values -- all fields
+    //$values = get_fields( $post_id );
 
-    // Check the new value of a specific field.
-    /*
-    $program_items = get_field('program_items', $post_id);
-    $hero_image = get_field('hero_image', $post_id);
-    if( $hero_image ) {
-        // Do something...
-    }*/
+    // Check the current (updated) value of a specific field.
+    $rows = get_field('program_items', $post_id);
+    if ( $rows ) {
+        foreach( $rows as $row ) {
+        	if ( isset($row['program_item'][0]) ) {
+        		foreach ( $row['program_item'] as $program_item_obj_id ) {
+        			$item_post_type = get_post_type( $program_item_obj_id );
+        			if ( $item_post_type == 'repertoire' ) {
+        				$rep_related_events = get_field('related_events', $program_item_obj_id);
+        				if ( $rep_related_events ) {
+        					// Check to see if post_id is already saved to rep record
+        				} else {
+        					// No related_events set yet, so add the post_id
+        					//update_field('related_events', $post_id, $program_item_obj_id );
+        				}
+        			}	
+        		}
+        	}
+        }
+    }
 	
 }
 
