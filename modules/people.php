@@ -74,7 +74,7 @@ function get_cpt_person_content( $post_id = null ) {
     $arr_obj_sermons = get_related_posts( $post_id, 'sermon', 'sermon_author' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
     if ( $arr_obj_sermons ) {
         
-        $info .= '<div class="dev-view sermons">';
+        $info .= '<div class="dev-only sermons">';
         $info .= "<h3>Sermons:</h3>";
 
         foreach ( $arr_obj_sermons as $sermon ) {
@@ -111,7 +111,7 @@ function get_cpt_person_content( $post_id = null ) {
 
         if ( $event_posts ) { 
             global $post;
-            $info .= '<div class="dev-view em_events">';
+            $info .= '<div class="dev-only em_events">';
             //-- STC
             $info .= '<h3>Events at Saint Thomas Church:</h3>';
             foreach($event_posts as $post) { 
@@ -131,7 +131,7 @@ function get_cpt_person_content( $post_id = null ) {
         $term_obj_list = get_the_terms( $post_id, 'people_category' );
         if ( $term_obj_list ) {
             $terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
-            $info .= '<div class="dev-view categories">';
+            $info .= '<div class="dev-only categories">';
             if ( $terms_string ) {
                 $info .= "<p>Categories: ".$terms_string."</p>";
             }
