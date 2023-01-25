@@ -126,20 +126,19 @@ function get_cpt_person_content( $post_id = null ) {
         } else {
             $info .= "<!-- No related events found for post_id: $post_id -->";
         }
-        */
-        
-        $term_obj_list = get_the_terms( $post_id, 'people_category' );
-        if ( $term_obj_list ) {
-            $terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
-            $info .= '<div class="dev-only categories">';
-            if ( $terms_string ) {
-                $info .= "<p>Categories: ".$terms_string."</p>";
-            }
-            $info .= '</div>';
-        }
-        
         wp_reset_query();
+        */
     }
+        
+	$term_obj_list = get_the_terms( $post_id, 'people_category' );
+	if ( $term_obj_list ) {
+		$terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
+		$info .= '<div class="dev-only categories">';
+		if ( $terms_string ) {
+			$info .= "<p>Categories: ".$terms_string."</p>";
+		}
+		$info .= '</div>';
+	}
     
     return $info;
     
