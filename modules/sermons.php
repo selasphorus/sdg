@@ -441,9 +441,12 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
             //$msg .= "<p>author_id: $author_id</p>";
             //$msg .= "<!-- author_id: $author_id -->";
             if ($author === 'other') {
+            	// Exclude IDs of featured_preachers (as designated via the CPT options page)
+            	$exclusions = get_field('featured_preachers', 'option');
+            	/*
             	// If featured_preachers have been designated via the CPT options page, use those. Otherwise default to old hard-coded exclusions
             	$featured_preachers = get_field('featured_preachers', 'option');
-            	if ( !empty($featured_preachers) ) { $exclusions = $featured_preachers; } else { $exclusions = array(15012, 15001, 124072, 123941, 143207, 15022, 246039); }
+            	if ( !empty($featured_preachers) ) { $exclusions = $featured_preachers; } else { $exclusions = array(15012, 15001, 124072, 123941, 143207, 15022, 246039); }*/
                 $compare = 'NOT IN';
                 
                 $authors_meta = array( 'relation' => 'AND' );
@@ -542,9 +545,9 @@ function build_sermon_filters() {
 	$info .= '<br />';
 	
 	// Preachers menu
-	// Limit the list to a specific set of active clergy, per their person_ids, or "Other"
-    // TODO: figure out a more elegant way to do this so that it's easier to make changes
-    // If featured_preachers have been designated via the CPT options page, use those. Otherwise default to old hard-coded author_ids array.
+    // Get featured_preachers as designated via the CPT options page
+    $author_ids = get_field('featured_preachers', 'option');
+    /*
     $featured_preachers = get_field('featured_preachers', 'option');
     if ( !empty($featured_preachers) ) { 
     	$author_ids = $featured_preachers;
@@ -555,7 +558,7 @@ function build_sermon_filters() {
         // Fr. Turner, Fr. Moretz, Fr. Brown, Fr. Cheng, Mo. Turner, Sr. Promise -- DEV SITE
         $author_ids = array(15012, 15001, 14984, 143207, 15022, 147858); // Fr. Bennett:
     }
-    
+    */
     $args = array(
         'post_type'   => 'person',
         'post_status' => 'publish',
