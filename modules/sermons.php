@@ -441,8 +441,9 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
             //$msg .= "<p>author_id: $author_id</p>";
             //$msg .= "<!-- author_id: $author_id -->";
             if ($author === 'other') {
-                $exclusions = array(15012, 15001, 124072, 123941, 143207, 15022, 246039); 
-                //'(15012, 15001, 124072, 123941, 143207, 15022, 147858)';
+            	// If featured_preachers have been designated via the CPT options page, use those. Otherwise default to old hard-coded exclusions
+            	$featured_preachers = get_field('featured_preachers', 'option');
+            	if ( !empty($featured_preachers) ) { $exclusions = $featured_preachers; } else { $exclusions = array(15012, 15001, 124072, 123941, 143207, 15022, 246039); }
                 $compare = 'NOT IN';
                 
                 $authors_meta = array( 'relation' => 'AND' );
@@ -543,7 +544,11 @@ function build_sermon_filters() {
 	// Preachers menu
 	// Limit the list to a specific set of active clergy, per their person_ids, or "Other"
     // TODO: figure out a more elegant way to do this so that it's easier to make changes
-    if ( !is_dev_site() ) {
+    // If featured_preachers have been designated via the CPT options page, use those. Otherwise default to old hard-coded author_ids array.
+    $featured_preachers = get_field('featured_preachers', 'option');
+    if ( !empty($featured_preachers) ) { 
+    	$author_ids = $featured_preachers;
+    } else if ( !is_dev_site() ) {
         // Fr. Turner 15012, Fr. Brown 14984, Fr. Cheng 143207, Fr. Gioia 305654, Mo. Lee-Pae 284270, Fr. Moretz 15001, Sr. Promise 246039, Fr. Shultz 282498, Mo. Turner 15022 -- LIVE SITE
         $author_ids = array(15012, 14984, 143207, 305654, 284270, 15001, 246039, 282498, 15022); // Fr. Bennett: 123941
     } else {
