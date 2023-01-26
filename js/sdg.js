@@ -552,14 +552,15 @@ jQuery(document).ready(function($) {
 
     }
     
-    // Pop-up dialog for Day Titles
+    // Pop-up dialog for Day Titles and other modal content
     $(function() {
         
-        var handle_id; //var litdate_id;
+        var handle_id;
         var dialog_id;
         
         $("a.dialog_handle").on("click", function() {
-        //$("a.calendar-day").on("click", function() {
+        
+        	console.log('click registered on a dialog_handle link');
             
             //var isOpen = false, dialogOpen = false;
             
