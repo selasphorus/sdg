@@ -579,6 +579,9 @@ jQuery(document).ready(function($) {
         });
         
         $(document.body).on("click", ".ui-widget-overlay", function() {
+        
+        	console.log('click registered on a widget overlay element');
+        	
             $.each($(".ui-dialog"), function() {
                 var $dialog;
                 $dialog = $(this).children(".ui-dialog-content");
