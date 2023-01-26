@@ -555,8 +555,8 @@ jQuery(document).ready(function($) {
     // Pop-up dialog for Day Titles and other modal content
     $(function() {
         
-        var handle_id;
-        var dialog_id;
+        //var handle_id;
+        //var dialog_id;
         
         $("a.dialog_handle").on("click", function() {
         
