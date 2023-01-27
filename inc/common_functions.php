@@ -397,11 +397,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
 			}
 
-			if ( $field ) { 
-				//$field_info .= "break.<br />";
-				break;  // Once the field has been matched to a post_type field, there's no need to continue looping
-			}
-
 		} // END foreach ( $field_groups as $group )
 		
 		// Get terms applied to both posts
