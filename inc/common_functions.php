@@ -412,17 +412,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_label = "";
 			
 			// Get terms... WIP
-			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'all' ) ); // array( 'fields' => 'names' ) 
-			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'all' ) );
+			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
+			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'ids' ) );
 			
-			if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
-			if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
+			//if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
+			//if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
 			
-			/*$merged = merge_field_values($p1_val, $p2_val);
+			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
-			$merge_info = $merged['info'];*/
-			$merge_value = "tmp";
-			$merge_info = "tmp";
+			$merge_info = $merged['info'];
+			//$merge_value = "tmp"; $merge_info = "tmp";
 		
 			$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
 			//$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
