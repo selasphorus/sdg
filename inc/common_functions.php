@@ -402,12 +402,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
-			$field_type = "TMP";
+			$field_type = "array";
 			$field_label = "";
 			
 			// Get terms... WIP
-			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'names' ) );
-			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'names' ) );
+			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'all' ) ); // array( 'fields' => 'names' ) 
+			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'all' ) );
 			
 			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
