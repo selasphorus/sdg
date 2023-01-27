@@ -415,8 +415,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'all' ) ); // array( 'fields' => 'names' ) 
 			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'all' ) );
 			
-			$info .= "taxonomy [$field_name] p1_val: ".print_r($p1_val, true)."<br />";
-			$info .= "taxonomy [$field_name] p2_val: ".print_r($p2_val, true)."<br />";
+			if ( !is_empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: ".print_r($p1_val, true)."<br />"; }
+			if ( !is_empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: ".print_r($p2_val, true)."<br />"; }
+			
 			/*$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
 			$merge_info = $merged['info'];*/
