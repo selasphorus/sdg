@@ -274,26 +274,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	}
         
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
-    $arr_core_fields = array( 'post_title', 'content', 'excerpt', 'post_thumbnail' );
-    // post_title, content, excerpt, post_thumbnail (featured image)
-    // author, post_status, date published, date last modified -- read only?
-    //$arr_fields = get_fields...;
-    //$info .= print_r($arr_fields, true); // tft
+    $arr_core_fields = array( 'post_title', 'content', 'excerpt', 'post_thumbnail' ); // Also?: author, post_status, date published, date last modified -- read only?
     
     // Get all ACF field groups associated with the post_type
     $field_groups = acf_get_field_groups( array( 'post_type' => $post_type ) );
-    //$troubleshooting .= "field_groups for post_type '$post_type': <pre>".print_r($field_groups,true)."</pre>";
-    /*$troubleshooting .= "field_groups for post_type '$post_type': <pre>";
-    foreach ( $field_groups as $field_group ) {
-    	$troubleshooting .= $field_group['title']."<br />";
-    }
-    $troubleshooting .= "</pre>";*/
     
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
     $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
     
-    // TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
+    // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
     $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     
@@ -309,6 +299,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	// Get and compare last modified dates
     	$p1_modified = $p1->post_modified;
     	$p2_modified = $p2->post_modified;
+    	
     	// Prioritize the post which was most recently modified by putting it in first position
     	// In other words, swap p1/p2 if second post is newer
     	if ( $p1_modified < $p2_modified ) {
@@ -334,7 +325,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		// TODO: tag which fields are ok to edit manually, to avoid trouble -- e.g. editions; choirplanner_id, &c. should be RO
 		// TODO: include editing instructions -- e.g. separate category list with semicolons (not commas!)
-		
 		
 		// Get core values for both posts
 		foreach ( $arr_core_fields as $field_name ) {
@@ -512,696 +502,47 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '</table>';
     }
     
-    /*
-        // Loop through the field names and create the actual form fields
-        foreach ( $arr_fields as $arr_field ) {
-            
-            $field_info = ""; // init
-            $field_name = $arr_field; // may be overrriden below
-            $alt_field_name = null; // for WIP fields/transition incomplete, e.g. repertoire_litdates replacing related_liturgical_dates
-                    
-            // Fine tune the field name
-            if ( $field_name == "title" ) {
-                $placeholder = "title"; // for input field
-                if ( $post_type == "repertoire" ) { // || $post_type == "edition"
-                    $field_name = "title_clean"; // todo -- address problem that editions don't have this field
-                    //$field_name = "post_title";
-                } else {
-                    $field_name = "post_title";
-                    //$field_name = "s";
-                }
-            } else {
-                $placeholder = $field_name; // for input field
-            }
-            
-            if ( $form_type == "advanced_search" ) {
-                $field_label = str_replace("_", " ",ucfirst($placeholder));
-                if ( $field_label == "Repertoire category" ) { 
-                    $field_label = "Category";
-                } else if ( $field_name == "liturgical_date" || $field_label == "Related liturgical dates" ) { 
-                    $field_label = "Liturgical Dates";
-                    $field_name = "repertoire_litdates";
-                    $alt_field_name = "related_liturgical_dates";
-                }
-            }
-            
-            // Check to see if the field_name is an actual field, separator, or search operator
-            if ( str_starts_with($field_name, '&') ) { 
-                
-                // This "field" is a separator/text between fields                
-                $info .= substr($field_name,1).'&nbsp;';
-                
-            } else if ( $field_name == 'search_operator' ) {
-                
-                // This "field" is a search operator, i.e. search type
-                
-                if ( !isset($_GET[$field_name]) || empty($_GET[$field_name]) ) { $search_operator = 'and'; } else { $search_operator = $_GET[$field_name]; } // default to "and"
-
-                $info .= 'Search Type: ';
-                $info .= '<input type="radio" id="and" name="search_operator" value="and"';
-                if ( $search_operator == 'and' ) { $info .= ' checked="checked"'; }
-                $info .= '>';
-                $info .= '<label for="and">AND <span class="tip">(match all criteria)</span></label>&nbsp;';
-                $info .= '<input type="radio" id="or" name="search_operator" value="or"';
-                if ( $search_operator == 'or' ) { $info .= ' checked="checked"'; }
-                $info .= '>';
-                $info .= '<label for="or">OR <span class="tip">(match any)</span></label>';
-                $info .= '<br />';
-                        
-            } else if ( $field_name == 'devmode' ) {
-                
-                // This "field" is for testing/dev purposes only
-                
-                if ( !isset($_GET[$field_name]) || empty($_GET[$field_name]) ) { $devmode = 'true'; } else { $devmode = $_GET[$field_name]; } // default to "true"
-
-                $info .= 'Dev Mode?: ';
-                $info .= '<input type="radio" id="devmode" name="devmode" value="true"';
-                if ( $devmode == 'true' ) { $info .= ' checked="checked"'; }
-                $info .= '>';
-                $info .= '<label for="true">True</label>&nbsp;';
-                $info .= '<input type="radio" id="false" name="devmode" value="false"';
-                if ( $devmode !== 'true' ) { $info .= ' checked="checked"'; }
-                $info .= '>';
-                $info .= '<label for="false">False</label>';
-                $info .= '<br />';
-                        
-            } else {
-                
-                // This is an actual search field
-                
-                // init/defaults
-                $field_type = null; // used to default to "text"
-                $pick_object = null; // ?pods?
-                $pick_custom = null; // ?pods?
-                $field = null;
-                $field_value = null;
-                
-                // First, deal w/ title field -- special case
-                if ( $field_name == "post_title" ) {
-                    $field = array( 'type' => 'text', 'name' => $field_name );
-                }
-                
-                // Check to see if a field by this name is associated with the designated post_type -- for now, only in use for repertoire(?)
-                $field = match_group_field( $field_groups, $field_name );
-                
-                if ( $field ) {
-                    
-                    // if field_name is same as post_type, must alter it to prevent automatic redirect when search is submitted -- e.g. "???"
-                    if ( post_type_exists( $arr_field ) ) {
-                        $field_name = $post_type."_".$arr_field;
-                    }
-                    
-                    $query_assignment = "primary";
-                    
-                } else {
-                    
-                    //$field_info .= "field_name: $field_name -- not found for $post_type >> look for related field.<br />"; // tft
-                    
-                    // If no matching field was found in the primary post_type, then
-                    // ... get all ACF field groups associated with the related_post_type(s)                    
-                    $related_field_groups = acf_get_field_groups( array( 'post_type' => $related_post_type ) );
-                    $field = match_group_field( $related_field_groups, $field_name );
-                                
-                    if ( $field ) {
-                        
-                        // if field_name is same as post_type, must alter it to prevent automatic redirect when search is submitted -- e.g. "publisher" => "edition_publisher"
-                        if ( post_type_exists( $arr_field ) ) {
-                            $field_name = $related_post_type."_".$arr_field;
-                        }
-                        $query_assignment = "related";
-                        $field_info .= "field_name: $field_name found for related_post_type: $related_post_type.<br />"; // tft    
-                        
-                    } else {
-                        
-                        // Still no field found? Check taxonomies 
-                        //$field_info .= "field_name: $field_name -- not found for $related_post_type either >> look for taxonomy.<br />"; // tft
-                        
-                        // For field_names matching taxonomies, check for match in $taxonomies array
-                        if ( taxonomy_exists( $field_name ) ) {
-                            
-                            $field_info .= "$field_name taxonomy exists.<br />";
-                                
-                            if ( in_array($field_name, $taxonomies) ) {
-
-                                $query_assignment = "primary";                                    
-                                $field_info .= "field_name $field_name found in primary taxonomies array<br />";
-
-                            } else {
-
-                                // Get all taxonomies associated with the related_post_type
-                                $related_taxonomies = get_object_taxonomies( $related_post_type );
-
-                                if ( in_array($field_name, $related_taxonomies) ) {
-
-                                    $query_assignment = "related";
-                                    $field_info .= "field_name $field_name found in related taxonomies array<br />";                                        
-
-                                } else {
-                                    $field_info .= "field_name $field_name NOT found in related taxonomies array<br />";
-                                }
-                                //$info .= "taxonomies for post_type '$related_post_type': <pre>".print_r($related_taxonomies,true)."</pre>"; // tft
-
-                                $field_info .= "field_name $field_name NOT found in primary taxonomies array<br />";
-                            }
-                            
-                            $field = array( 'type' => 'taxonomy', 'name' => $field_name );
-                            
-                        } else {
-                            $field_info .= "Could not determine field_type!<br />";
-                        }
-                    }
-                }                
-                
-                if ( $field ) {
-                    
-                    //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
-                    
-                    if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
-                    
-                    // Check to see if a custom post type or taxonomy exists with same name as $field_name
-                    // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
-                    if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
-                        $field_cptt_name = $arr_field;
-                        //$field_info .= "field_cptt_name: $field_cptt_name same as arr_field: $arr_field<br />"; // tft
-                    } else {
-                        $field_cptt_name = null;
-                    }
-
-                    //
-                    $field_info .= "field_name: $field_name<br />"; // tft
-                    if ( $alt_field_name ) { $field_info .= "alt_field_name: $alt_field_name<br />"; }                    
-                    $field_info .= "query_assignment: $query_assignment<br />";
-
-                    // Check to see if a value was submitted for this field
-                    if ( isset($_GET[$field_name]) ) { // if ( isset($_REQUEST[$field_name]) ) {
-                        
-                        $field_value = $_GET[$field_name]; // $field_value = $_REQUEST[$field_name];
-                        
-                        // If field value is not empty...
-                        if ( !empty($field_value) && $field_name != 'search_operator' && $field_name != 'devmode' ) {
-                            //$search_values = true; // actual non-empty search values have been found in the _GET/_REQUEST array
-                            // instead of boolean, create a search_values array? and track which post_type they relate to?
-                            $search_values[] = array( 'field_post_type' => $field_post_type, 'arr_field' => $arr_field, 'field_name' => $field_name, 'field_value' => $field_value );
-                            //$field_info .= "field value: $field_value<br />"; 
-                            //$troubleshooting .= "query_assignment for field_name $field_name is *$query_assignment* >> search value: '$field_value'<br />";
-                            
-                            if ( $query_assignment == "primary" ) {
-                                $search_primary_post_type = true;
-                                $troubleshooting .= ">> Setting search_primary_post_type var to TRUE based on field $field_name searching value $field_value<br />";
-                            } else {
-                                $search_related_post_type = true;
-                                $troubleshooting .= ">> Setting search_related_post_type var to TRUE based on field $field_name searching value $field_value<br />";
-                            }
-                            
-                        }
-                        
-                        $field_info .= "field value: $field_value<br />";
-                        
-                    } else {
-                        //$field_info .= "field value: [none]<br />";
-                        $field_value = null;
-                    }
-
-                    
-                    // Get 'type' field option
-                    $field_type = $field['type'];
-                    $field_info .= "field_type: $field_type<br />"; // tft
-                    
-                    if ( !empty($field_value) ) {
-                        $field_value = sanitize($field_value); //$field_value = sdg_sanitize($field_value);
-                    }
-                    
-                    //$field_info .= "field_name: $field_name<br />";                    
-                    //$field_info .= "value: $field_value<br />";
-                    
-                    if ( $field_type !== "text" && $field_type !== "taxonomy" ) {
-                        //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
-                        //$field_info .= "field key: ".$field['key']."<br />";
-                        //$field_info .= "field return_format: ".$field['return_format']."<br />";
-                    }                    
-                    
-                    //if ( ( $field_name == "post_title" || $field_name == "title_clean" ) && !empty($field_value) ) {
-                    
-                    if ( $field_name == "post_title" && !empty($field_value) ) {
-                        
-                        //$args['s'] = $field_value;
-                        $args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
-
-                    } else if ( $field_type == "text" && !empty($field_value) ) { 
-                        
-                        // TODO: figure out how to determine whether to match exact or not for particular fields
-                        // -- e.g. box_num should be exact, but not necessarily for title_clean?
-                        // For now, set it explicitly per field_name
-                        //if ( $field_name == "box_num" ) {
-                         //   $match_value = '"' . $field_value . '"'; // matches exactly "123", not just 123. This prevents a match for "1234"
-                       // } else {
-                         //   $match_value = $field_value;
-                        //}
-                        $match_value = $field_value;
-                        //$mq_components[] =  array(
-                        $query_component = array(
-                            'key'   => $field_name,
-                            'value' => $match_value,
-                            'compare'=> 'LIKE'
-                        );
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $mq_components_primary[] = $query_component;
-                        } else {
-                            $mq_components_related[] = $query_component;
-                        }
-                        
-                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
-
-                    } else if ( $field_type == "select" && !empty($field_value) ) { 
-                        
-                        // If field allows multiple values, then values will return as array and we must use LIKE comparison
-                        if ( $field['multiple'] == 1 ) {
-                            $compare = 'LIKE';
-                        } else {
-                            $compare = '=';
-                        }
-                        
-                        $match_value = $field_value;
-                        $query_component = array(
-                            'key'   => $field_name,
-                            'value' => $match_value,
-                            'compare'=> $compare
-                        );
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $mq_components_primary[] = $query_component;
-                        } else {
-                            $mq_components_related[] = $query_component;
-                        }                        
-                        
-                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
-
-                    } else if ( $field_type == "relationship" ) { // && !empty($field_value) 
-
-                        $field_post_type = $field['post_type'];                        
-                        // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-                        if ( count($field_post_type) == 1) {
-                            $field_post_type = $field['post_type'][0];
-                        } else {
-                            // ???
-                        }
-                        
-                        $field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
-                        
-                        if ( !empty($field_value) ) {
-                            
-                            $field_value_converted = ""; // init var for storing ids of posts matching field_value
-                            
-                            // If $options,
-                            if ( !empty($options) ) {
-                                
-                                if ( $arr_field == "publisher" ) {
-                                    $key = $arr_field; // can't use field_name because of redirect issue
-                                } else {
-                                    $key = $field_name;
-                                }
-                                $query_component = array(
-                                    'key'   => $key, 
-                                    //'value' => $match_value,
-                                    // TODO: FIX -- value as follows doesn't work w/ liturgical dates because it's trying to match string, not id... need to get id!
-                                    'value' => '"' . $field_value . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
-                                    'compare'=> 'LIKE', 
-                                );
-
-                                // Add query component to the appropriate components array
-                                if ( $query_assignment == "primary" ) {
-                                    $mq_components_primary[] = $query_component;
-                                } else {
-                                    $mq_components_related[] = $query_component;
-                                }
-                                
-                                if ( $alt_field_name ) {
-                                    
-                                    $meta_query['relation'] = 'OR';
-                                    
-                                    $query_component = array(
-                                        'key'   => $alt_field_name,
-                                        //'value' => $field_value,
-                                        // TODO: FIX -- value as follows doesn't work w/ liturgical dates because it's trying to match string, not id... need to get id!
-                                        'value' => '"' . $field_value . '"',
-                                        'compare'=> 'LIKE'
-                                    );
-                                    
-                                    // Add query component to the appropriate components array
-                                    if ( $query_assignment == "primary" ) {
-                                        $mq_components_primary[] = $query_component;
-                                    } else {
-                                        $mq_components_related[] = $query_component;
-                                    }
-                                    
-                                }
-                                
-                            } else {
-                                
-                                // If no $options, match search terms
-                                $field_info .= "options array is empty.<br />";
-                                
-                                // Get id(s) of any matching $field_post_type records with post_title like $field_value
-                                $field_value_args = array('post_type' => $field_post_type, 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids', '_search_title' => $field_value, 'suppress_filters' => FALSE );
-                                $field_value_posts = get_posts( $field_value_args );
-                                if ( count($field_value_posts) > 0 ) {
-
-                                    $field_info .= count($field_value_posts)." field_value_posts found<br />";
-                                    //$field_info .= "field_value_args: <pre>".print_r($field_value_args, true)."</pre><br />";
-
-                                    // The problem here is that, because ACF stores multiple values as a single meta_value array, 
-                                    // ... it's not possible to search efficiently for an array of values
-                                    // TODO: figure out if there's some way to for ACF to store the meta_values in separate rows?
-                                    
-                                    $sub_query = array();
-                                    
-                                    if ( count($field_value_posts) > 1 ) {
-                                        $sub_query['relation'] = 'OR';
-                                    }
-                                    
-                                    // TODO: make this a subquery to better control relation
-                                    foreach ( $field_value_posts as $fvp_id ) {
-                                        $sub_query[] = [
-                                            'key'   => $arr_field, // can't use field_name because of "publisher" issue
-                                            //'key'   => $field_name,
-                                            'value' => '"' . $fvp_id . '"',
-                                            'compare' => 'LIKE',
-                                        ];
-                                    }
-                                    
-                                    // Add query component to the appropriate components array
-                                    if ( $query_assignment == "primary" ) {
-                                        $mq_components_primary[] = $sub_query;
-                                    } else {
-                                        $mq_components_related[] = $sub_query;
-                                    }
-                                    //$mq_components_primary[] = $sub_query;
-                                }
-                                
-                            }
-                            
-                            //$field_info .= ">> WIP: set meta_query component for: $field_name = $field_value<br/>";
-                            $field_info .= "Added meta_query_component for key: $field_name, value: $field_value<br/>";
-                            
-                        }
-                        
-                        // For text fields, may need to get ID matching value -- e.g. person id for name mousezart (220824), if composer field were not set up as combobox -- maybe faster?
-                        
-
-                    } else if ( $field_type == "taxonomy" && !empty($field_value) ) {
-
-                        $query_component = array (
-                            'taxonomy' => $field_name,
-                            //'field'    => 'slug',
-                            'terms'    => $field_value,
-                        );
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $tq_components_primary[] = $query_component;
-                        } else {
-                            $tq_components_related[] = $query_component;
-                        }
-
-                        if ( $post_type == "repertoire" ) {
-
-                            // Since rep & editions share numerous taxonomies in common, check both
-                            
-                            $related_field_name = 'repertoire_editions'; //$related_field_name = 'related_editions';
-                            
-                            $field_info .= ">> WIP: field_type: taxonomy; field_name: $field_name; post_type: $post_type; terms: $field_value<br />"; // tft
-                            
-                        }
-
-                    }
-                    
-                    //$field_info .= "-----<br />";
-                    
-                } // END if ( $field )
-        */
-        /*   
-                // Set up the form fields
-                // ----------------------
-                if ( $form_type == "advanced_search" ) {
-                   
-                    //$field_info .= "CONFIRM field_type: $field_type<br />"; // tft
-                    
-                    $input_class = "advanced_search";
-                    $input_html = "";
-                    $options = array();
-                    
-                    if ( in_array($field_name, $taxonomies) ) {
-                        $input_class .= " primary_post_type";
-                        $field_label .= "*";
-                    }                    
-                    
-                    $info .= '<label for="'.$field_name.'" class="'.$input_class.'">'.$field_label.':</label>';
-                    
-                    if ( $field_type == "text" ) {
-                        
-                        $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';                                            
-                    
-                    } else if ( $field_type == "select" ) {
-                        
-                        if ( isset($field['choices']) ) {
-                            $options = $field['choices'];
-                            //$field_info .= "field: <pre>".print_r($field, true)."</pre>";
-                            //$field_info .= "field choices: <pre>".print_r($field['choices'],true)."</pre>"; // tft
-                        } else {
-                            $options = null; // init
-                            $field_info .= "No field choices found. About to go looking for values to set as options...<br />";
-                            $field_info .= "field: <pre>".print_r($field, true)."</pre>";
-                        }
-                        
-                    } else if ( $field_type == "relationship" ) {
-                        
-                        if ( $field_cptt_name ) { $field_info .= "field_cptt_name: $field_cptt_name<br />"; } // tft 
-                        if ( $arr_field ) { $field_info .= "arr_field: $arr_field<br />"; } // tft 
-                        
-                        // repertoire_litdates
-                        // related_liturgical_dates
-                        
-                        if ( $field_cptt_name != $arr_field ) {
-                        //if ( $field_cptt_name != $field_name ) {
-                            
-                            $field_info .= "field_cptt_name NE arr_field<br />"; // tft
-                            //$field_info .= "field_cptt_name NE field_name<br />"; // tft
-                            
-                            // TODO: 
-                            if ( $field_post_type && $field_post_type != "person" && $field_post_type != "publisher" ) { // TMP disable options for person fields so as to allow for free autocomplete
-                                
-                                // TODO: consider when to present options as combo box and when to go for autocomplete text
-                                // For instance, what if the user can't remember which Bach wrote a piece? Should be able to search for all...
-                                
-                                // e.g. field_post_type = person, field_name = composer 
-                                // ==> find all people in Composers people_category -- PROBLEM: people might not be correctly categorized -- this depends on good data entry
-                                // -- alt: get list of composers who are represented in the music library -- get unique meta_values for meta_key="composer"
-
-                                // TODO: figure out how to filter for only composers related to editions? or lit dates related to rep... &c.
-                                // TODO: find a way to do this more efficiently, perhaps with a direct wpdb query to get all unique meta_values for relevant keys
-                                
-                                //
-                                // set up WP_query
-                                $options_args = array(
-                                    'post_type' => $post_type, //'post_type' => $field_post_type,
-                                    'post_status' => 'publish',
-                                    'fields' => 'ids',
-                                    'posts_per_page' => -1, // get them all
-                                    'meta_query' => array(
-                                        'relation' => 'OR',
-                                        array(
-                                            'key'     => $field_name,
-                                            'compare' => 'EXISTS'
-                                        ),
-                                        array(
-                                            'key'     => $alt_field_name,
-                                            'compare' => 'EXISTS'
-                                        ),
-                                    ),
-                                );
-                                
-                                $options_arr_posts = new WP_Query( $options_args );
-                                $options_posts = $options_arr_posts->posts;
-
-                                //$field_info .= "options_args: <pre>".print_r($options_args,true)."</pre>"; // tft
-                                $field_info .= count($options_posts)." options_posts found <br />"; // tft
-                                //$field_info .= "options_posts: <pre>".print_r($options_posts,true)."</pre>"; // tft
-
-                                $arr_ids = array(); // init
-
-                                foreach ( $options_posts as $options_post_id ) {
-
-                                    // see also get composer_ids
-                                    $meta_values = get_field($field_name, $options_post_id, false);
-                                    $alt_meta_values = get_field($alt_field_name, $options_post_id, false);
-                                    if ( !empty($meta_values) ) {
-                                        //$field_info .= count($meta_values)." meta_value(s) found for field_name: $field_name and post_id: $options_post_id.<br />";
-                                        foreach ($meta_values AS $meta_value) {
-                                            $arr_ids[] = $meta_value;
-                                        }
-                                    }
-                                    if ( !empty($alt_meta_values) ) {
-                                        //$field_info .= count($alt_meta_values)." meta_value(s) found for alt_field_name: $alt_field_name and post_id: $options_post_id.<br />";
-                                        foreach ($alt_meta_values AS $meta_value) {
-                                            $arr_ids[] = $meta_value;
-                                        }
-                                    }
-
-                                }
-
-                                $arr_ids = array_unique($arr_ids);
-
-                                // Build the options array from the ids
-                                foreach ( $arr_ids as $id ) {
-                                    if ( $field_post_type == "person" ) {
-                                        $last_name = get_post_meta( $id, 'last_name', true );
-                                        $first_name = get_post_meta( $id, 'first_name', true );
-                                        $middle_name = get_post_meta( $id, 'middle_name', true );
-                                        //
-                                        $option_name = $last_name;
-                                        if ( !empty($first_name) ) {
-                                            $option_name .= ", ".$first_name;
-                                        }
-                                        if ( !empty($middle_name) ) {
-                                            $option_name .= " ".$middle_name;
-                                        }
-                                        //$option_name = $last_name.", ".$first_name;
-                                        $options[$id] = $option_name;
-                                        // TODO: deal w/ possibility that last_name, first_name fields are empty
-                                    } else {
-                                        $options[$id] = get_the_title($id);
-                                    }
-                                }
-
-                            }
-
-                            asort($options);
-
-                        } else {
-                        	
-                        	$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';                                            
-                    
-                    		//$input_html = "LE TSET"; // tft
-                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
-                        }
-                        
-                    } else if ( $field_type == "taxonomy" ) {
-                        
-                        // Get options, i.e. taxonomy terms
-                        $obj_options = get_terms ( $field_name );
-                        //$info .= "options for taxonomy $field_name: <pre>".print_r($options, true)."</pre>"; // tft
-                        
-                        // Convert objects into array for use in building select menu
-                        foreach ( $obj_options as $obj_option ) { // $option_value => $option_name
-                            
-                            $option_value = $obj_option->term_id;
-                            $option_name = $obj_option->name;
-                            //$option_slug = $obj_option->slug;
-                            $options[$option_value] = $option_name;
-                        }
-                        
-                    } else {
-                        
-                        $field_info .= "field_type could not be determined.";
-                    }
-                    
-                    if ( !empty($options) ) { // WIP // && strpos($input_class, "combobox")
-
-                        //if ( !empty($field_value) ) { $troubleshooting .= "options: <pre>".print_r($options, true)."</pre>"; } // tft
-
-                        $input_class .= " combobox"; // tft
-                                                
-                        $input_html = '<select name="'.$field_name.'" id="'.$field_name.'" class="'.$input_class.'">'; 
-                        $input_html .= '<option value>-- Select One --</option>'; // default empty value // class="'.$input_class.'"
-                        
-                        // Loop through the options to build the select menu
-                        foreach ( $options as $option_value => $option_name ) {
-                            $input_html .= '<option value="'.$option_value.'"';
-                            if ( $option_value == $field_value ) { $input_html .= ' selected="selected"'; }
-                            //if ( $option_name == "Men-s Voices" ) { $option_name = "Men's Voices"; }
-                            $input_html .= '>'.$option_name.'</option>'; //  class="'.$input_class.'"
-                        }
-                        $input_html .= '</select>';
-
-                    } else if ( $options && strpos($input_class, "multiselect") !== false ) {
-                        // TODO: implement multiple select w/ remote source option in addition to combobox (which is for single-select inputs) -- see choirplanner.js WIP
-                    } else if ( empty($input_html) ) {
-                        $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.'" />'; // tft
-                    }
-                    
-                    $info .= $input_html;
-                    
-                } else {
-                    $input_class = "simple_merge";
-                    $info .= '<input type="text" id="'.$field_name.'" name="'.$field_name.'" placeholder="'.$placeholder.'" value="'.$field_value.'" class="'.$input_class.'" />';
-                }
-                
-                if ( $form_type == "advanced_search" ) {
-                    $info .= '<br />';
-                    //$info .= '<!-- '."\n".$field_info."\n".' -->';
-                }
-                
-                //$troubleshooting .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
-                //if ( strpos($field_name, "publisher") || strpos($field_name, "devmode") || strpos($arr_field, "devmode") || $field_name == "devmode" ) {
-                if ( (!empty($field_value) && $field_name != 'search_operator' && $field_name != 'devmode' ) ||
-                   ( !empty($options_posts) && count($options_posts) > 0 ) ||
-                   strpos($field_name, "liturgical") ) {
-                    $troubleshooting .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
-                }
-                //$field_name == "liturgical_date" || $field_name == "repertoire_litdates" || 
-                //if ( !empty($field_value) ) { $troubleshooting .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />"; }
-                
-            } // End conditional for actual search fields
-            
-        } // end foreach ( $arr_fields as $field_name )
+    $info .= '<input type="submit" value="Merge Records">';
+    $info .= '<a href="#!" id="form_reset">Clear Form</a>';
+    $info .= '</form>';        
         
-        */
+    // 
+    $args_related = null; // init
+    $mq_components = array();
+    $tq_components = array();
+    //$troubleshooting .= "mq_components: <pre>".print_r($mq_components,true)."</pre>";
+    //$troubleshooting .= "tq_components: <pre>".print_r($tq_components,true)."</pre>";
         
-        $info .= '<input type="submit" value="Merge Records">';
-        $info .= '<a href="#!" id="form_reset">Clear Form</a>';
-        $info .= '</form>';        
-        
-        // 
-        $args_related = null; // init
-        $mq_components = array();
-        $tq_components = array();
-        
-        //$troubleshooting .= "mq_components: <pre>".print_r($mq_components,true)."</pre>";
-        //$troubleshooting .= "tq_components: <pre>".print_r($tq_components,true)."</pre>";
-        
-        // Finalize meta_query or queries
-        // ==============================
-        /*
-		if ( count($mq_components) > 1 && empty($meta_query['relation']) ) {
-			$meta_query['relation'] = $search_operator;
+    // Finalize meta_query or queries
+    // ==============================
+	/*
+	if ( count($mq_components) > 1 && empty($meta_query['relation']) ) {
+		$meta_query['relation'] = $search_operator;
+	}
+	if ( count($mq_components) == 1) {
+		//$troubleshooting .= "Single mq_component.<br />";
+		$meta_query = $mq_components; //$meta_query = $mq_components[0];
+	} else {
+		foreach ( $mq_components AS $component ) {
+			$meta_query[] = $component;
 		}
-		if ( count($mq_components) == 1) {
-			//$troubleshooting .= "Single mq_component.<br />";
-			$meta_query = $mq_components; //$meta_query = $mq_components[0];
-		} else {
-			foreach ( $mq_components AS $component ) {
-				$meta_query[] = $component;
-			}
-		}
+	}
+	
+	if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
+	
+	
+	// Finalize tax_query or queries
+	// =============================
+	
 		
-		if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
-        
-        
-        // Finalize tax_query or queries
-        // =============================
-        
-            
-		if ( count($tq_components) > 1 && empty($tax_query['relation']) ) {
-			$tax_query['relation'] = $search_operator;
-		}
-		foreach ( $tq_components AS $component ) {			
-			$tax_query[] = $component;
-		}
-		if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
-        */
+	if ( count($tq_components) > 1 && empty($tax_query['relation']) ) {
+		$tax_query['relation'] = $search_operator;
+	}
+	foreach ( $tq_components AS $component ) {			
+		$tax_query[] = $component;
+	}
+	if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
+	*/
         
     
     $info .= '<div class="troubleshootingX">';
