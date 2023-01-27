@@ -490,7 +490,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				} else {
 					$info .= '<td>';
 					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
-					$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
+					$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value.'" />';
 					$info .= '</td>';
 				}				
 				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
