@@ -145,8 +145,13 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 	$info = "";
 	
 	// Compare values/merge arrays
-	// If both values are arrays, then merge them
-	if ( is_array($p1_val) && is_array($p2_val) ) {
+	
+	// What type of values have we got?
+	if ( is_object($p1_val) || is_object($p2_val) ) {
+		// If one or more value is of type 'object', then...???
+		$merge_value = "OBJECT(S)!"; // tft
+	} else if ( is_array($p1_val) && is_array($p2_val) ) {
+		// If both values are arrays, then merge them
 		//$merge_value = array_merge($p1_val, $p2_val);
 		$merge_value = array_unique(array_merge($p1_val, $p2_val));
 		//$info .= "Merged arrays!";
