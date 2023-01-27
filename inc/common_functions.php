@@ -408,6 +408,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		foreach ( $taxonomies as $taxonomy ) {
 			
 			$field_type = "array";
+			$field_name = $taxonomy;
 			$field_label = "";
 			
 			// Get terms... WIP
