@@ -434,6 +434,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_label = ""; // tft
 			
 			if ( $merging ) {
+			
+				$merge_info = "";					
+				if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 				
 				// Do the merging...
 				$old_val = $p1->$field_name;
@@ -442,16 +445,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$new_val = $_POST[$field_name];
 				}
 				if ( !empty($old_val) || !empty($new_val) ) {
-					if ( $old_val != $new_val ) {
-						$info .= "[$field_name] old_val: $old_val;<br />[$field_name] new_val: $new_val<br />";
-						// update value
-						$info .= "New value not same as old for -> run update<br />";
+					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
+						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
+						// convert new_val to array, if needed -- check field type >> explode
+						// Update value via ACF update_field($field_name, $field_value, [$post_id]);
+						//
+						$info .= $merge_info;
 					} else {
-						//$info .= "New value same as old for $field_name<br />";
+						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
-				}				
+				}			
 				
 			} else {
+			
+				// Not merging yet -- prep to display post comparison info
+				
 				$p1_val = $p1->$field_name;
 				$p2_val = $p2->$field_name;
 			
@@ -490,44 +500,24 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				if ( $merging ) {
 				
-					$merge_info = "";
-					
+					$merge_info = "";					
 					if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 					
 					// Compare old stored value w/ new merge_value, to see whether update is needed
 					$old_val = $p1_val;
-					if ( is_array($old_val) ) { 
-						$old_val_str = implode("; ",$old_val);
-						//$old_val_str = strval(print_r($old_val, true));
-						//$merge_info .= "old_val is_array<br />";
-						//$merge_info .= "gettype old_val: ".gettype($old_val)."<br />";
-						//$merge_info .= "gettype old_val_str: ".gettype($old_val_str)."<br />";
-					} else {
-						$old_val_str = $old_val;
-					}
+					if ( is_array($old_val) ) { $old_val_str = implode("; ",$old_val); } else { $old_val_str = $old_val; }
 					$old_val_str = trim($old_val_str);
 					
-					$new_val = "";
-					if ( !empty($_POST[$field_name]) ) {
-						$new_val = $_POST[$field_name];
-					}
-					if ( is_array($new_val) ) {
-						$new_val_str = implode("; ",$new_val);
-						//$new_val_str = strval(print_r($new_val, true));
-						//$merge_info .= "new_val is_array<br />";
-					} else {
-						$new_val_str = $new_val;
-					}
+					if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
+					if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
 					$new_val_str = trim($new_val_str);
-					//$merge_info .= "gettype new_val_str: ".gettype($new_val_str)."<br />";
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
-						//$merge_info .= "strcmp: ".strcmp($old_val_str, $new_val_str)."<br />";
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
 							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
-							// update value
-							$merge_info .= "New value not same as old (strcmp) for '$field_name' -> run update<br /><br />";
-							// Do the merging...
+							$merge_info .= "New value for ACF field '$field_name' -> run update<br /><br />";
+							// convert new_val to array, if needed -- check field type >> explode
+							// Update value via ACF update_field($field_name, $field_value, [$post_id]);
 							//
 							$info .= $merge_info;
 						} else {
@@ -538,7 +528,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					
 				} else {
 				
-					// Not merging yet
+					// Not merging yet -- prep to display post comparison info
+					
 					// If a value was retrieved for either post, then display more info about the field object (tft)
 					if ( $p1_val || $p1_val ) {				
 						if ( $field_name == "choir_voicing" ) {
@@ -568,16 +559,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
-			if ( $merging ) {
-				// Do the merging...
-			} else {
-				//
-			}
-				
-			$field_type = "taxonomy";
-			$field_name = $taxonomy;
-			$field_label = "";
-			
 			// Get terms... WIP
 			$p1_val = wp_get_post_terms( $p1_id, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
 			$p2_val = wp_get_post_terms( $p2_id, $taxonomy, array( 'fields' => 'ids' ) );
@@ -585,14 +566,53 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
 			//if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
 			
-			// WIP/TODO: figure out best way to display taxonomy names while storing ids for actual merge operation
-			$merged = merge_field_values($p1_val, $p2_val);
-			$merge_value = $merged['merge_value'];
-			$merge_info = $merged['info'];
-			//$merge_value = "tmp"; $merge_info = "tmp";
+			if ( $merging ) {
+			
+				$merge_info = "";					
+				if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
+				
+				// Do the merging...
+				// Compare old stored value w/ new merge_value, to see whether update is needed
+				$old_val = $p1_val;
+				if ( is_array($old_val) ) { $old_val_str = implode("; ",$old_val); } else { $old_val_str = $old_val; }
+				$old_val_str = trim($old_val_str);
+				
+				if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
+				if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
+				$new_val_str = trim($new_val_str);
+				
+				if ( !empty($old_val) || !empty($new_val) ) {
+					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
+						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+						$merge_info .= "New value for taxonomy '$field_name' -> run update<br /><br />";
+						// convert new_val to array, if needed -- check field type >> explode
+						// Update value via ACF update_field($field_name, $field_value, [$post_id]);
+						//
+						$info .= $merge_info;
+					} else {
+						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+						//$merge_info .= "New value same as old for $field_name<br /><br />";
+					}
+				}
+				
+			} else {
+				
+				// Not merging yet -- prep to display post comparison info
+				
+				$field_type = "taxonomy";
+				$field_name = $taxonomy;
+				$field_label = "";
+			
+				// WIP/TODO: figure out best way to display taxonomy names while storing ids for actual merge operation
+				$merged = merge_field_values($p1_val, $p2_val);
+				$merge_value = $merged['merge_value'];
+				$merge_info = $merged['info'];
+				//$merge_value = "tmp"; $merge_info = "tmp";
 		
-			$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
-			//$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
+				$arr_fields[$field_name] = array('field_cat' => "taxonomy", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+				//$arr_fields[$taxonomy] = array("taxonomy", $p1_val, $p2_val, $merge_value, $merge_info);
+				
+			}
 			
 			/* e.g.
 			$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
