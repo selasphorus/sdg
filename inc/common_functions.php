@@ -242,6 +242,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
     
+    	$info .= "Got POST ids. Prep to merge...<br />";
     	$merging = true;
     	
     	if ( !empty($_POST['p1_id']) ) {
