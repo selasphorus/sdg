@@ -514,13 +514,27 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
 			
 			if ( !(empty($p1_val) && empty($p2_val)) ) {
+				
+				// Open row
 				$info .= '<tr>';
-				$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
+				//$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
+				
+				// Field info
 				$info .= '<td>'.$field_cat.'</td>';
 				$info .= '<td>'.$field_name;
 				if ( !empty($field_label) ) { $info .= '<br />('.$field_label.')'; }
 				$info .= '</td>';
-				$info .= '<td class="'.$p1_class.'">'.$p1_val_str.'</td>';
+				
+				// P1 value
+				$info .= '<td class="'.$p1_class.'">';
+				if ( is_array($p1_val) ) {
+					foreach ( $p1_val as $term_id ) {
+						$info .= get_term( $term_id )->name."; ";
+					}
+				}
+				$info .= $p1_val_str;
+				$info .= '</td>';
+				
 				// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
 				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
 				//$readonly = " readonly";
@@ -529,6 +543,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//field_type: relationship
 				//field_type: number -- e.g. choirplanner_id (legacy data)
 				//
+				
+				// Merge value
 				$info .= '<td>';
 				if ( $field_type == "text" || $field_type == "textarea" ) {
 					$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
@@ -544,11 +560,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
 					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
 				}
-				$info .= '</td>';			
+				$info .= '</td>';
+					
 				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
-				$info .= '<td class="'.$p2_class.'">'.$p2_val_str.'</td>';
+				
+				// P2 value
+				$info .= '<td class="'.$p2_class.'">';
+				if ( is_array($p2_val) ) {
+					foreach ( $p2_val as $term_id ) {
+						$info .= get_term( $term_id )->name."; ";
+					}
+				}
+				$info .= $p2_val_str;
+				$info .= '</td>';
+				
+				// Close row
 				$info .= '</tr>';
 			}
 				
