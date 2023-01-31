@@ -529,7 +529,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td class="'.$p1_class.'">';
 				if ( $field_type == "taxonomy" && is_array($p1_val) ) {
 					foreach ( $p1_val as $term_id ) {
-						$info .= get_term( $term_id )->name.";<br />";
+						$info .= get_term( $term_id )->name."<br />";
 					}
 				}
 				$info .= $p1_val_str;
@@ -552,7 +552,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				} else if ( $field_type == "taxonomy" ) {
 					if ( is_array($merge_value) ) {
 						foreach ( $merge_value as $term_id ) {
-							$info .= get_term( $term_id )->name.";<br />";
+							$info .= get_term( $term_id )->name."<br />";
 						}
 					}
 					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
@@ -570,7 +570,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= '<td class="'.$p2_class.'">';
 				if ( $field_type == "taxonomy" && is_array($p2_val) ) {
 					foreach ( $p2_val as $term_id ) {
-						$info .= get_term( $term_id )->name.";<br />";
+						$info .= get_term( $term_id )->name."<br />";
 					}
 				}
 				$info .= $p2_val_str;
