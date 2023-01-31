@@ -504,7 +504,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						if ( $old_val_str != $new_val_str ) {
 							$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							// update value
-							$info .= "New value not same as old for $field_name -> run update<br />";
+							$info .= "New value not same as old for $field_name -> run update<br /><br />";
 						} else {
 							//$info .= "New value same as old for $field_name<br />";
 						}
