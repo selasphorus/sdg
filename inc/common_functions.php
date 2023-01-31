@@ -632,8 +632,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$merge_value = $values['merge_val'];
 				$merge_info = $values['merge_info'];
 			
-				if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
-				if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
+				// WIP/TODO: implode everything -- passing printed arrays is basically useless.
+				if ( is_array($p1_val) ) { $p1_val_str = implode("; ",$p1_val); } else { $p1_val_str = $p1_val; }
+				if ( is_array($p2_val) ) { $p2_val_str = implode("; ",$p2_val); } else { $p2_val_str = $p2_val; }
+				//if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
+				//if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
 				if ( is_array($merge_value) ) { 
 					$merge_value_str = implode("; ",$merge_value);
 					$merge_info .= "(".count($merge_value)." item array)";
@@ -689,10 +692,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							}
 						}
 						$info .= '<pre>'.print_r($merge_value, true).'</pre>';
-						$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
+						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
+						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
 					} else {
 						$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
-						$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
+						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';	
+						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
 					}
 					$info .= '</td>';
 					
