@@ -517,6 +517,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$new_val_str = $new_val;
 					}
 					$new_val_str = trim($new_val_str);
+					$merge_info .= "gettype new_val_str: ".gettype($new_val_str)."<br />";
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
