@@ -515,7 +515,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( !empty($old_val) || !empty($new_val) ) {
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
 							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
-							$merge_info .= "New value for ACF field '$field_name' -> run update<br /><br />";
+							$merge_info .= "New value for ACF <em>$field_type</em> field '$field_name' -> run update<br /><br />";
 							// convert new_val to array, if needed -- check field type >> explode
 							// Update value via ACF update_field($field_name, $field_value, [$post_id]);
 							//
