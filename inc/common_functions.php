@@ -315,7 +315,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 				$arr_posts = $posts_info['arr_posts']->posts;
 				$info .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
-				//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+				$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 				if ( count($arr_posts) > 2 ) {
 					$troubleshooting .= "<p>That's too many posts! I can only handle two at a time.</p>";
@@ -388,17 +388,17 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 			
 			// Assemble general post info for table header
-			$p1_info = "[".$p1_ID."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
-			$p2_info = "[".$p2_ID."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
+			$p1_info = "[".$p1_id."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
+			$p2_info = "[".$p2_id."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
 			//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
 			//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
 			$info .= "<pre>";
-			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_ID."<br />";
-			$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2_ID."<br />";
+			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_id."<br />";
+			$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2_id."<br />";
 			$info .= "</pre>";
 			//
-			$info .= '<input type="hidden" name="p1_id" value="'.$p1_ID.'">';
-			$info .= '<input type="hidden" name="p2_id" value="'.$p2_ID.'">';
+			$info .= '<input type="hidden" name="p1_id" value="'.$p1_id.'">';
+			$info .= '<input type="hidden" name="p2_id" value="'.$p2_id.'">';
 			
     	}
 		
@@ -453,8 +453,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$field_label = $group_field['label'];
 				$field_type = $group_field['type'];
 				
-				$p1_val = get_field($field_name, $p1_ID, false);
-				$p2_val = get_field($field_name, $p2_ID, false);
+				$p1_val = get_field($field_name, $p1_id, false);
+				$p2_val = get_field($field_name, $p2_id, false);
 				
 				// If a value was retrieved for either post, then display more info about the field object (tft)
 				if ( $p1_val || $p1_val ) {				
@@ -494,8 +494,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_label = "";
 			
 			// Get terms... WIP
-			$p1_val = wp_get_post_terms( $p1_ID, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
-			$p2_val = wp_get_post_terms( $p2_ID, $taxonomy, array( 'fields' => 'ids' ) );
+			$p1_val = wp_get_post_terms( $p1_id, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
+			$p2_val = wp_get_post_terms( $p2_id, $taxonomy, array( 'fields' => 'ids' ) );
 			
 			//if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
 			//if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
