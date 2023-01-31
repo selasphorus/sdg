@@ -298,15 +298,21 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		);
 	
 		// Turn the list of IDs into a proper array
-		if ( !empty($a['ids']) ) {
+		if ( !empty( $a['ids'] ) ) {
 			$str_ids = $a['ids'];
 			$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
-		} else if (isset($_GET['ids'])) {
+		} else if ( isset($_GET['ids']) ) {
 			$post_ids = $_GET['ids'];
 			$str_ids = implode(", ", $_GET['ids']);
-		} else if (isset($_POST['ids'])) {
+		} else if ( isset($_POST['ids']) ) {
 			$post_ids = $_POST['ids'];
 			$str_ids = implode(", ", $_POST['ids']);
+		} else if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
+			$p1_id = $_POST['p1_id'];
+			$p2_id = $_POST['p2_id'];
+			$str_ids = $p1_id.", ".$p2_id;
+			//$post_ids = $_POST['ids'];
+			//$str_ids = implode(", ", $_POST['ids']);
 		} else {
 			$post_ids = array();
 			$str_ids = "";
@@ -368,6 +374,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
     
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
+    
+    $info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
+    $info .= 'Primary Post ID: <input type="text" name="p1_id" value="'.$p1_id.'" />';
+    $info .= 'Secondary Post ID: <input type="text" name="p2_id" value="'.$p2_id.'" />';
+    $info .= '<input type="submit" value="Merge">';
+    $info .= '</form>';
     
     $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     // TODO: add field(s) for submitting post_ids for merging?
