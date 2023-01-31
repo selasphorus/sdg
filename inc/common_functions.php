@@ -449,8 +449,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					} else {
 						//$info .= "New value same as old for $field_name<br />";
 					}
-				}
-				
+				}				
 				
 			} else {
 				$p1_val = $p1->$field_name;
@@ -477,12 +476,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
 			$i = 0;
 			foreach ( $group_fields as $group_field ) {
-			
-				if ( $merging ) {
-					// Do the merging...
-				} else {
-					//
-				}
 				
 				$merge_value = null; // init
 				$merge_info = "";
@@ -494,24 +487,47 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				$p1_val = get_field($field_name, $p1_id, false);
 				$p2_val = get_field($field_name, $p2_id, false);
-				
-				// If a value was retrieved for either post, then display more info about the field object (tft)
-				if ( $p1_val || $p1_val ) {				
-					if ( $field_name == "choir_voicing" ) {
-					//$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
-					}					
-				}
-				
-				$merged = merge_field_values($p1_val, $p2_val);
-				$merge_val = $merged['merge_value'];
-				$merge_info = $merged['info'];
 			
-				$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_val, 'merge_info' => $merge_info );
-				/*
-				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
-				if ( $group_field['type'] == "relationship" ) { $field_info .= "post_type: ".print_r($group_field['post_type'],true)."<br />"; }
-				if ( $group_field['type'] == "select" ) { $field_info .= "choices: ".print_r($group_field['choices'],true)."<br />"; }
-				*/
+				if ( $merging ) {
+				
+					// Do the merging...
+					$old_val = $p1_val;
+					$new_val = "";
+					if ( !empty($_POST[$field_name]) ) {
+						$new_val = $_POST[$field_name];
+					}
+					if ( !empty($old_val) || !empty($new_val) ) {
+						if ( $old_val != $new_val ) {
+							$info .= "[$field_name] old_val: $old_val;<br />[$field_name] new_val: $new_val<br />";
+							// update value
+							$info .= "New value not same as old for -> run update<br />";
+						} else {
+							//$info .= "New value same as old for $field_name<br />";
+						}
+					}
+					
+				} else {
+				
+					// Not merging yet
+					// If a value was retrieved for either post, then display more info about the field object (tft)
+					if ( $p1_val || $p1_val ) {				
+						if ( $field_name == "choir_voicing" ) {
+						//$info .= "Field object ($field_name): <pre>".print_r($group_field,true)."</pre><br />";
+						}					
+					}
+				
+					$merged = merge_field_values($p1_val, $p2_val);
+					$merge_val = $merged['merge_value'];
+					$merge_info = $merged['info'];
+			
+					$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_val, 'merge_info' => $merge_info );
+					/*
+					$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
+					if ( $group_field['type'] == "relationship" ) { $field_info .= "post_type: ".print_r($group_field['post_type'],true)."<br />"; }
+					if ( $group_field['type'] == "select" ) { $field_info .= "choices: ".print_r($group_field['choices'],true)."<br />"; }
+					*/
+					
+				}
 				
 				$i++;
 
