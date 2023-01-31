@@ -190,7 +190,45 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $troubleshooting = "";
     
     if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
-    if ( !empty($_POST) ) { $troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>'; }
+    if ( !empty($_POST) ) { 
+    	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
+    	// WIP/TODO: Update p1 with merged values
+    	$troubleshooting .= "About to save merged values to p1<br />";
+    	//
+    	// Save content (only if previously empty)
+		/*
+		$data = array(
+			'ID' => $post_id,
+			'post_content' => $content,
+			'meta_input' => array(
+			'meta_key' => $meta_value,
+			'another_meta_key' => $another_meta_value
+		)
+		);
+
+		wp_update_post( $data, true );
+		if (is_wp_error($post_id)) { // ?? if (is_wp_error($data)) {
+			$errors = $post_id->get_error_messages();
+			foreach ($errors as $error) {
+				$info .= $error;
+			}
+		}
+        */
+        /*
+        if ( in_array('last_mod', $arr_updates) ) {
+			if ( update_post_meta( $post_id, 'html_last_modified', wp_slash( $html_last_modified ) ) ) {
+			//if ( update_post_meta( $post_id, 'html_last_modified', $html_last_modified ) ) {
+				$info .= "Update OK for html_last_modified postmeta<br />";
+			} else {
+				$info .= "No update for html_last_modified postmeta (post_id: $post_id; html_last_modified: $html_last_modified)<br />";
+				$last_mod = get_post_meta( $post_id, 'html_last_modified' );
+				$info .= "current value(s) for html_last_modified: ".print_r($last_mod,true)."<br />";
+			}
+		}*/
+    	// WIP/TODO: Move p2 to trash
+    	$troubleshooting .= "About to move p1 to trash<br />";
+    	//
+    }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
     $a = shortcode_atts( array(
@@ -407,7 +445,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
-			$field_type = "array";
+			$field_type = "taxonomy";
 			$field_name = $taxonomy;
 			$field_label = "";
 			
@@ -418,6 +456,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
 			//if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
 			
+			// WIP/TODO: figure out best way to display taxonomy names while storing ids for actual merge operation
 			$merged = merge_field_values($p1_val, $p2_val);
 			$merge_value = $merged['merge_value'];
 			$merge_info = $merged['info'];
@@ -490,14 +529,22 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//field_type: relationship
 				//field_type: number -- e.g. choirplanner_id (legacy data)
 				//
+				$info .= '<td>';
 				if ( $field_type == "text" || $field_type == "textarea" ) {
-					$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
-				} else {
-					$info .= '<td>';
-					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
+					$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
+					$info .= $merge_info;
+				} else if ( $field_type == "taxonomy" ) {
+					if ( is_array($merge_value) ) {
+						foreach ( $merge_value as $term_id ) {
+							$info .= get_term( $term_id )->name."; ";
+						}
+					}
 					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
-					$info .= '</td>';
-				}				
+				} else {
+					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
+					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
+				}
+				$info .= '</td>';			
 				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
 				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
