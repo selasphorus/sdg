@@ -559,6 +559,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
+			$field_name = $taxonomy;
+			
 			// Get terms... WIP
 			$p1_val = wp_get_post_terms( $p1_id, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
 			$p2_val = wp_get_post_terms( $p2_id, $taxonomy, array( 'fields' => 'ids' ) );
