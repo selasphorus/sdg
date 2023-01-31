@@ -240,6 +240,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     	$merging = true;
     	$arr_posts = array(); // tft
+    	$form_type = 'simple_merge';
     	
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
