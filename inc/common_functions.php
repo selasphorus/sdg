@@ -497,7 +497,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					// Compare old stored value w/ new merge_value, to see whether update is needed
 					$old_val = $p1_val;
 					if ( is_array($old_val) ) { 
-						$old_val_str = print_r($old_val, true);
+						$old_val_str = strval(print_r($old_val, true));
 						$merge_info .= "old_val is_array<br />";
 					} else {
 						$old_val_str = $old_val;
@@ -509,7 +509,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$new_val = $_POST[$field_name];
 					}
 					if ( is_array($new_val) ) {
-						$new_val_str = print_r($new_val, true);
+						$new_val_str = strval(print_r($new_val, true));
 						$merge_info .= "new_val is_array<br />";
 					} else {
 						$new_val_str = $new_val;
