@@ -499,6 +499,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( is_array($old_val) ) { 
 						$old_val_str = strval(print_r($old_val, true));
 						$merge_info .= "old_val is_array<br />";
+						$merge_info .= "gettype old_val: ".gettype($old_val)."<br />";
+						$merge_info .= "gettype old_val_str: ".gettype($old_val_str)."<br />";
 					} else {
 						$old_val_str = $old_val;
 					}
