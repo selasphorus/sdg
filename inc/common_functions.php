@@ -520,8 +520,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$merge_info .= "gettype new_val_str: ".gettype($new_val_str)."<br />";
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
+						$merge_info .= "strcmp: ".strcmp($old_val_str, $new_val_str)."<br />";
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
-							$merge_info .= "old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 							// update value
 							$merge_info .= "New value not same as old (strcmp) for '$field_name' -> run update<br /><br />";
 							// Do the merging...
