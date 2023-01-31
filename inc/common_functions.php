@@ -539,7 +539,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( !empty($old_val) || !empty($new_val) ) {
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
 							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
-							$merge_info .= "New value for ACF <em>$field_type</em> field '$field_name' -> run update<br /><br />";
+							$merge_info .= "New value for ACF <em>$field_type</em> field '$field_name' -> run update<br />";
 							// convert new_val to array, if needed -- check field type >> explode
 							if ( $field_type == 'relationship' ) {
 								$field_value = explode("; ",$new_val);
@@ -556,8 +556,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$info .= $merge_info;
 						} else {
 							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
-							//$merge_info .= "New value same as old for $field_name<br /><br />";
+							//$merge_info .= "New value same as old for $field_name<br />";
 						}
+						$merge_info .= "<br />";
 					}
 					
 				} else {
@@ -620,15 +621,19 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( !empty($old_val) || !empty($new_val) ) {
 					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
 						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
-						$merge_info .= "New value for taxonomy '$field_name' -> run update<br /><br />";
+						$merge_info .= "New value for taxonomy '$field_name' -> run update<br />";
+						$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
 						// convert new_val to array, if needed -- check field type >> explode
-						// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
+						// WIP Update value via wp_set_post_terms( $post_id, $term_ids, $taxonomy ); // $term_ids = array( 5 ); // Correct. This will add the tag with the id 5.
+						//wp_set_post_terms( $post_id, $terms, $taxonomy, $append ); // $append -- If true, don't delete existing terms, just add on. If false, replace the terms with the new terms.
+						//wp_set_post_terms( $post_id, $terms, 'admin_tag', true );
 						//
 						$info .= $merge_info;
 					} else {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
+					$merge_info .= "<br />";
 				}
 				
 			} else {
