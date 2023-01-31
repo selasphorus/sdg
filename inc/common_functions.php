@@ -523,11 +523,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$merge_info .= "New value not same as old for '$field_name' -> run update<br /><br />";
 							// Do the merging...
 							//
+							$info .= $merge_info;
 						} else {
 							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							//$merge_info .= "New value same as old for $field_name<br /><br />";
 						}
-						$info .= $merge_info;
 					}
 					
 				} else {
