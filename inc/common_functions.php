@@ -295,8 +295,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		} else if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
 			$p1_id = $_POST['p1_id'];
 			$p2_id = $_POST['p2_id'];
+			$post_ids = array($p1_id,$p2_id);
 			$str_ids = $p1_id.", ".$p2_id;
-			//$post_ids = $_POST['ids'];
 			//$str_ids = implode(", ", $_POST['ids']);
 		} else {
 			$post_ids = array();
