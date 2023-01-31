@@ -186,35 +186,26 @@ add_shortcode('sdg_merge_form', 'sdg_merge_form');
 //function sdg_merge_form ( $post_ids = array() ) {
 function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
+	// init vars
 	$info = "";
     $troubleshooting = "";
+    $action = null;
     
+    // Retrieve any data submitted via forms or query vars
     if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
     if ( !empty($_POST) ) { 
+    
     	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
+    	
+    	if ( isset($_POST['action']) {
+    		$action = $_POST['action'];
+    	}
+    	
     	// WIP/TODO: Update p1 with merged values
     	//$troubleshooting .= "About to save merged values to p1 [".$_POST['p1_id']."]<br />";
     	//
     	// Save content (only if previously empty)
-    	// Update core fields
-		/*
-		$data = array(
-			'ID' => $post_id,
-			'post_content' => $content,
-			'meta_input' => array(
-			'meta_key' => $meta_value,
-			'another_meta_key' => $another_meta_value
-		)
-		);
-
-		wp_update_post( $data, true );
-		if (is_wp_error($post_id)) { // ?? if (is_wp_error($data)) {
-			$errors = $post_id->get_error_messages();
-			foreach ($errors as $error) {
-				$info .= $error;
-			}
-		}
-        */
+    	
         // Update ACF fields:
         //update_field($selector, $value, [$post_id]);
         // Update post-meta:
@@ -240,7 +231,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     	
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $action == "merge" ) {
     
     	$info .= "Got POST ids. Prep to merge...<br />";
     	$merging = true;
@@ -256,13 +247,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	if ( !empty($_POST['p2_id']) ) {
     		$p2_id = $_POST['p2_id'];
     		$arr_posts[] = $p2_id;  		
-    	}    	
-    	
-    	// If a merge request has been submitted, then get the relevant post IDs
-    	///$arr_posts( $_POST['p1_id'], $_POST['p2_id'] );
-    	//$p1 = get_post($_POST['p1_id']);
-    	//$p2 = get_post($_POST['p2_id']);
-    	//$arr_posts = array($p1,$p2);
+    	}
     	
     } else {
     
@@ -383,6 +368,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
     $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:1rem;" />';
     $info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
+    $info .= '<input type="hidden" name="action" value="review">';
     $info .= '<input type="submit" value="Merge">';
     $info .= '</form>';
     $info .= '<br clear="all" />';
@@ -475,7 +461,26 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
-				}			
+				}
+				// Update core fields
+				/*
+				$data = array(
+					'ID' => $post_id,
+					'post_content' => $content,
+					'meta_input' => array(
+					'meta_key' => $meta_value,
+					'another_meta_key' => $another_meta_value
+				)
+				);
+
+				wp_update_post( $data, true );
+				if (is_wp_error($post_id)) { // ?? if (is_wp_error($data)) {
+					$errors = $post_id->get_error_messages();
+					foreach ($errors as $error) {
+						$info .= $error;
+					}
+				}
+				*/
 				
 			} else {
 			
@@ -782,6 +787,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( $merging ) {
     	// Show input(s) for new pair of IDs?
     } else {
+    	$info .= '<input type="hidden" name="action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records">';
     }
     $info .= '<a href="#!" id="form_reset">Clear Form</a>';
