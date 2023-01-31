@@ -236,11 +236,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
+    // init
+    $arr_posts = array(); // tft
+    $form_type = 'simple_merge';
+    	
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
     
     	$merging = true;
-    	$arr_posts = array(); // tft
-    	$form_type = 'simple_merge';
     	
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
