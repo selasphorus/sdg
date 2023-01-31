@@ -189,7 +189,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	// init vars
 	$info = "";
     $troubleshooting = "";
-    $action = null;
+    $form_action = null;
     
     // Retrieve any data submitted via forms or query vars
     if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
@@ -197,8 +197,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
     	
-    	if ( isset($_POST['action']) {
-    		$action = $_POST['action'];
+    	if ( isset($_POST['form_action']) ) {
+    		$form_action = $_POST['form_action'];
     	}
     	
     	// WIP/TODO: Update p1 with merged values
@@ -231,7 +231,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     	
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $action == "merge" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge" ) {
     
     	$info .= "Got POST ids. Prep to merge...<br />";
     	$merging = true;
@@ -368,7 +368,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
     $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:1rem;" />';
     $info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
-    $info .= '<input type="hidden" name="action" value="review">';
+    $info .= '<input type="hidden" name="form_action" value="review">';
     $info .= '<input type="submit" value="Merge">';
     $info .= '</form>';
     $info .= '<br clear="all" />';
@@ -787,7 +787,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( $merging ) {
     	// Show input(s) for new pair of IDs?
     } else {
-    	$info .= '<input type="hidden" name="action" value="merge">';
+    	$info .= '<input type="hidden" name="form_action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records">';
     }
     $info .= '<a href="#!" id="form_reset">Clear Form</a>';
