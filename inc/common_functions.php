@@ -375,9 +375,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
+    //?ids%5B%5D=292003&ids%5B%5D=298829
+    //292003 -- 298829
+    
     $info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
-    $info .= 'Primary Post ID: <input type="text" name="p1_id" value="'.$p1_id.'" />';
-    $info .= 'Secondary Post ID: <input type="text" name="p2_id" value="'.$p2_id.'" />';
+    $info .= 'Primary Post ID: <input type="text" name="p1_id" value="'.$p1_id.'" style="width:100px;float:left;" />';
+    $info .= 'Secondary Post ID: <input type="text" name="p2_id" value="'.$p2_id.'" style="width:100px;float:left;" />';
     $info .= '<input type="submit" value="Merge">';
     $info .= '</form>';
     
