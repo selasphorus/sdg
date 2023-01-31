@@ -49,7 +49,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
                 $related_posts->the_post();
                 $related_id = get_the_ID();                
             }
-            $info = $related_id;            
+            $info = $related_id;
         } else {
             $info = $related_posts->data();
         }
@@ -374,7 +374,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     if ( count($arr_posts) == 2 ) {
 		
-		$info .= "Two posts... moving forward...<br />";
+		//$troubleshooting .= "Two posts... moving forward...<br />";
 		
 		// TODO: give user choice of which post to treat as primary?
 		$p1_id = $arr_posts[0];
@@ -432,7 +432,20 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_label = ""; // tft
 			
 			if ( $merging ) {
+				
 				// Do the merging...
+				$old_val = "";
+				$new_val = "";
+				if ( !empty($_POST[$field_name]) ) {
+					$new_val = $_POST[$field_name];
+				}
+				if ( $old_val != $new_val ) {
+					// update value
+					$info .= "New value not same as old for $field_name -> run update<br />";
+				} else {
+					$info .= "New value same as old for $field_name<br />";
+				}
+				
 			} else {
 				$p1_val = $p1->$field_name;
 				$p2_val = $p2->$field_name;
@@ -551,7 +564,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		if ( $merging ) {
 			
-			// Do the merging...
+			// ...
 			
 		} else {
 			
@@ -595,7 +608,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( !empty($field_label) ) { $info .= '<br />('.$field_label.')'; }
 					$info .= '</td>';
 				
-					// P1 value
+					// Display P1 value
 					$info .= '<td class="'.$p1_class.'">';
 					if ( $field_type == "taxonomy" && is_array($p1_val) ) {
 						foreach ( $p1_val as $term_id ) {
@@ -614,7 +627,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					//field_type: number -- e.g. choirplanner_id (legacy data)
 					//
 				
-					// Merge value
+					// Display merge value
 					$info .= '<td>';
 					if ( $field_type == "text" || $field_type == "textarea" ) {
 						$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
@@ -637,7 +650,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
 					//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
 				
-					// P2 value
+					// Display P2 value
 					$info .= '<td class="'.$p2_class.'">';
 					if ( $field_type == "taxonomy" && is_array($p2_val) ) {
 						foreach ( $p2_val as $term_id ) {
@@ -660,7 +673,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     }
     
     if ( $merging ) {
-    	// do something?
+    	// Show input(s) for new pair of IDs?
     } else {
     	$info .= '<input type="submit" value="Merge Records">';
     }
