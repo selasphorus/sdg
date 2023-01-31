@@ -499,9 +499,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( is_array($old_val) ) { 
 						$old_val_str = implode("; ",$old_val);
 						//$old_val_str = strval(print_r($old_val, true));
-						$merge_info .= "old_val is_array<br />";
-						$merge_info .= "gettype old_val: ".gettype($old_val)."<br />";
-						$merge_info .= "gettype old_val_str: ".gettype($old_val_str)."<br />";
+						//$merge_info .= "old_val is_array<br />";
+						//$merge_info .= "gettype old_val: ".gettype($old_val)."<br />";
+						//$merge_info .= "gettype old_val_str: ".gettype($old_val_str)."<br />";
 					} else {
 						$old_val_str = $old_val;
 					}
@@ -514,15 +514,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( is_array($new_val) ) {
 						$new_val_str = implode("; ",$new_val);
 						//$new_val_str = strval(print_r($new_val, true));
-						$merge_info .= "new_val is_array<br />";
+						//$merge_info .= "new_val is_array<br />";
 					} else {
 						$new_val_str = $new_val;
 					}
 					$new_val_str = trim($new_val_str);
-					$merge_info .= "gettype new_val_str: ".gettype($new_val_str)."<br />";
+					//$merge_info .= "gettype new_val_str: ".gettype($new_val_str)."<br />";
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
-						$merge_info .= "strcmp: ".strcmp($old_val_str, $new_val_str)."<br />";
+						//$merge_info .= "strcmp: ".strcmp($old_val_str, $new_val_str)."<br />";
 						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
 							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 							// update value
