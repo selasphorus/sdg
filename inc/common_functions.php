@@ -380,12 +380,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     $info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
     $info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:1rem;" />';
-    $info .= '<label for="p1_id">Primary Post ID</label>';
+    $info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
     $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:1rem;" />';
-    $info .= '<label for="p2_id">Secondary Post ID</label>';
+    $info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
     $info .= '<input type="submit" value="Merge">';
     $info .= '</form>';
     $info .= '<br clear="all" />';
+    $info .= '<hr />';
     
     $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     // TODO: add field(s) for submitting post_ids for merging?
