@@ -454,7 +454,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
 						// convert new_val to array, if needed -- check field type >> explode
-						// Update value via ACF update_field($field_name, $field_value, [$post_id]);
+						// WIP Update value via ???;
 						//
 						$info .= $merge_info;
 					} else {
@@ -546,7 +546,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							} else {
 								$field_value = $new_val;
 							}
-							// Update value via ACF update_field($field_name, $field_value, [$post_id]);
+							// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
+							$merge_info .= "Prepped to run update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
 							/*if ( update_field($field_name, $field_value, $p1_id) ) {
 								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
 							} else {
@@ -621,7 +622,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 						$merge_info .= "New value for taxonomy '$field_name' -> run update<br /><br />";
 						// convert new_val to array, if needed -- check field type >> explode
-						// Update value via ACF update_field($field_name, $field_value, [$post_id]);
+						// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
 						//
 						$info .= $merge_info;
 					} else {
