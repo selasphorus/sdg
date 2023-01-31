@@ -547,7 +547,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$field_value = $new_val;
 							}
 							// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
-							$merge_info .= "Prepped to run update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
+							$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
 							/*if ( update_field($field_name, $field_value, $p1_id) ) {
 								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
 							} else {
