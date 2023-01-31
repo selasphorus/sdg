@@ -517,7 +517,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// Open row
 				$info .= '<tr>';
-				//$info .= '<td>'.'<input type="hidden" name="test_input" value="test_val">'.'</td>';
+				$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
 				
 				// Field info
 				$info .= '<td>'.$field_cat.'</td>';
