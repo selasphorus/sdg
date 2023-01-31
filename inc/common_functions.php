@@ -387,6 +387,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	
     		// Form has been submitted... About to merge...
     		//...
+    		$p1 = get_post($p1_id);
+    		$p2 = get_post($p2_id);
     		
     	} else {
     	
@@ -401,10 +403,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			// Prioritize the post which was most recently modified by putting it in first position
 			// In other words, swap p1/p2 if second post is newer
 			if ( $p1_modified < $p2_modified ) {
-				$p1 = $arr_posts[1];
-				$p2 = $arr_posts[0];
-				$p1_id = $p1->ID;
-				$p2_id = $p2->ID;
+				$p1_id = $arr_posts[1];
+				$p2_id = $arr_posts[0];
+				$p1 = get_post($p1_id);
+    			$p2 = get_post($p2_id);
 			}
 			
 			// Assemble general post info for table header
@@ -434,11 +436,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( $merging ) {
 				
 				// Do the merging...
-				$old_val = "";
+				$old_val = $p1->$field_name;
 				$new_val = "";
 				if ( !empty($_POST[$field_name]) ) {
 					$new_val = $_POST[$field_name];
 				}
+				$info .= "old_val: $old_val; new_val: $new_val<br />";
 				if ( $old_val != $new_val ) {
 					// update value
 					$info .= "New value not same as old for $field_name -> run update<br />";
