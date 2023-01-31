@@ -243,9 +243,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
-    		$post_type = get_post_type($p1_id);
+    		$arr_posts[] = $p1_id;
+    		$post_type = get_post_type($p1_id);    		
     	} else {
     		$post_type = "UNKNOWN";
+    	}
+    	
+    	if ( !empty($_POST['p2_id']) ) {
+    		$p2_id = $_POST['p2_id'];
+    		$arr_posts[] = $p2_id;  		
     	}    	
     	
     	// If a merge request has been submitted, then get the relevant post IDs
@@ -363,6 +369,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // TODO: add field(s) for submitting post_ids for merging?
     
     if ( count($arr_posts) == 2 ) {
+		
+		$info .= "Two posts... moving forward...<br />";
 		
 		// TODO: give user choice of which post to treat as primary?
 		$p1_id = $arr_posts[0];
