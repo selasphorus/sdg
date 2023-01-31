@@ -510,8 +510,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							// Do the merging...
 							//
 						} else {
-							$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
-							$info .= "New value same as old for $field_name<br />";
+							//$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							//$info .= "New value same as old for $field_name<br /><br />";
 						}
 					}
 					
