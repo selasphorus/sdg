@@ -490,7 +490,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				if ( $merging ) {
 				
-					// Do the merging...
+					// Compare old stored value w/ new merge_value, to see whether update is needed
 					$old_val = $p1_val;
 					if ( is_array($old_val) ) { $old_val_str = print_r($old_val, true); } else { $old_val_str = $old_val; }
 					$old_val_str = trim($old_val_str);
@@ -507,8 +507,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							// update value
 							$info .= "New value not same as old for '$field_name' -> run update<br /><br />";
+							// Do the merging...
+							//
 						} else {
-							//$info .= "New value same as old for $field_name<br />";
+							$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							$info .= "New value same as old for $field_name<br />";
 						}
 					}
 					
