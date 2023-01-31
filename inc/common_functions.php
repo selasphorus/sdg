@@ -402,12 +402,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 			// Prioritize the post which was most recently modified by putting it in first position
 			// In other words, swap p1/p2 if second post is newer
-			if ( $p1_modified < $p2_modified ) {
+			/*if ( $p1_modified < $p2_modified ) {
 				$p1_id = $arr_posts[1];
 				$p2_id = $arr_posts[0];
 				$p1 = get_post($p1_id);
     			$p2 = get_post($p2_id);
-			}
+			}*/
 			
 			// Assemble general post info for table header
 			$p1_info = "[".$p1_id."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
@@ -517,8 +517,17 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 							$merge_info .= "New value for ACF <em>$field_type</em> field '$field_name' -> run update<br /><br />";
 							// convert new_val to array, if needed -- check field type >> explode
+							if ( $field_type == 'relationship' ) {
+								$field_value = explode("; ",$new_val);
+							} else {
+								$field_value = $new_val;
+							}
 							// Update value via ACF update_field($field_name, $field_value, [$post_id]);
-							//
+							/*if ( update_field($field_name, $field_value, $p1_id) ) {
+								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
+							} else {
+								$merge_info .= "Oh no! Update failed.<br />";
+							}*/
 							$info .= $merge_info;
 						} else {
 							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
