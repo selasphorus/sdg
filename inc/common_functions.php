@@ -193,9 +193,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( !empty($_POST) ) { 
     	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
     	// WIP/TODO: Update p1 with merged values
-    	$troubleshooting .= "About to save merged values to p1 [".$_POST['p1_id']."]<br />";
+    	//$troubleshooting .= "About to save merged values to p1 [".$_POST['p1_id']."]<br />";
     	//
     	// Save content (only if previously empty)
+    	// Update core fields
 		/*
 		$data = array(
 			'ID' => $post_id,
@@ -214,6 +215,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 		}
         */
+        // Update ACF fields:
+        //update_field($selector, $value, [$post_id]);
+        // Update post-meta:
         /*
         if ( in_array('last_mod', $arr_updates) ) {
 			if ( update_post_meta( $post_id, 'html_last_modified', wp_slash( $html_last_modified ) ) ) {
@@ -226,96 +230,114 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 		}*/
     	// WIP/TODO: Move p2 to trash
-    	$troubleshooting .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
+    	//$troubleshooting .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
     	//wp_trash_post($p2_id);
     	//
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
-    $a = shortcode_atts( array(
-		'post_type'	=> 'post',
-		'ids'     	=> array(),
-        'form_type'	=> 'simple_merge',
-        'limit'    	=> '-1'
-    ), $atts );
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) ) {
     
-    $post_type = $a['post_type'];
-    $form_type = $a['form_type'];
-    $limit = $a['limit'];
-    
-	// Set post_status options based on user role
-	if ( current_user_can('read_repertoire') ) {
-		$post_status = array( 'publish', 'private', 'draft' );
-	} else {
-		$post_status = 'publish';
-	}
-    
-    // Set up basic query args for retrieval of posts to merge
-    $args = array(
-		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
-		'post_status'     => $post_status,
-		//'posts_per_page'  => $limit, //-1, //$posts_per_page,
-        'orderby'         => 'title',
-        'order'           => 'ASC',
-        //'return_fields'   => 'ids', // ?
-	);
-	
-    // Turn the list of IDs into a proper array
-    if ( !empty($a['ids']) ) {
-    	$str_ids = $a['ids'];
-    	$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
-    } else if (isset($_GET['ids'])) {
-		$post_ids = $_GET['ids'];
-		$str_ids = implode(", ", $_GET['ids']);
-    } else if (isset($_POST['ids'])) {
-		$post_ids = $_POST['ids'];
-		$str_ids = implode(", ", $_POST['ids']);
+    	$merging = true;
+    	
+    	// If a merge request has been submitted, then get the relevant post IDs
+    	$arr_posts($_POST['p1_id'],$_POST['p2_id']);
+    	//$p1 = get_post($_POST['p1_id']);
+    	//$p2 = get_post($_POST['p2_id']);
+    	//$arr_posts = array($p1,$p2);
+    	
     } else {
-    	$post_ids = array();
-    	$str_ids = "";
-    }
     
-	$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
-    
-    if ( count($post_ids) < 1 ) {
-    	$troubleshooting .= "Not enough post_ids submitted.<br />";
-    }
-    
-    //$info .= "form_type: $form_type<br />"; // tft
-
-    // If post_ids have been submitted, then run the query
-    if ( count($post_ids) > 1 ) {
-            
-		//$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+    	$merging = false;
+    	
+    	// Get posts based on submitted IDs
+    	$a = shortcode_atts( array(
+			'post_type'	=> 'post',
+			'ids'     	=> array(),
+			'form_type'	=> 'simple_merge',
+			'limit'    	=> '-1'
+		), $atts );
 	
-		// Get posts matching the assembled args
-		// =====================================
-		$posts_info = birdhive_get_posts( $args );
+		$post_type = $a['post_type'];
+		$form_type = $a['form_type'];
+		$limit = $a['limit'];
 	
-		if ( isset($posts_info['arr_posts']) ) {
-		
-			$arr_posts = $posts_info['arr_posts']->posts;
-			$troubleshooting .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
-			//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
-			
-			if ( count($arr_posts) > 2 ) {
-				$troubleshooting .= "<p>That's too many posts! I can only handle two at a time.</p>";
-			}
-		
-			//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-			$troubleshooting .= $posts_info['info']."<hr />";
-			//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
-		
-			// Print last SQL query string
-			//global $wpdb;
-			//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-			//$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
-		
+		// Set post_status options based on user role
+		if ( current_user_can('read_repertoire') ) {
+			$post_status = array( 'publish', 'private', 'draft' );
+		} else {
+			$post_status = 'publish';
 		}
 	
-	} else {
-		$arr_posts = array(); // empty array to avoid counting errors later, in case no posts were retrieved
-	}
+		// Set up basic query args for retrieval of posts to merge
+		$args = array(
+			'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+			'post_status'     => $post_status,
+			//'posts_per_page'  => $limit, //-1, //$posts_per_page,
+			'orderby'         => 'title',
+			'order'           => 'ASC',
+			'return_fields'   => 'ids',
+		);
+	
+		// Turn the list of IDs into a proper array
+		if ( !empty($a['ids']) ) {
+			$str_ids = $a['ids'];
+			$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
+		} else if (isset($_GET['ids'])) {
+			$post_ids = $_GET['ids'];
+			$str_ids = implode(", ", $_GET['ids']);
+		} else if (isset($_POST['ids'])) {
+			$post_ids = $_POST['ids'];
+			$str_ids = implode(", ", $_POST['ids']);
+		} else {
+			$post_ids = array();
+			$str_ids = "";
+		}
+	
+		$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
+	
+		if ( count($post_ids) < 1 ) {
+			$troubleshooting .= "Not enough post_ids submitted.<br />";
+		}
+	
+		//$info .= "form_type: $form_type<br />"; // tft
+
+		// If post_ids have been submitted, then run the query
+		if ( count($post_ids) > 1 ) {
+			
+			//$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+	
+			// Get posts matching the assembled args
+			// =====================================
+			$posts_info = birdhive_get_posts( $args );
+	
+			if ( isset($posts_info['arr_posts']) ) {
+		
+				$arr_posts = $posts_info['arr_posts']->posts;
+				$info .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
+				//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+			
+				if ( count($arr_posts) > 2 ) {
+					$troubleshooting .= "<p>That's too many posts! I can only handle two at a time.</p>";
+				}
+		
+				//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
+				$troubleshooting .= $posts_info['info']."<hr />";
+				//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+		
+				// Print last SQL query string
+				//global $wpdb;
+				//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+				//$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+		
+			}
+	
+		}/* else {
+			$arr_posts = array(); // empty array to avoid counting errors later, in case no posts were retrieved
+		}*/
+    }
+    
+    // =====================================
         
     // Get array of fields which apply to the given post_type -- basic fields as opposed to ACF fields
     $arr_core_fields = array( 'post_title', 'content', 'excerpt', 'post_thumbnail' ); // Also?: author, post_status, date published, date last modified -- read only?
@@ -335,40 +357,50 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( count($arr_posts) == 2 ) {
 		
 		// TODO: give user choice of which post to treat as primary?
-		$p1 = $arr_posts[0];
-		$p2 = $arr_posts[1];
+		$p1_id = $arr_posts[0];
+		$p2_id = $arr_posts[1];
+		//$p1 = $arr_posts[0];
+		//$p2 = $arr_posts[1];
 		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
     	
-    	// Get and compare last modified dates
-    	$p1_modified = $p1->post_modified;
-    	$p2_modified = $p2->post_modified;
+    	if ( $merging ) {
     	
-    	// Prioritize the post which was most recently modified by putting it in first position
-    	// In other words, swap p1/p2 if second post is newer
-    	if ( $p1_modified < $p2_modified ) {
-    		$p1 = $arr_posts[1];
-			$p2 = $arr_posts[0];
+    		// Form has been submitted... About to merge...
+    		//...
+    		
+    	} else {
+    	
+    		// If not ready to run merge, assemble info about posts-to-merge
+    		$p1 = get_post($p1_id);
+    		$p2 = get_post($p2_id);
+    		
+    		// Get and compare last modified dates
+			$p1_modified = $p1->post_modified;
+			$p2_modified = $p2->post_modified;
+		
+			// Prioritize the post which was most recently modified by putting it in first position
+			// In other words, swap p1/p2 if second post is newer
+			if ( $p1_modified < $p2_modified ) {
+				$p1 = $arr_posts[1];
+				$p2 = $arr_posts[0];
+				$p1_id = $p1->ID;
+				$p2_id = $p2->ID;
+			}
+			
+			// Assemble general post info for table header
+			$p1_info = "[".$p1_ID."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
+			$p2_info = "[".$p2_ID."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
+			//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
+			//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
+			$info .= "<pre>";
+			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_ID."<br />";
+			$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2_ID."<br />";
+			$info .= "</pre>";
+			//
+			$info .= '<input type="hidden" name="p1_id" value="'.$p1_ID.'">';
+			$info .= '<input type="hidden" name="p2_id" value="'.$p2_ID.'">';
+			
     	}
-    	
-    	// Assemble general post info for table header
-    	$p1_info = "[".$p1->ID."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
-    	$p2_info = "[".$p2->ID."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
-    	//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
-    	//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
-    	$info .= "<pre>";
-    	$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1->ID."<br />";
-    	$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2->ID."<br />";
-    	$info .= "</pre>";
-		//
-		$info .= '<input type="hidden" name="p1_id" value="'.$p1->ID.'">';
-		$info .= '<input type="hidden" name="p2_id" value="'.$p2->ID.'">';
-    
-    	/*$info .= '<table>';
-		$info .= '<tr>';
-		$info .= '<th>'.$p1->ID.'</th><th>'.$p1->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p1->post_author).'</th>';
-		$info .= '<th>'.$p2->ID.'</th><th>'.$p2->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p2->post_author).'</th>';
-		$info .= '</tr>';
-		$info .= '</table>';*/
 		
 		// TODO: tag which fields are ok to edit manually, to avoid trouble -- e.g. editions; choirplanner_id, &c. should be RO
 		// TODO: include editing instructions -- e.g. separate category list with semicolons (not commas!)
@@ -379,15 +411,19 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$field_type = "text";
 			$field_label = ""; // tft
 			
-			$p1_val = $p1->$field_name;
-			$p2_val = $p2->$field_name;
+			if ( $merging ) {
+				// Do the merging...
+			} else {
+				$p1_val = $p1->$field_name;
+				$p2_val = $p2->$field_name;
 			
-			$merged = merge_field_values($p1_val, $p2_val);
-			$merge_value = $merged['merge_value'];
-			$merge_info = $merged['info'];
+				$merged = merge_field_values($p1_val, $p2_val);
+				$merge_value = $merged['merge_value'];
+				$merge_info = $merged['info'];
 			
-			$arr_fields[$field_name] = array('field_cat' => "core_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
-			//$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
+				$arr_fields[$field_name] = array('field_cat' => "core_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_value, 'merge_info' => $merge_info);
+				//$arr_fields[$field_name] = array("core_field", $p1_val, $p2_val, $merge_value, $merge_info);
+			}
 			
 		}
 		
@@ -402,17 +438,23 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
 			$i = 0;
 			foreach ( $group_fields as $group_field ) {
-
+			
+				if ( $merging ) {
+					// Do the merging...
+				} else {
+					//
+				}
+				
 				$merge_value = null; // init
 				$merge_info = "";
-				
+							
 				// field_object parameters include: key, label, name, type, id -- also potentially: 'post_type' for relationship fields, 'sub_fields' for repeater fields, 'choices' for select fields, and so on
 				$field_name = $group_field['name'];
 				$field_label = $group_field['label'];
 				$field_type = $group_field['type'];
 				
-				$p1_val = get_field($field_name, $p1->ID, false);
-				$p2_val = get_field($field_name, $p2->ID, false);
+				$p1_val = get_field($field_name, $p1_ID, false);
+				$p2_val = get_field($field_name, $p2_ID, false);
 				
 				// If a value was retrieved for either post, then display more info about the field object (tft)
 				if ( $p1_val || $p1_val ) {				
@@ -426,18 +468,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$merge_info = $merged['info'];
 			
 				$arr_fields[$field_name] = array('field_cat' => "acf_field", 'field_type' => $field_type, 'field_label' => $field_label, 'p1_val' => $p1_val, 'p2_val' => $p2_val, 'merge_val' => $merge_val, 'merge_info' => $merge_info );
-				//$arr_fields[$field_name] = array("acf_field", $p1_val, $p2_val, $merge_value, $merge_info);
-			
 				/*
 				$field_info .= "[$i] group_field: <pre>".print_r($group_field,true)."</pre>"; // tft
-				$field_info .= "[$i] group_field: ".$group_field['key']."<br />";
-				$field_info .= "label: ".$group_field['label']."<br />";
-				$field_info .= "name: ".$group_field['name']."<br />";
-				$field_info .= "type: ".$group_field['type']."<br />";
 				if ( $group_field['type'] == "relationship" ) { $field_info .= "post_type: ".print_r($group_field['post_type'],true)."<br />"; }
 				if ( $group_field['type'] == "select" ) { $field_info .= "choices: ".print_r($group_field['choices'],true)."<br />"; }
-				$field_info .= "<br />";
-				//$field_info .= "[$i] group_field: ".$group_field['key']."/".$group_field['label']."/".$group_field['name']."/".$group_field['type']."/".$group_field['post_type']."<br />";
 				*/
 				
 				$i++;
@@ -449,13 +483,19 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get terms applied to both posts
 		foreach ( $taxonomies as $taxonomy ) {
 			
+			if ( $merging ) {
+				// Do the merging...
+			} else {
+				//
+			}
+				
 			$field_type = "taxonomy";
 			$field_name = $taxonomy;
 			$field_label = "";
 			
 			// Get terms... WIP
-			$p1_val = wp_get_post_terms( $p1->ID, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
-			$p2_val = wp_get_post_terms( $p2->ID, $taxonomy, array( 'fields' => 'ids' ) );
+			$p1_val = wp_get_post_terms( $p1_ID, $taxonomy, array( 'fields' => 'ids' ) ); // 'all'; 'names'
+			$p2_val = wp_get_post_terms( $p2_ID, $taxonomy, array( 'fields' => 'ids' ) );
 			
 			//if ( !empty($p1_val) ) { $info .= "taxonomy [$field_name] p1_val: <pre>".print_r($p1_val, true)."</pre>"; }
 			//if ( !empty($p2_val) ) { $info .= "taxonomy [$field_name] p2_val: <pre>".print_r($p2_val, true)."</pre>"; }
@@ -489,108 +529,121 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// Get related posts for both posts (events, &c?)
 		// WIP
 		
-		// Build the table for review of post & merge values		
-		$info .= '<table class="pre">';
-		$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merge Value</th><th>P2 Value</th></tr>';
-		
-		foreach ( $arr_fields as $field_name => $values ) {
-		
-			$field_cat = $values['field_cat'];
-			$field_type = $values['field_type'];
-			$field_label = $values['field_label'];
-			$p1_val = $values['p1_val'];
-			$p2_val = $values['p2_val'];
-			$merge_value = $values['merge_val'];
-			$merge_info = $values['merge_info'];
+		if ( $merging ) {
 			
-			if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
-			if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
-			if ( is_array($merge_value) ) { 
-				$merge_value_str = implode("; ",$merge_value);
-				$merge_info .= "(".count($merge_value)." item array)";
-			} else {
-				$merge_value_str = $merge_value;
-			}
-			//if ( is_array($merge_value) ) { $merge_value_str = "<pre>".print_r($merge_value,true)."</pre>"; } else { $merge_value_str = $merge_value; }
-			if ( $p1_val == $merge_value ) { $p1_class = "merged_val"; } else { $p1_class = "tbx"; }
-			if ( $p2_val == $merge_value ) { $p2_class = "merged_val"; } else { $p2_class = "tbx"; }
-			if ( !empty($merge_info) ) { $merge_info = ' <span class="merge_info">'.$merge_info.'</span>'; }
-			//if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
+			// Do the merging...
 			
-			if ( !(empty($p1_val) && empty($p2_val)) ) {
-				
-				// Open row
-				$info .= '<tr>';
-				$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
-				
-				// Field info
-				$info .= '<td>'.$field_cat.'</td>';
-				$info .= '<td>'.$field_name;
-				if ( !empty($field_label) ) { $info .= '<br />('.$field_label.')'; }
-				$info .= '</td>';
-				
-				// P1 value
-				$info .= '<td class="'.$p1_class.'">';
-				if ( $field_type == "taxonomy" && is_array($p1_val) ) {
-					foreach ( $p1_val as $term_id ) {
-						$info .= get_term( $term_id )->name."<br />";
-					}
+		} else {
+			
+			// Build the table for review of post & merge values		
+			$info .= '<table class="pre">';
+			$info .= '<tr><th style="width:5px;">&nbsp;</th><th width="100px">Field Type</th><th width="180px">Field Name</th><th>P1 Value</th><th>Merge Value</th><th>P2 Value</th></tr>';
+		
+			foreach ( $arr_fields as $field_name => $values ) {
+		
+				$field_cat = $values['field_cat'];
+				$field_type = $values['field_type'];
+				$field_label = $values['field_label'];
+				$p1_val = $values['p1_val'];
+				$p2_val = $values['p2_val'];
+				$merge_value = $values['merge_val'];
+				$merge_info = $values['merge_info'];
+			
+				if ( is_array($p1_val) ) { $p1_val_str = "<pre>".print_r($p1_val,true)."</pre>"; } else { $p1_val_str = $p1_val; }
+				if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
+				if ( is_array($merge_value) ) { 
+					$merge_value_str = implode("; ",$merge_value);
+					$merge_info .= "(".count($merge_value)." item array)";
+				} else {
+					$merge_value_str = $merge_value;
 				}
-				$info .= $p1_val_str;
-				$info .= '</td>';
+				//if ( is_array($merge_value) ) { $merge_value_str = "<pre>".print_r($merge_value,true)."</pre>"; } else { $merge_value_str = $merge_value; }
+				if ( $p1_val == $merge_value ) { $p1_class = "merged_val"; } else { $p1_class = "tbx"; }
+				if ( $p2_val == $merge_value ) { $p2_class = "merged_val"; } else { $p2_class = "tbx"; }
+				if ( !empty($merge_info) ) { $merge_info = ' <span class="merge_info">'.$merge_info.'</span>'; }
+				//if ( !empty($merge_info) ) { $merge_info = ' ['.$merge_info.']'; }
+			
+				if ( !(empty($p1_val) && empty($p2_val)) ) {
 				
-				// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
-				// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
-				//$readonly = " readonly";
-				//$input_class = ' class="readonly"';
-				// Deal w/ title_for_matching -- will be auto-regenerated, so manual editing is pointless
-				//field_type: relationship
-				//field_type: number -- e.g. choirplanner_id (legacy data)
-				//
+					// Open row
+					$info .= '<tr>';
+					$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
 				
-				// Merge value
-				$info .= '<td>';
-				if ( $field_type == "text" || $field_type == "textarea" ) {
-					$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
-					$info .= $merge_info;
-				} else if ( $field_type == "taxonomy" ) {
-					if ( is_array($merge_value) ) {
-						foreach ( $merge_value as $term_id ) {
+					// Field info
+					$info .= '<td>'.$field_cat.'</td>';
+					$info .= '<td>'.$field_name;
+					if ( !empty($field_label) ) { $info .= '<br />('.$field_label.')'; }
+					$info .= '</td>';
+				
+					// P1 value
+					$info .= '<td class="'.$p1_class.'">';
+					if ( $field_type == "taxonomy" && is_array($p1_val) ) {
+						foreach ( $p1_val as $term_id ) {
 							$info .= get_term( $term_id )->name."<br />";
 						}
 					}
-					$info .= '<pre>'.print_r($merge_value, true).'</pre>';
-					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
-				} else {
-					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
-					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
-				}
-				$info .= '</td>';
-					
-				//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
-				//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
-				//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
+					$info .= $p1_val_str;
+					$info .= '</td>';
 				
-				// P2 value
-				$info .= '<td class="'.$p2_class.'">';
-				if ( $field_type == "taxonomy" && is_array($p2_val) ) {
-					foreach ( $p2_val as $term_id ) {
-						$info .= get_term( $term_id )->name."<br />";
+					// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
+					// TODO: set some inputs with readonly attribute and class="readonly" to make it obvious to user
+					//$readonly = " readonly";
+					//$input_class = ' class="readonly"';
+					// Deal w/ title_for_matching -- will be auto-regenerated, so manual editing is pointless
+					//field_type: relationship
+					//field_type: number -- e.g. choirplanner_id (legacy data)
+					//
+				
+					// Merge value
+					$info .= '<td>';
+					if ( $field_type == "text" || $field_type == "textarea" ) {
+						$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
+						$info .= $merge_info;
+					} else if ( $field_type == "taxonomy" ) {
+						if ( is_array($merge_value) ) {
+							foreach ( $merge_value as $term_id ) {
+								$info .= get_term( $term_id )->name."<br />";
+							}
+						}
+						$info .= '<pre>'.print_r($merge_value, true).'</pre>';
+						$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
+					} else {
+						$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
+						$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
 					}
+					$info .= '</td>';
+					
+					//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_info.'</td>';
+					//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_info.'</td>';
+					//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_info.'</td>';
+				
+					// P2 value
+					$info .= '<td class="'.$p2_class.'">';
+					if ( $field_type == "taxonomy" && is_array($p2_val) ) {
+						foreach ( $p2_val as $term_id ) {
+							$info .= get_term( $term_id )->name."<br />";
+						}
+					}
+					$info .= $p2_val_str;
+					$info .= '</td>';
+				
+					// Close row
+					$info .= '</tr>';
 				}
-				$info .= $p2_val_str;
-				$info .= '</td>';
 				
-				// Close row
-				$info .= '</tr>';
 			}
-				
-		}
 		
-		$info .= '</table>';
+			$info .= '</table>';
+		
+		}				
+		
     }
     
-    $info .= '<input type="submit" value="Merge Records">';
+    if ( $merging ) {
+    	// do something?
+    } else {
+    	$info .= '<input type="submit" value="Merge Records">';
+    }
     $info .= '<a href="#!" id="form_reset">Clear Form</a>';
     $info .= '</form>';        
         
