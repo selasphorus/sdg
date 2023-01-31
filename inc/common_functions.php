@@ -492,13 +492,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 					// Do the merging...
 					$old_val = $p1_val;
+					if ( is_array($old_val) ) { $old_val_str = print_r($old_val, true); } else  { $old_val_str = $old_val; }
+					
 					$new_val = "";
 					if ( !empty($_POST[$field_name]) ) {
 						$new_val = $_POST[$field_name];
 					}
-					if ( !empty($old_val) || !empty($new_val) ) {
-						if ( $old_val != $new_val ) {
-							$info .= "[$field_name] old_val: $old_val;<br />[$field_name] new_val: $new_val<br />";
+					if ( !empty($old_val_str) || !empty($new_val) ) {
+						if ( $old_val_str != $new_val ) {
+							$info .= "[$field_name] old_val_str: $old_val_str;<br />[$field_name] new_val: $new_val<br />";
 							// update value
 							$info .= "New value not same as old for -> run update<br />";
 						} else {
