@@ -441,13 +441,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( !empty($_POST[$field_name]) ) {
 					$new_val = $_POST[$field_name];
 				}
-				$info .= "[$field_name] old_val: $old_val;<br />[$field_name] new_val: $new_val<br />";
-				if ( $old_val != $new_val ) {
-					// update value
-					$info .= "New value not same as old for -> run update<br />";
-				} else {
-					//$info .= "New value same as old for $field_name<br />";
+				if ( !empty($old_val) || !empty($new_val) ) {
+					if ( $old_val != $new_val ) {
+						$info .= "[$field_name] old_val: $old_val;<br />[$field_name] new_val: $new_val<br />";
+						// update value
+						$info .= "New value not same as old for -> run update<br />";
+					} else {
+						//$info .= "New value same as old for $field_name<br />";
+					}
 				}
+				
 				
 			} else {
 				$p1_val = $p1->$field_name;
