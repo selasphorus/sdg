@@ -227,6 +227,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}*/
     	// WIP/TODO: Move p2 to trash
     	$troubleshooting .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
+    	//wp_trash_post($p2_id);
     	//
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
@@ -558,6 +559,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$info .= get_term( $term_id )->name."<br />";
 						}
 					}
+					$info .= '<span class="nb">'.$merge_value_str.'</span>';
 					$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
 				} else {
 					$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_info;
