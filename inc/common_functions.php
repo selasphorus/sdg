@@ -379,9 +379,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     //292003 -- 298829
     
     $info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
-    $info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;padding-right:1rem;" />';
+    $info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:1rem;" />';
     $info .= '<label for="p1_id">Primary Post ID</label>';
-    $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;padding-right:1rem;" />';
+    $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:1rem;" />';
     $info .= '<label for="p2_id">Secondary Post ID</label>';
     $info .= '<input type="submit" value="Merge">';
     $info .= '</form>';
