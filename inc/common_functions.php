@@ -193,7 +193,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( !empty($_POST) ) { 
     	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
     	// WIP/TODO: Update p1 with merged values
-    	$troubleshooting .= "About to save merged values to p1<br />";
+    	$troubleshooting .= "About to save merged values to p1 [".$_POST['p1_id']."]<br />";
     	//
     	// Save content (only if previously empty)
 		/*
@@ -226,7 +226,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 		}*/
     	// WIP/TODO: Move p2 to trash
-    	$troubleshooting .= "About to move p1 to trash<br />";
+    	$troubleshooting .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
     	//
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
@@ -517,7 +517,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// Open row
 				$info .= '<tr>';
-				$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
+				$info .= '<td>'.'<input type="hidden" name="p1_id" value="'.$p1->ID.'">'.'<input type="hidden" name="p2_id" value="'.$p2->ID.'">'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
 				
 				// Field info
 				$info .= '<td>'.$field_cat.'</td>';
