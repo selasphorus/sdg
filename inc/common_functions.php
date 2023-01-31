@@ -490,21 +490,32 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				if ( $merging ) {
 				
+					$info .= "[$field_name]<br />";
 					// Compare old stored value w/ new merge_value, to see whether update is needed
 					$old_val = $p1_val;
-					if ( is_array($old_val) ) { $old_val_str = print_r($old_val, true); } else { $old_val_str = $old_val; }
+					if ( is_array($old_val) ) { 
+						$old_val_str = print_r($old_val, true);
+						$info .= "old_val is_array<br />";
+					} else {
+						$old_val_str = $old_val;
+					}
 					$old_val_str = trim($old_val_str);
 					
 					$new_val = "";
 					if ( !empty($_POST[$field_name]) ) {
 						$new_val = $_POST[$field_name];
 					}
-					if ( is_array($new_val) ) { $new_val_str = print_r($new_val, true); } else { $new_val_str = $new_val; }
+					if ( is_array($new_val) ) {
+						$new_val_str = print_r($new_val, true);
+						$info .= "new_val is_array<br />";
+					} else {
+						$new_val_str = $new_val;
+					}
 					$new_val_str = trim($new_val_str);
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
 						if ( $old_val_str != $new_val_str ) {
-							$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							$info .= "old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							// update value
 							$info .= "New value not same as old for '$field_name' -> run update<br /><br />";
 							// Do the merging...
