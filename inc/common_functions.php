@@ -329,7 +329,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
     $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
-    
+    //
+    $info .= '<input type="hidden" name="p1_id" value="'.$p1->ID.'">';
+    $info .= '<input type="hidden" name="p2_id" value="'.$p2->ID.'">';
     // TODO: add field(s) for submitting post_ids for merging?
     
     if ( count($arr_posts) == 2 ) {
@@ -517,7 +519,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// Open row
 				$info .= '<tr>';
-				$info .= '<td>'.'<input type="hidden" name="p1_id" value="'.$p1->ID.'">'.'<input type="hidden" name="p2_id" value="'.$p2->ID.'">'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
+				$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
 				
 				// Field info
 				$info .= '<td>'.$field_cat.'</td>';
