@@ -329,9 +329,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
     $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
-    //
-    $info .= '<input type="hidden" name="p1_id" value="'.$p1->ID.'">';
-    $info .= '<input type="hidden" name="p2_id" value="'.$p2->ID.'">';
     // TODO: add field(s) for submitting post_ids for merging?
     
     if ( count($arr_posts) == 2 ) {
@@ -361,6 +358,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1->ID."<br />";
     	$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2->ID."<br />";
     	$info .= "</pre>";
+		//
+		$info .= '<input type="hidden" name="p1_id" value="'.$p1->ID.'">';
+		$info .= '<input type="hidden" name="p2_id" value="'.$p2->ID.'">';
+    
     	/*$info .= '<table>';
 		$info .= '<tr>';
 		$info .= '<th>'.$p1->ID.'</th><th>'.$p1->post_modified.'</th><th>'.get_the_author_meta('user_nicename',$p1->post_author).'</th>';
