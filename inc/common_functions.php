@@ -490,12 +490,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				if ( $merging ) {
 				
-					$info .= "[$field_name]<br />";
+					$merge_info = "";
+					
+					if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
+					
 					// Compare old stored value w/ new merge_value, to see whether update is needed
 					$old_val = $p1_val;
 					if ( is_array($old_val) ) { 
 						$old_val_str = print_r($old_val, true);
-						$info .= "old_val is_array<br />";
+						$merge_info .= "old_val is_array<br />";
 					} else {
 						$old_val_str = $old_val;
 					}
@@ -507,7 +510,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					}
 					if ( is_array($new_val) ) {
 						$new_val_str = print_r($new_val, true);
-						$info .= "new_val is_array<br />";
+						$merge_info .= "new_val is_array<br />";
 					} else {
 						$new_val_str = $new_val;
 					}
@@ -515,15 +518,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
 						if ( $old_val_str != $new_val_str ) {
-							$info .= "old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							$merge_info .= "old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							// update value
-							$info .= "New value not same as old for '$field_name' -> run update<br /><br />";
+							$merge_info .= "New value not same as old for '$field_name' -> run update<br /><br />";
 							// Do the merging...
 							//
 						} else {
-							//$info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
-							//$info .= "New value same as old for $field_name<br /><br />";
+							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
+							//$merge_info .= "New value same as old for $field_name<br /><br />";
 						}
+						$info .= $merge_info;
 					}
 					
 				} else {
