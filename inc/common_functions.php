@@ -241,6 +241,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$merging = true;
     	$arr_posts = array(); // tft
     	
+    	if ( !empty($_POST['p1_id']) ) {
+    		$p1_id = $_POST['p1_id'];
+    		$post_type = get_post_type($p1_id);
+    	} else {
+    		$post_type = "UNKNOWN";
+    	}    	
+    	
     	// If a merge request has been submitted, then get the relevant post IDs
     	///$arr_posts( $_POST['p1_id'], $_POST['p2_id'] );
     	//$p1 = get_post($_POST['p1_id']);
