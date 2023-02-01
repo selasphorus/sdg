@@ -469,8 +469,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 				// Update core fields
 				if ( $field_name == "post_thumbnail" ) {
-					$merge_info .= "<br />";
-					$info .= $merge_info;
+					//$merge_info .= "<br />";
+					//$info .= $merge_info;
 					//set_post_thumbnail( $p1_id, $new_val ) //set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
 				}
 				
