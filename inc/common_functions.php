@@ -780,7 +780,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	// WIP/TODO: Move p2 to trash
 		if ( !$merge_errors ) {
 			$info .= "<hr />";
-			$info .= "Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash<br />";
+			$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash</h3>";
+			// TODO: first add deleted-after-merge admin_tag?
 			//wp_trash_post($p2_id);
 		}
 		
