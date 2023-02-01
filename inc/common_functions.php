@@ -701,7 +701,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 					// Display merge value
 					$info .= '<td>';
-					if ( $field_cat != "core_field" && ( $field_type == "text" || $field_type == "textarea" ) ) {
+					if ( $field_cat != "core_field" && ( $field_type == "text" || $field_type == "textarea" ) ) { // Disabled editing for core fields for now. Title is auto-gen anyway and thumbnails are seldom used for rep.
 						$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
 						$info .= $merge_val_info;
 					} else if ( $field_type == "taxonomy" ) {
