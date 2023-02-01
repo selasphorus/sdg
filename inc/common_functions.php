@@ -642,6 +642,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$merge_info .= "Success! wp_set_post_terms completed.<br />";
 								$fields_merged++;
 							} else {
+								$merge_info .= '<span class="nb">'."Oh no! Update via wp_set_post_terms failed.</span><br />";
 								$merge_errors = true;
 							}
 						}
