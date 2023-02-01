@@ -725,11 +725,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$info .= get_term( $term_id )->name."<br />";
 							}
 						}
-						$info .= '<pre>'.print_r($merge_value, true).'</pre>';
+						$info .= '<span class="nb merged_val"><pre>'.print_r($merge_value, true).'</pre></span>';
 						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
 						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
 					} else {
-						$info .= 'field_type: '.$field_type.'<br /><span class="nb">'.$merge_value_str.'</span>'.$merge_val_info;
+						$info .= 'field_type: '.$field_type.'<br /><span class="nb merged_val">'.$merge_value_str.'</span>'.$merge_val_info;
 						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';	
 						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
 					}
