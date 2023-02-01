@@ -460,6 +460,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
+						$field_value = $new_val;
+						$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 						//
 						$merge_info .= "<br />";
 						$info .= $merge_info;
