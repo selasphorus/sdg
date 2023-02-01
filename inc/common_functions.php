@@ -234,6 +234,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge" ) {
     
     	$merging = true;
+    	$merge_errors = false;
     	
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
@@ -468,6 +469,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$merge_info .= "Success! Updated $field_name -- p1 ($p1_id)<br />";
 							} else {
 								$merge_info .= "Update failed for $field_name -- p1 ($p1_id)<br />";
+								$merge_errors = true;
 							}
 						} else {
 							//
@@ -501,6 +503,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 
 				wp_update_post( $data, true );
 				if (is_wp_error($p1_id)) { // ?? if (is_wp_error($data)) {
+					$merge_errors = true;
 					$errors = $p1_id->get_error_messages();
 					foreach ($errors as $error) {
 						$info .= $error;
@@ -579,9 +582,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
 							$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 							/*if ( update_field($field_name, $field_value, $p1_id) ) {
-								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
+								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
 							} else {
 								$merge_info .= "Oh no! Update failed.<br />";
+								$merge_errors = true;
 							}*/
 							$merge_info .= "<br />";
 							$info .= $merge_info;
@@ -648,12 +652,17 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( strcmp($old_val, $new_val) != 0 ) {
 						$merge_info .= "New value for taxonomy '$field_name' -> run update<br />";
 						// Turn new_val into an array
-						$field_value = explode("; ",$new_val);
-						$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
+						$arr_terms = explode("; ",$new_val);
+						$merge_info .= "Prepped to run update_field:<br />taxonomy: '$taxonomy' -- arr_terms: '".print_r($arr_terms, true)."' -- post_id: '$p1_id'<br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via wp_set_post_terms( $post_id, $term_ids, $taxonomy ); // $term_ids = array( 5 ); // Correct. This will add the tag with the id 5.
-						//wp_set_post_terms( $post_id, $terms, $taxonomy, $append ); // $append -- If true, don't delete existing terms, just add on. If false, replace the terms with the new terms.
-						//wp_set_post_terms( $post_id, $terms, 'admin_tag', true );
+						// wp_set_post_terms( int $post_id, string|array $terms = '', string $taxonomy = 'post_tag', bool $append = false ): array|false|WP_Error
+						if ( wp_set_post_terms( $p1_id, $arr_terms, $taxonomy, true ) ) { // append=true, i.e. don't delete existing terms, just add on.
+							$merge_info .= "Success! wp_set_post_terms completed.<br />";
+						} else {
+							$merge_errors = true;
+						}
+						//
 						//
 					} else {
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
