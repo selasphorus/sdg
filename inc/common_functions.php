@@ -773,11 +773,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$terms_result = wp_set_post_terms( $p2_id, $term_ids, 'admin_tag', true );
 			if ( $terms_result ) { $info .= 'admin_tag added.<br />'; } else { $info .= "Nope...<br />"; }
 			//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
-			/*if ( wp_trash_post($p2_id) ) {
+			if ( wp_trash_post($p2_id) ) {
 				$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
 			} else {
 				$info .= "ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.<br />";
-			}*/
+			}
 		}
 		
     } else if ( count($arr_posts) == 2 ) {
