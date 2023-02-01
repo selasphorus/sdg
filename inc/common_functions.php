@@ -553,8 +553,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			// WIP: track fields cumulatively to determine whether records are identical and, if so, offer option to delete p2 (or -- newer of two posts)
 			if ( $p1_val != $p2_val ) { $identical_posts = false; }			
 			
-			if ( $merging && $field_name != "post_title" ) {
+			if ( $merging ) {
 			
+				if ( $field_name == "post_title" ) {
+					continue;
+				}
+				
 				$merge_info = "";					
 				if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 				
@@ -671,7 +675,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( !empty($merge_val_info) ) { $merge_val_info = ' <span class="merge_val_info">'.$merge_val_info.'</span>'; }
 				//if ( !empty($merge_val_info) ) { $merge_val_info = ' ['.$merge_val_info.']'; }
 		
-				if ( !(empty($p1_val) && empty($p2_val)) ) {
+				if ( !( empty($p1_val) && empty($p2_val) ) ) {
 			
 					// Open row
 					$info .= '<tr>';
