@@ -402,9 +402,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			//
 			$info .= "<pre>";
 			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_id;
-			$info .= '<a href="'.get_permalink($p1_id),'">View</a>&nbsp;<a href="'.get_edit_post_link($p1_id),'">Edit</a><br />';
+			$info .= '&nbsp;<a href="'.get_permalink($p1_id).'">View</a>&nbsp;<a href="'.get_edit_post_link($p1_id).'">Edit</a><br />';
 			$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2_id;
-			$info .= '<a href="'.get_permalink($p2_id),'">View</a>&nbsp;<a href="'.get_edit_post_link($p2_id),'">Edit</a><br />';
+			$info .= '&nbsp;<a href="'.get_permalink($p2_id).'">View</a>&nbsp;<a href="'.get_edit_post_link($p2_id).'">Edit</a><br />';
 			$info .= "</pre>";
 			//
 			$info .= '<input type="hidden" name="p1_id" value="'.$p1_id.'">';
