@@ -673,7 +673,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//if ( is_array($p2_val) ) { $p2_val_str = "<pre>".print_r($p2_val,true)."</pre>"; } else { $p2_val_str = $p2_val; }
 				if ( is_array($merge_value) ) { 
 					$merge_value_str = implode("; ",$merge_value);
-					$merge_val_info .= "(".count($merge_value)." item array)";
+					//$merge_val_info .= "(".count($merge_value)." item array)";
 				} else {
 					$merge_value_str = $merge_value;
 				}
