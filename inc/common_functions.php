@@ -552,10 +552,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 					
 					// Compare old stored value w/ new merge_value, to see whether update is needed
-					$old_val = trim($p1_val);
-					if ( is_array($old_val) ) { $old_val = implode("; ",$old_val); } else { $old_val = $old_val; }
+					$old_val = $p1_val;
+					if ( is_array($old_val) ) { $old_val = trim(implode("; ",$old_val)); } else { $old_val = trim($old_val); }
 					
-					if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
+					if ( !empty($_POST[$field_name]) ) { $new_val = trim($_POST[$field_name]); } else { $new_val = ""; }
 					//if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
 					//$new_val_str = trim($new_val_str);
 					
