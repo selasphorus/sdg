@@ -703,11 +703,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 			*/
 			
-			// WIP/TODO: Move p2 to trash
-			if ( $merging && !$merge_errors ) {
-				$info .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
-				//wp_trash_post($p2_id);
-			}
 		}
 		
 		// Get related posts for both posts (events, &c?)
@@ -715,7 +710,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		if ( $merging ) {
 			
-			// ...
+			// WIP/TODO: Move p2 to trash
+			if ( !$merge_errors ) {
+				$info .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
+				//wp_trash_post($p2_id);
+			}
 			
 		} else {
 			
