@@ -790,8 +790,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     }
     
     if ( $merging ) {
-    	// Show input(s) for new pair of IDs?
-    } else {
+    	// ???
+    } else if ( count($arr_posts) == 2 ) {
     	$info .= '<input type="hidden" name="form_action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records">';
     	//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
