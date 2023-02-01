@@ -716,7 +716,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					} else {
 						//$info .= 'field_type: '.$field_type.'<br />';
 						$info .= '<span class="nb merged_val">'.$merge_value_str.'</span>'.$merge_val_info;
-						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';	
+						if ( $field_name != "post_title" ) {
+							$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
+						}
 						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
 					}
 					$info .= '</td>';
