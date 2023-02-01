@@ -456,13 +456,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
 						//
-						
+						$merge_info .= "<br />";
+						$info .= $merge_info;						
 					} else {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
-					$merge_info .= "<br />";
-					$info .= $merge_info;
 				}
 				// Update core fields
 				/*
