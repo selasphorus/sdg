@@ -455,8 +455,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$new_val = $_POST[$field_name];
 				}
 				if ( !empty($old_val) || !empty($new_val) ) {
+					$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
-						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+						//$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
 						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
