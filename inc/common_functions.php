@@ -309,7 +309,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 		
 				//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-				$troubleshooting .= "posts_info: ".$posts_info['info']."<hr />";
+				$troubleshooting .= $posts_info['info']."<hr />"; // "posts_info: ".
 				//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
 		
 				// Print last SQL query string
@@ -787,6 +787,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     } else if ( count($arr_posts) == 2 ) {
     	$info .= '<input type="hidden" name="form_action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records">';
+    	$info .= '<span class="nb"><em>This action cannot be undone! The primary post will be updated with the field values displayed in the merge column; the secondary post will be sent to the trash.</span><br />';
     	//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
     }    
     $info .= '</form>';        
