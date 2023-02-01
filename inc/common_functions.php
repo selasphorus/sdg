@@ -634,11 +634,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						
 							// Turn new_val into an array
 							$arr_terms = explode("; ",$new_val);
-							$merge_info .= "Prepped to run wp_set_post_terms:<br />>>> taxonomy: '$taxonomy' -- arr_terms: '".print_r($arr_terms, true)."' -- post_id: '$p1_id'<br />";
+							$merge_info .= "Prepped to run wp_set_post_terms:<br />>>> taxonomy: '$field_name' -- arr_terms: '".print_r($arr_terms, true)."' -- post_id: '$p1_id'<br />";
 							// convert new_val to array, if needed -- check field type >> explode
 							// WIP Update value via wp_set_post_terms( $post_id, $term_ids, $taxonomy ); // $term_ids = array( 5 ); // Correct. This will add the tag with the id 5.
 							// wp_set_post_terms( int $post_id, string|array $terms = '', string $taxonomy = 'post_tag', bool $append = false ): array|false|WP_Error
-							if ( wp_set_post_terms( $p1_id, $arr_terms, $taxonomy, false ) ) { // append=false, i.e. delete existing terms, don't just add on.
+							if ( wp_set_post_terms( $p1_id, $arr_terms, $field_name, false ) ) { // append=false, i.e. delete existing terms, don't just add on.
 								$merge_info .= "Success! wp_set_post_terms completed.<br />";
 								$fields_merged++;
 							} else {
