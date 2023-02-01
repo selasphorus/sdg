@@ -793,7 +793,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 			
 			// TODO: first add deleted-after-merge admin_tag?
-			//wp_trash_post($p2_id);
+			$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true );
+			if ( wp_trash_post($p2_id) ) {
+				$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
+			} else {
+				$info .= "ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.<br />";
+			}
 		}
 		
     } else if ( count($arr_posts) == 2 ) {
