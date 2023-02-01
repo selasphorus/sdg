@@ -576,6 +576,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						// WIP: build in update options for all field_cats...
 						if ( $field_cat == "core_field" ) {
 							
+							// $arr_core_fields = array( 'post_title', 'content', 'excerpt', 'post_thumbnail' );
 							if ( $field_name == "post_thumbnail" ) {
 								$merge_info .= "Prepped to run set_post_thumbnail:<br />>>> field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 								if ( set_post_thumbnail( $p1_id, $new_val ) ) { // set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
@@ -587,28 +588,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								}
 							} else {
 								$merge_info .= "Prepped to run update_post:<br />>>> field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
-								//// WIP Update value via update_post, for other core fields
-								// Update core fields
-								/*
-								wp_update_post(
-									array (
-										'ID'        => $p1_id,
-										'post_title' => $new_title,
-										'post_name' => $new_slug
-									)
-								);
-								// -- OR --         
+								// WIP Update value via update_post, for other core fields
 								$data = array(
 									'ID' => $p1_id,
-									'post_content' => $content,
-									'meta_input' => array(
-										'meta_key' => $meta_value,
-										'another_meta_key' => $another_meta_value
-									)
+									$field_name => $field_value
 								);
-
 								wp_update_post( $data, true );
-								if (is_wp_error($p1_id)) { // ?? if (is_wp_error($data)) {
+								if ( is_wp_error($p1_id) ) { // ?? if (is_wp_error($data)) {
 									$merge_errors = true;
 									$errors = $p1_id->get_error_messages();
 									foreach ($errors as $error) {
@@ -617,7 +603,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								} else {
 									$fields_merged++;
 								}
-								*/
 							}
 							
 						} else if ( $field_cat == "acf_field" ) {
