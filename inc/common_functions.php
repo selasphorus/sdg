@@ -456,11 +456,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
 						//
-						$info .= $merge_info;
+						
 					} else {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
+					$merge_info .= "<br />";
+					$info .= $merge_info;
 				}
 				// Update core fields
 				/*
@@ -553,11 +555,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							} else {
 								$merge_info .= "Oh no! Update failed.<br />";
 							}*/
-							$info .= $merge_info;
 						} else {
 							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							//$merge_info .= "New value same as old for $field_name<br />";
 						}
+						$info .= $merge_info;
 						$merge_info .= "<br />";
 					}
 					
@@ -628,11 +630,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//wp_set_post_terms( $post_id, $terms, $taxonomy, $append ); // $append -- If true, don't delete existing terms, just add on. If false, replace the terms with the new terms.
 						//wp_set_post_terms( $post_id, $terms, 'admin_tag', true );
 						//
-						$info .= $merge_info;
 					} else {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
+					$info .= $merge_info;
 					$merge_info .= "<br />";
 				}
 				
