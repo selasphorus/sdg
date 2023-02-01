@@ -722,7 +722,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					} else if ( $field_type == "taxonomy" ) {
 						if ( is_array($merge_value) ) {
 							foreach ( $merge_value as $term_id ) {
-								$info .= get_term( $term_id )->name."<br />";
+								$info .= '<span class="nb merged_val">'.get_term( $term_id )->name."</span><br />";
 							}
 						}
 						$info .= '<span class="nb merged_val"><pre>'.print_r($merge_value, true).'</pre></span>';
