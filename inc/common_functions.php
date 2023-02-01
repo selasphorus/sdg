@@ -583,7 +583,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 									$merge_info .= "Success! Updated $field_name -- p1 ($p1_id)<br />";
 									$fields_merged++;
 								} else {
-									$merge_info .= "Update failed for $field_name -- p1 ($p1_id)<br />";
+									$merge_info .= '<span class="nb">'."Update failed for $field_name -- p1 ($p1_id)</span><br />";
 									$merge_errors = true;
 								}
 							} else {
@@ -619,7 +619,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$merge_info .= "Success! Ran update_field for $field_name.<br />";
 								$fields_merged++;
 							} else {
-								$merge_info .= "Oh no! Update failed.<br />";
+								$merge_info .= '<span class="nb">'."Oh no! Update failed.</span><br />";
 								$merge_errors = true;
 							}
 							
@@ -778,8 +778,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( wp_trash_post($p2_id) ) {
 				$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
 			} else {
-				$info .= "ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.<br />";
+				$info .= '<span class="nb">'."ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.</span><br />";
 			}
+		} else {
+			$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
 		}
 		
     } else if ( count($arr_posts) == 2 ) {
