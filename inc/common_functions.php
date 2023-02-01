@@ -578,12 +578,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							}
 							// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
 							$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
-							/*if ( update_field($field_name, $field_value, $p1_id) ) {
-								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
+							if ( update_field($field_name, $field_value, $p1_id) ) {
+								$merge_info .= "Success! Ran update_field for $field_name.<br />";
 							} else {
 								$merge_info .= "Oh no! Update failed.<br />";
 								$merge_errors = true;
-							}*/
+							}
 							$merge_info .= "<br />";
 							$info .= $merge_info;
 						} else {
@@ -712,7 +712,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			// WIP/TODO: Move p2 to trash
 			if ( !$merge_errors ) {
-				$info .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
+				$info .= "<hr />";
+				$info .= "Merge completeled successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash<br />";
 				//wp_trash_post($p2_id);
 			}
 			
