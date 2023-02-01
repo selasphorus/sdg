@@ -288,7 +288,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// If post_ids have been submitted, then run the query
 		if ( count($post_ids) > 1 ) {
 			
-			$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+			//$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
 	
 			// Get posts matching the assembled args
 			// =====================================
