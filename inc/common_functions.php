@@ -356,7 +356,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
-    $troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
+    //$troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
     
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
