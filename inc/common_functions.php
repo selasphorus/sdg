@@ -232,6 +232,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     	$merging = true;
     	$merge_errors = false;
+    	$fields_merged = 0;
     	
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
@@ -596,6 +597,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$merge_info .= "Prepped to run set_post_thumbnail:<br />>>> field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 								if ( set_post_thumbnail( $p1_id, $new_val ) ) { // set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
 									$merge_info .= "Success! Updated $field_name -- p1 ($p1_id)<br />";
+									$fields_merged++;
 								} else {
 									$merge_info .= "Update failed for $field_name -- p1 ($p1_id)<br />";
 									$merge_errors = true;
@@ -629,6 +631,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 									foreach ($errors as $error) {
 										$info .= $error;
 									}
+								} else {
+									$fields_merged++;
 								}
 								*/
 							}
@@ -645,6 +649,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$merge_info .= "Prepped to run ACF update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 							if ( update_field($field_name, $field_value, $p1_id) ) {
 								$merge_info .= "Success! Ran update_field for $field_name.<br />";
+								$fields_merged++;
 							} else {
 								$merge_info .= "Oh no! Update failed.<br />";
 								$merge_errors = true;
@@ -660,6 +665,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							// wp_set_post_terms( int $post_id, string|array $terms = '', string $taxonomy = 'post_tag', bool $append = false ): array|false|WP_Error
 							if ( wp_set_post_terms( $p1_id, $arr_terms, $taxonomy, true ) ) { // append=true, i.e. don't delete existing terms, just add on.
 								$merge_info .= "Success! wp_set_post_terms completed.<br />";
+								$fields_merged++;
 							} else {
 								$merge_errors = true;
 							}
@@ -780,7 +786,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	// WIP/TODO: Move p2 to trash
 		if ( !$merge_errors ) {
 			$info .= "<hr />";
-			$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash</h3>";
+			if ( $fields_merged > 0 ) {
+				$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
+			} else {
+				$info .= "<h3>No merge required. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
+			}
+			
 			// TODO: first add deleted-after-merge admin_tag?
 			//wp_trash_post($p2_id);
 		}
