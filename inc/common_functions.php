@@ -193,34 +193,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // Retrieve any data submitted via forms or query vars
     if ( !empty($_GET) ) { $troubleshooting .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
-    if ( !empty($_POST) ) { 
-    
-    	$troubleshooting .= '<pre>_POST: '.print_r($_POST,true).'</pre>';
-    	
+    if ( !empty($_POST) ) {    
+    	$troubleshooting .= '<pre>_POST: '.print_r($_POST,true).'</pre>';    	
     	if ( isset($_POST['form_action']) ) {
     		$form_action = $_POST['form_action'];
     	}
-    	
-    	// WIP/TODO: Update p1 with merged values
-    	//$troubleshooting .= "About to save merged values to p1 [".$_POST['p1_id']."]<br />";
-    	//
-    	// Save content (only if previously empty)
-    	
-        // Update ACF fields:
-        //update_field($selector, $value, [$post_id]);
-        // Update post-meta:
-        /*
-        if ( in_array('last_mod', $arr_updates) ) {
-			if ( update_post_meta( $post_id, 'html_last_modified', wp_slash( $html_last_modified ) ) ) {
-			//if ( update_post_meta( $post_id, 'html_last_modified', $html_last_modified ) ) {
-				$info .= "Update OK for html_last_modified postmeta<br />";
-			} else {
-				$info .= "No update for html_last_modified postmeta (post_id: $post_id; html_last_modified: $html_last_modified)<br />";
-				$last_mod = get_post_meta( $post_id, 'html_last_modified' );
-				$info .= "current value(s) for html_last_modified: ".print_r($last_mod,true)."<br />";
-			}
-		}*/
-    	//
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
@@ -779,6 +756,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$info .= '</table>';
 		}
 		
+	} else {
+		$info .= "Post count incorrect for comparison or merge (".count($arr_posts).")<br />";
 	} // END if ( count($arr_posts) == 2 )
     
     if ( $merging ) {
