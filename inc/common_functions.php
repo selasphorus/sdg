@@ -725,7 +725,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$info .= '<span class="nb merged_val">'.get_term( $term_id )->name."</span><br />";
 							}
 						}
-						$info .= '<span class="nb"><pre>'.print_r($merge_value, true).'</pre></span>';
+						$info .= '<span class="tmp"><pre>'.print_r($merge_value, true).'</pre></span>';
 						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
 						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
 					} else {
