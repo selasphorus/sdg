@@ -455,9 +455,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$new_val = $_POST[$field_name];
 				}
 				if ( !empty($old_val) || !empty($new_val) ) {
-					$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
-					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
-						//$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+					$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
+					if ( strcmp($old_val, $new_val) != 0 ) {
 						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
@@ -465,12 +464,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$merge_info .= "<br />";
 						$info .= $merge_info;
 					} else {
-						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 				}
 				// Update core fields
 				if ( $field_name == "post_thumbnail" ) {
+					$merge_info .= "<br />";
 					$info .= $merge_info;
 					//set_post_thumbnail( $p1_id, $new_val ) //set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
 				}
@@ -553,17 +552,16 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 					
 					// Compare old stored value w/ new merge_value, to see whether update is needed
-					$old_val = $p1_val;
-					if ( is_array($old_val) ) { $old_val_str = implode("; ",$old_val); } else { $old_val_str = $old_val; }
-					$old_val_str = trim($old_val_str);
+					$old_val = trim($p1_val);
+					if ( is_array($old_val) ) { $old_val = implode("; ",$old_val); } else { $old_val = $old_val; }
 					
 					if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
-					if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
-					$new_val_str = trim($new_val_str);
+					//if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
+					//$new_val_str = trim($new_val_str);
 					
 					if ( !empty($old_val) || !empty($new_val) ) {
-						if ( strcmp($old_val_str, $new_val_str) != 0 ) {
-							$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+						$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
+						if ( strcmp($old_val, $new_val) != 0 ) {
 							$merge_info .= "New value for ACF <em>$field_type</em> field '$field_name' -> run update<br />";
 							// convert new_val to array, if needed -- check field type >> explode
 							if ( $field_type == 'relationship' ) {
@@ -581,7 +579,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$merge_info .= "<br />";
 							$info .= $merge_info;
 						} else {
-							//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 							//$merge_info .= "New value same as old for $field_name<br />";
 						}
 					}
@@ -635,17 +632,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// Do the merging...
 				// Compare old stored value w/ new merge_value, to see whether update is needed
-				$old_val = $p1_val;
-				if ( is_array($old_val) ) { $old_val_str = implode("; ",$old_val); } else { $old_val_str = $old_val; }
-				$old_val_str = trim($old_val_str);
-				
+				$old_val = $p1_val;				
 				if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
-				if ( is_array($new_val) ) { $new_val_str = implode("; ",$new_val); } else { $new_val_str = $new_val; }
-				$new_val_str = trim($new_val_str);
 				
 				if ( !empty($old_val) || !empty($new_val) ) {
-					if ( strcmp($old_val_str, $new_val_str) != 0 ) {
-						$merge_info .= "old_val_str: '$old_val_str';<br />new_val_str: '$new_val_str'<br />";
+						$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
+					if ( strcmp($old_val, $new_val) != 0 ) {
 						$merge_info .= "New value for taxonomy '$field_name' -> run update<br />";
 						$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
 						// convert new_val to array, if needed -- check field type >> explode
@@ -654,7 +646,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//wp_set_post_terms( $post_id, $terms, 'admin_tag', true );
 						//
 					} else {
-						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 					$info .= $merge_info;
