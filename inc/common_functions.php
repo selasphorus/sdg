@@ -392,7 +392,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		$p1 = get_post($p1_id);
     		$p2 = get_post($p2_id);
     		
-    		$info .= "About to merge values from post $p2 into post $p1...<br />";
+    		$info .= "About to merge values from post $p2_id into post $p1_id...<br />";
     		
     	} else {
     	
