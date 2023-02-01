@@ -607,7 +607,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							
 						} else if ( $field_cat == "acf_field" ) {
 						
-							$new_val = wp_slash($new_val);
+							$new_value = esc_attr($new_val);
+							//$new_val = wp_slash($new_val);
 							
 							// convert new_val to array, if needed -- check field type >> explode
 							if ( $field_type == 'relationship' ) {
