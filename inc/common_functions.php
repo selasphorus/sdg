@@ -787,7 +787,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     } else if ( count($arr_posts) == 2 ) {
     	$info .= '<input type="hidden" name="form_action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records"><br />';
-    	$info .= '<p class="nb"><em>This action cannot be undone!<br />The primary post will be updated with the field values displayed in the merge column;<br />the secondary post will be sent to the trash.</p>';
+    	$info .= '<p class="nb"><em>This action cannot be undone!<br />The primary post will be updated with the field values displayed in green, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in orange will be deleted/overwritten.</p>';
     	//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
     }    
     $info .= '</form>';        
