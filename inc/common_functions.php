@@ -789,7 +789,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( $fields_merged > 0 ) {
 				$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
 			} else {
-				$info .= "<h3>No merge required. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
+				$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
 			}
 			
 			// TODO: first add deleted-after-merge admin_tag?
