@@ -701,8 +701,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						foreach ( $p1_val as $term_id ) {
 							$info .= get_term( $term_id )->name."<br />";
 						}
-					}
-					$info .= $p1_val_str;
+					} else {
+						$info .= $p1_val_str;
+					}					
 					$info .= '</td>';
 			
 					// TODO: set input type based on field_type -- see corresponding ACF fields e.g. select for fixed options; checkboxes for taxonomies... &c.
@@ -745,8 +746,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						foreach ( $p2_val as $term_id ) {
 							$info .= get_term( $term_id )->name."<br />";
 						}
-					}
-					$info .= $p2_val_str;
+					} else {
+						$info .= $p2_val_str;
+					}					
 					$info .= '</td>';
 			
 					// Close row
