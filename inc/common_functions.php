@@ -752,7 +752,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}
 		
 	} else {
-		$info .= "Post count incorrect for comparison or merge (".count($arr_posts).")<br />";
+		//$info .= "Post count incorrect for comparison or merge (".count($arr_posts).")<br />";
 	} // END if ( count($arr_posts) == 2 )
     
     if ( $merging ) {
