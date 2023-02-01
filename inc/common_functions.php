@@ -457,12 +457,21 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( !empty($old_val) || !empty($new_val) ) {
 					$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
 					if ( strcmp($old_val, $new_val) != 0 ) {
-						$merge_info .= "New value for core WP field '$field_name' -> run update<br /><br />";
+						$merge_info .= "New value for core WP field '$field_name' -> run update<br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via ???;
 						$field_value = $new_val;
 						$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 						//
+						if ( $field_name == "post_thumbnail" ) {
+							if ( set_post_thumbnail( $p1_id, $new_val ) ) { // set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
+								$merge_info .= "Success! Updated $field_name -- p1 ($p1_id)<br />";
+							} else {
+								$merge_info .= "Update failed for $field_name -- p1 ($p1_id)<br />";
+							}
+						} else {
+							//
+						}
 						$merge_info .= "<br />";
 						$info .= $merge_info;
 					} else {
@@ -470,11 +479,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					}
 				}
 				// Update core fields
-				if ( $field_name == "post_thumbnail" ) {
-					//$merge_info .= "<br />";
-					//$info .= $merge_info;
-					//set_post_thumbnail( $p1_id, $new_val ) //set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
-				}
+				
 				
 				/*
 				wp_update_post(
