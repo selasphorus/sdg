@@ -192,10 +192,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $form_action = null;
     
     // Retrieve any data submitted via forms or query vars
-    if ( !empty($_GET) ) { $troubleshooting .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; }
+    if ( !empty($_GET) ) { $troubleshooting .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
     if ( !empty($_POST) ) { 
     
-    	$troubleshooting .= '_POST: <pre>'.print_r($_POST,true).'</pre>';
+    	$troubleshooting .= '<pre>_POST: '.print_r($_POST,true).'</pre>';
     	
     	if ( isset($_POST['form_action']) ) {
     		$form_action = $_POST['form_action'];
