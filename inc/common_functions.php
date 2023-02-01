@@ -309,7 +309,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 		
 				//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-				$troubleshooting .= $posts_info['info']."<hr />";
+				$troubleshooting .= "posts_info: ".$posts_info['info']."<hr />";
 				//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
 		
 				// Print last SQL query string
