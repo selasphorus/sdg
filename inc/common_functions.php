@@ -444,7 +444,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
 				
 				// Do the merging...
-				$old_val = $p1->$field_name;
+				if ( $field_name == "post_thumbnail" ) {
+					$old_val = get_post_thumbnail_id($p1_id);
+				} else {
+					$old_val = $p1->$field_name;
+				}				
 				$new_val = "";
 				if ( !empty($_POST[$field_name]) ) {
 					$new_val = $_POST[$field_name];
