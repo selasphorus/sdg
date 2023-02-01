@@ -415,8 +415,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			// Assemble general post info for table header
 			$p1_info = "[".$p1_id."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
 			$p2_info = "[".$p2_id."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
-			$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
-			$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
+			//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>'; // tft
+			//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>'; // tft
 			//
 			$info .= "<pre>";
 			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_id."<br />";
@@ -499,8 +499,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				// Not merging yet -- prep to display post comparison info
 				
-				$p1_val = $p1->$field_name;
-				$p2_val = $p2->$field_name;
+				if ( $field_name == "post_thumbnail" ) {
+					$p1_val = get_post_thumbnail_id($p1_id);
+					$p2_val = get_post_thumbnail_id($p2_id);
+				} else {
+					$p1_val = $p1->$field_name;
+					$p2_val = $p2->$field_name;
+				}	
 			
 				$merged = merge_field_values($p1_val, $p2_val);
 				$merge_value = $merged['merge_value'];
