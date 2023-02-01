@@ -305,9 +305,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
 		$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
 	
-		if ( count($post_ids) < 1 ) {
-			$troubleshooting .= "Not enough post_ids submitted.<br />";
-		}
+		//if ( count($post_ids) < 1 ) { $troubleshooting .= "Not enough post_ids submitted.<br />"; }
 	
 		//$info .= "form_type: $form_type<br />"; // tft
 
