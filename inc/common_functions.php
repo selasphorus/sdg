@@ -796,8 +796,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     } else {
     	$info .= '<input type="hidden" name="form_action" value="merge">';
     	$info .= '<input type="submit" value="Merge Records">';
-    }
-    $info .= '<a href="#!" id="form_reset">Clear Form</a>';
+    	//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
+    }    
     $info .= '</form>';        
         
     // 
