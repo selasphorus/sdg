@@ -462,7 +462,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						// WIP Update value via ???;
 						//
 						$merge_info .= "<br />";
-						$info .= $merge_info;						
+						$info .= $merge_info;
 					} else {
 						//$merge_info .= "[$field_name] old_val_str: '$old_val_str';<br />[$field_name] new_val_str: '$new_val_str'<br />";
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
@@ -470,6 +470,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 				// Update core fields
 				if ( $field_name == "post_thumbnail" ) {
+					$info .= $merge_info;
 					//set_post_thumbnail( $p1_id, $new_val ) //set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
 				}
 				
