@@ -233,7 +233,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge" ) {
     
-    	$info .= "Got POST ids. Prep to merge...<br />";
     	$merging = true;
     	
     	if ( !empty($_POST['p1_id']) ) {
@@ -392,6 +391,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		//...
     		$p1 = get_post($p1_id);
     		$p2 = get_post($p2_id);
+    		
+    		$info .= "About to merge values from post $p2 into post $p1...<br />";
     		
     	} else {
     	
