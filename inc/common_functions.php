@@ -301,10 +301,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 				if ( count($arr_posts) < 2 ) {
-					$info .= "<p>That's not enough posts! I need two posts, please.</p>";
+					$info .= '<p class="nb">Please submit IDs for two published posts.</p>';
 					$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 				} else if ( count($arr_posts) > 2 ) {
-					$info .= "<p>That's too many posts! I can only handle two at a time.</p>";
+					$info .= '<p class="nb">That\'s too many posts! I can only handle two at a time.</p>';
 					$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 				}
 		
