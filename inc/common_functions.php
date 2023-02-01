@@ -632,11 +632,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				// Do the merging...
 				// Compare old stored value w/ new merge_value, to see whether update is needed
-				$old_val = $p1_val;				
+				$old_val = $p1_val;
+				if ( is_array($old_val) ) { $old_val = trim(implode("; ",$old_val)); } else { $old_val = trim($old_val); }
 				if ( !empty($_POST[$field_name]) ) { $new_val = $_POST[$field_name]; } else { $new_val = ""; }
 				
 				if ( !empty($old_val) || !empty($new_val) ) {
-						$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
+					$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
 					if ( strcmp($old_val, $new_val) != 0 ) {
 						$merge_info .= "New value for taxonomy '$field_name' -> run update<br />";
 						$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
