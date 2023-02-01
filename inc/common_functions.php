@@ -711,7 +711,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					//$readonly = " readonly";
 					//$input_class = ' class="readonly"';
 					// Deal w/ title_for_matching -- will be auto-regenerated, so manual editing is pointless
-					//field_type: relationship
 					//field_type: number -- e.g. choirplanner_id (legacy data)
 					//
 			
