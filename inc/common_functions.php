@@ -392,7 +392,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		$p1 = get_post($p1_id);
     		$p2 = get_post($p2_id);
     		
-    		$info .= "About to merge values from post $p2_id into post $p1_id...<br />";
+    		$info .= "<h3>About to merge values from post $p2_id into post $p1_id...</h3>";
     		
     	} else {
     	
@@ -570,7 +570,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$field_value = $new_val;
 							}
 							// WIP Update value via ACF update_field($field_name, $field_value, [$post_id]);
-							$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
+							$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 							/*if ( update_field($field_name, $field_value, $p1_id) ) {
 								$merge_info .= "Success! Ran update_field for field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $post_id<br />";
 							} else {
@@ -640,7 +640,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$merge_info .= "old_val: '$old_val';<br />new_val: '$new_val'<br />";
 					if ( strcmp($old_val, $new_val) != 0 ) {
 						$merge_info .= "New value for taxonomy '$field_name' -> run update<br />";
-						$merge_info .= "Prepped to run update_field:<br />field_name: $field_name -- field_value: ".print_r($field_value, true)." -- post_id: $p1_id<br />";
+						// Turn new_val into an array
+						$field_value = explode("; ",$new_val);
+						$merge_info .= "Prepped to run update_field:<br />field_name: '$field_name' -- field_value: '".print_r($field_value, true)."' -- post_id: '$p1_id'<br />";
 						// convert new_val to array, if needed -- check field type >> explode
 						// WIP Update value via wp_set_post_terms( $post_id, $term_ids, $taxonomy ); // $term_ids = array( 5 ); // Correct. This will add the tag with the id 5.
 						//wp_set_post_terms( $post_id, $terms, $taxonomy, $append ); // $append -- If true, don't delete existing terms, just add on. If false, replace the terms with the new terms.
