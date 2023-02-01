@@ -220,9 +220,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$info .= "current value(s) for html_last_modified: ".print_r($last_mod,true)."<br />";
 			}
 		}*/
-    	// WIP/TODO: Move p2 to trash
-    	//$troubleshooting .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
-    	//wp_trash_post($p2_id);
     	//
     }
     //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
@@ -705,6 +702,12 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//$rep_info .= "<br />";
 			}
 			*/
+			
+			// WIP/TODO: Move p2 to trash
+			if ( $merging && !$merge_errors ) {
+				$info .= "About to move p2 [".$_POST['p2_id']."] to trash<br />";
+				//wp_trash_post($p2_id);
+			}
 		}
 		
 		// Get related posts for both posts (events, &c?)
