@@ -775,7 +775,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			}
 			
 			// TODO: first add deleted-after-merge admin_tag?
-			$info .= "About to attempt to add admin_tag ''deleted-after-merge' to post p2 [$p2_id]<br />";
+			$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
 			$term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
 			$term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' );
         	if ( $term ) { $term_id = $term->term_id; } // get term id from slug
