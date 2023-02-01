@@ -553,7 +553,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			// WIP: track fields cumulatively to determine whether records are identical and, if so, offer option to delete p2 (or -- newer of two posts)
 			if ( $p1_val != $p2_val ) { $identical_posts = false; }			
 			
-			if ( $merging ) {
+			if ( $merging && $field_name != "post_title" ) {
 			
 				$merge_info = "";					
 				if ( !empty($field_name) ) { $merge_info .= "[$field_name]<br />"; }
