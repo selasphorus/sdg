@@ -322,7 +322,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 				$arr_posts = $posts_info['arr_posts']->posts;
 				//$troubleshooting .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
-				$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+				//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 				if ( count($arr_posts) > 2 ) {
 					$troubleshooting .= "<p>That's too many posts! I can only handle two at a time.</p>";
