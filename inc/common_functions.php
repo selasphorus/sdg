@@ -415,8 +415,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			// Assemble general post info for table header
 			$p1_info = "[".$p1_id."] ".$p1->post_modified." (".get_the_author_meta('user_nicename',$p1->post_author).")";
 			$p2_info = "[".$p2_id."] ".$p2->post_modified." (".get_the_author_meta('user_nicename',$p2->post_author).")";
-			//$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
-			//$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
+			$info .= 'p1: <pre>'.print_r($p1,true).'</pre>';
+			$info .= 'p2: <pre>'.print_r($p2,true).'</pre>';
+			//
 			$info .= "<pre>";
 			$info .= "Post #1 >> Last modified: ".$p1->post_modified."; author: ".get_the_author_meta('user_nicename',$p1->post_author)."; ID: ".$p1_id."<br />";
 			$info .= "Post #2 >> Last modified: ".$p2->post_modified."; author: ".get_the_author_meta('user_nicename',$p2->post_author)."; ID: ".$p2_id."<br />";
@@ -431,6 +432,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// TODO: include editing instructions -- e.g. separate category list with semicolons (not commas!)
 		
 		// Get core values for both posts
+		//array( 'post_title', 'content', 'excerpt', 'post_thumbnail' );
 		foreach ( $arr_core_fields as $field_name ) {
 			
 			$field_type = "text";
@@ -462,19 +464,31 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					}
 				}
 				// Update core fields
+				if ( $field_name == "post_thumbnail" ) {
+					//set_post_thumbnail( $p1_id, $new_val ) //set_post_thumbnail( int|WP_Post $post, int $thumbnail_id ): int|bool
+				}
+				
 				/*
+				wp_update_post(
+					array (
+						'ID'        => $p1_id,
+						'post_title' => $new_title,
+						'post_name' => $new_slug
+					)
+				);
+				// -- OR --         
 				$data = array(
-					'ID' => $post_id,
+					'ID' => $p1_id,
 					'post_content' => $content,
 					'meta_input' => array(
-					'meta_key' => $meta_value,
-					'another_meta_key' => $another_meta_value
-				)
+						'meta_key' => $meta_value,
+						'another_meta_key' => $another_meta_value
+					)
 				);
 
 				wp_update_post( $data, true );
-				if (is_wp_error($post_id)) { // ?? if (is_wp_error($data)) {
-					$errors = $post_id->get_error_messages();
+				if (is_wp_error($p1_id)) { // ?? if (is_wp_error($data)) {
+					$errors = $p1_id->get_error_messages();
 					foreach ($errors as $error) {
 						$info .= $error;
 					}
