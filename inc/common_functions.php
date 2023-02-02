@@ -354,6 +354,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
     	
     	// Set up the form for submitting IDs to compare
+    	// To do: set action to SELF without query vars(?)
 		$info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
 		$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
 		$info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
@@ -366,6 +367,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '<hr />';
     
     	// Set up the merge form
+    	// To do: set action to SELF without query vars(?)
     	$info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     
     	if ( $merging ) {
