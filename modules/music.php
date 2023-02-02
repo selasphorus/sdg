@@ -662,6 +662,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
             if ( $html ) { 
             	$authorship_info .= '<span class="arranger">arr. '.$arranger_info.'</span>';
             } else {
+            	if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
             	$authorship_info .= "arr. ".$arranger_info;
             }
             
@@ -686,6 +687,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
                 if ( $html ) { 
 					$authorship_info .= '<span class="transcriber">transcr. '.$transcriber_info.'</span>';
 				} else {
+					if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
 					$authorship_info .= "transcr. ".$transcriber_info;
 				}
             }
@@ -704,7 +706,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         	if ( $html ) { 
 				$authorship_info .= '<span class="librettist">text by '.$librettist_info.'</span>';
 			} else {
-				$authorship_info .= ", text by ".$librettist_info;
+				if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
+				$authorship_info .= "text by ".$librettist_info;
 			}            
         }
 
@@ -721,7 +724,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         	if ( $html ) { 
 				$authorship_info .= '<span class="librettist">transl. '.$translator_info.'</span>';
 			} else {
-				$authorship_info .= ", transl. ".$translator_info;
+				if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
+				$authorship_info .= "transl. ".$translator_info;
 			}
         }
 
