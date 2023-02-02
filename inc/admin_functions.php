@@ -897,8 +897,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 // do_action( "updated_post_meta", int $meta_id, int $object_id, string $meta_key, mixed $_meta_value )
 // Fires immediately after updating metadata of a specific type.
 
-
-add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
+// TMP(?) disabled 02/02/23 -- will need to test to determine whether it's necessary when first saving/publishing a NEW post...
+//add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
 function build_the_title_on_insert( $data, $postarr ) {
     
     sdg_log( "divline1" );
@@ -912,12 +912,13 @@ function build_the_title_on_insert( $data, $postarr ) {
     $post_type = $data['post_type'];
     $new_title = null;
     
-    sdg_log( "post_id: ".$post_id."; post_type: ".$post_type );
+    sdg_log( "[bttoi] post_id: ".$post_id."; post_type: ".$post_type );
     
     if ( $post_id == 0 || ( $post_type != 'repertoire' && $post_type != 'edition' ) ) {
         return $data;
     }
     
+    /*
     // ids for testing
     $dev_rep_ids = array ('16679', '31020', '23070');
     $live_rep_ids = array ('167740');
@@ -933,14 +934,17 @@ function build_the_title_on_insert( $data, $postarr ) {
         $test_ids = array_merge($live_rep_ids, $live_edition_ids);
     }
     //if ( !in_array($post_id, $test_ids) ) { return $data; }
+    */
     
     //sdg_log( "data: ".print_r($data, true) ); // tft
     //sdg_log( "postarr: ".print_r($postarr, true) ); // tft
     //sdg_log( "_POST array: ".print_r($_POST, true) ); // tft
     
+    // TODO: figure out how to run this ONLY if the post is being saved for the first time... Or is it not needed at all? Only run btt via sspc?
+    /*
     if ( $post_type == 'repertoire' && isset($_POST['acf']['field_624615e7eca6f']) ) {
         
-        sdg_log( "build the array of repertoire _POST data for submission to fcn build_the_title." );
+        sdg_log( "[bttoi] build the array of repertoire _POST data for submission to fcn build_the_title." );
         
         // Get custom field data from $_POST array
         $arr = array(); // init
@@ -974,7 +978,7 @@ function build_the_title_on_insert( $data, $postarr ) {
         
     } else if ( $data['post_type'] == 'edition' && ( isset($_POST['acf']['field_6244d279cde53']) || isset($_POST['acf']['field_626811b538d8e']) ) ) { //  field_626811b538d8e
         
-        sdg_log( "build the array of edition _POST data for submission to fcn build_the_title." );
+        sdg_log( "[bttoi] build the array of edition _POST data for submission to fcn build_the_title." );
         
         //sdg_log( "_POST array: ".print_r($_POST, true) ); // tft
         
@@ -1013,9 +1017,9 @@ function build_the_title_on_insert( $data, $postarr ) {
         
     } else {
         
-        sdg_log( "Insufficient data for building the array of _POST data for submission to fcn build_the_title." );
+        sdg_log( "[bttoi] Insufficient data for building the array of _POST data for submission to fcn build_the_title." );
         
-    }
+    }*/
     
     if ( $new_title ) {
         
@@ -1026,12 +1030,12 @@ function build_the_title_on_insert( $data, $postarr ) {
             
         } else if ( $new_title == $data['post_title'] ) {
             
-            sdg_log( "new_title same as old_title.");
+            sdg_log( "[bttoi] new_title same as old_title.");
             
         } else {
 
-            sdg_log( "old_title: ".$data['post_title'] );
-            sdg_log( "new_title: ".$new_title );
+            sdg_log( "[bttoi] old_title: ".$data['post_title'] );
+            sdg_log( "[bttoi] new_title: ".$new_title );
 
             // Save new title to data array
             $data['post_title'] = $new_title;
@@ -1514,6 +1518,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         if ( $new_title != $old_title ) {
 
 			sdg_log( "[sspc] update the post_title" );
+			
+			// TODO: figure out how NOT to trigger wp_insert_post_data when running this update...
 			
             // unhook this function to prevent infinite looping
             remove_action( 'save_post', 'sdg_save_post_callback' );
