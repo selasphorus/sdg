@@ -1511,7 +1511,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         }
     
     	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
-        /*if ( $new_title != $old_title ) {
+        if ( $new_title != $old_title ) {
 
 			sdg_log( "[sspc] update the post_title" );
 			
@@ -1538,7 +1538,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
             //add_action( 'save_post_event', 'sdg_save_event_post_callback' );
 
-        }*/
+        }
         
         /*** TITLE POSTMETA ***/
         /*
