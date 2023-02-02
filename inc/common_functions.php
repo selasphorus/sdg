@@ -611,8 +611,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							
 						} else if ( $field_cat == "acf_field" ) {
 						
-							//$new_value = esc_attr($new_val); // without this, the update fails, but WITH, it saves the backslashes. What to do? TODO: figure this out...
-							$new_val = wp_slash($new_val);
+							//$new_value = esc_attr($new_val); // without this, the update fails for records with quotation marks, but WITH, it saves the backslashes. What to do? TODO: figure this out...
+							//$new_val = wp_slash($new_val);
 							
 							// convert new_val to array, if needed -- check field type >> explode
 							if ( $field_type == 'relationship' ) {
