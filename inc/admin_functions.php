@@ -1389,7 +1389,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     
     // If this is a post revision, then abort
     if ( wp_is_post_revision( $post_id ) ) { 
-        sdg_log( "is post revision >> abort." );
+        sdg_log( "[sspc] is post revision >> abort." );
         return;
     }
     
@@ -1409,7 +1409,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
         // If this event is part of a recurring event series, then abort
         if ( $recurrence_id ) { 
-            sdg_log( "is part of recurring event series ($recurrence_id) >> abort." );
+            sdg_log( "[sspc] is part of recurring event series ($recurrence_id) >> abort." );
             return;
         }
 
@@ -1432,8 +1432,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $new_slug_info = clean_slug( $post_id );
         $new_slug = $new_slug_info['new_slug'];
         $old_slug = $post->post_name;
-        sdg_log( "old_slug: ".$old_slug);
-        sdg_log( "new_slug: ".$new_slug);
+        sdg_log( "[sspc] old_slug: ".$old_slug);
+        sdg_log( "[sspc] new_slug: ".$new_slug);
 
         // Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
         if ( $new_slug != $old_slug ) {
@@ -1478,13 +1478,13 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         
         sdg_log( "divline2" );
 
-        sdg_log( "post_id: ".$post_id );
-        sdg_log( "post_type: ".$post_type );
-        sdg_log( "post_title: ".$post_title );
+        sdg_log( "[sspc] post_id: ".$post_id );
+        sdg_log( "[sspc] post_type: ".$post_type );
+        sdg_log( "[sspc] post_title: ".$post_title );
+        sdg_log( "[sspc] new_title: ".$new_title );
         //sdg_log( "old_title: ".$old_title );
-        sdg_log( "old_t4m: ".$old_t4m );
-        //sdg_log( "new_title: ".$new_title );
-        sdg_log( "new_t4m: ".$new_t4m );
+        sdg_log( "[sspc] old_t4m: ".$old_t4m );
+        sdg_log( "[sspc] new_t4m: ".$new_t4m );
 
         //$update_data = array(); // init
 
@@ -1514,6 +1514,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
         if ( $new_title != $old_title ) {
 
+			sdg_log( "[sspc] update the post_title" );
+			
             // unhook this function to prevent infinite looping
             remove_action( 'save_post', 'sdg_save_post_callback' );
             //remove_action( 'save_post_event', 'sdg_save_event_post_callback' );
