@@ -1473,7 +1473,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
 
         sdg_log( "[sspc] about to call function: get_title_uid" );
-        $new_t4m = get_title_uid( $post_id, $post_type, $new_title );
+        $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
         
         sdg_log( "divline2" );
 
@@ -1770,7 +1770,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
             }
             
             $new_title = build_the_title( $post_id, 'title_for_matching', null ); // 
-            $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // field: title_for_matching
+            $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
             
             sdg_log( "[run_title_updates] old_title: ".$old_title );
             sdg_log( "[run_title_updates] old_t4m: ".$old_t4m );
