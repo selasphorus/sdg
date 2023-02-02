@@ -341,19 +341,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     //?ids%5B%5D=292003&ids%5B%5D=298829
     //292003 -- 298829
     
-    $info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
-    $info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
-    $info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
-    $info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
-    $info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
-    $info .= '<input type="hidden" name="form_action" value="review">';
-    $info .= '<input type="submit" value="Compare Posts">';
-    $info .= '</form>';
-    $info .= '<br clear="all" />';
-    $info .= '<hr />';
-    
-    $info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
-    // TODO: add field(s) for submitting post_ids for merging?
     
     if ( count($arr_posts) == 2 ) {
 		
@@ -366,6 +353,21 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		//$p2 = $arr_posts[1];
 		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
     	
+    	// Set up the form for submitting IDs to compare
+		$info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
+		$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
+		$info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
+		$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
+		$info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
+		$info .= '<input type="hidden" name="form_action" value="review">';
+		$info .= '<input type="submit" value="Compare Posts">';
+		$info .= '</form>';
+		$info .= '<br clear="all" />';
+		$info .= '<hr />';
+    
+    	// Set up the merge form
+    	$info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
+    
     	if ( $merging ) {
     	
     		// Form has been submitted... About to merge...
@@ -754,90 +756,52 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		} // END foreach ( $arr_fields....
 		
-		if ( !$merging ) {
+		if ( $merging ) {
+    
+			// WIP/TODO: Move p2 to trash
+			if ( !$merge_errors ) {
+				$info .= "<hr />";
+				if ( $fields_merged > 0 ) {
+					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
+				} else {
+					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
+				}
+			
+				// TODO: first add deleted-after-merge admin_tag?
+				$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
+				$term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
+				$term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' );
+				if ( $term ) { $term_id = $term->term_id; } // get term id from slug
+				$term_ids[] = $term_id;
+				$terms_result = wp_set_post_terms( $p2_id, $term_ids, 'admin_tag', true );
+				if ( $terms_result ) { $info .= 'admin_tag added.<br />'; } else { $info .= "Nope...<br />"; }
+				//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
+				if ( wp_trash_post($p2_id) ) {
+					$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
+				} else {
+					$info .= '<span class="nb">'."ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.</span><br />";
+				}
+			} else {
+				$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
+			}
+		
+		} else {
+			
 			// Close the comparison table
 			$info .= '</table>';
+			
+			//
+			$info .= '<input type="hidden" name="form_action" value="merge">';
+			$info .= '<input type="submit" value="Merge Records"><br />';
+			$info .= '<p class="nb"><em>This action cannot be undone!<br />The primary post will be updated with the field values displayed in <span class="green">green</span>, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in <span class="orange">orange</span> will be deleted/overwritten.</p>';
+			//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
 		}
 		
+		$info .= '</form>';
+    
 	} else {
 		//$info .= "Post count incorrect for comparison or merge (".count($arr_posts).")<br />";
-	} // END if ( count($arr_posts) == 2 )
-    
-    if ( $merging ) {
-    
-    	// WIP/TODO: Move p2 to trash
-		if ( !$merge_errors ) {
-			$info .= "<hr />";
-			if ( $fields_merged > 0 ) {
-				$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
-			} else {
-				$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
-			}
-			
-			// TODO: first add deleted-after-merge admin_tag?
-			$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
-			$term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
-			$term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' );
-        	if ( $term ) { $term_id = $term->term_id; } // get term id from slug
-        	$term_ids[] = $term_id;
-			$terms_result = wp_set_post_terms( $p2_id, $term_ids, 'admin_tag', true );
-			if ( $terms_result ) { $info .= 'admin_tag added.<br />'; } else { $info .= "Nope...<br />"; }
-			//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
-			if ( wp_trash_post($p2_id) ) {
-				$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
-			} else {
-				$info .= '<span class="nb">'."ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.</span><br />";
-			}
-		} else {
-			$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
-		}
-		
-    } else if ( count($arr_posts) == 2 ) {
-    	$info .= '<input type="hidden" name="form_action" value="merge">';
-    	$info .= '<input type="submit" value="Merge Records"><br />';
-    	$info .= '<p class="nb"><em>This action cannot be undone!<br />The primary post will be updated with the field values displayed in <span class="green">green</span>, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in <span class="orange">orange</span> will be deleted/overwritten.</p>';
-    	//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
-    }    
-    $info .= '</form>';        
-        
-    // 
-    $args_related = null; // init
-    $mq_components = array();
-    $tq_components = array();
-    //$troubleshooting .= "mq_components: <pre>".print_r($mq_components,true)."</pre>";
-    //$troubleshooting .= "tq_components: <pre>".print_r($tq_components,true)."</pre>";
-        
-    // Finalize meta_query or queries
-    // ==============================
-	/*
-	if ( count($mq_components) > 1 && empty($meta_query['relation']) ) {
-		$meta_query['relation'] = $search_operator;
-	}
-	if ( count($mq_components) == 1) {
-		//$troubleshooting .= "Single mq_component.<br />";
-		$meta_query = $mq_components; //$meta_query = $mq_components[0];
-	} else {
-		foreach ( $mq_components AS $component ) {
-			$meta_query[] = $component;
-		}
-	}
-	
-	if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
-	
-	
-	// Finalize tax_query or queries
-	// =============================
-	
-		
-	if ( count($tq_components) > 1 && empty($tax_query['relation']) ) {
-		$tax_query['relation'] = $search_operator;
-	}
-	foreach ( $tq_components AS $component ) {			
-		$tax_query[] = $component;
-	}
-	if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
-	*/
-        
+	} // END if ( count($arr_posts) == 2 )       
     
     $info .= '<div class="troubleshootingX">';
     $info .= $troubleshooting;
