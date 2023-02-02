@@ -1470,6 +1470,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         // Get post obj, post_title, $old_t4m
         $the_post = get_post( $post_id );
         $post_title = $the_post->post_title;
+        $new_title = build_the_title( $post_id );
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
 
         sdg_log( "about to call function: get_title_uid" );
@@ -1510,6 +1511,33 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
         }
     
+    	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
+        if ( $new_title != $old_title ) {
+
+            // unhook this function to prevent infinite looping
+            remove_action( 'save_post', 'sdg_save_post_callback' );
+            //remove_action( 'save_post_event', 'sdg_save_event_post_callback' );
+
+            // Update the post
+            $update_args = array(
+                'ID'           => $post_id,
+                'post_title'   => $new_title,
+            );
+
+            // Update the post into the database
+            wp_update_post( $update_args, true );    
+
+            if ( ! is_wp_error($post_id) ) {
+                // If update was successful, add admin tag to note that slug has been updated
+                sdg_add_post_term( $post_id, 'title-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+                //$info .= sdg_add_post_term( $post_id, 'slug-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+            }
+
+            // re-hook this function
+            add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
+            //add_action( 'save_post_event', 'sdg_save_event_post_callback' );
+
+        }
         /*** TITLE POSTMETA ***/
         /*
         // Get the title_for_matching. If none is set, or if it's empty, run the update function.
@@ -1743,10 +1771,10 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
             $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // field: title_for_matching
             //$new_cp_uid = get_title_uid( $post_id, $post_type, $new_title ); // field: cp_import_uid
             
-            //sdg_log( "[run_title_updates] old_title: ".$old_title );
-            //sdg_log( "[run_title_updates] old_t4m: ".$old_t4m );
-            //sdg_log( "[run_title_updates] new_title: ".$new_title );
-            //sdg_log( "[run_title_updates] new_t4m: ".$new_t4m );
+            sdg_log( "[run_title_updates] old_title: ".$old_title );
+            sdg_log( "[run_title_updates] old_t4m: ".$old_t4m );
+            sdg_log( "[run_title_updates] new_title: ".$new_title );
+            sdg_log( "[run_title_updates] new_t4m: ".$new_t4m );
             
             if ( strpos($new_title, 'Error! Abort!') !== false || strpos($new_title, 'Problem!') !== false ) {
                 
