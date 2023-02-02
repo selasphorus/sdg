@@ -1057,6 +1057,7 @@ function calc_litdates( $atts = [] ) {
     $meta_key = $a['meta_key'];
     $admin_tag_slug = $a['admin_tag_slug'];
     
+    // Set up the WP query args
 	$args = array(
 		'post_type' => 'liturgical_date',
 		'post_status' => 'publish',
@@ -1080,6 +1081,7 @@ function calc_litdates( $atts = [] ) {
     if ( $a['id'] !== null ) { $args['post__in'] = explode(', ', $a['id']); }
     if ( $a['meta_key'] !== null ) { $args['meta_key'] = $meta_key; }
     
+    // Run the query
 	$arr_posts = new WP_Query( $args );
     $posts = $arr_posts->posts;
     
