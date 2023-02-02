@@ -142,42 +142,41 @@ function sanitize ( $str = null ) {
 }
 
 // WIP-NOW
-function get_title_uid ( $post_id = null, $post_type = null, $tmp_title = null, $uid_field = 'title_for_matching' ) {
+// Build title_for_matching UID based on... ???
+function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
     
     sdg_log( "divline2" );
     sdg_log( "function called: get_title_uid" );
     
-    sdg_log( "[get_title_uid] post_id: ".$post_id."; post_type: ".$post_type );
-    sdg_log( "[get_title_uid] tmp_title: ".$tmp_title ); // formerly post_title
-    sdg_log( "[get_title_uid] uid_field: ".$uid_field );
+    sdg_log( "[gtu] post_id: ".$post_id."; post_type: ".$post_type );
+    sdg_log( "[gtu] post_title: ".$post_title );
+    sdg_log( "[gtu] uid_field: ".$uid_field );
     
-    if ( $post_id == null && $tmp_title == null ) {
+    if ( $post_id == null && $post_title == null ) {
         return null;
     }
     
     $new_t4m = ""; // init 
     
-    $tmp_title = build_the_title( $post_id, $uid_field );
-    //if ( !$post_title ) { $post_title = build_the_title( $post_id ); }
+    if ( !$post_title ) { $post_title = get_the_title( $post_id ); } //if ( !$post_title ) { $post_title = build_the_title( $post_id ); }
     if ( !$post_type ) { $post_type = get_post_type( $post_id ); }
     
     // Abort if error
-    if ( strpos($tmp_title, 'Error! Abort!') !== false ) {
+    if ( strpos($post_title, 'Error! Abort!') !== false ) {
         return null; // TODO: test!
     }
     
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
-    $new_t4m = super_sanitize_title ( $tmp_title );
+    $new_t4m = super_sanitize_title ( $post_title );
     
-    //sdg_log( "old_title: ".$post_title );
-    sdg_log( "[get_title_uid] old_t4m: ".$old_t4m );    
+    sdg_log( "[gtu] old_t4m: ".$old_t4m );    
     
     // Check to see if new_t4m is in fact unique to this post
     $t4m_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); //meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
     if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
         
         // not unique! fix it...
-        sdg_log( "[get_title_uid] new_t4m not unique! Fix it.");
+        sdg_log( "[gtu] new_t4m not unique! Fix it.");
         
         if ( $old_t4m != $new_t4m ) {
             $i = $t4m_posts+1;
@@ -188,9 +187,9 @@ function get_title_uid ( $post_id = null, $post_type = null, $tmp_title = null, 
         
     }
     if ( $new_t4m == $old_t4m ) {
-        sdg_log( "[get_title_uid] new_t4m same as old_t4m." );
+        sdg_log( "[gtu] new_t4m same as old_t4m." );
     } else {
-        sdg_log( "[get_title_uid] new_t4m: ".$new_t4m );
+        sdg_log( "[gtu] new_t4m: ".$new_t4m );
     }
     
     return $new_t4m;
@@ -1473,8 +1472,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $new_title = build_the_title( $post_id );
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
 
-        sdg_log( "about to call function: get_title_uid" );
-        $new_t4m = get_title_uid( $post_id, $post_type, $post_title );
+        sdg_log( "[sspc] about to call function: get_title_uid" );
+        $new_t4m = get_title_uid( $post_id, $post_type, $new_title );
         
         sdg_log( "divline2" );
 
@@ -1512,7 +1511,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         }
     
     	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
-        if ( $new_title != $old_title ) {
+        /*if ( $new_title != $old_title ) {
 
 			sdg_log( "[sspc] update the post_title" );
 			
@@ -1539,7 +1538,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
             //add_action( 'save_post_event', 'sdg_save_event_post_callback' );
 
-        }
+        }*/
+        
         /*** TITLE POSTMETA ***/
         /*
         // Get the title_for_matching. If none is set, or if it's empty, run the update function.
@@ -1771,7 +1771,6 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
             
             $new_title = build_the_title( $post_id, 'title_for_matching', null ); // 
             $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // field: title_for_matching
-            //$new_cp_uid = get_title_uid( $post_id, $post_type, $new_title ); // field: cp_import_uid
             
             sdg_log( "[run_title_updates] old_title: ".$old_title );
             sdg_log( "[run_title_updates] old_t4m: ".$old_t4m );
@@ -1946,7 +1945,7 @@ function posts_cleanup( $atts = [] ) {
             if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
 
                 // not unique! fix it...
-                sdg_log( "[get_title_uid] new_t4m not unique! Fix it.");
+                sdg_log( "[posts_cleanup] new_t4m not unique! Fix it.");
 
                 if ( $old_t4m != $new_t4m ) {
                     $i = $t4m_posts+1;
