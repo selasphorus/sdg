@@ -1474,6 +1474,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $the_post = get_post( $post_id );
         $post_title = $the_post->post_title;
         $new_title = build_the_title( $post_id );
+        $new_slug = sanitize_title($new_title);
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
 
         sdg_log( "[sspc] about to call function: get_title_uid" );
@@ -1485,6 +1486,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         sdg_log( "[sspc] post_type: ".$post_type );
         sdg_log( "[sspc] post_title: ".$post_title );
         sdg_log( "[sspc] new_title: ".$new_title );
+        sdg_log( "[sspc] new_slug: ".$new_slug );
+        // WIP:
         //sdg_log( "old_title: ".$old_title );
         sdg_log( "[sspc] old_t4m: ".$old_t4m );
         sdg_log( "[sspc] new_t4m: ".$new_t4m );
@@ -1527,8 +1530,9 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
             // Update the post
             $update_args = array(
-                'ID'           => $post_id,
-                'post_title'   => $new_title,
+                'ID'       	=> $post_id,
+                'post_title'=> $new_title,
+                'post_name'	=> $new_slug,
             );
 
             // Update the post into the database
