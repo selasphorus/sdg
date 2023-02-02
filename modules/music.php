@@ -470,7 +470,7 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
     $is_hymn = false;
     $is_psalm = false;
     //
-    if ( $format == "post_title" || $format == "edition_title" || $format == "concert_item" ) {
+    if ( $format == "post_title" || $format == "edition_title" ) {
     	$html = false;
     } else {
     	$html = true;
