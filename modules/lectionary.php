@@ -560,7 +560,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
             // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $litdate_id, $year );
-			$info .= $display_dates_info['info'];
+			$ts_info .= $display_dates_info['info'];
 			$display_dates = $display_dates_info['dates'];
 			$ts_info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
 			if ( !in_array($date_str, $display_dates) ) {
