@@ -454,6 +454,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
     // Make sure the date hasn't been returned enclosed in quotation marks
+    // e.g. "Sunday, February 5, 2023"
+    $date_bits = explode(", ",$the_date);
+    $info .= "date_bits: ".print_r($date_bits,true)."<br />";
     $the_date = (string) $the_date;
     $the_date = htmlspecialchars_decode($the_date);
     $the_date = html_entity_decode($the_date);
@@ -463,7 +466,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "<!-- the_date contains quotation marks -->\n"; } else { $ts_info .= "<!-- the_date contains NO quotation marks -->\n"; }
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
     $info .= "the_date: ".$the_date."<br />";
-    if ( strtotime(string $the_date) ) { $info .= "strtotime(the_date): ".strtotime(string $the_date)."<br />"; } else { $info .= "strtotime(the_date) FAILED<br />"; }
+    if ( strtotime($the_date) ) { $info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $info .= "strtotime(the_date) FAILED<br />"; }
     //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
