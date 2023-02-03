@@ -455,6 +455,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
     // Make sure the date hasn't been returned enclosed in quotation marks
     $the_date = htmlspecialchars_decode($the_date);
+    $the_date = html_entity_decode($the_date);
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
