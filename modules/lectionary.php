@@ -454,7 +454,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
     $the_date = str_replace('\"', '', $the_date);
-    //$the_date = str_replace('\"', '', $the_date);
+    $the_date = str_replace('"', '', $the_date);
+    $the_date = str_replace("'", "", $the_date);
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
     //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
     
