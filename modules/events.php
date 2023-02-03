@@ -2129,7 +2129,8 @@ add_filter('em_cp_event_recurring_public','__return_true');
 //function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
 function get_special_date_content( $the_date = null ) {
 
-	$info = "\n<!-- get_special_date_content -->\n";
+	$info = "";
+	$ts_info = "\n<!-- get_special_date_content -->\n";
     
     /*$args = shortcode_atts( 
         array(
@@ -2143,8 +2144,8 @@ function get_special_date_content( $the_date = null ) {
     //$post_id = (int) $args['post_id'];
     //$series_id = (int) $args['series_id'];
     //$the_date = $args['the_date'];
-    $info .= "<!-- the_date: '$the_date' -->\n";
-    $info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
+    $ts_info .= "<!-- the_date: '$the_date' -->\n";
+    $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
     
     // TODO: make this a real thing that retrieves content from the DB based on the date...
     // via meta_query
@@ -2173,7 +2174,7 @@ function get_special_date_content( $the_date = null ) {
     if ($the_date == "2022-12-24") {
         
         $timestamp = strtotime($the_date);
-        $info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
+        $ts_info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
         
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
         $info .= '<div class="message centered">';
