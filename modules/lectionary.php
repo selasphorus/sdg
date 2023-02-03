@@ -450,7 +450,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
-    //$ts_info .= "<!-- the_date: ".$the_date." -->\n"; // tft
+    $ts_info .= "<!-- the_date: ".$the_date." -->\n"; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
     if ( $series_id ) { 
