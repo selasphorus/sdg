@@ -454,7 +454,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
     // Make sure the date hasn't been returned enclosed in quotation marks
-    if ( strpos($the_date, '"') !== false ) { $ts_info .= "<!-- the_date contains quotation marks -->\n"; }
+    if ( strpos($the_date, '"') !== false ) { $ts_info .= "<!-- the_date contains quotation marks -->\n"; } else { $ts_info .= "<!-- the_date contains NO quotation marks -->\n"; }
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
