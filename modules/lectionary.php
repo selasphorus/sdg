@@ -530,7 +530,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( is_array($litdate_posts) ) { $num_litdate_posts = count($litdate_posts); } else { $num_litdate_posts = 0; }
     //$ts_info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
     $ts_info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
-    if ( $litdates['troubleshooting'] ) { $ts_info .= $litdates['troubleshooting']; }
+    //if ( $litdates['ts_info'] ) { $ts_info .= $litdates['ts_info']; }
     
     // If some posts were retrieved for dates calculated and/or assigned
     
@@ -693,7 +693,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	}
 	
 	$info .= get_special_date_content( $the_date );
-	//$info .= $ts_info;
+	$info .= $ts_info;
 	
 	return $info;
 	
