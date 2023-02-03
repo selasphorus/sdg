@@ -1657,7 +1657,7 @@ add_shortcode('convert_bidirectional_fields', 'convert_bidirectional_fields');
 function convert_bidirectional_fields ( $post_id = null, $post_type = "", $old_field_name = "", $new_field_name = "", $verbose = false ) {
     
     $info = "";
-    $troubleshooting = "";
+    $ts_info = "";
     $new_vals = false;
     
     $info .= ">> convert_bidirectional_fields >><br />";

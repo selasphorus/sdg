@@ -16,7 +16,6 @@ function get_lit_dates ( $args ) {
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	
 	// init
-	$info = "";
 	$litdates = array();
 	$litdate_posts = array();
 	$date = null;
@@ -26,7 +25,7 @@ function get_lit_dates ( $args ) {
 	$start_date = null;
 	$end_date = null;
 	
-	$info = "\n<!-- get_lit_dates -->\n";
+	$ts_info = "\n<!-- get_lit_dates -->\n";
 	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
@@ -60,7 +59,7 @@ function get_lit_dates ( $args ) {
 		
 	}
 	
-	$info .= "<!-- start_date: '$start_date'; end_date: '$end_date'; year: '$year'; month: '$month' -->\n"; // tft
+	$ts_info .= "<!-- start_date: '$start_date'; end_date: '$end_date'; year: '$year'; month: '$month' -->\n"; // tft
     
     // Loop through all dates in range from start to end
     $start = strtotime($start_date);
@@ -97,7 +96,7 @@ function get_lit_dates ( $args ) {
         
         // Add meta_query components for fixed dates
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
-        //$info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
+        //$ts_info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
         $meta_sub_query[] = array(
 			'key'		=> 'fixed_date_str',
 			'compare'	=> '=',
@@ -107,9 +106,9 @@ function get_lit_dates ( $args ) {
 		// Add alt component in case day num has been stored without leading zero
 		$day_num = intval(date("j", $start ));
         if ( $day_num < 10 ) {
-            //$info .= "<!-- day_num: '$day_num' -->\n"; // tft
+            //$ts_info .= "<!-- day_num: '$day_num' -->\n"; // tft
             $fixed_date_str_alt = date("F j", $start ); // day w/ out leading zeros
-            //$info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
+            //$ts_info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
             $meta_sub_query[] = array(
 				'key'		=> 'fixed_date_str',
 				'compare'	=> '=',
@@ -119,7 +118,7 @@ function get_lit_dates ( $args ) {
         
         // Format date_str
         $full_date_str = date("Y-m-d", $start );        
-        $info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+        $ts_info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
         
         // Add meta_query components for date calculations and assignments        
 		$meta_sub_query[] = array(
@@ -150,7 +149,7 @@ function get_lit_dates ( $args ) {
 		$litdate_args['meta_query'] = $meta_query;
 	
 		// Run the query
-		//$info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		//$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
 		$arr_posts = new WP_Query( $litdate_args );
 		$litdate_posts[$full_date_str] = $arr_posts->posts;
         
@@ -169,7 +168,7 @@ function get_lit_dates ( $args ) {
     }
     */
     
-    $litdates['info'] = $info;
+    $litdates['troubleshooting'] = $troubleshooting;
     $litdates['posts'] = $litdate_posts;
     
     return $litdates;
@@ -214,7 +213,7 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
     $litdates = get_lit_dates( $litdate_args );
     
     $posts = $litdates['posts'];
-    $info .= $litdates['info'];
+    $info .= $litdates['troubleshooting'];
     
     foreach ( $posts AS $date => $date_posts ) {
         
@@ -432,7 +431,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "";
-	$troubleshooting = "\n<!-- get_day_title -->\n";
+	$ts_info = "\n<!-- get_day_title -->\n";
     
     $args = shortcode_atts( 
         array(
@@ -449,9 +448,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $hide_day_titles = 0; // init
 
     if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $troubleshooting .= "<!-- post_id: ".$post_id." -->\n"; // tft
-    if ( $series_id ) { $troubleshooting .= "<!-- series_id: ".$series_id." -->\n"; }
-    //$troubleshooting .= "<!-- the_date: ".$the_date." -->\n"; // tft
+    $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
+    if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
+    //$ts_info .= "<!-- the_date: ".$the_date." -->\n"; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
     if ( $series_id ) { 
@@ -462,18 +461,18 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $hide_day_titles == 0 ) {
     	$hide_day_titles = get_post_meta( $post_id, 'hide_day_titles', true );
     }
-    //$troubleshooting .= "<!-- hide_day_titles: [$hide_day_titles] -->";
+    //$ts_info .= "<!-- hide_day_titles: [$hide_day_titles] -->";
     
     if ( $hide_day_titles == 1 ) { 
-        $troubleshooting .= "<!-- hide_day_titles is set to true for this post/event -->";
+        $ts_info .= "<!-- hide_day_titles is set to true for this post/event -->";
         return $info;
     } else {
-        //$troubleshooting .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
+        //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
     }
     
 	if ( $the_date == null ) {
         
-        $troubleshooting .= "<!-- the_date is null -- get the_date -->"; // tft
+        $ts_info .= "<!-- the_date is null -- get the_date -->"; // tft
 		
         // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
         if ( $post_id === null ) {
@@ -484,7 +483,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
             $post = get_post( $post_id );
             $post_type = $post->post_type;
-            $troubleshooting .= "<!-- post_type: ".$post_type." -->"; // tft
+            $ts_info .= "<!-- post_type: ".$post_type." -->"; // tft
 
             if ( $post_type == 'event' ) {
                 
@@ -493,13 +492,13 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 
             } else if ( $post_type == 'sermon' ) {
                 
-                $troubleshooting .= "<!-- sermon -->";
+                $ts_info .= "<!-- sermon -->";
                 $the_date = the_field( 'sermon_date', $post_id );
                 //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
                 
             } else {
-                //$troubleshooting .= "post_id: ".$post_id."<br />"; // tft
-                //$troubleshooting .= "post_type: ".$post_type."<br />"; // tft
+                //$ts_info .= "post_id: ".$post_id."<br />"; // tft
+                //$ts_info .= "post_type: ".$post_type."<br />"; // tft
             }
         }
         
@@ -508,7 +507,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $the_date == null ) {
         
         // If still no date has been found, give up.
-        $troubleshooting .= "<!-- no date available for which to find day_title -->\n"; // tft
+        $ts_info .= "<!-- no date available for which to find day_title -->\n"; // tft
         return $info;
         
     }
@@ -523,15 +522,15 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     	$litdate_posts = $litdates['posts'][$date_str];
 	} else if ( isset($litdates['posts']) ) {
 		$litdate_posts = $litdates['posts'];
-		$troubleshooting .= "<!-- litdates['posts'][$date_str] not set -->";
-		//$troubleshooting .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
+		$ts_info .= "<!-- litdates['posts'][$date_str] not set -->";
+		//$ts_info .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
 	} else {
 		$litdate_posts = array(); // empty
 	}
     if ( is_array($litdate_posts) ) { $num_litdate_posts = count($litdate_posts); } else { $num_litdate_posts = 0; }
-    //$troubleshooting .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
-    $troubleshooting .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
-    if ( $litdates['info'] ) { $info .= $litdates['info']; }
+    //$ts_info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
+    $ts_info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
+    if ( $litdates['troubleshooting'] ) { $ts_info .= $litdates['troubleshooting']; }
     
     // If some posts were retrieved for dates calculated and/or assigned
     
@@ -539,7 +538,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // WIP
     if ( $num_litdate_posts == 0 ) {    
-    	$troubleshooting .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->";
+    	$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->";
     }
     
     if ( $num_litdate_posts > 0 ) {
@@ -552,15 +551,15 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         foreach ( $litdate_posts AS $litdate_post ) {
             
             $litdate_id = $litdate_post->ID;
-            $troubleshooting .= "<!-- litdate_post->ID: ".$litdate_id." -->"; // tft
+            $ts_info .= "<!-- litdate_post->ID: ".$litdate_id." -->"; // tft
             
             // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $litdate_id, $year );
 			$info .= $display_dates_info['info'];
 			$display_dates = $display_dates_info['dates'];
-			$troubleshooting .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
+			$ts_info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
 			if ( !in_array($date_str, $display_dates) ) {
-				$troubleshooting .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
+				$ts_info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
 				// Therefore don't show it.
 				$litdate_id = null;
 				continue;
@@ -568,36 +567,36 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
             // Get date_type (fixed, calculated, assigned)
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
-            $troubleshooting .= "<!-- date_type: ".$date_type." -->"; // tft
+            $ts_info .= "<!-- date_type: ".$date_type." -->"; // tft
             
             // Get category/priority
             $terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
-            //$troubleshooting .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
+            //$ts_info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
             
             $priority = 999;
             if ( $terms ) {
                 
                 foreach ( $terms as $term ) {
                     $term_priority = get_term_meta($term->term_id, 'priority', true);
-                    $troubleshooting .= "<!-- term: ".$term->slug." :: term_priority: ".$term_priority." -->"; // tft
+                    $ts_info .= "<!-- term: ".$term->slug." :: term_priority: ".$term_priority." -->"; // tft
 
                     if ( !empty($term_priority) ) {
                     	if ( $term_priority < $priority ) { // top priority is lowest number
                     		$priority = $term_priority;
-                        	$troubleshooting .= "<!-- NEW priority: ".$priority." -->"; // tft
+                        	$ts_info .= "<!-- NEW priority: ".$priority." -->"; // tft
                         } else if ( $term_priority == $top_priority ) {
-                        	$troubleshooting .= "<!-- term_priority is same as priority -->"; // tft
+                        	$ts_info .= "<!-- term_priority is same as priority -->"; // tft
                     	} else {
-                    		$troubleshooting .= "<!-- term_priority is higher than priority -->"; // tft
+                    		$ts_info .= "<!-- term_priority is higher than priority -->"; // tft
                     	}                        
                     } else {
-                    	$troubleshooting .= "<!-- term_priority is not set for term ".$term->slug." -->";
+                    	$ts_info .= "<!-- term_priority is not set for term ".$term->slug." -->";
                     }
                 }
                 
             }
             
-            $troubleshooting .= "<!-- priority: ".$priority." -->"; // tft
+            $ts_info .= "<!-- priority: ".$priority." -->"; // tft
             $key = $priority."-".$litdate_id; // this will cause sort by priority num, then by litdate_id
             $litdates[$key] = $litdate_id;
             //$litdates[$top_priority] = $litdate_post_id;
@@ -607,17 +606,17 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         if ( count($litdates) > 0 ) {
         
-        	$troubleshooting .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
+        	$ts_info .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
         	uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
-        	$troubleshooting .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
+        	$ts_info .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
        
 			// Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
 			//$firstKey = array_key_first($array);
 		
 			$top_key = array_key_first($litdates);
-			$troubleshooting .= "<!-- top_key: ".$top_key." -->"; // tft
+			$ts_info .= "<!-- top_key: ".$top_key." -->"; // tft
 			$litdate_id = $litdates[$top_key];
-			$troubleshooting .= "<!-- litdate_id: ".$litdate_id." -->"; // tft
+			$ts_info .= "<!-- litdate_id: ".$litdate_id." -->"; // tft
 			
         }
     }
@@ -678,9 +677,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 				$info .= '</div>'; //<!-- /calendar-day-desc -->
 
 			} else {
-				//$troubleshooting .= "<!-- no collect_text found -->";
-				//$troubleshooting .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
-				//$troubleshooting .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
+				//$ts_info .= "<!-- no collect_text found -->";
+				//$ts_info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
+				//$ts_info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
 				// If no content or collect, just show the day title
 				$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
 			}
@@ -688,8 +687,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
     } else {
 		
-        $troubleshooting .= "<!-- no litdate found for display -->";
-		//$troubleshooting .= "<!-- params: <pre>".print_r($params, true)."</pre> -->";
+        $ts_info .= "<!-- no litdate found for display -->";
+		//$ts_info .= "<!-- params: <pre>".print_r($params, true)."</pre> -->";
         
 	}
 	

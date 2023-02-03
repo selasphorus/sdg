@@ -639,7 +639,7 @@ function get_event_program_items( $atts = [] ) {
     $run_updates = $a['run_updates'];
     $display = $a['display'];
     $info = "";
-    $troubleshooting = "";
+    $ts_info = "";
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
     $groupings = false;
@@ -935,7 +935,7 @@ function get_event_program_items( $atts = [] ) {
 						$item_post_type = get_post_type( $program_item_obj_id );						
 						if ( $item_post_type == 'repertoire' ) {
 							// Update the repertoire_events field for this rep record, as needed
-							$troubleshooting .= update_repertoire_events( $program_item_obj_id, false, array($post_id) );							
+							$ts_info .= update_repertoire_events( $program_item_obj_id, false, array($post_id) );							
 						}					
 					}
 				}

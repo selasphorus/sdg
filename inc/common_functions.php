@@ -188,18 +188,18 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
 	// init vars
 	$info = "";
-    $troubleshooting = "";
+    $ts_info = "";
     $form_action = null;
     
     // Retrieve any data submitted via forms or query vars
-    if ( !empty($_GET) ) { $troubleshooting .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
+    if ( !empty($_GET) ) { $ts_info .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
     if ( !empty($_POST) ) {    
-    	$troubleshooting .= '<pre>_POST: '.print_r($_POST,true).'</pre>';    	
+    	$ts_info .= '<pre>_POST: '.print_r($_POST,true).'</pre>';    	
     	if ( isset($_POST['form_action']) ) {
     		$form_action = $_POST['form_action'];
     	}
     }
-    //$troubleshooting .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
+    //$ts_info .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
     
     // init
     $arr_posts = array(); // tft
@@ -281,14 +281,14 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
 		$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
 	
-		//if ( count($post_ids) < 1 ) { $troubleshooting .= "Not enough post_ids submitted.<br />"; }
+		//if ( count($post_ids) < 1 ) { $ts_info .= "Not enough post_ids submitted.<br />"; }
 	
 		//$info .= "form_type: $form_type<br />"; // tft
 
 		// If post_ids have been submitted, then run the query
 		if ( count($post_ids) > 1 ) {
 			
-			//$troubleshooting .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+			//$ts_info .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
 	
 			// Get posts matching the assembled args
 			// =====================================
@@ -297,25 +297,25 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( isset($posts_info['arr_posts']) ) {
 		
 				$arr_posts = $posts_info['arr_posts']->posts;
-				//$troubleshooting .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
-				//$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+				//$ts_info .= "<p>Num arr_posts: [".count($arr_posts)."]</p>";
+				//$ts_info .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 			
 				if ( count($arr_posts) < 2 ) {
 					$info .= '<p class="nb">Please submit IDs for two published posts.</p>';
-					$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+					$ts_info .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 				} else if ( count($arr_posts) > 2 ) {
 					$info .= '<p class="nb">That\'s too many posts! I can only handle two at a time.</p>';
-					$troubleshooting .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
+					$ts_info .= "arr_posts: <pre>".print_r($arr_posts,true)."</pre>"; // tft
 				}
 		
 				//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-				$troubleshooting .= $posts_info['info']."<hr />"; // "posts_info: ".
+				$ts_info .= $posts_info['info']."<hr />"; // "posts_info: ".
 				//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
 		
 				// Print last SQL query string
 				//global $wpdb;
 				//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-				//$troubleshooting .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+				//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
 		
 			}
 	
@@ -334,7 +334,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // Get all taxonomies associated with the post_type
     $taxonomies = get_object_taxonomies( $post_type );
-    //$troubleshooting .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
+    //$ts_info .= "taxonomies for post_type '$post_type': <pre>".print_r($taxonomies,true)."</pre>";
     
     // WIP/TODO: Make one big array of field_name & p1/p2 values from core_fields, field_groups, and taxonomies, and process that into rows...
     
@@ -360,7 +360,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	
     if ( count($arr_posts) == 2 ) {
 		
-		//$troubleshooting .= "Two posts... moving forward...<br />";
+		//$ts_info .= "Two posts... moving forward...<br />";
 		
 		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
     
