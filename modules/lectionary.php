@@ -453,6 +453,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
+    $the_date = str_replace('"', '', $the_date);
     $ts_info .= "<!-- the_date: ".$the_date." -->\n"; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
@@ -517,7 +518,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     }
     
     // Get litdate posts according to date
-    $date_str = date("Y-m-d",strtotime($the_date));
+    $date_str = date("Y-m-d", strtotime($the_date));
     $ts_info .= "<!-- date_str: ".$date_str." -->\n"; // tft
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
