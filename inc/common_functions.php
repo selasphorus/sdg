@@ -341,30 +341,28 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     //?ids%5B%5D=292003&ids%5B%5D=298829
     //292003 -- 298829
     
-    
+    // TODO: give user choice of which post to treat as primary?
+	if ( $arr_posts[0] ) { $p1_id = $arr_posts[0]; } else { $p1_id = null; }
+	if ( $arr_posts[1] ) { $p2_id = $arr_posts[1]; } else { $p2_id = null; }	
+	
+	// Set up the form for submitting IDs to compare
+	// To do: set action to SELF without query vars(?)
+	$info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
+	$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
+	$info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
+	$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
+	$info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
+	$info .= '<input type="hidden" name="form_action" value="review">';
+	$info .= '<input type="submit" value="Compare Posts">';
+	$info .= '</form>';
+	$info .= '<br clear="all" />';
+	$info .= '<hr />';
+	
     if ( count($arr_posts) == 2 ) {
 		
 		//$troubleshooting .= "Two posts... moving forward...<br />";
 		
-		// TODO: give user choice of which post to treat as primary?
-		$p1_id = $arr_posts[0];
-		$p2_id = $arr_posts[1];
-		//$p1 = $arr_posts[0];
-		//$p2 = $arr_posts[1];
 		$arr_fields = array(); // $arr_fields['field_name'] = array(field_cat, field_type, values...) -- field categories are: core_field, acf_field, or taxonomy;
-    	
-    	// Set up the form for submitting IDs to compare
-    	// To do: set action to SELF without query vars(?)
-		$info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
-		$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
-		$info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
-		$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
-		$info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
-		$info .= '<input type="hidden" name="form_action" value="review">';
-		$info .= '<input type="submit" value="Compare Posts">';
-		$info .= '</form>';
-		$info .= '<br clear="all" />';
-		$info .= '<hr />';
     
     	// Set up the merge form
     	// To do: set action to SELF without query vars(?)
