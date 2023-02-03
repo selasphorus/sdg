@@ -168,7 +168,7 @@ function get_lit_dates ( $args ) {
     }
     */
     
-    $litdates['troubleshooting'] = $troubleshooting;
+    $litdates['troubleshooting'] = $ts_info;
     $litdates['posts'] = $litdate_posts;
     
     return $litdates;
@@ -693,7 +693,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	}
 	
 	$info .= get_special_date_content( $the_date );
-	//$info .= $troubleshooting;
+	//$info .= $ts_info;
 	
 	return $info;
 	

@@ -806,7 +806,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	} // END if ( count($arr_posts) == 2 )       
     
     $info .= '<div class="troubleshootingX">';
-    $info .= $troubleshooting;
+    $info .= $ts_info;
     $info .= '</div>';
     
     return $info;

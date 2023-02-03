@@ -968,7 +968,7 @@ function get_event_program_items( $atts = [] ) {
     }
     
     if ( is_dev_site() ) {
-    	$info .= $troubleshooting;
+    	$info .= $ts_info;
     }
     
 	return $info;

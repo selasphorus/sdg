@@ -2181,7 +2181,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
     } // END if ( $a['fields'] )
 
     $info .= '<div class="troubleshooting">';
-    $info .= $troubleshooting;
+    $info .= $ts_info;
     $info .= '</div>';
     
     return $info;
