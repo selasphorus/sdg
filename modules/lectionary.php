@@ -518,6 +518,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Get litdate posts according to date
     $date_str = date("Y-m-d",strtotime($the_date));
+    $ts_info .= "<!-- date_str: ".$date_str." -->\n"; // tft
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
     $year = substr($date_str, 0, 4); // for checking display_dates later in the fcn
