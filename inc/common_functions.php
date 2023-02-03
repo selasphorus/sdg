@@ -615,6 +615,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						
 							//$new_value = esc_attr($new_val); // without this, the update fails for records with *single* quotation marks, but WITH, it saves the backslashes. What to do? TODO: figure this out...
 							//$new_val = wp_slash($new_val);
+							//TODO: try sanitize_meta?
 							
 							// convert new_val to array, if needed -- check field type >> explode
 							if ( $field_type == 'relationship' ) {
@@ -628,6 +629,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 								$merge_info .= "Success! Ran update_field for $field_name.<br />";
 								$fields_merged++;
 							} else {
+								//TODO: consider using WP update_post_meta instead if update_field fails?
 								$merge_info .= '<span class="nb">'."Oh no! Update failed.</span><br />";
 								$merge_errors = true;
 							}
