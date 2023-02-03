@@ -29,9 +29,12 @@ function get_lit_dates ( $args ) {
 	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
+	
 	if ( isset($args['date']) ) {
 	
 		$date = $args['date'];
+		// TODO: deal w/ possibility that date is passed in the wrong format >> convert it to YYYY-MM-DD
+		//if str contains commas? if first four digits not a number? ... date('Y-m-d',strtotime($date))
 		$start_date = $end_date = $date;
 		$year = substr($date,0,4);
 		$month = substr($date,5,2);
@@ -514,9 +517,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     }
     
     // Get litdate posts according to date
-    $litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
-    $litdates = get_lit_dates( $litdate_args );
     $date_str = date("Y-m-d",strtotime($the_date));
+    $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
+    $litdates = get_lit_dates( $litdate_args );
     $year = substr($date_str, 0, 4); // for checking display_dates later in the fcn
     //
     if ( isset($litdates['posts'][$date_str]) ) { 
