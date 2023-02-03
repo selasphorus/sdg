@@ -462,6 +462,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "<!-- the_date contains quotation marks -->\n"; } else { $ts_info .= "<!-- the_date contains NO quotation marks -->\n"; }
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
     $info .= "the_date: ".$the_date."<br />";
+    $info .= "strtotime(the_date): ".strtotime($the_date)."<br />";
     //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
