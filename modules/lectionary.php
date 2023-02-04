@@ -470,6 +470,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
     //
+    $ts_info .= "string cleanup attempted via preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />"; }
+    //
     if ( strpos($the_date, ',') !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
     $date_bits = explode(", ",$the_date);
     $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
