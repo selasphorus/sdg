@@ -464,13 +464,17 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
+    //
+    if ( strpos($the_date, ',') !== false ) { $ts_info .= "<!-- the_date contains one or more commas -->\n"; } else { $ts_info .= "<!-- the_date contains NO commas -->\n"; }
     $date_bits = explode(", ",$the_date);
-    $info .= "date_bits: ".print_r($date_bits,true)."<br />";
+    $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "<!-- the_date contains quotation marks -->\n"; } else { $ts_info .= "<!-- the_date contains NO quotation marks -->\n"; }
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
-    $info .= "the_date: ".$the_date."<br />";
-    if ( strtotime($the_date) ) { $info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $info .= "strtotime(the_date) FAILED<br />"; }
+    $ts_info .= "the_date: ".$the_date."<br />";
+    if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= "strtotime(the_date) FAILED<br />"; }
     //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
+    
+    $info .= $ts_info; // tft
     
     // Check to see if day titles are to be hidden for the entire event series, if any
     if ( $series_id ) { 
