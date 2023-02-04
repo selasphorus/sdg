@@ -458,6 +458,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // e.g. "Sunday, February 5, 2023"
     $ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
     //
+    $the_date = filter_var($the_date, FILTER_FLAG_STRIP_LOW, FILTER_FLAG_STRIP_HIGH);
     $the_date = (string) $the_date;
     $the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
     $the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
@@ -475,7 +476,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Remove quotation marks
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "the_date contains quotation marks<br />"; } else { $ts_info .= "the_date contains NO quotation marks<br />"; }
     //
-    $ts_info .= "string cleanup attempted via preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
+    $ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
     //
     $ts_info .= "var_export of revised the_date: ".var_export($the_date,true)."<br />";
     //
