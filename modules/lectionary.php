@@ -454,6 +454,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
     
+    // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
     // Make sure the date hasn't been returned enclosed in quotation marks
     // e.g. "Sunday, February 5, 2023"
     $ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
@@ -473,6 +474,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
+    $the_date = str_replace(",", "--", $the_date);
     
     // Remove quotation marks
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "the_date contains quotation marks<br />"; } else { $ts_info .= "the_date contains NO quotation marks<br />"; }
