@@ -453,9 +453,14 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
     if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
+    
     // Make sure the date hasn't been returned enclosed in quotation marks
     // e.g. "Sunday, February 5, 2023"
     $the_date = (string) $the_date;
+    $the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
+    $the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
+    $the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
+    //
     $the_date = htmlspecialchars_decode($the_date);
     $the_date = html_entity_decode($the_date);
     $the_date = strip_tags($the_date);
