@@ -479,7 +479,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //
     $ts_info .= "var_export of revised the_date: ".var_export($the_date,true)."<br />";
     //
-    if ( strpos($the_date, ',') !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
+    if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
     $date_bits = explode(", ",$the_date);
     $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
