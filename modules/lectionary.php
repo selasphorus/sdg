@@ -483,6 +483,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //
     if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
     if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
+    if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) {
+		$ts_info .= "preg_match_all: ".print_r($matches, true)."<br />";
+	}
     $date_bits = explode(", ",$the_date);
     $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
