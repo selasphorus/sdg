@@ -479,8 +479,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Remove quotation marks
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace("\'", '', $the_date);
-    //$the_date = str_replace('"', '', $the_date);
-    //$the_date = str_replace("'", "", $the_date);
+    $the_date = str_replace('"', '', $the_date);
+    $the_date = str_replace("'", "", $the_date);
     
     
     //$ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
