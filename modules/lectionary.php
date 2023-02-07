@@ -457,6 +457,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
     // Make sure the date hasn't been returned enclosed in quotation marks
     // e.g. "Sunday, February 5, 2023"
+    $ts_info .= "var the_date is of type: ".gettype($the_date)."<br />";
     $ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
     //
     $the_date = filter_var($the_date, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_STRING); // FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH
