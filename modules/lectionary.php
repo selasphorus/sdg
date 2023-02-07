@@ -469,25 +469,25 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //$the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
     //
     $the_date = htmlspecialchars_decode($the_date);
-    //$the_date = html_entity_decode($the_date);
+    $the_date = html_entity_decode($the_date);
     //$the_date = strip_tags($the_date);
     //$the_date = stripslashes($the_date);
     //
-    // Remove quotation marks
-    $the_date = str_replace('\"', '', $the_date);
-    //$the_date = str_replace('"', '', $the_date);
-    //$the_date = str_replace("'", "", $the_date);
     
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[2] the_date contains quotation marks<br />"; } else { $ts_info .= "[2] the_date contains NO quotation marks<br />"; }
     
+    // Remove quotation marks
+    $the_date = str_replace('\"', '', $the_date);
+    $the_date = str_replace("\'", '', $the_date);
+    //$the_date = str_replace('"', '', $the_date);
+    //$the_date = str_replace("'", "", $the_date);
     
     
-    /*
-    $ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
+    //$ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
     //
     $ts_info .= "var_export of revised the_date: ".var_export($the_date,true)."<br />";
     
-    if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all: ".print_r($matches, true)."<br />"; }
+    //if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all: ".print_r($matches, true)."<br />"; }
     
     //*/
     if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
