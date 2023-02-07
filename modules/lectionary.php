@@ -490,9 +490,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //*/
     if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
     if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
-    if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: ".print_r($matches, true)."<br />"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
-    if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: ".print_r($matches, true)."<br />"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
-    if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: ".print_r($matches, true)."<br />"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
+    if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
+    if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
+    if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
     
     
     $date_bits = explode(", ",$the_date);
