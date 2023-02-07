@@ -466,7 +466,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //$the_date = (string) $the_date;
     //$the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
     //$the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
-    //$the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
+    $the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
     //
     $the_date = htmlspecialchars_decode($the_date);
     $the_date = html_entity_decode($the_date);
