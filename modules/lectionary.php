@@ -473,11 +473,12 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $the_date = strip_tags($the_date);
     $the_date = stripslashes($the_date);
     //
+    */
     $the_date = str_replace('\"', '', $the_date);
     $the_date = str_replace('"', '', $the_date);
     $the_date = str_replace("'", "", $the_date);
     //$the_date = str_replace(",", "--", $the_date);
-    */
+    
     // Remove quotation marks
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "the_date contains quotation marks<br />"; } else { $ts_info .= "the_date contains NO quotation marks<br />"; }
     /*
