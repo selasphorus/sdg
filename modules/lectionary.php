@@ -460,27 +460,28 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "var the_date is of type: ".gettype($the_date)."<br />";
     $ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
     //
-    /*
-    $the_date = filter_var($the_date, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_STRING); // FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH
-    //$the_date = filter_var($the_date, FILTER_FLAG_STRIP_LOW, FILTER_FLAG_STRIP_HIGH);
-    $the_date = (string) $the_date;
-    $the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
-    $the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
-    $the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
+    if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[1] the_date contains quotation marks<br />"; } else { $ts_info .= "[1] the_date contains NO quotation marks<br />"; }
+    //
+    //$the_date = filter_var($the_date, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_STRING); // FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH //$the_date = filter_var($the_date, FILTER_FLAG_STRIP_LOW, FILTER_FLAG_STRIP_HIGH);
+    //$the_date = (string) $the_date;
+    //$the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
+    //$the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
+    //$the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
     //
     $the_date = htmlspecialchars_decode($the_date);
-    $the_date = html_entity_decode($the_date);
-    $the_date = strip_tags($the_date);
-    $the_date = stripslashes($the_date);
+    //$the_date = html_entity_decode($the_date);
+    //$the_date = strip_tags($the_date);
+    //$the_date = stripslashes($the_date);
     //
-    */
-    $the_date = str_replace('\"', '', $the_date);
-    $the_date = str_replace('"', '', $the_date);
-    $the_date = str_replace("'", "", $the_date);
-    //$the_date = str_replace(",", "--", $the_date);
-    
     // Remove quotation marks
-    if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "the_date contains quotation marks<br />"; } else { $ts_info .= "the_date contains NO quotation marks<br />"; }
+    //$the_date = str_replace('\"', '', $the_date);
+    //$the_date = str_replace('"', '', $the_date);
+    //$the_date = str_replace("'", "", $the_date);
+    
+    if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[2] the_date contains quotation marks<br />"; } else { $ts_info .= "[2] the_date contains NO quotation marks<br />"; }
+    
+    
+    
     /*
     $ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
     //
