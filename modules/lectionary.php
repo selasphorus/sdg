@@ -471,7 +471,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //$the_date = htmlspecialchars_decode($the_date);
     //$the_date = html_entity_decode($the_date);
     $the_date = strip_tags($the_date);
-    //$the_date = stripslashes($the_date);
+    $the_date = stripslashes($the_date);
     //
     
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[2] the_date contains quotation marks<br />"; } else { $ts_info .= "[2] the_date contains NO quotation marks<br />"; }
