@@ -458,7 +458,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // Make sure the date hasn't been returned enclosed in quotation marks
     // e.g. "Sunday, February 5, 2023"
     $ts_info .= "var the_date is of type: ".gettype($the_date)."<br />";
-    $ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
+    //$ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
     //
     if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[1] the_date contains quotation marks<br />"; } else { $ts_info .= "[1] the_date contains NO quotation marks<br />"; }
     //
@@ -490,11 +490,11 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all: ".print_r($matches, true)."<br />"; }
     
     //*/
-    if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
-    if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
-    if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
-    if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
-    if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
+    //if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
+    //if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
+    //if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
+    //if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
+    //if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
     
     
     $date_bits = explode(", ",$the_date);
