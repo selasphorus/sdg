@@ -474,6 +474,7 @@ jQuery(document).ready(function($) {
         $(".filter-form select").each(function(){
 			$(this).val( $(this).find("option:first").val() );
         });
+        /*
         // Redirect to remove query vars
         let current_url = window.location.href;
 		let current_path = window.location.pathname;
@@ -482,6 +483,7 @@ jQuery(document).ready(function($) {
 		console.log( "current_path: "+current_path );
 		console.log( "query_str: "+query_str );
 		//window.location.href = current_path; // redirect
+		*/
     });
     
 	
