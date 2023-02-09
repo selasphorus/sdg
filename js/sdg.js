@@ -470,16 +470,27 @@ jQuery(document).ready(function($) {
     
 	$("#reset").click(function() {
 		//alert("click"); // tft
-        $("#filter-form select").each(function(){
+		// Reset form fields
+        $(".filter-form select").each(function(){
 			$(this).val( $(this).find("option:first").val() );
         });
+        // Redirect to remove query vars
+        let current_url = window.location.href;
+		let current_path = window.location.pathname;
+		let query_str = window.location.search;
+		console.log( "current_url: "+current_url );
+		console.log( "current_path: "+current_path );
+		console.log( "query_str: "+query_str );
+		//window.location.href = current_path; // redirect
     });
     
 	
-    /**** Events Calendar ***/
+    /**** Modal PopUp Windows ***/
 
     function getModalDimensions() {
 
+		// TODO: build in option to set dimensions based on content?
+		
         var winwidth = $(window).width();
         var winheight = $(window).height();
         var bodywidth = $(document.body).width();
@@ -492,6 +503,8 @@ jQuery(document).ready(function($) {
         //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
 
         //alert ("window dimensions: "+winwidth+" x "+winheight);
+        
+        // Determine dimensions for modal window
         if ( winwidth > 1300) {
             modalwidth = winwidth * 0.6;
         } else if ( winwidth > 800) {
@@ -501,7 +514,8 @@ jQuery(document).ready(function($) {
         } else {
             modalwidth = winwidth * 0.99;
         }
-
+        
+		// Determine positioning for modal window
         if ( winheight > 1200) {
             modalheight = winheight * 0.7;
             modal_at = "center top+25%";
@@ -516,6 +530,7 @@ jQuery(document).ready(function($) {
             modal_at = "center top+10%";
         }
 
+		// Round the numbers
         modalwidth = Math.round(modalwidth);
         modalheight = Math.round(modalheight);
 
