@@ -617,8 +617,8 @@ function build_sermon_filters() {
 	$info .= '<br />';
 	
 	$info .= '<div class="centeralign padded">';
-	$info .= '<input type="submit" id="filter" name="filter" value="Filter" />';
-	$info .= '<input type="submit" id="reset" name="reset" value="Clear Filters" />';
+	$info .= '<input type="submit" id="filter" name="submit" value="Filter" />';
+	$info .= '<input type="submit" id="reset" name="submit" value="Clear Filters" />';
 	$info .= '</div>';
 	$info .= '</form>';
 	
