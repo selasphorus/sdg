@@ -537,7 +537,7 @@ add_shortcode('sermon_filters', 'build_sermon_filters');
 // TODO: eventually: create general function for sdg_filterform ( $menus = array() ) for creation of filter forms for other content tyeps
 function build_sermon_filters() {
 	
-	$info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.esc_url( get_post_type_archive_link('sermon') ).'" method="get">';
+	$info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.esc_url( get_permalink() ).'" method="get">';
 	
 	// Years select menu
 	$years = range( 2001, date('Y') );
@@ -617,8 +617,8 @@ function build_sermon_filters() {
 	$info .= '<br />';
 	
 	$info .= '<div class="centeralign padded">';
-	$info .= '<input id="filter" type="submit" name="filter" value="Filter" />';
-	$info .= '<input id="reset" type="submit" name="reset" value="Clear Filters" />';
+	$info .= '<input type="submit" id="filter" name="filter" value="Filter" />';
+	$info .= '<input type="submit" id="reset" name="reset" value="Clear Filters" />';
 	$info .= '</div>';
 	$info .= '</form>';
 	
