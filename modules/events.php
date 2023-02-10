@@ -1838,7 +1838,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	}
 		//$booking_button_text = get_field( 'booking_button_text', $post_id );
 		
-		$booking_form = $EM_Event->output('#_BOOKINGFORM'); // ???
+		//$booking_form = $EM_Event->output('#_BOOKINGFORM'); // ???
+		$booking_form = "TEST";
 		
 		$info .= '<div class="single_event_registration">'; //  style="margin-top:1rem;"
 		
