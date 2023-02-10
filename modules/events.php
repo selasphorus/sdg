@@ -1829,17 +1829,18 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 		$booking_type = get_field( 'booking_type', $post_id );
 		$info = "";
 		
-    	if ( $booking_type == "application" ) { 
+		//$booking_button_text = get_field( 'booking_button_text', $post_id );
+    	if ( $booking_type == "application" ) {
     		$booking_button_text = "Submit an Application";
-    		$header_text = "Application for #_EVENTNAME, #_EVENTDATES";
+    		$submit_button_text = "Apply";
+    		$header_text = "Application for ".$EM_Event->output('#_EVENTNAME').", ".$EM_Event->output('#_EVENTDATES');
     	} else {
     		$booking_button_text = "Register for this Event";
-    		$header_text = "Registration for #_EVENTNAME, #_EVENTDATES";
+    		$submit_button_text = "Register";
+    		$header_text = "Registration for ".$EM_Event->output('#_EVENTNAME').", ".$EM_Event->output('#_EVENTDATES');
     	}
-		//$booking_button_text = get_field( 'booking_button_text', $post_id );
 		
-		$booking_form = $EM_Event->output('#_BOOKINGFORM'); // ???
-		//$booking_form = "TEST";
+		$booking_form = $EM_Event->output('#_BOOKINGFORM');
 		
 		$info .= '<div class="single_event_registration">'; //  style="margin-top:1rem;"
 		
