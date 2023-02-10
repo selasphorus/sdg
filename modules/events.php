@@ -1596,7 +1596,9 @@ function get_event_programs_containing_post( $post_id = null ) { // formerly get
 	
 }
 
+/*** EVENT BOOKINGS ***/
 
+// See sdg_placeholders
 
 /*** EVENTS/WEBCASTS ***/
 
@@ -1821,6 +1823,44 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         $atts = array('the_date'=>$EM_Event->start_date);
         $replace = get_day_title($atts);
         
+    } else if ( $result == '#_BOOKINGINFO' ) {
+    
+    	$booking_form_display = get_field( 'booking_form_display', $post_id );
+		$booking_type = get_field( 'booking_type', $post_id );
+		$info = "";
+		
+    	if ( $booking_type == "application" ) { 
+    		$booking_button_text = "Submit an Application";
+    		$header_text = "Application for #_EVENTNAME, #_EVENTDATES";
+    	} else {
+    		$booking_button_text = "Register for this Event";
+    		$header_text = "Registration for #_EVENTNAME, #_EVENTDATES";
+    	}
+		//$booking_button_text = get_field( 'booking_button_text', $post_id );
+		
+		$booking_form = $EM_Event->output('#_BOOKINGFORM'); // ???
+		
+		$info .= '<div class="single_event_registration">'; //  style="margin-top:1rem;"
+		
+		if ( $booking_form_display == "modal" ) {
+			
+			$info .= '<a href="#!" id="dialog_handle_'.$post_id.'" class="dialog_handle button">'.$booking_button_text.'</a>';
+			$info .= '<div id="dialog_content_'.$post_id.'" class="dialog dialog_content booking_form">';
+			$info .= '<h2 autofocus class="" style="text-transform: none;">'.$header_text.'</h2>';
+			$info .= $booking_form;
+			$info .= '</div>';
+			
+		} else {
+		
+			$info .= '<h2>'.$header_text.'</h2>';
+			$info .= $booking_form;
+			
+		}
+		
+		$info .= '</div>';
+    
+    	$replace = $info;
+    	
     }
     
     return $replace;
