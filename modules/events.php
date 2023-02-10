@@ -1833,11 +1833,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	if ( $booking_type == "application" ) {
     		$booking_button_text = "Submit an Application";
     		$submit_button_text = "Apply";
-    		$header_text = "Application for ".$EM_Event->output('#_EVENTNAME').", ".$EM_Event->output('#_EVENTDATES');
+    		$header_text = "Application for <em>".$EM_Event->output('#_EVENTNAME')."</em>, ".$EM_Event->output('#_EVENTDATES');
     	} else {
     		$booking_button_text = "Register for this Event";
     		$submit_button_text = "Register";
-    		$header_text = "Registration for ".$EM_Event->output('#_EVENTNAME').", ".$EM_Event->output('#_EVENTDATES');
+    		$header_text = "Registration for <em>".$EM_Event->output('#_EVENTNAME')."</em>, ".$EM_Event->output('#_EVENTDATES');
     	}
 		
 		$booking_form = $EM_Event->output('#_BOOKINGFORM');
@@ -1848,13 +1848,13 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 			
 			$info .= '<a href="#!" id="dialog_handle_'.$post_id.'" class="dialog_handle button">'.$booking_button_text.'</a>';
 			$info .= '<div id="dialog_content_'.$post_id.'" class="dialog dialog_content booking_form">';
-			$info .= '<h2 autofocus class="" style="text-transform: none;">'.$header_text.'</h2>';
+			$info .= '<h2 autofocus class="modal_header" style="text-transform: none;">'.$header_text.'</h2>';
 			$info .= $booking_form;
 			$info .= '</div>';
 			
 		} else {
 		
-			$info .= '<h2>'.$header_text.'</h2>';
+			$info .= '<h2 class="em_booking_header">'.$header_text.'</h2>';
 			$info .= $booking_form;
 			
 		}
