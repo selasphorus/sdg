@@ -1829,14 +1829,16 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 		$booking_type = get_field( 'booking_type', $post_id );
 		$info = "";
 		
-		//$booking_button_text = get_field( 'booking_button_text', $post_id );
+		//$submit_button_text = get_field( 'booking_button_text', $post_id ); // dbem_bookings_submit_button
+		$booking_button_text = get_field( 'booking_form_button_text', $post_id ); //
+		
     	if ( $booking_type == "application" ) {
-    		$booking_button_text = "Submit an Application";
-    		$submit_button_text = "Apply";
+    		if ( !$booking_button_text ) { $booking_button_text = "Submit an Application"; }
+    		//if ( !$submit_button_text ) { $submit_button_text = "Apply"; }    		
     		$header_text = "Application for <em>".$EM_Event->output('#_EVENTNAME')."</em>, ".$EM_Event->output('#_EVENTDATES');
     	} else {
-    		$booking_button_text = "Register for this Event";
-    		$submit_button_text = "Register";
+    		if ( !$booking_button_text ) { $booking_button_text = "Register for this Event"; }
+    		//if ( !$submit_button_text ) { $submit_button_text = "Submit Your Registration"; }
     		$header_text = "Registration for <em>".$EM_Event->output('#_EVENTNAME')."</em>, ".$EM_Event->output('#_EVENTDATES');
     	}
 		
@@ -1854,7 +1856,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 			
 		} else {
 		
-			$info .= '<h2 class="em_booking_header">'.$header_text.'</h2>';
+			//$info .= '<h2 class="em_booking_header">'.$header_text.'</h2>';
 			$info .= $booking_form;
 			
 		}
