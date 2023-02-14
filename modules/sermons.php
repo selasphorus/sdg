@@ -480,18 +480,32 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
         //$msg .= "<!-- bbook: $bbook -->";
         //scripture_citations > relationship to Readings > reading.book > relationship to Bible book/ bible_book.post_title
         
-        $meta_query_components[] =  array(
+        /*$meta_query_components[] =  array(
             'key'   => 'scripture_citations',
             'value' => '%'.$bbook.'%',
             'compare'   => 'LIKE',
-        );
+        );*/        
+        
+        $meta_query_components[] =  array(
+			'relation' => 'OR',
+			array(
+				'key'   => 'scripture_citations_txt',
+            	'value' => '%'.$bbook.'%',
+            	'compare'   => 'LIKE',
+			),
+			array(
+				'key'   => 'scripture_citations',
+            	'value' => '%'.$bbook.'%',
+            	'compare'   => 'LIKE',
+			)
+		);
     
     }
     
     // Topic
     if ($topic !== null) { 
 			
-        $msg .= "topic: $topic<br />";
+        //$msg .= "topic: $topic<br />";
         $tax_query = array(
             array(
                 'taxonomy' => 'sermon_topic',
