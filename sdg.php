@@ -1675,7 +1675,14 @@ function sdg_selectmenu ( $args = '' ) {
 	$orderby = $r['orderby'];
 	$value_field = $r['value_field'];
 	
-	if ( isset($_GET[$select_name]) ) { $selected = $_GET[$select_name]; } else { $selected = null; }
+	if ( isset($_GET[$select_name]) ) { 
+		$selected = $_GET[$select_name]; 
+	} else if ( isset($_GET[$tax]) ) { 
+		$select_name = $tax;
+		$selected = $_GET[$tax];
+	} else { 
+		$selected = null;
+	}
 	$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 	
 	$info .= '<span class="menu_label">'.$label.':</span>'; // Label preceding select menu
