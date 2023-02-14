@@ -505,7 +505,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     // Topic
     if ($topic !== null) { 
 			
-        //$msg .= "topic: $topic<br />";
+        $msg .= "topic: $topic<br />";
         $tax_query = array(
             array(
                 'taxonomy' => 'sermon_topic',
@@ -513,8 +513,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
                 'terms'    => $topic,
             ),
         );
-        //$msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
-        $args['tax_query'] = $tax_query;
+        $msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
+        //$args['tax_query'] = $tax_query;
         
     }
     
