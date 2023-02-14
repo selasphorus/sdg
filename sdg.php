@@ -1668,7 +1668,7 @@ function sdg_selectmenu ( $args = '' ) {
 	
 	if ($arr_values) {
 		
-		$ts_info .= '<pre>'.print_r($arr_values, true).'</pre>';
+		//$ts_info .= '<pre>'.print_r($arr_values, true).'</pre>';
 		
 		$selected = get_query_var( $select_name );
 		$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
