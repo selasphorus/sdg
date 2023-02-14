@@ -1649,16 +1649,16 @@ function sdg_selectmenu ( $args = '' ) {
 	$dropdown_menu = ""; // init
 	
 	$defaults = array(
-		'label'   => '',
-		'arr_values'   => '',
-		'arr_type'   => 'objects',
-		'select_name'   => '',
-		'meta_key'   => '', // redundant w/ select_name?
-		'show_any'   => true,
-		'show_other'   => false,
-		'tax'   => '',
-		'orderby'   => '',
-		'value_field'   => '',
+		'label'   	 	=> '',
+		'arr_values' 	=> null,
+		'arr_type'   	=> 'objects',
+		'select_name'	=> '',
+		'meta_key'   	=> '', // redundant w/ select_name?
+		'show_any'   	=> true,
+		'show_other' 	=> false,
+		'tax'   		=> '',
+		'orderby'   	=> '',
+		'value_field'   => 'term_id',
 	);
 	
 	// Parse incoming $args into an array and merge it with $defaults
