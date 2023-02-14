@@ -1634,6 +1634,7 @@ function sdg_select_distinct ( $args = '' ) {
 function sdg_selectmenu ( $args = '' ) {
 	
 	$info = "";
+	$ts_info = "";
 	$dropdown_menu = ""; // init
 	
 	$defaults = array(
@@ -1667,10 +1668,10 @@ function sdg_selectmenu ( $args = '' ) {
 	
 	if ($arr_values) {
 		
-		//$info .= '<pre>'.print_r($arr_values, true).'</pre>'; // tft
+		$ts_info .= '<pre>'.print_r($arr_values, true).'</pre>';
 		
 		$selected = get_query_var( $select_name );
-		if ( is_dev_site() ) { $info .= 'selected ['.$select_name.']: '.$selected.'<br />'; } // tft
+		$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 		
 		// Set up the select menu
 		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform">';
@@ -1725,6 +1726,7 @@ function sdg_selectmenu ( $args = '' ) {
 	} else if ($tax !== null) {
 		
 		$selected = get_query_var( $tax );
+		$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 		
 		$args = array(
 			'show_option_all' => 'Any '.$label,
