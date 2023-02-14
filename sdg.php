@@ -1675,7 +1675,7 @@ function sdg_selectmenu ( $args = '' ) {
 	$orderby = $r['orderby'];
 	$value_field = $r['value_field'];
 	
-	$selected = $_GET[$select_name];
+	if ( isset($_GET[$select_name]) ) { $selected = $_GET[$select_name]; } else { $selected = null; }
 	$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 	
 	$info .= '<span class="menu_label">'.$label.':</span>'; // Label preceding select menu
