@@ -1675,14 +1675,14 @@ function sdg_selectmenu ( $args = '' ) {
 	$orderby = $r['orderby'];
 	$value_field = $r['value_field'];
 	
+	$selected = $_GET[$select_name];
+	$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
+	
 	$info .= '<span class="menu_label">'.$label.':</span>'; // Label preceding select menu
 	
 	if ($arr_values) {
 		
 		//$ts_info .= '<pre>'.print_r($arr_values, true).'</pre>';
-		
-		$selected = get_query_var( $select_name );
-		$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 		
 		// Set up the select menu
 		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform">';
@@ -1735,9 +1735,6 @@ function sdg_selectmenu ( $args = '' ) {
 		$dropdown_menu .= '</select>';
 		
 	} else if ($tax !== null) {
-		
-		$selected = get_query_var( $tax );
-		$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 		
 		$args = array(
 			'show_option_all' => 'Any '.$label,
