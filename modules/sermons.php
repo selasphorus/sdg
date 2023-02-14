@@ -387,7 +387,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $meta_query_components = array();    
     
     // Year
-    if ($year === 'any' ) { $year = null; }
+    if ( $year === 'any' ) { $year = null; }
     if ( isset( $year ) && is_numeric( $year ) ) {
         //$msg .= "year: $year<br />"; // tft
         $meta_query_components[] =  array(
@@ -503,7 +503,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     }
     
     // Topic
-    if ($topic !== null) { 
+    if ( is_numeric($topic) ) { // $topic !== null
 			
         $msg .= "topic: $topic<br />";
         $tax_query = array(
@@ -516,6 +516,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
         $msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
         //$args['tax_query'] = $tax_query;
         
+    } else if ( $topic ) {
+    	$msg .= "topic: [$topic]<br />";
     }
     
     // Finalize meta_query
