@@ -1670,7 +1670,7 @@ function sdg_selectmenu ( $args = '' ) {
 		//$info .= '<pre>'.print_r($arr_values, true).'</pre>'; // tft
 		
 		$selected = get_query_var( $select_name );
-		//if ( is_dev_site() ) { $info .= 'selected ['.$select_name.']: '.$selected.'<br />'; } // tft
+		if ( is_dev_site() ) { $info .= 'selected ['.$select_name.']: '.$selected.'<br />'; } // tft
 		
 		// Set up the select menu
 		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform">';
