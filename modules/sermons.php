@@ -537,7 +537,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $msg .= '<div class="troubleshooting">args: <pre>'.print_r($args, true).'</pre></div>';
     //$msg .= '<div class="troubleshooting">posts: <pre>'.print_r($posts, true).'</pre></div>';
     
-    $msg = "<!-- END find_matching_sermons -->";
+    $msg .= "<!-- END find_matching_sermons -->";
     
     $info['args'] = $args;
     $info['msg'] = $msg;
