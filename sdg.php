@@ -1746,7 +1746,7 @@ function sdg_selectmenu ( $args = '' ) {
 		
 		$args = array(
 			'show_option_all' => 'Any '.$label,
-            'name' => 'topic', // $tax
+            'name' => $select_name, // $tax
             'taxonomy' => $tax,
             'orderby' => $orderby,
             'echo' => false,

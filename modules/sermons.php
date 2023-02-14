@@ -505,7 +505,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     // Topic
     if ( is_numeric($topic) ) { // $topic !== null
 			
-        $msg .= "topic: $topic<br />";
+        //$msg .= "topic: $topic<br />";
         $tax_query = array(
             array(
                 'taxonomy' => 'sermon_topic',
@@ -513,8 +513,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
                 'terms'    => $topic,
             ),
         );
-        $msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
-        //$args['tax_query'] = $tax_query;
+        //$msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
+        $args['tax_query'] = $tax_query;
         
     } else if ( $topic ) {
     	$msg .= "topic: [$topic]<br />";
@@ -534,8 +534,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $msg .= '<div class="troubleshooting">args: <pre>'.print_r($args, true).'</pre></div>';
     
     // Run the query
-    $posts = array(); // tft
-    //$posts = new WP_Query( $args ); //$arr_sermons = $result->posts;       
+    //$posts = array(); // tft
+    $posts = new WP_Query( $args ); //$arr_sermons = $result->posts;       
     //$msg .= '<div class="troubleshooting">posts: <pre>'.print_r($posts, true).'</pre></div>';
     
     $msg .= "<!-- END find_matching_sermons -->";
@@ -558,7 +558,7 @@ function build_sermon_filters() {
 	
 	// Years select menu
 	$years = range( 2001, date('Y') );
-	$info .= sdg_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'sermon_date' ) );
+	$info .= sdg_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'year' ) );
 	$info .= '<br />';
 	
 	// Preachers menu
@@ -588,7 +588,7 @@ function build_sermon_filters() {
     // Given that the number of ids included is so limited, the select_distinct query isn't currently necessary. Use get_posts instead.
 	//$author_values = sdg_select_distinct( array ( 'post_type' => 'person', 'meta_key' => 'sermon_author', 'arr_include' => $author_ids ) ); 
     
-	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'sermon_author', 'show_other' => true ) ) ;
+	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'author', 'show_other' => true ) ) ;
 	$info .= '<br />';
 	
 	// Bible Books menu
@@ -605,7 +605,7 @@ function build_sermon_filters() {
 	if ($bbook_results->have_posts()) {
 		
 		$bbook_values = array();
-		$bbook_values["optgroup_label"] = "Old Testament";
+		$bbook_values["optgroup_label"] = "-- Old Testament --";
 		
 		while ( $bbook_results->have_posts() ) : $bbook_results->the_post();
 		
@@ -617,9 +617,9 @@ function build_sermon_filters() {
 		
 			// Insert the optgroup labels for old and new Testaments, where relevant
 			if ($bbook_title == "Malachi") {
-				$bbook_values["optgroup_label2"] = "The Apocrypha";
+				$bbook_values["optgroup_label2"] = "-- The Apocrypha --";
 			} else if ($bbook_title == "2 Maccabees" || $bbook_title == "II Maccabees") {
-				$bbook_values["optgroup_label3"] = "New Testament";
+				$bbook_values["optgroup_label3"] = "-- New Testament --";
 			}
 		
 		endwhile;
@@ -630,7 +630,7 @@ function build_sermon_filters() {
 	}
 	
 	// Sermon Topics menu
-	$info .= sdg_selectmenu ( array( 'label' => 'Topic', 'orderby' => 'name', 'tax' => 'sermon_topic' ) ) ;
+	$info .= sdg_selectmenu ( array( 'label' => 'Topic', 'orderby' => 'name', 'select_name' => 'topic', 'tax' => 'sermon_topic' ) ) ;
 	$info .= '<br />';
 	
 	$info .= '<div class="centeralign padded">';
