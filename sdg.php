@@ -1678,12 +1678,13 @@ function sdg_selectmenu ( $args = '' ) {
 	if ( isset($_GET[$select_name]) ) { 
 		$selected = $_GET[$select_name]; 
 	} else if ( isset($_GET[$tax]) ) { 
-		$select_name = $tax;
+		//$select_name = $tax;
 		$selected = $_GET[$tax];
+		$ts_info .= 'selected ['.$tax.']: '.$selected.'<br />';
 	} else { 
 		$selected = null;
 	}
-	$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
+	//$ts_info .= 'selected ['.$select_name.']: '.$selected.'<br />';
 	
 	$info .= '<span class="menu_label">'.$label.':</span>'; // Label preceding select menu
 	
