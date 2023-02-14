@@ -1745,6 +1745,7 @@ function sdg_selectmenu ( $args = '' ) {
 	}
 	
 	$info .= $dropdown_menu;
+	$info .= $ts_info;
 	
 	return $info;
 
