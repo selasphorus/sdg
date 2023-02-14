@@ -457,6 +457,17 @@ function sdg_scripts_method() {
     
 }
 
+// Add custom query vars
+add_filter( 'query_vars', 'sdg_query_vars' );
+function sdg_query_vars( $qvars ) {
+	$qvars[] = 'devmode';
+	$qvars[] = 'sermon_author';
+	$qvars[] = 'sermon_date';
+	$qvars[] = 'bbook';
+	$qvars[] = 'sermon_topic';
+	$qvars[] = 'y'; // = year -- for date_calculations (and - ?)
+    return $qvars;
+}
 
 // Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
 add_filter( 'get_edit_post_link', 'sdg_add_post_type_query_var', 10, 3 );
