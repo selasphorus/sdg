@@ -509,7 +509,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
         $tax_query = array(
             array(
                 'taxonomy' => 'sermon_topic',
-                //'field'    => 'slug',
+                //'field'    => 'slug', // Default value is ‘term_id’
                 'terms'    => $topic,
             ),
         );
@@ -529,12 +529,11 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     }
     if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
     
-    // Run the query
-    //$sermons = new WP_Query( $args );
-    $posts = new WP_Query( $args );
-    //$arr_sermons = $result->posts;
-    
     $msg .= '<div class="troubleshooting">args: <pre>'.print_r($args, true).'</pre></div>';
+    
+    // Run the query
+    $posts = array(); // tft
+    //$posts = new WP_Query( $args ); //$arr_sermons = $result->posts;       
     //$msg .= '<div class="troubleshooting">posts: <pre>'.print_r($posts, true).'</pre></div>';
     
     $msg .= "<!-- END find_matching_sermons -->";
