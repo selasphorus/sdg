@@ -689,16 +689,16 @@ function update_sermon_bbooks( $sermon_id = null ) {
 	}
 
 	// Check event_ids to see if they're already in the repertoire_events array and add them if not
-	foreach($scripture_citations as $reading) {
+	foreach($scripture_citations as $reading_id) {
 		// get bbook
-		$info .= "Reading: ".print_r($reading,true)."<br />";
-		/*$bbook_id = get_field('book', $reading->ID, false);
+		//$info .= "Reading: ".print_r($reading,true)."<br />";
+		$bbook_id = get_field('book', $reading_id, false);
 		if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
 			$sermon_bbooks[] = $bbook_id;
 			$updates = true;
 		} else {
 			$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
-		}*/
+		}
 	}
 	
 	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
