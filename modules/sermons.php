@@ -507,7 +507,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     }
     
     // Topic
-    if ( is_numeric($topic) ) { // $topic !== null
+    if ( is_numeric($topic) && $topic != 0 ) { // $topic !== null
 			
         //$msg .= "topic: $topic<br />";
         $tax_query = array(
