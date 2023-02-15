@@ -1570,7 +1570,12 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
       
     } else if ( $post_type == "sermon" ) {
     
-    	update_sermon_bbooks( $post_id );
+    	sdg_log( "[sspc] update the sermon_bbooks" );
+    	if ( update_sermon_bbooks( $post_id ) ) {
+    		sdg_log( "[sspc] Success! Updated the sermon_bbooks" );
+    	} else {
+    		sdg_log( "[sspc] ERROR! Failed to update the sermon_bbooks" );
+    	}
     	
     } // end post_type check
 
