@@ -692,8 +692,8 @@ function update_sermon_bbooks( $sermon_id = null ) {
 	foreach($scripture_citations as $reading_id) {
 		// get bbook
 		//$info .= "Reading: ".print_r($reading,true)."<br />";
-		$bbook_id = get_field('book', $reading_id, false);
-		$info .= "bbook_id: $bbook_id (reading $reading_id).<br />";
+		$book = get_field('book', $reading_id, false);
+		$info .= "bbook_id: ".$book->ID." (reading $reading_id).<br />";
 		/*if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
 			$sermon_bbooks[] = $bbook_id;
 			$updates = true;
