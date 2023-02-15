@@ -295,10 +295,12 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";		
 	}	
 	if ( !empty($citations) ) {
-		$info .= "Scripture citation(s): ";
-		if ( is_singular('sermon') ) { $info .= '<p class="citations">'; } else { $info .= '<p>'; }
-		$info .= $citations;
-		$info .= '</p>';
+		$citations = "Scripture citation(s): ".$citations;
+		if ( is_singular('sermon') ) { 
+			$info .= '<p class="citations">'.$citations.'</p>'; 
+		} else {
+			$info .= $citations;
+		}
 	}	
 	
 	if ( $sermon_audio == true ) {
