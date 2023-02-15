@@ -485,7 +485,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
         //scripture_citations > relationship to Readings > reading.book > relationship to Bible book/ bible_book.post_title
         
         // TODO: get bbook ID
-        $bbook_id = get_page_by_title( $bbook, OBJECT, 'bible_book' ); //get_page_by_title( string $page_title, string $output = OBJECT, string|array $post_type = 'page' ): WP_Post|array|null
+        $bbook_obj = get_page_by_title( $bbook, OBJECT, 'bible_book' ); //get_page_by_title( string $page_title, string $output = OBJECT, string|array $post_type = 'page' ): WP_Post|array|null
+        if ( $bbook_obj ) { $bbook_id = $bbook_obj->ID; } else { $bbook_id = null; }
         
         /*$meta_query_components[] =  array(
             'key'   => 'scripture_citations',
