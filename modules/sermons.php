@@ -196,13 +196,13 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	// Display the sermon author
     $authors = get_field('sermon_author', $post_id);
-	if ($authors) { 
-        
+	if ($authors) {
         foreach( $authors as $author ){
             // TODO: hyperlink author(s)?
             $info .= '<span class="preacher author">'.get_the_title( $author->ID ).'</span>';
         }
 		//$info .= '<span class="preacher author">'.the_field('sermon_author', $post_id).'</span>';
+		$info .= '<br />';
 	}
     
 	// Show the link(s) to the Service(s) at which the sermon was delivered
