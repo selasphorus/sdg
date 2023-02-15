@@ -301,7 +301,14 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		} else {
 			$info .= $citations;
 		}
-	}	
+	}
+	
+	// Related Bbooks
+    $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
+	if ( empty($sermon_bbooks) && is_dev_site() ) {
+		// Field repertoire_events is empty -> check to see if updates are in order
+		$info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>';
+	}
 	
 	if ( $sermon_audio == true ) {
         $info .= "<hr />";
