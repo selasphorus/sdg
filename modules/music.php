@@ -69,7 +69,7 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 	$info .= "+++++<br /><br />";
 	
 	return $info;
-							
+	
 }
 
 /* ~~~ Display functions ~~~ */
