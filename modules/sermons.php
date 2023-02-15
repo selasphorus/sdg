@@ -547,15 +547,16 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $msg .= '<div class="troubleshooting">args: <pre>'.print_r($args, true).'</pre></div>';
     
     // Run the query
-    $posts = new WP_Query( $args ); //$arr_sermons = $result->posts;
-    $msg .= '<div class="troubleshooting"># posts found:'.count($posts).'</div>';
+    $result = new WP_Query( $args );
+    $arr_sermons = $result->posts;
+    $msg .= '<div class="troubleshooting">count arr_sermons:'.count($arr_sermons).'</div>';
     //$msg .= '<div class="troubleshooting">posts: <pre>'.print_r($posts, true).'</pre></div>';
     
     $msg .= "<!-- END find_matching_sermons -->";
     
     $info['args'] = $args;
     $info['msg'] = $msg;
-    $info['posts'] = $posts;
+    $info['posts'] = $arr_sermons; //$info['posts'] = $posts;
     
     return $info;
     
