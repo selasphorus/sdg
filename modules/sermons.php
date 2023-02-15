@@ -502,7 +502,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
             	'compare'   => 'LIKE',
 			),
 			array(
-				'key'   => 'bbooks',
+				'key'   => 'sermon_bbooks',
 				'value' => '"' . $bbook_id . '"',
             	//'value' => '%'.$bbook_id.'%',
             	'compare'   => 'LIKE',
@@ -660,4 +660,55 @@ function build_sermon_filters() {
 	
 }
 
+
+/* ~~~ Admin/Dev functions ~~~ */
+function update_sermon_bbooks( $sermon_id = null ) {
+	
+	$info = "";
+	$updates = false;
+	
+	$info .= "About to update sermon_bbooks for sermon with ID:".$sermon_id."<br />";
+	
+	// get the scripture_citations & sermon_bbooks field values
+	$scripture_citations = get_field('scripture_citations', $sermon_id, false);
+	$sermon_bbooks = get_field('sermon_bbooks', $sermon_id, false);
+	
+	if ( !empty($sermon_bbooks) ) {
+		$info .= "This sermon currently has the following sermon_bbooks: <pre>".print_r($sermon_bbooks,true)."</pre>";								
+		if ( !is_array($sermon_bbooks) ) { $sermon_bbooks = explode( ", ",$sermon_bbooks ); } // If it's not an array already, make it one		
+	} else {
+		$info .= "This sermon currently has no sermon_bbooks.<br />";
+		$sermon_bbooks = array(); // No repertoire_events set yet, so prep an empty array
+	}
+
+	// Check event_ids to see if they're already in the repertoire_events array and add them if not
+	foreach($scripture_citations as $reading) {
+		// get bbook
+		$bbook_id = get_field('book', $reading->ID, false);
+		if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
+			$sermon_bbooks[] = $bbook_id;
+			$updates = true;
+		} else {
+			$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
+		}
+	}
+	
+	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
+	if ( $updates == true ) {
+		if ( update_field('sermon_bbooks', $sermon_bbooks, $sermon_id ) ) {
+			$info .= "Success! sermon_bbooks field updated<br />";
+			$info .= "Updated sermon_bbooks: <pre>".print_r($sermon_bbooks,true)."</pre>";
+		} else {
+			$info .= "phooey. update failed.<br />";
+		}
+	} else {
+		$info .= "No update needed.<br />";
+	}
+	
+	$info .= "+++++<br /><br />";
+	
+	return $info;
+	
+}
+	
 ?>
