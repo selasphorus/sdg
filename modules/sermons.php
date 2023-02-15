@@ -503,7 +503,8 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 			),
 			array(
 				'key'   => 'bbooks',
-            	'value' => '%'.$bbook_id.'%',
+				'value' => '"' . $bbook_id . '"',
+            	//'value' => '%'.$bbook_id.'%',
             	'compare'   => 'LIKE',
 			)/*,
 			array(
