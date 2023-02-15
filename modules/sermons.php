@@ -278,28 +278,28 @@ function get_cpt_sermon_meta( $post_id = null ) {
     }
 	
     // Scripture Citations
-    $citations = get_field('scripture_citations', $post_id);
-	if ( $citations ) {
-		
-        if ( is_singular('sermon') ) { $info .= '<p class="citations">'; } else { $info .= '<p>'; }
-        
-        $info .= "Scripture citation(s): ";
-        
-        foreach( $citations as $citation ){
+    $citations = "";
+    $readings = get_field('scripture_citations', $post_id);
+	if ( $readings ) {		
+        foreach( $readings as $readings ){
             // TODO: add hyperlinks to Bible Verses (readings)
-            $info .= get_the_title( $citation->ID )."; ";
+            $citations .= get_the_title( $reading->ID )."; ";
         }
-        
         if ( substr($info, -2) == "; " ) { // count($citations) > 0 && 
             // Trim trailing semicolon and space
-            $info = substr($info, 0, -2);
-        }
+            $citations = substr($info, 0, -2);
+        }        
+	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
+		$citations = the_field('scripture_citations_txt', $post_id)."<br />";		
+	}	
+	if ( !empty($citations) ) {
+		$info .= "Scripture citation(s): ";
+		if ( is_singular('sermon') ) { $info .= '<p class="citations">'; } else { $info .= '<p>'; }
+		$info .= $citations;
 		$info .= '</p>';
-        
-	} else if ( get_field('scripture_citations_txt', $post_id) ) {
-        $info .= "Scripture citation(s): ";
-		$info .= the_field('scripture_citations_txt', $post_id)."<br />";
-	} else if ( $sermon_audio == true ) {
+	}	
+	
+	if ( $sermon_audio == true ) {
         $info .= "<hr />";
     }
     
