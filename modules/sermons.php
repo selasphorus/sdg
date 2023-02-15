@@ -201,8 +201,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             // TODO: hyperlink author(s)?
             $info .= '<span class="preacher author">'.get_the_title( $author->ID ).'</span>';
         }
-		//$info .= '<span class="preacher author">'.the_field('sermon_author', $post_id).'</span>';
-		$info .= '<br />';
+		//$info .= '<span class="preacher author">'.the_field('sermon_author', $post_id).'</span>';		
 	}
     
 	// Show the link(s) to the Service(s) at which the sermon was delivered
@@ -215,6 +214,9 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }      
     }
     
+    if ( !empty($authors) || !empty($related_events) ) {
+    	$info .= '<br />';
+    }
     // TODO: try, instead, matching sermon_date to _event_start_date? But what if a sermon was delivered on multiple occasions...?
     
     /*
