@@ -544,15 +544,17 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     }
     if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
     
-    $msg .= '<div class="troubleshooting">args: <pre>'.print_r($args, true).'</pre></div>';
+    $msg .= '<!-- args: <pre>'.print_r($args, true).'</pre> -->';
     
     // Run the query
     $result = new WP_Query( $args );
     $arr_sermons = $result->posts;
-    $msg .= '<div class="troubleshooting">count arr_sermons:'.count($arr_sermons).'</div>';
+    $msg .= '<!-- count arr_sermons:'.count($arr_sermons).' -->';
+    $msg .= "<!-- Last SQL-Query: {$result->request} -->"; // tft
     //$msg .= '<div class="troubleshooting">posts: <pre>'.print_r($posts, true).'</pre></div>';
     
     $msg .= "<!-- END find_matching_sermons -->";
+    
     
     $info['args'] = $args;
     $info['msg'] = $msg;
