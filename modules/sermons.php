@@ -283,7 +283,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
     $citations = "";
     $readings = get_field('scripture_citations', $post_id);
 	if ( $readings ) {		
-        foreach( $readings as $readings ){
+        foreach( $readings as $reading ){
             // TODO: add hyperlinks to Bible Verses (readings)
             $citations .= '<span class="reading">'.get_the_title( $reading->ID )."</span>; ";
         }
