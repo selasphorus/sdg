@@ -1367,7 +1367,6 @@ function clean_slug( $post_id ) {
 // TODO: figure this out!
 
 */
-
 add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
 function sdg_save_post_callback( $post_id, $post, $update ) {
     
@@ -1466,7 +1465,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
         }
         
-    } else if ( $post_type == "repertoire" || $post_type == "edition" ) { //
+    } else if ( $post_type == "repertoire" || $post_type == "edition" ) {
         
         // TODO: check to see if this save is happening via WP All Import and if so, skip t4m changes
         
@@ -1568,7 +1567,11 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         /*if ( $new_title_clean = make_clean_title( $post_id ) ) {
             $display_title = $new_title_clean;
         }*/
-        
+      
+    } else if ( $post_type == "sermon" ) {
+    
+    	update_sermon_bbooks( $post_id );
+    	
     } // end post_type check
 
 }
