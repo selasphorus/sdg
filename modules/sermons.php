@@ -498,7 +498,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 			'relation' => 'OR',
 			array(
 				'key'   => 'scripture_citations_txt',
-            	'value' => '%'.$bbook.'%',
+            	'value' => $bbook,//'value' => '%'.$bbook.'%',
             	'compare'   => 'LIKE',
 			),
 			array(
