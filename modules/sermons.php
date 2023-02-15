@@ -283,14 +283,14 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	if ( $readings ) {		
         foreach( $readings as $readings ){
             // TODO: add hyperlinks to Bible Verses (readings)
-            $citations .= get_the_title( $reading->ID )."; ";
+            $citations .= '<span class="reading">'.get_the_title( $reading->ID )."</span>; ";
         }
         if ( substr($info, -2) == "; " ) { // count($citations) > 0 && 
             // Trim trailing semicolon and space
             $citations = substr($info, 0, -2);
         }        
 	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
-		$citations = the_field('scripture_citations_txt', $post_id)."<br />";		
+		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";		
 	}	
 	if ( !empty($citations) ) {
 		$info .= "Scripture citation(s): ";
