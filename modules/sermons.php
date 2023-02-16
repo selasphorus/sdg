@@ -693,7 +693,8 @@ function update_sermon_bbooks( $sermon_id = null ) {
 		// get bbook
 		//$info .= "Reading: ".print_r($reading,true)."<br />";
 		$book = get_field('book', $reading_id, false);
-		$info .= "bbook_id: ".$book->ID." (reading $reading_id).<br />";
+		$info .= "book: ".print_r($book,true)." (reading_id: $reading_id)<br />";
+		//$info .= "bbook_id: ".$book->ID." (reading $reading_id).<br />";
 		/*if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
 			$sermon_bbooks[] = $bbook_id;
 			$updates = true;
