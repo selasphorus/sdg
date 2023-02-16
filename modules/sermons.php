@@ -771,7 +771,7 @@ function update_sermon_citations( $sermon_id = null ) {
 				if ( $book_id = post_exists($book) ) {
 					$info .= "book matches record with ID: '".$book_id."'<br />";
 				}
-				$chapterverses = substr( $txt, strpos($txt," ") );
+				$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
 				$info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
 				// WIP...
 				
