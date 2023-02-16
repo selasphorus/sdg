@@ -287,7 +287,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             // TODO: add hyperlinks to Bible Verses (readings)
             $citations .= '<span class="reading">'.get_the_title( $reading->ID )."</span>; ";
         }
-        if ( substr($citations, -2) == "; " ) { $citations = substr($info, 0, -2); } // Trim trailing semicolon and space
+        if ( substr($citations, -2) == "; " ) { $citations = substr($citations, 0, -2); } // Trim trailing semicolon and space
 	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
 		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";		
 	}
