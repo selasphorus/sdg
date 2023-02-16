@@ -696,7 +696,7 @@ function update_sermon_bbooks( $sermon_id = null ) {
 			$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
 			$info .= "bbook_id: ".$book[0]."<br />";
 			$bbook_id = $book[0];
-			if ( !empty($bbook_id) && !in_array( $bbook_id, $sermon_bbooks ) ) {
+			if ( !empty($bbook_id) && is_numeric($bbook_id) && !in_array( $bbook_id, $sermon_bbooks ) ) {
 				$sermon_bbooks[] = $bbook_id;
 				$updates = true;
 			} else {
@@ -770,42 +770,50 @@ function update_sermon_citations( $sermon_id = null ) {
 				//preg_match($pattern, $str, $matches);
 				if ( preg_match('/([I]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
 					$book = $matches[1];
+					$info .= "matches: <pre>".print_r($matches,true)."</pre>";
 				} else if ( preg_match('/([0-3]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
 					$book = $matches[1];
+					$info .= "matches: <pre>".print_r($matches,true)."</pre>";
 				} else {
 					$book = substr( $txt, 0, strpos($txt," ") );
 				}
 				
 				$info .= "book extracted from txt: '".$book."'<br />";
 				if ( $book_id = post_exists($book) ) {
-					$info .= "book matches record with ID: '".$book_id."'<br />";
+					$info .= "book matches record with ID: ".$book_id."<br />";
+				} else {
+					$info .= "No book match found.<br />";
 				}
 				$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
 				$info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
 				
-				// Create new reading post
-				$args = array(
-					'post_title'    => wp_strip_all_tags( $txt ),
-					'post_type'   	=> 'reading',
-					'post_status'   => 'publish',
-					'post_author'   => 1, // get_current_user_id()
-					'meta_input'   => array(
-						'book' => $book_id,
-						'chapterverses' => $chapterverses,
-					),
-				);
+				if ( $book_id && $chapterverses ) {
+				
+					// Create new reading post
+					$args = array(
+						'post_title'    => wp_strip_all_tags( $txt ),
+						'post_type'   	=> 'reading',
+						'post_status'   => 'publish',
+						'post_author'   => 1, // get_current_user_id()
+						'meta_input'   => array(
+							'book' => $book_id,
+							'chapterverses' => $chapterverses,
+						),
+					);
 
-				// Insert the post into the database
-				/*$post_id = wp_insert_post($args);
-				if ( !is_wp_error($post_id) ) {
-				  	// the post is valid
-				  	$info .= "Success! new reading record created<br />";
-				  	$info .= "reading args: <pre>".print_r($args,true)."</pre>";
-				  	$scripture_citations[] = $post_id;
-					$updates = true;
-				} else {
-					$info .= $post_id->get_error_message();
-				}*/
+					// Insert the post into the database
+					/*$post_id = wp_insert_post($args);
+					if ( !is_wp_error($post_id) ) {
+						// the post is valid
+						$info .= "Success! new reading record created<br />";
+						$info .= "reading args: <pre>".print_r($args,true)."</pre>";
+						$scripture_citations[] = $post_id;
+						$updates = true;
+					} else {
+						$info .= $post_id->get_error_message();
+					}*/
+				
+				}
 			}
 		}
 	}
