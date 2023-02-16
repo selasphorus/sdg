@@ -688,19 +688,21 @@ function update_sermon_bbooks( $sermon_id = null ) {
 		$sermon_bbooks = array(); // No repertoire_events set yet, so prep an empty array
 	}
 
-	// Check event_ids to see if they're already in the repertoire_events array and add them if not
-	foreach($scripture_citations as $reading_id) {
-		// get bbook
-		//$info .= "Reading: ".print_r($reading,true)."<br />";
-		$book = get_field('book', $reading_id, false);
-		//$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
-		//$info .= "bbook_id: ".$book[0]."<br />";
-		$bbook_id = $book[0];
-		if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
-			$sermon_bbooks[] = $bbook_id;
-			$updates = true;
-		} else {
-			//$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
+	// Check reading bbooks to see if they're already in the sermon_bbooks array and add them if not
+	if ( $scripture_citations ) {
+		foreach( $scripture_citations as $reading_id ) {
+			// get bbook
+			//$info .= "Reading: ".print_r($reading,true)."<br />";
+			$book = get_field('book', $reading_id, false);
+			//$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
+			//$info .= "bbook_id: ".$book[0]."<br />";
+			$bbook_id = $book[0];
+			if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
+				$sermon_bbooks[] = $bbook_id;
+				$updates = true;
+			} else {
+				//$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
+			}
 		}
 	}
 	
