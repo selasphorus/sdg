@@ -29,6 +29,10 @@ $plugin_path = plugin_dir_path( __FILE__ );
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
+if ( ! is_admin() ) {
+    require_once( ABSPATH . 'wp-admin/includes/post.php' ); // so that we can run functions like post_exists on the front end
+}
+
 // Register our sdg_settings_init to the admin_init action hook.
 add_action( 'admin_init', 'sdg_settings_init' );
 
