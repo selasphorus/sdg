@@ -766,7 +766,15 @@ function update_sermon_citations( $sermon_id = null ) {
 				$info .= "No post found matching title '".$txt."'<br />";
 				// Create a new reading record and link it to this sermon record
 				// Extract book; chapterverses from txt
-				$book = substr( $txt, 0, strpos($txt," ") );
+				// TODO: deal w/ books beginning w/ 1, 2, or 3
+				//preg_match($pattern, $str, $matches);
+				if ( preg_match('/([0-9]+\s[A-Za-z]+)(.*)/', $txt, $matches) ) {
+					$book = $matches[0][0];
+					//$book = preg_replace('/([0-9]+)_(.*)/', '$2', $event_title);
+				} else {
+					$book = substr( $txt, 0, strpos($txt," ") );
+				}
+				
 				$info .= "book extracted from txt: '".$book."'<br />";
 				if ( $book_id = post_exists($book) ) {
 					$info .= "book matches record with ID: '".$book_id."'<br />";
@@ -781,13 +789,13 @@ function update_sermon_citations( $sermon_id = null ) {
 					'post_status'   => 'publish',
 					'post_author'   => 1, // get_current_user_id()
 					'meta_input'   => array(
-						'book' => $book,
+						'book' => $book_id,
 						'chapterverses' => $chapterverses,
 					),
 				);
 
 				// Insert the post into the database
-				$post_id = wp_insert_post($args);
+				/*$post_id = wp_insert_post($args);
 				if ( !is_wp_error($post_id) ) {
 				  	// the post is valid
 				  	$info .= "Success! new reading record created<br />";
@@ -796,7 +804,7 @@ function update_sermon_citations( $sermon_id = null ) {
 					$updates = true;
 				} else {
 					$info .= $post_id->get_error_message();
-				}
+				}*/
 			}
 		}
 	}
