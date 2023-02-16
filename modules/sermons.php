@@ -768,9 +768,10 @@ function update_sermon_citations( $sermon_id = null ) {
 				// Extract book; chapterverses from txt
 				// TODO: deal w/ books beginning w/ 1, 2, or 3
 				//preg_match($pattern, $str, $matches);
-				if ( preg_match('/([0-9]+\s[A-Za-z]+)(.*)/', $txt, $matches) ) {
-					$book = $matches[0][0];
-					//$book = preg_replace('/([0-9]+)_(.*)/', '$2', $event_title);
+				if ( preg_match('/([I]+\s[A-Za-z]+)(.*)/', $txt, $matches) ) {
+					$book = $matches[1];
+				} else if ( preg_match('/([0-3]+\s[A-Za-z]+)(.*)/', $txt, $matches) ) {
+					$book = $matches[1];
 				} else {
 					$book = substr( $txt, 0, strpos($txt," ") );
 				}
