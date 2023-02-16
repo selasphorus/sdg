@@ -696,7 +696,7 @@ function update_sermon_bbooks( $sermon_id = null ) {
 			$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
 			$info .= "bbook_id: ".$book[0]."<br />";
 			$bbook_id = $book[0];
-			if ( !in_array( $bbook_id, $sermon_bbooks ) ) {
+			if ( !empty($bbook_id) && !in_array( $bbook_id, $sermon_bbooks ) ) {
 				$sermon_bbooks[] = $bbook_id;
 				$updates = true;
 			} else {
