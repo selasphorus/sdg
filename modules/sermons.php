@@ -288,8 +288,11 @@ function get_cpt_sermon_meta( $post_id = null ) {
             $citations .= '<span class="reading">'.get_the_title( $reading->ID )."</span>; ";
         }
         if ( substr($citations, -2) == "; " ) { $citations = substr($citations, 0, -2); } // Trim trailing semicolon and space
-	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
-		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";	
+	} 
+	if ( get_field('scripture_citations_txt', $post_id) ) {	
+		if ( !$readings ) {
+			$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";	
+		}
 		$info .= '<div class="troubleshooting">'.update_sermon_citations( $post_id ).'</div>'; // This should be removed or commented out eventually, once the fcn has been run for all sermons			
 	}
 	
@@ -756,6 +759,9 @@ function update_sermon_citations( $sermon_id = null ) {
 				$info .= "reading found matching title '".$txt."' with ID: ".$reading_id."<br />";
 			} else {
 				$info .= "No post found matching title '".$txt."'<br />";
+				// Create a new reading record and link it to this sermon record
+				// Extract book; chapterverses from txt
+				
 			}
 			//$info .= "txt: ".print_r($reading,true)."<br />";
 			//$book = get_field('book', $reading_id, false);
