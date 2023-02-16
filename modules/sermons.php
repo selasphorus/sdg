@@ -766,6 +766,11 @@ function update_sermon_citations( $sermon_id = null ) {
 				$info .= "No post found matching title '".$txt."'<br />";
 				// Create a new reading record and link it to this sermon record
 				// Extract book; chapterverses from txt
+				$book = substr( $txt, 0, strpos($txt," ") );
+				$info .= "book extracted from txt: '".$book."'<br />";
+				if ( $book_id = post_exists($book) ) {
+					$info .= "book matches record with ID: '".$book_id."'<br />";
+				}
 				// WIP...
 			}
 		}
