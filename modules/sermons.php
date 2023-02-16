@@ -282,18 +282,16 @@ function get_cpt_sermon_meta( $post_id = null ) {
     // Scripture Citations
     $citations = "";
     $readings = get_field('scripture_citations', $post_id);
-	if ( $readings ) {		
-        foreach( $readings as $reading ){
+	if ( $readings ) {
+        foreach( $readings as $reading ) {
             // TODO: add hyperlinks to Bible Verses (readings)
             $citations .= '<span class="reading">'.get_the_title( $reading->ID )."</span>; ";
         }
-        if ( substr($info, -2) == "; " ) { // count($citations) > 0 && 
-            // Trim trailing semicolon and space
-            $citations = substr($info, 0, -2);
-        }        
+        if ( substr($citations, -2) == "; " ) { $citations = substr($info, 0, -2); } // Trim trailing semicolon and space
 	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
 		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";		
-	}	
+	}
+	
 	if ( !empty($citations) ) {
 		$citations = "Scripture citation(s): ".$citations;
 		if ( is_singular('sermon') ) { 
