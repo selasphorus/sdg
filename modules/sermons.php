@@ -771,7 +771,25 @@ function update_sermon_citations( $sermon_id = null ) {
 				if ( $book_id = post_exists($book) ) {
 					$info .= "book matches record with ID: '".$book_id."'<br />";
 				}
+				$chapterverses = substr( $txt, strpos($txt," ") );
+				$info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
 				// WIP...
+				
+				/*
+				// Create post object
+				$arr_reading = array(
+					'post_title'    => wp_strip_all_tags( $txt ),
+					'post_status'   => 'publish',
+					'post_author'   => 1, // get_current_user_id()
+					'meta_input'   => array(
+						'book' => $book,
+						'chapterverses' => $chapterverses,
+					),
+				);
+
+				// Insert the post into the database
+				wp_insert_post( $my_post );
+				*/
 			}
 		}
 	}
