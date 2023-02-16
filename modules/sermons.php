@@ -754,26 +754,20 @@ function update_sermon_citations( $sermon_id = null ) {
 			$txt = trim($txt);
 			
 			// Try to match text to an existing reading record
-			//get_post? WP_query?
 			if ( $reading_id = post_exists($txt) ) {
 				$info .= "reading found matching title '".$txt."' with ID: ".$reading_id."<br />";
+				if ( !in_array( $reading_id, $scripture_citations ) ) {
+					$scripture_citations[] = $reading_id;
+					$updates = true;
+				} else {
+					$info .= "The reading_id [$reading_id] is already in the array.<br />";	
+				}
 			} else {
 				$info .= "No post found matching title '".$txt."'<br />";
 				// Create a new reading record and link it to this sermon record
 				// Extract book; chapterverses from txt
-				
+				// WIP...
 			}
-			//$info .= "txt: ".print_r($reading,true)."<br />";
-			//$book = get_field('book', $reading_id, false);
-			//$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
-			//$info .= "bbook_id: ".$book[0]."<br />";
-			/*$reading_id = $book[0];
-			if ( !in_array( $reading_id, $scripture_citations ) ) {
-				$scripture_citations[] = $reading_id;
-				$updates = true;
-			} else {
-				//$info .= "The reading_id [$reading_id] is already in the array.<br />";	
-			}*/
 		}
 	}
 	
