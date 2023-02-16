@@ -674,17 +674,17 @@ function update_sermon_bbooks( $sermon_id = null ) {
 	$info = "";
 	$updates = false;
 	
-	$info .= "About to update sermon_bbooks for sermon with ID:".$sermon_id."<br />";
+	//$info .= "About to update sermon_bbooks for sermon with ID:".$sermon_id."<br />";
 	
 	// get the scripture_citations & sermon_bbooks field values
 	$scripture_citations = get_field('scripture_citations', $sermon_id, false);
 	$sermon_bbooks = get_field('sermon_bbooks', $sermon_id, false);
 	
 	if ( !empty($sermon_bbooks) ) {
-		$info .= "This sermon currently has the following sermon_bbooks: <pre>".print_r($sermon_bbooks,true)."</pre>";								
+		//$info .= "This sermon currently has the following sermon_bbooks: <pre>".print_r($sermon_bbooks,true)."</pre>";								
 		if ( !is_array($sermon_bbooks) ) { $sermon_bbooks = explode( ", ",$sermon_bbooks ); } // If it's not an array already, make it one		
 	} else {
-		$info .= "This sermon currently has no sermon_bbooks.<br />";
+		//$info .= "This sermon currently has no sermon_bbooks.<br />";
 		$sermon_bbooks = array(); // No repertoire_events set yet, so prep an empty array
 	}
 
@@ -700,7 +700,7 @@ function update_sermon_bbooks( $sermon_id = null ) {
 			$sermon_bbooks[] = $bbook_id;
 			$updates = true;
 		} else {
-			$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
+			//$info .= "The bbook_id [$bbook_id] is already in the array.<br />";	
 		}
 	}
 	
@@ -710,13 +710,13 @@ function update_sermon_bbooks( $sermon_id = null ) {
 			$info .= "Success! sermon_bbooks field updated<br />";
 			$info .= "Updated sermon_bbooks: <pre>".print_r($sermon_bbooks,true)."</pre>";
 		} else {
-			$info .= "phooey. update failed.<br />";
+			$info .= "phooey. sermon_bbooks update failed.<br />";
 		}
 	} else {
-		$info .= "No update needed.<br />";
+		//$info .= "No update needed.<br />";
 	}
 	
-	$info .= "+++++<br /><br />";
+	//$info .= "+++++<br /><br />";
 	
 	return $info;
 	
