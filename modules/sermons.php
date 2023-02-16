@@ -303,10 +303,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
-	//if ( empty($sermon_bbooks) && is_dev_site() ) {
-		// Field sermon_bbooks is empty -> check to see if updates are in order
-		$info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>';
-	//}
+    if ( empty($sermon_bbooks) ) { $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; } // This should be removed or commented out eventually, once the fcn has been run for all sermons
 	
 	if ( $sermon_audio == true ) {
         $info .= "<hr />";
