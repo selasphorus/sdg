@@ -718,5 +718,70 @@ function update_sermon_bbooks( $sermon_id = null ) {
 	return $info;
 	
 }
+
+// WIP: write FCN to Update scripture_citations from scripture_citations_txt
+function update_sermon_citations( $sermon_id = null ) {
 	
+	$info = "";
+	$updates = false;
+	
+	//$info .= "About to update scripture_citations for sermon with ID:".$sermon_id."<br />";
+	
+	// get the scripture_citations_txt & scripture_citations field values
+	$scripture_citations_txt = get_field('scripture_citations_txt', $sermon_id, false);
+	$scripture_citations = get_field('scripture_citations', $sermon_id, false);
+	
+	if ( !empty($scripture_citations_txt) ) {
+		//$info .= "This sermon currently has the following scripture_citations_txt: <pre>".print_r($scripture_citations_txt,true)."</pre>";								
+		if ( !is_array($scripture_citations_txt) ) { $scripture_citations_txt = explode( "|",$scripture_citations_txt ); } // If it's not an array already, make it one		
+	} else {
+		//return false; // No update needed -- no txt citations to process
+	}
+	
+	if ( empty($scripture_citations) ) {
+		//$info .= "This sermon currently has no scripture_citations.<br />";
+		$scripture_citations = array(); // No repertoire_events set yet, so prep an empty array
+	}
+
+	// Check reading bbooks to see if they're already in the sermon_bbooks array and add them if not
+	if ( $scripture_citations_txt ) {
+		foreach( $scripture_citations_txt as $txt ) {
+			
+			$txt = trim($txt);
+			
+			// Try to match text to an existing reading record
+			//get_post? WP_query?
+			
+			//$info .= "txt: ".print_r($reading,true)."<br />";
+			//$book = get_field('book', $reading_id, false);
+			//$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
+			//$info .= "bbook_id: ".$book[0]."<br />";
+			$reading_id = $book[0];
+			if ( !in_array( $reading_id, $scripture_citations ) ) {
+				$scripture_citations[] = $reading_id;
+				$updates = true;
+			} else {
+				//$info .= "The reading_id [$reading_id] is already in the array.<br />";	
+			}
+		}
+	}
+	
+	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
+	if ( $updates == true ) {
+		if ( update_field('scripture_citations', $scripture_citations, $sermon_id ) ) {
+			$info .= "Success! scripture_citations field updated<br />";
+			$info .= "Updated scripture_citations: <pre>".print_r($scripture_citations,true)."</pre>";
+		} else {
+			$info .= "phooey. scripture_citations update failed.<br />";
+		}
+	} else {
+		//$info .= "No update needed.<br />";
+	}
+	
+	//$info .= "+++++<br /><br />";
+	
+	return $info;
+	
+}
+
 ?>
