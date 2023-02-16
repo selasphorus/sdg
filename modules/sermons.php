@@ -755,15 +755,15 @@ function update_sermon_citations( $sermon_id = null ) {
 			
 			// Try to match text to an existing reading record
 			if ( $reading_id = post_exists($txt) ) {
-				$info .= "reading found matching title '".$txt."' with ID: ".$reading_id."<br />";
+				$info .= "reading found matching title '".$txt."' with ID: ".$reading_id; //."<br />"
 				if ( !in_array( $reading_id, $scripture_citations ) ) {
 					$scripture_citations[] = $reading_id;
 					$updates = true;
 				} else {
-					$info .= "The reading_id [$reading_id] is already in the array.<br />";	
+					$info .= "The reading_id [$reading_id] is already in the array."; // ."<br />"
 				}
 			} else {
-				$info .= "No post found matching title '".$txt."'<br />";
+				$info .= "No post found matching title '".$txt."'"; // ."<br />"
 				// Create a new reading record and link it to this sermon record
 				// Extract book; chapterverses from txt
 				// WIP...
