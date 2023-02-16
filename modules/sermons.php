@@ -773,12 +773,11 @@ function update_sermon_citations( $sermon_id = null ) {
 				}
 				$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
 				$info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
-				// WIP...
 				
-				/*
-				// Create post object
+				// Create new reading post
 				$arr_reading = array(
 					'post_title'    => wp_strip_all_tags( $txt ),
+					'post_type'   	=> 'reading',
 					'post_status'   => 'publish',
 					'post_author'   => 1, // get_current_user_id()
 					'meta_input'   => array(
@@ -788,14 +787,20 @@ function update_sermon_citations( $sermon_id = null ) {
 				);
 
 				// Insert the post into the database
-				wp_insert_post( $my_post );
-				*/
+				$post_id = wp_insert_post($arr_reading);
+				if ( !is_wp_error($post_id) ) {
+				  	// the post is valid
+				  	$scripture_citations[] = $post_id;
+					$updates = true;
+				} else {
+					$info .= $post_id->get_error_message();
+				}
 			}
 		}
 	}
 	
 	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
-	/*if ( $updates == true ) {
+	if ( $updates == true ) {
 		if ( update_field('scripture_citations', $scripture_citations, $sermon_id ) ) {
 			$info .= "Success! scripture_citations field updated<br />";
 			$info .= "Updated scripture_citations: <pre>".print_r($scripture_citations,true)."</pre>";
@@ -803,8 +808,8 @@ function update_sermon_citations( $sermon_id = null ) {
 			$info .= "phooey. scripture_citations update failed.<br />";
 		}
 	} else {
-		//$info .= "No update needed.<br />";
-	}*/
+		$info .= "No update needed.<br />";
+	}
 	
 	//$info .= "+++++<br /><br />";
 	
