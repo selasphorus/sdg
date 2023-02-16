@@ -289,7 +289,8 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }
         if ( substr($citations, -2) == "; " ) { $citations = substr($citations, 0, -2); } // Trim trailing semicolon and space
 	} else if ( get_field('scripture_citations_txt', $post_id) ) {	
-		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";		
+		$citations = '<span class="readings">'.get_field('scripture_citations_txt', $post_id)."</span><br />";	
+		$info .= '<div class="troubleshooting">'.update_sermon_citations( $post_id ).'</div>'; } // This should be removed or commented out eventually, once the fcn has been run for all sermons			
 	}
 	
 	if ( !empty($citations) ) {
@@ -751,7 +752,9 @@ function update_sermon_citations( $sermon_id = null ) {
 			
 			// Try to match text to an existing reading record
 			//get_post? WP_query?
-			
+			if ( $reading_id = post_exists($txt) ) {
+				$info .= "reading found matching title '".$txt."' with ID: ".$reading_id."<br />";
+			}
 			//$info .= "txt: ".print_r($reading,true)."<br />";
 			//$book = get_field('book', $reading_id, false);
 			//$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
@@ -767,7 +770,7 @@ function update_sermon_citations( $sermon_id = null ) {
 	}
 	
 	// If changes have been made, then update the repertoire_events field with the modified array of event_id values
-	if ( $updates == true ) {
+	/*if ( $updates == true ) {
 		if ( update_field('scripture_citations', $scripture_citations, $sermon_id ) ) {
 			$info .= "Success! scripture_citations field updated<br />";
 			$info .= "Updated scripture_citations: <pre>".print_r($scripture_citations,true)."</pre>";
@@ -776,7 +779,7 @@ function update_sermon_citations( $sermon_id = null ) {
 		}
 	} else {
 		//$info .= "No update needed.<br />";
-	}
+	}*/
 	
 	//$info .= "+++++<br /><br />";
 	
