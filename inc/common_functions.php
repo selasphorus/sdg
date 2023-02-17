@@ -354,6 +354,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
 	$info .= '<label for="p2_id">Secondary Post ID</label>';
 	$info .= '<input type="hidden" name="form_action" value="review">';
+	$info .= '&nbsp;&nbsp;&nbsp;';
 	$info .= '<input type="submit" value="Compare Posts">';
 	$info .= '</form>';
 	$info .= '<br clear="all" />';
