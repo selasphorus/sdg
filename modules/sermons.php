@@ -694,8 +694,8 @@ function update_sermon_bbooks( $sermon_id = null ) {
 			//$info .= "Reading: ".print_r($reading,true)."<br />";
 			$book = get_field('book', $reading_id, false);
 			$info .= "book: [".print_r($book,true)."] (reading_id: $reading_id)<br />";
-			$info .= "bbook_id: ".$book[0]."<br />";
 			if ( is_numeric($book) ) { $bbook_id = $book; } else { $bbook_id = $book[0]; }
+			$info .= "bbook_id: ".$bbook_id."<br />";
 			if ( !empty($bbook_id) && is_numeric($bbook_id) && !in_array( $bbook_id, $sermon_bbooks ) ) {
 				$sermon_bbooks[] = $bbook_id;
 				$updates = true;
