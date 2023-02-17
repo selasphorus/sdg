@@ -770,6 +770,9 @@ function update_sermon_citations( $sermon_id = null ) {
 				//preg_match($pattern, $str, $matches);
 				if ( preg_match('/([I]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
 					$book = $matches[1];
+					$book = str_replace("III", "3", $book);
+					$book = str_replace("II", "2", $book);
+					$book = str_replace("I", "1", $book);
 					$info .= "matches: <pre>".print_r($matches,true)."</pre>";
 				} else if ( preg_match('/([0-3]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
 					$book = $matches[1];
@@ -784,7 +787,7 @@ function update_sermon_citations( $sermon_id = null ) {
 				} else {
 					$info .= "No book match found.<br />";
 				}
-				$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
+				$chapterverses = str_replace($book, "", $txt); //$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
 				$info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
 				
 				if ( $book_id && $chapterverses ) {
