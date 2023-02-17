@@ -11,7 +11,8 @@
     margin-right: 0.2rem;
 }
 
-.symbol {
+.symbol,
+a.symbol {
     font-size: 3.5rem;
     text-decoration: none;
     border-bottom: none;
@@ -20,6 +21,7 @@
     vertical-align: middle;
 }
 
-.action {
+.action,
+a.action {
     color: #E71105; /*var(--mdred);*/
 }
