@@ -562,7 +562,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         // If still no date has been found, give up.
         $ts_info .= "<!-- no date available for which to find day_title -->\n"; // tft
-        $info .= $ts_info;
+        $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
         return $info;
         
     }
