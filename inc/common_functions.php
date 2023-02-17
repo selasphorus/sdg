@@ -350,7 +350,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	$info .= '<form id="select_ids" method="post" class="sdg_merge_form">';
 	$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
 	$info .= '<label for="p1_id" style="margin-right:1.5rem;">Primary Post ID</label>';
-	$info .= '<a href="#" id="swap-ids">&8644;</a>';
+	$info .= '<a href="#" id="swap-ids">&#8644;</a>';
 	$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
 	$info .= '<label for="p2_id" style="margin-right:1.5rem;">Secondary Post ID</label>';
 	$info .= '<input type="hidden" name="form_action" value="review">';
