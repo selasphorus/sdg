@@ -766,9 +766,8 @@ function update_sermon_citations( $sermon_id = null ) {
 				$info .= "No post found matching title '".$txt."'<br />";
 				// Create a new reading record and link it to this sermon record
 				// Extract book; chapterverses from txt
-				// TODO: deal w/ books beginning w/ 1, 2, or 3
-				//preg_match($pattern, $str, $matches);
 				if ( preg_match('/([I]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
+					// Deal w/ books beginning w/ I/II/III or 1/2/3
 					$book = $matches[1];
 					$chapterverses = str_replace($book, "", $txt);
 					$book = str_replace("III", "3", $book);
@@ -781,7 +780,6 @@ function update_sermon_citations( $sermon_id = null ) {
 				} else {
 					$book = substr( $txt, 0, strpos($txt," ") );
 				}
-				
 				$info .= "book extracted from txt: '".$book."'<br />";
 				if ( $book_id = post_exists($book) ) {
 					$info .= "book matches record with ID: ".$book_id."<br />";
