@@ -487,10 +487,12 @@ jQuery(document).ready(function($) {
     });
     
     $("#swap-ids").click(function() {
-		//alert("click"); // tft
+		alert("swap!"); // tft
 		// Reset form fields
         let new_p2 = $("p1_id").val();
         let new_p1 = $("p2_id").val();
+        console.log( "new_p1: "+new_p1 );
+        console.log( "new_p2: "+new_p2 );
         $("p1_id").val(p1_id);
         $("p2_id").val(new_p2);
         
