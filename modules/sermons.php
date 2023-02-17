@@ -770,6 +770,7 @@ function update_sermon_citations( $sermon_id = null ) {
 				//preg_match($pattern, $str, $matches);
 				if ( preg_match('/([I]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
 					$book = $matches[1];
+					$chapterverses = str_replace($book, "", $txt);
 					$book = str_replace("III", "3", $book);
 					$book = str_replace("II", "2", $book);
 					$book = str_replace("I", "1", $book);
