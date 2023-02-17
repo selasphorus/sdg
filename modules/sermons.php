@@ -802,7 +802,7 @@ function update_sermon_citations( $sermon_id = null ) {
 					);
 
 					// Insert the post into the database
-					/*$post_id = wp_insert_post($args);
+					$post_id = wp_insert_post($args);
 					if ( !is_wp_error($post_id) ) {
 						// the post is valid
 						$info .= "Success! new reading record created<br />";
@@ -811,7 +811,7 @@ function update_sermon_citations( $sermon_id = null ) {
 						$updates = true;
 					} else {
 						$info .= $post_id->get_error_message();
-					}*/
+					}
 				
 				}
 			}
