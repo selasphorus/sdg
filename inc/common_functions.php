@@ -764,7 +764,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
 			// WIP/TODO: Move p2 to trash
 			if ( !$merge_errors ) {
+				
 				$info .= "<hr />";
+			
 				if ( $fields_merged > 0 ) {
 					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
 				} else {
@@ -785,6 +787,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				} else {
 					$info .= '<span class="nb">'."ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.</span><br />";
 				}
+				
+				$info .= 'Post #1 >>&nbsp;<a href="'.get_permalink($p1_id).'" target="_blank">View</a>&nbsp;<a href="'.get_edit_post_link($p1_id).'" target="_blank">Edit</a><br />';
+				$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
+				
 			} else {
 				$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
 			}
