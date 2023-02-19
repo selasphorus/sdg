@@ -581,7 +581,7 @@ function build_sermon_filters() {
 	
 	// Years select menu
 	$years = range( 2001, date('Y') );
-	$info .= sdg_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'year' ) );
+	$info .= sdg_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'yr' ) );
 	$info .= '<br />';
 	
 	// Preachers menu
@@ -611,7 +611,7 @@ function build_sermon_filters() {
     // Given that the number of ids included is so limited, the select_distinct query isn't currently necessary. Use get_posts instead.
 	//$author_values = sdg_select_distinct( array ( 'post_type' => 'person', 'meta_key' => 'sermon_author', 'arr_include' => $author_ids ) ); 
     
-	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'author', 'show_other' => true ) ) ;
+	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true ) ) ;
 	$info .= '<br />';
 	
 	// Bible Books menu
@@ -648,7 +648,7 @@ function build_sermon_filters() {
 		endwhile;
 		
 		//$info .= 'bbook_values: <pre>'.print_r($bbook_values, true).'</pre>'; // tft
-		$info .= sdg_selectmenu ( array( 'label' => 'Text', 'arr_values' => $bbook_values, 'select_name' => 'bbook' ) ) ;
+		$info .= sdg_selectmenu ( array( 'label' => 'Text', 'arr_values' => $bbook_values, 'select_name' => 'txt' ) ) ;
 		$info .= '<br />';
 	}
 	
