@@ -465,10 +465,6 @@ function sdg_scripts_method() {
 add_filter( 'query_vars', 'sdg_query_vars' );
 function sdg_query_vars( $qvars ) {
 	$qvars[] = 'devmode';
-	$qvars[] = 'sermon_author';
-	$qvars[] = 'sermon_date';
-	$qvars[] = 'bbook';
-	$qvars[] = 'sermon_topic';
 	$qvars[] = 'y'; // = year -- for date_calculations (and - ?)
     return $qvars;
 }
