@@ -1328,7 +1328,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         $field_value = null;
                     }
 
-                    
                     // Get 'type' field option
                     $field_type = $field['type'];
                     $field_info .= "field_type: $field_type<br />"; // tft
@@ -1346,7 +1345,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         //$field_info .= "field return_format: ".$field['return_format']."<br />";
                     }                    
                     
-                    if ( ( $field_name == "post_title" || $field_name == "title_clean" ) && !empty($field_value) ) { //  
+                    if ( ( $field_name == "post_title" ) && !empty($field_value) ) { //  
                     	// WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
                     	// WIP: figure out if search_title AND meta query for title_clean will screw things up...
                     	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
@@ -1361,7 +1360,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         	$match_value = str_replace(" ","--",$match_value);
                         }
                         $match_value = "--".$match_value."--";
-                        //$match_value = '"' . $match_value . '"';
                         
                         // TODO: figure out how to determine whether to match exact or not for particular fields
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
@@ -1372,11 +1370,28 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             $match_value = $field_value;
                         }*/
                         
-                        $query_component = array(
-                            'key'   => $field_name,
-                            'value' => $match_value,
-                            'compare'=> 'LIKE'
-                        );
+                        // If querying title_clean, then also query tune_name
+                        if ( $field_name == "title_clean" ) {
+                        	$query_component = array(
+								'relation' => 'OR',
+								array(
+									'key'   => 'title_clean',
+									'value' => $match_value,
+									'compare'=> 'LIKE'
+								),
+								array(
+									'key'   => 'tune_name',
+									'value' => $match_value,
+									'compare'=> 'LIKE'
+								)
+							);
+                        } else {
+                        	$query_component = array(
+								'key'   => $field_name,
+								'value' => $match_value,
+								'compare'=> 'LIKE'
+							);
+                        }
                         
                         // Add query component to the appropriate components array
                         if ( $query_assignment == "primary" ) {
