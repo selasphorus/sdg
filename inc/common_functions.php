@@ -205,7 +205,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     	
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_recordsX" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
     	$merging = true;
     	$merge_errors = false;

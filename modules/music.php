@@ -1345,9 +1345,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         //$field_info .= "field return_format: ".$field['return_format']."<br />";
                     }                    
                     
-                    if ( ( $field_name == "post_title" ) && !empty($field_value) ) { //  
-                    	// WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
-                    	// WIP: figure out if search_title AND meta query for title_clean will screw things up...
+                    if ( ( $field_name == "post_title" ) && !empty($field_value) ) {
                     	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
                     }
                     
@@ -1357,9 +1355,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         // WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
                         if ( $field_name == "title_clean" && strpos($match_value," ") ) {
-                        	$match_value = str_replace(" ","--",$match_value);
+                        	$match_value = str_replace(" ","XXX",$match_value);
                         }
-                        $match_value = "--".$match_value."--";
+                        $match_value = "XXX".$match_value."XXX";
                         
                         // TODO: figure out how to determine whether to match exact or not for particular fields
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
