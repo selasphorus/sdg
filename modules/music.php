@@ -1358,7 +1358,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         // WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
                         if ( $field_name == "title_clean" && strpos($match_value," ") ) {
-                        	$match_value = str_replace(" ","_X_",$match_value);
+                        	$match_value = str_replace(" ","--",$match_value);
                         }
                         $match_value = '"' . $match_value . '"';
                         
