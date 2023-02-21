@@ -1346,25 +1346,30 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         //$field_info .= "field return_format: ".$field['return_format']."<br />";
                     }                    
                     
-                    //if ( ( $field_name == "post_title" || $field_name == "title_clean" ) && !empty($field_value) ) {
+                    if ( ( $field_name == "post_title" ) && !empty($field_value) ) { //  || $field_name == "title_clean"
+                    	// WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
+                    	// WIP: figure out if search_title AND meta query for title_clean will screw things up...
+                    	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
+                    }
                     
-                    if ( $field_name == "post_title" && !empty($field_value) ) {
+                    if ( $field_type == "text" && !empty($field_value) && $field_name != "post_title" ) { 
                         
-                        //$args['s'] = $field_value;
-                        $args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
-
-                    } else if ( $field_type == "text" && !empty($field_value) ) { 
+                        $match_value = $field_value;
+                        
+                        // WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
+                        if (strpos($match_value," ")) {
+                        	$match_value = str_replace(" ","%",$match_value);
+                        }
                         
                         // TODO: figure out how to determine whether to match exact or not for particular fields
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
                         // For now, set it explicitly per field_name
                         /*if ( $field_name == "box_num" ) {
-                            $match_value = '"' . $field_value . '"'; // matches exactly "123", not just 123. This prevents a match for "1234"
+                            $match_value = '"' . $match_value . '"'; // matches exactly "123", not just 123. This prevents a match for "1234"
                         } else {
                             $match_value = $field_value;
                         }*/
-                        $match_value = $field_value;
-                        //$mq_components[] =  array(
+                        
                         $query_component = array(
                             'key'   => $field_name,
                             'value' => $match_value,
