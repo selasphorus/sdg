@@ -205,7 +205,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     	
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
     	$merging = true;
     	$merge_errors = false;
@@ -809,7 +809,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$info .= '</table>';
 			
 			//
-			$info .= '<input type="hidden" name="form_action" value="merge">';
+			$info .= '<input type="hidden" name="form_action" value="merge_records">';
 			$info .= '<input type="submit" value="Merge Records"><br />';
 			$info .= '<p class="nb"><em>This action cannot be undone!<br />The primary post will be updated with the field values displayed in <span class="green">green</span>, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in <span class="orange">orange</span> will be deleted/overwritten.</p>';
 			//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
