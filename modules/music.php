@@ -1977,12 +1977,13 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 //$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
                 
                 $info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
+                $info .= '<div class="troubleshooting">'.$posts_info['troubleshooting'].'</div>';
                 //$ts_info .= $posts_info['info']."<hr />";
                 //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
                 
                 // Print last SQL query string
-                global $wpdb;
-                $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+                //global $wpdb;
+                //$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
                 //$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
                 
             }
