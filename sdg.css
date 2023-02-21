@@ -19,6 +19,7 @@ a.symbol {
     padding: 0 1rem;
     font-weight: 900;
     vertical-align: middle;
+    line-height: normal;
 }
 
 .action,
@@ -29,3 +30,12 @@ a.action {
 .input-group {
 	float: left;
 }
+
+.input-group label {
+	font-size: 0.9rem;
+}
+
+.merge-input {
+	width: 7rem;
+}
+
