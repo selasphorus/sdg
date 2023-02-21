@@ -208,7 +208,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
     	$merging = true;
-    	$merge_errors = false;
+    	/*$merge_errors = false;
     	$fields_merged = 0;
     	
     	if ( !empty($_POST['p1_id']) ) {
@@ -222,7 +222,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	if ( !empty($_POST['p2_id']) ) {
     		$p2_id = $_POST['p2_id'];
     		$arr_posts[] = $p2_id;  		
-    	}
+    	}*/
     	
     } else {
     
