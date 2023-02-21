@@ -775,8 +775,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		} // END foreach ( $arr_fields....
 		
 		if ( $merging ) {
-    
-			// WIP/TODO: Move p2 to trash
+
 			if ( !$merge_errors ) {
 				
 				$info .= "<hr />";
@@ -787,7 +786,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
 				}
 			
-				// TODO: first add deleted-after-merge admin_tag?
+				$info .= '<div class="info">';
+				// Add deleted-after-merge admin_tag
 				$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
 				$term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
 				$term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' );
@@ -798,12 +798,20 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
 				if ( wp_trash_post($p2_id) ) {
 					$info .= "Success! p2 [".$_POST['p2_id']."] moved to trash.<br />";
+					$p2_trashed = true;
 				} else {
 					$info .= '<span class="nb">'."ERROR! failed to move p2 [".$_POST['p2_id']."] to trash.</span><br />";
+					$p2_trashed = false;
 				}
 				
 				$info .= 'Post #1 >>&nbsp;<a href="'.get_permalink($p1_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p1_id).'" target="_blank">Edit</a><br />';
-				$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
+				if ( $p2_trashed ) {
+					$info .= 'Post #2 >>&nbsp;<a href="wp-admin/edit.php?post_status=trash&post_type=repertoire" target="_blank">View P2 in Trash</a><br />';
+				} else {
+					$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
+				}
+				
+				$info .= '</div>';
 				
 			} else {
 				$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
