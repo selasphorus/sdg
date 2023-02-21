@@ -728,6 +728,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 					// Display merge value
 					$info .= '<td>';
+                    
+                    // WIP 230221 make input_name that won't conflict with any CPT name, taxonomy, &c. (reserved words) -- TS post issues...
+                    $input_name = $field_name;
+                    
 					if ( $field_cat != "core_field" && ( $field_type == "text" || $field_type == "textarea" ) ) { // Disabled editing for core fields for now. Title is auto-gen anyway and thumbnails are seldom used for rep.
 						$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
 						$info .= $merge_val_info;
@@ -864,8 +868,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$info .= '</table>';
 			
 			//
-			$info .= '<input type="hidden" name="form_action" value="merge_records">';
-			$info .= '<input type="submit" value="Merge Records"><br /><br />';
+			//$info .= '<input type="hidden" name="form_action" value="merge_records">';
+			$info .= '<input type="submit" name="form_action" value="TEST"><br /><br />';
+			$info .= '<input type="submit" name="form_action" value="Merge Records"><br /><br />';
 			$info .= '<p class="nb"><em>NB: This action cannot be undone!<br />The primary post will be updated with the field values displayed in <span class="green">green</span>, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in <span class="orange">orange</span> will be deleted/overwritten.</p>';
 			//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
 		}
