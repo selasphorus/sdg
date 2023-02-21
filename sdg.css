@@ -25,3 +25,7 @@ a.symbol {
 a.action {
     color: #E71105; /*var(--mdred);*/
 }
+
+.input-group {
+	float: left;
+}
