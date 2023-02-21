@@ -435,7 +435,7 @@ function sdg_scripts_method() {
     global $current_user;
     $current_user = wp_get_current_user();
     
-    $ver = "0.1";
+    $ver = "0.2";
     wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', NULL, $ver );
     
     $fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
