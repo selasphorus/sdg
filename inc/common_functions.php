@@ -204,11 +204,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     // init
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
-    	
+    
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
     	$merging = true;
-    	/*$merge_errors = false;
+    	$merge_errors = false;
     	$fields_merged = 0;
     	
     	if ( !empty($_POST['p1_id']) ) {
@@ -222,7 +222,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	if ( !empty($_POST['p2_id']) ) {
     		$p2_id = $_POST['p2_id'];
     		$arr_posts[] = $p2_id;  		
-    	}*/
+    	}
     	
     } else {
     
@@ -384,9 +384,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		
     		$info .= "<h3>Merge request submitted...</h3>";
     		
-    		// WIP/TODO: first update_repertoire_events for both posts(?)
-    		///$info .= '<div class="info">'.update_repertoire_events( $p1_id ).'</div>';
-    		///$info .= '<div class="info">'.update_repertoire_events( $p2_id ).'</div>';
+    		// WIP: first update_repertoire_events for both posts(?)
+    		$info .= '<div class="info">'.update_repertoire_events( $p1_id ).'</div>';
+    		$info .= '<div class="info">'.update_repertoire_events( $p2_id ).'</div>';
     		
     		$info .= "<h3>About to merge values from post $p2_id into post $p1_id...</h3>";
     		
@@ -569,9 +569,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			if ( $p1_val != $p2_val ) { $identical_posts = false; }			
 			
 			if ( $merging ) {
-			
-				continue; // tft
-			
+                
+                continue; // tft
+                /*
 				if ( $field_name == "post_title" ) {
 					continue;
 				}
@@ -675,7 +675,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 				} // End if old and/or new value is non-empty
-				
+				*/
+                
 			} else { 
 				
 				// Comparison -- not merging
