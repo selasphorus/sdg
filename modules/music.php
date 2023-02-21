@@ -2364,8 +2364,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 				$rep_info .= update_repertoire_events( $post_id, false );
 				$rep_info .= '</p>';
 			} else if ( $i < 5 ) {  // On live site, for now, limit number of records that are processed, because the queries may be slow
-				$rep_info .= '<br />{'.$i.'}';
-				$rep_info .= '<p class="troubleshooting">'.update_repertoire_events( $post_id, false ).'</p>';
+				$rep_info .= '<p class="troubleshooting">{'.$i.'}'.update_repertoire_events( $post_id, false ).'</p>';
 			}			
 		}
 		
