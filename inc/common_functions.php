@@ -385,8 +385,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		$info .= "<h3>Merge request submitted...</h3>";
     		
     		// WIP/TODO: first update_repertoire_events for both posts(?)
-    		$info .= '<div class="info">'.update_repertoire_events( $p1_id ).'</div>';
-    		$info .= '<div class="info">'.update_repertoire_events( $p2_id ).'</div>';
+    		///$info .= '<div class="info">'.update_repertoire_events( $p1_id ).'</div>';
+    		///$info .= '<div class="info">'.update_repertoire_events( $p2_id ).'</div>';
     		
     		$info .= "<h3>About to merge values from post $p2_id into post $p1_id...</h3>";
     		
@@ -581,7 +581,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$old_val = $p1_val;
 				if ( is_array($old_val) ) { $old_val = trim(implode("; ",$old_val)); } else { $old_val = trim($old_val); }				
 				if ( !empty($_POST[$field_name]) ) { $new_val = trim($_POST[$field_name]); } else { $new_val = ""; }
-				
+				/* TS
 				if ( !empty($old_val) || !empty($new_val) ) {
 				
 					$merge_info .= "old_val: '$old_val'; new_val: '$new_val'<br />";
@@ -673,7 +673,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 				} // End if old and/or new value is non-empty
-				
+				*/
 			} else { 
 				
 				// Comparison -- not merging
