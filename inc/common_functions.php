@@ -352,7 +352,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	$info .= '<input type="text" id="p1_id" name="p1_id" value="'.$p1_id.'" style="width:100px;margin-right:0.5rem;" />';
 	$info .= '<br /><label for="p1_id">Primary Post ID</label>';
 	$info .= '</div>';
+	$info .= '<div class="input-group">';
 	if ( is_dev_site() ) { $info .= '<a href="#" id="swap-ids" class="action symbol">&#8644;</a>'; } else { $info .= '<span class="symbol">&lArr;</span>'; }
+	$info .= '</div>';
 	$info .= '<div class="input-group">';
 	$info .= '<input type="text" id="p2_id" name="p2_id" value="'.$p2_id.'" style="width:100px;margin-right:0.5rem;" />';
 	$info .= '<br /><label for="p2_id">Secondary Post ID</label>';
