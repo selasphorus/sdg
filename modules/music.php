@@ -1360,6 +1360,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         if ( $field_name == "title_clean" && strpos($match_value," ") ) {
                         	$match_value = str_replace(" ","--",$match_value);
                         }
+                        $match_value = "'".$match_value."'";
                         //$match_value = '"' . $match_value . '"';
                         
                         // TODO: figure out how to determine whether to match exact or not for particular fields
