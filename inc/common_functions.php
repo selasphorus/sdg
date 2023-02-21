@@ -805,6 +805,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							$info .= "post_title updated";
 						}
 						$info .= '</div>';
+					} else {
+						$info .= '<div class="info">No change to post_title post-merge.</div>';
 					}
 				} else {
 					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
