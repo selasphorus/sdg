@@ -570,6 +570,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( $merging ) {
 			
+				continue; // tft
+			
 				if ( $field_name == "post_title" ) {
 					continue;
 				}
@@ -581,7 +583,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				$old_val = $p1_val;
 				if ( is_array($old_val) ) { $old_val = trim(implode("; ",$old_val)); } else { $old_val = trim($old_val); }				
 				if ( !empty($_POST[$field_name]) ) { $new_val = trim($_POST[$field_name]); } else { $new_val = ""; }
-				/* TS
+				
 				if ( !empty($old_val) || !empty($new_val) ) {
 				
 					$merge_info .= "old_val: '$old_val'; new_val: '$new_val'<br />";
@@ -673,7 +675,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 				} // End if old and/or new value is non-empty
-				*/
+				
 			} else { 
 				
 				// Comparison -- not merging
@@ -776,7 +778,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		if ( $merging ) {
 
 			$merge_errors = true; // tft
-			
+			/*
 			if ( !$merge_errors ) {
 				
 				$info .= "<hr />";
@@ -785,7 +787,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
 					// TODO: re-build the title
 					$info .= "TODO: re-build the title<br />";
-					/*$new_title = build_the_title( $_POST['p1_id'] );
+					$new_title = build_the_title( $_POST['p1_id'] );
 					$post_title = get_the_title( $_POST['p1_id'] );
 					if ( $new_title != $post_title ) {
 						$info .= "P1 new_title ($new_title) NE post_title ($post_title).<br />";
@@ -810,13 +812,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$info .= '</div>';
 					} else {
 						$info .= '<div class="info">No change to post_title post-merge.</div>';
-					}*/
+					}
 				} else {
 					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
 				}
 			
 				$info .= '<div class="info">';
-				/*
+				
 				// Add deleted-after-merge admin_tag to P2
 				$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
 				//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
@@ -856,13 +858,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				} else {
 					$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
 				}
-				*/
+				
 				$info .= '</div>';
 				
 			} else {
 				$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
 			}
-		
+			*/
 		} else {
 			
 			// Close the comparison table
