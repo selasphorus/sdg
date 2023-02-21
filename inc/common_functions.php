@@ -665,7 +665,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							}
 						}
 						
-						$merge_info .= "<br />";
+						//$merge_info .= "<br />";
 						$merge_info = '<div class="info">'.$merge_info.'</div>';
 						
 						$info .= $merge_info;
