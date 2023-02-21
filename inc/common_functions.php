@@ -782,6 +782,30 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 				if ( $fields_merged > 0 ) {
 					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
+					// TODO: re-build the title
+					$new_title = build_the_title( $p1_id );
+					$post_title = get_the_title( $p1_id );
+					if ( $new_title != $post_title ) {
+						$new_slug = sanitize_title($new_title);
+						// Update the post
+						$update_args = array(
+							'ID'       	=> $p1_id,
+							'post_title'=> $new_title,
+							'post_name'	=> $new_slug,
+						);
+						// Update the post
+						wp_update_post( $update_args, true );
+						$info .= '<div class="info">';
+						if ( is_wp_error($p1_id) ) {
+							$errors = $p1_id->get_error_messages();
+							foreach ($errors as $error) {
+								$info .= $error;
+							}
+						} else {
+							$info .= "post_title updated";
+						}
+						$info .= '</div>';
+					}
 				} else {
 					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
 				}
