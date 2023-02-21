@@ -43,7 +43,7 @@ form#select_ids {
 	font-size: 0.9rem;
 }
 
-input.merge-input {
+input[type="text"].merge-input {
 	width: 7rem;
 }
 
