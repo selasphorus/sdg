@@ -1346,7 +1346,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         //$field_info .= "field return_format: ".$field['return_format']."<br />";
                     }                    
                     
-                    if ( ( $field_name == "post_title" ) && !empty($field_value) ) { //  || $field_name == "title_clean"
+                    if ( ( $field_name == "post_title" || $field_name == "title_clean" ) && !empty($field_value) ) { //  
                     	// WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
                     	// WIP: figure out if search_title AND meta query for title_clean will screw things up...
                     	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
