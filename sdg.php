@@ -878,7 +878,7 @@ function sdg_posts_where( $where, $wp_query ) {
 	$where = str_replace("meta_key = 'date_assignments_XYZ", "meta_key LIKE 'date_assignments_%", $where);
 	
 	// TODO: do a similar replacement for meta VALUES so as to ignore punctuation -- e.g. compare LIKE value veni_XYZ_redemptor => veni%redemptor
-	//$where = str_replace("_XYZ_", "%", $where);
+	$where = str_replace("_X_", "%", $where);
     
     return $where;
 }
