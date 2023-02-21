@@ -205,9 +205,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_recordsX" ) {
     
-    	$merging = false; //$merging = true;
+    	$merging = true;
     	$merge_errors = false;
     	$fields_merged = 0;
     	
@@ -374,7 +374,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     	// Set up the merge form
     	// To do: set action to SELF without query vars(?)
-    	$info .= '<form method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
+    	$info .= '<form id="merge_posts" method="post" class="sdg_merge_form '.$form_type.'">'; // action? method?
     
     	if ( $merging ) {
     	
