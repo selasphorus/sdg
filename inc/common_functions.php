@@ -818,24 +818,24 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// Add deleted-after-merge admin_tag to P2
 				$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
 				//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
-				$term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
-				$term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' ); // get term id from slug
-				if ( $term ) { 
-					$term_id = $term->term_id;
-					$term_ids[] = $term_id;
-					$terms_result = wp_set_post_terms( $p2_id, $term_ids, 'admin_tag', true );
+				$p2_term_ids = wp_get_post_terms( $p2_id, 'admin_tag' );
+				$p2_term = get_term_by( 'slug', 'deleted-after-merge', 'admin_tag' ); // get term id from slug
+				if ( $p2_term ) { 
+					$term_id = $p2_term->term_id;
+					$p2_term_ids[] = $term_id;
+					$terms_result = wp_set_post_terms( $p2_id, $p2_term_ids, 'admin_tag', true );
 					if ( $terms_result ) { $info .= 'admin_tag added.<br />'; } else { $info .= "Nope...<br />"; }
 				}
 				
 				// Add "merged" tag to P1
 				$info .= "About to attempt to add admin_tag 'updated-via-merge' to post p1 [$p1_id]<br />";
 				//$info .= sdg_add_post_term( $p1_id, 'updated-via-merge', 'admin_tag', true ); // this fcn is still WIP
-				$term_ids = wp_get_post_terms( $p1_id, 'admin_tag' );
-				$term = get_term_by( 'slug', 'updated-via-merge', 'admin_tag' ); // get term id from slug
-				if ( $term ) { 
+				$p1_term_ids = wp_get_post_terms( $p1_id, 'admin_tag' );
+				$p1_term = get_term_by( 'slug', 'updated-via-merge', 'admin_tag' ); // get term id from slug
+				if ( $p1_term ) { 
 					$term_id = $term->term_id;
 					$term_ids[] = $term_id;
-					$terms_result = wp_set_post_terms( $p2_id, $term_ids, 'admin_tag', true );
+					$terms_result = wp_set_post_terms( $p2_id, $p1_term_ids, 'admin_tag', true );
 					if ( $terms_result ) { $info .= 'admin_tag added.<br />'; } else { $info .= "Nope...<br />"; }
 				}
 				
