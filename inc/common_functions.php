@@ -783,11 +783,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( $fields_merged > 0 ) {
 					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
 					// TODO: re-build the title
-					$new_title = build_the_title( $_POST['p1_id'] );
+					/*$new_title = build_the_title( $_POST['p1_id'] );
 					$post_title = get_the_title( $_POST['p1_id'] );
 					if ( $new_title != $post_title ) {
 						$info .= "P1 new_title ($new_title) NE post_title ($post_title).<br />";
-						/*$new_slug = sanitize_title($new_title);
+						$new_slug = sanitize_title($new_title);
 						// Update the post
 						$update_args = array(
 							'ID'       	=> $p1_id,
@@ -804,11 +804,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							}
 						} else {
 							$info .= "post_title updated";
-						}*/
+						}
 						$info .= '</div>';
 					} else {
 						$info .= '<div class="info">No change to post_title post-merge.</div>';
-					}
+					}*/
 				} else {
 					$info .= "<h3>No merge required -- Primary post is up-to-date and complete. About to move duplicate p2 [".$_POST['p2_id']."] to trash.</h3>";
 				}
