@@ -379,7 +379,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	if ( $merging ) {
     	
     		// Form has been submitted... About to merge...
-    		//...
     		$p1 = get_post($p1_id);
     		$p2 = get_post($p2_id);
     		
