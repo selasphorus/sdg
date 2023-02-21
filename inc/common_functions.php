@@ -775,6 +775,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		if ( $merging ) {
 
+			$merge_errors = true; // tft
+			
 			if ( !$merge_errors ) {
 				
 				$info .= "<hr />";
@@ -782,6 +784,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				if ( $fields_merged > 0 ) {
 					$info .= "<h3>Merge completed successfully for all fields. About to move p2 [".$_POST['p2_id']."] to trash.</h3>";
 					// TODO: re-build the title
+					$info .= "TODO: re-build the title<br />";
 					/*$new_title = build_the_title( $_POST['p1_id'] );
 					$post_title = get_the_title( $_POST['p1_id'] );
 					if ( $new_title != $post_title ) {
@@ -813,7 +816,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 			
 				$info .= '<div class="info">';
-				
+				/*
 				// Add deleted-after-merge admin_tag to P2
 				$info .= "About to attempt to add admin_tag 'deleted-after-merge' to post p2 [$p2_id]<br />";
 				//$info .= sdg_add_post_term( $p2_id, 'deleted-after-merge', 'admin_tag', true ); // this fcn is still WIP
@@ -853,7 +856,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				} else {
 					$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
 				}
-				
+				*/
 				$info .= '</div>';
 				
 			} else {
