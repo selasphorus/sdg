@@ -386,10 +386,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		$info .= "<h3>Merge request submitted...</h3>";
     		
     		// WIP/TODO: first update_repertoire_events for both posts(?)
-    		$info .= update_repertoire_events( $p1_id );
-    		$info .= update_repertoire_events( $p2_id );
+    		$info .= '<div class="info">'.update_repertoire_events( $p1_id ).'</div>';
+    		$info .= '<div class="info">'.update_repertoire_events( $p2_id ).'</div>';
     		
-    		$info .= "<h4>About to merge values from post $p2_id into post $p1_id...</h4>";
+    		$info .= "<h3>About to merge values from post $p2_id into post $p1_id...</h3>";
     		
     	} else {
     	
@@ -823,7 +823,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				
 				$info .= 'Post #1 >>&nbsp;<a href="'.get_permalink($p1_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p1_id).'" target="_blank">Edit</a><br />';
 				if ( $p2_trashed ) {
-					$info .= 'Post #2 >>&nbsp;<a href="wp-admin/edit.php?post_status=trash&post_type=repertoire" target="_blank">View P2 in Trash</a><br />';
+					$info .= 'Post #2 >>&nbsp;<a href="/wp-admin/edit.php?post_status=trash&post_type=repertoire" target="_blank">View P2 in Trash</a><br />';
 				} else {
 					$info .= 'Post #2 >>&nbsp;<a href="'.get_permalink($p2_id).'" target="_blank">View</a>&nbsp;|&nbsp;<a href="'.get_edit_post_link($p2_id).'" target="_blank">Edit</a><br />';
 				}
