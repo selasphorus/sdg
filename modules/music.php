@@ -2265,11 +2265,11 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         }
         $info .= ' <span class="devinfo">['.$post_id.']</span>';
         $tune_name = get_field('tune_name', $post_id, false);
-        /*if ( $tune_name ) {
+        if ( $tune_name ) {
             foreach ( $tune_name AS $tune ) {
                 $info .= $tune;
             }
-        }*/
+        }
         $info .= '</div>';
 
         // Get rep-specific info: rep categories, 
