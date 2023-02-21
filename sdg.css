@@ -27,6 +27,14 @@ a.action {
     color: #E71105; /*var(--mdred);*/
 }
 
+form#select_ids {
+	height: 5rem;
+}
+
+.sdg_merge_form {
+	margin-bottom: 1rem;
+}
+
 .input-group {
 	float: left;
 }
