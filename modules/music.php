@@ -1056,7 +1056,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
 		'post_status'     => 'publish',
 		'posts_per_page'  => $limit, //-1, //$posts_per_page,
-        'orderby'         => 'title',
+        'orderby'         => 'title ID',
         'order'           => 'ASC',
         'return_fields'   => 'ids',
 	);
