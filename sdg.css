@@ -1,6 +1,45 @@
 @charset "UTF-8";
 /* CSS Document */
 
+:root {
+    
+    /* Font Family */
+	--global--font-primary: var(--font-headings, -apple-system, "Open Sans", Helvetica, Arial, sans-serif);
+	--global--font-secondary: var(--font-base, -apple-system, Merriweather, Georgia, 'EB Garamond', serif);
+	--global--font-tertiary: var(--font-base, -apple-system, Montserrat, "Helvetica Neue", sans-serif);
+	--global--font-monospace: var(--font-base, -apple-system, "Courier New", "Inconsolata", monospace);
+	
+	/* Colors */
+	--white:	#ffffff;
+	--grey:		#736F69; /* very close to #ccc */
+	--ltgrey:	#E3E2E1; /* replaces eeeeee, efefef, f0f0f0, &c. */
+	--mdltgrey:	#aba9a5;
+	--mdgrey:	#96918d;
+	--mddkgrey:	#66625f; /* replaces 515151, 555(555) (which are somewhat darker), &c. -- cooler version: #686868 -- medium grey */
+	--charcoal:	#333333; /* replaces ??, &c. */
+	
+	--red:		#990000;
+	--mdred:	#E71105; /* bright and ugly! */
+	--dkred:	#760000; /* underutilized, very similar to red */
+	--orange:	orange; /**/
+	
+	--yellow:	#FFFF33;
+	--lemon:	#FFFF66;
+	--green:	#42A406;
+	--dkgreen:	#4d6600; /* olive-ish? army green? */
+	
+	/* Pastels */
+	--minty:	#d9f2d9;
+	--glacier:	#ccf5ff;
+	
+	
+	--dustyblue: #6785ac; /* medium blue (extracted from old site header graphic) */
+	--paledustyblue: #9DB1CA;
+	
+}
+
+/*** ***/
+
 .up {
 	width: 0;
 	height: 0;
@@ -27,6 +66,14 @@ a.action {
     color: #E71105; /*var(--mdred);*/
 }
 
+.info {
+	border: 1px solid var(--ltgrey);
+    padding: 1rem;
+    font-family: var(--global--font-monospace);
+}
+
+/*** FORM STYLES ***/
+
 form#select_ids {
 	height: 5rem;
 }
@@ -46,4 +93,6 @@ form#select_ids {
 input[type="text"].merge-input {
 	width: 7rem;
 }
+
+
 
