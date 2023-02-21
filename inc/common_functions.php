@@ -383,7 +383,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     		$p1 = get_post($p1_id);
     		$p2 = get_post($p2_id);
     		
-    		$info .= "<h3>About to merge values from post $p2_id into post $p1_id...</h3>";
+    		$info .= "<h3>Merge request submitted...</h3>";
+    		
+    		// WIP/TODO: first update_repertoire_events for both posts(?)
+    		$info .= update_repertoire_events( $p1_id );
+    		$info .= update_repertoire_events( $p2_id );
+    		
+    		$info .= "<h4>About to merge values from post $p2_id into post $p1_id...</h4>";
     		
     	} else {
     	
