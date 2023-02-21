@@ -1928,7 +1928,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 						array(
 							'taxonomy' => 'repertoire_category',
 							'field'    => 'slug',
-							'terms'    => array('organ-works'),
+							'terms'    => array('organ-works', 'piano-works'), //, 'symphonic-works'
 							'operator' => 'NOT IN',
 							//'include_children' => true,
 						),
