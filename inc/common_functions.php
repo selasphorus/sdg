@@ -193,7 +193,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // Retrieve any data submitted via forms or query vars
     if ( !empty($_GET) ) { $ts_info .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
-    if ( !empty($_POST) ) {    
+    if ( !empty($_POST) ) {
     	$ts_info .= '<pre>_POST: '.print_r($_POST,true).'</pre>';    	
     	if ( isset($_POST['form_action']) ) {
     		$form_action = $_POST['form_action'];
@@ -207,7 +207,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
-    	$merging = true;
+    	$merging = false; //$merging = true;
     	$merge_errors = false;
     	$fields_merged = 0;
     	
