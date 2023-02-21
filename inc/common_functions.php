@@ -730,10 +730,10 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$info .= '<td>';
                     
                     // WIP 230221 make input_name that won't conflict with any CPT name, taxonomy, &c. (reserved words) -- TS post issues...
-                    $input_name = $field_name;
+                    $input_name = "test_".$field_name;
                     
 					if ( $field_cat != "core_field" && ( $field_type == "text" || $field_type == "textarea" ) ) { // Disabled editing for core fields for now. Title is auto-gen anyway and thumbnails are seldom used for rep.
-						$info .= '<textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
+						$info .= '<textarea name="'.$input_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
 						$info .= $merge_val_info;
 					} else if ( $field_type == "taxonomy" ) {
 						if ( is_array($merge_value) ) {
@@ -742,13 +742,13 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 							}
 						}
 						$info .= '<span class="tmp"><pre>'.print_r($merge_value, true).'</pre></span>';
-						$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
+						$info .= '<input type="hidden" name="'.$input_name.'" value="'.$merge_value_str.'" />';
 						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';
 					} else {
 						//$info .= 'field_type: '.$field_type.'<br />';
 						$info .= '<span class="nb merged_val">'.$merge_value_str.'</span>'.$merge_val_info;
 						if ( $field_name != "post_title" ) {
-							$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
+							$info .= '<input type="hidden" name="'.$input_name.'" value="'.$merge_value_str.'" />';
 						}				
 					}
 					$info .= '</td>';
