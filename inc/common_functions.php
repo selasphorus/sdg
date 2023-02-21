@@ -205,7 +205,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_recordsX" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
     
     	$merging = true;
     	$merge_errors = false;
@@ -214,7 +214,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	if ( !empty($_POST['p1_id']) ) {
     		$p1_id = $_POST['p1_id'];
     		$arr_posts[] = $p1_id;
-    		$post_type = get_post_type($p1_id);    		
+    		$post_type = get_post_type($p1_id);
     	} else {
     		$post_type = "UNKNOWN";
     	}
@@ -570,8 +570,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			if ( $merging ) {
                 
-                continue; // tft
-                /*
 				if ( $field_name == "post_title" ) {
 					continue;
 				}
@@ -675,7 +673,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						//$merge_info .= "New value same as old for $field_name<br /><br />";
 					}
 				} // End if old and/or new value is non-empty
-				*/
                 
 			} else { 
 				
@@ -702,7 +699,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 					// Open row
 					$info .= '<tr>';
-					$info .= '<td>'.'</td>'; // '<input type="hidden" name="test_input" value="test_val">'
+					$info .= '<td>'.'</td>';
 			
 					// Field info
 					$info .= '<td>'.$field_cat.'</td>';
@@ -748,14 +745,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 						$info .= '<span class="nb merged_val">'.$merge_value_str.'</span>'.$merge_val_info;
 						if ( $field_name != "post_title" ) {
 							$info .= '<input type="hidden" name="'.$field_name.'" value="'.$merge_value_str.'" />';
-						}
-						//$info .= '<input type="hidden" name="'.$field_name.'" value="'.print_r($merge_value, true).'" />';					
+						}				
 					}
 					$info .= '</td>';
-				
-					//$info .= '<td><textarea name="'.$field_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>'.$merge_val_info.'</td>';
-					//$info .= '<td><input type="text" name="'.$field_name.'" value="'.$merge_value_str.'" />'.$merge_val_info.'</td>';
-					//$info .= '<td><span class="nb">'.$merge_value_str.'</span>'.$merge_val_info.'</td>';
 			
 					// Display P2 value
 					$info .= '<td class="'.$p2_class.'">';
@@ -779,7 +771,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		if ( $merging ) {
 
 			$merge_errors = true; // tft
-			/*
+			
 			if ( !$merge_errors ) {
 				
 				$info .= "<hr />";
@@ -865,7 +857,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			} else {
 				$info .= "<h3>Errors occurred during Merge operation. Therefore p2 [".$_POST['p2_id']."] has not yet been moved to the trash.</h3>";
 			}
-			*/
+			
 		} else {
 			
 			// Close the comparison table
