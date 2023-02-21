@@ -364,7 +364,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 	$info .= '<input type="submit" value="Compare Posts">';
 	$info .= '</form>';
 	$info .= '<br clear="all" />';
-	$info .= '<hr />';
+	//$info .= '<hr />';
 	
     if ( count($arr_posts) == 2 ) {
 		
@@ -818,6 +818,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		$info .= '</form>';
     
 	} else {
+		$info .= '<hr />';
 		//$info .= "Post count incorrect for comparison or merge (".count($arr_posts).")<br />";
 	} // END if ( count($arr_posts) == 2 )       
     
