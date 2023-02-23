@@ -602,7 +602,7 @@ function get_authorship_info ( $args = array() ) {
         
     }
     
-    sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
+    //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
     
     // Build the authorship_info string
     
