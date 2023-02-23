@@ -355,7 +355,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $authorship_arr['anon_info'] = $arr['anon_info'];
             //$authorship_arr['rep_categories'] = $arr['rep_categories'];
             
-            $authorship_info = get_authorship_info( $authorship_arr, 'post_title', $abbr ); //( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) 
+            $authorship_args = array( 'data' => $authorship_arr, 'format' => 'post_title', 'abbr' => $abbr ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+            $authorship_info = get_authorship_info ( $authorship_args ); //$authorship_info = get_authorship_info( $authorship_arr, 'post_title', $abbr );
             
             //$key_ids = $arr['keys']; // array of ids
             $first_line = $arr['first_line'];
@@ -397,7 +398,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             //
             $editors = $arr['editor']; // array of ids
             //sdg_log( "editors: ".print_r($editors, true) );
-            $editors_str = str_from_persons_array ( $editors, 'editors', $post_id, $format, $arr_of, $abbr );
+            $persons_args = array( 'arr_persons' => $editors, 'person_category' => 'editors', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => false );
+            $editors_str = str_from_persons_array ( $persons_args ); //$editors_str = str_from_persons_array ( $editors, 'editors', $post_id, $format, $arr_of, $abbr );
             //sdg_log( "editors_str: ".$editors_str );
             sdg_log( "-----");
             
@@ -550,7 +552,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $opus_num = get_field('opus_number', $post_id);
 
             // composer(s), arranger(s), transcriber:
-            $authorship_info = get_authorship_info( $authorship_arr, 'post_title', $abbr ); //( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true )
+            $authorship_args = array( 'data' => $authorship_arr, 'format' => 'post_title', 'abbr' => $abbr ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+            $authorship_info = get_authorship_info ( $authorship_args ); //$authorship_info = get_authorship_info( $authorship_arr, 'post_title', $abbr );
 
             $first_line = get_field('first_line', $post_id);
             $tune_name = get_field('tune_name', $post_id);
@@ -762,7 +765,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // MW Authorship
             
             // A. Short version
-            $rep_authorship_short = get_authorship_info( array( 'post_id' => $musical_work_id ), 'edition_title', true ); // abbr
+            $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => true ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+            $rep_authorship_short = get_authorship_info ( $authorship_args ); //$rep_authorship_short = get_authorship_info( array( 'post_id' => $musical_work_id ), 'edition_title', true );
             //sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short ); // tft
             // ltrim punctuation so as to avoid failed replacement if work, e.g., has no arranger but no composer listed -- TODO: integrate this into get_authorship_info fcn?
             $rep_authorship_short = ltrim( $rep_authorship_short, ', ' );
@@ -771,7 +775,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short ); // tft
             
             // B. Long version
-            $rep_authorship_long = get_authorship_info( array( 'post_id' => $musical_work_id ), 'edition_title', false ); // not abbr
+            $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => false ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+            $rep_authorship_long = get_authorship_info ( $authorship_args ); //$rep_authorship_long = get_authorship_info( array( 'post_id' => $musical_work_id ), 'edition_title', false ); // not abbr
             //sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long ); // tft
             // remove punctuation for purposes of string replacement
             $rep_authorship_long = ltrim( $rep_authorship_long, ', ' );
@@ -1183,7 +1188,7 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
 		
 		}
         
-        if ( !empty($clean_title) && $post_type === 'repertoire' ) { // 230220 added post_type check -- TODO: re-expand application, but make sure to update this field if post_title is updated! e.g. for events
+        if ( !empty($clean_title) && $post_type == 'repertoire' ) { // 230220 added post_type check -- TODO: re-expand application, but make sure to update this field if post_title is updated! e.g. for events
 			if ( ! add_post_meta( $post_id, 'title_clean', $clean_title, true ) ) {
 				update_post_meta ( $post_id, 'title_clean', $clean_title );
 			}

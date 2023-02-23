@@ -1227,8 +1227,10 @@ function get_program_item_name ( $a = array() ) {
                         $title_as_label .= get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
                         // TODO: figure out how to show auth info only for one item if all items in group have same info...
                         // WIP
-                        if ( $show_item_authorship == true ) { $item_name = get_authorship_info( array( 'post_id' => $program_item_obj_id ), 'concert_item', false, false, false ); }
-                        // get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) {
+                        if ( $show_item_authorship == true ) { 
+                        	$authorship_args = array( 'data' => array( 'post_id' => $program_item_obj_id ), 'format' => 'concert_item', 'abbr' => false ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+            				$item_name = get_authorship_info ( $authorship_args ); //$item_name = get_authorship_info( array( 'post_id' => $program_item_obj_id ), 'concert_item', false, false, false );
+                        }
 
                     } else {
 

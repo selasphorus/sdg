@@ -411,8 +411,14 @@ function str_from_persons_array ( $args = array() ) {
             } else {
                 $display_name = get_the_title( $person_id );
             }
-
-            $info .= $display_name;
+            
+            if ( $links ) {
+                $person_url = esc_url( get_permalink( $person_id ) );
+                $info .= make_link( $person_url, $display_name, '', '_blank' );
+            } else {
+            	$info .= $display_name;
+            }
+            
             sdg_log( "[str_from_persons] abbr is true (or is psalm composer) >> use short display_name: ".$display_name );
 
         } else {
@@ -425,7 +431,13 @@ function str_from_persons_array ( $args = array() ) {
 
             } else {
 
-                $info .= $display_name;
+                if ( $links ) {
+					$person_url = esc_url( get_permalink( $person_id ) );
+					$info .= make_link( $person_url, $display_name, '', '_blank' );
+				} else {
+					$info .= $display_name;
+				}
+            
                 sdg_log( "[str_from_persons] abbr is false >> use long display_name: ".$display_name );
 
                 // Add person_dates for composers only for post_titles (always) & edition_titles (provisionally for rep_authorship_long use only) & concert_items
@@ -461,16 +473,33 @@ function str_from_persons_array ( $args = array() ) {
 // Retrieve properly formatted authorship info for Repertoire records
 // Authorship: Composers, Arrangers, Transcriber, Librettists, &c.
 // $format options include: display; post_title; ....? (TODO: better info here)
-function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) {
-    
+// TODO: parse_args
+//function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true, $links = false ) {
+function get_authorship_info ( $args = array() ) {
+  
     sdg_log( "divline2" );
     sdg_log( "function called: get_authorship_info" );
     
+    // Defaults
+	$defaults = array(
+		'data'     		=> array(),
+		'format'    	=> 'post_title',
+		'abbr'    		=> false,
+		'is_single_work'=> false,
+		'show_title'    => false,
+		'links'    		=> false,
+	);
+
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	/*
     sdg_log( "[authorship_info] data: ".print_r($data, true) );
     sdg_log( "[authorship_info] format: ".$format );
     sdg_log( "[authorship_info] is_single_work: ".$is_single_work );
     sdg_log( "[authorship_info] show_title: ".$show_title );
     sdg_log( "[authorship_info] abbr: ".(int)$abbr );
+    */
     
     // Init vars
     $authorship_info = "";
@@ -522,7 +551,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         $composers_str = "";
         $composers = get_field('composer', $post_id, false); // Can't use get_post_meta for ACF relationship fields because stored value is array
         if ( $composers ) { 
-            $composers_str = str_from_persons_array( $composers, 'composers', $post_id, $format, 'objects', false ); 
+            $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => 'objects', 'abbr' => false, 'links' => $links );
+            $composers_str = str_from_persons_array ( $persons_args ); //$composers_str = str_from_persons_array( $composers, 'composers', $post_id, $format, 'objects', false ); 
             //args: $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
         }
         $display_composer = $composers_str;
@@ -582,7 +612,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
         if ( is_dev_site() ) {
             $composer_info = $composers_str;
         } else {
-            $composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
+            $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
+            $composer_info = str_from_persons_array ( $persons_args ); //$composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
         }
         
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
@@ -667,7 +698,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
     // 2. Arranger(s)
     if ( !empty($arrangers) ) {
 
-        $arranger_info = str_from_persons_array ( $arrangers, 'arrangers', $post_id, $format, $arr_of, $abbr );
+        $persons_args = array( 'arr_persons' => $arrangers, 'person_category' => 'arrangers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
+        $arranger_info = str_from_persons_array ( $persons_args ); //$arranger_info = str_from_persons_array ( $arrangers, 'arrangers', $post_id, $format, $arr_of, $abbr );
 
         if ( $is_single_work == true && $arranger_info != "") {
             $info .= "Arranger(s): ".$arranger_info."<br />";
@@ -691,7 +723,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
     // 3. Transcriber(s)
     if ( !empty($transcribers) ) {
 
-        $transcriber_info = str_from_persons_array ( $transcribers, 'transcribers', $post_id, $format, $arr_of, $abbr );
+        $persons_args = array( 'arr_persons' => $transcribers, 'person_category' => 'transcribers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
+        $transcriber_info = str_from_persons_array ( $persons_args ); //$transcriber_info = str_from_persons_array ( $transcribers, 'transcribers', $post_id, $format, $arr_of, $abbr );
 
         if ( $transcriber_info != "" ) {
             if ( $is_single_work == true ) {
@@ -716,7 +749,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
     // 4. Librettist(s)
     if ( !empty($librettists) && $format != "post_title" && $format != "edition_title" && $format != "concert_item" ) {
         
-        $librettist_info = str_from_persons_array ( $librettists, 'librettists', $post_id, $format, $arr_of, $abbr );
+        $persons_args = array( 'arr_persons' => $librettists, 'person_category' => 'librettists', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
+        $librettist_info = str_from_persons_array ( $persons_args ); //$librettist_info = str_from_persons_array ( $librettists, 'librettists', $post_id, $format, $arr_of, $abbr );
 
         if ( $is_single_work == true && $librettist_info != "") {
             $info .= "Librettist(s): ".$librettist_info."<br />";
@@ -734,7 +768,8 @@ function get_authorship_info( $data = array(), $format = 'post_title', $abbr = f
     // 5. Translator(s)
     if ( !empty($translators) && $format != "post_title" ) {
 
-        $translator_info = str_from_persons_array ( $translators, 'translators', $post_id, $format, $arr_of, $abbr );
+        $persons_args = array( 'arr_persons' => $translators, 'person_category' => 'translators', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
+        $librettist_info = str_from_persons_array ( $persons_args ); //$translator_info = str_from_persons_array ( $translators, 'translators', $post_id, $format, $arr_of, $abbr );
 
         if ( $is_single_work == true && $translator_info != "") {
             $info .= "Translator(s): ".$translator_info."<br />";
@@ -909,7 +944,8 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     if ( $show_authorship == true ) { // && $is_single_work == false
         
         $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title ); // $title_clean
-        $authorship_info = get_authorship_info( $authorship_arr, $format, false, $is_single_work, $show_title ); 
+        $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title ); //, 'links' => false
+        $authorship_info = get_authorship_info ( $authorship_args ); //$authorship_info = get_authorship_info( $authorship_arr, $format, false, $is_single_work, $show_title ); 
         // ( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) 
         if ( $authorship_info != "Unknown" ) {
             if ( $format == 'display' ) { $info .= '<span class="authorship">'; }
