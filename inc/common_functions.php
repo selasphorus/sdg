@@ -205,7 +205,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $arr_posts = array(); // tft
     $form_type = 'simple_merge';
     
-    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "merge_records" ) {
+    if ( isset($_POST['p1_id']) && isset($_POST['p2_id']) && $form_action == "Merge Records" ) { // $form_action == "merge_records"
     
     	$merging = true;
     	$merge_errors = false;
@@ -564,6 +564,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$p2_val = $values['p2_val'];
 			$merge_value = $values['merge_val'];
 			$merge_val_info = $values['merge_info'];
+			//
+			$post_field_name = "sdg_".$field_name;
 			
 			// WIP: track fields cumulatively to determine whether records are identical and, if so, offer option to delete p2 (or -- newer of two posts)
 			if ( $p1_val != $p2_val ) { $identical_posts = false; }			
@@ -580,7 +582,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				// Compare old stored value w/ new merge_value, to see whether update is needed
 				$old_val = $p1_val;
 				if ( is_array($old_val) ) { $old_val = trim(implode("; ",$old_val)); } else { $old_val = trim($old_val); }				
-				if ( !empty($_POST[$field_name]) ) { $new_val = trim($_POST[$field_name]); } else { $new_val = ""; }
+				if ( !empty($_POST[$post_field_name]) ) { $new_val = trim($_POST[$post_field_name]); } else { $new_val = ""; }
 				
 				if ( !empty($old_val) || !empty($new_val) ) {
 				
@@ -730,7 +732,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 					$info .= '<td>';
                     
                     // WIP 230221 make input_name that won't conflict with any CPT name, taxonomy, &c. (reserved words) -- TS post issues...
-                    $input_name = "test_".$field_name;
+                    $input_name = "sdg_".$field_name;
                     
 					if ( $field_cat != "core_field" && ( $field_type == "text" || $field_type == "textarea" ) ) { // Disabled editing for core fields for now. Title is auto-gen anyway and thumbnails are seldom used for rep.
 						$info .= '<textarea name="'.$input_name.'" rows="5" columns="20">'.$merge_value_str.'</textarea>';
@@ -869,7 +871,6 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			
 			//
 			//$info .= '<input type="hidden" name="form_action" value="merge_records">';
-			$info .= '<input type="submit" name="form_action" value="TEST"><br /><br />';
 			$info .= '<input type="submit" name="form_action" value="Merge Records"><br /><br />';
 			$info .= '<p class="nb"><em>NB: This action cannot be undone!<br />The primary post will be updated with the field values displayed in <span class="green">green</span>, and in the center merge column;<br />the secondary post will be sent to the trash and all field values displayed in <span class="orange">orange</span> will be deleted/overwritten.</p>';
 			//$info .= '<a href="#!" id="form_reset">Clear Form</a>';
