@@ -567,7 +567,7 @@ function get_authorship_info ( $args = array() ) {
         $librettists = get_field('librettist', $post_id, false);
         $translators = get_field('translator', $post_id, false);
         //
-        $anon_info = get_field( $post_id, 'anon_info', false );//$anon_info = get_post_meta( $post_id, 'anon_info', true ); // post_meta ok for text fields... but is it better/faster? TODO: RS
+        $anon_info = get_post_meta( $post_id, 'anon_info', true ); // post_meta ok for text fields... but is it better/faster? TODO: RS //$anon_info = get_field( $post_id, 'anon_info', false );//
 
         // TODO: streamline this -- maybe along the lines of is_anon?
         if ( $format == 'display' ) { $info .= "<!-- display_composer: ".$display_composer." -->"; } // tft
@@ -585,7 +585,7 @@ function get_authorship_info ( $args = array() ) {
         
         $arr_of = 'objects';
         
-    } else { 
+    } else {
         
         sdg_log( "[authorship_info] get info from data without post_id" );
         
