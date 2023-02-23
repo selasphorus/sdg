@@ -527,7 +527,9 @@ function get_authorship_info ( $args = array() ) {
     }
     
     // Get info either via post_id, if set, or from data array
-    if ( isset($data['post_id']) ) { 
+    if ( isset($data['post_id']) ) {
+        
+        sdg_log( "[authorship_info] get info from data['post_id']" );
         
         $post_id = $data['post_id'];
         //sdg_log( "[authorship_info] post_id: ".$post_id );
@@ -584,6 +586,8 @@ function get_authorship_info ( $args = array() ) {
         $arr_of = 'objects';
         
     } else { 
+        
+        sdg_log( "[authorship_info] get info from data without post_id" );
         
         $post_id = null;
         //$is_hymn
