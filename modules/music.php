@@ -476,9 +476,11 @@ function str_from_persons_array ( $args = array() ) {
 // TODO: parse_args
 //function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true, $links = false ) {
 function get_authorship_info ( $args = array() ) {
-  
-    sdg_log( "divline2" );
-    sdg_log( "function called: get_authorship_info" );
+
+	$do_log = false; // logging off or on -- set to off for cleaner logs; on for active TS
+	
+    sdg_log( "divline2", $do_log ); 
+    sdg_log( "function called: get_authorship_info", $do_log );
     
     // Defaults
 	$defaults = array(
@@ -527,7 +529,7 @@ function get_authorship_info ( $args = array() ) {
     if ( isset($data['post_id']) ) { 
         
         $post_id = $data['post_id'];
-        sdg_log( "[authorship_info] post_id: ".$post_id );
+        //sdg_log( "[authorship_info] post_id: ".$post_id );
         
         if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
             $rep_title = $data['rep_title'];
@@ -599,44 +601,44 @@ function get_authorship_info ( $args = array() ) {
         
     }
     
-    //sdg_log( "[authorship_info] rep_title: ".$rep_title );
+    sdg_log( "[authorship_info] rep_title: ".$rep_title, $do_log );
     
     // Build the authorship_info string
     
     // 1. Composer(s)
     if ( !empty($composers) ) { // || !empty($anon_info)
         
-        //sdg_log( "[authorship_info] composers: ".print_r($composers, true) );
+        sdg_log( "[authorship_info] composers: ".print_r($composers, true), $do_log );
         
         // str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false )
-        if ( is_dev_site() ) {
-            $composer_info = $composers_str;
-        } else {
+        //if ( is_dev_site() ) {
+        //    $composer_info = $composers_str;
+        //} else {
             $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
             $composer_info = str_from_persons_array ( $persons_args ); //$composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
-        }
+        //}
         
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
         // Redundant: TODO: instead use is_anon fcn? Any reason why not to do this?
         if ( $composer_info == '[Unknown]' || $composer_info == 'Unknown' || $composer_info == 'Anonymous' || $composer_info == 'Plainsong' ) { //
             $is_anon = true;
-            sdg_log( "[authorship_info] is_anon.");
+            sdg_log( "[authorship_info] is_anon.", $do_log);
         } else {
-            sdg_log( "[authorship_info] NOT is_anon.");
+            sdg_log( "[authorship_info] NOT is_anon.", $do_log);
         }
         if ( $composer_info == "Unknown" || ( $composer_info == "Anonymous" && $anon_info == "" ) ) { 
             $composer_info = "";
         }
         
-        sdg_log( "[authorship_info] composer_info: ".$composer_info );
-        sdg_log( "[authorship_info] anon_info: ".$anon_info );
+        sdg_log( "[authorship_info] composer_info: ".$composer_info, $do_log );
+        sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
         
         if ( $composer_info != "" || $anon_info != "" ) {
 
             if ( $is_anon == true ) { // || $composer_info == 'Plainsong'
                 if ( $anon_info != "" ) {
                     // 1a. "Anonymous/anon_info"
-                    sdg_log( "[authorship_info] is_anon + anon_info" );
+                    //sdg_log( "[authorship_info] is_anon + anon_info" );
                     if ( $format == "post_title" || $format == "edition_title" || $format == "concert_item" ) {
                         if ( $composer_info != "" ) {
                             $composer_info .= "/";

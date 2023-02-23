@@ -145,12 +145,14 @@ function sanitize ( $str = null ) {
 // Build title_for_matching UID based on... ???
 function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
     
-    sdg_log( "divline2" );
-    sdg_log( "function called: get_title_uid" );
+    $do_log = true;
     
-    sdg_log( "[gtu] post_id: ".$post_id."; post_type: ".$post_type );
-    sdg_log( "[gtu] post_title: ".$post_title );
-    sdg_log( "[gtu] uid_field: ".$uid_field );
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_title_uid", $do_log );
+    
+    sdg_log( "[gtu] post_id: ".$post_id."; post_type: ".$post_type, $do_log );
+    sdg_log( "[gtu] post_title: ".$post_title, $do_log );
+    sdg_log( "[gtu] uid_field: ".$uid_field, $do_log );
     
     if ( $post_id == null && $post_title == null ) {
         return null;
@@ -169,14 +171,14 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
     $new_t4m = super_sanitize_title ( $post_title );
     
-    sdg_log( "[gtu] old_t4m: ".$old_t4m );    
+    sdg_log( "[gtu] old_t4m: ".$old_t4m, $do_log );    
     
     // Check to see if new_t4m is in fact unique to this post
     $t4m_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); //meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
     if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
         
         // not unique! fix it...
-        sdg_log( "[gtu] new_t4m not unique! Fix it.");
+        sdg_log( "[gtu] new_t4m not unique! Fix it.", $do_log);
         
         if ( $old_t4m != $new_t4m ) {
             $i = $t4m_posts+1;
@@ -187,9 +189,9 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
         
     }
     if ( $new_t4m == $old_t4m ) {
-        sdg_log( "[gtu] new_t4m same as old_t4m." );
+        sdg_log( "[gtu] new_t4m same as old_t4m.", $do_log );
     } else {
-        sdg_log( "[gtu] new_t4m: ".$new_t4m );
+        sdg_log( "[gtu] new_t4m: ".$new_t4m, $do_log );
     }
     
     return $new_t4m;
@@ -197,7 +199,9 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
 
 function update_title_for_matching ( $post_id ) {
     
-    sdg_log( "function: sdg_update_title_for_matching" );
+    $do_log = true;
+    
+    sdg_log( "function: sdg_update_title_for_matching", $do_log );
     
     $post = get_post( $post_id );
     $post_title = $post->post_title;
@@ -211,7 +215,7 @@ function update_title_for_matching ( $post_id ) {
     $title_clean = get_post_meta( $post_id, 'title_clean', true );
     
     if ( ! $title_clean || $title_clean == "" ) {
-        sdg_log( "No title_clean stored in post_meta for this post -> use make_clean_title" );
+        sdg_log( "No title_clean stored in post_meta for this post -> use make_clean_title", $do_log );
         $title_clean = make_clean_title( $post_id );
     }
     $info .= "<!-- post_title: $post_title // title_clean: $title_clean // t4m: $t4m -->";
@@ -312,15 +316,28 @@ function update_title_for_matching ( $post_id ) {
 
 function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
     
-    sdg_log( "divline2" );
-    sdg_log( "function called: build_the_title" );
+    $do_log = true;
     
-    sdg_log( "[btt] post_id: ".$post_id );
-    sdg_log( "[btt] abbr: ".(int)$abbr );
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: build_the_title", $do_log );
+    
+    sdg_log( "[btt] post_id: ".$post_id, $do_log );
+    sdg_log( "[btt] abbr: ".(int)$abbr, $do_log );
     
     if ( $post_id == null ) { return null; }
     $post_type = get_post_type( $post_id ); //if ( $post_type == null ) { $post_type = get_post_type( $post_id ); }
     
+    // Before we get any further, if this is a repertoire record, check for a title_clean value
+    // If there is no title_clean, abort -- there's a problem!
+    if ( $post_type == 'repertoire' ) {
+    	if ( isset($arr['title_clean']) ) { $title_clean = $arr['title_clean']; } else { $title_clean = get_field('title_clean', $post_id); }
+    	if ( empty($title_clean) ) { 
+    		sdg_log( "[btt] Problem! title_clean is empty for repertoire record ID: ".$post_id, $do_log );
+    		return null;
+    	}
+    }
+    
+    //
     $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
     
@@ -332,7 +349,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     // Set var values
     if ( !empty($arr) ) {
         
-        sdg_log( "[btt] running btt using array derived from _POST." );
+        sdg_log( "[btt] running btt using array derived from _POST.", $do_log );
         
         if ( $post_type == 'repertoire' ) {
             
@@ -375,10 +392,10 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
             if ( is_array($musical_works) && count($musical_works) == 1 ) {
                 $musical_work_id = $musical_works[0];
-                sdg_log( "[btt/edition] single musical_work_id found: ".$musical_work_id );
+                sdg_log( "[btt/edition] single musical_work_id found: ".$musical_work_id, $do_log );
             } else {
                 // WIP -- TBD: how to deal w/ case of multiple works associated with one edition
-                sdg_log( "[btt/edition] multiple musical_works found: ".print_r($musical_works, true) );
+                sdg_log( "[btt/edition] multiple musical_works found: ".print_r($musical_works, true), $do_log );
                 foreach ( $musical_works AS $musical_work_id ) {
                     //$musical_work_id = 
                 }
@@ -387,7 +404,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // TODO: turn this array into a string!
             $choir_forces = $arr['choir_forces'];
             if ( is_array($choir_forces) ) {
-                sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".print_r($choir_forces, true) );
+                sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".print_r($choir_forces, true), $do_log );
                 $choir_forces_str = implode(", ",$choir_forces);
                 $choir_forces_str = ucwords(str_replace("_"," ",$choir_forces_str));
                 $choir_forces_str = str_replace("Men-s","Men's",$choir_forces_str);
@@ -401,7 +418,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $persons_args = array( 'arr_persons' => $editors, 'person_category' => 'editors', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => false );
             $editors_str = str_from_persons_array ( $persons_args ); //$editors_str = str_from_persons_array ( $editors, 'editors', $post_id, $format, $arr_of, $abbr );
             //sdg_log( "editors_str: ".$editors_str );
-            sdg_log( "-----");
+            sdg_log( "-----", $do_log );
             
             $publication_id = $arr['publication']; // single id
             //sdg_log( "[btt/arr] publication_id: ".$publication_id ); // tft
@@ -454,7 +471,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 //sdg_log( "[btt/arr] voicings_str is empty." );
                 if ( $arr['voicing_txt'] != "" ) {
                     $voicings_str = $arr['voicing_txt'];
-                    sdg_log( "[btt/arr] using backup txt field for voicings_str" );
+                    sdg_log( "[btt/arr] using backup txt field for voicings_str", $do_log );
                 }
             } else {
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str );
@@ -503,7 +520,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
             if ( $instruments_str == "" && $arr['instrumentation_txt'] != "" ) {
                 $instruments_str = $arr['instrumentation_txt'];
-                sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str );
+                sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str, $do_log );
             }
             
             
@@ -531,14 +548,14 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         }
         if ( $keys_str == "" && $arr['key_name_txt'] != "" ) {
             $keys_str = $arr['key_name_txt'];
-            sdg_log( "[btt/arr] using backup txt field for keys_str" );
+            sdg_log( "[btt/arr] using backup txt field for keys_str", $do_log );
         }
         
     } else if ( $post_id ) {
         
         // If no array of data was submitted, get info via the post_id
         
-        sdg_log( "[btt] running btt based on post_id." );
+        sdg_log( "[btt] running btt based on post_id.", $do_log );
         
         $authorship_arr['post_id'] = $post_id;
         
@@ -612,7 +629,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             
         }
     } else {
-    	sdg_log( "[btt] No POST data arr or post_id!");
+    	sdg_log( "[btt] No POST data arr or post_id!", $do_log );
     }
     
     // Taxonomies
@@ -669,13 +686,13 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         $psalm_cat_id = "1461"; // "Psalms" -- same id on live and dev
         $chant_cat_id = "1528"; // "Anglican Chant" -- same id on live and dev
         
-        sdg_log( "[btt] title_clean: ".$title_clean );
+        sdg_log( "[btt] title_clean: ".$title_clean, $do_log );
         
         if ( in_array($hymn_cat_id, $rep_categories) ) {
 
             // Hymns
             
-            sdg_log( "[btt] This is a hymn." ); // tft
+            sdg_log( "[btt] This is a hymn.", $do_log ); // tft
             // TODO: deal w/ miscategorizations -- e.g. 
             // Blest are the pure in heart (Ten Orisons) -- M. Searle Wright (1918-2004)
             
@@ -759,7 +776,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
         // 1. Musical Work
         if ( $musical_work_id != null ) {
-            sdg_log( "[btt] musical_work_id: ".$musical_work_id );
+            sdg_log( "[btt] musical_work_id: ".$musical_work_id, $do_log );
             
             $musical_work_title = get_the_title($musical_work_id);
             //$musical_work_title = get_field('post_title', $musical_work_id);
@@ -776,7 +793,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $rep_authorship_short = ltrim( $rep_authorship_short, ', ' );
             $rep_authorship_short = ltrim( $rep_authorship_short, '-- ' );
             $rep_authorship_short = trim( $rep_authorship_short, '()' );
-            sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short ); // tft
+            sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short, $do_log ); // tft
             
             // B. Long version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => false ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
@@ -789,8 +806,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $rep_authorship_long = ltrim( $rep_authorship_long, '(' ); // left enclosing paren
             $rep_authorship_long = str_replace( "))", ")", $rep_authorship_long ); // get rid of final left enclosing paren but not closing paren for author dates
             
-            sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long ); // tft
-            sdg_log( "[btt/edition] musical_work_title: ".$musical_work_title ); // tft
+            sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long, $do_log ); // tft
+            sdg_log( "[btt/edition] musical_work_title: ".$musical_work_title, $do_log ); // tft
             
             // Compare short/long authorship; replace as needed
             if ( $rep_authorship_long != $rep_authorship_short ) {
@@ -800,17 +817,17 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 // TODO: figure out why this doesn't always work as expected -- sometimes no replacement is made despite the availability of valid strings.
                 $count = 0;
                 $musical_work = str_replace( $rep_authorship_long, $rep_authorship_short, $musical_work_title, $count );
-                sdg_log( "[btt/edition] num replacements made: ".$count." (Replace [".$rep_authorship_long."] with [".$rep_authorship_short."] in [".$musical_work_title."] )" ); // tft
-                sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work ); // tft
+                sdg_log( "[btt/edition] num replacements made: ".$count." (Replace [".$rep_authorship_long."] with [".$rep_authorship_short."] in [".$musical_work_title."] )", $do_log ); // tft
+                sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work, $do_log ); // tft
             } else {
-                sdg_log( "[btt/edition] rep_authorship_long same as rep_authorship_short." ); // tft
+                sdg_log( "[btt/edition] rep_authorship_long same as rep_authorship_short.", $do_log ); // tft
                 $musical_work = $musical_work_title;
             }
             $new_title .= $musical_work;
             //sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work ); // tft
             //sdg_log( "[btt/edition] new_title (after adding musical_work info): ".$new_title );
         } else {
-            sdg_log( "[btt/edition] Abort! No musical_work found upon which to build the title." );
+            sdg_log( "[btt/edition] Abort! No musical_work found upon which to build the title.", $do_log );
             return "<pre>*** Error! Abort! No musical_work found upon which to build the title for Edition with post_id: $post_id. ***</pre>";
             //return null; // no musical work for building edition title.
         }
@@ -895,7 +912,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
     }
     
-    sdg_log( "[btt] new_title (final): ".$new_title );
+    sdg_log( "[btt] new_title (final): ".$new_title, $do_log );
     
     return $new_title;
     

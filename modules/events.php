@@ -2082,7 +2082,7 @@ add_filter( 'em_events_build_sql_conditions', 'sdg_em_custom_scope_condition',10
 function sdg_em_custom_scope_condition( $conditions, $args ){
 
     sdg_log("fcn sdg_em_custom_scope_condition");
-    sdg_log("args: ". print_r($args,true) );
+    //sdg_log("args: ". print_r($args,true) );
     sdg_log("conditions: ". print_r($conditions,true) );
     
     if( is_admin() ) { sdg_log("is_admin"); } else { sdg_log("NOT is_admin"); }

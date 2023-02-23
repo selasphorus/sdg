@@ -1866,7 +1866,9 @@ function sdg_console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-function sdg_log($log_msg) {
+function sdg_log( $log_msg, $do_log = true ) {
+    
+    if ( $do_log === false ) { return; } // Abort if logging is turned off (set per calling fcn)
     
 	// Create directory for storage of log files, if it doesn't exist already
 	$log_filename = $_SERVER['DOCUMENT_ROOT']."/_sdg-devlog";
@@ -1892,7 +1894,7 @@ function sdg_log($log_msg) {
 	// (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
     $log_file = $log_filename.'/' . $datestamp . '-sdg_dev.log';
 	// Syntax: file_put_contents(filename, data, mode, context)
-    file_put_contents($log_file, $log_msg . "\n", FILE_APPEND);
+	file_put_contents($log_file, $log_msg . "\n", FILE_APPEND); 
 }
 
 
