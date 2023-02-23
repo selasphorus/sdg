@@ -146,12 +146,14 @@ function get_cpt_person_content( $post_id = null ) {
 
 function get_person_dates( $post_id, $styled = false ) {
     
-    sdg_log( "divline2" );
-    sdg_log( "function called: get_person_dates" );
+    $do_log = false; // logging off or on -- set to off for cleaner logs; on for active TS
+    
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_person_dates", $do_log );
     
     //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
-    sdg_log( "[get_person_dates] post_id: ".$post_id );
-    //sdg_log( "[get_person_dates] styled: ".$styled );
+    sdg_log( "[get_person_dates] post_id: ".$post_id, $do_log );
+    //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
     
     $info = ""; // init
     
