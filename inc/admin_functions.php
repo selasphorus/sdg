@@ -145,7 +145,7 @@ function sanitize ( $str = null ) {
 // Build title_for_matching UID based on... ???
 function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
     
-    $do_log = true;
+    $do_log = true; // false for cleaner logs; true for active TS
     
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_title_uid", $do_log );
@@ -199,7 +199,7 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
 
 function update_title_for_matching ( $post_id ) {
     
-    $do_log = true;
+    $do_log = true; // false for cleaner logs; true for active TS
     
     sdg_log( "function: sdg_update_title_for_matching", $do_log );
     

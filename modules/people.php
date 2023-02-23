@@ -146,7 +146,7 @@ function get_cpt_person_content( $post_id = null ) {
 
 function get_person_dates( $post_id, $styled = false ) {
     
-    $do_log = false; // logging off or on -- set to off for cleaner logs; on for active TS
+    $do_log = false; // false for cleaner logs; true for active TS
     
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_person_dates", $do_log );

@@ -173,7 +173,6 @@ function get_cpt_edition_content( $post_id = null ) {
 	if ($post_id === null) { $post_id = get_the_ID(); }
 	$info .= "<!-- edition post_id: $post_id -->";
     
-    
     // Musical Work
     if ( get_field( 'repertoire_editions', $post_id )  ) {
         $repertoire_editions = get_field( 'repertoire_editions', $post_id );
@@ -357,8 +356,10 @@ function is_anon( $post_id = null ) {
 //function str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
 function str_from_persons_array ( $args = array() ) {
     
-    sdg_log( "divline2" );
-    sdg_log( "function called: str_from_persons_array" );
+    $do_log = false; // false for cleaner logs; true for active TS
+    
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: str_from_persons_array", $do_log );
     
     // Defaults
 	$defaults = array(
@@ -375,13 +376,13 @@ function str_from_persons_array ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
     
-    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
-    /*sdg_log( "[str_from_persons] person_category: ".$person_category );
-    sdg_log( "[str_from_persons] post_id: ".$post_id );
-    sdg_log( "[str_from_persons] format: ".$format );
-    sdg_log( "[str_from_persons] arr_of: ".$arr_of );
-    sdg_log( "[str_from_persons] abbr: ".(int)$abbr );
-    sdg_log( "[str_from_persons] links: ".(int)$links );*/
+    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true), $do_log );
+    sdg_log( "[ssfpa] person_category: ".$person_category, $do_log );
+    sdg_log( "[ssfpa] post_id: ".$post_id, $do_log );
+    sdg_log( "[ssfpa] format: ".$format, $do_log );
+    sdg_log( "[ssfpa] arr_of: ".$arr_of, $do_log );
+    sdg_log( "[ssfpa] abbr: ".(int)$abbr, $do_log );
+    sdg_log( "[ssfpa] links: ".(int)$links, $do_log );
     
     $info = "";
     
@@ -398,7 +399,7 @@ function str_from_persons_array ( $args = array() ) {
         } else {
             $person_id = $person;
         }*/
-        sdg_log( "[str_from_persons] person_id: ".$person_id );
+        sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
 
         if ( $abbr == true || 
             ( $person_category == "composers" && has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) 
@@ -419,7 +420,7 @@ function str_from_persons_array ( $args = array() ) {
             	$info .= $display_name;
             }
             
-            sdg_log( "[str_from_persons] abbr is true (or is psalm composer) >> use short display_name: ".$display_name );
+            sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
 
         } else {
                 
@@ -427,7 +428,7 @@ function str_from_persons_array ( $args = array() ) {
 
             if ( $display_name == "Unknown" ) {
 
-                sdg_log( "[str_from_persons] display_name = Unknown" );
+                sdg_log( "[ssfpa] display_name = Unknown", $do_log );
 
             } else {
 
@@ -438,19 +439,19 @@ function str_from_persons_array ( $args = array() ) {
 					$info .= $display_name;
 				}
             
-                sdg_log( "[str_from_persons] abbr is false >> use long display_name: ".$display_name );
+                sdg_log( "[ssfpa] abbr is false >> use long display_name: ".$display_name, $do_log );
 
                 // Add person_dates for composers only for post_titles (always) & edition_titles (provisionally for rep_authorship_long use only) & concert_items
                 if ( $format == "post_title" || $format == "edition_title" ) { // || $format == "concert_item"
                     if ( $person_category == "composers" || $person_category == "arrangers" ) { 
                         $info .= get_person_dates( $person_id, false ); // don't add person_dates span/style for post_titles
-                        sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, false ) );
+                        sdg_log( "[ssfpa] get_person_dates: ".get_person_dates( $person_id, false ), $do_log );
                     } else {
-                        sdg_log( "[str_from_persons] not in composers cat >> don't add dates" );
+                        sdg_log( "[ssfpa] not in composers cat >> don't add dates", $do_log );
                     }
                 } else {
                     $info .= get_person_dates( $person_id, true );
-                    sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ) );
+                    sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ), $do_log );
                 }
 
             }
@@ -477,7 +478,7 @@ function str_from_persons_array ( $args = array() ) {
 //function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true, $links = false ) {
 function get_authorship_info ( $args = array() ) {
 
-	$do_log = false; // logging off or on -- set to off for cleaner logs; on for active TS
+	$do_log = false; // false for cleaner logs; true for active TS
 	
     sdg_log( "divline2", $do_log ); 
     sdg_log( "function called: get_authorship_info", $do_log );
@@ -496,11 +497,11 @@ function get_authorship_info ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	/*
-    sdg_log( "[authorship_info] data: ".print_r($data, true) );
-    sdg_log( "[authorship_info] format: ".$format );
-    sdg_log( "[authorship_info] is_single_work: ".$is_single_work );
-    sdg_log( "[authorship_info] show_title: ".$show_title );
-    sdg_log( "[authorship_info] abbr: ".(int)$abbr );
+    sdg_log( "[authorship_info] data: ".print_r($data, true), $do_log );
+    sdg_log( "[authorship_info] format: ".$format, $do_log );
+    sdg_log( "[authorship_info] is_single_work: ".$is_single_work, $do_log );
+    sdg_log( "[authorship_info] show_title: ".$show_title, $do_log );
+    sdg_log( "[authorship_info] abbr: ".(int)$abbr, $do_log );
     */
     
     // Init vars
@@ -638,7 +639,7 @@ function get_authorship_info ( $args = array() ) {
             if ( $is_anon == true ) { // || $composer_info == 'Plainsong'
                 if ( $anon_info != "" ) {
                     // 1a. "Anonymous/anon_info"
-                    //sdg_log( "[authorship_info] is_anon + anon_info" );
+                    //sdg_log( "[authorship_info] is_anon + anon_info", $do_log );
                     if ( $format == "post_title" || $format == "edition_title" || $format == "concert_item" ) {
                         if ( $composer_info != "" ) {
                             $composer_info .= "/";
@@ -838,13 +839,15 @@ function get_excerpted_from( $post_id = null ) {
 // Return formats include 'display' (for front end), 'txt' (for back end(, and 'sanitized' (for DB matching)
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
 	
-    /*sdg_log( "divline2" );
-    sdg_log( "function called: get_rep_info" );
+	$do_log = false; // false for cleaner logs; true for active TS
+	
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_rep_info", $do_log );
     
-    sdg_log( "[get_rep_info] post_id: ".$post_id );
-    sdg_log( "[get_rep_info] format: ".$format );
-    sdg_log( "[get_rep_info] show_authorship: ".$show_authorship );
-    sdg_log( "[get_rep_info] show_title: ".$show_title );*/
+    sdg_log( "[get_rep_info] post_id: ".$post_id, $do_log );
+    sdg_log( "[get_rep_info] format: ".$format, $do_log );
+    sdg_log( "[get_rep_info] show_authorship: ".$show_authorship, $do_log );
+    sdg_log( "[get_rep_info] show_title: ".$show_title, $do_log );
     
 	$info = "";
 	if ( $post_id === null ) { $post_id = get_the_ID(); }
