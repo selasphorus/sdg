@@ -562,7 +562,7 @@ function get_authorship_info ( $args = array() ) {
         $librettists = get_field('librettist', $post_id, false);
         $translators = get_field('translator', $post_id, false);
         //
-        $anon_info = get_post_meta( $post_id, 'anon_info', true ); // post_meta ok for text fields... but is it better/faster? TODO: RS
+        $anon_info = get_field( $post_id, 'anon_info', false );//$anon_info = get_post_meta( $post_id, 'anon_info', true ); // post_meta ok for text fields... but is it better/faster? TODO: RS
 
         // TODO: streamline this -- maybe along the lines of is_anon?
         if ( $format == 'display' ) { $info .= "<!-- display_composer: ".$display_composer." -->"; } // tft
@@ -624,7 +624,7 @@ function get_authorship_info ( $args = array() ) {
         } else {
             sdg_log( "[authorship_info] NOT is_anon.");
         }
-        if ( $composer_info == "Unknown" || ( $composer_info == "Anonymous" && $anon_info == "") ) { 
+        if ( $composer_info == "Unknown" || ( $composer_info == "Anonymous" && $anon_info == "" ) ) { 
             $composer_info = "";
         }
         
@@ -657,8 +657,8 @@ function get_authorship_info ( $args = array() ) {
             if ( $is_single_work !== true && $composer_info != "" ) {
 
                 // 1b. Composer name(s)
-                if ( $format == "post_title" && $composer_info != "Unknown" ) {
-                    $composer_info = " -- ".$composer_info;
+                if ( $format == "post_title" && $composer_info != "Unknown" ) { // && $composer_info != "Anonymous"
+                    $composer_info = " --* ".$composer_info;
                 } else if ( $is_psalm ) { // has_term( 'psalms', 'repertoire_category', $post_id )
                     $composer_info = " (".$composer_info.")";
                 } else if ( $plainsong == true ) {
@@ -677,7 +677,7 @@ function get_authorship_info ( $args = array() ) {
 
         }
 
-        if ( $is_single_work == true && $composer_info != "") {
+        if ( $is_single_work == true && $composer_info != "" ) {
             if ( $is_anon == false ) { 
                 $info .= "Composer(s): ";
             } else if ( $plainsong == true || stripos($composer_info, 'tone') || stripos($composer_info, 'Plainsong') || stripos($anon_info, 'Plainsong') || $anon_info == 'Plainsong' ) { // also "mode"? -- 
