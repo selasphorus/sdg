@@ -462,7 +462,7 @@ function str_from_persons_array ( $args = array() ) {
     } // END foreach $arr_persons
 
     // Trim trailing comma and space
-    if ( substr($info, -2) == ', ' ) {
+    if ( substr($info, -2) == ", " ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
@@ -658,7 +658,7 @@ function get_authorship_info ( $args = array() ) {
 
                 // 1b. Composer name(s)
                 if ( $format == "post_title" && $composer_info != "Unknown" ) { // && $composer_info != "Anonymous"
-                    $composer_info = " --* ".$composer_info;
+                    $composer_info = " -- ".$composer_info;
                 } else if ( $is_psalm ) { // has_term( 'psalms', 'repertoire_category', $post_id )
                     $composer_info = " (".$composer_info.")";
                 } else if ( $plainsong == true ) {
@@ -707,7 +707,7 @@ function get_authorship_info ( $args = array() ) {
             if ( $authorship_info != "" ) {
                 //$authorship_info .= ", ";
             } else if ( $format != 'edition_title' && $format != "concert_item" ) {
-                $authorship_info .= " --$ ";
+                //$authorship_info .= " -- ";
             }
             if ( $html ) { 
             	$authorship_info .= '<span class="arranger">arr. '.$arranger_info.'</span>';
