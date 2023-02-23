@@ -478,7 +478,7 @@ function str_from_persons_array ( $args = array() ) {
 //function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true, $links = false ) {
 function get_authorship_info ( $args = array() ) {
 
-	$do_log = false; // false for cleaner logs; true for active TS
+	$do_log = true; // false for cleaner logs; true for active TS
 	
     sdg_log( "divline2", $do_log ); 
     sdg_log( "function called: get_authorship_info", $do_log );
@@ -602,12 +602,13 @@ function get_authorship_info ( $args = array() ) {
         
     }
     
+    sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
     //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
     
     // Build the authorship_info string
     
     // 1. Composer(s)
-    if ( !empty($composers) || !empty($anon_info) ) { //
+    if ( !empty($composers) ) { //
         
         sdg_log( "[authorship_info] composers: ".print_r($composers, true), $do_log );
         
