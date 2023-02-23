@@ -1138,8 +1138,8 @@ function filter_the_title( $post_title, $post_id = null ) {
 // TODO/WIP: Troubleshoot
 function make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
 	
-    sdg_log( "divline1" );
-    sdg_log( "function: make_clean_title");
+    //sdg_log( "divline1" );
+    //sdg_log( "function: make_clean_title");
     
     //if ( $post_id === null ) { $post_id = get_the_ID(); }
     
@@ -1157,10 +1157,10 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
         }
     }
     
-    sdg_log( "post_id: ".$post_id."; post_title: ".$post_title );
+    //sdg_log( "[smct] post_id: ".$post_id."; post_title: ".$post_title );
     
     if ( $return_revised == true ) {
-        sdg_log( "function: make_clean_title >> return_revised" );
+        //sdg_log( "[smct] >> return_revised" );
     }
     
 	if ( is_admin() && $return_revised == true ) {

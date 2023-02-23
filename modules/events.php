@@ -2253,8 +2253,8 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     sdg_log( "divline2" );
     sdg_log( "function called: sdg_custom_event_search_build_sql_conditions" );
     
-    sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true) );
-    sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true) );
+    //sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true) );
+    //sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true) );
     
     global $wpdb;
     
@@ -2289,7 +2289,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
 		
 	}
     
-    sdg_log( "[sdg_custom_event_search...] modified conditions: ".print_r($conditions, true) );
+    //sdg_log( "[sdg_custom_event_search...] modified conditions: ".print_r($conditions, true) );
     
     return $conditions;
 }
