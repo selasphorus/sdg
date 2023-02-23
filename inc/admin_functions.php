@@ -538,7 +538,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
         // If no array of data was submitted, get info via the post_id
         
-        sdg_log( "running btt based on post_id." );
+        sdg_log( "[btt] running btt based on post_id." );
         
         $authorship_arr['post_id'] = $post_id;
         
@@ -666,7 +666,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         $hymn_cat_id = "1452"; // "Hymns" -- same id on live and dev
         $psalm_cat_id = "1461"; // "Psalms" -- same id on live and dev
         $chant_cat_id = "1528"; // "Anglican Chant" -- same id on live and dev
-            
+        
+        sdg_log( "[btt] title_clean: ".$title_clean );
+        
         if ( in_array($hymn_cat_id, $rep_categories) ) {
 
             // Hymns
