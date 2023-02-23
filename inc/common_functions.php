@@ -776,7 +776,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		
 		if ( $merging ) {
 
-			$merge_errors = true; // tft
+			//$merge_errors = true; // tft to prevent trashing of p2
 			
 			if ( !$merge_errors ) {
 				
