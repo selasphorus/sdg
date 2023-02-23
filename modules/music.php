@@ -607,7 +607,7 @@ function get_authorship_info ( $args = array() ) {
     // Build the authorship_info string
     
     // 1. Composer(s)
-    if ( !empty($composers) ) { // || !empty($anon_info)
+    if ( !empty($composers) || !empty($anon_info) ) { //
         
         sdg_log( "[authorship_info] composers: ".print_r($composers, true), $do_log );
         
