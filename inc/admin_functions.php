@@ -923,9 +923,63 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 // do_action( "updated_post_meta", int $meta_id, int $object_id, string $meta_key, mixed $_meta_value )
 // Fires immediately after updating metadata of a specific type.
 
+
+/* 220223 moved from apostle/functions.php */
+
+// TODO update for ACF -- get field_ids
+add_filter( 'wp_insert_post_data' , 'modify_post_title' , '99', 2 );
+function modify_post_title( $data ) {
+    
+	if ($data['post_type'] == 'reading') {
+		
+		$title = $data['post_title'];
+		if ($title == '') { 
+			//if ( isset($_POST['acf']['field_abc123']) ) { // // Check if book value was updated.
+            //$arr['title_clean']     = $_POST['acf']['field_624615e7eca6f'];
+			if ( isset( $_REQUEST['acf']['field_62718b8b97a1c'] ) ) {
+				$arr_book = $_REQUEST['acf']['field_62718b8b97a1c'];
+				$book_name = get_the_title($arr_book[0]);
+                $title .= ucfirst($book_name).' ';
+			}
+			if ( isset( $_REQUEST['acf']['field_62718bc597a1d'] ) ) {
+				$chapterverses = $_REQUEST['acf']['field_62718bc597a1d'];
+				$title .= $chapterverses;
+			}
+			if ($title == '') { $title = 'Unnamed Reading Record'; }
+		}
+		$data['post_title'] = $title;
+		
+	} else if ($data['post_type'] == 'lectionary') {
+		
+		$title = $data['post_title'];
+		if ( isset( $_REQUEST['acf']['field_62742fcbdac58'] ) ) {
+			$year = $_REQUEST['acf']['field_62742fcbdac58'];
+			
+			if (strpos($title,'(Year '.ucfirst($year).')') === false) {
+				
+				if (strpos($title,'Year ') !== false) {
+					$pattern = '/Year [A-C]/';
+					$replacement = 'Year '.ucfirst($year);
+					$title = preg_replace($pattern, $replacement, $title);
+				} else {
+					$title .= ' (Year '.ucfirst($year).')';
+				}
+			}
+		}
+		if ($title == '') { $title = 'Unnamed Lectionary Record'; }
+		$data['post_title'] = $title;
+		
+	}
+    
+	return $data;
+}
+
+
 // TMP(?) disabled 02/02/23 -- will need to test to determine whether it's necessary when first saving/publishing a NEW post...
 //add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
 function build_the_title_on_insert( $data, $postarr ) {
+    
+    $do_log = true; // false for cleaner logs; true for active TS
     
     sdg_log( "divline1" );
     sdg_log( "filter: wp_insert_post_data" );
@@ -1397,10 +1451,12 @@ function clean_slug( $post_id ) {
 add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
 function sdg_save_post_callback( $post_id, $post, $update ) {
     
-    sdg_log( "divline1" );
-    sdg_log( "action: save_post" );
-    //sdg_log( "action: save_post_event" );
-    sdg_log( "function called: sdg_save_post_callback" );
+    $do_log = true; // false for cleaner logs; true for active TS
+    
+    sdg_log( "divline1", $do_log );
+    //sdg_log( "action: save_post", $do_log );
+    //sdg_log( "action: save_post_event", $do_log );
+    sdg_log( "function called: sdg_save_post_callback", $do_log );
     
     if ( is_dev_site() ) {
         sdg_add_post_term( $post_id, 'dev-test-tmp', 'admin_tag', true ); // tft
@@ -1418,14 +1474,14 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     
     // If this is a post revision, then abort
     if ( wp_is_post_revision( $post_id ) ) { 
-        sdg_log( "[sspc] is post revision >> abort." );
+        sdg_log( "[sspc] is post revision >> abort.", $do_log );
         return;
     }
     
     $post_type = $post->post_type;
     //$post_type = get_post_type( $post_id );
     // get custom fields from $_POST var?
-    sdg_log( "[sspc] post_type: ".$post_type );
+    sdg_log( "[sspc] post_type: ".$post_type, $do_log );
  
     // ***WIP***
     if ( $post_type == "event" ) {
@@ -1439,7 +1495,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
         // If this event is part of a recurring event series, then abort
         if ( $recurrence_id ) { 
-            sdg_log( "[sspc] is part of recurring event series ($recurrence_id) >> abort." );
+            sdg_log( "[sspc] is part of recurring event series ($recurrence_id) >> abort.", $do_log );
             return;
         }
 
@@ -1462,8 +1518,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $new_slug_info = clean_slug( $post_id );
         $new_slug = $new_slug_info['new_slug'];
         $old_slug = $post->post_name;
-        sdg_log( "[sspc] old_slug: ".$old_slug);
-        sdg_log( "[sspc] new_slug: ".$new_slug);
+        sdg_log( "[sspc] old_slug: ".$old_slug, $do_log );
+        sdg_log( "[sspc] new_slug: ".$new_slug, $do_log );
 
         // Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
         if ( $new_slug != $old_slug ) {
@@ -1506,22 +1562,22 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $new_slug = sanitize_title($new_title);
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true ); // or use get_field?
 
-        sdg_log( "[sspc] about to call function: get_title_uid" );
+        sdg_log( "[sspc] about to call function: get_title_uid", $do_log );
         $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
         
-        sdg_log( "divline2" );
+        sdg_log( "divline2", $do_log );
 
-        sdg_log( "[sspc] post_id: ".$post_id );
-        sdg_log( "[sspc] post_type: ".$post_type );
-        sdg_log( "[sspc] post_title: ".$post_title );
-        sdg_log( "[sspc] title_clean: ".$title_clean );
+        sdg_log( "[sspc] post_id: ".$post_id, $do_log );
+        sdg_log( "[sspc] post_type: ".$post_type, $do_log );
+        sdg_log( "[sspc] post_title: ".$post_title, $do_log );
+        sdg_log( "[sspc] title_clean: ".$title_clean, $do_log );
         //
-        sdg_log( "[sspc] new_title: ".$new_title );
-        sdg_log( "[sspc] new_slug: ".$new_slug );
+        sdg_log( "[sspc] new_title: ".$new_title, $do_log );
+        sdg_log( "[sspc] new_slug: ".$new_slug, $do_log );
         // WIP:
         //sdg_log( "old_title: ".$old_title );
-        sdg_log( "[sspc] old_t4m: ".$old_t4m );
-        sdg_log( "[sspc] new_t4m: ".$new_t4m );
+        sdg_log( "[sspc] old_t4m: ".$old_t4m, $do_log );
+        sdg_log( "[sspc] new_t4m: ".$new_t4m, $do_log );
 
         //$update_data = array(); // init
 
@@ -1534,12 +1590,12 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
             // TODO: get this to work when called via Update for individual post record (post.php)
             // For the moment, the t4m only gets updates when run via the title_updates function. No idea why.
-            sdg_log( ">> update t4m" );
+            sdg_log( ">> update t4m", $do_log );
             //$update_data['meta_input'] = array( 'title_for_matching' => $new_t4m );
             $meta_update = update_post_meta( $post_id, 'title_for_matching', $new_t4m );
-            sdg_log( "meta_update: ".$meta_update );
+            sdg_log( "meta_update: ".$meta_update, $do_log );
             if ( $meta_update === true ) {
-                sdg_log("success!");
+                sdg_log( "success!", $do_log );
                 //sdg_log(sdg_add_post_term( $post_id, array('t4m-updated', 'programmatically-updated'), 'admin_tag', true ));
             } else {
                 //(int|bool) Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
@@ -1551,7 +1607,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
         if ( $new_title != $post_title ) {
 
-			sdg_log( "[sspc] update the post_title" );
+			sdg_log( "[sspc] update the post_title", $do_log );
 			
 			// TODO: figure out how NOT to trigger wp_insert_post_data when running this update...
 			
@@ -1602,11 +1658,11 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
       
     } else if ( $post_type == "sermon" ) {
     
-    	sdg_log( "[sspc] update the sermon_bbooks" );
+    	sdg_log( "[sspc] update the sermon_bbooks", $do_log );
     	if ( update_sermon_bbooks( $post_id ) ) {
-    		sdg_log( "[sspc] Success! Updated the sermon_bbooks" );
+    		sdg_log( "[sspc] Success! Updated the sermon_bbooks", $do_log );
     	} else {
-    		sdg_log( "[sspc] ERROR! Failed to update the sermon_bbooks" );
+    		sdg_log( "[sspc] ERROR! Failed to update the sermon_bbooks", $do_log );
     	}
     	
     } // end post_type check
