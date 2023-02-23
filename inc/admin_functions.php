@@ -1188,11 +1188,12 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
 		
 		}
         
-        if ( !empty($clean_title) && $post_type == 'repertoire' ) { // 230220 added post_type check -- TODO: re-expand application, but make sure to update this field if post_title is updated! e.g. for events
+        // WIP/TS
+        /*if ( !empty($clean_title) && $post_type == 'repertoire' ) { // 230220 added post_type check -- TODO: re-expand application, but make sure to update this field if post_title is updated! e.g. for events
 			if ( ! add_post_meta( $post_id, 'title_clean', $clean_title, true ) ) {
 				update_post_meta ( $post_id, 'title_clean', $clean_title );
 			}
-		}
+		}*/
         
     } else if ( !is_admin() ) {
         
