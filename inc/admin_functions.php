@@ -648,7 +648,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 $keys_str = get_field('key_name', $post_id, false);
             }*/
         }
-        sdg_log( "[btt/taxonomies] keys_str: ".$keys_str ); // tft
+        sdg_log( "[btt] keys_str: ".$keys_str ); // tft
         
         if ( $post_type == 'repertoire' ) {
             $rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'ids' ) );
@@ -659,7 +659,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // Get term names for "voicing".
             $voicings = wp_get_post_terms( $post_id, 'voicing', array( 'fields' => 'names' ) );
             if ( $voicings ) { $voicings_str = implode(", ", $voicings); } else { $voicings_str = ""; }
-            sdg_log( "[btt/taxonomies] voicings_str: ".$voicings_str ); // tft
+            sdg_log( "[btt] voicings_str: ".$voicings_str ); // tft
 
             // Get term names for "soloist".
             $soloists = wp_get_post_terms( $post_id, 'soloist', array( 'fields' => 'names' ) );
