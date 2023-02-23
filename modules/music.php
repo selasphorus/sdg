@@ -353,17 +353,35 @@ function is_anon( $post_id = null ) {
 
 // Stringify an array of person ids or objects, with formatting options
 // TODO: better documentation
-function str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
+// TODO: add option to make_link for each name
+//function str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
+function str_from_persons_array ( $args = array() ) {
     
     sdg_log( "divline2" );
     sdg_log( "function called: str_from_persons_array" );
     
+    // Defaults
+	$defaults = array(
+		'arr_persons'     	=> array(),
+		'person_category' 	=> null,
+		'post_id' 			=> null,
+		'format'    		=> 'display',
+		'arr_of'    		=> 'objects',
+		'abbr'    			=> false,
+		'links'    			=> false,
+	);
+
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+    
     //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
-    sdg_log( "[str_from_persons] person_category: ".$person_category );
+    /*sdg_log( "[str_from_persons] person_category: ".$person_category );
     sdg_log( "[str_from_persons] post_id: ".$post_id );
     sdg_log( "[str_from_persons] format: ".$format );
     sdg_log( "[str_from_persons] arr_of: ".$arr_of );
     sdg_log( "[str_from_persons] abbr: ".(int)$abbr );
+    sdg_log( "[str_from_persons] links: ".(int)$links );*/
     
     $info = "";
     
@@ -2251,6 +2269,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '<div class="rep_item">';
         $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
         $info .= " by ";
+        // Composer(s)
         $composers = get_field('composer', $post_id, false);
         if ( $composers ) {
             foreach ( $composers AS $person_id ) {
@@ -2260,6 +2279,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 $info .= make_link( $composer_url, $composer_name, '', '_blank' );
             }
         }
+        // Anon info/arranger...
+        //get_authorship_info -- but with links
         $info .= ' <span class="devinfo">['.$post_id.']</span>';
         $tune_name = get_field('tune_name', $post_id, false);
         if ( $tune_name ) { $info .= '<br /><span class="tune_name">Tune: '.$tune_name.'</span>'; }
