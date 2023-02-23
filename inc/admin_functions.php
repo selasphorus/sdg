@@ -332,7 +332,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     // Set var values
     if ( !empty($arr) ) {
         
-        sdg_log( "running btt using array derived from _POST." );
+        sdg_log( "[btt] running btt using array derived from _POST." );
         
         if ( $post_type == 'repertoire' ) {
             
@@ -611,6 +611,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $instrumentation_txt = get_field('instrumentation_txt', $post_id);
             
         }
+    } else {
+    	sdg_log( "[btt] No POST data arr or post_id!");
     }
     
     // Taxonomies
@@ -1406,6 +1408,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     $post_type = $post->post_type;
     //$post_type = get_post_type( $post_id );
     // get custom fields from $_POST var?
+    sdg_log( "[sspc] post_type: ".$post_type );
  
     // ***WIP***
     if ( $post_type == "event" ) {
@@ -1480,9 +1483,11 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         // Get post obj, post_title, $old_t4m
         $the_post = get_post( $post_id );
         $post_title = $the_post->post_title;
+        $title_clean = get_post_meta( $post_id, 'title_clean', true ); // or use get_field?
+        //
         $new_title = build_the_title( $post_id );
         $new_slug = sanitize_title($new_title);
-        $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
+        $old_t4m = get_post_meta( $post_id, 'title_for_matching', true ); // or use get_field?
 
         sdg_log( "[sspc] about to call function: get_title_uid" );
         $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
@@ -1492,6 +1497,8 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         sdg_log( "[sspc] post_id: ".$post_id );
         sdg_log( "[sspc] post_type: ".$post_type );
         sdg_log( "[sspc] post_title: ".$post_title );
+        sdg_log( "[sspc] title_clean: ".$title_clean );
+        //
         sdg_log( "[sspc] new_title: ".$new_title );
         sdg_log( "[sspc] new_slug: ".$new_slug );
         // WIP:
