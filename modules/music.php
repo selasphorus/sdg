@@ -720,10 +720,10 @@ function get_authorship_info ( $args = array() ) {
             } else if ( $format != 'edition_title' && $format != "concert_item" ) {
                 //$authorship_info .= " -- ";
             }
+            if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
             if ( $html ) { 
             	$authorship_info .= '<span class="arranger">arr. '.$arranger_info.'</span>';
             } else {
-            	if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
             	$authorship_info .= "arr. ".$arranger_info;
             }
             
