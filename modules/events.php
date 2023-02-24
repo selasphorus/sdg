@@ -968,7 +968,8 @@ function get_event_program_items( $atts = [] ) {
     }
     
     if ( is_dev_site() ) {
-    	$info .= $ts_info;
+    	//$info .= $ts_info;
+    	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
     
 	return $info;
