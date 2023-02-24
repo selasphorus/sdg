@@ -342,8 +342,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     //292003 -- 298829
     
     // TODO: give user choice of which post to treat as primary?
-	if ( $arr_posts[0] ) { $p1_id = $arr_posts[0]; } else { $p1_id = null; }
-	if ( $arr_posts[1] ) { $p2_id = $arr_posts[1]; } else { $p2_id = null; }	
+	if ( isset($arr_posts[0]) ) { $p1_id = $arr_posts[0]; } else { $p1_id = null; }
+	if ( isset($arr_posts[1]) ) { $p2_id = $arr_posts[1]; } else { $p2_id = null; }	
 	
 	// Set up the form for submitting IDs to compare
 	// To do: set action to SELF without query vars(?)
