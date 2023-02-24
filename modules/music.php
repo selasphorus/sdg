@@ -2334,7 +2334,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '<td class="repertoire">';
         $info .= '<div class="rep_item">';
         $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
-        
+        $info .= "&nbsp;";
         $authorship_args = array( 'data' => array( 'post_id' => $post_id ), 'format' => 'display', 'abbr' => false, 'is_single_work' => false, 'show_title' => false, 'links' => true );
         $authorship_info = get_authorship_info ( $authorship_args );
         $info .= $authorship_info;
