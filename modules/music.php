@@ -2331,6 +2331,11 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '<td class="repertoire">';
         $info .= '<div class="rep_item">';
         $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
+        
+        $authorship_args = array( 'data' => array( 'post_id' => $post_id ), 'format' => 'display', 'abbr' => false, 'is_single_work' => false, 'show_title' => false, 'links' => true );
+        $authorship_info = get_authorship_info ( $authorship_args );
+        $info .= $authorship_info;
+        /*
         $info .= " by ";
         // Composer(s)
         $composers = get_field('composer', $post_id, false);
@@ -2342,8 +2347,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 $info .= make_link( $composer_url, $composer_name, '', '_blank' );
             }
         }
-        // Anon info/arranger...
-        //get_authorship_info -- but with links
+        */
         $info .= ' <span class="devinfo">['.$post_id.']</span>';
         $tune_name = get_field('tune_name', $post_id, false);
         if ( $tune_name ) { $info .= '<br /><span class="tune_name">Tune: '.$tune_name.'</span>'; }
