@@ -643,22 +643,25 @@ function get_authorship_info ( $args = array() ) {
 
             if ( $is_anon == true ) { // || $composer_info == 'Plainsong'
                 if ( $anon_info != "" ) {
+                	$show_anon = "";
                     // 1a. "Anonymous/anon_info"
                     //sdg_log( "[authorship_info] is_anon + anon_info", $do_log );
                     if ( $format == "post_title" || $format == "edition_title" || $format == "concert_item" ) {
                         if ( $composer_info != "" ) {
-                            $composer_info .= "/";
+                            $show_anon .= "/";
                         }
-                        $composer_info .= $anon_info;
+                        $show_anon .= $anon_info;
                         //$composer_info .= "Anonymous/".$anon_info.""; // ???
                     } else if ( $is_single_work !== true && $anon_info != "Plainsong" && $is_psalm == false ) {
-                        $composer_info .= " (".$anon_info.")";
+                        $show_anon .= " (".$anon_info.")";
                     } else if ( $is_psalm == true && $composer_info == "Plainsong" ) {
-                        $composer_info .= "/".$anon_info;
+                        $show_anon .= "/".$anon_info;
                         // TODO: make this same as all plainsong? Or keep variation for Psalms only?
                     } else {
-                        $composer_info .= $anon_info;
+                        $show_anon .= $anon_info;
                     }
+                    if ( $html ) { $show_anon = '<span class="anon_info">'.$show_anon.'</span>'; }
+                    if ( !empty( $show_anon) ) { $composer_info .= $show_anon; }
                 }
             }
 
@@ -680,7 +683,7 @@ function get_authorship_info ( $args = array() ) {
                 } else if ( $format != "edition_title" && $format != "concert_item"  ) {
                     $composer_info = "by ".$composer_info;
                 }
-                if ( $html ) { $composer_info = '<span class="composer">'.$composer_info.'</span>'; }                
+                if ( $html ) { $composer_info = '<span class="composer">'.$composer_info.'</span>'; }
             }
 
         }
