@@ -564,7 +564,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // Get info via ACF get_field fcn rather than get_post_meta -- because the latter may return: Array( [0] => )
             
             $title_clean = get_field('title_clean', $post_id);
-            $excerpted_from = get_field('excerpted_from', $post_id);
+            $arr_excerpted_from = get_excerpted_from( $post_id );
+    		$excerpted_from = $arr_excerpted_from['excerpted_from'];
+            //$excerpted_from = get_field('excerpted_from', $post_id);
             $catalog_num = get_field('catalog_number', $post_id);
             $opus_num = get_field('opus_number', $post_id);
 
