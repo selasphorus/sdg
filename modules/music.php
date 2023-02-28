@@ -2352,8 +2352,16 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         }
         */
         $info .= ' <span class="devinfo">['.$post_id.']</span>';
+        
+        // Excerpted from
+        $arr_excerpted_from = get_excerpted_from( $post_id );
+    	$excerpted_from = $arr_excerpted_from['excerpted_from'];
+        if ( $excerpted_from ) { $info .= '<br /><span class="excerpted_from">Excerpted from: '.$excerpted_from.'</span>'; }
+        
+        // Tune Name
         $tune_name = get_field('tune_name', $post_id, false);
         if ( $tune_name ) { $info .= '<br /><span class="tune_name">Tune: '.$tune_name.'</span>'; }
+        
         $info .= '</div>';
 
         // Get rep-specific info: rep categories, 
