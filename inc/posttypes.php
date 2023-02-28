@@ -1027,7 +1027,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
 			'taxonomies' => array( 'sermon_topic', 'admin_tag' ),
-			'show_in_rest' => true,    
+			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'sermon', $args );
