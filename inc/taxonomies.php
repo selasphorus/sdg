@@ -75,7 +75,7 @@ function register_taxonomy_admin_tag() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'admin_tag' ],
     );
-    register_taxonomy( 'admin_tag', [ 'admin_note', 'bible_book', 'collect', 'data_table', 'edition', 'ensemble', 'event', 'event-recurring', 'event_series', 'lectionary', 'liturgical_date', 'liturgical_date_calc', 'location', 'music_list', 'page', 'person', 'post', 'product', 'psalms_of_the_day', 'publication', 'publisher', 'reading', 'repertoire', 'sermon', 'sermon_series' ], $args );
+    register_taxonomy( 'admin_tag', [ 'admin_note', 'attachement', 'bible_book', 'collect', 'data_table', 'edition', 'ensemble', 'event', 'event-recurring', 'event_series', 'lectionary', 'liturgical_date', 'liturgical_date_calc', 'location', 'music_list', 'page', 'person', 'post', 'product', 'psalms_of_the_day', 'publication', 'publisher', 'reading', 'repertoire', 'sermon', 'sermon_series' ], $args );
 }
 add_action( 'init', 'register_taxonomy_admin_tag' );
 
