@@ -560,8 +560,19 @@ function get_personnel_person ( $a = array() ) {
     if ( isset($a['display']) ) 	{ $display = $a['display'];     		} else { $display = ""; }
 	
 	if ( isset($row['person'][0]) ) { 
-                
-		$person_name = get_the_title($row['person'][0]);
+        
+        // Get the person name
+        $person_id = $row['person'][0];
+        // Get prefix and last name, if available
+        $prefix = get_field('prefix',$person_id);
+        $last_name = get_field('last_name',$person_id);
+        if ( !empty($prefix) && !empty($last_name) ) {
+        	$person_name = $prefix." ".$last_name;
+        } else {
+        	// If no prefix & last_name, just use post title
+        	$person_name = get_the_title($person_id);
+        }
+        
 		//$person_name = make_link( get_permalink($row['person'][0]), $person_name );
 		// TODO: get website for person if any and make link
 		
