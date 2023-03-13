@@ -310,9 +310,51 @@ if ( in_array('people', $sdg_modules ) ) {
 	add_action( 'init', 'register_taxonomy_people_category' );
 }
 
-if ( in_array('music', $sdg_modules ) ) {
+/*** Taxonomies for PROJECTS ***/
 
-	/*** Taxonomies for REPERTOIRE ***/
+if ( in_array('project', $sdg_modules ) ) {
+	// Custom Taxonomy: Project Category
+	function register_taxonomy_project_category() {
+		//$cap = 'project'; // WIP
+		$labels = array(
+			'name'              => _x( 'Project Categories', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Project Category', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Project Categories' ),
+			'all_items'         => __( 'All Project Categories' ),
+			'parent_item'       => __( 'Parent Project Category' ),
+			'parent_item_colon' => __( 'Parent Project Category:' ),
+			'edit_item'         => __( 'Edit Project Category' ),
+			'update_item'       => __( 'Update Project Category' ),
+			'add_new_item'      => __( 'Add New Project Category' ),
+			'new_item_name'     => __( 'New Project Category Name' ),
+			'menu_name'         => __( 'Project Categories' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+            // CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'project_category' ],
+		);
+		register_taxonomy( 'project_category', [ 'project' ], $args );
+	}
+	add_action( 'init', 'register_taxonomy_project_category' );
+}
+
+/*** Taxonomies for REPERTOIRE ***/
+
+if ( in_array('music', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Occasion
 	function register_taxonomy_occasion() {
@@ -617,9 +659,9 @@ if ( in_array('music', $sdg_modules ) ) {
 
 }
 
-if ( in_array('events', $sdg_modules ) ) {
+/*** Taxonomies for EVENT PROGRAMS ***/
 
-	/*** Taxonomies for EVENT PROGRAMS ***/
+if ( in_array('events', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Person Role
 	function register_taxonomy_person_role() {
@@ -699,9 +741,9 @@ if ( in_array('events', $sdg_modules ) ) {
 
 }
 
-if ( in_array('lectionary', $sdg_modules ) ) {
+/*** Taxonomies for LECTIONARY ***/
 
-	/*** Taxonomies for LECTIONARY ***/
+if ( in_array('lectionary', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Liturgical Date Category
 	function register_taxonomy_liturgical_date_category() {
