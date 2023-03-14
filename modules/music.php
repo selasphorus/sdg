@@ -1895,9 +1895,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         $rep_cat_queried = false;
         
         //$ts_info .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
-        $ts_info .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; // tft
+        //if ( !empty($tq_components_primary) ) { $ts_info .= "tq_components_primary: <pre>".print_r($tq_components_primary,true)."</pre>"; } // tft
         //$ts_info .= "mq_components_related: <pre>".print_r($mq_components_related,true)."</pre>"; // tft
-        $ts_info .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; // tft
+        //if ( !empty($tq_components_primary) ) { $ts_info .= "tq_components_related: <pre>".print_r($tq_components_related,true)."</pre>"; } // tft
         
         // If field values were found related to both post types,
         // AND if we're searching for posts that match ALL terms (search_operator: "and"),
