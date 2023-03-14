@@ -312,7 +312,7 @@ if ( in_array('people', $sdg_modules ) ) {
 
 /*** Taxonomies for PROJECTS ***/
 
-if ( in_array('project', $sdg_modules ) ) {
+if ( in_array('projects', $sdg_modules ) ) {
 	// Custom Taxonomy: Project Category
 	function register_taxonomy_project_category() {
 		//$cap = 'project'; // WIP
