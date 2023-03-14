@@ -1904,11 +1904,17 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         if ( $search_primary_post_type == true ) {
 			$args['post_type'] = $post_type;
 		}
+		
+		if ( $search_related_post_type == true ) {
+			if ( $args ) { 
+				$args_related = array_merge( $args_related, $args ); //$args_related = $args;
+				$args = null; // reset primary args to prevent triggering of second query
+			}
+            $args_related['post_type'] = $related_post_type;
+        }
         
         if ( $search_primary_post_type == true && $search_related_post_type == true && $search_operator == "and" ) { 
-            $ts_info .= "Querying both primary and related post_types (two sets of args)<br />";
-            $args_related = array_merge( $args_related, $args ); //$args_related = $args;
-            $args_related['post_type'] = $related_post_type;
+            $ts_info .= "Querying both primary and related post_types (two sets of args)<br />";            
         } else if ( $search_primary_post_type == true && $search_related_post_type == true && $search_operator == "or" ) { 
             // WIP -- in this case
             $ts_info .= "Querying both primary and related post_types (two sets of args) but with OR operator... WIP<br />";
@@ -1919,9 +1925,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             } else if ( $search_related_post_type == true ) {
                 // Searching related post_type only
                 $ts_info .= "Searching related post_type only<br />";
-                $args_related = array_merge( $args_related, $args ); //$args_related = $args;
-                $args_related['post_type'] = $related_post_type;
-                $args = null; // reset primary args to prevent triggering of second query
             }
         }
         
