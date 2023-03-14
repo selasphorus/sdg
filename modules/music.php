@@ -1429,7 +1429,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
                         // For now, set it explicitly per field_name
                         if ( $field_name == "box_num" ) {
-                        	$match_value = "'".$match_value."'";
+                        	//$match_value = "'".$match_value."'";
                         	//$match_value = '"'.$match_value.'"'; // matches exactly "123", not just 123. This prevents a match for "1234"
                         } else {
                         	$match_value = "XXX".$match_value."XXX";
