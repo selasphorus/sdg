@@ -1906,7 +1906,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 		}
 		
 		if ( $search_related_post_type == true ) {
-			if ( $args ) { 
+			if ( is_array($args) && is_array($args_related) ) {
 				$args_related = array_merge( $args_related, $args ); //$args_related = $args;
 				$args = null; // reset primary args to prevent triggering of second query
 			}
