@@ -2105,7 +2105,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 $ts_info .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
                 
-                $ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
+                //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
                 $related_posts_info = birdhive_get_posts( $args_related );
                 
                 if ( isset($related_posts_info['arr_posts']) ) {
@@ -2115,13 +2115,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
 
                     $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
-                    //$ts_info .= $related_posts_info['info']."<hr />";
-                    //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
-
-                    // Print last SQL query string
-                    global $wpdb;
-                    $info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-                    //$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+					$info .= '<div class="troubleshooting">'.$related_posts_info['troubleshooting'].'</div>';
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
