@@ -1889,7 +1889,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         
         
         // 
-        $args_related = null; // init
+        $args_related = array(); // init
         $rep_cat_queried = false;
         
         //$ts_info .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
