@@ -1908,7 +1908,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 		if ( $search_related_post_type == true ) {
 			if ( is_array($args) && is_array($args_related) ) {
 				$args_related = array_merge( $args_related, $args ); //$args_related = $args;
-				$args = null; // reset primary args to prevent triggering of second query
 			}
             $args_related['post_type'] = $related_post_type;
         }
@@ -1925,6 +1924,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             } else if ( $search_related_post_type == true ) {
                 // Searching related post_type only
                 $ts_info .= "Searching related post_type only<br />";
+                $args = null; // reset primary args to prevent triggering of second query
             }
         }
         
