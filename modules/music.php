@@ -2104,7 +2104,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 $ts_info .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
                 
                 $ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
-                //$related_posts_info = birdhive_get_posts( $args_related );
+                $related_posts_info = birdhive_get_posts( $args_related );
                 
                 if ( isset($related_posts_info['arr_posts']) ) {
                 
