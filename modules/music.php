@@ -1935,118 +1935,124 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         $args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
         */
         
-		if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
-			$meta_query['relation'] = $search_operator;
-		}
-		if ( count($mq_components_primary) == 1) {                
-			$meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
-		} else {
-			foreach ( $mq_components_primary AS $component ) {
-				$meta_query[] = $component;
+        if ( $search_primary_post_type == true ) {
+			if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
+				$meta_query['relation'] = $search_operator;
 			}
+			if ( count($mq_components_primary) == 1) {                
+				$meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
+			} else {
+				foreach ( $mq_components_primary AS $component ) {
+					$meta_query[] = $component;
+				}
+			}
+			/*foreach ( $mq_components_primary AS $component ) {
+				$meta_query[] = $component;
+			}*/
+			if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
 		}
-		/*foreach ( $mq_components_primary AS $component ) {
-			$meta_query[] = $component;
-		}*/
-		if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
 		
 		// related query
-		if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
-			$meta_query_related['relation'] = $search_operator;
-		}
-		if ( count($mq_components_related) == 1) {
-			$meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
-		} else {
-			foreach ( $mq_components_related AS $component ) {
-				$meta_query_related[] = $component;
+		if ( $search_related_post_type == true ) {
+			if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
+				$meta_query_related['relation'] = $search_operator;
 			}
-		}
-		/*foreach ( $mq_components_related AS $component ) {
-			$meta_query_related[] = $component;
-		}*/
-		if ( !empty($meta_query_related) ) { $args_related['meta_query'] = $meta_query_related; }
-            
+			if ( count($mq_components_related) == 1) {
+				$meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
+			} else {
+				foreach ( $mq_components_related AS $component ) {
+					$meta_query_related[] = $component;
+				}
+			}
+			/*foreach ( $mq_components_related AS $component ) {
+				$meta_query_related[] = $component;
+			}*/
+			if ( !empty($meta_query_related) ) { $args_related['meta_query'] = $meta_query_related; }
+		}            
         
         // Finalize tax_query or queries
         // =============================
         
-		if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
-			$tax_query['relation'] = $search_operator;
-		}
-		foreach ( $tq_components_primary AS $component ) {
-		
-			// Check to see if component relates to repertoire_category
-			if ( $post_type == "repertoire" ) {
-				
-				$ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
-				
-				// WIP: Exclude all posts with repertoire_category = "organ-works" (and children)
-				// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
-				if ( $component['taxonomy'] == "repertoire_category" ) {
-				
-					$rep_cat_queried = true;
-					
-					// Add 'AND' relation...
-					$component = array(
-						'relation' => 'AND',
-						array(
-							'taxonomy' => 'repertoire_category',
-							'terms'    => $component['terms'],
-							'operator' => 'IN',
-						),
-						array(
-							'taxonomy' => 'repertoire_category',
-							'field'    => 'slug',
-							'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'), //, 'symphonic-works'
-							'operator' => 'NOT IN',
-							//'include_children' => true,
-						),
-						array(
-							'taxonomy' => 'admin_tag',
-							'field'    => 'slug',
-							'terms'    => array('external-repertoire'),
-							'operator' => 'NOT IN',
-							//'include_children' => true,
-						),
-					);
-					$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
-				}
+        if ( $search_primary_post_type == true ) {
+			if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
+				$tax_query['relation'] = $search_operator;
 			}
-			$tax_query[] = $component;
+			foreach ( $tq_components_primary AS $component ) {
+		
+				// Check to see if component relates to repertoire_category
+				if ( $post_type == "repertoire" ) {
+				
+					$ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
+				
+					// WIP: Exclude all posts with repertoire_category = "organ-works" (and children)
+					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+					if ( $component['taxonomy'] == "repertoire_category" ) {
+				
+						$rep_cat_queried = true;
+					
+						// Add 'AND' relation...
+						$component = array(
+							'relation' => 'AND',
+							array(
+								'taxonomy' => 'repertoire_category',
+								'terms'    => $component['terms'],
+								'operator' => 'IN',
+							),
+							array(
+								'taxonomy' => 'repertoire_category',
+								'field'    => 'slug',
+								'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'), //, 'symphonic-works'
+								'operator' => 'NOT IN',
+								//'include_children' => true,
+							),
+							array(
+								'taxonomy' => 'admin_tag',
+								'field'    => 'slug',
+								'terms'    => array('external-repertoire'),
+								'operator' => 'NOT IN',
+								//'include_children' => true,
+							),
+						);
+						$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
+					}
+				}
+				$tax_query[] = $component;
+			}
+			if ( $post_type == "repertoire" && $rep_cat_queried == false ) {
+				$tax_query[] = array(
+					'relation' => 'AND',
+					array(
+						'taxonomy' => 'repertoire_category',
+						'field'    => 'slug',
+						'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'),
+						'operator' => 'NOT IN',
+						//'include_children' => true,
+					),
+					array(
+						'taxonomy' => 'admin_tag',
+						'field'    => 'slug',
+						'terms'    => array('external-repertoire'),
+						'operator' => 'NOT IN',
+						//'include_children' => true,
+					),
+				);
+			}
+			if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
 		}
-		if ( $post_type == "repertoire" && $rep_cat_queried == false ) {
-			$tax_query[] = array(
-				'relation' => 'AND',
-				array(
-					'taxonomy' => 'repertoire_category',
-					'field'    => 'slug',
-					'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'),
-					'operator' => 'NOT IN',
-					//'include_children' => true,
-				),
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array('external-repertoire'),
-					'operator' => 'NOT IN',
-					//'include_children' => true,
-				),
-			);
-		}
-		if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
 		
 		// related query
-		if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
-			$tax_query_related['relation'] = $search_operator;
-		}
-		foreach ( $tq_components_related AS $component ) {
-			$tax_query_related[] = $component;
-		}
-		if ( !empty($tax_query_related) ) { $args_related['tax_query'] = $tax_query_related; }
-            
+		if ( $search_related_post_type == true ) {
+			if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
+				$tax_query_related['relation'] = $search_operator;
+			}
+			foreach ( $tq_components_related AS $component ) {
+				$tax_query_related[] = $component;
+			}
+			if ( !empty($tax_query_related) ) { $args_related['tax_query'] = $tax_query_related; }
+		}            
 
         ///// WIP
-        if ( $related_post_type ) {
+        if ( $search_related_post_type == true && $related_post_type ) {
             
             // If we're dealing with multiple post types, then the and/or is extra-complicated, because not all taxonomies apply to all post_types
             // Must be able to find, e.g., repertoire with composer: Mousezart as well as ("OR") all editions/rep with instrument: Bells
@@ -2062,7 +2068,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         // If search values have been submitted, then run the search query
         if ( count($search_values) > 0 ) {
             
-            if ( $args ) {
+            if ( $search_primary_post_type == true && $args ) {
 				$ts_info .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
 			
 				// Get posts matching the assembled args
@@ -2093,7 +2099,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 				}
 			}
             
-            if ( $args_related ) {
+            if ( $search_related_post_type == true && $args_related ) {
                 
                 $ts_info .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
                 
