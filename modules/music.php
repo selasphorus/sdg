@@ -2317,7 +2317,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     //$info .= 'array_unique rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
     //$info .= "<br />+++++++++++<br />";
     
-    $ts_info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
+    $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
     $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
     //$info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">'; // This works fine, but ids are lost on refresh of merge page. Pass them via GET instead for more flexibility.
