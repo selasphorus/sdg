@@ -1265,6 +1265,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$field_name = "s";
                 }
                 $field_info .= "[1265] field_name: $field_name; arr_field: $arr_field<br />";
+            } else if ( $field_name == "season" ) {
+            	// Do sthg to tmp disable this field until it's sorted out?
             } else {
                 $placeholder = $field_name; // for input field
             }
@@ -1575,6 +1577,26 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
+                    } else if ( $field_type == "checkbox" && !empty($field_value) ) {
+                        
+                        $compare = 'LIKE';
+                        
+                        $match_value = $field_value;
+                        $query_component = array(
+                            'key'   => $field_name,
+                            'value' => $match_value,
+                            'compare'=> $compare
+                        );
+                        
+                        // Add query component to the appropriate components array
+                        if ( $query_assignment == "primary" ) {
+                            $mq_components_primary[] = $query_component;
+                        } else {
+                            $mq_components_related[] = $query_component;
+                        }                        
+                        
+                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
+
                     } else if ( $field_type == "relationship" ) {// && !empty($field_value)
 
                         if ( !empty($field_value) ) {
@@ -1764,7 +1786,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';                                            
                     
-                    } else if ( $field_type == "select" ) {
+                    } else if ( $field_type == "select" && $field_type == "checkbox" ) {
                         
                         if ( isset($field['choices']) ) {
                             $options = $field['choices'];
@@ -2487,7 +2509,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         }
 
         // Get and display term names for "season".
-        $seasons = wp_get_post_terms( $post_id, 'season', array( 'fields' => 'names' ) );
+        //$seasons = wp_get_post_terms( $post_id, 'season', array( 'fields' => 'names' ) );
+        $seasons = get_field('season', $post_id, false); // returns array of IDs
         if ( is_array($seasons) && count($seasons) > 0 ) {
             foreach ( $seasons as $season ) {
                 $rep_info .= '<span class="season">';
