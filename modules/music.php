@@ -2259,6 +2259,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info = ""; // init
     
+    $info .= "+~+~+~+~+~+~+~+~+~+~ format_search_results +~+~+~+~+~+~+~+~+~+~<br />";
+    
     // TODO: generalize -- this is currently very specific to display of repertoire/editions info
     //if ( $search_type = "choirplanner" ) { }
     
