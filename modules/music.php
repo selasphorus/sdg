@@ -2285,7 +2285,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         if ( $post_type == "edition" ) {
             // Get the related repertoire record(s)
             if ( $repertoire_editions = get_field( 'repertoire_editions', $post_id ) ) { //  && !empty($repertoire_editions)
-                $ts_info .= 'repertoire_editions for post_id $post_id: <pre>'.print_r($repertoire_editions, true).'</pre>';
+                $ts_info .= 'repertoire_editions for edition with post_id '.$post_id.': <pre>'.print_r($repertoire_editions, true).'</pre>';
                 foreach ( $repertoire_editions as $musical_work ) {
                     if ( is_object($musical_work) ) {
                         $rep_ids[] = $musical_work->ID;
@@ -2294,7 +2294,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                     }
                 }
             } elseif ( $musical_works = get_field( 'musical_work', $post_id )  ) {
-                $ts_info .= 'musical_works for post_id $post_id: <pre>'.print_r($musical_works, true).'</pre>';
+                $ts_info .= 'musical_works for edition with post_id '.$post_id.': <pre>'.print_r($musical_works, true).'</pre>';
                 $ts_info .= '<span class="devinfo">'."[$post_id] This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.</span><br />";
                 foreach ( $musical_works as $musical_work ) {
                     if ( is_object($musical_work) ) {
