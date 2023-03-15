@@ -1400,7 +1400,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 $ts_info .= ">> Setting search_primary_post_type var to TRUE based on field $field_name searching value $field_value<br />";
                             } else {
                                 $search_related_post_type = true;
-                                $ts_info .= ">> Setting search_related_post_type var to TRUE based on field $field_name searching value $field_value<br />";
+                                $field_info .= ">> Setting search_related_post_type var to TRUE based on field $field_name searching value $field_value<br />";
                             }
                             
                         }
