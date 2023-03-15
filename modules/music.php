@@ -1378,7 +1378,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     }
 
                     //
-                    $field_info .= "field_name: $field_name<br />"; // tft
+                    $field_info .= "[1381] field_name: $field_name; arr_field: $arr_field<br />"; //$field_info .= "field_name: $field_name<br />";
                     if ( $alt_field_name ) { $field_info .= "alt_field_name: $alt_field_name<br />"; }                    
                     $field_info .= "query_assignment: $query_assignment<br />";
 
