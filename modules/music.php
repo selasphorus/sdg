@@ -1354,14 +1354,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
                     
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
-                    //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
+                    $field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
 					/*if ( count($field_post_type) == 1) {
 						$field_post_type = $field['post_type'][0];
 					} else {
 						// ???
 					}*/
-                    $field_info .= "field_post_type: $field_post_type<br />"; // tft
+                    //$field_info .= "field_post_type: $field_post_type<br />"; // tft
                     
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
