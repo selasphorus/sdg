@@ -1745,7 +1745,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // TODO: fix keys -- should be `repertoire_litdates` NOT `repertoire_liturgical_date`; `publisher` NOT `edition_publisher`; 
                                 // also make sure not to use alt_field_name if it's EMPTY!
                                 if ( $query_assignment == "primary" ) { $options_post_type = $post_type; } else { $options_post_type = $related_post_type; }
-                                $option_field_name = $field_cptt_name;
+                                //$option_field_name = $field_cptt_name;
+                                $option_field_name = $field_name;
                                 
                                 $options_args = array(
                                     'post_type' => $options_post_type,
