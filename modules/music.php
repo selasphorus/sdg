@@ -1786,7 +1786,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';                                            
                     
-                    } else if ( $field_type == "select" && $field_type == "checkbox" ) {
+                    } else if ( $field_type == "select" || $field_type == "checkbox" ) {
                         
                         if ( isset($field['choices']) ) {
                             $options = $field['choices'];
