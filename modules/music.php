@@ -1354,15 +1354,15 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
                     
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
-                    $field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
+                    //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-					/*if ( count($field_post_type) == 1) {
+					if ( is_array($field_post_type) ) {
 						$field_post_type = $field['post_type'][0];
+						$field_info .= "field_post_type: $field_post_type<br />"; // tft
 					} else {
 						// ???
-					}*/
-                    //$field_info .= "field_post_type: $field_post_type<br />"; // tft
-                    
+					}
+					
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
                     if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
@@ -1737,8 +1737,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // set up WP_query
                                 // TODO: fix keys -- should be `repertoire_litdates` NOT `repertoire_liturgical_date`; `publisher` NOT `edition_publisher`; 
                                 // also make sure not to use alt_field_name if it's EMPTY!
+                                if ( $query_assignment == "primary" ) { $options_post_type = $post_type; } else { $options_post_type = $related_post_type; }
+                                
                                 $options_args = array(
-                                    'post_type' => $field_post_type, //'post_type' => $post_type, //
+                                    'post_type' => $options_post_type,
                                     'post_status' => 'publish',
                                     'fields' => 'ids',
                                     'posts_per_page' => -1, // get them all
