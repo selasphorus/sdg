@@ -1262,6 +1262,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 // init/defaults
                 $field_type = null; // used to default to "text"
+                $field_post_type = $post_type;
                 $pick_object = null; // ?pods?
                 $pick_custom = null; // ?pods?
                 $field = null;
@@ -1287,6 +1288,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     
                 } else {
                     
+                    // Field not found for primary post type >> look for related field
+                    ////SEE BELOW-- $field_post_type = $related_post_type; // Should this be set later only if field or taxonomy is found?
+                    
                     //$field_info .= "field_name: $field_name -- not found for $post_type >> look for related field.<br />"; // tft
                     
                     // If no matching field was found in the primary post_type, then
@@ -1301,7 +1305,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             $field_name = $related_post_type."_".$arr_field;
                         }
                         $query_assignment = "related";
-                        $field_info .= "field_name: $field_name found for related_post_type: $related_post_type.<br />"; // tft    
+                        $field_info .= "field '$arr_field' found for related_post_type: $related_post_type [field_name: $field_name].<br />"; // tft    
                         
                     } else {
                         
@@ -1350,6 +1354,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
                     
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
+                    //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
+                    // Check to see if more than one element in array. If not, use $field['post_type'][0]...
+					if ( count($field_post_type) == 1) {
+						$field_post_type = $field['post_type'][0];
+					} else {
+						// ???
+					}
+                    $field_info .= "field_post_type: $field_post_type<br />"; // tft
                     
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
@@ -1495,16 +1507,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 
                     } else if ( $field_type == "relationship" ) {// && !empty($field_value)
 
-                        $field_post_type = $field['post_type'];                        
-                        // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-                        if ( count($field_post_type) == 1) {
-                            $field_post_type = $field['post_type'][0];
-                        } else {
-                            // ???
-                        }
-                        
-                        $field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
-                        
                         if ( !empty($field_value) ) {
                             
                             $field_value_converted = ""; // init var for storing ids of posts matching field_value
@@ -1733,8 +1735,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 
                                 //
                                 // set up WP_query
+                                // TODO: fix keys -- should be `repertoire_litdates` NOT `repertoire_liturgical_date`; `publisher` NOT `edition_publisher`; 
+                                // also make sure not to use alt_field_name if it's EMPTY!
                                 $options_args = array(
-                                    'post_type' => $post_type, //'post_type' => $field_post_type,
+                                    'post_type' => $field_post_type, //'post_type' => $post_type, //
                                     'post_status' => 'publish',
                                     'fields' => 'ids',
                                     'posts_per_page' => -1, // get them all
