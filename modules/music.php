@@ -1187,6 +1187,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             
             $field_info = ""; // init
             $field_name = $arr_field; // may be overrriden below
+            $field_info .= "[1190] field_name: $field_name; arr_field: $arr_field<br />";
             $alt_field_name = null; // for WIP fields/transition incomplete, e.g. repertoire_litdates replacing related_liturgical_dates
                     
             // Fine tune the field name
@@ -1199,6 +1200,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     $field_name = "post_title";
                     //$field_name = "s";
                 }
+                $field_info .= "[1203] field_name: $field_name; arr_field: $arr_field<br />";
             } else {
                 $placeholder = $field_name; // for input field
             }
@@ -1214,6 +1216,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 }/* else if ( $field_name == "edition_publisher" ) {
                     $field_label = "Publisher";
                 }*/
+                $field_info .= "[1219] field_name: $field_name; arr_field: $arr_field<br />";
             }
             
             // Check to see if the field_name is an actual field, separator, or search operator
@@ -1283,6 +1286,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
                         $field_name = $post_type."_".$field_name; //$field_name = $post_type."_".$arr_field;
                     }
+                    $field_info .= "[1289] field_name: $field_name; arr_field: $arr_field<br />";
                     
                     $query_assignment = "primary";
                     
@@ -1304,6 +1308,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
                             $field_name = $related_post_type."_".$field_name; //$field_name = $related_post_type."_".$arr_field;
                         }
+                        $field_info .= "[1311] field_name: $field_name; arr_field: $arr_field<br />";
                         $query_assignment = "related";
                         $field_info .= "field '$arr_field' found for related_post_type: $related_post_type [field_name: $field_name].<br />"; // tft    
                         
@@ -1351,14 +1356,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 if ( $field ) {
                     
-                    //$field_info .= "field: <pre>".print_r($field,true)."</pre>"; // tft
+                    //$field_info .= "field: <pre>".print_r($field,true)."</pre>";
                     
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
                     //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
 					if ( is_array($field_post_type) ) {
 						$field_post_type = $field['post_type'][0];
-						$field_info .= "field_post_type: $field_post_type<br />"; // tft
+						$field_info .= "field_post_type: $field_post_type<br />";
 					} else {
 						// ???
 					}
@@ -1367,7 +1372,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
                     if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
                         $field_cptt_name = $arr_field;
-                        $field_info .= "field_cptt_name: $field_cptt_name same as arr_field: $arr_field<br />"; // tft
+                        $field_info .= "field_cptt_name: $field_cptt_name same as arr_field: $arr_field<br />";
                     } else {
                         $field_cptt_name = null;
                     }
