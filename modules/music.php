@@ -1249,7 +1249,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             
             $field_info = ""; // init
             $field_name = $arr_field; // may be overrriden below
-            $field_info .= "[1252] field_name: $field_name; arr_field: $arr_field<br />";
+            $option_field_name = $field_name;
+            $field_info .= "[1253] field_name: $field_name; arr_field: $arr_field<br />";
+            $field_info .= "[1254] option_field_name: $option_field_name<br />";
             $alt_field_name = null; // for WIP fields/transition incomplete, e.g. repertoire_litdates replacing related_liturgical_dates
                     
             // Fine tune the field name
@@ -1327,14 +1329,11 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 // init/defaults
                 $field_type = null; // used to default to "text"
-                $field_post_type = null; //$post_type;
-                $option_field_name = $field_name;
+                $field_post_type = null; //$post_type;                
                 $pick_object = null; // ?pods?
                 $pick_custom = null; // ?pods?
                 $field = null;
                 $field_value = null;
-                
-                $field_info .= "[1337] option_field_name: $option_field_name<br />";
                 
                 // First, deal w/ title field -- special case
                 if ( $field_name == "post_title" ) {
