@@ -1755,9 +1755,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 $options_posts = $options_arr_posts->posts;
 
                                 $field_info .= count($options_posts)." options_posts found <br />"; // tft
-                                if ( count($options_posts) == 0 ) {
-                                	$field_info .= "options_args: <pre>".print_r($options_args,true)."</pre>";
-                                }
+                                $field_info .= "options_args: <pre>".print_r($options_args,true)."</pre>";
+                                //if ( count($options_posts) == 0 ) { $field_info .= "options_args: <pre>".print_r($options_args,true)."</pre>"; }
                                 //$field_info .= "options_posts: <pre>".print_r($options_posts,true)."</pre>"; // tft
 
                                 $arr_ids = array(); // init
