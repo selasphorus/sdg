@@ -2257,9 +2257,11 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 //
 function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
-    $info = ""; // init
+    // init
+    $info = ""; 
+    $ts_info = "";
     
-    $info .= "+~+~+~+~+~+~+~+~+~+~ format_search_results +~+~+~+~+~+~+~+~+~+~<br />";
+    $ts_info .= "+~+~+~+~+~+~+~+~+~+~ format_search_results +~+~+~+~+~+~+~+~+~+~<br />";
     
     // TODO: generalize -- this is currently very specific to display of repertoire/editions info
     //if ( $search_type = "choirplanner" ) { }
@@ -2277,15 +2279,13 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
             
         //$info .= '<pre>'.print_r($post, true).'</pre>'; // tft
         //$info .= '<div class="troubleshooting">post: <pre>'.print_r($post, true).'</pre></div>'; // tft
-        //$post_id = $post->ID;
-        //$post_type = $post->post_type;
         $post_type = get_post_type($post_id);
-        //$info .= 'post_id: '.$post_id."<br />"; // tft
-        //$info .= 'post_type: '.$post_type."<br />"; // tft
+        $ts_info .= 'post_id: '.$post_id."<br />"; // tft
+        $ts_info .= 'post_type: '.$post_type."<br />"; // tft
         if ( $post_type == "edition" ) {
             // Get the related repertoire record(s)
             if ( $repertoire_editions = get_field( 'repertoire_editions', $post_id ) ) { //  && !empty($repertoire_editions)
-                $info .= 'repertoire_editions: <pre>'.print_r($repertoire_editions, true).'</pre>';
+                $ts_info .= 'repertoire_editions for post_id $post_id: <pre>'.print_r($repertoire_editions, true).'</pre>';
                 foreach ( $repertoire_editions as $musical_work ) {
                     if ( is_object($musical_work) ) {
                         $rep_ids[] = $musical_work->ID;
@@ -2294,8 +2294,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                     }
                 }
             } elseif ( $musical_works = get_field( 'musical_work', $post_id )  ) {
-                $info .= 'musical_works: <pre>'.print_r($musical_works, true).'</pre>';
-                $info .= '<span class="devinfo">'."[$post_id] This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.</span><br />";
+                $ts_info .= 'musical_works for post_id $post_id: <pre>'.print_r($musical_works, true).'</pre>';
+                $ts_info .= '<span class="devinfo">'."[$post_id] This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.</span><br />";
                 foreach ( $musical_works as $musical_work ) {
                     if ( is_object($musical_work) ) {
                         $rep_ids[] = $musical_work->ID;
@@ -2304,9 +2304,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                     }
                 }           
             } else {
-                $info .= '<span class="devinfo">No musical_work found for edition with id: '.$post_id.'</span><br />';
+                $ts_info .= '<span class="devinfo">No musical_work found for edition with id: '.$post_id.'</span><br />';
             }
-            
             //$rep_ids[] = $rep_post_id;
         } else if ( $post_type == "repertoire" ) {
             $rep_ids[] = $post_id;
@@ -2318,7 +2317,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     //$info .= 'array_unique rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
     //$info .= "<br />+++++++++++<br />";
     
-    $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
+    $ts_info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
     
     $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
     //$info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">'; // This works fine, but ids are lost on refresh of merge page. Pass them via GET instead for more flexibility.
@@ -2660,6 +2659,10 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= '<input type="submit" value="Merge Selected">';
     //if ( is_dev_site() ) { $info .= '<input type="submit" value="Merge Selected">'; }
 	$info .= "</form>";
+    
+    $info .= '<div class="troubleshooting">';
+    $info .= $ts_info;
+    $info .= '</div>';
     
     return $info;
     
