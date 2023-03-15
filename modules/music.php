@@ -2121,6 +2121,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
                         
+                        $ts_info .= "arr_post_ids NOT empty <br />";
+                        
                         $related_post_field_name = "repertoire_editions"; // TODO: generalize!
                         
                         $full_match_ids = array(); // init
@@ -2185,6 +2187,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         $ts_info .= "Num full_match_ids: [".count($full_match_ids)."]".'</div>';
                         
                     } else {
+                    	$ts_info .= "Primary arr_post_ids is empty >> use arr_related_post_ids as arr_post_ids<br />";
                         $arr_post_ids = $arr_related_post_ids;
                     }
 
@@ -2280,7 +2283,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         if ( $post_type == "edition" ) {
             // Get the related repertoire record(s)
             if ( $repertoire_editions = get_field( 'repertoire_editions', $post_id ) ) { //  && !empty($repertoire_editions)
-                //$info .= 'repertoire_editions: <pre>'.print_r($repertoire_editions, true).'</pre>';
+                $info .= 'repertoire_editions: <pre>'.print_r($repertoire_editions, true).'</pre>';
                 foreach ( $repertoire_editions as $musical_work ) {
                     if ( is_object($musical_work) ) {
                         $rep_ids[] = $musical_work->ID;
@@ -2289,7 +2292,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                     }
                 }
             } elseif ( $musical_works = get_field( 'musical_work', $post_id )  ) {
-                //$info .= 'musical_works: <pre>'.print_r($musical_works, true).'</pre>';
+                $info .= 'musical_works: <pre>'.print_r($musical_works, true).'</pre>';
                 $info .= '<span class="devinfo">'."[$post_id] This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.</span><br />";
                 foreach ( $musical_works as $musical_work ) {
                     if ( is_object($musical_work) ) {
