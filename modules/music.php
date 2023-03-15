@@ -1339,7 +1339,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             $field = array( 'type' => 'taxonomy', 'name' => $field_name );
                             
                         } else {
-                            $field_info .= "Could not determine field_type!<br />";
+                            $field_info .= "Could not determine field_type for field_name: $field_name<br />";
                         }
                     }
                 }                
@@ -1879,7 +1879,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                    strpos($field_name, "liturgical") ) {
                     //$ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
                 }
-                $ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
+                $ts_info .= "+++++ FIELD INFO +++++<br />".$field_info."<br />";
                 //$field_name == "liturgical_date" || $field_name == "repertoire_litdates" || 
                 //if ( !empty($field_value) ) { $ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />"; }
                 
