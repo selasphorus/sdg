@@ -1754,15 +1754,15 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     'fields' => 'ids',
                                     'posts_per_page' => -1, // get them all
                                     'meta_query' => array(
-                                        'relation' => 'OR',
+                                        //'relation' => 'OR',
                                         array(
                                             'key'     => $option_field_name, // $arr_field instead?
                                             'compare' => 'EXISTS'
                                         ),
-                                        array(
+                                        /*array(
                                             'key'     => $alt_field_name,
                                             'compare' => 'EXISTS'
-                                        ),
+                                        ),*/
                                     ),
                                 );
                                 
