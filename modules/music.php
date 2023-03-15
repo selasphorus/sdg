@@ -1265,8 +1265,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$field_name = "s";
                 }
                 $field_info .= "[1265] field_name: $field_name; arr_field: $arr_field<br />";
-            } else if ( $field_name == "season" ) {
-            	// Do sthg to tmp disable this field until it's sorted out?
             } else {
                 $placeholder = $field_name; // for input field
             }
