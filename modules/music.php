@@ -1710,7 +1710,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         // repertoire_litdates
                         // related_liturgical_dates
                         
-                        if ( $field_cptt_name != $arr_field ) {
+                        //if ( $field_cptt_name != $arr_field ) {
                         //if ( $field_cptt_name != $field_name ) {
                             
                             $field_info .= "field_cptt_name NE arr_field<br />"; // tft
@@ -1718,6 +1718,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             
                             // TODO: 
                             if ( $field_post_type && $field_post_type != "person" ) { // TMP disable options for person fields so as to allow for free autocomplete // && $field_post_type != "publisher"
+                                
+                                $field_info .= "looking for options...<br />";
                                 
                                 // TODO: consider when to present options as combo box and when to go for autocomplete text
                                 // For instance, what if the user can't remember which Bach wrote a piece? Should be able to search for all...
@@ -1801,18 +1803,22 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                         $options[$id] = get_the_title($id);
                                     }
                                 }
+                                
+                                asort($options);
 
+                            } else {
+                            	$field_info .= "NOT looking for options for this relationship field...<br />";
+                            	$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
                             }
 
-                            asort($options);
+                            
 
-                        } else {
+                        //} else {
                         	
-                        	$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';                                            
-                    
+                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
                     		//$input_html = "LE TSET"; // tft
                         	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
-                        }
+                        //}
                         
                     } else if ( $field_type == "taxonomy" ) {
                         
