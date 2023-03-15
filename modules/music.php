@@ -72,6 +72,68 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 	
 }
 
+// WIP fcn to update to new bidirectional field: repertoire_litdates
+/*function update_repertoire_litdates( $rep_id = null, $run_slow_queries = false, $arr_litdate_ids = array() ) {
+	
+	$info = "";
+	$updates = false;
+	
+	$info .= "About to update repertoire_litdates for rep item with ID:".$rep_id."<br />";
+	
+	// get the repertoire_litdates field contents for the rep item
+	$repertoire_litdates = get_field('repertoire_litdates', $rep_id, false);
+	
+	if ( !empty($repertoire_litdates) ) {
+		$info .= "This rep item currently has the following repertoire_litdates: <pre>".print_r($repertoire_litdates,true)."</pre>";								
+		if ( !is_array($repertoire_litdates) ) { $repertoire_litdates = explode( ", ",$repertoire_litdates ); } // If it's not an array already, make it one		
+	} else {
+		$info .= "This rep item currently has no repertoire_litdates.<br />";
+		$repertoire_litdates = array(); // No repertoire_litdates set yet, so prep an empty array
+	}
+	
+	// Check to see if any litdate_ids were submitted and proceed accordingly
+	if ( empty($arr_litdate_ids) && $run_slow_queries == true ) {
+	
+		// No litdate_ids were submitted -> run a query to find ALL litdate_ids for litdates with programs containing the rep_id		
+		$related_litdates = get_related_litdates ( "program_item", $rep_id );
+		$arr_litdate_ids = $related_litdates['litdate_posts'];
+		//$related_litdates_info = $related_litdates['info'];
+	
+		if ( empty($arr_litdate_ids) ) {
+			$info .= "No related litdates were found using the get_related_litdates fcn.<br />"; // tft
+		}
+    
+	}
+
+	// Check litdate_ids to see if they're already in the repertoire_litdates array and add them if not
+	foreach($arr_litdate_ids as $litdate_id) {
+		if ( !in_array( $litdate_id, $repertoire_litdates ) ) {
+			$repertoire_litdates[] = $litdate_id;
+			$updates = true;
+		} else {
+			$info .= "The litdate_id [$litdate_id] is already in the array.<br />";	
+		}
+	}
+	
+	// If changes have been made, then update the repertoire_litdates field with the modified array of litdate_id values
+	if ( $updates == true ) {
+		if ( update_field('repertoire_litdates', $repertoire_litdates, $rep_id ) ) {
+			$info .= "Success! repertoire_litdates field updated<br />";
+			$info .= "Updated repertoire_litdates: <pre>".print_r($repertoire_litdates,true)."</pre>";
+		} else {
+			$info .= "phooey. update failed.<br />";
+		}
+	} else {
+		$info .= "No update needed.<br />";
+	}
+	
+	$info .= "+++++<br /><br />";
+	
+	return $info;
+	
+}*/
+
+
 /* ~~~ Display functions ~~~ */
 
 function get_cpt_repertoire_content( $post_id = null ) {
