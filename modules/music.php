@@ -1311,35 +1311,36 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         // For field_names matching taxonomies, check for match in $taxonomies array
                         if ( taxonomy_exists( $field_name ) ) {
                             
-                            $field_info .= "$field_name taxonomy exists.<br />";
+                            $field_info .= "'$field_name' taxonomy exists"; // .<br />
                                 
                             if ( in_array($field_name, $taxonomies) ) {
 
                                 $query_assignment = "primary";                                    
-                                $field_info .= "field_name $field_name found in primary taxonomies array<br />";
+                                $field_info .= " -- found in primary taxonomies array<br />";
 
                             } else {
-
+                            
+                            	$field_info .= " -- NOT found in primary taxonomies array<br />";
+                            	
                                 // Get all taxonomies associated with the related_post_type
                                 $related_taxonomies = get_object_taxonomies( $related_post_type );
 
                                 if ( in_array($field_name, $related_taxonomies) ) {
 
                                     $query_assignment = "related";
-                                    $field_info .= "field_name $field_name found in related taxonomies array<br />";                                        
+                                    $field_info .= " -- found in related taxonomies array<br />";                                        
 
                                 } else {
-                                    $field_info .= "field_name $field_name NOT found in related taxonomies array<br />";
+                                    $field_info .= " -- NOT found in related taxonomies array<br />";
                                 }
                                 //$info .= "taxonomies for post_type '$related_post_type': <pre>".print_r($related_taxonomies,true)."</pre>"; // tft
 
-                                $field_info .= "field_name $field_name NOT found in primary taxonomies array<br />";
                             }
                             
                             $field = array( 'type' => 'taxonomy', 'name' => $field_name );
                             
                         } else {
-                            $field_info .= "Could not determine field_type for field_name: $field_name<br />";
+                            //$field_info .= "Could not determine field_type for field_name: $field_name<br />";
                         }
                     }
                 }                
@@ -1354,7 +1355,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
                     if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
                         $field_cptt_name = $arr_field;
-                        //$field_info .= "field_cptt_name: $field_cptt_name same as arr_field: $arr_field<br />"; // tft
+                        $field_info .= "field_cptt_name: $field_cptt_name same as arr_field: $arr_field<br />"; // tft
                     } else {
                         $field_cptt_name = null;
                     }
@@ -1415,7 +1416,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
                     }
                     
-                    if ( $field_type == "text" && !empty($field_value) && $field_name != "post_title" ) { 
+                    if ( $field_type == "text" && !empty($field_value) && $field_name != "post_title" ) {
                         
                         $match_value = $field_value;
                         
@@ -1467,7 +1468,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
-                    } else if ( $field_type == "select" && !empty($field_value) ) { 
+                    } else if ( $field_type == "select" && !empty($field_value) ) {
                         
                         // If field allows multiple values, then values will return as array and we must use LIKE comparison
                         if ( $field['multiple'] == 1 ) {
@@ -1492,7 +1493,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
-                    } else if ( $field_type == "relationship" ) { // && !empty($field_value) 
+                    } else if ( $field_type == "relationship" ) {// && !empty($field_value)
 
                         $field_post_type = $field['post_type'];                        
                         // Check to see if more than one element in array. If not, use $field['post_type'][0]...
@@ -1716,7 +1717,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             //$field_info .= "field_cptt_name NE field_name<br />"; // tft
                             
                             // TODO: 
-                            if ( $field_post_type && $field_post_type != "person" && $field_post_type != "publisher" ) { // TMP disable options for person fields so as to allow for free autocomplete
+                            if ( $field_post_type && $field_post_type != "person" ) { // TMP disable options for person fields so as to allow for free autocomplete // && $field_post_type != "publisher"
                                 
                                 // TODO: consider when to present options as combo box and when to go for autocomplete text
                                 // For instance, what if the user can't remember which Bach wrote a piece? Should be able to search for all...
@@ -1830,7 +1831,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                     } else {
                         
-                        $field_info .= "field_type could not be determined.";
+                        $field_info .= "Could not determine field_type for field_name: $field_name<br />"; //$field_info .= "field_type could not be determined.<br />";
+                        
                     }
                     
                     if ( !empty($options) ) { // WIP // && strpos($input_class, "combobox")
