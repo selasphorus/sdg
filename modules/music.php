@@ -1276,6 +1276,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 } else if ( $arr_field == "liturgical_date" || $field_name == "liturgical_date" || $field_label == "Related liturgical dates" ) { 
                     $field_label = "Liturgical Dates";
                     $field_name = "repertoire_litdates";
+                    $option_field_name = $field_name;
                     $alt_field_name = "related_liturgical_dates";
                 }/* else if ( $field_name == "edition_publisher" ) {
                     $field_label = "Publisher";
@@ -1843,7 +1844,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 foreach ( $options_posts as $options_post_id ) {
 
                                     // see also get composer_ids
-                                    $meta_values = get_field($field_name, $options_post_id, false);
+                                    $meta_values = get_field($option_field_name, $options_post_id, false);
                                     $alt_meta_values = get_field($alt_field_name, $options_post_id, false);
                                     if ( !empty($meta_values) ) {
                                         //$field_info .= count($meta_values)." meta_value(s) found for field_name: $field_name and post_id: $options_post_id.<br />";
