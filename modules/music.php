@@ -1356,11 +1356,11 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
                     //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-					if ( count($field_post_type) == 1) {
+					/*if ( count($field_post_type) == 1) {
 						$field_post_type = $field['post_type'][0];
 					} else {
 						// ???
-					}
+					}*/
                     $field_info .= "field_post_type: $field_post_type<br />"; // tft
                     
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
