@@ -1249,7 +1249,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             
             $field_info = ""; // init
             $field_name = $arr_field; // may be overrriden below
-            $field_info .= "[1190] field_name: $field_name; arr_field: $arr_field<br />";
+            $field_info .= "[1252] field_name: $field_name; arr_field: $arr_field<br />";
             $alt_field_name = null; // for WIP fields/transition incomplete, e.g. repertoire_litdates replacing related_liturgical_dates
                     
             // Fine tune the field name
@@ -1262,7 +1262,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     $field_name = "post_title";
                     //$field_name = "s";
                 }
-                $field_info .= "[1203] field_name: $field_name; arr_field: $arr_field<br />";
+                $field_info .= "[1265] field_name: $field_name; arr_field: $arr_field<br />";
             } else {
                 $placeholder = $field_name; // for input field
             }
@@ -1278,7 +1278,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 }/* else if ( $field_name == "edition_publisher" ) {
                     $field_label = "Publisher";
                 }*/
-                $field_info .= "[1219] field_name: $field_name; arr_field: $arr_field<br />";
+                $field_info .= "[1281] field_name: $field_name; arr_field: $arr_field<br />";
             }
             
             // Check to see if the field_name is an actual field, separator, or search operator
@@ -1334,6 +1334,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 $field = null;
                 $field_value = null;
                 
+                $field_info .= "[1337] option_field_name: $option_field_name<br />";
+                
                 // First, deal w/ title field -- special case
                 if ( $field_name == "post_title" ) {
                     $field = array( 'type' => 'text', 'name' => $field_name );
@@ -1349,7 +1351,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
                         $field_name = $post_type."_".$field_name; //$field_name = $post_type."_".$arr_field;
                     }
-                    $field_info .= "[1289] field_name: $field_name; arr_field: $arr_field<br />";
+                    $field_info .= "[1354] field_name: $field_name; arr_field: $arr_field<br />";
                     
                     $query_assignment = "primary";
                     
@@ -1371,7 +1373,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
                             $field_name = $related_post_type."_".$field_name; //$field_name = $related_post_type."_".$arr_field;
                         }
-                        $field_info .= "[1311] field_name: $field_name; arr_field: $arr_field<br />";
+                        $field_info .= "[1376] field_name: $field_name; arr_field: $arr_field<br />";
                         $query_assignment = "related";
                         $field_info .= "field '$arr_field' found for related_post_type: $related_post_type [field_name: $field_name].<br />"; // tft    
                         
@@ -1441,7 +1443,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     }
 
                     //
-                    $field_info .= "[1381] field_name: $field_name; arr_field: $arr_field<br />"; //$field_info .= "field_name: $field_name<br />";
+                    $field_info .= "[1446] field_name: $field_name; arr_field: $arr_field<br />"; //$field_info .= "field_name: $field_name<br />";
                     if ( $alt_field_name ) { $field_info .= "alt_field_name: $alt_field_name<br />"; }                    
                     $field_info .= "query_assignment: $query_assignment<br />";
 
