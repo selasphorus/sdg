@@ -18,7 +18,6 @@ if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; 
 /*** GENERAL/ADMIN POST TYPES ***/
 
 if ( in_array('admin_notes', $sdg_modules ) ) {
-
 	// Admin Note
 	function register_post_type_admin_note() {
 
@@ -482,7 +481,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'menu_icon'          => 'dashicons-book',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'repertoire_category', 'occasion', 'season', 'post_tag', 'admin_tag' ),
+			'taxonomies' => array( 'repertoire_category', 'occasion', 'post_tag', 'admin_tag' ), //, 'season'
 			'show_in_rest' => true,    
 		);
 
@@ -652,54 +651,6 @@ if ( in_array('music', $sdg_modules ) ) {
 	//add_action( 'init', 'register_post_type_music_list' );
 
 }
-
-/*** INVENTORY ***/
-// WIP
-// item? thing? possession? object?
-if ( in_array('inventory', $sdg_modules ) ) {
-	// Thing
-	function sdg_register_post_type_thing() {
-
-		$labels = array(
-			'name' => __( 'Things', 'sdg' ),
-			'singular_name' => __( 'Thing', 'sdg' ),
-			'add_new' => __( 'New Thing', 'sdg' ),
-			'add_new_item' => __( 'Add New Thing', 'sdg' ),
-			'edit_item' => __( 'Edit Thing', 'sdg' ),
-			'new_item' => __( 'New Thing', 'sdg' ),
-			'view_item' => __( 'View Thing', 'sdg' ),
-			'search_items' => __( 'Search Things', 'sdg' ),
-			'not_found' =>  __( 'No Things Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No Things found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'thing' ),
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
-		);
-
-		register_post_type( 'thing', $args );
-	
-	}
-	add_action( 'init', 'sdg_register_post_type_thing' );
-}
-
-/*** LOGBOOK ***/
-// WIP -- consider log entries model vs calendar events -- see ATCHQ ACF field group "Logbook (Library)" >> log_entries repeater.
-// Is there any need for a special post type -- or instead a Logbook/Log Entries field group applied to multiple post types? 
 
 /*** LECTIONARY ***/
 
@@ -938,7 +889,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'season', 'admin_tag' ),
+			'taxonomies' => array( 'admin_tag' ), //'season', 
 			'show_in_rest' => true,    
 		);
 
@@ -1506,6 +1457,95 @@ if ( in_array('links', $sdg_modules ) ) {
 	}
 	add_action( 'init', 'register_post_type_link' );
 
+}
+
+
+/*** INVENTORY ***/
+// WIP
+// item? thing? possession? object?
+if ( in_array('inventory', $sdg_modules ) ) {
+	// Thing
+	function sdg_register_post_type_thing() {
+
+		$labels = array(
+			'name' => __( 'Things', 'sdg' ),
+			'singular_name' => __( 'Thing', 'sdg' ),
+			'add_new' => __( 'New Thing', 'sdg' ),
+			'add_new_item' => __( 'Add New Thing', 'sdg' ),
+			'edit_item' => __( 'Edit Thing', 'sdg' ),
+			'new_item' => __( 'New Thing', 'sdg' ),
+			'view_item' => __( 'View Thing', 'sdg' ),
+			'search_items' => __( 'Search Things', 'sdg' ),
+			'not_found' =>  __( 'No Things Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Things found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'thing' ),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies' => array( 'admin_tag', 'press_category' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'thing', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_thing' );
+}
+
+/*** LOGBOOK ***/
+// WIP -- consider log entries model vs calendar events -- see ATCHQ ACF field group "Logbook (Library)" >> log_entries repeater.
+// Is there any need for a special post type -- or instead a Logbook/Log Entries field group applied to multiple post types? 
+if ( in_array('logbook', $sdg_modules ) ) {
+	// Log Entry
+	function sdg_register_post_type_log_entry() {
+
+		$labels = array(
+			'name' => __( 'Logbook', 'sdg' ),
+			'singular_name' => __( 'Log Entry', 'sdg' ),
+			'add_new' => __( 'New Log Entry', 'sdg' ),
+			'add_new_item' => __( 'Add New Log Entry', 'sdg' ),
+			'edit_item' => __( 'Edit Log Entry', 'sdg' ),
+			'new_item' => __( 'New Log Entry', 'sdg' ),
+			'view_item' => __( 'View Log Entry', 'sdg' ),
+			'search_items' => __( 'Search Log Entries', 'sdg' ),
+			'not_found' =>  __( 'No Log Entries Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Log Entries found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'log_entry' ),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies' => array( 'admin_tag', 'press_category' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'log_entry', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_log_entry' );
 }
 
 /*** HEALTH & WELLNESS ***/

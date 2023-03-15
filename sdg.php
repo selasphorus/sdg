@@ -254,6 +254,7 @@ function sdg_modules_field_cb( $args ) {
 		'data_tables' => __( 'Data Tables' ), 
 		//
 		'inventory' => __( 'Inventory' ), 
+		'logbook' => __( 'Logbook' ), 
 	);
 	
 	$value   = ( !isset( $options[$args['label_for']] ) ) ? array() : $options[$args['label_for']];
