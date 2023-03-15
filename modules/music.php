@@ -1327,7 +1327,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 // init/defaults
                 $field_type = null; // used to default to "text"
-                $field_post_type = $post_type;
+                $field_post_type = null; //$post_type;
+                $option_field_name = $field_name;
                 $pick_object = null; // ?pods?
                 $pick_custom = null; // ?pods?
                 $field = null;
@@ -1808,7 +1809,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // also make sure not to use alt_field_name if it's EMPTY!
                                 if ( $query_assignment == "primary" ) { $options_post_type = $post_type; } else { $options_post_type = $related_post_type; }
                                 //$option_field_name = $field_cptt_name;
-                                $option_field_name = $field_name;
+                                //$option_field_name = $field_name;
                                 
                                 $options_args = array(
                                     'post_type' => $options_post_type,
