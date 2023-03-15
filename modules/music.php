@@ -1877,7 +1877,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 if ( (!empty($field_value) && $field_name != 'search_operator' && $field_name != 'devmode' ) ||
                    ( !empty($options_posts) && count($options_posts) > 0 ) ||
                    strpos($field_name, "liturgical") ) {
-                    //$ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
+                    $ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />";
                 }
                 //$field_name == "liturgical_date" || $field_name == "repertoire_litdates" || 
                 //if ( !empty($field_value) ) { $ts_info .= "+++++<br />FIELD INFO<br/>+++++<br />".$field_info."<br />"; }
