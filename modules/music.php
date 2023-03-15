@@ -1207,7 +1207,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 $field_label = str_replace("_", " ",ucfirst($placeholder));
                 if ( $field_label == "Repertoire category" ) { 
                     $field_label = "Category";
-                } else if ( $field_name == "liturgical_date" || $field_label == "Related liturgical dates" ) { 
+                } else if ( $arr_field == "liturgical_date" || $field_name == "liturgical_date" || $field_label == "Related liturgical dates" ) { 
                     $field_label = "Liturgical Dates";
                     $field_name = "repertoire_litdates";
                     $alt_field_name = "related_liturgical_dates";
@@ -1280,8 +1280,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 if ( $field ) {
                     
                     // if field_name is same as post_type, must alter it to prevent automatic redirect when search is submitted -- e.g. "???"
-                    if ( post_type_exists( $arr_field ) ) {
-                        $field_name = $post_type."_".$arr_field;
+                    if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
+                        $field_name = $post_type."_".$field_name; //$field_name = $post_type."_".$arr_field;
                     }
                     
                     $query_assignment = "primary";
@@ -1301,8 +1301,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     if ( $field ) {
                         
                         // if field_name is same as post_type, must alter it to prevent automatic redirect when search is submitted -- e.g. "publisher" => "edition_publisher"
-                        if ( post_type_exists( $arr_field ) ) {
-                            $field_name = $related_post_type."_".$arr_field;
+                        if ( post_type_exists( $field_name ) ) { //if ( post_type_exists( $arr_field ) ) {
+                            $field_name = $related_post_type."_".$field_name; //$field_name = $related_post_type."_".$arr_field;
                         }
                         $query_assignment = "related";
                         $field_info .= "field '$arr_field' found for related_post_type: $related_post_type [field_name: $field_name].<br />"; // tft    
@@ -1738,6 +1738,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // TODO: fix keys -- should be `repertoire_litdates` NOT `repertoire_liturgical_date`; `publisher` NOT `edition_publisher`; 
                                 // also make sure not to use alt_field_name if it's EMPTY!
                                 if ( $query_assignment == "primary" ) { $options_post_type = $post_type; } else { $options_post_type = $related_post_type; }
+                                $option_field_name = $field_cptt_name;
                                 
                                 $options_args = array(
                                     'post_type' => $options_post_type,
@@ -1747,7 +1748,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     'meta_query' => array(
                                         'relation' => 'OR',
                                         array(
-                                            'key'     => $field_name,
+                                            'key'     => $option_field_name, // $arr_field instead?
                                             'compare' => 'EXISTS'
                                         ),
                                         array(
