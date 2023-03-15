@@ -1673,6 +1673,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     
                     //$field_info .= "-----<br />";
                     
+                } else {
+                	$field_info .= "No field found for field_name $field_name <br />";
                 } // END if ( $field )
                 
                 
