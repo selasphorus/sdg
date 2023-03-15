@@ -2512,7 +2512,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         if ( is_array($seasons) && count($seasons) > 0 ) {
             foreach ( $seasons as $season ) {
                 $rep_info .= '<span class="season">';
-                $rep_info .= $season;
+                $rep_info .= ucfirst($season);
                 $rep_info .= '</span>';
             }
             //$rep_info .= implode(", ",$seasons);
