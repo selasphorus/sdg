@@ -1395,7 +1395,7 @@ if ( in_array('sources', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'source' ),
-			'capability_type' => array('organ', 'organs'),
+			//'capability_type' => array('organ', 'organs'),
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1547,15 +1547,6 @@ if ( in_array('logbook', $sdg_modules ) ) {
 	}
 	add_action( 'init', 'sdg_register_post_type_log_entry' );
 }
-
-/*** HEALTH & WELLNESS ***/
-//Diseases & Conditions -- condition
-//Tests & Procedures -- vettest >> procedure
-//Medications -- medication
-//Foods -- food
-//Symptoms -- symptom
-
-/*** ***/
 
 
 //
