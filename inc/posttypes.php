@@ -177,7 +177,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
 			'taxonomies' => array( 'people_category', 'people_tag', 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'person', $args );
@@ -306,7 +306,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
 			'taxonomies' => array( 'admin_tag', 'project_category' ), //'people_category', 'people_tag', 
-			'show_in_rest' => true,    
+			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'project', $args );
@@ -346,7 +346,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
 			'taxonomies' => array( 'recording_category', 'admin_tag' ),
-			'show_in_rest' => true,    
+			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'recording', $args );
@@ -1539,7 +1539,7 @@ if ( in_array('logbook', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
 			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
+			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'log_entry', $args );
