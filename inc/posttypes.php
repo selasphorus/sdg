@@ -184,6 +184,7 @@ if ( in_array('people', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'register_post_type_person' );
+	
 }
 
 if ( in_array('ensembles', $sdg_modules ) ) {
@@ -228,7 +229,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 	add_action( 'init', 'register_post_type_ensemble' );
 }
 
-if ( in_array('organizations', $sdg_modules ) ) {
+if ( in_array('organizations', $sdg_modules ) |! in_array('groups', $sdg_modules ) ) {
 	// Organization
 	function register_post_type_organization() {
 
@@ -268,6 +269,46 @@ if ( in_array('organizations', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'register_post_type_organization' );
+	
+	// Group
+	function register_post_type_group() {
+
+		$labels = array(
+			'name' => __( 'Groups', 'sdg' ),
+			'singular_name' => __( 'Group', 'sdg' ),
+			'add_new' => __( 'New Group', 'sdg' ),
+			'add_new_item' => __( 'Add New Group', 'sdg' ),
+			'edit_item' => __( 'Edit Group', 'sdg' ),
+			'new_item' => __( 'New Group', 'sdg' ),
+			'view_item' => __( 'View Group', 'sdg' ),
+			'search_items' => __( 'Search Groups', 'sdg' ),
+			'not_found' =>  __( 'No Groups Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Group found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'group' ),
+			//'capability_type' => array('group', 'groups'),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies' => array( 'admin_tag' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'group', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_group' );
 }
 
 /*** PROJECTS ***/
