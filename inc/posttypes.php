@@ -304,7 +304,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
 			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'show_in_rest' => false,    
 		);
 
 		register_post_type( 'group', $args );
