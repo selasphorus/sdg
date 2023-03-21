@@ -229,7 +229,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 	add_action( 'init', 'register_post_type_ensemble' );
 }
 
-if ( in_array('organizations', $sdg_modules ) |! in_array('groups', $sdg_modules ) ) {
+if ( in_array('organizations', $sdg_modules ) ) {
 	// Organization
 	function register_post_type_organization() {
 
@@ -269,7 +269,9 @@ if ( in_array('organizations', $sdg_modules ) |! in_array('groups', $sdg_modules
 	
 	}
 	add_action( 'init', 'register_post_type_organization' );
-	
+}
+
+if ( in_array('groups', $sdg_modules ) ) {
 	// Group
 	function register_post_type_group() {
 
