@@ -296,6 +296,8 @@ function get_event_personnel( $atts = [] ) {
             // initialize vars
             $placeholder_label = false;
             $placeholder_item = false;
+            $arr_person_role = array();
+            $arr_person = array();
             $person_role = null;
             $person_name = null;
             $delete_row = false;
@@ -717,8 +719,13 @@ function get_event_program_items( $atts = [] ) {
             $placeholder_label = false;
             $placeholder_item = false;
             //
+            $arr_item_label = array();
+            $arr_item_name = array();
+            //
             $program_item_label = null;
             $program_item_name = null;
+            //
+            $title_as_label = false;
             //
             $show_person_dates = true;
             //
@@ -774,7 +781,7 @@ function get_event_program_items( $atts = [] ) {
             // Get the program item name
             // --------------------
             // TODO: figure out how to not need to pass so many parameters
-            $arr_item_name = array(); // tft
+            
             // TODO: deal w/ special case of multiple items per program row
             
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
@@ -784,8 +791,6 @@ function get_event_program_items( $atts = [] ) {
             	$program_item_label = $arr_item_name['title_as_label'];
                 $title_as_label = true;
             	$row_info .= "<!-- title_as_label -->";
-            } else {
-                $title_as_label = false;
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
