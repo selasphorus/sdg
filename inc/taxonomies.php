@@ -312,6 +312,49 @@ if ( in_array('people', $sdg_modules ) ) {
 	add_action( 'init', 'register_taxonomy_people_category' );
 }
 
+/*** Taxonomies for GROUPS (ORGS/ENSEMBLES) ***/
+
+if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules ) || in_array('ensembles', $sdg_modules ) ) {
+	// Custom Taxonomy: Group Category
+	function register_taxonomy_group_category() {
+		//$cap = 'group'; // WIP
+		$labels = array(
+			'name'              => _x( 'Group Categories', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Group Category', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Group Categories' ),
+			'all_items'         => __( 'All Group Categories' ),
+			'parent_item'       => __( 'Parent Group Category' ),
+			'parent_item_colon' => __( 'Parent Group Category:' ),
+			'edit_item'         => __( 'Edit Group Category' ),
+			'update_item'       => __( 'Update Group Category' ),
+			'add_new_item'      => __( 'Add New Group Category' ),
+			'new_item_name'     => __( 'New Group Category Name' ),
+			'menu_name'         => __( 'Group Categories' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+            // CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'group_category' ],
+		);
+		register_taxonomy( 'group_category', [ 'group', 'organization', 'ensemble' ], $args );
+	}
+	add_action( 'init', 'register_taxonomy_group_category' );
+}
+
+
 /*** Taxonomies for PROJECTS ***/
 
 if ( in_array('projects', $sdg_modules ) ) {

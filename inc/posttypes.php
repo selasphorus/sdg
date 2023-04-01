@@ -187,6 +187,8 @@ if ( in_array('people', $sdg_modules ) ) {
 	
 }
 
+// TODO: merge Ensemble/Organization/Group into a single post type
+// Figure out how to allow for individual sites to set labels to customize -- e.g. "Ensembles" for STC
 if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
 	function register_post_type_ensemble() {
