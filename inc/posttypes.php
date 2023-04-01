@@ -305,7 +305,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-groups',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-			'taxonomies' => array( 'admin_tag' ),
+			'taxonomies' => array( 'admin_tag', 'group_category' ),
 			'show_in_rest' => false,    
 		);
 
