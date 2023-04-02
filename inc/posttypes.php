@@ -1505,6 +1505,10 @@ if ( in_array('links', $sdg_modules ) ) {
 }
 
 
+/*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
+
+// TODO: Move Inventory and Logbook to a separate plugin or plugins?
+
 /*** INVENTORY ***/
 // WIP
 // item? thing? possession? object?
@@ -1593,6 +1597,8 @@ if ( in_array('logbook', $sdg_modules ) ) {
 	add_action( 'init', 'sdg_register_post_type_log_entry' );
 }
 
+
+/*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
 
 //
 if ( in_array('music', $sdg_modules ) ) {
