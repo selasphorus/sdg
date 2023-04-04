@@ -1911,7 +1911,7 @@ function sdg_log( $log_msg, $do_log = true ) {
 add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
 function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
-    if ( is_singular() ):
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ):
         $featured_image_id = get_post_thumbnail_id();
         if ( $featured_image_id ) {
             $caption = get_post( $featured_image_id )->post_excerpt;
@@ -1943,7 +1943,7 @@ function sdg_featured_image_caption ( $post_id = null ) {
         $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
     }
     
-    if ( $caption != "" ) {
+    if ( $caption != "" && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) {
         $caption_class = "featured_image_caption";
         $info .= '<p class="'. $caption_class . '">';
         $info .= $caption;	
