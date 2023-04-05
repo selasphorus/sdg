@@ -1061,7 +1061,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'hierarchical'       => false,
 			//'menu_icon'          => 'dashicons-book',
 			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
 			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => true,    
 		);
