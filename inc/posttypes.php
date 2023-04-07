@@ -1507,51 +1507,7 @@ if ( in_array('links', $sdg_modules ) ) {
 
 /*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
 
-// TODO: Move Inventory and Logbook to a separate plugin or plugins?
-
-/*** INVENTORY ***/
-// WIP
-// item? thing? possession? object?
-if ( in_array('inventory', $sdg_modules ) ) {
-	// Thing
-	function sdg_register_post_type_thing() {
-
-		$labels = array(
-			'name' => __( 'Things', 'sdg' ),
-			'singular_name' => __( 'Thing', 'sdg' ),
-			'add_new' => __( 'New Thing', 'sdg' ),
-			'add_new_item' => __( 'Add New Thing', 'sdg' ),
-			'edit_item' => __( 'Edit Thing', 'sdg' ),
-			'new_item' => __( 'New Thing', 'sdg' ),
-			'view_item' => __( 'View Thing', 'sdg' ),
-			'search_items' => __( 'Search Things', 'sdg' ),
-			'not_found' =>  __( 'No Things Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No Things found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'thing' ),
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
-		);
-
-		register_post_type( 'thing', $args );
-	
-	}
-	add_action( 'init', 'sdg_register_post_type_thing' );
-}
+// TODO: Move Logbook, Documents, Inventory, Ledger to a separate plugin or plugins?
 
 /*** LOGBOOK ***/
 // WIP -- consider log entries model vs calendar events -- see ATCHQ ACF field group "Logbook (Library)" >> log_entries repeater.
@@ -1595,6 +1551,50 @@ if ( in_array('logbook', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'sdg_register_post_type_log_entry' );
+}
+
+/*** INVENTORY ***/
+// WIP
+// item? thing? possession? object?
+if ( in_array('inventory', $sdg_modules ) ) {
+	// Thing
+	function sdg_register_post_type_thing() {
+
+		$labels = array(
+			'name' => __( 'Things', 'sdg' ),
+			'singular_name' => __( 'Thing', 'sdg' ),
+			'add_new' => __( 'New Thing', 'sdg' ),
+			'add_new_item' => __( 'Add New Thing', 'sdg' ),
+			'edit_item' => __( 'Edit Thing', 'sdg' ),
+			'new_item' => __( 'New Thing', 'sdg' ),
+			'view_item' => __( 'View Thing', 'sdg' ),
+			'search_items' => __( 'Search Things', 'sdg' ),
+			'not_found' =>  __( 'No Things Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Things found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'thing' ),
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies' => array( 'admin_tag', 'press_category' ),
+			'show_in_rest' => true,    
+		);
+
+		register_post_type( 'thing', $args );
+	
+	}
+	add_action( 'init', 'sdg_register_post_type_thing' );
 }
 
 

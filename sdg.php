@@ -24,7 +24,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 $plugin_path = plugin_dir_path( __FILE__ );
 
-// TODO: Deal w/ plugin dependencies -- Display Posts; ACF; EM; &c.?
+// TODO: Deal w/ plugin dependencies -- Display Content; ACF; EM; &c.?
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -252,10 +252,7 @@ function sdg_modules_field_cb( $args ) {
 		'ninjaforms' => __( 'Ninja Forms' ), 
 		//
 		'admin_notes' => __( 'Admin Notes' ), 
-		'data_tables' => __( 'Data Tables' ), 
-		//
-		'inventory' => __( 'Inventory' ), 
-		'logbook' => __( 'Logbook' ), 
+		'data_tables' => __( 'Data Tables' ),
 	);
 	
 	$value   = ( !isset( $options[$args['label_for']] ) ) ? array() : $options[$args['label_for']];
@@ -348,10 +345,6 @@ function sdg_settings_page_html() {
 // Get plugin options -- WIP
 $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } else { $modules = array(); }
-//$modules = get_option( 'sdg_modules', array( 'events', 'people', 'lectionary', 'music', 'webcasts', 'sermons', 'slider', 'ninjaforms' ) );
-//$some_option = get_option( 'key_name', 'default_value' );
-
-
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
@@ -394,16 +387,15 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'groups', 'inventory', 'links', 'logbook', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'groups', 'links', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
 }
 
 
-// WIP/TODO: loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
-
-if( function_exists('acf_add_options_page') ) {
+// Loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
+if ( function_exists('acf_add_options_page') ) {
     
     foreach ( $modules as $module ) {
     
@@ -420,14 +412,12 @@ if( function_exists('acf_add_options_page') ) {
 		
 	}
 
-    
-
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
-
 //wp_enqueue_script('sdg_js_script', plugins_url('sdg.js', __FILE__), array('json_settings'), true );
+
 /**
  * Enqueue a script with jQuery as a dependency.
  */
