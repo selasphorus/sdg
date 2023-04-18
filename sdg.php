@@ -556,6 +556,8 @@ function devmode_active() {
     if ( is_user_logged_in() ) {
         $current_user = wp_get_current_user();
 		$username = $current_user->user_login;
+    } else {
+    	$username = null;
     }
     
 	$devmode = get_query_var('devmode');
