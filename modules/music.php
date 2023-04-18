@@ -2114,7 +2114,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 							array(
 								'taxonomy' => 'repertoire_category',
 								'field'    => 'slug',
-								'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'), //, 'symphonic-works'
+								'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms'), //, 'symphonic-works'
 								'operator' => 'NOT IN',
 								//'include_children' => true,
 							),
@@ -2137,7 +2137,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					array(
 						'taxonomy' => 'repertoire_category',
 						'field'    => 'slug',
-						'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'brass-music', 'psalms'),
+						'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms'),
 						'operator' => 'NOT IN',
 						//'include_children' => true,
 					),
