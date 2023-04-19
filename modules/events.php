@@ -138,10 +138,11 @@ function get_event_ticketing_info( $post_id = null ) {
     //$ticket_urls = get_post_meta( $post_id, 'ticket_urls', true );
     
     if ( empty($rows) ) { $rows = array(); }
-    $info .= "<!-- ".count($rows)." ticket url rows -->\n"; // tft
+    if ( is_array($rows)) { $num_rows = count($rows); } else { $num_rows = 0; }
+    $info .= "<!-- ".$num_rows." ticket url rows -->\n"; // tft
     
     // Loop through the ticket url rows and accumulate data for display
-	if ( count($rows) > 0 ) {
+	if ( $num_rows > 0 ) {
         
         $i = 0;
         
