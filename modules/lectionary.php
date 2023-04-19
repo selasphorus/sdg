@@ -640,7 +640,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                     	if ( $term_priority < $priority ) { // top priority is lowest number
                     		$priority = $term_priority;
                         	$ts_info .= "<!-- NEW priority: ".$priority." -->"; // tft
-                        } else if ( $term_priority == $top_priority ) {
+                        } else if ( isset($top_priority) && $term_priority == $top_priority ) {
                         	$ts_info .= "<!-- term_priority is same as priority -->"; // tft
                     	} else {
                     		$ts_info .= "<!-- term_priority is higher than priority -->"; // tft
