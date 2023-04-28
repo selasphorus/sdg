@@ -1819,7 +1819,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             // Is there in fact an image?
             if ( empty($replace) ) {
             	$replace .= "<!-- no image! -->";
-            	//get img via stc_post_thumbnail
+            	// Get img via stc_post_thumbnail fcn
+            	$replace = stc_post_thumbnail ( "thumbnail", false, false );
             }
             
             $classes = "post-thumbnail sdg";
