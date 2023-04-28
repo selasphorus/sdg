@@ -1821,7 +1821,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             if ( empty($replace) && function_exists('stc_post_thumbnail') ) {
             	$replace .= "<!-- no image! -->";
             	// Get img via stc_post_thumbnail fcn
-            	$replace = stc_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
+            	$replace .= stc_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
             } else {
             	$replace = "***".$replace."***";
             }
@@ -1903,7 +1903,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	
     } else {
     
-    	$replace .= "<!-- result: ".print_r($result,true)." -->";
+    	//$replace .= "result: ".print_r($result,true)." -->";
     	
     }
     
