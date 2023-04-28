@@ -1822,7 +1822,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$replace .= "<!-- no image! -->";
             	// Get img via stc_post_thumbnail fcn
             	//$replace .= "post_id: ".$post_id."; event ID:".$EM_Event->ID."<br />";
-            	$replace .= stc_post_thumbnail ( $post_id, "thumbnail", false, false );
+            	$replace .= stc_post_thumbnail ( $post_id, array( 250, 250), false, false );
             	//$replace .= stc_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
             } else {
             	//$replace = "***".$replace."***"; // tft
