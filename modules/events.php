@@ -1838,6 +1838,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
         }
         
+        if ( $show_image == true ) {
+        	$replace .= "<!-- show_image is TRUE -->";
+        } else {
+        	$replace .= "<!-- show_image is FALSE -->";
+        }
+        
     } else if ( $result == '#_DAYTITLE' ) {
         
         //$replace = "day_title for".$EM_Event->start_date; // tft
