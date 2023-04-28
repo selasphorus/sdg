@@ -1901,6 +1901,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     	$replace = $info;
     	
+    } else {
+    
+    	$replace .= "<!-- result: ".$result." -->";
+    	
     }
     
     return $replace;
