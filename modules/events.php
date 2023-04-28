@@ -1776,7 +1776,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         }
         $replace = $event_title;
         
-    } else if ( $result == '#_EVENTIMAGE' ) {
+    } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}') {
         
         // Modified version of default to actually show image & caption only under certain circumstances
         
