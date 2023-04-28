@@ -1903,7 +1903,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	
     } else {
     
-    	$replace .= "<!-- result: ".$result." -->";
+    	$replace .= "<!-- result: ".print_r($result,true)." -->";
     	
     }
     
