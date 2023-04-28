@@ -1816,6 +1816,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
+            // Is there in fact an image?
+            if ( empty($replace) ) {
+            	$replace .= "<!-- no image! -->";
+            	//get img via stc_post_thumbnail
+            }
+            
             $classes = "post-thumbnail sdg";
             $caption = sdg_featured_image_caption($EM_Event->ID);
 
