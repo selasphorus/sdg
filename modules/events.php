@@ -1825,7 +1825,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$replace .= stc_post_thumbnail ( $post_id, "thumbnail", false, false );
             	//$replace .= stc_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
             } else {
-            	$replace = "***".$replace."***";
+            	//$replace = "***".$replace."***"; // tft
             }
             
             $classes = "post-thumbnail sdg";
