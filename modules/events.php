@@ -1708,9 +1708,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title -- WIP!
-	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => null );
-    $event_title = stc_post_title( $title_args );
-    //$event_title = "TEST"; // tft
+	///$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => null );
+    ///$event_title = stc_post_title( $title_args );
+    $event_title = "TEST"; // tft
     
     if ( $result == '#_EVENTLINK' || $result == '#_EVENTNAME' ) {
         
@@ -1734,7 +1734,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         }
         $replace = $event_title;
         
-    } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}') {
+    } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
         if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
         
