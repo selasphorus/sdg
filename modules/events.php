@@ -1703,6 +1703,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
     
+    if ( is_singular('event') ) {
+    	return $replace; // tft
+    }
+    
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title -- WIP!
