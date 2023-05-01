@@ -1700,13 +1700,12 @@ function display_webcast_events() {
 add_filter('em_event_output_placeholder','sdg_placeholders',1,3); // TMP DISABLED 03/25/22
 function sdg_placeholders( $replace, $EM_Event, $result ) {
     
+    $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info = "";
+    $ts_info .= "<!-- EM post_id: $post_id -->";
     
-    if ( is_singular('event') ) {
-    	//return $replace; // tft
-    }
+    if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
