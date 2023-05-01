@@ -1704,7 +1704,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     //$event_id = $EM_Event->ID;
     
     // Get the formatted event title -- WIP!
-	$title_args = array( 'post' => $post_id, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel_sub' => 3 );
+	$title_args = array( 'post' => $post_id, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => 3 );
     $event_title = stc_post_title( $title_args );
     
     if ( $result == '#_EVENTLINK' ) {
