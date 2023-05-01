@@ -1705,8 +1705,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     //$event_id = $EM_Event->ID;
     $ts_info .= "EM post_id: $post_id; result: $result";
     
-    if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
-    
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title -- WIP!
@@ -1738,7 +1736,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}') {
         
-        $replace .= " *** testing... *** ";
+        if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
+        
+        //$replace .= " *** testing... *** ";
         
         // Modified version of default to actually show image & caption only under certain circumstances
         
