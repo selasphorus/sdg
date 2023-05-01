@@ -1703,17 +1703,15 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
     
+    if ( $result == '#_EDITEVENTLINK' ) { $make_link = true; } else { $make_link = false; }
+    
     // Get the formatted event title -- WIP!
-	$title_args = array( 'post' => $post_id, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => null );
+	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => null );
     $event_title = stc_post_title( $title_args );
     
-    if ( $result == '#_EVENTLINK' ) {
+    if ( $result == '#_EVENTLINK' || $result == '#_EVENTNAME' ) {
         
-        $event_link = esc_url($EM_Event->get_permalink());
-        //$replace = '<a href="'.$event_link.'">'.get_the_title($EM_Event->ID).'</a>';
-        $replace = '<a href="'.$event_link.'">'.$event_title.'</a>';
-        
-        //if ( is_dev_site() ) { $replace .= "<!-- series_id: ".$series_id."; series_title: ".$series_title." -->"; }
+        $replace = $event_title;
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
@@ -1723,18 +1721,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $replace = '<a href="'.$link.'">'.esc_html(sprintf(__('Edit Event','events-manager'))).'</a>';
         }
         
-    } else if ( $result == '#_EVENTNAME' ) {
-        
-        $replace = $event_title;
-        //$replace .= "<!-- event ID: [".$EM_Event->ID."]; post_id: [".$post_id."] -->"; // tft
-        
-        // TODO: coordinate/consolidate vis-a-vis function clean_title()... Why doesn't that fcn take care of FullCalendar display?
-        /*if (strpos($replace, '[') != false) { 
-            $replace = preg_replace('/\[[^\]]*\]([^\]]*)/', '$1', $replace);
-            $replace = preg_replace('/([^\]]*)\[[^\]]*\]/', '$1', $replace);
-        }*/
-        
-    }  else if ( $result == '#_EVENTNAMESHORT' ) {
+    } else if ( $result == '#_EVENTNAMESHORT' ) {
         
         // Get the short_title, if any
         if ( $post_id && $post_id != "" ) { 
