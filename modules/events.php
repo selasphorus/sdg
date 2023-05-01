@@ -1739,6 +1739,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}') {
         
+        $replace .= "testing...";
+        
         // Modified version of default to actually show image & caption only under certain circumstances
         
         /*
