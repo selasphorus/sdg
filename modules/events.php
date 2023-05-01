@@ -1712,7 +1712,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $event_title = stc_post_title( $title_args );
     //$event_title = "TEST"; // tft
     
-    if ( $result == '#_EVENTLINK' || $result == '#_EVENTNAME' ) {
+    if ( $result == '#_EVENTNAME' ) {
+    
+    	$replace .= " >> ".$event_title." << ";
+    
+    } else if ( $result == '#_EVENTLINK' ) {
         
         $replace = $event_title;
         
