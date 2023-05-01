@@ -1822,14 +1822,15 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$replace .= "<!-- no image! -->";
             	// Get img via stc_post_thumbnail fcn
             	//$replace .= "post_id: ".$post_id."; event ID:".$EM_Event->ID."<br />";
-            	$replace .= stc_post_thumbnail ( $post_id, array( 250, 250), false, false );
+            	$img_tag = stc_post_thumbnail ( $post_id, array( 250, 250), false, false );
             	//$replace .= stc_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
+            	$replace .= $img_tag;
             } else {
             	//$replace = "***".$replace."***"; // tft
             }
             
             $classes = "post-thumbnail sdg";
-            if ( $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left event-image"; }
+            if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left event-image"; }
             $caption = sdg_featured_image_caption($EM_Event->ID);
 
             if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) {
