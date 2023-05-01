@@ -1702,6 +1702,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
+    $ts_info = "";
     
     if ( is_singular('event') ) {
     	//return $replace; // tft
@@ -1744,7 +1745,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         $show_image = true;
         
         $featured_image_display = get_field('featured_image_display', $post_id);
+        $ts_info .= "<!-- featured_image_display: ".$featured_image_display." -->";
         
+        /*
         if ( !is_archive() && $featured_image_display == "thumbnail" ) { // get_post_type( $post_id ) == "event" && 
         
         	$show_image = false;
@@ -1813,12 +1816,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         } else {
             $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
         }
-        
         if ( $show_image == true ) {
         	$replace .= "<!-- show_image is TRUE -->";
         } else {
         	$replace .= "<!-- show_image is FALSE -->";
         }
+        */
+        
+        $replace .= $ts_info;
         
     } else if ( $result == '#_DAYTITLE' ) {
         
