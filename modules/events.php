@@ -1708,9 +1708,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title -- WIP!
-	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel' => null, 'hlevel_sub' => null );
-    ///$event_title = stc_post_title( $title_args );
-    $event_title = "TEST"; // tft
+	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
+    $event_title = stc_post_title( $title_args );
+    //$event_title = "TEST"; // tft
     
     if ( $result == '#_EVENTLINK' || $result == '#_EVENTNAME' ) {
         
@@ -1736,14 +1736,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
-        if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
-        
-        //$replace .= " *** testing... *** ";
+        //if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
         
         // Modified version of default to actually show image & caption only under certain circumstances
         
-        /*
-        $post_id = $EM_Event->ID;
         $show_image = true;
         
         $featured_image_display = get_field('featured_image_display', $post_id);
@@ -1822,7 +1818,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         } else {
         	$replace .= "<!-- show_image is FALSE -->";
         }
-        */
         
         //$replace .= $ts_info;
         
