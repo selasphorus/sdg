@@ -1829,6 +1829,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             }
             
             $classes = "post-thumbnail sdg";
+            if ( $result == '#_EVENTIMAGE{250,250}' ) { $classes .= "float-left event-image"; }
             $caption = sdg_featured_image_caption($EM_Event->ID);
 
             if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) {
