@@ -1776,7 +1776,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
-            $classes = "event-image";
+            $classes = "post-thumbnail sdg event-image";
             
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
@@ -1798,7 +1798,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	
             } else {
             	//$replace = "***".$replace."***"; // tft
-            	$classes .= " post-thumbnail sdg float-left";
+            	$classes .= " float-left";
             }
             
             $caption = sdg_featured_image_caption($EM_Event->ID);
