@@ -1714,11 +1714,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     if ( $result == '#_EVENTNAME' ) {
     
-    	$replace .= " >> ".$event_title." << ";
+    	$replace .= " [_EVENTNAME] >> ".$event_title." << ";
     
     } else if ( $result == '#_EVENTLINK' ) {
         
-        $replace = $event_title;
+        //$replace = $event_title;
+        $replace .= " [_EVENTLINK] >> ".$event_title." << ";
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
