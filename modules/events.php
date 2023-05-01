@@ -1816,6 +1816,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
+            $classes .= "event-image";
+            
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
             if ( empty($replace) && function_exists('stc_post_thumbnail') ) {
@@ -1827,10 +1829,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$replace .= $img_tag;
             } else {
             	//$replace = "***".$replace."***"; // tft
+            	$classes .= " post-thumbnail sdg";
+            	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             }
             
-            $classes = "post-thumbnail sdg";
-            if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left event-image"; }
             $caption = sdg_featured_image_caption($EM_Event->ID);
 
             if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) {
