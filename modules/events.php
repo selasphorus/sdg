@@ -1702,42 +1702,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    //$event_title = get_the_title($post_id); // breaks things. why?!?!?!
     
-    $clean_title = get_post_meta( $post_id, 'clean_title', true ); // for legacy events only
-    if ( $clean_title && $clean_title != "" ) {
-        $event_title = $clean_title;
-    } else {
-        $event_title = $EM_Event->event_name;
-    }
-    
-    // TMP: a version of this code also appears in admin_functions.php -- twice! -- and if the clean_title code above were working, it shouldn't be necessary
-    if ( preg_match('/([0-9]+)_(.*)/', $event_title) ) {
-        $event_title = preg_replace('/([0-9]+)_(.*)/', '$2', $event_title);
-        $event_title = str_replace("_", " ", $event_title);
-    }
-    
-    $event_title = remove_bracketed_info($event_title);
-    //$event_title = htmlentities($event_title); // In case there are apostrophes (probably only possible in the short_title?)
-    
-    if ( is_dev_site() ) {
-        
-        //$event_title = get_the_title($EM_Event->ID); // For some reason this is breaking things on the live site, but only when event titles have info in brackets with space around hyphen -- e.g. 2022 - Shrine Prayers
-        
-        // Get the series title, if any
-        $series_id = null;
-        $series_title = "";
-
-        $event_series = get_post_meta( $post_id, 'events_series', true );
-        if ( isset($event_series['ID']) ) { 
-            $series_id = $event_series['ID'];
-            $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
-            if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
-        }
-
-        // Prepend series_title, if applicable
-        if ( $series_title != "" ) { $event_title = $series_title.": ".$event_title; }
-    }
+    // Get the formatted event title -- WIP!
+	$title_args = array( 'post' => $post_id, 'line_breaks' => false, 'show_subtitle' => true, 'display' => false, 'hlevel_sub' => 3 );
+    $event_title = stc_post_title( $title_args );
     
     if ( $result == '#_EVENTLINK' ) {
         
