@@ -1741,10 +1741,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         // Modified version of default to actually show image & caption only under certain circumstances
         
+        /*
         $post_id = $EM_Event->ID;
         $show_image = true;
         
-        /*
         $featured_image_display = get_field('featured_image_display', $post_id);
         $ts_info .= "<!-- featured_image_display: ".$featured_image_display." -->";
         
