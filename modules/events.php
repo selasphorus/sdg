@@ -1830,7 +1830,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             } else {
             	//$replace = "***".$replace."***"; // tft
-            	$classes .= " post-thumbnail sdg";
+            	$classes .= " post-thumbnail sdg float-left";
             }
             
             $caption = sdg_featured_image_caption($EM_Event->ID);
