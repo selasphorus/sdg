@@ -1804,7 +1804,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$replace .= $img_tag;
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
-            } else {
+            } else if ( !is_singular('event') ){
             	//$replace = "***".$replace."***"; // tft
             	$classes .= " float-left";
             }
