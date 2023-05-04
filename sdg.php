@@ -1183,7 +1183,6 @@ function sdg_troubleshooting_display_callback( $post ) {
     echo "test";
 }
  
-
 /**
  * Post Object Info: Prints the metabox content.
  * 
@@ -1208,9 +1207,6 @@ function sdg_postobj_info_meta_box_callback( $post ) {
     echo $info;
 	
 }
-
-
-
 
 /*** Admin Columns Pro -- Capabilities (permissions) ***/
 
@@ -1295,14 +1291,11 @@ function sdg_pre_get_posts( $query ) {
   	return $query;
 }
 
-
 // Category/Taxonomy Description as Widget
 add_shortcode('post_category_widget', 'sdg_get_category_widget');
 function sdg_get_category_widget ( $post_id = null ) { // or $term_id?
-    
     //#_CATEGORYNOTES -- Events Manager
 }
-
 
 // Post Resources (ACF field)
 add_shortcode('post_sidebar_widget', 'get_post_sidebar_widget');
@@ -1765,17 +1758,6 @@ function sdg_selectmenu ( $args = '' ) {
 }
 
 /*** SEARCH ***/
-
-// WIP
-
-// This function is built in to PHP starting in v. 8.0
-/*if ( !function_exists('str_starts_with') ) {
-    
-    function str_starts_with ( $haystack, $needle ) {
-        return strpos( $haystack , $needle ) === 0;
-    }
-    
-}*/
 
 // Get name of post_type
 function get_post_type_str( $type = "" ) {

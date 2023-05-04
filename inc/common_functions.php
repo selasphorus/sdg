@@ -8,6 +8,256 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+/*********** POST BASICS ***********/
+
+//sdg_post_title
+
+// Custom fcn for thumbnail/featured image display
+function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true ) {
+    
+    // init
+    $info = ""; // in case echo == false
+    if ( $post_id === null ) { $post_id = get_the_ID(); }
+    $thumbnail_id = null;
+    $image_gallery = array();
+    
+    if ( is_singular($post_id) && !(is_page('events')) ) {
+        $img_size = "full";
+    }
+    
+    /*
+    // Defaults
+	$defaults = array(
+		'post_id'         => null,
+		'preview_length'  => 55,
+		'readmore'        => false,
+	);
+	
+    // Parse args
+	$args = wp_parse_args( $args, $defaults );
+
+	// Extract
+	extract( $args );
+	*/
+    
+    $ts_info = "";
+    $ts_info .= "post_id: $post_id<br />";
+    $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
+    
+    // Are we using the custom image, if any is set?
+    if ( $use_custom_thumb == true ) {    
+        // First, check to see if the post has a Custom Thumbnail
+        $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
+        
+        if ( $custom_thumb_id ) {
+            $thumbnail_id = $custom_thumb_id;
+        }
+    }
+
+    // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
+    if ( !$thumbnail_id ) {
+        
+        // Check to see if the given post has a featured image
+        if ( has_post_thumbnail( $post_id ) ) {
+
+            $thumbnail_id = get_post_thumbnail_id( $post_id );
+            $ts_info .= "post has a featured image.<br />";
+
+        } else {
+
+            $ts_info .= "post has NO featured image.<br />";
+
+            // If there's no featured image, see if there are any other images that we can use instead
+            
+            // Image Gallery?
+            // get image gallery images and select one at random
+            $image_gallery = get_post_meta( $post_id, 'image_gallery', true );
+            if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
+            	$ts_info .= "Found an image_gallery array.<br />";
+            	$ts_info .= "image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
+            	$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
+            	// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
+            	// Get number of items in array...
+            	$img_count = count($image_gallery);
+            	// Get event date and weekday
+            	if ( get_post_type($post_id) == 'event' ) {
+            		// Is this an instance of a recurring event? look for recurrent event id...
+            		$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
+            		if ( $recurrence_id ) {
+            		
+            			$meta = get_post_meta( $post_id );
+            			$ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
+            			
+            			// Get event object?
+            			//$ts_info .= print_r($XXX,true);
+            			
+            			// Get recurring event info
+            			$revent = get_post ( $recurrence_id );
+            			$ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
+            			$recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
+            			$recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
+            			$recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
+            			//'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
+						$ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
+						
+            			// Get event date
+						$event_date = get_post_meta( $post_id, '_event_start_date', true );
+						$ts_info .= "event_date: $event_date; <br />";
+						
+						
+						$date = explode('-', $event_date);
+						$year = $date[0];
+						$month = $date[1];
+						$day = $date[2];
+						$weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
+						$yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
+            		}					
+            	}
+            	//
+            	$thumbnail_id = $image_gallery[$i];
+            	$ts_info .= "Random thumbnail ID: $thumbnail_id<br />";
+            } else {
+            	$ts_info .= "No image_gallery found.<br />";
+            }
+            
+            // Image(s) in post content?
+            if ( empty($thumbnail_id) && function_exists('get_first_image_from_post_content') ) { 
+				$image_info = get_first_image_from_post_content( $post_id );
+				if ( $image_info ) {
+					$thumbnail_id = $image_info['id'];
+				} else {
+					$thumbnail_id = "test"; // tft
+				}
+			}
+
+            if ( empty($thumbnail_id) ) {
+
+                // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
+                // Also, images uploaded to a post remain "attached" according to the Media Library even after they're deleted from the post.
+                $images = get_attached_media( 'image', $post_id );
+                //$images = get_children( "post_parent=".$post_id."&post_type=attachment&post_mime_type=image&numberposts=1" );
+                if ($images) {
+                    //$thumbnail_id = $images[0];
+                    foreach ($images as $attachment_id => $attachment) {
+                        $thumbnail_id = $attachment_id;
+                    }
+                }
+
+            }
+
+            // If there's STILL no image, use a placeholder
+            // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
+            // TODO: designate placeholders *per category*?? via category/taxonomy ui?
+            if ( empty($thumbnail_id) ) {
+                if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $thumbnail_id = 121560; } else { $thumbnail_id = 121560; } // Fifth Avenue Entrance
+                //$thumbnail_id = null;
+            }
+        }
+    }
+    
+    // Make sure this is a proper context for display of the featured image
+    if ( post_password_required($post_id) || is_attachment($post_id) ) {
+        return;
+    } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
+        // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
+        return;
+    } else if ( has_term( 'video-webcasts', 'category' ) ) {        
+        $player_status = get_media_player( $post_id, true ); // get_media_player ( $post_id = null, $status_only = false, $url = null )
+        if ( $player_status == "ready" ) {
+            return;
+        }        
+    } else if ( is_page_template('page-centered.php') ) {        
+		return;
+	} else if ( is_singular() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
+        return; // wip
+    }
+
+    $ts_info .= "Ok to display the image, if one is found.<br />";
+    
+    // Ok to display the image! Set up classes for styling
+    $classes = "post-thumbnail sdg";
+    
+    // Retrieve the caption (if any) and return it for display
+    if ( get_post( $thumbnail_id  ) ) {
+		$caption = get_post( $thumbnail_id  )->post_excerpt;
+		if ( !empty($caption) && !is_singular('person') ) {
+			$classes .= " has-caption";
+		} else {
+			$classes .= " no-caption";
+		}
+    }
+    
+    if ( is_singular($post_id) && !( $post_id == get_the_ID() && is_page('events') ) ) {
+        
+        $ts_info .= "is_singular<br />";
+        
+        if ( has_post_thumbnail($post_id) ) {
+            
+            if ( is_singular('person') ) {
+                $img_size = "medium"; // portrait
+                $classes .= " float-left";
+            }
+            
+            $classes .= " is_singular";
+            
+            $info .= '<div class="'.$classes.'">';
+            $info .= get_the_post_thumbnail( $post_id, $img_size );
+            $info .= '</div><!-- .post-thumbnail -->';
+
+        } else {
+        
+        	// If an image_gallery was found, show one image as the featured image
+        	// TODO: streamline this
+        	if ( $thumbnail_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
+        		$info .= wp_get_attachment_image( $thumbnail_id, $img_size, false, array( "class" => "featured_attachment" ) );
+        	}
+        	
+        }
+        
+    } else if ( !( $post_id == get_the_ID() && is_page('events') ) ) { 
+        
+        // NOT singular -- aka archives, search results, &c.
+        $img_tag = "";
+        
+        if ( $thumbnail_id ) {
+            
+            // display attachment via thumbnail_id
+            $img_tag = wp_get_attachment_image( $thumbnail_id, $img_size, false, array( "class" => "featured_attachment" ) );
+            
+            $ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$thumbnail_id;
+            if ( isset($images)) { $ts_info .= '<pre>'.print_r($images,true).'</pre>'; }
+            
+        } else {
+            
+            $ts_info .= 'Use placeholder img';
+            
+            if ( function_exists( 'get_placeholder_img' ) ) { 
+                $img_tag = get_placeholder_img();
+            }
+        }
+        
+        if ( !empty($img_tag) ) {
+        	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
+        	$info .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$info .= $img_tag;
+        	$info .= '</a>';
+        }        
+        
+    } // End if is_singular()
+    
+    //$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
+    
+	if ( $echo == true ) {
+		$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
+		echo $info;    
+	} else {
+		if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
+		return $info;
+	}
+
+}
+
+
 /*********** POST RELATIONSHIPS ***********/
 
 // The following function is the replacement for the old get_related_podposts fcn
