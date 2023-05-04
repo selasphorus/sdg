@@ -167,12 +167,13 @@ function sdg_post_title ( $args = array() ) {
 
 
 // Custom fcn for thumbnail/featured image display
-function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true ) {
+function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "img_tag" ) {
     
     // init
     $info = ""; // in case echo == false
     if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $thumbnail_id = null;
+    $img_id = null;
+    $img_tag = "";
     $image_gallery = array();
     
     if ( is_singular($post_id) && !(is_page('events')) ) {
@@ -204,17 +205,17 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
         
         if ( $custom_thumb_id ) {
-            $thumbnail_id = $custom_thumb_id;
+            $img_id = $custom_thumb_id;
         }
     }
 
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
-    if ( !$thumbnail_id ) {
+    if ( !$img_id ) {
         
         // Check to see if the given post has a featured image
         if ( has_post_thumbnail( $post_id ) ) {
 
-            $thumbnail_id = get_post_thumbnail_id( $post_id );
+            $img_id = get_post_thumbnail_id( $post_id );
             $ts_info .= "post has a featured image.<br />";
 
         } else {
@@ -268,32 +269,32 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             		}					
             	}
             	//
-            	$thumbnail_id = $image_gallery[$i];
-            	$ts_info .= "Random thumbnail ID: $thumbnail_id<br />";
+            	$img_id = $image_gallery[$i];
+            	$ts_info .= "Random thumbnail ID: $img_id<br />";
             } else {
             	$ts_info .= "No image_gallery found.<br />";
             }
             
             // Image(s) in post content?
-            if ( empty($thumbnail_id) && function_exists('get_first_image_from_post_content') ) { 
+            if ( empty($img_id) && function_exists('get_first_image_from_post_content') ) { 
 				$image_info = get_first_image_from_post_content( $post_id );
 				if ( $image_info ) {
-					$thumbnail_id = $image_info['id'];
+					$img_id = $image_info['id'];
 				} else {
-					$thumbnail_id = "test"; // tft
+					$img_id = "test"; // tft
 				}
 			}
 
-            if ( empty($thumbnail_id) ) {
+            if ( empty($img_id) ) {
 
                 // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
                 // Also, images uploaded to a post remain "attached" according to the Media Library even after they're deleted from the post.
                 $images = get_attached_media( 'image', $post_id );
                 //$images = get_children( "post_parent=".$post_id."&post_type=attachment&post_mime_type=image&numberposts=1" );
                 if ($images) {
-                    //$thumbnail_id = $images[0];
+                    //$img_id = $images[0];
                     foreach ($images as $attachment_id => $attachment) {
-                        $thumbnail_id = $attachment_id;
+                        $img_id = $attachment_id;
                     }
                 }
 
@@ -302,9 +303,9 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             // If there's STILL no image, use a placeholder
             // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
             // TODO: designate placeholders *per category*?? via category/taxonomy ui?
-            if ( empty($thumbnail_id) ) {
-                if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $thumbnail_id = 121560; } else { $thumbnail_id = 121560; } // Fifth Avenue Entrance
-                //$thumbnail_id = null;
+            if ( empty($img_id) ) {
+                if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
+                //$img_id = null;
             }
         }
     }
@@ -332,8 +333,8 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
     $classes = "post-thumbnail sdg";
     
     // Retrieve the caption (if any) and return it for display
-    if ( get_post( $thumbnail_id  ) ) {
-		$caption = get_post( $thumbnail_id  )->post_excerpt;
+    if ( get_post( $img_id  ) ) {
+		$caption = get_post( $img_id  )->post_excerpt;
 		if ( !empty($caption) && !is_singular('person') ) {
 			$classes .= " has-caption";
 		} else {
@@ -354,16 +355,16 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             
             $classes .= " is_singular";
             
-            $info .= '<div class="'.$classes.'">';
-            $info .= get_the_post_thumbnail( $post_id, $img_size );
-            $info .= '</div><!-- .post-thumbnail -->';
+            $img_tag .= '<div class="'.$classes.'">';
+            $img_tag .= get_the_post_thumbnail( $post_id, $img_size );
+            $img_tag .= '</div><!-- .post-thumbnail -->';
 
         } else {
         
         	// If an image_gallery was found, show one image as the featured image
         	// TODO: streamline this
-        	if ( $thumbnail_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
-        		$info .= wp_get_attachment_image( $thumbnail_id, $img_size, false, array( "class" => "featured_attachment" ) );
+        	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
+        		$img_tag .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
         	}
         	
         }
@@ -373,12 +374,12 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         // NOT singular -- aka archives, search results, &c.
         $img_tag = "";
         
-        if ( $thumbnail_id ) {
+        if ( $img_id ) {
             
             // display attachment via thumbnail_id
-            $img_tag = wp_get_attachment_image( $thumbnail_id, $img_size, false, array( "class" => "featured_attachment" ) );
+            $img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
             
-            $ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$thumbnail_id;
+            $ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
             if ( isset($images)) { $ts_info .= '<pre>'.print_r($images,true).'</pre>'; }
             
         } else {
@@ -392,20 +393,26 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         
         if ( !empty($img_tag) ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
-        	$info .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
-        	$info .= $img_tag;
-        	$info .= '</a>';
+        	$img_tag .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$img_tag .= $img_tag;
+        	$img_tag .= '</a>';
         }        
         
     } // End if is_singular()
     
     //$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
     
+    if ( $return == "img_tag" ) {
+    	$info .= $img_tag;
+    } else { // $return == "id"
+    	$info = $img_id;
+    }
+	
 	if ( $echo == true ) {
 		$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
 		echo $info;    
 	} else {
-		if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
+		//if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 		return $info;
 	}
 
