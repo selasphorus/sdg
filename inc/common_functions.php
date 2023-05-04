@@ -10,7 +10,161 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** POST BASICS ***********/
 
-//sdg_post_title
+// TODO: replace w/ sdg_post_title via SDG plugin? or via display_content plugin?
+function sdg_post_title ( $args = array() ) {
+
+	$info = "";
+	$ts_info = "";
+	
+	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
+	
+	// Defaults
+	$defaults = array(
+		'post'			=> null,
+		'line_breaks'	=> false,
+		'show_subtitle'	=> false,
+		'show_series_title' => false,
+		'link'			=> false,
+		'echo'			=> true,
+		'hlevel'		=> 1,
+		'hlevel_sub'	=> 2,
+		'hclass'  		=> 'entry-title',
+		'hclass_sub'  	=> 'subtitle',
+		'before'  		=> '',
+		'after'  		=> '',
+	);
+
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+
+	// Extract
+	extract( $args );
+	
+	if ( is_int($post) ) { 
+		$post_id = $post;
+		$post = get_post( $post_id );
+	} else {
+		$post_id = isset( $post->ID ) ? $post->ID : 0;
+	}
+	//$ts_info .= "post_id: ".$post_id."<br />";
+	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
+	$title = $post->post_title;
+	
+	if ( strlen( $title ) == 0 || $post_id == 0) {
+		return;
+	}
+	
+	// WIP
+	// What about clean_title?
+	/*
+	$clean_title = get_post_meta( $post_id, 'clean_title', true ); // for legacy events only
+    if ( $clean_title && $clean_title != "" ) {
+        $event_title = $clean_title;
+    } else {
+        $event_title = $EM_Event->event_name;
+    }
+    */
+    // Clean it up
+	if ( preg_match('/([0-9]+)_(.*)/', $title) ) {
+        $title = preg_replace('/([0-9]+)_(.*)/', '$2', $title);
+        $title = str_replace("_", " ", $title);
+    }    
+    $title = remove_bracketed_info($title);
+        
+	// Check for pipe character and replace it with line breaks or spaces, depending on settings
+	if ( $line_breaks ) {
+		$title = str_replace("|", "<br />", $title);
+	} else {
+		$title = str_replace("|", " ", $title);
+		$title = str_replace("  ", " ", $title); // Replace double space with single, in case extra space was left following pipe
+	}
+
+	$title = $before.$title;
+	
+	if ( $show_subtitle ) { // && function_exists( 'is_dev_site' ) && is_dev_site()
+		$subtitle = get_post_meta( $post_id, 'subtitle', true );
+		if ( strlen( $subtitle ) != 0 ) {
+			// Add "with-subtitle" class to title header, if any
+			$hclass .= " with-subtitle";
+			if ( $hlevel_sub ) {
+				$subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$subtitle.'</h'.$hlevel_sub.'>';
+			} else {
+				$subtitle = '<br /><span class="subtitle">'.$subtitle.'</span>';
+			}
+		}
+	} else {
+		$subtitle = "";
+	}
+	
+	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
+	
+		$info .= "<!-- show_series_title -->";
+		
+		// Determine the series type
+		if ( $post->post_type == "event" ) {
+			$series_field = 'events_series';
+		} else if ( $post->post_type == "sermon" ) {
+			$series_field = 'sermons_series';
+		}
+		$info .= "<!-- series_field: $series_field -->";
+		$series = get_post_meta( $post_id, $series_field, true );
+		if (isset($series[0])) { $series_id = $series[0]; } else { $series_id = null; $info .= "<!-- series: ".print_r($series, true)." -->"; }
+		$info .= "<!-- series_id: $series_id -->";
+		$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );		
+		if ( empty( $series_subtitle ) && !empty( $series_id ) ) {
+			$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id );
+		}		
+		if ( !empty( $series_subtitle ) ) {
+			if ( !empty( $series_id ) ) { 
+				$series_subtitle = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark" target="_blank">'.$series_subtitle.'</a>';
+			}
+			$series_subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_subtitle.'</h'.$hlevel_sub.'>';
+		}
+		// TODO: add hyperlink to the series page
+		//
+	} else {
+		$series_subtitle = "";
+	}
+	/*
+	if ( is_dev_site() ) {
+        
+        //$event_title = get_the_title($EM_Event->ID); // For some reason this is breaking things on the live site, but only when event titles have info in brackets with space around hyphen -- e.g. 2022 - Shrine Prayers
+        
+        // Get the series title, if any
+        $series_id = null;
+        $series_title = "";
+
+        $event_series = get_post_meta( $post_id, 'events_series', true );
+        if ( isset($event_series['ID']) ) { 
+            $series_id = $event_series['ID'];
+            $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
+            if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
+        }
+
+        // Prepend series_title, if applicable
+        if ( $series_title != "" ) { $event_title = $series_title.": ".$event_title; }
+    }
+    */
+	if ( $link ) {
+		$title = '<a href="'.esc_url( get_permalink($post_id) ).'" rel="bookmark">'.$title.'</a>';
+	}
+	
+	if ( $hlevel ) {
+		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>';
+	}
+	
+	$info .= $title;
+	$info .= $subtitle;
+	$info .= $series_subtitle;
+	
+	if ( $echo ) {
+		echo $info;
+	} else {
+		return $info;
+	}
+	
+}
+
 
 // Custom fcn for thumbnail/featured image display
 function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true ) {

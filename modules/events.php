@@ -1710,7 +1710,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     // Get the formatted event title
 	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
     $ts_info .= "title_args: ".print_r($title_args,true);
-    $event_title = stc_post_title( $title_args );
+    $event_title = sdg_post_title( $title_args );
     
     if ( $result == '#_EVENTNAME' ) {
     
