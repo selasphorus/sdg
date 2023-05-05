@@ -233,6 +233,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             	$ts_info .= "image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
             	$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
             	// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
+            	/*
             	// Get number of items in array...
             	$img_count = count($image_gallery);
             	// Get event date and weekday
@@ -269,7 +270,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
 						$yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
             		}					
             	}
-            	//
+            	*/
             	$img_id = $image_gallery[$i];
             	$ts_info .= "Random thumbnail ID: $img_id<br />";
             } else {
@@ -282,7 +283,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
 				if ( $image_info ) {
 					$img_id = $image_info['id'];
 				} else {
-					$img_id = "test"; // tft
+					//$img_id = "test"; // tft
 				}
 			}
 
@@ -322,9 +323,9 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         if ( $player_status == "ready" ) {
             return;
         }        
-    } else if ( is_page_template('page-centered.php') ) {        
+    } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
 		return;
-	} else if ( is_singular() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
+	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
         return; // wip
     }
 
