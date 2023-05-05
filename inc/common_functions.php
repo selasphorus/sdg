@@ -393,7 +393,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         
         if ( !empty($img_tag) ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
-        	$img_tag = '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$img_tag .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
         	$img_tag .= $img_tag;
         	$img_tag .= '</a>';
         }        
