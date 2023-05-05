@@ -13,7 +13,9 @@ $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
 
 // TODO: review and revise capabilities to make sure they'll be compatible for sites with and without sophisticated permissions management (e.g. Members plugin)
-
+/*if ( is_plugin_active( 'plugin-directory/plugin-file.php' ) ) {
+	//plugin is activated
+}*/
 
 /*** GENERAL/ADMIN POST TYPES ***/
 
