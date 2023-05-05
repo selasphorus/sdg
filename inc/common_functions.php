@@ -406,6 +406,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
     	$info .= $img_html;
     } else { // $return == "id"
     	$info = $img_id;
+    	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
 	
 	if ( $echo == true ) {
