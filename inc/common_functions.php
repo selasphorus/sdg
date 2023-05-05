@@ -415,7 +415,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
 		$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
 		echo $info;    
 	} else {
-		if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
+		//if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 		return $info;
 	}
 
