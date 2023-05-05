@@ -355,7 +355,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             
             $classes .= " is_singular";
             
-            $img_tag .= '<div class="'.$classes.'">';
+            $img_tag = '<div class="'.$classes.'">';
             $img_tag .= get_the_post_thumbnail( $post_id, $img_size );
             $img_tag .= '</div><!-- .post-thumbnail -->';
 
@@ -364,7 +364,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         	// If an image_gallery was found, show one image as the featured image
         	// TODO: streamline this
         	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
-        		$img_tag .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+        		$img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
         	}
         	
         }
@@ -393,7 +393,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         
         if ( !empty($img_tag) ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
-        	$img_tag .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$img_tag = '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
         	$img_tag .= $img_tag;
         	$img_tag .= '</a>';
         }        
