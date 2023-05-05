@@ -304,8 +304,8 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
             // TODO: designate placeholders *per category*?? via category/taxonomy ui?
             if ( empty($img_id) ) {
-                if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
-                //$img_id = null;
+                //if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
+                $img_id = null;
             }
         }
     }
