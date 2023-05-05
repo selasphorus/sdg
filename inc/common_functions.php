@@ -167,13 +167,13 @@ function sdg_post_title ( $args = array() ) {
 
 
 // Custom fcn for thumbnail/featured image display
-function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "img_tag" ) {
+function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "html" ) {
     
     // init
     $info = ""; // in case echo == false
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $img_id = null;
-    $img_tag = "";
+    $img_html = "";
     $image_gallery = array();
     
     if ( is_singular($post_id) && !(is_page('events')) ) {
@@ -355,16 +355,16 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
             
             $classes .= " is_singular";
             
-            $img_tag = '<div class="'.$classes.'">';
-            $img_tag .= get_the_post_thumbnail( $post_id, $img_size );
-            $img_tag .= '</div><!-- .post-thumbnail -->';
+            $img_html .= '<div class="'.$classes.'">';
+            $img_html .= get_the_post_thumbnail( $post_id, $img_size );
+            $img_html .= '</div><!-- .post-thumbnail -->';
 
         } else {
         
         	// If an image_gallery was found, show one image as the featured image
         	// TODO: streamline this
         	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
-        		$img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+        		$img_html = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
         	}
         	
         }
@@ -393,17 +393,17 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
         
         if ( !empty($img_tag) ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
-        	$img_tag .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
-        	$img_tag .= $img_tag;
-        	$img_tag .= '</a>';
+        	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$img_html .= $img_tag;
+        	$img_html .= '</a>';
         }        
         
     } // End if is_singular()
     
     //$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
     
-    if ( $return == "img_tag" ) {
-    	$info .= $img_tag;
+    if ( $return == "html" ) {
+    	$info .= $img_html;
     } else { // $return == "id"
     	$info = $img_id;
     }
