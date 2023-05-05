@@ -198,6 +198,7 @@ function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_cus
     $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
+    $ts_info .= "return: $return<br />";
     
     // Are we using the custom image, if any is set?
     if ( $use_custom_thumb == true ) {    
