@@ -224,7 +224,7 @@ function sdg_post_thumbnail ( $args ) {
     $ts_info .= "return: $return<br />";
     
     // Are we using the custom image, if any is set?
-    if ( in_array("custom_thumb", $sources ) == true ) {
+    if ( in_array("custom_thumb", $sources ) ) {
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
         
@@ -249,7 +249,7 @@ function sdg_post_thumbnail ( $args ) {
             // If there's no featured image, see if there are any other images that we can use instead
             
             // Image Gallery?
-            if ( in_array("gallery", $sources ) == true ) {
+            if ( in_array("gallery", $sources ) ) {
 				// get image gallery images and select one at random
 				$image_gallery = get_post_meta( $post_id, 'image_gallery', true );
 				if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
@@ -303,7 +303,7 @@ function sdg_post_thumbnail ( $args ) {
             }
             
             // Image(s) in post content?
-            if ( in_array("content", $sources ) == true ) {
+            if ( in_array("content", $sources ) ) {
 				if ( empty($img_id) && function_exists('get_first_image_from_post_content') ) { 
 					$image_info = get_first_image_from_post_content( $post_id );
 					if ( $image_info ) {
