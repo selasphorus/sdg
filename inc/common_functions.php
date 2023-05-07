@@ -179,7 +179,7 @@ function sdg_post_thumbnail ( $args ) {
 	$defaults = array(
 		'post_id'	=> null,
 		'img_size'	=> "thumbnail",
-		'sources'	=> array("featured_image", "image_gallery"), //array("custom_thumb"),
+		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
 		'return'  	=> 'html',
 	);
@@ -194,6 +194,9 @@ function sdg_post_thumbnail ( $args ) {
     $img_id = null;
     $img_html = "";
     $image_gallery = array();
+    if ( $sources == "all" ) {
+    	$sources = array("featured_image", "gallery", "custom_thumb", "content");
+    }
     
     if ( is_singular($post_id) && !(is_page('events')) ) {
         $img_size = "full";
@@ -217,10 +220,11 @@ function sdg_post_thumbnail ( $args ) {
     $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
+    $ts_info .= "sources: ".print_r($sources, true)."<br />";
     $ts_info .= "return: $return<br />";
     
     // Are we using the custom image, if any is set?
-    if ( $use_custom_thumb == true ) {    
+    if ( in_array("custom_thumb", $sources ) == true ) {
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
         
@@ -245,64 +249,68 @@ function sdg_post_thumbnail ( $args ) {
             // If there's no featured image, see if there are any other images that we can use instead
             
             // Image Gallery?
-            // get image gallery images and select one at random
-            $image_gallery = get_post_meta( $post_id, 'image_gallery', true );
-            if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
-            	$ts_info .= "Found an image_gallery array.<br />";
-            	$ts_info .= "image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
-            	$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
-            	// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
-            	/*
-            	// Get number of items in array...
-            	$img_count = count($image_gallery);
-            	// Get event date and weekday
-            	if ( get_post_type($post_id) == 'event' ) {
-            		// Is this an instance of a recurring event? look for recurrent event id...
-            		$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
-            		if ( $recurrence_id ) {
-            		
-            			$meta = get_post_meta( $post_id );
-            			$ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
-            			
-            			// Get event object?
-            			//$ts_info .= print_r($XXX,true);
-            			
-            			// Get recurring event info
-            			$revent = get_post ( $recurrence_id );
-            			$ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
-            			$recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
-            			$recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
-            			$recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
-            			//'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
-						$ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
+            if ( in_array("gallery", $sources ) == true ) {
+				// get image gallery images and select one at random
+				$image_gallery = get_post_meta( $post_id, 'image_gallery', true );
+				if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
+					$ts_info .= "Found an image_gallery array.<br />";
+					$ts_info .= "image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
+					$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
+					// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
+					/*
+					// Get number of items in array...
+					$img_count = count($image_gallery);
+					// Get event date and weekday
+					if ( get_post_type($post_id) == 'event' ) {
+						// Is this an instance of a recurring event? look for recurrent event id...
+						$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
+						if ( $recurrence_id ) {
+					
+							$meta = get_post_meta( $post_id );
+							$ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
 						
-            			// Get event date
-						$event_date = get_post_meta( $post_id, '_event_start_date', true );
-						$ts_info .= "event_date: $event_date; <br />";
+							// Get event object?
+							//$ts_info .= print_r($XXX,true);
+						
+							// Get recurring event info
+							$revent = get_post ( $recurrence_id );
+							$ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
+							$recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
+							$recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
+							$recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
+							//'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
+							$ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
+						
+							// Get event date
+							$event_date = get_post_meta( $post_id, '_event_start_date', true );
+							$ts_info .= "event_date: $event_date; <br />";
 						
 						
-						$date = explode('-', $event_date);
-						$year = $date[0];
-						$month = $date[1];
-						$day = $date[2];
-						$weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
-						$yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
-            		}					
-            	}
-            	*/
-            	$img_id = $image_gallery[$i];
-            	$ts_info .= "Random thumbnail ID: $img_id<br />";
-            } else {
-            	$ts_info .= "No image_gallery found.<br />";
+							$date = explode('-', $event_date);
+							$year = $date[0];
+							$month = $date[1];
+							$day = $date[2];
+							$weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
+							$yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
+						}					
+					}
+					*/
+					$img_id = $image_gallery[$i];
+					$ts_info .= "Random thumbnail ID: $img_id<br />";
+				} else {
+					$ts_info .= "No image_gallery found.<br />";
+				}
             }
             
             // Image(s) in post content?
-            if ( empty($img_id) && function_exists('get_first_image_from_post_content') ) { 
-				$image_info = get_first_image_from_post_content( $post_id );
-				if ( $image_info ) {
-					$img_id = $image_info['id'];
-				} else {
-					//$img_id = "test"; // tft
+            if ( in_array("content", $sources ) == true ) {
+				if ( empty($img_id) && function_exists('get_first_image_from_post_content') ) { 
+					$image_info = get_first_image_from_post_content( $post_id );
+					if ( $image_info ) {
+						$img_id = $image_info['id'];
+					} else {
+						//$img_id = "test"; // tft
+					}
 				}
 			}
 
