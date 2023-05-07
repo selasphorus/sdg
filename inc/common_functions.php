@@ -195,7 +195,7 @@ function sdg_post_thumbnail ( $args ) {
     $img_html = "";
     $image_gallery = array();
     if ( $sources == "all" ) {
-    	$sources = array("featured_image", "gallery", "custom_thumb", "content");
+    	$sources = array("featured", "gallery", "custom_thumb", "content");
     }
     
     if ( is_singular($post_id) && !(is_page('events')) ) {
