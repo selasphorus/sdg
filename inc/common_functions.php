@@ -435,7 +435,7 @@ function sdg_post_thumbnail ( $args ) {
     	$info .= $img_html;
     } else { // $return == "id"
     	$info = $img_id;
-    	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+    	//$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
 	
 	if ( $echo == true ) {
