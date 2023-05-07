@@ -167,10 +167,29 @@ function sdg_post_title ( $args = array() ) {
 
 
 // Custom fcn for thumbnail/featured image display
-function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "html" ) {
+function sdg_post_thumbnail ( $args ) {
+//function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "html" ) {
     
-    // init
-    $info = ""; // in case echo == false
+    $info = "";
+	$ts_info = "";
+	
+	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
+	
+	// Defaults
+	$defaults = array(
+		'post_id'	=> null,
+		'img_size'	=> "thumbnail",
+		'sources'	=> array("featured_image", "image_gallery"), //array("custom_thumb"),
+		'echo'		=> true,
+		'return'  	=> 'html',
+	);
+
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+
+	// Extract
+	extract( $args );
+	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $img_id = null;
     $img_html = "";
