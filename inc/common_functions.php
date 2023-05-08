@@ -377,16 +377,20 @@ function sdg_post_thumbnail ( $args ) {
         
         if ( has_post_thumbnail($post_id) ) {
             
-            if ( is_singular('person') ) {
-                $img_size = "medium"; // portrait
-                $classes .= " float-left";
+            if ( $return == "html" ) {
+            	if ( is_singular('person') ) {
+					$img_size = "medium"; // portrait
+					$classes .= " float-left";
+				}
+			
+				$classes .= " is_singular";
+			
+				$img_html .= '<div class="'.$classes.'">';
+				$img_html .= get_the_post_thumbnail( $post_id, $img_size );
+				$img_html .= '</div><!-- .post-thumbnail -->';
+            } else {
+            	$img_id = get_post_thumbnail_id( $post_id );
             }
-            
-            $classes .= " is_singular";
-            
-            $img_html .= '<div class="'.$classes.'">';
-            $img_html .= get_the_post_thumbnail( $post_id, $img_size );
-            $img_html .= '</div><!-- .post-thumbnail -->';
 
         } else {
         
