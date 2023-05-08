@@ -1799,7 +1799,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	}
             	// Get img via sdg_post_thumbnail fcn
             	//$replace .= "post_id: ".$post_id."; event ID:".$EM_Event->ID."<br />";
-            	$img_tag = sdg_post_thumbnail ( $post_id, $img_size, false, false );
+            	$img_args = array( 'post_id' => $post_id, 'img_size' => $img_size, 'sources' => "all", 'echo' => true );
+            	$img_tag = sdg_post_thumbnail ( $img_args ); //$img_tag = sdg_post_thumbnail ( $post_id, $img_size, false, false );
             	//$replace .= sdg_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
             	$replace .= $img_tag;
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
