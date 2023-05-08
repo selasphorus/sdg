@@ -1753,7 +1753,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         $featured_image_display = get_field('featured_image_display', $post_id);
         $ts_info .= "<!-- featured_image_display: ".$featured_image_display." -->";
         
-        if ( !is_archive() ) {
+        if ( !is_archive() && !is_page('categories') ) {
         
         	if ( $featured_image_display == "thumbnail" ) {
         		$show_image = false;
