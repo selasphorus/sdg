@@ -1792,7 +1792,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
-            if ( empty($replace) && function_exists('sdg_post_thumbnail') ) {
+            if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
             	
             	$replace .= "<!-- no image! -->";
             	
