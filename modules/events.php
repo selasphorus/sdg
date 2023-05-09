@@ -1703,7 +1703,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "<!-- EM post_id: $post_id; result: $result -->";
+    $ts_info .= "<!-- EM post_id: $post_id; -->";
+    //$ts_info .= "<!-- EM result: $result -->";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
