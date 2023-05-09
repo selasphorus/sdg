@@ -1703,7 +1703,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "EM post_id: $post_id; result: $result";
+    $ts_info .= "<!-- EM post_id: $post_id; result: $result -->";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
@@ -1755,6 +1755,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( !is_archive() && !is_page() ) { //&& ! ( is_page() && $post_id == get_the_ID() )
         
+        	$ts_info .= "<!-- !is_archive() && !is_page() -->";
+        	
         	if ( $featured_image_display == "thumbnail" ) {
         	
         		$show_image = false;
