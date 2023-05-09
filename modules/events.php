@@ -1773,14 +1773,16 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				if ( $webcast_format == "video" ) {
 					$url_ondemand = get_field('url_ondemand', $post_id);
 				}
-		
+				
+				$ts_info .= "<!-- webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
+				
 				// If we've got a video_id and the status is live or on demand, then don't show the image		
 				if ( ( !empty($video_id) && 
 					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
 					|| ( $webcast_format == "video" && ( !empty($url_ondemand) ) ) 
 				   ) { 
 					$show_image = false;
-					$replace = "<!-- webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
+					$replace = "<!-- show video, not image -->";
 				}
 								
 			}
