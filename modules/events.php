@@ -1760,10 +1760,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         		$show_image = false;
         		$replace = "<!-- featured_image_display: $featured_image_display -->";
         		
-        	} else if ( has_term( 'webcasts', 'event-categories', $post_id ) 
+        	} else if ( is_singular('event') && (
+        		has_term( 'webcasts', 'event-categories', $post_id ) 
 				|| has_term( 'webcasts', 'category', $post_id ) 
 				|| has_term( 'video-webcasts', 'event-categories', $post_id ) 
-				|| has_term( 'video-webcasts', 'category', $post_id )) {
+				|| has_term( 'video-webcasts', 'category', $post_id ) 
+				)) {
 				
 				$webcast_status = get_webcast_status( $post_id );
 				$webcast_format = get_field('webcast_format', $post_id);
