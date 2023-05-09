@@ -1726,7 +1726,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
-        if( $EM_Event->can_manage('edit_events','edit_others_events') ){
+        if ( $EM_Event->can_manage('edit_events','edit_others_events') ){
             $link = esc_url($EM_Event->get_edit_url());
             $link .= "&post_type=event";
             $replace = '<a href="'.$link.'">'.esc_html(sprintf(__('Edit Event','events-manager'))).'</a>';
@@ -1796,7 +1796,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             // TODO: generalize from STC to something more widely applicable
             if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
             	
-            	$replace .= "<!-- no image! -->";
+            	$ts_info .= "<!-- no image! -->";
             	
             	if ( is_singular('event') ) {
             		$img_size = "full";
@@ -1829,12 +1829,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
         }
         if ( $show_image == true ) {
-        	$replace .= "<!-- show_image is TRUE -->";
+        	$ts_info .= "<!-- show_image is TRUE -->";
         } else {
-        	$replace .= "<!-- show_image is FALSE -->";
+        	$ts_info .= "<!-- show_image is FALSE -->";
         }
         
-        //$replace .= $ts_info;
+        $replace .= $ts_info;
         
     } else if ( $result == '#_DAYTITLE' ) {
         
