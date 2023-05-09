@@ -1710,7 +1710,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     // Get the formatted event title
 	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
-    $ts_info .= "title_args: ".print_r($title_args,true);
+    $ts_info .= "<!-- title_args: ".print_r($title_args,true)." -->";
     $event_title = sdg_post_title( $title_args );
     
     if ( $result == '#_EVENTNAME' ) {
@@ -1804,16 +1804,15 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             		$img_size = array( 250, 250);
             	}
             	// Get img via sdg_post_thumbnail fcn
-            	//$replace .= "post_id: ".$post_id."; event ID:".$EM_Event->ID."<br />";
             	$img_args = array( 'post_id' => $post_id, 'img_size' => $img_size, 'sources' => "all", 'echo' => false );
-            	$img_tag = sdg_post_thumbnail ( $img_args ); //$img_tag = sdg_post_thumbnail ( $post_id, $img_size, false, false );
-            	//$replace .= sdg_post_thumbnail ( $EM_Event->ID, "thumbnail", false, false );
-            	$replace .= $img_tag;
+            	$img_tag = sdg_post_thumbnail ( $img_args );
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
-            } else if ( !is_singular('event') ){
-            	//$replace = "***".$replace."***"; // tft
-            	$classes .= " float-left";
+            } else {
+            	$img_tag = $replace;
+            	if ( !is_singular('event') ) {
+            		$classes .= " float-left";
+            	}
             }
             
             $caption = sdg_featured_image_caption($EM_Event->ID);
@@ -1823,7 +1822,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             }
             
             $replace .= $caption."<!-- sdg_placeholders -->";
-            $replace = '<div class="'.$classes.'">'.$replace.'</div>';
+            $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
             
         } else {
             $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
