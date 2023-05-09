@@ -1766,32 +1766,22 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				
 				$ts_info .= "<!-- is_singular('event') -->";
 				
-				if ( has_term( 'webcasts', 'event-categories', $post_id ) 
-					|| has_term( 'webcasts', 'category', $post_id ) 
-					|| has_term( 'video-webcasts', 'event-categories', $post_id ) 
-					|| has_term( 'video-webcasts', 'category', $post_id ) ) {
-				
-					$webcast_status = get_webcast_status( $post_id );
-					$webcast_format = get_field('webcast_format', $post_id);
-					$video_id = get_field('video_id', $post_id);
-					if ( $webcast_format == "video" ) {
-						$url_ondemand = get_field('url_ondemand', $post_id);
-					}
-			
-					// If we've got a video_id and the status is live or on demand, then don't show the image
-					// && in_array( $webcast_status, array('before', 'live', 'on_demand')
-			
-					if ( ( !empty($video_id) && ( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) // Vimeo  || $webcast_format == "vimeo_recurring"
-						//|| ( !empty($video_id) && $webcast_format == "youtube" ) // YouTube
-						|| ( $webcast_format == "video" && ( !empty($url_ondemand) ) ) // YouTube
-						//|| ( !empty($video_id) && ( has_term( 'video-webcasts', 'event-categories', $post_id ) || has_term( 'video-webcasts', 'category', $post_id ) ) ) // Non-Vimeo (i.e. Flowplayer) Video webcast
-					   ) { 
-						$show_image = false;
-						$replace = "<!-- webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
-					}
-				
+				$webcast_status = get_webcast_status( $post_id );
+				$webcast_format = get_field('webcast_format', $post_id);
+				$video_id = get_field('video_id', $post_id);
+				if ( $webcast_format == "video" ) {
+					$url_ondemand = get_field('url_ondemand', $post_id);
 				}
-				
+		
+				// If we've got a video_id and the status is live or on demand, then don't show the image		
+				if ( ( !empty($video_id) && 
+					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
+					|| ( $webcast_format == "video" && ( !empty($url_ondemand) ) ) 
+				   ) { 
+					$show_image = false;
+					$replace = "<!-- webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
+				}
+								
 			}
         }
         
