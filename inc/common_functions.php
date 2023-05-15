@@ -168,12 +168,11 @@ function sdg_post_title ( $args = array() ) {
 
 // Custom fcn for thumbnail/featured image display
 function sdg_post_thumbnail ( $args ) {
-//function sdg_post_thumbnail ( $post_id = null, $img_size = "thumbnail", $use_custom_thumb = false, $echo = true, $return = "html" ) {
     
     $info = "";
 	$ts_info = "";
 	
-	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
+	$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -198,7 +197,7 @@ function sdg_post_thumbnail ( $args ) {
     	$sources = array("featured", "gallery", "custom_thumb", "content");
     }
     
-    if ( is_singular($post_id) && !(is_page('events')) ) {
+    if ( is_singular() && $post_id == get_the_ID() && !(is_page('events')) ) {
         $img_size = "full";
     }
     
@@ -219,16 +218,18 @@ function sdg_post_thumbnail ( $args ) {
     
     $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
+    $ts_info .= "get_the_ID(): ".get_the_ID()."<br />";
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
     $ts_info .= "sources: ".print_r($sources, true)."<br />";
     $ts_info .= "return: $return<br />";
     
     // Are we using the custom image, if any is set?
     if ( in_array("custom_thumb", $sources ) ) {
+    	$ts_info .= "Check for custom_thumb<br />";
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
-        
         if ( $custom_thumb_id ) {
+        	$ts_info .= "custom_thumb_id found: $custom_thumb_id<br />";
             $img_id = $custom_thumb_id;
         }
     }
