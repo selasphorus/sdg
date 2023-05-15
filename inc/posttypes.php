@@ -29,7 +29,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 	function register_post_type_admin_note() {
 
 		if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = $cap_default; }
-		$caps = "dev"; // tft
+		$caps = "test"; // tft
 		
 		$labels = array(
 			'name' => __( 'Admin Notes', 'sdg' ),
@@ -52,7 +52,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'admin_note' ),
-			'capability_type' 	 => "dev",//$caps,
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
