@@ -94,6 +94,23 @@ function sdg_settings_init() {
             // Used 0 in this case but will still return Boolean not[see notes below] 
             ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
             )
+    );
+    
+    // Checkbox to determine whether or not to use custom capabilities
+	add_settings_field(
+        'use_custom_caps',
+        esc_attr__('Capabilities (Permissions)', 'sdg'),
+        'sdg_caps_field_cb',
+        'sdg',
+        'sdg_settings',
+        array( 
+            'type'         => 'checkbox',
+            'name'         => 'use_custom_caps',
+            'label_for'    => 'use_custom_caps',
+            'value'        => (empty(get_option('sdg_settings')['use_custom_caps'])) ? 0 : get_option('sdg_settings')['use_custom_caps'],
+            'description'  => __( 'Use custom capabilities.', 'sdg' ),
+            'checked'      => (!isset(get_option('sdg_settings')['use_custom_caps'])) ? 0 : get_option('sdg_settings')['use_custom_caps'],
+            )
     ); 
 	
 	// Register a new section in the "sdg" page.
@@ -200,7 +217,7 @@ function sdg_select_field_cb( $args ) {
  * @since 2.0.1
  * @input type checkbox
  */
-// TODO: make this a radio button instead
+// TODO: make this a radio button instead?
 function sdg_devsite_field_cb( $args ) { 
 
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
@@ -219,6 +236,25 @@ function sdg_devsite_field_cb( $args ) {
         type="checkbox" ' . $checked . '/>';
         $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
         //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
+
+        echo $html;
+}
+
+// TODO: make this a radio button instead?
+function sdg_caps_field_cb( $args ) { 
+	
+    $checked = '';
+    $options = get_option( 'sdg_settings' );
+    
+    $value   = ( !isset( $options[$args['name']] ) ) 
+                ? null : $options[$args['name']];
+    if ($value) { $checked = ' checked="checked" '; }
+        // Could use ob_start.
+        $html  = '';
+        $html .= '<input id="' . esc_attr( $args['name'] ) . '" 
+        name="sdg_settings' . esc_attr('['.$args['name'].']') .'" 
+        type="checkbox" ' . $checked . '/>';
+        $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
 
         echo $html;
 }
