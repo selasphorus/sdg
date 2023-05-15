@@ -28,13 +28,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Admin Note
 	function register_post_type_admin_note() {
 
-		//if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-		if ( $use_custom_caps ) { 
-			$caps = "admin_note"; // tft
-			//$caps = array('admin_note', 'admin_notes');
-		} else {
-			$caps = "post";
-		}
+		if ( $use_custom_caps ) { $caps = "admin_note"; } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Admin Notes', 'sdg' ),
