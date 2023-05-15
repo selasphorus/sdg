@@ -177,6 +177,7 @@ function sdg_post_thumbnail ( $args ) {
 	// Defaults
 	$defaults = array(
 		'post_id'	=> null,
+		'format'	=> "singular", // default to singular; other option is excerpt
 		'img_size'	=> "thumbnail",
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
@@ -197,7 +198,7 @@ function sdg_post_thumbnail ( $args ) {
     	$sources = array("featured", "gallery", "custom_thumb", "content");
     }
     
-    if ( is_singular() && $post_id == get_the_ID() && !(is_page('events')) ) {
+    if ( $context == "singular" && !is_page('events') ) {
         $img_size = "full";
     }
     
@@ -218,6 +219,7 @@ function sdg_post_thumbnail ( $args ) {
     
     $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
+    $ts_info .= "format: $format<br />";
     $ts_info .= "get_the_ID(): ".get_the_ID()."<br />";
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
     $ts_info .= "sources: ".print_r($sources, true)."<br />";
@@ -372,7 +374,7 @@ function sdg_post_thumbnail ( $args ) {
 		}
     }
     
-    if ( ( is_singular() && $post_id == get_the_ID() ) && !( is_page('events') ) ) {
+    if ( $context == "singular" && !( is_page('events') ) ) {
         
         $ts_info .= "is_singular<br />";
         
@@ -403,7 +405,7 @@ function sdg_post_thumbnail ( $args ) {
         	
         }
         
-    } else if ( !( $post_id == get_the_ID() && is_page('events') ) ) { 
+    } else if ( !( $context == "singular" && is_page('events') ) ) { 
         
         // NOT singular -- aka archives, search results, &c.
         $img_tag = "";

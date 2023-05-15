@@ -1800,11 +1800,13 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	
             	if ( is_singular('event') ) {
             		$img_size = "full";
+            		$format = "singular";
             	} else {
             		$img_size = array( 250, 250);
+            		$format = "excerpt";
             	}
             	// Get img via sdg_post_thumbnail fcn
-            	$img_args = array( 'post_id' => $post_id, 'img_size' => $img_size, 'sources' => "all", 'echo' => false );
+            	$img_args = array( 'post_id' => $post_id, 'format' => $format, 'img_size' => $img_size, 'sources' => "all", 'echo' => false );
             	$img_tag = sdg_post_thumbnail ( $img_args );
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
