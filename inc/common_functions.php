@@ -198,7 +198,7 @@ function sdg_post_thumbnail ( $args ) {
     	$sources = array("featured", "gallery", "custom_thumb", "content");
     }
     
-    if ( $context == "singular" && !is_page('events') ) {
+    if ( $format == "singular" && !is_page('events') ) {
         $img_size = "full";
     }
     
@@ -374,7 +374,7 @@ function sdg_post_thumbnail ( $args ) {
 		}
     }
     
-    if ( $context == "singular" && !( is_page('events') ) ) {
+    if ( $format == "singular" && !( is_page('events') ) ) {
         
         $ts_info .= "is_singular<br />";
         
@@ -405,7 +405,7 @@ function sdg_post_thumbnail ( $args ) {
         	
         }
         
-    } else if ( !( $context == "singular" && is_page('events') ) ) { 
+    } else if ( !( $format == "singular" && is_page('events') ) ) { 
         
         // NOT singular -- aka archives, search results, &c.
         $img_tag = "";
