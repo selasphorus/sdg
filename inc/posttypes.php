@@ -205,6 +205,51 @@ if ( in_array('people', $sdg_modules ) ) {
 
 // TODO: merge Ensemble/Organization/Group into a single post type
 // Figure out how to allow for individual sites to set labels to customize -- e.g. "Ensembles" for STC
+
+if ( in_array('groups', $sdg_modules ) ) {
+	// Group
+	function register_post_type_group() {
+
+		if ( $use_custom_caps ) { $caps = "group"; } else { $caps = $cap_default; }
+		
+		$labels = array(
+			'name' => __( 'Groups', 'sdg' ),
+			'singular_name' => __( 'Group', 'sdg' ),
+			'add_new' => __( 'New Group', 'sdg' ),
+			'add_new_item' => __( 'Add New Group', 'sdg' ),
+			'edit_item' => __( 'Edit Group', 'sdg' ),
+			'new_item' => __( 'New Group', 'sdg' ),
+			'view_item' => __( 'View Group', 'sdg' ),
+			'search_items' => __( 'Search Groups', 'sdg' ),
+			'not_found' =>  __( 'No Groups Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Group found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'group' ),
+			'capability_type' 	 => $caps,
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-groups',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
+			'taxonomies' => array( 'admin_tag', 'group_category' ),
+			'show_in_rest' => false,    
+		);
+
+		register_post_type( 'group', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_group' );
+}
+
 if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
 	function register_post_type_ensemble() {
@@ -291,50 +336,6 @@ if ( in_array('organizations', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'register_post_type_organization' );
-}
-
-if ( in_array('groups', $sdg_modules ) ) {
-	// Group
-	function register_post_type_group() {
-
-		if ( $use_custom_caps ) { $caps = "group"; } else { $caps = $cap_default; }
-		
-		$labels = array(
-			'name' => __( 'Groups', 'sdg' ),
-			'singular_name' => __( 'Group', 'sdg' ),
-			'add_new' => __( 'New Group', 'sdg' ),
-			'add_new_item' => __( 'Add New Group', 'sdg' ),
-			'edit_item' => __( 'Edit Group', 'sdg' ),
-			'new_item' => __( 'New Group', 'sdg' ),
-			'view_item' => __( 'View Group', 'sdg' ),
-			'search_items' => __( 'Search Groups', 'sdg' ),
-			'not_found' =>  __( 'No Groups Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No Group found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'group' ),
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-			'taxonomies' => array( 'admin_tag', 'group_category' ),
-			'show_in_rest' => false,    
-		);
-
-		register_post_type( 'group', $args );
-	
-	}
-	add_action( 'init', 'register_post_type_group' );
 }
 
 /*** PROJECTS ***/
