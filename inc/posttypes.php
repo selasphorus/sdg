@@ -52,7 +52,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'admin_note' ),
-			'capability_type' 	 => $caps,
+			'capability_type' 	 => "dev",//$caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
