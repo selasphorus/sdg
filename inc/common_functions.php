@@ -371,7 +371,7 @@ function sdg_post_thumbnail ( $args ) {
 		}
     }
     
-    if ( ( is_singular() && $post_id == get_the_ID() ) && !( $post_id == get_the_ID() && is_page('events') ) ) {
+    if ( ( is_singular() && $post_id == get_the_ID() ) && !( is_page('events') ) ) {
         
         $ts_info .= "is_singular<br />";
         
