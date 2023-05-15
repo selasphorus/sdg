@@ -209,7 +209,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
 	function register_post_type_ensemble() {
 
-		if ( $use_custom_caps ) { $caps = array('ensemble', 'ensembles'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "group"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Ensembles', 'sdg' ),
@@ -253,7 +253,7 @@ if ( in_array('organizations', $sdg_modules ) ) {
 	// Organization
 	function register_post_type_organization() {
 
-		if ( $use_custom_caps ) { $caps = array('group', 'groups'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "group"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Organizations', 'sdg' ),
@@ -297,7 +297,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 	// Group
 	function register_post_type_group() {
 
-		if ( $use_custom_caps ) { $caps = array('group', 'groups'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "group"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Groups', 'sdg' ),
@@ -344,7 +344,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 	// Project
 	function register_post_type_project() {
 
-		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "project"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Projects', 'sdg' ),
@@ -386,7 +386,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 	// Recording (Discography)
 	function register_post_type_recording() {
 
-		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "project"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Recordings', 'sdg' ),
@@ -433,7 +433,7 @@ if ( in_array('press', $sdg_modules ) ) {
 	// Press
 	function sdg_register_post_type_press() {
 
-		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "project"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Press', 'sdg' ),
@@ -479,7 +479,7 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 	// Newsletter
 	function sdg_register_post_type_newsletter() {
 
-		if ( $use_custom_caps ) { $caps = array('newsletter', 'newsletters'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "newsletter"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Newsletters', 'sdg' ),
@@ -569,7 +569,7 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Edition
 	function register_post_type_edition() {
 
-		if ( $use_custom_caps ) { $caps = array('edition', 'editions'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "edition"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Editions', 'sdg' ),
@@ -611,7 +611,7 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Publisher
 	function register_post_type_publisher() {
 
-		if ( $use_custom_caps ) { $caps = array('publisher', 'publishers'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "publisher"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Publishers', 'sdg' ),
@@ -653,7 +653,7 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Publication
 	function register_post_type_publication() {
 
-		if ( $use_custom_caps ) { $caps = array('publication', 'publications'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "publication"; } else { $caps = $cap_default; }
 		
 		$labels = array(
 			'name' => __( 'Publications', 'sdg' ),
