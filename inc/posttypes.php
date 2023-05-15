@@ -11,6 +11,11 @@ if ( !function_exists( 'add_action' ) ) {
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
+$cap_default = 'post';
+$use_custom_caps = false;
+if ( isset($options['use_custom_caps']) && !empty($options['is_dev_site']) ) {
+	$use_custom_caps = true;
+}
 
 // TODO: review and revise capabilities to make sure they'll be compatible for sites with and without sophisticated permissions management (e.g. Members plugin)
 /*if ( is_plugin_active( 'plugin-directory/plugin-file.php' ) ) {
@@ -23,6 +28,8 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Admin Note
 	function register_post_type_admin_note() {
 
+		if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Admin Notes', 'sdg' ),
 			'singular_name' => __( 'Admin Note', 'sdg' ),
@@ -44,7 +51,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'admin_note' ),
-			'capability_type' => array('admin_note', 'admin_notes'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -64,6 +71,8 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 // DB Query -- deprecated -- merged with Admin Notes
 function register_post_type_db_query() {
 
+	if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = $cap_default; }
+	
 	$labels = array(
 		'name' => __( 'DB Queries', 'sdg' ),
 		'singular_name' => __( 'DB Query', 'sdg' ),
@@ -85,7 +94,7 @@ function register_post_type_db_query() {
         'show_in_menu'       => 'edit.php?post_type=admin_note',
         'query_var'          => true,
         'rewrite'            => array( 'slug' => 'db_query' ),
-        'capability_type' => array('admin_note', 'admin_notes'),
+        'capability_type' 	 => $caps,
         'map_meta_cap'       => true,
         'has_archive'        => true,
         'hierarchical'       => false,
@@ -105,6 +114,8 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 	// Data Table
 	function register_post_type_data_table() {
 
+		if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Data Tables', 'sdg' ),
 			'singular_name' => __( 'Data Table', 'sdg' ),
@@ -126,7 +137,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=admin_note',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'data_table' ),
-			'capability_type' => array('admin_note', 'admin_notes'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -150,6 +161,8 @@ if ( in_array('people', $sdg_modules ) ) {
 	// Person
 	function register_post_type_person() {
 
+		if ( $use_custom_caps ) { $caps = array('person', 'people'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'People', 'sdg' ),
 			'singular_name' => __( 'Person', 'sdg' ),
@@ -171,7 +184,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'person' ),
-			'capability_type' => array('person', 'people'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -195,6 +208,8 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
 	function register_post_type_ensemble() {
 
+		if ( $use_custom_caps ) { $caps = array('ensemble', 'ensembles'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Ensembles', 'sdg' ),
 			'singular_name' => __( 'Ensemble', 'sdg' ),
@@ -216,7 +231,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'ensemble' ),
-			'capability_type' => array('ensemble', 'ensembles'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -237,6 +252,8 @@ if ( in_array('organizations', $sdg_modules ) ) {
 	// Organization
 	function register_post_type_organization() {
 
+		if ( $use_custom_caps ) { $caps = array('group', 'groups'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Organizations', 'sdg' ),
 			'singular_name' => __( 'Organization', 'sdg' ),
@@ -258,7 +275,7 @@ if ( in_array('organizations', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'organization' ),
-			//'capability_type' => array('organization', 'organizations'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -279,6 +296,8 @@ if ( in_array('groups', $sdg_modules ) ) {
 	// Group
 	function register_post_type_group() {
 
+		if ( $use_custom_caps ) { $caps = array('group', 'groups'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Groups', 'sdg' ),
 			'singular_name' => __( 'Group', 'sdg' ),
@@ -300,7 +319,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'group' ),
-			//'capability_type' => array('group', 'groups'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -324,6 +343,8 @@ if ( in_array('projects', $sdg_modules ) ) {
 	// Project
 	function register_post_type_project() {
 
+		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Projects', 'sdg' ),
 			'singular_name' => __( 'Project', 'sdg' ),
@@ -345,7 +366,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'project' ),
-			'capability_type' => array('project', 'projects'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -364,6 +385,8 @@ if ( in_array('projects', $sdg_modules ) ) {
 	// Recording (Discography)
 	function register_post_type_recording() {
 
+		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Recordings', 'sdg' ),
 			'singular_name' => __( 'Recording', 'sdg' ),
@@ -385,7 +408,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'recording' ),
-			//'capability_type' => array('publication', 'publications'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -401,7 +424,6 @@ if ( in_array('projects', $sdg_modules ) ) {
 	}
 	//add_action( 'init', 'register_post_type_recording' );
 
-
 }
 
 /*** PRESS ***/
@@ -410,6 +432,8 @@ if ( in_array('press', $sdg_modules ) ) {
 	// Press
 	function sdg_register_post_type_press() {
 
+		if ( $use_custom_caps ) { $caps = array('project', 'projects'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Press', 'sdg' ),
 			'singular_name' => __( 'Press', 'sdg' ),
@@ -431,7 +455,7 @@ if ( in_array('press', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'press' ),
-			//'capability_type' => array('press', 'press'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -454,6 +478,8 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 	// Newsletter
 	function sdg_register_post_type_newsletter() {
 
+		if ( $use_custom_caps ) { $caps = array('newsletter', 'newsletters'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Newsletters', 'sdg' ),
 			'singular_name' => __( 'Newsletter', 'sdg' ),
@@ -475,7 +501,7 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'newsletter' ),
-			//'capability_type' => array('newsletter', 'newsletter'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -500,6 +526,8 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Repertoire, aka Musical Work
 	function register_post_type_repertoire() {
 
+		if ( $use_custom_caps ) { $caps = array('musicwork', 'repertoire'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Musical Works', 'sdg' ),
 			'singular_name' => __( 'Musical Work', 'sdg' ),
@@ -521,7 +549,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'repertoire' ),
-			'capability_type' => array('musicwork', 'repertoire'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -540,6 +568,8 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Edition
 	function register_post_type_edition() {
 
+		if ( $use_custom_caps ) { $caps = array('edition', 'editions'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Editions', 'sdg' ),
 			'singular_name' => __( 'Edition', 'sdg' ),
@@ -561,7 +591,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=repertoire',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'edition' ),
-			'capability_type' => array('edition', 'editions'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -580,6 +610,8 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Publisher
 	function register_post_type_publisher() {
 
+		if ( $use_custom_caps ) { $caps = array('publisher', 'publishers'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Publishers', 'sdg' ),
 			'singular_name' => __( 'Publisher', 'sdg' ),
@@ -601,7 +633,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=publication',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'publisher' ),
-			'capability_type' => array('publisher', 'publishers'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -620,6 +652,8 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Publication
 	function register_post_type_publication() {
 
+		if ( $use_custom_caps ) { $caps = array('publication', 'publications'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Publications', 'sdg' ),
 			'singular_name' => __( 'Publication', 'sdg' ),
@@ -641,7 +675,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'publication' ),
-			'capability_type' => array('publication', 'publications'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -660,6 +694,8 @@ if ( in_array('music', $sdg_modules ) ) {
 	// Music List
 	function register_post_type_music_list() {
 
+		if ( $use_custom_caps ) { $caps = array('music_list', 'music_lists'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Music Lists', 'sdg' ),
 			'singular_name' => __( 'Music List', 'sdg' ),
@@ -681,7 +717,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'music_list' ),
-			'capability_type' => array('music_list', 'music_lists'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -706,6 +742,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Bible Book
 	function register_post_type_bible_book() {
 
+		if ( $use_custom_caps ) { $caps = array('bible_book', 'bible_books'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Books of the Bible', 'sdg' ),
 			'singular_name' => __( 'Bible Book', 'sdg' ),
@@ -727,7 +765,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'bible_book' ),
-			'capability_type' => array('bible_book', 'bible_books'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -746,6 +784,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Reading
 	function register_post_type_reading() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Readings', 'sdg' ),
 			'singular_name' => __( 'Reading', 'sdg' ),
@@ -767,8 +807,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'reading' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
-			//'capability_type' => array('reading', 'readings'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -787,6 +826,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Lectionary Day
 	function register_post_type_lectionary() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Lectionary', 'sdg' ),
 			'singular_name' => __( 'Lectionary Day', 'sdg' ),
@@ -808,8 +849,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'lectionary' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
-			//'capability_type' => array('lectionary_day', 'lectionary_days'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -828,6 +868,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Liturgical Date
 	function register_post_type_liturgical_date() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Liturgical Calendar', 'sdg' ),
 			'singular_name' => __( 'Liturgical Date', 'sdg' ),
@@ -849,7 +891,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'liturgical_date' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -868,6 +910,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Liturgical Date Calculation
 	function register_post_type_liturgical_date_calc() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Liturgical Date Calculations', 'sdg' ),
 			'singular_name' => __( 'Liturgical Date Calculation', 'sdg' ),
@@ -889,7 +933,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'liturgical_date_calc' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -908,6 +952,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Collect
 	function register_post_type_collect() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Collects', 'sdg' ),
 			'singular_name' => __( 'Collect', 'sdg' ),
@@ -929,7 +975,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'collect' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -948,6 +994,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Psalms of the Day
 	function register_post_type_psalms_of_the_day() {
 
+		if ( $use_custom_caps ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Psalms of the Day', 'sdg' ),
 			'singular_name' => __( 'Psalms of the Day', 'sdg' ),
@@ -969,8 +1017,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'psalms_of_the_day' ),
-			'capability_type'    => array('lectionary_item', 'lectionary'),
-			//'capability_type' => array('lectionary', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -995,6 +1042,8 @@ if ( in_array('sermons', $sdg_modules ) ) {
 	// Sermon
 	function register_post_type_sermon() {
 
+		if ( $use_custom_caps ) { $caps = array('sermon', 'sermons'); } else { $caps = $cap_default; }
+				
 		$labels = array(
 			'name' => __( 'Sermons', 'sdg' ),
 			'singular_name' => __( 'Sermon', 'sdg' ),
@@ -1016,7 +1065,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'sermon' ),
-			'capability_type' => array('sermon', 'sermons'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => 'sermon-archive',
 			//'has_archive'        => true,
@@ -1036,6 +1085,8 @@ if ( in_array('sermons', $sdg_modules ) ) {
 	// Sermon Series
 	function register_post_type_sermon_series() {
 
+		if ( $use_custom_caps ) { $caps = array('sermon', 'sermons'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Sermon Series', 'sdg' ),
 			'singular_name' => __( 'Sermon Series', 'sdg' ),
@@ -1057,7 +1108,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=sermon',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'sermon_series' ),
-			//'capability_type' => array('lectionary', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1082,6 +1133,8 @@ if ( in_array('events', $sdg_modules ) ) {
 	// Event Series
 	function register_post_type_event_series() {
 
+		if ( $use_custom_caps ) { $caps = array('event', 'events'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Event Series', 'sdg' ),
 			'singular_name' => __( 'Event Series', 'sdg' ),
@@ -1103,7 +1156,7 @@ if ( in_array('events', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=event',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'event_series' ),
-			//'capability_type' => array('lectionary', 'lectionary'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1129,6 +1182,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Organ
 	function register_post_type_organ() {
 
+		if ( $use_custom_caps ) { $caps = array('organ', 'organs'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Organs', 'sdg' ),
 			'singular_name' => __( 'Organ', 'sdg' ),
@@ -1150,7 +1205,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'organ' ),
-			'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1169,6 +1224,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Organ Builder
 	function register_post_type_builder() {
 
+		if ( $use_custom_caps ) { $caps = array('organ', 'organs'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Builders', 'sdg' ),
 			'singular_name' => __( 'Builder', 'sdg' ),
@@ -1190,7 +1247,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'builder' ),
-			'capability_type' => array('builder', 'builders'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1209,6 +1266,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Division
 	function register_post_type_division() {
 
+		if ( $use_custom_caps ) { $caps = array('organ', 'organs'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Divisions', 'sdg' ),
 			'singular_name' => __( 'Division', 'sdg' ),
@@ -1230,7 +1289,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'division' ),
-			'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1249,6 +1308,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Manual
 	function register_post_type_manual() {
 
+		if ( $use_custom_caps ) { $caps = array('organ', 'organs'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Manuals', 'sdg' ),
 			'singular_name' => __( 'Manual', 'sdg' ),
@@ -1270,7 +1331,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'manual' ),
-			'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1289,6 +1350,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Stop
 	function register_post_type_stop() {
 
+		if ( $use_custom_caps ) { $caps = array('organ', 'organs'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Stops', 'sdg' ),
 			'singular_name' => __( 'Stop', 'sdg' ),
@@ -1310,7 +1373,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'stop' ),
-			'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1335,6 +1398,8 @@ if ( in_array('venues', $sdg_modules ) ) {
 	// Venue
 	function register_post_type_venue() {
 
+		if ( $use_custom_caps ) { $caps = array('venue', 'venues'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Venues', 'sdg' ),
 			'singular_name' => __( 'Venue', 'sdg' ),
@@ -1356,7 +1421,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'venue' ),
-			'capability_type' => array('venue', 'venues'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1375,6 +1440,8 @@ if ( in_array('venues', $sdg_modules ) ) {
 	// Address
 	function register_post_type_address() {
 
+		if ( $use_custom_caps ) { $caps = array('venue', 'venues'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Addresses', 'sdg' ),
 			'singular_name' => __( 'Address', 'sdg' ),
@@ -1396,7 +1463,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'show_in_menu'       => 'edit.php?post_type=venue',
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'address' ),
-			'capability_type' => array('venue', 'venues'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1415,12 +1482,14 @@ if ( in_array('venues', $sdg_modules ) ) {
 }
 
 /*** SOURCES ***/
-
+// TODO: phase this out, replace w/ RESOURCES(?)
 if ( in_array('sources', $sdg_modules ) ) {
 
 	// Source
 	function register_post_type_source() {
 
+		if ( $use_custom_caps ) { $caps = array('source', 'sources'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Sources', 'sdg' ),
 			'singular_name' => __( 'Source', 'sdg' ),
@@ -1442,7 +1511,7 @@ if ( in_array('sources', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'source' ),
-			//'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1461,12 +1530,14 @@ if ( in_array('sources', $sdg_modules ) ) {
 }
 
 /*** LINKS ***/
-
+// TODO: phase this out, replace w/ RESOURCES(?)
 if ( in_array('links', $sdg_modules ) ) {
 
 	// Links
 	function register_post_type_link() {
 
+		if ( $use_custom_caps ) { $caps = array('resource', 'resources'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Links', 'sdg' ),
 			'singular_name' => __( 'Link', 'sdg' ),
@@ -1488,7 +1559,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'link' ),
-			//'capability_type' => array('organ', 'organs'),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1506,6 +1577,54 @@ if ( in_array('links', $sdg_modules ) ) {
 
 }
 
+/*** RESOURCES ***/
+
+if ( in_array('resources', $sdg_modules ) ) {
+
+	// Resources
+	function register_post_type_resource() {
+
+		if ( $use_custom_caps ) { $caps = array('resource', 'resources'); } else { $caps = $cap_default; }
+		
+		$labels = array(
+			'name' => __( 'Resources', 'sdg' ),
+			'singular_name' => __( 'Resource', 'sdg' ),
+			'add_new' => __( 'New Resource', 'sdg' ),
+			'add_new_item' => __( 'Add New Resource', 'sdg' ),
+			'edit_item' => __( 'Edit Resource', 'sdg' ),
+			'new_item' => __( 'New Resource', 'sdg' ),
+			'view_item' => __( 'View Resource', 'sdg' ),
+			'search_items' => __( 'Search Resources', 'sdg' ),
+			'not_found' =>  __( 'No Resources Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Resources found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui'            => true,
+			'show_in_menu'       => true,
+			'query_var'          => true,
+			'rewrite'            => array( 'slug' => 'resource' ),
+			'capability_type' 	 => $caps,
+			'map_meta_cap'       => true,
+			'has_archive'        => true,
+			'hierarchical'       => false,
+			//'menu_icon'          => 'dashicons-welcome-write-blog',
+			'menu_position'      => null,
+			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'show_in_rest' => false, // i.e. false = use classic, not block editor
+		);
+
+		register_post_type( 'resource', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_resource' );
+
+}
+
 
 /*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
 
@@ -1518,6 +1637,8 @@ if ( in_array('logbook', $sdg_modules ) ) {
 	// Log Entry
 	function sdg_register_post_type_log_entry() {
 
+		if ( $use_custom_caps ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Logbook', 'sdg' ),
 			'singular_name' => __( 'Log Entry', 'sdg' ),
@@ -1539,6 +1660,7 @@ if ( in_array('logbook', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'log_entry' ),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
@@ -1562,6 +1684,8 @@ if ( in_array('inventory', $sdg_modules ) ) {
 	// Thing
 	function sdg_register_post_type_thing() {
 
+		if ( $use_custom_caps ) { $caps = array('thing', 'things'); } else { $caps = $cap_default; }
+		
 		$labels = array(
 			'name' => __( 'Things', 'sdg' ),
 			'singular_name' => __( 'Thing', 'sdg' ),
@@ -1583,6 +1707,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
 			'show_in_menu'       => true,
 			'query_var'          => true,
 			'rewrite'            => array( 'slug' => 'thing' ),
+			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
 			'hierarchical'       => false,
