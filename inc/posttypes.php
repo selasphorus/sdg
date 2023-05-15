@@ -161,7 +161,8 @@ if ( in_array('people', $sdg_modules ) ) {
 	// Person
 	function register_post_type_person() {
 
-		if ( $use_custom_caps ) { $caps = array('person', 'people'); } else { $caps = $cap_default; }
+		//if ( $use_custom_caps ) { $caps = array('person', 'people'); } else { $caps = $cap_default; }
+		if ( $use_custom_caps ) { $caps = "person"; } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'People', 'sdg' ),
