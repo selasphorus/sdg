@@ -1154,6 +1154,7 @@ function match_group_field ( $field_groups, $field_name ) {
 }
 */
 
+// TODO: make this function less STC-specific?
 add_shortcode('sdg_search_form', 'sdg_search_form');
 function sdg_search_form ($atts = [], $content = null, $tag = '') {
 	
@@ -2090,15 +2091,18 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
 				$tax_query['relation'] = $search_operator;
 			}
+			
+			$term_exclusions = array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+			
 			foreach ( $tq_components_primary AS $component ) {
 		
 				// Check to see if component relates to repertoire_category
 				if ( $post_type == "repertoire" ) {
 				
 					$ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
-				
-					// WIP: Exclude all posts with repertoire_category = "organ-works" (and children)
+					
 					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+					// TODO: generalize this option to all cats to be set via SDG options -- currently it is VERY STC-specific...
 					if ( $component['taxonomy'] == "repertoire_category" ) {
 				
 						$rep_cat_queried = true;
@@ -2114,7 +2118,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 							array(
 								'taxonomy' => 'repertoire_category',
 								'field'    => 'slug',
-								'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms'), //, 'symphonic-works'
+								'terms'    => $term_exclusions,
 								'operator' => 'NOT IN',
 								//'include_children' => true,
 							),
@@ -2137,7 +2141,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					array(
 						'taxonomy' => 'repertoire_category',
 						'field'    => 'slug',
-						'terms'    => array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms'),
+						'terms'    => $term_exclusions,
 						'operator' => 'NOT IN',
 						//'include_children' => true,
 					),
