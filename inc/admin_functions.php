@@ -1304,6 +1304,7 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
         }
 		
 		//$clean_title = str_replace("--", "&mdash;", $clean_title);
+		$clean_title = str_replace("|", "<br />", $clean_title);
 		
 	}
 	
