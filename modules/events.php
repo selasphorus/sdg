@@ -115,7 +115,7 @@ function get_event_ticketing_info( $post_id = null ) {
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // Get ticket header and info
-    $show_ticket_info = get_post_meta( $post_id, 'show_ticket_info', true );
+    $show_ticket_info = get_post_meta( $post_id, 'show_ticketing_info', true );
     if ( $show_ticket_info != "1" ) { $ticket_info_div_class = " devinfo"; } else { $ticket_info_div_class = ""; }
     $ticket_info_header = get_post_meta( $post_id, 'ticket_info_header', true );
     $ticket_info = get_post_meta( $post_id, 'ticket_info', true );
@@ -130,7 +130,7 @@ function get_event_ticketing_info( $post_id = null ) {
     }
     
     // Ticket URLs
-    $show_ticket_urls = get_post_meta( $post_id, 'show_ticket_urls', true );
+    $show_ticket_urls = get_post_meta( $post_id, 'show_ticketing_urls', true );
     //$info .= "<!-- show_ticket_urls: ".$show_ticket_urls." -->\n"; // tft
     if ( $show_ticket_urls != "1" ) { $ticket_div_class = " devinfo"; } else { $ticket_div_class = ""; }
     //
