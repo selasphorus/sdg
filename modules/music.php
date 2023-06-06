@@ -447,6 +447,7 @@ function str_from_persons_array ( $args = array() ) {
     sdg_log( "[ssfpa] links: ".(int)$links, $do_log );
     
     $info = "";
+    $ts_info = "";
     
     //if ( $format == 'display' && $person_category ) { $info .= "<!-- persons in category: $person_category -->"; }
     
@@ -462,18 +463,32 @@ function str_from_persons_array ( $args = array() ) {
             $person_id = $person;
         }*/
         sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
-
-        if ( $abbr == true || 
-            ( $person_category == "composers" && has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) 
+        $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
+        
+        if ( $abbr == true || person_category == "composers" || person_category == "arrangers"
            ) { 
+           
+           	$last_name = get_post_meta( $person_id, 'last_name', true );
 
-            $last_name = get_post_meta( $person_id, 'last_name', true );
-
-            if ( $last_name ) {
-                $display_name = $last_name;
-            } else {
-                $display_name = get_the_title( $person_id );
-            }
+			if ( has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) {
+			
+				if ( $last_name ) {
+					$display_name = $last_name;
+				} else {
+					$display_name = get_the_title( $person_id );
+				}
+            
+			} else {
+			
+				$display_name = "";
+           		$first_name = get_post_meta( $person_id, 'first_name', true );
+				
+				if ( $last_name ) {
+					if ( $first_name ) { $display_name .= $first_name." "; }
+					$display_name .= $last_name;
+				}
+			
+			}
             
             if ( $links ) {
                 $person_url = esc_url( get_permalink( $person_id ) );
@@ -483,6 +498,7 @@ function str_from_persons_array ( $args = array() ) {
             }
             
             sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
+        	$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
 
         } else {
                 
