@@ -449,9 +449,8 @@ function str_from_persons_array ( $args = array() ) {
     $info = "";
     $ts_info = "";
     
-    //if ( $format == 'display' && $person_category ) { $info .= "<!-- persons in category: $person_category -->"; }
-    
-    //$info .= "<!-- arr_persons: ".print_r($arr_persons, true)." -->"; // tft; needs work
+    $ts_info .= "<!-- [ssfpa] person_category: $person_category -->";    
+    $ts_info .= "<!-- [ssfpa] arr_persons: ".print_r($arr_persons, true)." -->";
     
     foreach ( $arr_persons AS $person_id ) {
 
@@ -476,7 +475,7 @@ function str_from_persons_array ( $args = array() ) {
 				if ( $last_name ) { $display_name = $last_name; }
 				
 				sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
-        		$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
+        		//$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
             
 			} else {
 			
@@ -520,17 +519,19 @@ function str_from_persons_array ( $args = array() ) {
         }
         
         // Add person_dates for composers only for post_titles (always) & edition_titles (provisionally for rep_authorship_long use only) & concert_items
-		if ( ( $format == "post_title" || $format == "edition_title" ) 
-			&& ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
-				$info .= get_person_dates( $person_id, false ); // don't add person_dates span/style for post_titles
-				sdg_log( "[ssfpa] get_person_dates: ".get_person_dates( $person_id, false ), $do_log );
+        if ( ( $format == "post_title" || $format == "edition_title" ) && ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
+        
+        }
+		/* if ( ( $format == "post_title" || $format == "edition_title" ) && ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
+				//$info .= get_person_dates( $person_id, false ); // don't add person_dates span/style for post_titles
+				//sdg_log( "[ssfpa] get_person_dates: ".get_person_dates( $person_id, false ), $do_log );
 			} else {
-				sdg_log( "[ssfpa] not in composers cat >> don't add dates", $do_log );
+				//sdg_log( "[ssfpa] not in composers cat >> don't add dates", $do_log );
 			}
 		} else if ( $abbr !== true ) {
-			$info .= get_person_dates( $person_id, true ); // add dates with span/style
-			sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ), $do_log );
-		}
+			//$info .= get_person_dates( $person_id, true ); // add dates with span/style
+			//sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ), $do_log );
+		}*/
 
         if (count($arr_persons) > 1) { $info .= ", "; }
 
@@ -541,7 +542,7 @@ function str_from_persons_array ( $args = array() ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
-    //$info .= $ts_info;
+    $info .= $ts_info;
     
     return $info;
     
