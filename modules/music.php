@@ -465,21 +465,23 @@ function str_from_persons_array ( $args = array() ) {
         sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
         $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
         
+        $display_name = get_the_title( $person_id ); // Default to post_title
+        
         if ( $abbr == true || $person_category == "composers" || $person_category == "arrangers" ) {
            
            	$last_name = get_post_meta( $person_id, 'last_name', true );
 
-			if ( has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) {
+			if ( $abbr == true || has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) {
 			
-				if ( $last_name ) {
-					$display_name = $last_name;
-				} else {
-					$display_name = get_the_title( $person_id );
-				}
+				sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
+        		$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
+        	
+				if ( $last_name ) { $display_name = $last_name; }
             
 			} else {
 			
-				$display_name = "";
+				// $person_category == "composers" || $person_category == "arrangers"
+			
            		$first_name = get_post_meta( $person_id, 'first_name', true );
 				
 				if ( $last_name ) {
@@ -495,14 +497,9 @@ function str_from_persons_array ( $args = array() ) {
             } else {
             	$info .= $display_name;
             }
-            
-            sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
-        	$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
 
         } else {
-                
-            $display_name = get_the_title( $person_id );
-
+        
             if ( $display_name == "Unknown" ) {
 
                 sdg_log( "[ssfpa] display_name = Unknown", $do_log );
@@ -543,6 +540,8 @@ function str_from_persons_array ( $args = array() ) {
     if ( substr($info, -2) == ", " ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
+    
+    $info .= $ts_info;
     
     return $info;
     
@@ -873,7 +872,7 @@ function get_authorship_info ( $args = array() ) {
 
     }
     
-    //$authorship_info .= $ts_info;
+    $authorship_info .= $ts_info;
     
     return $authorship_info;
     
