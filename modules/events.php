@@ -981,9 +981,9 @@ function get_event_program_items( $atts = [] ) {
     if ( $display == 'table' ) {
         $info .= $table;
     } else if ( $display == 'dev' ) {
-        $ts_info = str_replace('<!-- ','',$ts_info);
-        $ts_info = str_replace(' -->','<br />',$ts_info);
-        $ts_info .= '</p>';
+        //$ts_info = str_replace('<!-- ','',$ts_info);
+        //$ts_info = str_replace(' -->','<br />',$ts_info);
+        //$ts_info .= '</p>';
     }
     
     if ( is_dev_site() ) {
