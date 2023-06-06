@@ -595,7 +595,7 @@ function get_authorship_info ( $args = array() ) {
         sdg_log( "[authorship_info] get info from data['post_id']" );
         
         $post_id = $data['post_id'];
-        $ts_info .= "[authorship_info] post_id: ".$post_id;
+        $ts_info .= "<!-- [authorship_info] post_id: ".$post_id." -->";
         
         if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
             $rep_title = $data['rep_title'];
