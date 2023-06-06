@@ -541,7 +541,7 @@ function str_from_persons_array ( $args = array() ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
-    $info .= $ts_info;
+    //$info .= $ts_info;
     
     return $info;
     
