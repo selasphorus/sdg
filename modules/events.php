@@ -896,7 +896,7 @@ function get_event_program_items( $atts = [] ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					$ts_info .= $row_info;
+					$info .= $row_info;
 				}
 			}
 			
