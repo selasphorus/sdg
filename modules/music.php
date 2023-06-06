@@ -695,7 +695,7 @@ function get_authorship_info ( $args = array() ) {
         
         $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_log );
-        ///$ts_info .= "<!-- persons_args: ".print_r($persons_args, true)." -->";
+        $ts_info .= "<!-- persons_args: ".print_r($persons_args, true)." -->";
         $composer_info = str_from_persons_array ( $persons_args ); //$composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
                 
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
