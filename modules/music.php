@@ -472,11 +472,11 @@ function str_from_persons_array ( $args = array() ) {
            	$last_name = get_post_meta( $person_id, 'last_name', true );
 
 			if ( $abbr == true || has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) {
-			
+			        	
+				if ( $last_name ) { $display_name = $last_name; }
+				
 				sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
         		$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
-        	
-				if ( $last_name ) { $display_name = $last_name; }
             
 			} else {
 			
