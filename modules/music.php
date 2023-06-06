@@ -713,8 +713,8 @@ function get_authorship_info ( $args = array() ) {
         sdg_log( "[authorship_info] composer_info: ".$composer_info, $do_log );
         sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
         
-        $ts_info .= "<!-- composer_info: ".$composer_info." -->";
-        $ts_info .= "<!-- anon_info: ".$anon_info." -->";
+        ///$ts_info .= "<!-- composer_info: ".$composer_info." -->";
+        ///$ts_info .= "<!-- anon_info: ".$anon_info." -->";
         
         if ( $composer_info != "" || $anon_info != "" ) {
 
