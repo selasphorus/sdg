@@ -892,7 +892,7 @@ function get_authorship_info ( $args = array() ) {
 
     }
     
-    $authorship_info .= $ts_info;
+    //$authorship_info .= $ts_info;
     
     return $authorship_info;
     
