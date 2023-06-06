@@ -609,7 +609,7 @@ function get_authorship_info ( $args = array() ) {
         sdg_log( "[authorship_info] get info from data['post_id']" );
         
         $post_id = $data['post_id'];
-        $ts_info .= "<!-- [authorship_info] post_id: ".$post_id." -->";
+        ///$ts_info .= "<!-- [authorship_info] post_id: ".$post_id." -->";
         
         if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
             $rep_title = $data['rep_title'];
@@ -623,7 +623,7 @@ function get_authorship_info ( $args = array() ) {
         }
         
         $is_anon = is_anon($post_id);
-        if ( $format == 'display' && $is_anon == true ) { $ts_info .= "<!-- anon: true -->"; } else { $ts_info .= "<!-- anon: false -->"; }
+        ///if ( $format == 'display' && $is_anon == true ) { $ts_info .= "<!-- anon: true -->"; } else { $ts_info .= "<!-- anon: false -->"; }
 
         // Taxonomies
         if ( has_term( 'hymns', 'repertoire_category', $post_id ) ) { $is_hymn = true; }
@@ -658,7 +658,7 @@ function get_authorship_info ( $args = array() ) {
             $plainsong = false;
         }
         
-        if ( $format == 'display') { $ts_info .= "<!-- anon_info: ".$anon_info." -->"; } // tft
+        ///if ( $format == 'display') { $ts_info .= "<!-- anon_info: ".$anon_info." -->"; } // tft
         
         $arr_of = 'objects';
         
@@ -695,7 +695,7 @@ function get_authorship_info ( $args = array() ) {
         
         $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_log );
-        $ts_info .= "<!-- persons_args: ".print_r($persons_args, true)." -->";
+        ///$ts_info .= "<!-- persons_args: ".print_r($persons_args, true)." -->";
         $composer_info = str_from_persons_array ( $persons_args ); //$composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
                 
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
