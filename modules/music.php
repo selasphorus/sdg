@@ -465,8 +465,7 @@ function str_from_persons_array ( $args = array() ) {
         sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
         $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
         
-        if ( $abbr == true || person_category == "composers" || person_category == "arrangers"
-           ) { 
+        if ( $abbr == true || $person_category == "composers" || $person_category == "arrangers" ) { 
            
            	$last_name = get_post_meta( $person_id, 'last_name', true );
 
