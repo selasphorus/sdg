@@ -1094,13 +1094,13 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
     
     if ( $return_info == true ) {
         
-        $info .= "<!-- [sdg_add_post_term] -- ";
-        $info .= "$taxonomy: $term_slug";
+        $info .= "<!-- [sdg_add_post_term] ";
+        $info .= "$taxonomy: $term_slug ";
         //$info .= implode(", ",$arr_term_slugs)." -- ";
         if ( $result ) { 
-			$info .= " success!"; 
+			$info .= ">> success! "; 
 		} else { 
-			$info .= " FAILED!";
+			$info .= ">> FAILED! ";
 			$info .= print_r($term_ids, true);
 		}
         $info .= " -->";
