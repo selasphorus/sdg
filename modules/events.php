@@ -652,8 +652,10 @@ function get_event_program_items( $atts = [] ) {
     $post_id = $a['id'];
     $run_updates = $a['run_updates'];
     $display = $a['display'];
+    
     $info = "";
     $ts_info = "";
+    
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
     $groupings = false;
@@ -661,13 +663,13 @@ function get_event_program_items( $atts = [] ) {
     // TODO: deal more thoroughly w/ non-table display option, or eliminate that parameter altogether.
 	
 	if ($post_id == null) { $post_id = get_the_ID(); }
-	$info .= "<!-- Event Program Items for post_id: $post_id -->";
+	$ts_info .= "<!-- Event Program Items for post_id: $post_id -->";
     if ( is_dev_site() ) { $info .= "<!-- DEV -->"; } else { $info .= "<!-- NOT dev -->"; }
-    //$info .= "<!-- display: $display -->";
+    //$ts_info .= "<!-- display: $display -->";
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
-    $info .= "<!-- program_type: $program_type -->";
+    $ts_info .= "<!-- program_type: $program_type -->";
     
     // Program Layout -- left or centered?
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
@@ -689,7 +691,7 @@ function get_event_program_items( $atts = [] ) {
     if ( empty($rows) ) { $rows = array(); }
     //$rows = (!empty(get_field('program_items', $post_id))) ? 'default' : array();
     
-    $info .= "<!-- ".count($rows)." program_items rows -->"; // tft
+    $ts_info .= "<!-- ".count($rows)." program_items rows -->"; // tft
     
     if ( count($rows) > 0 ) {
         
@@ -894,7 +896,7 @@ function get_event_program_items( $atts = [] ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					$info .= $row_info;
+					$ts_info .= $row_info;
 				}
 			}
 			
@@ -979,9 +981,9 @@ function get_event_program_items( $atts = [] ) {
     if ( $display == 'table' ) {
         $info .= $table;
     } else if ( $display == 'dev' ) {
-        $info = str_replace('<!-- ','',$info);
-        $info = str_replace(' -->','<br />',$info);
-        $info .= '</p>';
+        $ts_info = str_replace('<!-- ','',$ts_info);
+        $ts_info = str_replace(' -->','<br />',$ts_info);
+        $ts_info .= '</p>';
     }
     
     if ( is_dev_site() ) {
