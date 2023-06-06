@@ -569,6 +569,7 @@ function get_authorship_info ( $args = array() ) {
     // Init vars
     $authorship_info = "";
     $info = "";
+    $ts_info = "";
     //
     $rep_title = "";
     $composers = array();
@@ -594,7 +595,7 @@ function get_authorship_info ( $args = array() ) {
         sdg_log( "[authorship_info] get info from data['post_id']" );
         
         $post_id = $data['post_id'];
-        //sdg_log( "[authorship_info] post_id: ".$post_id );
+        $ts_info .= "[authorship_info] post_id: ".$post_id;
         
         if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
             $rep_title = $data['rep_title'];
@@ -608,7 +609,7 @@ function get_authorship_info ( $args = array() ) {
         }
         
         $is_anon = is_anon($post_id);
-        if ( $format == 'display' && $is_anon == true ) { $info .= "<!-- anon: true -->"; } else { $info .= "<!-- anon: false -->"; }
+        if ( $format == 'display' && $is_anon == true ) { $ts_info .= "<!-- anon: true -->"; } else { $ts_info .= "<!-- anon: false -->"; }
 
         // Taxonomies
         if ( has_term( 'hymns', 'repertoire_category', $post_id ) ) { $is_hymn = true; }
@@ -643,7 +644,7 @@ function get_authorship_info ( $args = array() ) {
             $plainsong = false;
         }
         
-        if ( $format == 'display') { $info .= "<!-- anon_info: ".$anon_info." -->"; } // tft
+        if ( $format == 'display') { $ts_info .= "<!-- anon_info: ".$anon_info." -->"; } // tft
         
         $arr_of = 'objects';
         
@@ -700,6 +701,9 @@ function get_authorship_info ( $args = array() ) {
         
         sdg_log( "[authorship_info] composer_info: ".$composer_info, $do_log );
         sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
+        
+        $ts_info .= "<!-- composer_info: ".$composer_info." -->";
+        $ts_info .= "<!-- anon_info: ".$anon_info." -->";
         
         if ( $composer_info != "" || $anon_info != "" ) {
 
@@ -856,6 +860,8 @@ function get_authorship_info ( $args = array() ) {
         }
 
     }
+    
+    $authorship_info .= $ts_info;
     
     return $authorship_info;
     
