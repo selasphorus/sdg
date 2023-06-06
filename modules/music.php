@@ -465,7 +465,7 @@ function str_from_persons_array ( $args = array() ) {
         sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
         $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
         
-        if ( $abbr == true || $person_category == "composers" || $person_category == "arrangers" ) { 
+        if ( $abbr == true || $person_category == "composers" || $person_category == "arrangers" ) {
            
            	$last_name = get_post_meta( $person_id, 'last_name', true );
 
@@ -523,7 +523,7 @@ function str_from_persons_array ( $args = array() ) {
         }
         
         // Add person_dates for composers only for post_titles (always) & edition_titles (provisionally for rep_authorship_long use only) & concert_items
-		if ( ( $format == "post_title" || $format == "edition_title" ) 
+		/*if ( ( $format == "post_title" || $format == "edition_title" ) 
 			&& ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
 				$info .= get_person_dates( $person_id, false ); // don't add person_dates span/style for post_titles
 				sdg_log( "[ssfpa] get_person_dates: ".get_person_dates( $person_id, false ), $do_log );
@@ -533,7 +533,7 @@ function str_from_persons_array ( $args = array() ) {
 		} else if ( !($abbr == true)  ) {
 			$info .= get_person_dates( $person_id, true );
 			sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ), $do_log );
-		}
+		}*/
 
         if (count($arr_persons) > 1) { $info .= ", "; }
 
@@ -873,7 +873,7 @@ function get_authorship_info ( $args = array() ) {
 
     }
     
-    $authorship_info .= $ts_info;
+    //$authorship_info .= $ts_info;
     
     return $authorship_info;
     
