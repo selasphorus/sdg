@@ -485,7 +485,7 @@ function str_from_persons_array ( $args = array() ) {
            		$first_name = get_post_meta( $person_id, 'first_name', true );
 				
 				if ( $last_name ) {
-					if ( $first_name ) { $display_name .= $first_name." "; }
+					if ( $first_name ) { $display_name = $first_name." "; } else { $display_name = ""; }
 					$display_name .= $last_name;
 				}
 			
