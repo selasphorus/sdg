@@ -415,10 +415,13 @@ function is_anon( $post_id = null ) {
 // Stringify an array of person ids or objects, with formatting options
 // TODO: better documentation
 // TODO: add option to make_link for each name
-//function str_from_persons_array ( $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
 function str_from_persons_array ( $args = array() ) {
     
-    $do_log = false; // false for cleaner logs; true for active TS
+    $arr_results = array();
+    $info = "";
+    $ts_info = "";
+    
+    $do_log = true; // false for cleaner logs; true for active TS
     
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: str_from_persons_array", $do_log );
@@ -446,8 +449,6 @@ function str_from_persons_array ( $args = array() ) {
     sdg_log( "[ssfpa] abbr: ".(int)$abbr, $do_log );
     sdg_log( "[ssfpa] links: ".(int)$links, $do_log );
     
-    $info = "";
-    $ts_info = "";
     
     $ts_info .= "<!-- [ssfpa] person_category: $person_category -->";    
     $ts_info .= "<!-- [ssfpa] arr_persons: ".print_r($arr_persons, true)." -->";
@@ -542,9 +543,10 @@ function str_from_persons_array ( $args = array() ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
-    $info .= $ts_info;
-    
-    return $info;
+    $arr_results['str'] = $info;
+	$arr_results['info'] = $ts_info;
+	
+	return $arr_results;
     
 }
 
@@ -635,7 +637,10 @@ function get_authorship_info ( $args = array() ) {
         $composers = get_field('composer', $post_id, false); // Can't use get_post_meta for ACF relationship fields because stored value is array
         if ( $composers ) { 
             $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => 'objects', 'abbr' => false, 'links' => $links );
-            $composers_str = str_from_persons_array ( $persons_args ); //$composers_str = str_from_persons_array( $composers, 'composers', $post_id, $format, 'objects', false ); 
+            $arr_composers_str = str_from_persons_array ( $persons_args );
+            $composers_str = $arr_composers_str['str'];
+            $ts_composers = $arr_composers_str['info'];
+            $ts_info .= $ts_composers;
             //args: $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
         }
         $display_composer = $composers_str;
@@ -697,7 +702,10 @@ function get_authorship_info ( $args = array() ) {
         $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_log );
         $ts_info .= "<!-- [authorship_info] persons_args: <pre>".print_r($persons_args, true)."</pre> -->";
-        $composer_info = str_from_persons_array ( $persons_args ); //$composer_info = str_from_persons_array ( $composers, 'composers', $post_id, $format, $arr_of, $abbr );
+        $arr_composers_str = str_from_persons_array ( $persons_args );
+        $composer_info = $arr_composers_str['str'];
+        $ts_composers = $arr_composers_str['info'];
+        $ts_info .= $ts_composers;
                 
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
         // Redundant: TODO: instead use is_anon fcn? Any reason why not to do this?
@@ -788,10 +796,13 @@ function get_authorship_info ( $args = array() ) {
     if ( !empty($arrangers) ) {
 
         $persons_args = array( 'arr_persons' => $arrangers, 'person_category' => 'arrangers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
-        $arranger_info = str_from_persons_array ( $persons_args ); //$arranger_info = str_from_persons_array ( $arrangers, 'arrangers', $post_id, $format, $arr_of, $abbr );
+        $arr_arrangers_info = str_from_persons_array ( $persons_args );
+        $arrangers_info = $arr_arrangers_info['str'];
+        $ts_arrangers = $arr_arrangers_info['info'];
+        $ts_info .= $ts_arrangers;
 
-        if ( $is_single_work == true && $arranger_info != "") {
-            $info .= "Arranger(s): ".$arranger_info."<br />";
+        if ( $is_single_work == true && $arrangers_info != "") {
+            $info .= "Arranger(s): ".$arrangers_info."<br />";
         } else {
             if ( $authorship_info != "" ) {
                 //$authorship_info .= ", ";
@@ -800,24 +811,29 @@ function get_authorship_info ( $args = array() ) {
             }
             if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
             if ( $html ) { 
-            	$authorship_info .= '<span class="arranger">arr. '.$arranger_info.'</span>';
+            	$authorship_info .= '<span class="arranger">arr. '.$arrangers_info.'</span>';
             } else {
-            	$authorship_info .= "arr. ".$arranger_info;
+            	$authorship_info .= "arr. ".$arrangers_info;
             }
             
         }
 
     }
 
+	// TODO: consolidate the following three blocks into a single loop for transcribers, librettists, translators (poss also arrangers)
+	
     // 3. Transcriber(s)
     if ( !empty($transcribers) ) {
 
         $persons_args = array( 'arr_persons' => $transcribers, 'person_category' => 'transcribers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
-        $transcriber_info = str_from_persons_array ( $persons_args ); //$transcriber_info = str_from_persons_array ( $transcribers, 'transcribers', $post_id, $format, $arr_of, $abbr );
+        $arr_transcribers_info = str_from_persons_array ( $persons_args );
+        $transcribers_info = $arr_transcribers_info['str'];
+        $ts_transcribers = $arr_transcribers_info['info'];
+        $ts_info .= $ts_transcribers;
 
-        if ( $transcriber_info != "" ) {
+        if ( $transcribers_info != "" ) {
             if ( $is_single_work == true ) {
-                $info .= "Transcriber(s): ".$transcriber_info."<br />";
+                $info .= "Transcriber(s): ".$transcribers_info."<br />";
             } else {
                 if ( $authorship_info != "" ) {
                     //$authorship_info .= ", ";
@@ -825,10 +841,10 @@ function get_authorship_info ( $args = array() ) {
                     $authorship_info .= " -- ";
                 }
                 if ( $html ) { 
-					$authorship_info .= '<span class="transcriber">transcr. '.$transcriber_info.'</span>';
+					$authorship_info .= '<span class="transcriber">transcr. '.$transcribers_info.'</span>';
 				} else {
 					if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
-					$authorship_info .= "transcr. ".$transcriber_info;
+					$authorship_info .= "transcr. ".$transcribers_info;
 				}
             }
         }
@@ -839,16 +855,19 @@ function get_authorship_info ( $args = array() ) {
     if ( !empty($librettists) && $format != "post_title" && $format != "edition_title" && $format != "concert_item" ) {
         
         $persons_args = array( 'arr_persons' => $librettists, 'person_category' => 'librettists', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
-        $librettist_info = str_from_persons_array ( $persons_args ); //$librettist_info = str_from_persons_array ( $librettists, 'librettists', $post_id, $format, $arr_of, $abbr );
+        $arr_librettists_info = str_from_persons_array ( $persons_args );
+        $librettists_info = $arr_librettists_info['str'];
+        $ts_librettists = $arr_librettists_info['info'];
+        $ts_info .= $ts_librettists;
 
-        if ( $is_single_work == true && $librettist_info != "") {
-            $info .= "Librettist(s): ".$librettist_info."<br />";
+        if ( $is_single_work == true && $librettists_info != "") {
+            $info .= "Librettist(s): ".$librettists_info."<br />";
         } else {
         	if ( $html ) { 
-				$authorship_info .= '<span class="librettist">text by '.$librettist_info.'</span>';
+				$authorship_info .= '<span class="librettist">text by '.$librettists_info.'</span>';
 			} else {
 				if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
-				$authorship_info .= "text by ".$librettist_info;
+				$authorship_info .= "text by ".$librettists_info;
 			}            
         }
 
@@ -858,16 +877,19 @@ function get_authorship_info ( $args = array() ) {
     if ( !empty($translators) && $format != "post_title" ) {
 
         $persons_args = array( 'arr_persons' => $translators, 'person_category' => 'translators', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
-        $librettist_info = str_from_persons_array ( $persons_args ); //$translator_info = str_from_persons_array ( $translators, 'translators', $post_id, $format, $arr_of, $abbr );
-
-        if ( $is_single_work == true && $translator_info != "") {
-            $info .= "Translator(s): ".$translator_info."<br />";
+        $arr_translators_info = str_from_persons_array ( $persons_args );
+        $translators_info = $arr_translators_info['str'];
+        $ts_translators = $arr_translators_info['info'];
+        $ts_info .= $ts_translators;
+		
+        if ( $is_single_work == true && $translators_info != "") {
+            $info .= "Translator(s): ".$translators_info."<br />";
         } else {
         	if ( $html ) { 
-				$authorship_info .= '<span class="librettist">transl. '.$translator_info.'</span>';
+				$authorship_info .= '<span class="librettist">transl. '.$translators_info.'</span>';
 			} else {
 				if ( $authorship_info != "" ) { $authorship_info .= ", "; } else { $authorship_info .= " -- "; }
-				$authorship_info .= "transl. ".$translator_info;
+				$authorship_info .= "transl. ".$translators_info;
 			}
         }
 

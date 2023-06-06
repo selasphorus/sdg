@@ -487,7 +487,7 @@ function get_event_personnel( $atts = [] ) {
 function get_personnel_role ( $a = array() ) {
 	
 	// Init vars
-	$results = array();
+	$arr_results = array();
 	$info = "";
 	$person_role = "";
     $placeholder_label = false;
@@ -536,10 +536,10 @@ function get_personnel_role ( $a = array() ) {
 		
 	}
 	
-	$results['person_role'] = $person_role;
-	$results['info'] = $info;
+	$arr_results['person_role'] = $person_role;
+	$arr_results['info'] = $info;
 	
-	return $results;
+	return $arr_results;
             
 }
 
