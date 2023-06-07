@@ -594,7 +594,7 @@ function get_personnel_person ( $args = array() ) {
         	$show_job_title = true;
         }
         
-        $display_args = array( 'post_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
+        $display_args = array( 'person_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
         
         // Get URL for person, if any
         $personnel_url = null; // init

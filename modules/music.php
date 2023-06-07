@@ -499,7 +499,7 @@ function str_from_persons_array ( $args = array() ) {
 			$person_url = null;
 		}
 		
-		$display_args = array( 'post_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'url' => $person_url, 'styled' => true );
+		$display_args = array( 'person_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'url' => $person_url, 'styled' => true );
         
         // Get the display_name
         $person_name = get_person_display_name( $display_args );

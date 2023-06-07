@@ -23,7 +23,7 @@ function get_person_display_name ( $args = array() ) {
     
     // Defaults
 	$defaults = array(
-		'post_id' 		=> null,
+		'person_id' 	=> null,
 		'name_abbr'   	=> 'full', // other option is "abbr", i.e. lastname only
 		'use_post_title'=> false,
 		'show_prefix'   => false,
