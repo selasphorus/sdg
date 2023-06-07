@@ -26,6 +26,7 @@ $plugin_path = plugin_dir_path( __FILE__ );
 
 // TODO: Deal w/ plugin dependencies -- Display Content; ACF; EM; &c.?
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
+// TODO: formalize dependencies between modules -- e.g. events, music both require people
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 

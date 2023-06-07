@@ -358,7 +358,6 @@ function get_event_personnel( $atts = [] ) {
             // Get the person
             // --------------------
             $arr_person = get_personnel_person( $personnel_args );
-            //$arr_person = get_personnel_person( $i, $row, $program_type, $post_id, $run_updates, $display );
             $person_name = $arr_person['person_name'];
             $row_info .= $arr_person['info'];
             
@@ -543,44 +542,63 @@ function get_personnel_role ( $a = array() ) {
             
 }
 
-function get_personnel_person ( $a = array() ) {
+function get_personnel_person ( $args = array() ) {
 
-	// TODO Add param: person_role
-	
 	// Init vars
-	$results = array();
+	$arr_results = array();
 	$info = "";
+    $ts_info = "";
 	$person_name = "";
 	
-	//$info .= "<!-- get_personnel_person -->"; // tft
-	//$info .= "<!-- get_personnel_person -- row: ".print_r($row, true)." -->"; // tft
+	$do_log = true; // false for cleaner logs; true for active TS
+    
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_personnel_person", $do_log );
+    
+    // Defaults
+	$defaults = array(
+		'index'   		=> null,
+		'post_id' 		=> null,
+		'row'			=> null,
+		'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
+		'run_updates'   => false,
+		'display'    	=> "",
+		//'person_role'    	=> "", // WIP
+	);
 	
-	if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
-    if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
-    if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
-    if ( isset($a['program_type']) ){ $program_type = $a['program_type'];   } else { $program_type = "service_order"; }
-    if ( isset($a['run_updates']) ) { $run_updates = $a['run_updates'];     } else { $run_updates = false; }
-    if ( isset($a['display']) ) 	{ $display = $a['display'];     		} else { $display = ""; }
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	//$ts_info .= "get_personnel_person"; // tft
+	//$ts_info .= "get_personnel_person -- row: ".print_r($row, true); // tft
 	
 	if ( isset($row['person'][0]) ) { 
         
-        // Get the person name
+        // Get the person ID
         $person_id = $row['person'][0];
-        // Get prefix and last name, if available
-        $prefix = get_field('prefix',$person_id);
-        $last_name = get_field('last_name',$person_id);
-        if ( !empty($prefix) && !empty($last_name) ) {
-        	$person_name = $prefix." ".$last_name;
+        
+        // Set up display args to pass to fcn get_person_display_name
+        $name_abbr = "full";
+        $use_post_title = false;
+        $show_dates = false;
+        $styled = true;
+        
+        if ( $program_type == "concert_program" ) {
+        	$show_prefix = false;
+        	$show_suffix = false;
+        	$show_job_title = false;
         } else {
-        	// If no prefix & last_name, just use post title
-        	$person_name = get_the_title($person_id);
+        	$show_prefix = true;
+        	$show_suffix = true;
+        	$show_job_title = true;
         }
         
-		//$person_name = make_link( get_permalink($row['person'][0]), $person_name );
-		// TODO: get website for person if any and make link
-		
+        $display_args = array( 'post_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
+        
+        // Get URL for person, if any
+        $personnel_url = null; // init
 		if ( $program_type == "concert_program" ) {
-			$person_id = $row['person'][0];
 			if ( isset($row['personnel_url']) && $row['personnel_url'] != "" ) { 
                 $personnel_url = $row['personnel_url'];
             } else {
@@ -589,13 +607,15 @@ function get_personnel_person ( $a = array() ) {
                     $personnel_url = get_post_meta( $person_id, 'website', true );
                 } else if ( $personnel_post_type == "ensemble" ) { 
                     $personnel_url = get_post_meta( $person_id, 'ensemble_url', true );
-                }                
+                }           
             }
-			if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
 		} else {
-			// And/or link to person page on sdg site listing events, sermons, &c.
+			// And/or link to person page on sdg site listing events, sermons, &c.?
 		}
-		
+        $display_args['url'] = $personnel_url;
+        
+        $person_name = get_person_display_name( $display_args );
+        
 	}
 	
 	if ( empty($person_name) ) {
@@ -618,7 +638,7 @@ function get_personnel_person ( $a = array() ) {
 				if ( $run_updates == true ) {
 					$title_to_match = $person_name;
 					$info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-					$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'display' => $display );
+					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'display' => $display );
 					$match_result = match_placeholder( $match_args );
 					$info .= $match_result;
 				} else {
@@ -631,10 +651,10 @@ function get_personnel_person ( $a = array() ) {
 			
 	}
 	
-	$results['person_name'] = $person_name;
-	$results['info'] = $info;
+	$arr_results['person_name'] = $person_name;
+	$arr_results['info'] = $info;
 	
-	return $results;
+	return $arr_results;
 }
 
 
@@ -906,7 +926,7 @@ function get_event_program_items( $atts = [] ) {
 				if ( $is_header == 1 || $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
                     
                     // Single column row
-                    
+                    $row_content = "";
 					if ( $is_header == 1 || $row_type == "header" ) { 
                         $td_class = "header";
                         $row_content = $program_item_label;
@@ -997,7 +1017,7 @@ function get_event_program_items( $atts = [] ) {
 function get_program_item_label ( $a = array() ) {
 	
 	// Init vars
-	$results = array();
+	$arr_results = array();
 	$info = "";
 	$item_label = "";
 	$placeholder_label = false;
@@ -1071,19 +1091,19 @@ function get_program_item_label ( $a = array() ) {
 	}
     
 	//
-	$results['item_label'] = $item_label;
-	$results['info'] = $info;
+	$arr_results['item_label'] = $item_label;
+	$arr_results['info'] = $info;
 	
-	return $results;
+	return $arr_results;
 	
 }
 
-// TODO: either figure out a more elegant/efficient way to pass the args
+// 
 function get_program_item_name ( $a = array() ) {
 
 	// WIP!
 	// Init vars
-	$results = array();
+	$arr_results = array();
 	$info = "";
     $item_name = "";
 	$program_item_name = "";
@@ -1357,14 +1377,14 @@ function get_program_item_name ( $a = array() ) {
     $info .= "<!-- program_item_name: $program_item_name -->";
     
 	//
-	$results['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
-	$results['item_name'] = $program_item_name;
-    $results['num_items'] = $num_items; // wip
-	$results['program_composers'] = $program_composers;
-	$results['show_person_dates'] = $show_person_dates;
-	$results['info'] = $info;
+	$arr_results['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
+	$arr_results['item_name'] = $program_item_name;
+    $arr_results['num_items'] = $num_items; // wip
+	$arr_results['program_composers'] = $program_composers;
+	$arr_results['show_person_dates'] = $show_person_dates;
+	$arr_results['info'] = $info;
 	
-	return $results;
+	return $arr_results;
 	
 }
 

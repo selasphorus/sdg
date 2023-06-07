@@ -8,8 +8,87 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+/*********** Functions pertaining to CPT: PERSON ***********/
 
-/*********** CPT: PERSON ***********/
+function get_person_display_name ( $args = array() ) {
+	
+	// Init vars
+	$display_name = "";
+    $ts_info = "";
+	
+	$do_log = true; // false for cleaner logs; true for active TS
+    
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_person_display_name", $do_log );
+    
+    // Defaults
+	$defaults = array(
+		'post_id' 		=> null,
+		'name_abbr'   	=> 'full', // other option is "abbr", i.e. lastname only
+		'use_post_title'=> false,
+		'show_prefix'   => false,
+		'show_suffix'   => false,
+		'show_jobtitle' => false,
+		'show_dates'    => false,
+		'url'    		=> null,
+		'styled'		=> false,
+	);
+	
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	if ( $use_post_title ) {
+	
+		$display_name = get_the_title( $person_id );
+		
+	} else {
+	
+		// Get prefix and last name, if available
+		if ( $show_prefix ) {
+			$prefix = get_field('prefix',$person_id);
+			if ( $prefix ) { $display_name .= $prefix." "; }
+		}
+		
+		if ( $name_abbr == "full" ) {
+        	$first_name = get_post_meta( $person_id, 'first_name', true );
+        	if ( $first_name ) { $display_name .= $first_name." "; }
+			$middle_name = get_post_meta( $person_id, 'middle_name', true );
+			if ( $middle_name ) { $display_name .= $middle_name." "; }
+		}
+        
+		$last_name = get_field('last_name',$person_id);
+		$display_name .= $last_name;
+		
+		if ( $show_suffix ) {
+			$suffix = get_field('suffix',$person_id);
+			if ( $suffix ) { $display_name .= ", ".$suffix; }
+		}
+		
+		if ( $show_job_title ) {
+			$job_title = get_field('job_title',$person_id);
+			if ( $job_title ) { $display_name .= ", ".$job_title; }
+		}
+		
+		if ( $show_dates ) {
+			$display_name .= get_person_dates( $person_id, $styled );
+		}
+		
+		$display_name = trim($display_name);
+		
+		if ( empty($display_name) ) {
+			$display_name = get_the_title( $person_id );
+		}
+	
+	}
+	
+	if ( $url ) {
+		$display_name = make_link( $url, $display_name, '', '_blank' );
+	}
+	
+	return $display_name;	
+	
+}
 
 function get_cpt_person_content( $post_id = null ) {
 	
@@ -156,6 +235,7 @@ function get_person_dates( $post_id, $styled = false ) {
     //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
     
     $info = ""; // init
+    if ( $styled == 'false' ) { $styled = false; } // just in case...
     
     // Try ACF get_field instead?
     $birth_year = get_post_meta( $post_id, 'birth_year', true );

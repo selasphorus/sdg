@@ -431,7 +431,7 @@ function str_from_persons_array ( $args = array() ) {
 		'arr_persons'     	=> array(),
 		'person_category' 	=> null,
 		'post_id' 			=> null,
-		'format'    		=> 'display',
+		'format'    		=> 'display', // other possible values include: "post_title", "edition_title"
 		'arr_of'    		=> 'objects',
 		'abbr'    			=> false,
 		'links'    			=> false,
@@ -449,8 +449,8 @@ function str_from_persons_array ( $args = array() ) {
     sdg_log( "[ssfpa] abbr: ".(int)$abbr, $do_log );
     sdg_log( "[ssfpa] links: ".(int)$links, $do_log );
     
-    
-    $ts_info .= "<!-- [ssfpa] person_category: $person_category -->";    
+    $ts_info .= "<!-- [ssfpa] format: $format -->";
+    $ts_info .= "<!-- [ssfpa] person_category: $person_category -->";
     $ts_info .= "<!-- [ssfpa] arr_persons: ".print_r($arr_persons, true)." -->";
     
     foreach ( $arr_persons AS $person_id ) {
@@ -465,71 +465,46 @@ function str_from_persons_array ( $args = array() ) {
         sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
         $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
         
-        $display_name = get_the_title( $person_id ); // Default to post_title
-        
-        if ( $abbr == true || $person_category == "composers" || $person_category == "arrangers" ) {
-           
-           	$last_name = get_post_meta( $person_id, 'last_name', true );
-
-			if ( $abbr == true || has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) {
-			        	
-				if ( $last_name ) { $display_name = $last_name; }
-				
-				sdg_log( "[ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name, $do_log );
-        		//$ts_info .= "<!-- [ssfpa] abbr is true (or is psalm composer) >> use short display_name: ".$display_name." -->";
-            
-			} else {
-			
-				// $person_category == "composers" || $person_category == "arrangers"
-			
-           		$first_name = get_post_meta( $person_id, 'first_name', true );
-				
-				if ( $last_name ) {
-					if ( $first_name ) { $display_name = $first_name." "; } else { $display_name = ""; }
-					$display_name .= $last_name;
-				}
-			
-			}
-            
-            if ( $links ) {
-                $person_url = esc_url( get_permalink( $person_id ) );
-                $info .= make_link( $person_url, $display_name, '', '_blank' );
-            } else {
-            	$info .= $display_name;
-            }
-
+        // Set up display args to pass to fcn get_person_display_name
+        if ( $abbr || has_term( 'psalms', 'repertoire_category', $post_id ) && !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) { 
+        	$name_abbr = "abbr";
         } else {
-        
-            if ( $display_name == "Unknown" ) {
-
-                sdg_log( "[ssfpa] display_name = Unknown", $do_log );
-
-            } else {
-
-                if ( $links ) {
-					$person_url = esc_url( get_permalink( $person_id ) );
-					$info .= make_link( $person_url, $display_name, '', '_blank' );
-				} else {
-					$info .= $display_name;
-				}
-            
-                sdg_log( "[ssfpa] abbr is false >> use long display_name: ".$display_name, $do_log );
-
-            }
-
+        	$name_abbr = "full";
         }
         
-        // Add person_dates for composers only for post_titles (always) & edition_titles (provisionally for rep_authorship_long use only) & concert_items
+        $use_post_title = false;
+        $show_prefix = false;
+        $show_suffix = false;
+        $show_job_title = false;
+        $show_dates = false;
+        $styled = true;
+        	
+        if ( $person_category == "composers" || $person_category == "arrangers" ) {
+        	//
+        }
+        
         if ( ( $format == "post_title" || $format == "edition_title" ) && ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
-        
-        }
-		if ( ( $format == "post_title" || $format == "edition_title" ) && ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
-			$info .= get_person_dates( $person_id, false ); // don't add person_dates span/style for post_titles
-			//sdg_log( "[ssfpa] get_person_dates: ".get_person_dates( $person_id, false ), $do_log );
+			$show_dates = true;
+			 // don't add person_dates span/style for post_titles
 		} else if ( $abbr !== true ) {
-			$info .= get_person_dates( $person_id, true ); // add dates with span/style
-			//sdg_log( "[str_from_persons] get_person_dates: ".get_person_dates( $person_id, true ), $do_log );
+			$show_dates = true;
+			$styled = true; // add dates with span/style
 		}
+        
+        if ( $links ) {
+        	// TODO: verify post_type == person?
+			$person_url = esc_url( get_permalink( $person_id ) );
+			if ( $person_url ) { $display_args['url'] = $person_url; }
+		} else {
+			$person_url = null;
+		}
+		
+		$display_args = array( 'post_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'url' => $person_url, 'styled' => true );
+        
+        // Get the display_name
+        $person_name = get_person_display_name( $display_args );
+        
+        $info .= $person_name;
 
         if (count($arr_persons) > 1) { $info .= ", "; }
 
@@ -550,8 +525,6 @@ function str_from_persons_array ( $args = array() ) {
 // Retrieve properly formatted authorship info for Repertoire records
 // Authorship: Composers, Arrangers, Transcriber, Librettists, &c.
 // $format options include: display; post_title; ....? (TODO: better info here)
-// TODO: parse_args
-//function get_authorship_info( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true, $links = false ) {
 function get_authorship_info ( $args = array() ) {
 
 	$do_log = true; // false for cleaner logs; true for active TS
@@ -1056,8 +1029,8 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     if ( $show_authorship == true ) { // && $is_single_work == false
         
         $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title ); // $title_clean
-        $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title ); //, 'links' => false
-        $authorship_info = get_authorship_info ( $authorship_args ); //$authorship_info = get_authorship_info( $authorship_arr, $format, false, $is_single_work, $show_title ); 
+        $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title );
+        $authorship_info = get_authorship_info ( $authorship_args );
         // ( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) 
         if ( $authorship_info != "Unknown" ) {
             if ( $format == 'display' ) { $info .= '<span class="authorship">'; }
