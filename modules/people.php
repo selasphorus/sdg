@@ -70,6 +70,7 @@ function get_person_display_name ( $args = array() ) {
 			if ( $job_title ) { $display_name .= ", ".$job_title; }
 		}
 		
+		// WIP/TODO: fix 'styled' factor -- see e.g. https://stcnyc.wpengine.com/events/solemn-eucharist-2020-01-05/ Wm Byrd -- span needed around dates.
 		if ( $show_dates ) {
 			$display_name .= get_person_dates( $person_id, $styled );
 		}
