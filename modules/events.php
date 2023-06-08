@@ -304,8 +304,8 @@ function get_event_personnel( $atts = [] ) {
             $delete_row = false;
             $row_info = "";
             
-            // Is this a header row?
-            if ( isset($row['is_header']) ) { $is_header = $row['is_header']; } else { $is_header = false; }
+            // What's the row type? Options are "default", "header", "role_only", and "name_only"
+            if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
             
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
@@ -436,7 +436,7 @@ function get_event_personnel( $atts = [] ) {
 				$row_type = "standard";
 				
 				///
-				if ( $is_header == 1 ) { // || $row_type == "header"
+				if ( $row_type == "header" ) {
                     
                     // Single column row
                     $row_type = "header";
@@ -455,8 +455,13 @@ function get_event_personnel( $atts = [] ) {
 					if ( $placeholder_item == true ) 	{ $item_class .= " placeholder"; }
 					
 					$table .= '<td colspan="2" class="'.$td_class.'">';
-					$table .= '<span class="'.$item_class.'">'.$person_name.'</span>';
-					if ( $person_role != "" && $person_role != "N/A" && $person_role != "-- N/A --" ) { $table .= ', <span class="'.$role_class.'">'.$person_role.'</span>'; }
+					if ( $row_type == "header" ) {
+						if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
+						$table .= $header_txt;
+					} else {
+						$table .= '<span class="'.$item_class.'">'.$person_name.'</span>';
+						if ( $person_role != "" && $person_role != "N/A" && $person_role != "-- N/A --" ) { $table .= ', <span class="'.$role_class.'">'.$person_role.'</span>'; }
+					}					
 					$table .= '</td>';
 					
 				} else {
@@ -777,8 +782,13 @@ function get_event_program_items( $atts = [] ) {
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
             $row_info .= "<!-- get_event_program_items ==> row_type: ".$row_type." -->"; // tft
             
-            // Is this a header row?
-            if ( isset($row['is_header']) ) { $is_header = $row['is_header']; } else { $is_header = false; }
+            // Is this a header row? (Deprecated field)
+            if ( isset($row['is_header']) && $row['is_header'] == 1 ) { 
+            	if ( $row_type != "header" ) {
+            		// TODO: update the row_type in the DB
+            		$row_type = "header";
+            	}
+            }
         
             // Should this row be displayed on the front end?
             // TODO: modify to simplify as below -- set to true/false based on stored value, if any
@@ -825,7 +835,6 @@ function get_event_program_items( $atts = [] ) {
             
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
             
-            //$arr_item_name = get_program_item_name( $post_id, $program_item_label, $show_item_title, $program_type, $program_composers, $run_updates );
             if ( $arr_item_name['title_as_label'] != "" ) { 
             	$program_item_label = $arr_item_name['title_as_label'];
                 $title_as_label = true;
@@ -912,8 +921,6 @@ function get_event_program_items( $atts = [] ) {
                 }
                 
             }
-            
-            //if ( ( !empty($program_item_label) || !empty($program_item_name) ) || ( $is_header == 1 ) ) {
                 
             // Display the row if it's a header, or if BOTH item_label and item_name are not empty
             // --------------------
@@ -939,11 +946,11 @@ function get_event_program_items( $atts = [] ) {
 			// Add the table cells and close out the row
 			if ( $display == 'table' && $delete_row != true ) {
                 
-				if ( $is_header == 1 || $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
+				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
                     
                     // Single column row
                     $row_content = "";
-					if ( $is_header == 1 || $row_type == "header" ) { 
+					if ( $row_type == "header" ) { 
                         $td_class = "header";
                         $row_content = $program_item_label;
                     } else if ( $row_type == "program_note" ) {
@@ -1138,10 +1145,7 @@ function get_program_item_name ( $a = array() ) {
     if ( isset($a['program_type']) ){ $program_type = $a['program_type'];   } else { $program_type = "service_order"; }
     if ( isset($a['program_composers']) ){ $program_composers = $a['program_composers'];   } else { $program_composers = null; }
     if ( isset($a['run_updates']) ) { $run_updates = $a['run_updates'];     } else { $run_updates = false; }
-    
-	// Is this a header row?
-    if ( isset($row['is_header']) ) { $is_header = $row['is_header']; } else { $is_header = 0; }
-    
+        
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
     
@@ -1216,7 +1220,7 @@ function get_program_item_name ( $a = array() ) {
                     
                     // TODO: also check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
 
-                    if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && ! $is_header ) {
+                    if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && !($row_type == "header") ) {
 
                         // Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
                         $info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
@@ -1261,7 +1265,7 @@ function get_program_item_name ( $a = array() ) {
 
                         $info .= "<!-- author_ids is empty array -->";
 
-                    } // END if ( count($author_ids) > 0 && ! $is_header )
+                    } // END if ( count($author_ids) > 0 && !($row_type == "header") )
                     
                     // Second, get the name of the Musical Work using get_rep_info fcn
                     // *********************
