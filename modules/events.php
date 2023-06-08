@@ -368,7 +368,7 @@ function get_event_personnel( $atts = [] ) {
             $row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
             
             // Check for extra (empty) import rows -- prep to delete them
-            if ( ( empty($person_role) && empty($person_name) ) 
+            if ( ( $row_type != "header" && empty($person_role) && empty($person_name) ) 
             	|| ( $row_type == "header" && empty($header_txt) )
                 || ( ( $person_role == "x" || $person_role == "MATCH_DOUBLE (( post_title :: " ) && ( $person_name == "x" || empty($person_name) ) )
                 ) {
