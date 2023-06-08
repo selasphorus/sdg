@@ -316,7 +316,6 @@ function get_event_personnel( $atts = [] ) {
                 $show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
                 $row_info .= "<!-- default: show_row = 1 -->"; // tft
             }
-            //if ( isset($row['show_row']) ) { $show_row = $row['show_row']; } else { $show_row = 1; } // Should this row be displayed on the front end?
             
             if ( $display == 'dev' ) { // || devmode_active()
             
@@ -360,7 +359,6 @@ function get_event_personnel( $atts = [] ) {
 				// Get the person role
 				// --------------------
 				$arr_person_role = get_personnel_role( $personnel_args );
-				//$arr_person_role = get_personnel_role( $i, $row, $program_type, $post_id, $run_updates, $display );
 				//$row_info .= "<!-- arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre> -->"; // tft
 				$person_role = $arr_person_role['person_role'];
 				$row_info .= $arr_person_role['info'];
