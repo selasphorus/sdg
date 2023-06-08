@@ -304,6 +304,9 @@ function get_event_personnel( $atts = [] ) {
             $delete_row = false;
             $row_info = "";
             
+            // Is this a header row?
+            if ( isset($row['is_header']) ) { $is_header = $row['is_header']; } else { $is_header = false; }
+            
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
                 $show_row = $row['show_row'];
@@ -429,9 +432,22 @@ function get_event_personnel( $atts = [] ) {
 			
 			if ( $delete_row != true ) {
 			
-				if ( $program_type == "concert_program" ) {
+				$td_class = "";
+				$row_type = "standard";
+				
+				///
+				if ( $is_header == 1 ) { // || $row_type == "header"
+                    
+                    // Single column row
+                    $row_type = "header";
+                    $td_class .= "header";
+                    
+				}
+				///
+				
+				if ( $program_type == "concert_program" || $row_type == "header" ) {
 					
-					$td_class = "concert_program_personnel";
+					$td_class .= "concert_program_personnel";
 					$role_class = "person_role";
 					$item_class = "person";
 					
@@ -445,7 +461,7 @@ function get_event_personnel( $atts = [] ) {
 					
 				} else {
 				
-					$td_class = "program_label";
+					$td_class .= "program_label";
 					if ( $placeholder_label == true ) { $td_class .= " placeholder"; }
 					$table .= '<td class="'.$td_class.'">'.$person_role.'</td>';
 					$td_class = "program_item";
@@ -762,7 +778,7 @@ function get_event_program_items( $atts = [] ) {
             $row_info .= "<!-- get_event_program_items ==> row_type: ".$row_type." -->"; // tft
             
             // Is this a header row?
-            $is_header = $row['is_header'];
+            if ( isset($row['is_header']) ) { $is_header = $row['is_header']; } else { $is_header = false; }
         
             // Should this row be displayed on the front end?
             // TODO: modify to simplify as below -- set to true/false based on stored value, if any
