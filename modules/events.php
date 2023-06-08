@@ -443,7 +443,7 @@ function get_event_personnel( $atts = [] ) {
 			
 				$td_class = "";
 				
-				if ( $row_type == "header" ) { $td_class .= "header"; }
+				if ( $row_type == "header" ) { $td_class .= "header "; }
 				
 				if ( $program_type == "concert_program" || $row_type == "header" ) {
 					
