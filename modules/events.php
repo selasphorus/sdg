@@ -306,6 +306,7 @@ function get_event_personnel( $atts = [] ) {
             
             // What's the row type? Options are "default", "header", "role_only", and "name_only"
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
+			if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
             
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
@@ -367,7 +368,8 @@ function get_event_personnel( $atts = [] ) {
             $row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
             
             // Check for extra (empty) import rows -- prep to delete them
-            if (( empty($person_role) && empty($person_name) ) 
+            if ( ( empty($person_role) && empty($person_name) ) 
+            	|| ( $row_type == "header" && empty($header_txt) )
                 || ( ( $person_role == "x" || $person_role == "MATCH_DOUBLE (( post_title :: " ) && ( $person_name == "x" || empty($person_name) ) )
                 ) {
                 $delete_row = true;
@@ -456,7 +458,6 @@ function get_event_personnel( $atts = [] ) {
 					
 					$table .= '<td colspan="2" class="'.$td_class.'">';
 					if ( $row_type == "header" ) {
-						if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
 						$table .= $header_txt;
 					} else {
 						$table .= '<span class="'.$item_class.'">'.$person_name.'</span>';
