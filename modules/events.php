@@ -306,7 +306,6 @@ function get_event_personnel( $atts = [] ) {
             
             // What's the row type? Options are "default", "header", "role_only", and "name_only"
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
-			if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
             $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
             
             // Should this row be displayed on the front end?
@@ -348,25 +347,34 @@ function get_event_personnel( $atts = [] ) {
             $row_info .= "<!-- i: [$i]; post_id: [$post_id]; program_type: [$program_type]; display: [$display]; run_updates: [$run_updates] -->";
             //$row_info .= "<!-- personnel row [$i]: <pre>".print_r($row, true)."</pre> -->";
             
-            // Set up the args array for the personnel role/person functions
-            // --------------------
-            $personnel_args = array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'program_type' => $program_type, 'display' => $display, 'run_updates' => $run_updates );
+            if ( $row_type == "header" ) {
             
-            // Get the person role
-            // --------------------
-            $arr_person_role = get_personnel_role( $personnel_args );
-            //$arr_person_role = get_personnel_role( $i, $row, $program_type, $post_id, $run_updates, $display );
-            //$row_info .= "<!-- arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre> -->"; // tft
-            $person_role = $arr_person_role['person_role'];
-            $row_info .= $arr_person_role['info'];
+            	if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
             
-            // Get the person
-            // --------------------
-            $arr_person = get_personnel_person( $personnel_args );
-            $person_name = $arr_person['person_name'];
-            $row_info .= $arr_person['info'];
+            } else {
             
-            $row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
+            	// Set up the args array for the personnel role/person functions
+				// --------------------
+				$personnel_args = array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'program_type' => $program_type, 'display' => $display, 'run_updates' => $run_updates );
+			
+				// Get the person role
+				// --------------------
+				$arr_person_role = get_personnel_role( $personnel_args );
+				//$arr_person_role = get_personnel_role( $i, $row, $program_type, $post_id, $run_updates, $display );
+				//$row_info .= "<!-- arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre> -->"; // tft
+				$person_role = $arr_person_role['person_role'];
+				$row_info .= $arr_person_role['info'];
+			
+				// Get the person
+				// --------------------
+				$arr_person = get_personnel_person( $personnel_args );
+				$person_name = $arr_person['person_name'];
+				$row_info .= $arr_person['info'];
+			
+				$row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
+            
+            }
+            
             
             // Check for extra (empty) import rows -- prep to delete them
             if ( ( $row_type != "header" && empty($person_role) && empty($person_name) ) 
@@ -436,26 +444,20 @@ function get_event_personnel( $atts = [] ) {
 			if ( $delete_row != true ) {
 			
 				$td_class = "";
-				$row_type = "standard";
 				
-				///
-				if ( $row_type == "header" ) {
-                    
-                    // Single column row
-                    $row_type = "header";
-                    $td_class .= "header";
-                    
-				}
-				///
+				if ( $row_type == "header" ) { $td_class .= "header"; }
 				
 				if ( $program_type == "concert_program" || $row_type == "header" ) {
 					
 					$td_class .= "concert_program_personnel";
-					$role_class = "person_role";
-					$item_class = "person";
 					
-					if ( $placeholder_label == true )	{ $role_class .= " placeholder"; }
-					if ( $placeholder_item == true ) 	{ $item_class .= " placeholder"; }
+					if ( $row_type != "header" ) {
+						$role_class = "person_role";
+						$item_class = "person";
+					
+						if ( $placeholder_label == true )	{ $role_class .= " placeholder"; }
+						if ( $placeholder_item == true ) 	{ $item_class .= " placeholder"; }					
+					}
 					
 					$table .= '<td colspan="2" class="'.$td_class.'">';
 					if ( $row_type == "header" ) {
