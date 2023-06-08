@@ -307,11 +307,12 @@ function get_event_personnel( $atts = [] ) {
             // What's the row type? Options are "default", "header", "role_only", and "name_only"
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
 			if ( isset($row['header_txt']) ) { $header_txt = $row['header_txt']; } else { $header_txt = ""; }
+            $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
             
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
                 $show_row = $row['show_row'];
-                $row_info .= "<!-- show_row => ".$row['show_row']." -->"; // tft
+                $row_info .= "<!-- show_row: ".$row['show_row']." -->"; // tft
             } else { 
                 $show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
                 $row_info .= "<!-- default: show_row = 1 -->"; // tft
@@ -345,7 +346,7 @@ function get_event_personnel( $atts = [] ) {
             
             // Troubleshooting
             $row_info .= "<!-- i: [$i]; post_id: [$post_id]; program_type: [$program_type]; display: [$display]; run_updates: [$run_updates] -->";
-            $row_info .= "<!-- personnel row [$i]: <pre>".print_r($row, true)."</pre> -->";
+            //$row_info .= "<!-- personnel row [$i]: <pre>".print_r($row, true)."</pre> -->";
             
             // Set up the args array for the personnel role/person functions
             // --------------------
