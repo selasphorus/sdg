@@ -606,7 +606,7 @@ function get_personnel_person ( $args = array() ) {
 	
 	if ( isset($row['person']) && is_array($row['person']) ) {
 	
-		$person_name = "TESTING...";
+		$person_name = print_r($row['person'], true);
 		
 	} else if ( isset($row['person'][0]) ) { 
         
