@@ -604,53 +604,58 @@ function get_personnel_person ( $args = array() ) {
 	// TODO: deal with the possibility of multiple persons or ensembles in a given row
 	//
 	
-	if ( isset($row['person']) && is_array($row['person']) && count($row['person']) > 1 ) {
+	if ( isset($row['person']) && is_array($row['person']) ) {
 	
-		$person_name = print_r($row['person'], true);
+		foreach ($row['person'] AS $person_id ) {
 		
-	} else if ( isset($row['person'][0]) ) { 
+			// Get the person ID
+			$person_id = $row['person'][0];
+		
+			// Set up display args to pass to fcn get_person_display_name
+			$name_abbr = "full";
+			$use_post_title = false;
+			$show_dates = false;
+			$styled = true;
+		
+			if ( $program_type == "concert_program" ) {
+				$show_prefix = false;
+				$show_suffix = false;
+				$show_job_title = false;
+			} else {
+				$show_prefix = true;
+				$show_suffix = true;
+				$show_job_title = true;
+			}
+		
+			$display_args = array( 'person_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
+		
+			// Get URL for person, if any
+			$personnel_url = null; // init
+			if ( $program_type == "concert_program" ) {
+				if ( isset($row['personnel_url']) && $row['personnel_url'] != "" ) { 
+					$personnel_url = $row['personnel_url'];
+				} else {
+					$personnel_post_type = get_post_type( $person_id );
+					if ( $personnel_post_type == "person" ) { 
+						$personnel_url = get_post_meta( $person_id, 'website', true );
+					} else if ( $personnel_post_type == "ensemble" ) { 
+						$personnel_url = get_post_meta( $person_id, 'ensemble_url', true );
+					}           
+				}
+			} else {
+				// And/or link to person page on sdg site listing events, sermons, &c.?
+			}
+			$display_args['url'] = $personnel_url;
+		
+			$person_name .= get_person_display_name( $display_args )."<br />";
         
-        // Get the person ID
-        $person_id = $row['person'][0];
-        
-        // Set up display args to pass to fcn get_person_display_name
-        $name_abbr = "full";
-        $use_post_title = false;
-        $show_dates = false;
-        $styled = true;
-        
-        if ( $program_type == "concert_program" ) {
-        	$show_prefix = false;
-        	$show_suffix = false;
-        	$show_job_title = false;
-        } else {
-        	$show_prefix = true;
-        	$show_suffix = true;
-        	$show_job_title = true;
-        }
-        
-        $display_args = array( 'person_id' => $person_id, 'name_abbr' => $name_abbr, 'use_post_title' => $use_post_title, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
-        
-        // Get URL for person, if any
-        $personnel_url = null; // init
-		if ( $program_type == "concert_program" ) {
-			if ( isset($row['personnel_url']) && $row['personnel_url'] != "" ) { 
-                $personnel_url = $row['personnel_url'];
-            } else {
-                $personnel_post_type = get_post_type( $person_id );
-                if ( $personnel_post_type == "person" ) { 
-                    $personnel_url = get_post_meta( $person_id, 'website', true );
-                } else if ( $personnel_post_type == "ensemble" ) { 
-                    $personnel_url = get_post_meta( $person_id, 'ensemble_url', true );
-                }           
-            }
-		} else {
-			// And/or link to person page on sdg site listing events, sermons, &c.?
 		}
-        $display_args['url'] = $personnel_url;
-        
-        $person_name = get_person_display_name( $display_args );
-        
+	
+		// Trim trailing <br />
+		$person_name = substr($person_name, 0, -6);
+		
+	} else { 
+                
 	}
 	
 	if ( empty($person_name) ) {
