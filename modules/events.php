@@ -515,16 +515,20 @@ function get_personnel_role ( $a = array() ) {
     $placeholder_label = false;
 	
 	//$info .= "<!-- get_personnel_role -->"; // tft
-	
-    //get_personnel_role( $i, $row, $program_type, $post_id, $run_updates, $display );
     
-    // TODO: defaults/parse
-	if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
-    if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
-    if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
-    if ( isset($a['program_type']) ){ $program_type = $a['program_type'];   } else { $program_type = "service_order"; }
-    if ( isset($a['run_updates']) ) { $run_updates = $a['run_updates'];     } else { $run_updates = false; }
-    if ( isset($a['display']) ) 	{ $display = $a['display'];     		} else { $display = ""; }
+    // Defaults
+	$defaults = array(
+		'index'   		=> null,
+		'post_id' 		=> null,
+		'row'			=> null,
+		'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
+		'run_updates'   => false,
+		'display'    	=> "",
+	);
+	
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
 	
     // First, look for a proper taxonomy term (Personnel Role)
 	if ( isset($row['role']) && !empty($row['role']) ) { 
@@ -828,7 +832,6 @@ function get_event_program_items( $atts = [] ) {
             // --------------------
             if ( $show_item_label == true ) {
 				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
-                //$arr_item_label = get_program_item_label( $post_id, $row, $program_type, $run_updates ); // some way to avoid having to pass post_id (for matching)
 				$program_item_label = $arr_item_label['item_label'];
 				$row_info .= $arr_item_label['info'];
             }
@@ -1054,12 +1057,19 @@ function get_program_item_label ( $a = array() ) {
     
     //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
     
-    // TODO: defaults/parse
-    if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
-    if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
-    if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
-    if ( isset($a['program_type']) ){ $program_type = $a['program_type'];   } else { $program_type = null; }
-    if ( isset($a['run_updates']) ) { $run_updates = $a['run_updates'];     } else { $run_updates = false; }
+    // Defaults
+	$defaults = array(
+		'index'   		=> null,
+		'post_id' 		=> null,
+		'row'			=> null,
+		//'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
+		'run_updates'   => false,
+		'display'    	=> null,
+	);
+	
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
 	        
 	if ( isset($row['item_label'][0]) ) { 
 	
@@ -1141,18 +1151,25 @@ function get_program_item_name ( $a = array() ) {
     $show_person_dates = true;
     
     $info .= "<!-- ******* get_program_item_name ******* -->";
-    //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
+    //$info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
     
-    // TODO: defaults/parse
-    if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
-    if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
-    if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
-    if ( isset($a['row_type']) )    { $row_type = $a['row_type'];           } else { $row_type = "default"; }
-    if ( isset($a['program_item_label']) ){ $program_item_label = $a['program_item_label'];   } else { $program_item_label = null; }
-    if ( isset($a['show_item_title']) ){ $show_item_title = $a['show_item_title'];   } else { $show_item_title = true; }
-    if ( isset($a['program_type']) ){ $program_type = $a['program_type'];   } else { $program_type = "service_order"; }
-    if ( isset($a['program_composers']) ){ $program_composers = $a['program_composers'];   } else { $program_composers = null; }
-    if ( isset($a['run_updates']) ) { $run_updates = $a['run_updates'];     } else { $run_updates = false; }
+    // Defaults
+	$defaults = array(
+		'index'   		=> null,
+		'post_id' 		=> null, // needed for match_args
+		'row_type'		=> 'default', // other possible values include: "header", ...?
+		'row'			=> null,
+		'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
+		'program_item_label'=> null,
+		'show_item_title'	=> null,
+		'program_composers'	=> null,
+		'run_updates'   => false,
+		'display'    	=> null,
+	);
+	
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
         
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
@@ -1211,7 +1228,7 @@ function get_program_item_name ( $a = array() ) {
                     } else { 
                         $composer_ids = array();
                     }
-                    $author_ids = get_author_ids( $program_item_obj_id, false ); // get_author_ids ( $post_id = null, $include_composers = true )
+                    $author_ids = get_author_ids( $program_item_obj_id, false );
                     $info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
 
                     if ( $num_items > 1 ) {
