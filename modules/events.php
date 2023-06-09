@@ -608,9 +608,6 @@ function get_personnel_person ( $args = array() ) {
 	
 		foreach ($row['person'] AS $person_id ) {
 		
-			// Get the person ID
-			$person_id = $row['person'][0];
-		
 			// Set up display args to pass to fcn get_person_display_name
 			$name_abbr = "full";
 			$use_post_title = false;
