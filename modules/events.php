@@ -518,6 +518,7 @@ function get_personnel_role ( $a = array() ) {
 	
     //get_personnel_role( $i, $row, $program_type, $post_id, $run_updates, $display );
     
+    // TODO: defaults/parse
 	if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
     if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
     if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
@@ -595,6 +596,9 @@ function get_personnel_person ( $args = array() ) {
 	
 	//$ts_info .= "get_personnel_person"; // tft
 	//$ts_info .= "get_personnel_person -- row: ".print_r($row, true); // tft
+	
+	// TODO: deal with the possibility of multiple persons or ensembles in a given row
+	//
 	
 	if ( isset($row['person'][0]) ) { 
         
@@ -1050,6 +1054,7 @@ function get_program_item_label ( $a = array() ) {
     
     //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
     
+    // TODO: defaults/parse
     if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
     if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
     if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
@@ -1138,6 +1143,7 @@ function get_program_item_name ( $a = array() ) {
     $info .= "<!-- ******* get_program_item_name ******* -->";
     //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
     
+    // TODO: defaults/parse
     if ( isset($a['index']) )     	{ $i = $a['index'];             		} else { $i = null; }
     if ( isset($a['post_id']) )     { $post_id = $a['post_id'];             } else { $post_id = null; }
     if ( isset($a['row']) )         { $row = $a['row'];                     } else { $row = null; }
