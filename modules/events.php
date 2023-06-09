@@ -604,7 +604,11 @@ function get_personnel_person ( $args = array() ) {
 	// TODO: deal with the possibility of multiple persons or ensembles in a given row
 	//
 	
-	if ( isset($row['person'][0]) ) { 
+	if ( isset($row['person']) && is_array($row['person']) ) {
+	
+		$person_name = "TESTING...";
+		
+	} else if ( isset($row['person'][0]) ) { 
         
         // Get the person ID
         $person_id = $row['person'][0];
