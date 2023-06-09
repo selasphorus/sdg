@@ -604,7 +604,7 @@ function get_personnel_person ( $args = array() ) {
 	// TODO: deal with the possibility of multiple persons or ensembles in a given row
 	//
 	
-	if ( isset($row['person']) && is_array($row['person']) ) {
+	if ( isset($row['person']) && is_array($row['person']) && count($row['person']) > 1 ) {
 	
 		$person_name = print_r($row['person'], true);
 		
