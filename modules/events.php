@@ -506,7 +506,7 @@ function get_event_personnel( $atts = [] ) {
 	return $info;
 }
 
-function get_personnel_role ( $a = array() ) {
+function get_personnel_role ( $args = array() ) {
 	
 	// Init vars
 	$arr_results = array();
@@ -1046,7 +1046,7 @@ function get_event_program_items( $atts = [] ) {
 	return $info;
 }
 
-function get_program_item_label ( $a = array() ) {
+function get_program_item_label ( $args = array() ) {
 	
 	// Init vars
 	$arr_results = array();
@@ -1139,7 +1139,7 @@ function get_program_item_label ( $a = array() ) {
 }
 
 // 
-function get_program_item_name ( $a = array() ) {
+function get_program_item_name ( $args = array() ) {
 
 	// WIP!
 	// Init vars
