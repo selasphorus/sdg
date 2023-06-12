@@ -1180,200 +1180,203 @@ function get_program_item_name ( $args = array() ) {
     
     $num_items = 0; // init
     
-	if ( isset($row['program_item']) ) {
+	if ( isset($row['program_item']) && is_array($row['program_item']) ) {
+	
         //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
-        if ( is_array($row['program_item']) ) {
-        	$num_items = count($row['program_item']);
-			if ( $num_items > 1 ) {
-				// TODO: deal w/ special case of multiple items per program row -- variations per row_type, program_type...
-				$info .= "<!-- *** $num_items program_items found for this row! *** -->";
-			}
-        }
-	}
-	$info .= "<!-- >>>>>>> START foreach program_item <<<<<<< -->";
-	$i = 1; // init counter
-	
-	// Loop through the program items for this row (usually there is only one)
-	foreach ( $row['program_item'] as $program_item ) {
-	
-		$info .= "<!-- i: $i (program_item counter) -->";
-		$info .= "<!-- ------- -->";
+
+		$num_items = count($row['program_item']);
+		if ( $num_items > 1 ) {
+			// TODO: deal w/ special case of multiple items per program row -- variations per row_type, program_type...
+			$info .= "<!-- *** $num_items program_items found for this row! *** -->";
+		}
 		
-		$item_name = ""; // init
-		$show_item_authorship = true; // init
+		$info .= "<!-- >>>>>>> START foreach program_item <<<<<<< -->";
+		$i = 1; // init counter
+	
+		// Loop through the program items for this row (usually there is only one)
+		foreach ( $row['program_item'] as $program_item ) {
+	
+			$info .= "<!-- i: $i (program_item counter) -->";
+			$info .= "<!-- ------- -->";
 		
-		$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
-		//$program_item_obj_id = $row['program_item'][0]; // ACF is now set to return ID for relationship field, not object
-		//$program_item_obj = $row['program_item'][0];
-		//$program_item_obj_id = $program_item_obj->ID;
+			$item_name = ""; // init
+			$show_item_authorship = true; // init
+		
+			$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
+			//$program_item_obj_id = $row['program_item'][0]; // ACF is now set to return ID for relationship field, not object
+			//$program_item_obj = $row['program_item'][0];
+			//$program_item_obj_id = $program_item_obj->ID;
 			
-		if ( $program_item_obj_id ) {
+			if ( $program_item_obj_id ) {
 
-			$info .= "<!-- program_item_obj_id: $program_item_obj_id -->";
+				$info .= "<!-- program_item_obj_id: $program_item_obj_id -->";
 			
-			$item_post_type = get_post_type( $program_item_obj_id );
-			//$info .= "<!-- item_post_type: $item_post_type -->";
+				$item_post_type = get_post_type( $program_item_obj_id );
+				//$info .= "<!-- item_post_type: $item_post_type -->";
 				
-			$info .= "<!-- get_program_item_name via postmeta -->";
-			$info .= "<!-- item_post_type: $item_post_type -->";
+				$info .= "<!-- get_program_item_name via postmeta -->";
+				$info .= "<!-- item_post_type: $item_post_type -->";
 
-			if ( $item_post_type == 'repertoire' ) {
+				if ( $item_post_type == 'repertoire' ) {
 				
-				// First, deal w/ authorship display questions
-				// *********************
+					// First, deal w/ authorship display questions
+					// *********************
 				
-				// Store the composer ID(s) so as to check to determine whether to show person_dates or not (goal is to show each composer's dates only once per program)
-				$anon = is_anon($program_item_obj_id);
-				if ( $anon != true ) { 
-					$composer_ids = get_composer_ids( $program_item_obj_id );
-					$info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
-				} else { 
-					$composer_ids = array();
-				}
-				$author_ids = get_author_ids( $program_item_obj_id, false );
-				$info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
+					// Store the composer ID(s) so as to check to determine whether to show person_dates or not (goal is to show each composer's dates only once per program)
+					$anon = is_anon($program_item_obj_id);
+					if ( $anon != true ) { 
+						$composer_ids = get_composer_ids( $program_item_obj_id );
+						$info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
+					} else { 
+						$composer_ids = array();
+					}
+					$author_ids = get_author_ids( $program_item_obj_id, false );
+					$info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
 
-				if ( $num_items > 1 ) {
-					if ( $i == 1 ) { // first row item
-						$row_composer_ids = $composer_ids;
-						$info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; // tft
-					} else { // subsequent row items
-						if ( $composer_ids == $row_composer_ids ) {
-							$show_item_authorship = false;
-							$info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->"; // tft
+					if ( $num_items > 1 ) {
+						if ( $i == 1 ) { // first row item
+							$row_composer_ids = $composer_ids;
+							$info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; // tft
+						} else { // subsequent row items
+							if ( $composer_ids == $row_composer_ids ) {
+								$show_item_authorship = false;
+								$info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->"; // tft
+							}
 						}
 					}
-				}
 				
-				// TODO: also check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
+					// TODO: also check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
 
-				if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && !($row_type == "header") ) {
+					if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && !($row_type == "header") ) {
 
-					// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
-					$info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
-					$info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->";
+						// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
+						$info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
+						$info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->";
 					
-					if ( count($program_composers) > 0 ) {
+						if ( count($program_composers) > 0 ) {
 
-						if ( count($composer_ids) > 0 ) {
-							$ids_intersect = array_intersect($program_composers, $composer_ids);
+							if ( count($composer_ids) > 0 ) {
+								$ids_intersect = array_intersect($program_composers, $composer_ids);
+							} else {
+								$ids_intersect = array_intersect($program_composers, $author_ids);
+							}
+
+							$info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
+							$info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
+							if ( count($ids_intersect) > 0 && ( $num_items == 1 || $i > 1 ) ) { 
+								// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
+								$show_person_dates = false;
+								$info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
+							}
+
+							if ( count($composer_ids) > 0 ) {
+								$program_composers = array_unique(array_merge($program_composers, $composer_ids));
+							} else {
+								$program_composers = array_unique(array_merge($program_composers, $author_ids));
+							}
+
 						} else {
-							$ids_intersect = array_intersect($program_composers, $author_ids);
-						}
+						
+							$info .= "<!-- count(program_composers) NOT > 0 -->";
+						
+							if ( count($composer_ids) > 0 ) {
+								$program_composers = $composer_ids;
+							} else {
+								$program_composers = $author_ids;
+							}
 
-						$info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
-						$info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
-						if ( count($ids_intersect) > 0 && ( $num_items == 1 || $i > 1 ) ) { 
-							// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
-							$show_person_dates = false;
-							$info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
 						}
+						$info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->";
 
-						if ( count($composer_ids) > 0 ) {
-							$program_composers = array_unique(array_merge($program_composers, $composer_ids));
-						} else {
-							$program_composers = array_unique(array_merge($program_composers, $author_ids));
+					} else if ( !count($author_ids) > 0 ) {
+
+						$info .= "<!-- author_ids is empty array -->";
+
+					} // END if ( count($author_ids) > 0 && !($row_type == "header") )
+				
+					// Second, get the name of the Musical Work using get_rep_info fcn
+					// *********************
+				
+					// FCN: get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+				
+					// for row_type title_only, get rep info as item_name. For standard two-col, get title as item_label and authorship as item_name
+					// WIP
+				
+					if ( $row_type == 'title_only' ) {
+					
+						$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true ); 
+					
+					} else if ( empty($program_item_label) ) {
+
+						$info .= "<!-- program_item_label is empty >> use title in left col -->";
+
+						// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
+						$title_as_label .= get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
+						// TODO: figure out how to show auth info only for one item if all items in group have same info...
+						// WIP
+						if ( $show_item_authorship == true ) { 
+							$authorship_args = array( 'data' => array( 'post_id' => $program_item_obj_id ), 'format' => 'concert_item', 'abbr' => false ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
+							$item_name = get_authorship_info ( $authorship_args ); //$item_name = get_authorship_info( array( 'post_id' => $program_item_obj_id ), 'concert_item', false, false, false );
 						}
 
 					} else {
-						
-						$info .= "<!-- count(program_composers) NOT > 0 -->";
-						
-						if ( count($composer_ids) > 0 ) {
-							$program_composers = $composer_ids;
-						} else {
-							$program_composers = $author_ids;
-						}
+
+						$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
 
 					}
-					$info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->";
 
-				} else if ( !count($author_ids) > 0 ) {
+					//$info .= "<!-- item_name: ".$item_name." -->"; // tft
 
-					$info .= "<!-- author_ids is empty array -->";
+				} else if ( $item_post_type == 'sermon' ) {
 
-				} // END if ( count($author_ids) > 0 && !($row_type == "header") )
+					$sermon_author_ids = get_post_meta( $program_item_obj_id, 'sermon_author', true );
+					$info .= "<!-- sermon_author_ids: ".print_r($sermon_author_ids, true)." -->";
+					// TODO: deal w/ possibility of multiple authors
 				
-				// Second, get the name of the Musical Work using get_rep_info fcn
-				// *********************
-				
-				// FCN: get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
-				
-				// for row_type title_only, get rep info as item_name. For standard two-col, get title as item_label and authorship as item_name
-				// WIP
-				
-				if ( $row_type == 'title_only' ) {
-					
-					$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true ); 
-					
-				} else if ( empty($program_item_label) ) {
+					$sermon_author = get_the_title( $sermon_author_ids[0] );
+					if ( $sermon_author ) { $item_name = $sermon_author.": "; }
+					$item_name .= make_link( get_permalink($program_item_obj_id), get_the_title($program_item_obj_id) );
 
-					$info .= "<!-- program_item_label is empty >> use title in left col -->";
+				} else if ( $item_post_type == 'reading' ) {
 
-					// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
-					$title_as_label .= get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
-					// TODO: figure out how to show auth info only for one item if all items in group have same info...
-					// WIP
-					if ( $show_item_authorship == true ) { 
-						$authorship_args = array( 'data' => array( 'post_id' => $program_item_obj_id ), 'format' => 'concert_item', 'abbr' => false ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
-						$item_name = get_authorship_info ( $authorship_args ); //$item_name = get_authorship_info( array( 'post_id' => $program_item_obj_id ), 'concert_item', false, false, false );
+					$info .= "<!-- item_post_type: reading -->"; // tft
+
+					$post_title = get_the_title($program_item_obj_id);
+					if ( preg_match('/\[(.*)\]/',$post_title) ) {
+						$item_name = do_shortcode( $post_title ); // wip
+					} else {
+						$item_name = $post_title;
 					}
 
-				} else {
+					$info .= "<!-- post_title: '$post_title' -->"; // tft
 
-					$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
+				} else { // Not of posttype repertoire, sermon, or reading
 
-				}
+					$post_title = get_the_title($program_item_obj_id);
+					if ( preg_match('/\[(.*)\]/',$post_title) ) {
+						$item_name = do_shortcode( $post_title );
+					} else {
+						$item_name = $post_title;
+					}
 
-				//$info .= "<!-- item_name: ".$item_name." -->"; // tft
+				}                
 
-			} else if ( $item_post_type == 'sermon' ) {
+			}  
 
-				$sermon_author_ids = get_post_meta( $program_item_obj_id, 'sermon_author', true );
-				$info .= "<!-- sermon_author_ids: ".print_r($sermon_author_ids, true)." -->";
-				// TODO: deal w/ possibility of multiple authors
-				
-				$sermon_author = get_the_title( $sermon_author_ids[0] );
-				if ( $sermon_author ) { $item_name = $sermon_author.": "; }
-				$item_name .= make_link( get_permalink($program_item_obj_id), get_the_title($program_item_obj_id) );
-
-			} else if ( $item_post_type == 'reading' ) {
-
-				$info .= "<!-- item_post_type: reading -->"; // tft
-
-				$post_title = get_the_title($program_item_obj_id);
-				if ( preg_match('/\[(.*)\]/',$post_title) ) {
-					$item_name = do_shortcode( $post_title ); // wip
-				} else {
-					$item_name = $post_title;
-				}
-
-				$info .= "<!-- post_title: '$post_title' -->"; // tft
-
-			} else { // Not of posttype repertoire, sermon, or reading
-
-				$post_title = get_the_title($program_item_obj_id);
-				if ( preg_match('/\[(.*)\]/',$post_title) ) {
-					$item_name = do_shortcode( $post_title );
-				} else {
-					$item_name = $post_title;
-				}
-
-			}                
-
-		}  
-
-		$program_item_name .= $item_name;
+			$program_item_name .= $item_name;
 		
-		// Add spacer, in the case of multiple program items
-		if ( $num_items > 1 && $i != $num_items ) {
-			if ( $title_as_label != "" ) { $title_as_label .= '<p class="spacer">&nbsp;</p>'; }
-			if ( $program_item_name != "" ) { $program_item_name .= '<p class="spacer">&nbsp;</p>'; }
-		}
+			// Add spacer, in the case of multiple program items
+			if ( $num_items > 1 && $i != $num_items ) {
+				if ( $title_as_label != "" ) { $title_as_label .= '<p class="spacer">&nbsp;</p>'; }
+				if ( $program_item_name != "" ) { $program_item_name .= '<p class="spacer">&nbsp;</p>'; }
+			}
 
-		$i++;
+			$i++;
 
-	} // end foreach program_item
+		} // end foreach program_item
+    
+	}
+	
 	
 	// Is there a program note for this item? If so, append it to the item name
 	if ( isset($row['program_item_note']) && $row['program_item_note'] != "" ) {
