@@ -24,8 +24,8 @@ function get_person_display_name ( $args = array() ) {
     // Defaults
 	$defaults = array(
 		'person_id' 	=> null,
+		'field_override'=> 'none', // options include 'post_title', 'special_name'
 		'name_abbr'   	=> 'full', // other option is "abbr", i.e. lastname only
-		'use_post_title'=> false,
 		'show_prefix'   => false,
 		'show_suffix'   => false,
 		'show_jobtitle' => false,
@@ -38,7 +38,13 @@ function get_person_display_name ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
-	if ( $use_post_title ) {
+	$special_name = get_field('special_name',$person_id);
+	
+	if ( $field_override == "special_name" && !empty($special_name) ) {
+		
+		$display_name = $special_name;
+		
+	} else if ( $field_override == "post_title" ) {
 	
 		$display_name = get_the_title( $person_id );
 		
