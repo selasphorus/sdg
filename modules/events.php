@@ -607,7 +607,7 @@ function get_personnel_person ( $args = array() ) {
 		
 			// Set up display args to pass to fcn get_person_display_name
 			$name_abbr = "full";
-			$field_override = "none";
+			$override = "none";
 			$show_dates = false;
 			$styled = true;
 		
@@ -622,10 +622,10 @@ function get_personnel_person ( $args = array() ) {
 				// WIP Check to see if this is a clergy person/service_order >> use_post_title
 				//$use_post_title = true;
 				$name_abbr = "abbr";
-				$field_override = "special_name";
+				$override = "special_name";
 			}
 		
-			$display_args = array( 'person_id' => $person_id, 'name_abbr' => $name_abbr, 'field_override' => $field_override, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
+			$display_args = array( 'person_id' => $person_id, 'override' => $override, 'name_abbr' => $name_abbr, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
 		
 			// Get URL for person, if any
 			$personnel_url = null; // init

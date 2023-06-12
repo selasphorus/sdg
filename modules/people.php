@@ -24,7 +24,7 @@ function get_person_display_name ( $args = array() ) {
     // Defaults
 	$defaults = array(
 		'person_id' 	=> null,
-		'field_override'=> 'none', // options include 'post_title', 'special_name'
+		'override'		=> 'none', // options include 'post_title', 'special_name'
 		'name_abbr'   	=> 'full', // other option is "abbr", i.e. lastname only
 		'show_prefix'   => false,
 		'show_suffix'   => false,
@@ -40,11 +40,11 @@ function get_person_display_name ( $args = array() ) {
 	
 	$special_name = get_field('special_name',$person_id);
 	
-	if ( $field_override == "special_name" && !empty($special_name) ) {
+	if ( $override == "special_name" && $special_name ) {
 		
 		$display_name = $special_name;
 		
-	} else if ( $field_override == "post_title" ) {
+	} else if ( $override == "post_title" ) {
 	
 		$display_name = get_the_title( $person_id );
 		
