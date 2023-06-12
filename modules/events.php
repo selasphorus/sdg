@@ -574,7 +574,6 @@ function get_personnel_person ( $args = array() ) {
 
 	// Init vars
 	$arr_results = array();
-	$info = "";
     $ts_info = "";
 	$person_name = "";
 	
@@ -644,7 +643,9 @@ function get_personnel_person ( $args = array() ) {
 				// And/or link to person page on sdg site listing events, sermons, &c.?
 			}
 			$display_args['url'] = $personnel_url;
-		
+			
+			$ts_info .= "<!-- display_args for get_person_display_name: ".print_r($display_args, true)." -->";
+			
 			$person_name .= get_person_display_name( $display_args )."<br />";
         
 		}
@@ -668,20 +669,20 @@ function get_personnel_person ( $args = array() ) {
 		if ( empty($person_name) ) {
 			if ( isset($row['person_txt']) && $row['person_txt'] != "" && $row['person_txt'] != "x" ) { 
 				
-				$info .= "<!-- person is empty -> use placeholder person_txt -->";
+				$ts_info .= "<!-- person is empty -> use placeholder person_txt -->";
 				$placeholder_item = true;
 				$person_name = $row['person_txt'];
 				
 				// Fill in Placeholder -- see if a matching record can be found to fill in a proper person_name
 				if ( $run_updates == true ) {
 					$title_to_match = $person_name;
-					$info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+					$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
 					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'display' => $display );
 					$match_result = match_placeholder( $match_args );
-					$info .= $match_result;
+					$ts_info .= $match_result;
 				} else {
-                    $info .= "<!-- NO match_placeholder for personnel_person -->";
-					$info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+                    $ts_info .= "<!-- NO match_placeholder for personnel_person -->";
+					$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 				}
 				
 			}
@@ -690,7 +691,7 @@ function get_personnel_person ( $args = array() ) {
 	}
 	
 	$arr_results['person_name'] = $person_name;
-	$arr_results['info'] = $info;
+	$arr_results['info'] = $ts_info;
 	
 	return $arr_results;
 }
