@@ -1384,6 +1384,7 @@ function get_post_resources ( $post_id = null ) {
         $info .= "<hr />";
         $resources_header = get_post_meta( $post_id, 'resources_header', true );
         if ( empty($resources_header) ) { $resources_header = "Resources"; }
+        $link_class = get_post_meta( $post_id, 'resource_link_styling', true );
 
         $info .= '<h2 id="resources">'.$resources_header.'</h2>';
 
@@ -1406,8 +1407,8 @@ function get_post_resources ( $post_id = null ) {
             } else if ( strpos($attachment_title, 'Program' ) !== false && $post_type == 'event' ) {
                 $attachment_title = 'Program';
             }
-
-            $info .= make_link($attachment_url, $attachment_title, null, "_blank")."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
+            
+            $info .= make_link($attachment_url, $attachment_title, $link_class, "_blank")."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
 
         }
     } else {
