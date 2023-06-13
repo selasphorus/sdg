@@ -2103,7 +2103,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 				$tax_query['relation'] = $search_operator;
 			}
 			
-			$term_exclusions = array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+			$term_exclusions = array('organ-works', 'piano-works', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
 			
 			foreach ( $tq_components_primary AS $component ) {
 		
