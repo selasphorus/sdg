@@ -56,8 +56,13 @@ function get_person_display_name ( $args = array() ) {
 			if ( $prefix ) { $display_name .= $prefix." "; }
 		}
 		
+		if ( $name_abbr == "abbr" && $show_prefix && !$prefix ) {
+			$name_abbr == "full"; // ?? or better to just use post_title? see e.g. 
+			//$display_name = get_the_title( $person_id );
+		}
+		
 		// First and middle names
-		if ( $name_abbr == "full" || ( $name_abbr == "abbr" && $show_prefix && empty($prefix) ) ) {
+		if ( $name_abbr == "full" ) {
         	$first_name = get_post_meta( $person_id, 'first_name', true );
         	if ( $first_name ) { $display_name .= $first_name." "; }
 			$middle_name = get_post_meta( $person_id, 'middle_name', true );
