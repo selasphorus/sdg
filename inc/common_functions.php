@@ -364,6 +364,10 @@ function sdg_post_thumbnail ( $args ) {
     // Ok to display the image! Set up classes for styling
     $classes = "post-thumbnail sdg";
     
+    if ( is_dev_site() ) {
+    	$classes .= " zoom-fade";
+    }
+    
     // Retrieve the caption (if any) and return it for display
     if ( get_post( $img_id  ) ) {
 		$caption = get_post( $img_id  )->post_excerpt;
