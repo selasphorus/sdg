@@ -618,9 +618,10 @@ function get_personnel_person ( $args = array() ) {
 				$show_prefix = true;
 				$show_suffix = true;
 				$show_job_title = true;
-				// WIP Check to see if this is a clergy person/service_order >> use_post_title
-				//$use_post_title = true;
-				$name_abbr = "abbr";
+				// Check to see if this is a clergy person >> show prefix and lastname only, i.e. abbr
+				if ( has_term( 'clergy', 'people_category', $post_id ) ) { 
+					$name_abbr = "abbr";
+				}				
 				$override = "special_name";
 			}
 		

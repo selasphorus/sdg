@@ -49,33 +49,38 @@ function get_person_display_name ( $args = array() ) {
 		$display_name = get_the_title( $person_id );
 		
 	} else {
-	
-		// Get prefix and last name, if available
+
+		// Prefix
 		if ( $show_prefix ) {
 			$prefix = get_field('prefix',$person_id);
 			if ( $prefix ) { $display_name .= $prefix." "; }
 		}
 		
-		if ( $name_abbr == "full" ) {
+		// First and middle names
+		if ( $name_abbr == "full" || ( $name_abbr == "abbr" && $show_prefix && empty($prefix) ) ) {
         	$first_name = get_post_meta( $person_id, 'first_name', true );
         	if ( $first_name ) { $display_name .= $first_name." "; }
 			$middle_name = get_post_meta( $person_id, 'middle_name', true );
 			if ( $middle_name ) { $display_name .= $middle_name." "; }
 		}
         
+        // Last name
 		$last_name = get_field('last_name',$person_id);
 		$display_name .= $last_name;
 		
+		// Suffix
 		if ( $show_suffix ) {
 			$suffix = get_field('suffix',$person_id);
 			if ( $suffix ) { $display_name .= ", ".$suffix; }
 		}
 		
+		// Job Title
 		if ( $show_job_title ) {
 			$job_title = get_field('job_title',$person_id);
 			if ( $job_title ) { $display_name .= ", ".$job_title; }
 		}
 		
+		// Dates
 		// WIP/TODO: fix 'styled' factor -- see e.g. https://stcnyc.wpengine.com/events/solemn-eucharist-2020-01-05/ Wm Byrd -- span needed around dates.
 		if ( $show_dates ) {
 			$display_name .= get_person_dates( $person_id, $styled );
