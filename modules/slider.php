@@ -13,7 +13,7 @@ if ( !function_exists( 'add_action' ) ) {
  * Displays the slider
  * Modified version of fcorpo_display_slider()
  */
-// TODO: generalize
+// TODO: generalize -- default id is specific to STC
 function sdg_slider( $slider_id = "285632", $echo = false  )  { // default to Homepage Slider (live site)
     
     $info = '<div id="homepage-carousel">';
