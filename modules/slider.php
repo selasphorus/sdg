@@ -13,16 +13,21 @@ if ( !function_exists( 'add_action' ) ) {
  * Displays the slider
  * Modified version of fcorpo_display_slider()
  */
-function atc_display_slider( $slider_id = "285632" )  { // default to Homepage Slider (live site)
-    echo '<div id="homepage-carousel">';
+// TODO: generalize
+function sdg_slider( $slider_id = "285632", $echo = false  )  { // default to Homepage Slider (live site)
+    
+    $info = '<div id="homepage-carousel">';
 	if ( $slider_id == null ) {
-        echo '<img src="https://www.saintthomaschurch.org/wp-content/uploads/2019/07/Fifth-Avenue-Entrance-e1601222397172.jpg" alt="Fifth Avenue Entrance" />'; // tft
+        $info .= '<img src="https://www.saintthomaschurch.org/wp-content/uploads/2019/07/Fifth-Avenue-Entrance-e1601222397172.jpg" alt="Fifth Avenue Entrance" />'; // tft
     } else {
-        echo do_shortcode( '[metaslider id="'.$slider_id.'"]' ); // Meta Slider
+        $info .= do_shortcode( '[metaslider id="'.$slider_id.'"]' ); // Meta Slider
     }
     //echo do_shortcode( '[metaslider id="60001"]' ); // Meta Slider
 	//echo do_shortcode( '[sp_wpcarousel id="74075"]' ); // WP Carousel plugin
-	echo '</div>';
+	$info .= '</div>';
+	
+	if ( $echo ) { echo $info; } else { return $info; }
+	
 }
 
 
