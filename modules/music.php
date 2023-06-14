@@ -2795,12 +2795,12 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 }
 
 
-/*********** CPT: ENSEMBLE ***********/
-function get_cpt_ensemble_content() {
+/*********** CPT: GROUP ***********/
+function get_cpt_group_content() {
 	
 	$info = "";
 	$post_id = get_the_ID();
-	$info .= "ensemble post_id: $post_id<br />";
+	$info .= "group post_id: $post_id<br />";
 	
 	return $info;
 	

@@ -266,13 +266,13 @@ function sdg_modules_field_cb( $args ) {
 	$modules = array( 
 		'events' => __( 'Events' ), 
 		'people' => __( 'People' ), 
-		'ensembles' => __( 'Ensembles' ), 
+		'groups' => __( 'Groups' ), 
+		//'ensembles' => __( 'Ensembles' ), 
 		'music' => __( 'Music Library' ), 
 		'webcasts' => __( 'Webcasts' ), 
 		'sermons' => __( 'Sermons' ), 
 		'lectionary' => __( 'Lectionary' ), 
 		//
-		'groups' => __( 'Groups' ), 
 		'organizations' => __( 'Organizations' ), 
 		'projects' => __( 'Projects' ), 
 		'press' => __( 'Press' ), 
@@ -424,7 +424,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'ensembles', 'groups', 'links', 'newsletters', 'organizations', 'organs', 'press', 'projects', 'sources', 'venues' );
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'groups', 'links', 'newsletters', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources', 'venues' );
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
     }
@@ -1266,8 +1266,8 @@ function sdg_custom_post_content() {
 	$info = "";
 	$post_type = get_post_type( get_the_ID() );
 	
-	if ($post_type === "ensemble") {
-		$info .= get_cpt_ensemble_content();
+	if ($post_type === "group") {
+		$info .= get_cpt_group_content();
 	} else if ($post_type === "liturgical_date") {
 		$info .= get_cpt_liturgical_date_content();
 	} else if ($post_type === "person") {

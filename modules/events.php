@@ -332,8 +332,8 @@ function get_event_personnel( $atts = [] ) {
                 if ( isset($row['role_txt']) )      { $row_info .= "role_txt => ".$row['role_txt']."; "; }
                 if ( isset($row['person']) )        { $row_info .= "person => ".$row['person']."; "; }
                 if ( isset($row['person'][0]) )     { $row_info .= "person[0] => ".$row['person'][0]."; "; }
-                if ( isset($row['ensemble']) )      { $row_info .= "ensemble => ".$row['ensemble']."; "; }
-                if ( isset($row['ensemble'][0]) )   { $row_info .= "ensemble[0] => ".$row['ensemble'][0]."; "; }
+                if ( isset($row['group']) )      { $row_info .= "group => ".$row['group']."; "; }
+                if ( isset($row['group'][0]) )   { $row_info .= "group[0] => ".$row['group'][0]."; "; }
                 if ( isset($row['person_txt']) )    { $row_info .= "person_txt => ".$row['person_txt'].""; }
                 */
                 $row_info .= "</code><hr />";
@@ -636,8 +636,8 @@ function get_personnel_person ( $args = array() ) {
 					$personnel_post_type = get_post_type( $person_id );
 					if ( $personnel_post_type == "person" ) { 
 						$personnel_url = get_post_meta( $person_id, 'website', true );
-					} else if ( $personnel_post_type == "ensemble" ) { 
-						$personnel_url = get_post_meta( $person_id, 'ensemble_url', true );
+					} else if ( $personnel_post_type == "group" ) { 
+						$personnel_url = get_post_meta( $person_id, 'group_url', true );
 					}           
 				}
 			} else {
@@ -660,10 +660,10 @@ function get_personnel_person ( $args = array() ) {
 	
 	if ( empty($person_name) ) {
 		
-		if ( isset($row['ensemble'][0]) ) { 
-			$ensemble_obj = $row['ensemble'][0];
-			if ($ensemble_obj) { 
-				$person_name = $ensemble_obj->post_title;
+		if ( isset($row['group'][0]) ) { 
+			$group_obj = $row['group'][0];
+			if ($group_obj) { 
+				$person_name = $group_obj->post_title;
 			}
 		}
 		
