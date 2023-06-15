@@ -1839,7 +1839,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         		$show_image = false;
         		$replace = "<!-- featured_image_display: $featured_image_display -->";
         		
-        	} else if ( is_singular('event') ) {
+        	} else if ( is_singular('event') && post_is_webcast_eligible( $post_id ) ) {
 				
 				$ts_info .= "<!-- is_singular('event') -->";
 				
