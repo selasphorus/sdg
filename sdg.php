@@ -787,6 +787,151 @@ function sdg_autocomplete_search() {
 
 /*** MISC ***/
 
+/**
+ * Displays message/announcement bar/banner
+ */
+function sdg_msg_bar( $args = array() ) {
+
+	$info = "";
+	$ts_info = "";
+	
+	$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+	
+	// Defaults
+	$defaults = array(
+		'post_type'	=> "post",
+		//'post_id'	=> null,
+		//'XXX'		=> true,
+		'num_posts' => 1,
+	);
+
+	// Parse args
+	$args = wp_parse_args( $args, $defaults );
+
+	// Extract
+	extract( $args );
+	
+    $num_posts = 1; // tft
+    
+    $wp_args = array(
+		'post_type'   => $post_type,
+		'post_status' => 'publish',
+        'posts_per_page' => $num_posts,
+        'orderby'   => 'date',
+        'order'     => 'DESC'
+    );
+    
+    /*    
+    $tax_query = array(
+        array(
+            'taxonomy' => 'notes_category',
+            'field'    => 'slug',
+            'terms'    => 'banners', //$category
+        ),
+    );
+    //$info .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
+    $args['tax_query'] = $tax_query;
+    */
+		
+    $query = new WP_Query( $args );
+    //$info .= "<!-- args: ".print_r($args, true)." -->"; // tft <pre></pre>
+    //$info .= "<!-- Last SQL-Query (query): {$query->request} -->";
+
+    if ( $query->have_posts() ) {
+        
+        while ( $query->have_posts() ) {
+            
+            $query->the_post();
+            $post_id = get_the_ID();
+            $ts_info .= "<!-- post_id: $post_id -->";
+        	
+        	$colorscheme = "";
+            /*if ( has_term( 'greens', 'notes_category', $post_id ) ) {
+                $colorscheme = " greens";
+            } else if ( has_term( 'reds', 'notes_category', $post_id ) ) {
+                $colorscheme = " reds";
+            } else {
+                $colorscheme = "";
+            }*/
+                                                                          
+            $info .= '<div class="banner'.$colorscheme.'">';
+            
+            if ( has_post_thumbnail($post_id) ) {
+                $img = get_the_post_thumbnail( $post_id, 'full' );
+                if ( !empty($img) ) {
+                    $ts_info .= "<!-- img -->";
+                    $info .= $img;
+                }
+            } else {
+                $ts_info .= "<!-- content -->";
+                $post = get_post( $post_id );
+                $the_content = apply_filters('the_content', $post->post_content);
+                $info .= $the_content;
+                //$info .= get_the_content();
+                //$info .= get_the_content($post_id);
+            }
+            
+            $info .= '</div><!-- /banner -->';
+            
+        }
+
+        wp_reset_postdata(); // Reset postdata
+
+    } // endif
+    
+    /*
+    // V3 Webcast Event
+    // WIP: determine whether a webcast is currently streaming live
+    // TODO: move this part to a separate function to be called from the livestream banner notification post instead of this function...
+    $args = array(
+		'post_type'   => 'event',
+		'post_status' => 'publish',
+        'posts_per_page' => $num_posts,
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key'     => 'webcast_status',
+                'value'   => 'live'
+            ),
+            array(
+                'key'     => '_event_start_date',
+                'value'   => date('Y-m-d'), // today! (in case AG forgot to update the status after a live stream was over...)
+            )
+        ),
+        'orderby'   => 'ID',
+        'order'     => 'ASC'
+    );
+    $webcasts_query = new WP_Query( $args );
+    $webcasts_posts = $webcasts_query->posts;
+    
+    if ( count($webcasts_posts) > 0 ) {
+        $livestream = true;
+        //$info .= "Livestream(s): ".count($webcasts_posts); // tft
+        
+        foreach ( $webcasts_posts as $post ) {
+
+            setup_postdata( $post );
+            
+            $title = $post->post_title;
+            //$post_id = $post->ID;
+            $url = make_link( get_permalink($post->ID), $title ); // make_link( $url, $linktext, $class = null, $target = null)
+        }
+        
+    } else {
+        $livestream = false;
+        //$info .= "NO Livestream."; // tft
+        $url = null;
+    }
+    
+    //$info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
+    //$info .= "year: $year<br />";
+    //$info .= "[num posts: ".count($webcasts_posts)."]<br />";
+	*/
+	
+    return $info;
+    
+}
+
 add_shortcode('top','anchor_link_top');
 function anchor_link_top() {
     return '<span class="up"></span><a href="#top" class="anchor_top">top</a>';

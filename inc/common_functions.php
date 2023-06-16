@@ -167,7 +167,7 @@ function sdg_post_title ( $args = array() ) {
 
 
 // Custom fcn for thumbnail/featured image display
-function sdg_post_thumbnail ( $args ) {
+function sdg_post_thumbnail ( $args = array() ) {
     
     $info = "";
 	$ts_info = "";
