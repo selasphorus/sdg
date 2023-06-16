@@ -795,7 +795,7 @@ function sdg_msg_bar( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
-	$ts_info .= "<pre>sdg_msg_bar args: ".print_r($args, true)."</pre>";
+	$ts_info .= "<!-- <pre>sdg_msg_bar args: ".print_r($args, true)."</pre> -->";
 	
 	// Defaults
 	$defaults = array(
