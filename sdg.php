@@ -795,7 +795,7 @@ function sdg_msg_bar( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
-	$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+	$ts_info .= "<pre>sdg_msg_bar args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -810,8 +810,6 @@ function sdg_msg_bar( $args = array() ) {
 
 	// Extract
 	extract( $args );
-	
-    $num_posts = 1; // tft
     
     $wp_args = array(
 		'post_type'   => $post_type,
@@ -833,7 +831,7 @@ function sdg_msg_bar( $args = array() ) {
     $args['tax_query'] = $tax_query;
     */
 		
-    $query = new WP_Query( $args );
+    $query = new WP_Query( $wp_args );
     //$info .= "<!-- args: ".print_r($args, true)." -->"; // tft <pre></pre>
     //$info .= "<!-- Last SQL-Query (query): {$query->request} -->";
 
@@ -854,7 +852,7 @@ function sdg_msg_bar( $args = array() ) {
                 $colorscheme = "";
             }*/
                                                                           
-            $info .= '<div class="banner'.$colorscheme.'">';
+            $info .= '<div class="msg_bar'.$colorscheme.'">';
             
             if ( has_post_thumbnail($post_id) ) {
                 $img = get_the_post_thumbnail( $post_id, 'full' );
