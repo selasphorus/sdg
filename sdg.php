@@ -819,6 +819,10 @@ function sdg_msg_bar( $args = array() ) {
         'order'     => 'DESC'
     );
     
+    if ( $post_type == "post" ) {
+    	$wp_args['category_name'] = 'featured-posts';
+    }
+    
     /*    
     $tax_query = array(
         array(
