@@ -875,8 +875,8 @@ function sdg_msg_bar( $args = array() ) {
             
             $excerpt = get_the_excerpt( $post_id );
             $info .= $excerpt;
-                
             $info .= $ts_info;
+            $info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
             $info .= '</div><!-- /banner -->';
             
         }

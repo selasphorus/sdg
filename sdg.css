@@ -72,6 +72,57 @@ a.action {
     font-family: var(--global--font-monospace);
 }
 
+/* msg_bar styles */
+
+.site.has_msg_bar {
+    /*position: absolute;*/
+    top: 50px;
+    width: 100%;
+}
+
+.msg_bar {
+	width: 100%;
+    height: auto;
+    margin: 0px auto 0 auto;
+    padding: 1.5rem;
+    background-color: var(--ltgrey);
+    font-family: 'worksans-extralight', 'work sans', sans-serif;
+	font-size: 1.3rem;
+    font-weight: normal;
+	text-align: center;
+    line-height: normal;
+}
+
+.msg_bar.greens {
+    background-color: rgb(153, 204, 0, 0.5);
+    color: var(--dkgreen);
+}
+
+.msg_bar.reds {
+    background-color: rgb(156, 67, 22, 0.2);
+    color: rgb(156, 67, 22);
+}
+
+.msg_bar_close {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+}
+
+.msg_bar_close:after {
+    content: '×';
+    display: block;
+    font-family: helvetica,arial,sans-serif;
+    font-size: 1em;
+    font-weight: 100;
+    line-height: 2rem;
+    letter-spacing: normal;
+    padding: 0;
+}
+
 /*** FORM STYLES ***/
 
 form#select_ids {
