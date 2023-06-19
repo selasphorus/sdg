@@ -106,8 +106,8 @@ a.action {
 .msg_bar_close {
     cursor: pointer;
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 1rem;
+    right: 1rem;
     width: 2rem;
     height: 2rem;
 }
@@ -153,7 +153,7 @@ input[type="text"].merge-input {
 	}
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: 46px;
+		top: calc(1rem + 46px);
 	}
 	
 }
@@ -165,7 +165,7 @@ input[type="text"].merge-input {
 	}
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: 32px;
+		top: calc(1rem + 32px);
 	}
 	
 }
