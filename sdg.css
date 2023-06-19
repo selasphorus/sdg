@@ -152,12 +152,20 @@ input[type="text"].merge-input {
 		padding-top: 46px;
 	}
 	
+	body.admin-bar .msg_bar .msg_bar_close {
+		top: 46px;
+	}
+	
 }
 
 @media screen and (min-width: 48.9375em) {
 	
 	body.admin-bar .msg_bar {
 		padding-top: 32px;
+	}
+	
+	body.admin-bar .msg_bar .msg_bar_close {
+		top: 32px;
 	}
 	
 }
