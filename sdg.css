@@ -146,4 +146,18 @@ input[type="text"].merge-input {
 }
 
 
+@media screen and (min-width: 44.375em) {
 
+	body.admin-bar .msg_bar {
+		padding-top: 46px;
+	}
+	
+}
+
+@media screen and (min-width: 48.9375em) {
+	
+	body.admin-bar .msg_bar {
+		padding-top: 32px;
+	}
+	
+}
