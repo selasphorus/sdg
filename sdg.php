@@ -1211,7 +1211,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
     // Init vars
     $term_ids = array();
     $ts_info = "";
-    $result = null;
+    $result = "";
     
     // If post_id is empty, abort
     if ( empty($post_id) ) {
@@ -1237,7 +1237,23 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 					$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
 					return $ts_info;
 				}
-        		$term_ids[] = $arr_term['term_id'];
+        		//$term_ids[] = $arr_term['term_id'];
+        		$term_id = $arr_term['term_id'];
+        		if ( $return_info ) {
+					$ts_info .= "<!-- [sdg_add_post_term] ";
+					$ts_info .= "post_id: ".$post_id;
+					$ts_info .= "taxonomy: ".$taxonomy;
+					$ts_info .= "term_slug: ".$term_slug;
+					$ts_info .= "term_id: ".$term_id;
+				}
+        		$result = wp_set_post_terms( $post_id, $term_id, $taxonomy, true );
+        		if ( $result ) { 
+					$ts_info .= ">> success! "; 
+				} else { 
+					$ts_info .= ">> FAILED! ";
+				}
+				$ts_info .= " -->";
+        		
         	}
         }
         
@@ -1245,29 +1261,14 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         //$term_id = $term->term_id; // get term id from slug
         //$term_ids[] = $term_id;
         
-        $result = wp_set_post_terms( $post_id, $term_ids, $taxonomy, true );
-        
     }
     
     if ( $return_info ) {
-        
-        $ts_info .= "<!-- [sdg_add_post_term] ";
-		$ts_info .= "term_ids: ".print_r($term_ids, true);
-        //$ts_info .= "$taxonomy: $term_slug ";
-        //$ts_info .= implode(", ",$arr_term_slugs)." -- ";
-        if ( $result ) { 
-			$ts_info .= ">> success! "; 
-		} else { 
-			$ts_info .= ">> FAILED! ";
-		}
-        $ts_info .= " -->";
-        return $ts_info;
-        
-    } else {
-        
-        return $result;
-    }
-    
+		return $ts_info;		
+	} else {		
+		return $result;
+	}
+	
 }
 
 function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
