@@ -13,7 +13,8 @@ if ( !function_exists( 'add_action' ) ) {
 function get_person_display_name ( $args = array() ) {
 	
 	// Init vars
-	$display_name = "";
+	$arr_results = array();
+    $info = "";
     $ts_info = "";
 	
 	$do_log = true; // false for cleaner logs; true for active TS
@@ -103,7 +104,11 @@ function get_person_display_name ( $args = array() ) {
 		$display_name = make_link( $url, $display_name, '', '_blank' );
 	}
 	
-	return $display_name;	
+	//return $display_name;
+	$arr_results['display_name'] = $display_name;
+	$arr_results['info'] = $ts_info;
+	
+	return $arr_results;
 	
 }
 

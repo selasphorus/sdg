@@ -625,7 +625,7 @@ function get_personnel_person ( $args = array() ) {
 				$override = "special_name";
 			}
 		
-			$display_args = array( 'person_id' => $person_id, 'override' => $override, 'name_abbr' => $name_abbr, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => true );
+			$display_args = array( 'person_id' => $person_id, 'override' => $override, 'name_abbr' => $name_abbr, 'show_prefix' => $show_prefix, 'show_suffix' => $show_suffix, 'show_job_title' => $show_job_title, 'show_dates' => $show_dates, 'styled' => $styled );
 		
 			// Get URL for person, if any
 			$personnel_url = null; // init
@@ -861,8 +861,8 @@ function get_event_program_items( $atts = [] ) {
             if ( $num_row_items > 1 ) { $groupings = true; }
                 
             if ( $arr_item_name['program_composers'] ) { $program_composers = $arr_item_name['program_composers']; } // TODO: figure out how to pass program_composers *by reference*
-            if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; }
-            $row_info .= "<!-- arr_item_name['show_person_dates']: ".$arr_item_name['show_person_dates']."-->";
+            if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } else { $show_person_dates = false; }
+            $row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
             $row_info .= "<!-- START arr_item_name['info'] -->";
             $row_info .= $arr_item_name['info']; // info is already commented
