@@ -1246,8 +1246,7 @@ function get_program_item_name ( $args = array() ) {
 		// Loop through the program items for this row (usually there is only one)
 		foreach ( $row['program_item'] as $program_item ) {
 	
-			$ts_info .= "<!-- i: $i (program_item counter) -->";
-			$ts_info .= "<!-- ------- -->";
+			$ts_info .= "<!-- START program_item #$i -->";
 		
 			$item_name = ""; // init
 			$show_item_authorship = true; // init
@@ -1429,6 +1428,8 @@ function get_program_item_name ( $args = array() ) {
 				if ( $title_as_label != "" ) { $title_as_label .= '<p class="spacer">&nbsp;</p>'; }
 				if ( $program_item_name != "" ) { $program_item_name .= '<p class="spacer">&nbsp;</p>'; }
 			}
+			
+			$ts_info .= "<!-- END program_item #$i -->";
 
 			$i++;
 
