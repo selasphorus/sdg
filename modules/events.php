@@ -1287,16 +1287,16 @@ function get_program_item_name ( $args = array() ) {
 						$composer_ids = array();
 					}
 					$author_ids = get_author_ids( $program_item_obj_id, false );
-					//$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
+					//$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->";
 
 					if ( $num_items > 1 ) {
 						if ( $i == 1 ) { // first row item
 							$row_composer_ids = $composer_ids;
-							$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; // tft
+							if ( $row_composer_ids ) { $ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; }
 						} else { // subsequent row items
 							if ( $composer_ids == $row_composer_ids ) {
 								$show_item_authorship = false;
-								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->"; // tft
+								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->";
 							}
 						}
 					}
