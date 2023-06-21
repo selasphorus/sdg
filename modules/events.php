@@ -1282,12 +1282,12 @@ function get_program_item_name ( $args = array() ) {
 					$anon = is_anon($program_item_obj_id);
 					if ( $anon != true ) { 
 						$composer_ids = get_composer_ids( $program_item_obj_id );
-						$ts_info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
+						//$ts_info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
 					} else { 
 						$composer_ids = array();
 					}
 					$author_ids = get_author_ids( $program_item_obj_id, false );
-					$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
+					//$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
 
 					if ( $num_items > 1 ) {
 						if ( $i == 1 ) { // first row item
@@ -1307,7 +1307,7 @@ function get_program_item_name ( $args = array() ) {
 
 						// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
 						$ts_info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
-						$ts_info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->";
+						if ( !empty($program_composers) ) { $ts_info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->"; }
 					
 						if ( count($program_composers) > 0 ) {
 
@@ -1345,11 +1345,11 @@ function get_program_item_name ( $args = array() ) {
 							}
 
 						}
-						$ts_info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->";
+						if ( !empty($program_composers) ) { $ts_info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->"; }
 
 					} else if ( !count($author_ids) > 0 ) {
 
-						$ts_info .= "<!-- author_ids is empty array -->";
+						//$ts_info .= "<!-- author_ids is empty array -->";
 
 					} // END if ( count($author_ids) > 0 && !($row_type == "header") )
 				
