@@ -1445,6 +1445,7 @@ function get_program_item_name ( $args = array() ) {
 			}
 			
 			$ts_info .= "<!-- +~+~+~+~+ END program_item #$i +~+~+~+~+ -->";
+			$ts_info .= "<!-- +~+~+~+~+ +~+~+~+~++++~+~+~+~+ +~+~+~+~+ -->";
 
 			$i++;
 
