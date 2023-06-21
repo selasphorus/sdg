@@ -12,15 +12,15 @@ if ( !function_exists( 'add_action' ) ) {
 
 function get_person_display_name ( $args = array() ) {
 	
+	// TS/logging setup
+	$do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: get_person_display_name", $do_ts );
+	
 	// Init vars
 	$arr_info = array();
     $display_name = "";
     $ts_info = "";
-	
-	$do_log = true; // false for cleaner logs; true for active TS
-    
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_person_display_name", $do_log );
     
     // Defaults
 	$defaults = array(
@@ -35,7 +35,7 @@ function get_person_display_name ( $args = array() ) {
 		'styled'		=> false,
 	);
 	
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
@@ -249,17 +249,18 @@ function get_cpt_person_content( $post_id = null ) {
 
 function get_person_dates( $post_id, $styled = false ) {
     
+    // TS/logging setup
+    $do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: get_person_dates", $do_ts );
+    
     // Init vars
     $info = ""; // init
     //if ( $styled == 'false' ) { $styled = false; } else { $styled = true; }// just in case...
-    $do_log = false; // false for cleaner logs; true for active TS
-    
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_person_dates", $do_log );
     
     //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
-    sdg_log( "[get_person_dates] post_id: ".$post_id, $do_log );
-    //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
+    sdg_log( "[get_person_dates] post_id: ".$post_id, $do_ts );
+    //sdg_log( "[get_person_dates] styled: ".$styled, $do_ts );
     
     // Try ACF get_field instead?
     $birth_year = get_post_meta( $post_id, 'birth_year', true );

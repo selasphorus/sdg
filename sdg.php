@@ -801,15 +801,11 @@ function sdg_msg_bar( $args = array() ) {
 	// Defaults
 	$defaults = array(
 		'post_type'	=> "post",
-		//'post_id'	=> null,
-		//'XXX'		=> true,
 		'num_posts' => 1,
 	);
 
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-
-	// Extract
 	extract( $args );
     
     $wp_args = array(
@@ -2031,9 +2027,10 @@ function sdg_console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-function sdg_log( $log_msg, $do_log = true ) {
+function sdg_log( $log_msg, $do_ts = true ) {
     
-    if ( $do_log === false ) { return; } // Abort if logging is turned off (set per calling fcn)
+    // Set do_ts to true for active troubleshooting; false for cleaner source & logs
+    if ( $do_ts === false ) { return; } // Abort if logging is turned off (set per calling fcn)
     
 	// Create directory for storage of log files, if it doesn't exist already
 	$log_filename = $_SERVER['DOCUMENT_ROOT']."/_sdg-devlog";

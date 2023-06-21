@@ -142,7 +142,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     $ts_info = "";
     
 	if ($post_id === null) { $post_id = get_the_ID(); }
-	//$ts_info .="post_id: $post_id<br />";
+	//$ts_info .="[get_cpt_repertoire_content] post_id: $post_id<br />";
 	
     $arr_rep_info = get_rep_info( $program_item_obj_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
 	$rep_info = $arr_item_name['info'];
@@ -157,7 +157,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     $repertoire_events = get_field('repertoire_events', $post_id, false);
 	if ( empty($repertoire_events) && is_dev_site() ) {
 		// Field repertoire_events is empty -> check to see if updates are in order
-		$ts_info .= '<div class="troubleshooting">'.update_repertoire_events( $post_id ).'</div>';
+		$ts_info .= '<!-- '.update_repertoire_events( $post_id ).' -->';
 	}
     
     if ( $repertoire_events ) { 
@@ -229,6 +229,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     }*/
     
     //$ts_info .= "test"; // tft
+    //$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>';
 	
 	$arr_info['info'] = $info;
     $arr_info['ts_info'] = $ts_info;
@@ -239,9 +240,12 @@ function get_cpt_repertoire_content( $post_id = null ) {
 /*********** CPT: EDITION ***********/
 function get_cpt_edition_content( $post_id = null ) {
 	
+	// Init vars
 	$info = "";
+	$ts_info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
-	$info .= "<!-- edition post_id: $post_id -->";
+	
+	$ts_info .= "<!-- edition post_id: $post_id -->";
     
     // Musical Work
     if ( get_field( 'repertoire_editions', $post_id )  ) {
@@ -252,14 +256,15 @@ function get_cpt_edition_content( $post_id = null ) {
             //$info .= "<h3>".$musical_work->post_title."</h3>";
         }
     } elseif ( get_field( 'musical_work', $post_id )  ) {
-        $info .= '<p class="devinfo">'."This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.".'</p>';
+        //$ts_info .= '<p class="devinfo">'."This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field.".'</p>';
+        $ts_info .= '<!-- NB: This record requires an update. It is using the old musical_work field and should be updated to use the new bidirectional repertoire_editions field -->';
         $musical_works = get_field( 'musical_work', $post_id );
         //$info .= '<pre>'.print_r($musical_works, true).'</pre>';
         foreach ( $musical_works as $musical_work ) {
             $info .= "<h3>".$musical_work->post_title."</h3>";
         }
     } else {
-        $info .= "No musical_work found for edition with id: $post_id<br />";
+        $ts_info .= "<!-- No musical_work found for edition with id: $post_id -->";
     }
     
     // TODO: use get_rep_info to make more refined view?
@@ -387,6 +392,7 @@ function get_cpt_edition_content( $post_id = null ) {
     }
 
     $info .= '</table>';
+    $info .= $ts_info;
     
 	return $info;
 	
@@ -395,7 +401,7 @@ function get_cpt_edition_content( $post_id = null ) {
 // Function to determine if rep work is of anonymous or unknown authorship
 function is_anon( $post_id = null ) {
     
-    // init vars
+    // Init vars
 	if ($post_id === null) { $post_id = get_the_ID(); }
     $info = "";
     $composers_str = "";
@@ -405,9 +411,6 @@ function is_anon( $post_id = null ) {
     if ( $post_id === null || get_post_type( $post_id ) != 'repertoire' ) { return null; }
     
     $composers = get_field('composer', $post_id, false);
-    /*if ( get_field( 'composer', $post_id )  ) {
-        $composers_str = the_field( 'composer', $post_id );
-    }*/
 
     foreach ( $composers as $composer ) {
         $composers_str .= get_the_title($composer);
@@ -425,14 +428,15 @@ function is_anon( $post_id = null ) {
 // TODO: add option to make_link for each name
 function str_from_persons_array ( $args = array() ) {
     
+    // TS/logging setup
+    $do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: str_from_persons_array", $do_ts );
+    
+    // Init vars
     $arr_info = array();
     $info = "";
     $ts_info = "";
-    
-    $do_log = true; // false for cleaner logs; true for active TS
-    
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: str_from_persons_array", $do_log );
     
     // Defaults
 	$defaults = array(
@@ -445,17 +449,17 @@ function str_from_persons_array ( $args = array() ) {
 		'links'    			=> false,
 	);
 
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
     
-    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true), $do_log );
-    sdg_log( "[ssfpa] person_category: ".$person_category, $do_log );
-    sdg_log( "[ssfpa] post_id: ".$post_id, $do_log );
-    sdg_log( "[ssfpa] format: ".$format, $do_log );
-    sdg_log( "[ssfpa] arr_of: ".$arr_of, $do_log );
-    sdg_log( "[ssfpa] abbr: ".(int)$abbr, $do_log );
-    sdg_log( "[ssfpa] links: ".(int)$links, $do_log );
+    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true), $do_ts );
+    sdg_log( "[ssfpa] person_category: ".$person_category, $do_ts );
+    sdg_log( "[ssfpa] post_id: ".$post_id, $do_ts );
+    sdg_log( "[ssfpa] format: ".$format, $do_ts );
+    sdg_log( "[ssfpa] arr_of: ".$arr_of, $do_ts );
+    sdg_log( "[ssfpa] abbr: ".(int)$abbr, $do_ts );
+    sdg_log( "[ssfpa] links: ".(int)$links, $do_ts );
     
     $ts_info .= "<!-- [ssfpa] format: $format -->";
     $ts_info .= "<!-- [ssfpa] person_category: $person_category -->";
@@ -470,7 +474,7 @@ function str_from_persons_array ( $args = array() ) {
         } else {
             $person_id = $person;
         }*/
-        sdg_log( "[ssfpa] person_id: ".$person_id, $do_log );
+        sdg_log( "[ssfpa] person_id: ".$person_id, $do_ts );
         $ts_info .= "<!-- [ssfpa] person_id: ".$person_id." -->";
         
         // Set up display args to pass to fcn get_person_display_name
@@ -537,10 +541,10 @@ function str_from_persons_array ( $args = array() ) {
 // $format options include: display; post_title; ....? (TODO: better info here)
 function get_authorship_info ( $args = array() ) {
 
-	$do_log = true; // false for cleaner logs; true for active TS
-	
-    sdg_log( "divline2", $do_log ); 
-    sdg_log( "function called: get_authorship_info", $do_log );
+	// TS/logging setup
+	$do_ts = false;
+    sdg_log( "divline2", $do_ts ); 
+    sdg_log( "function called: get_authorship_info", $do_ts );
     
     // Defaults
 	$defaults = array(
@@ -552,15 +556,16 @@ function get_authorship_info ( $args = array() ) {
 		'links'    		=> false,
 	);
 
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	
 	/*
-    sdg_log( "[authorship_info] data: ".print_r($data, true), $do_log );
-    sdg_log( "[authorship_info] format: ".$format, $do_log );
-    sdg_log( "[authorship_info] is_single_work: ".$is_single_work, $do_log );
-    sdg_log( "[authorship_info] show_title: ".$show_title, $do_log );
-    sdg_log( "[authorship_info] abbr: ".(int)$abbr, $do_log );
+    sdg_log( "[authorship_info] data: ".print_r($data, true), $do_ts );
+    sdg_log( "[authorship_info] format: ".$format, $do_ts );
+    sdg_log( "[authorship_info] is_single_work: ".$is_single_work, $do_ts );
+    sdg_log( "[authorship_info] show_title: ".$show_title, $do_ts );
+    sdg_log( "[authorship_info] abbr: ".(int)$abbr, $do_ts );
     */
     
     // Init vars
@@ -669,18 +674,18 @@ function get_authorship_info ( $args = array() ) {
         
     }
     
-    sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
-    //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
+    sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_ts );
+    //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_ts );
     
     // Build the authorship_info string
     
     // 1. Composer(s)
     if ( !empty($composers) ) { //
         
-        sdg_log( "[authorship_info] composers: ".print_r($composers, true), $do_log );
+        sdg_log( "[authorship_info] composers: ".print_r($composers, true), $do_ts );
         
         $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
-        sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_log );
+        sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_ts );
         $ts_info .= "<!-- [authorship_info] persons_args: <pre>".print_r($persons_args, true)."</pre> -->";
         $arr_composers_str = str_from_persons_array ( $persons_args );
         $composer_info = $arr_composers_str['info'];
@@ -691,16 +696,16 @@ function get_authorship_info ( $args = array() ) {
         // Redundant: TODO: instead use is_anon fcn? Any reason why not to do this?
         if ( $composer_info == '[Unknown]' || $composer_info == 'Unknown' || $composer_info == 'Anonymous' || $composer_info == 'Plainsong' ) { //
             $is_anon = true;
-            sdg_log( "[authorship_info] is_anon.", $do_log);
+            sdg_log( "[authorship_info] is_anon.", $do_ts);
         } else {
-            sdg_log( "[authorship_info] NOT is_anon.", $do_log);
+            sdg_log( "[authorship_info] NOT is_anon.", $do_ts);
         }
         if ( $composer_info == "Unknown" || ( $composer_info == "Anonymous" && $anon_info == "" ) ) { 
             $composer_info = "";
         }
         
-        sdg_log( "[authorship_info] composer_info: ".$composer_info, $do_log );
-        sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
+        sdg_log( "[authorship_info] composer_info: ".$composer_info, $do_ts );
+        sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_ts );
         
         ///$ts_info .= "<!-- composer_info: ".$composer_info." -->";
         ///$ts_info .= "<!-- anon_info: ".$anon_info." -->";
@@ -711,7 +716,7 @@ function get_authorship_info ( $args = array() ) {
                 if ( $anon_info != "" ) {
                 	$show_anon = "";
                     // 1a. "Anonymous/anon_info"
-                    //sdg_log( "[authorship_info] is_anon + anon_info", $do_log );
+                    //sdg_log( "[authorship_info] is_anon + anon_info", $do_ts );
                     if ( $format == "post_title" || $format == "edition_title" || $format == "concert_item" ) {
                         if ( $composer_info != "" ) {
                             $show_anon .= "/";
@@ -927,23 +932,22 @@ function get_excerpted_from( $post_id = null ) {
 // Retrieve full rep title and associated info. 
 // Return formats include 'display' (for front end), 'txt' (for back end(, and 'sanitized' (for DB matching)
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
+	
+	// TS/logging setup
+	$do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: get_rep_info", $do_ts );
     
 	// Init vars
     $arr_info = array();
     $info = "";
-    $ts_info = "";
-    
+    $ts_info = "";    
 	if ( $post_id === null ) { $post_id = get_the_ID(); }
-	
-	$do_log = false; // false for cleaner logs; true for active TS
-	
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_rep_info", $do_log );
     
-    sdg_log( "[get_rep_info] post_id: ".$post_id, $do_log );
-    sdg_log( "[get_rep_info] format: ".$format, $do_log );
-    sdg_log( "[get_rep_info] show_authorship: ".$show_authorship, $do_log );
-    sdg_log( "[get_rep_info] show_title: ".$show_title, $do_log );
+    sdg_log( "[get_rep_info] post_id: ".$post_id, $do_ts );
+    sdg_log( "[get_rep_info] format: ".$format, $do_ts );
+    sdg_log( "[get_rep_info] show_authorship: ".$show_authorship, $do_ts );
+    sdg_log( "[get_rep_info] show_title: ".$show_title, $do_ts );
     
     // Do nothing if post_id is empty or this is not a rep record
     if ( $post_id === null || get_post_type( $post_id ) != 'repertoire' ) { return null; }

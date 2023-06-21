@@ -526,7 +526,7 @@ function get_personnel_role ( $args = array() ) {
 		'display'    	=> "",
 	);
 	
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
@@ -571,16 +571,16 @@ function get_personnel_role ( $args = array() ) {
 }
 
 function get_personnel_person ( $args = array() ) {
+	
+	// TS/logging setup
+	$do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: get_personnel_person", $do_ts );
 
 	// Init vars
 	$arr_info = array();
 	$person_name = "";
     $ts_info = "";
-	
-	$do_log = true; // false for cleaner logs; true for active TS
-    
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_personnel_person", $do_log );
     
     // Defaults
 	$defaults = array(
@@ -593,7 +593,7 @@ function get_personnel_person ( $args = array() ) {
 		//'person_role'    	=> "", // WIP
 	);
 	
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
@@ -1075,7 +1075,7 @@ function get_program_item_label ( $args = array() ) {
 		'display'    	=> null,
 	);
 	
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	        
@@ -1175,7 +1175,7 @@ function get_program_item_name ( $args = array() ) {
 		'display'    	=> null,
 	);
 	
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
         
@@ -2186,11 +2186,12 @@ function my_em_scope_conditions($conditions, $args){
 //add_filter( 'em_object_build_sql_conditions_args', 'sdg_em_custom_scope_arg',10,1); // CMS(?) -- // WIP -- tmp disabled because not fully working -- DN seem to fire on back end at all
 function sdg_em_custom_scope_arg( $args = array() ){
     
-    $do_log = false; // false for cleaner logs; true for active TS
-    
-    sdg_log( "fcn sdg_em_custom_scope_arg", $do_log );
-    if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
-    sdg_log( "args: ". print_r($args,true), $do_log );
+    // TS/logging setup
+    $do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: sdg_em_custom_scope_arg", $do_ts );
+    if( is_admin() ) { sdg_log( "is_admin", $do_ts ); } else { sdg_log( "NOT is_admin", $do_ts ); }
+    sdg_log( "[secsa] args: ". print_r($args,true), $do_ts );
     //sdg_log("conditions: ". print_r($conditions,true) );
     return $args;
 }
@@ -2198,29 +2199,30 @@ function sdg_em_custom_scope_arg( $args = array() ){
 add_filter( 'em_events_build_sql_conditions', 'sdg_em_custom_scope_condition',10,2);
 function sdg_em_custom_scope_condition( $conditions, $args ){
 
-	$do_log = false; // false for cleaner logs; true for active TS
-	
-    sdg_log( "fcn sdg_em_custom_scope_condition", $do_log );
+	// TS/logging setup
+	$do_ts = false;
+	sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: sdg_em_custom_scope_condition", $do_ts );
     //sdg_log("args: ". print_r($args,true) );
-    sdg_log( "conditions: ". print_r($conditions,true), $do_log );
+    sdg_log( "[secsc] conditions: ". print_r($conditions,true), $do_ts );
     
-    if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
+    if( is_admin() ) { sdg_log( "is_admin", $do_ts ); } else { sdg_log( "NOT is_admin", $do_ts ); }
     
 	if( is_admin() ) {
 		
         if ( !empty($args['scope']) ) { $scope = $args['scope']; } else { $scope = null; }
 		
 		if ( ! is_array($scope) ) {
-			sdg_log("args['scope']: ".$args['scope'], $do_log);
+			sdg_log("args['scope']: ".$args['scope'], $do_ts);
 		} else {
-			sdg_log("args['scope']: ". print_r($args['scope'],true), $do_log );
+			sdg_log("args['scope']: ". print_r($args['scope'],true), $do_ts );
 		}
         
         if ( !empty($conditions['scope']) ) {
             if ( ! is_array($conditions['scope']) ) {
-                sdg_log( "conditions['scope']".$conditions['scope'], $do_log );
+                sdg_log( "conditions['scope']".$conditions['scope'], $do_ts );
             } else {
-                sdg_log( "conditions['scope']". print_r($conditions['scope'],true), $do_log );
+                sdg_log( "conditions['scope']". print_r($conditions['scope'],true), $do_ts );
             }        
         }
 		
@@ -2233,7 +2235,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
 		
 		if ( in_array($scope, $my_scopes) ) {		
 			
-			sdg_log($scope." is a custom scope.", $do_log);
+			sdg_log($scope." is a custom scope.", $do_ts);
 			$arr_dates = sdg_em_custom_scopes($scope);
 		
 			if ( $arr_dates) {
@@ -2251,7 +2253,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
 		
 	}
     
-    if ( isset($conditions['scope']) ) { sdg_log( "final conditions['scope']: ".$conditions['scope'], $do_log ); }
+    if ( isset($conditions['scope']) ) { sdg_log( "final conditions['scope']: ".$conditions['scope'], $do_ts ); }
     
     //return $args;
     return $conditions;
@@ -2369,10 +2371,10 @@ function sdg_custom_event_search_parameters($args, $array){
 add_filter( 'em_events_build_sql_conditions', 'sdg_custom_event_search_build_sql_conditions',1,2);
 function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     
-    $do_log = false; // false for cleaner logs; true for active TS
-    
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_log );
+    // TS/logging setup
+    $do_ts = false;
+    sdg_log( "divline2", $do_ts );
+    sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_ts );
     
     //sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true) );
     //sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true) );
@@ -2381,7 +2383,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     
     if( !empty($args['series']) && is_numeric($args['series']) ){
         
-        sdg_log( "[sdg_custom_event_search...] series is set and valid: ".$args['series'], $do_log );
+        sdg_log( "[sdg_custom_event_search...] series is set and valid: ".$args['series'], $do_ts );
         $meta_value = '%"'.$args['series'].'"%';
         $sql = $wpdb->prepare(
             "SELECT `event_id` FROM ".EM_EVENTS_TABLE.", `wpstc_postmeta` WHERE `meta_value` LIKE %s AND `meta_key`='events_series' AND ".EM_EVENTS_TABLE.".`post_id` = `wpstc_postmeta`.`post_id`", $meta_value
@@ -2395,7 +2397,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     // The following seems to effect only front-end display. Look into affecting back-end display, also.
     if( !empty($args['scope']) ) {
 		
-        sdg_log( "[sdg_custom_event_search...] scope: ".print_r( $args['scope'],true ), $do_log );
+        sdg_log( "[sdg_custom_event_search...] scope: ".print_r( $args['scope'],true ), $do_ts );
         
 		$scope = $args['scope'];
 		$arr_dates = sdg_em_custom_scopes($scope);

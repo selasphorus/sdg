@@ -34,10 +34,8 @@ function sdg_post_title ( $args = array() ) {
 		'after'  		=> '',
 	);
 
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-
-	// Extract
 	extract( $args );
 	
 	if ( is_int($post) ) { 
@@ -184,10 +182,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 		'return'  	=> 'html',
 	);
 
-	// Parse args
+	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-
-	// Extract
 	extract( $args );
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
@@ -210,10 +206,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 		'readmore'        => false,
 	);
 	
-    // Parse args
+    // Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-
-	// Extract
 	extract( $args );
 	*/
     
