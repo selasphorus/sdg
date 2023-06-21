@@ -1295,13 +1295,15 @@ function get_program_item_name ( $args = array() ) {
 							$row_composer_ids = $composer_ids;
 							if ( !empty($row_composer_ids) ) { $ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; }
 						} else { // subsequent row items
-							// merge arrays
-							if ( is_array($composer_ids) ) { array_merge($row_composer_ids, $composer_ids); }
 							// TODO: hide authorship after row one if ALL items in the row have the same composer
 							if ( !empty($row_composer_ids) && $composer_ids == $row_composer_ids ) {
 								$show_item_authorship = false;
+								$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->";
+								$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->";
 								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->";
 							}
+							// Merge arrays
+							array_merge($row_composer_ids, $composer_ids); //if ( is_array($composer_ids) ) { array_merge($row_composer_ids, $composer_ids); }
 						}
 					}
 				
@@ -1325,7 +1327,7 @@ function get_program_item_name ( $args = array() ) {
 								$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
 								
 								if ( $num_items == 1 || $i > 1 ) { 
-									// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
+									// Hide person dates if already shown in this program OR if this is not the first item in a multi-item row
 									$show_person_dates = false;
 									$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
 								}
