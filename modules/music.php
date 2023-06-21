@@ -897,6 +897,11 @@ function get_authorship_info ( $args = array() ) {
 
 // Excerpted From
 function get_excerpted_from( $post_id = null ) {
+
+	// TS/logging setup
+	$do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log ); 
     
     // Init vars
     $arr_info = array();
