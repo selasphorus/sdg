@@ -466,7 +466,7 @@ function sdg_scripts_method() {
     
     $fpath = WP_PLUGIN_DIR . '/sdg/sdg.css';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "230621"; }  
-    wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', NULL ); // , $ver
+    wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', $ver );
     
     $fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "201209"; }    
