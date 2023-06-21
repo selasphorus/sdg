@@ -251,7 +251,7 @@ function get_person_dates( $post_id, $styled = false ) {
     
     // Init vars
     $info = ""; // init
-    if ( $styled == 'false' ) { $styled = false; } else { $styled = true; }// just in case...
+    //if ( $styled == 'false' ) { $styled = false; } else { $styled = true; }// just in case...
     $do_log = false; // false for cleaner logs; true for active TS
     
     sdg_log( "divline2", $do_log );
