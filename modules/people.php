@@ -14,7 +14,7 @@ function get_person_display_name ( $args = array() ) {
 	
 	// Init vars
 	$arr_results = array();
-    $info = "";
+    $display_name = "";
     $ts_info = "";
 	
 	$do_log = true; // false for cleaner logs; true for active TS
