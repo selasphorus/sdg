@@ -13,7 +13,7 @@ if ( !function_exists( 'add_action' ) ) {
 function get_person_display_name ( $args = array() ) {
 	
 	// Init vars
-	$arr_results = array();
+	$arr_info = array();
     $display_name = "";
     $ts_info = "";
 	
@@ -107,10 +107,10 @@ function get_person_display_name ( $args = array() ) {
 	}
 	
 	//return $display_name;
-	$arr_results['display_name'] = $display_name;
-	$arr_results['info'] = $ts_info;
+	$arr_info['info'] = $display_name;
+	$arr_info['ts_info'] = $ts_info;
 	
-	return $arr_results;
+	return $arr_info;
 	
 }
 

@@ -512,8 +512,7 @@ function str_from_persons_array ( $args = array() ) {
         
         // Get the display_name
         $arr_person_name = get_person_display_name( $display_args );
-        $person_name = $arr_person_name['display_name'];
-            
+        $person_name = $arr_person_name['info'];            
         $info .= $person_name;
         $ts_info .= $arr_person_name['ts_info'];
 
@@ -526,7 +525,7 @@ function str_from_persons_array ( $args = array() ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
-    $arr_info['str'] = $info;
+    $arr_info['info'] = $info;
 	$arr_info['ts_info'] = $ts_info;
 	
 	return $arr_info;
@@ -619,7 +618,7 @@ function get_authorship_info ( $args = array() ) {
         if ( $composers ) { 
             $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => 'objects', 'abbr' => false, 'links' => $links );
             $arr_composers_str = str_from_persons_array ( $persons_args );
-            $composers_str = $arr_composers_str['str'];
+            $composers_str = $arr_composers_str['info'];
             $ts_composers = $arr_composers_str['ts_info'];
             $ts_info .= $ts_composers;
             //args: $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
@@ -684,7 +683,7 @@ function get_authorship_info ( $args = array() ) {
         sdg_log( "[authorship_info] persons_args: ".print_r($persons_args, true), $do_log );
         $ts_info .= "<!-- [authorship_info] persons_args: <pre>".print_r($persons_args, true)."</pre> -->";
         $arr_composers_str = str_from_persons_array ( $persons_args );
-        $composer_info = $arr_composers_str['str'];
+        $composer_info = $arr_composers_str['info'];
         $ts_composers = $arr_composers_str['ts_info'];
         $ts_info .= $ts_composers;
                 
@@ -778,7 +777,7 @@ function get_authorship_info ( $args = array() ) {
 
         $persons_args = array( 'arr_persons' => $arrangers, 'person_category' => 'arrangers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_arrangers_info = str_from_persons_array ( $persons_args );
-        $arrangers_info = $arr_arrangers_info['str'];
+        $arrangers_info = $arr_arrangers_info['info'];
         $ts_arrangers = $arr_arrangers_info['ts_info'];
         $ts_info .= $ts_arrangers;
 
@@ -808,7 +807,7 @@ function get_authorship_info ( $args = array() ) {
 
         $persons_args = array( 'arr_persons' => $transcribers, 'person_category' => 'transcribers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_transcribers_info = str_from_persons_array ( $persons_args );
-        $transcribers_info = $arr_transcribers_info['str'];
+        $transcribers_info = $arr_transcribers_info['info'];
         $ts_transcribers = $arr_transcribers_info['ts_info'];
         $ts_info .= $ts_transcribers;
 
@@ -837,7 +836,7 @@ function get_authorship_info ( $args = array() ) {
         
         $persons_args = array( 'arr_persons' => $librettists, 'person_category' => 'librettists', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_librettists_info = str_from_persons_array ( $persons_args );
-        $librettists_info = $arr_librettists_info['str'];
+        $librettists_info = $arr_librettists_info['info'];
         $ts_librettists = $arr_librettists_info['ts_info'];
         $ts_info .= $ts_librettists;
 
@@ -859,7 +858,7 @@ function get_authorship_info ( $args = array() ) {
 
         $persons_args = array( 'arr_persons' => $translators, 'person_category' => 'translators', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_translators_info = str_from_persons_array ( $persons_args );
-        $translators_info = $arr_translators_info['str'];
+        $translators_info = $arr_translators_info['info'];
         $ts_translators = $arr_translators_info['ts_info'];
         $ts_info .= $ts_translators;
 		

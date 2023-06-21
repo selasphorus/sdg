@@ -649,8 +649,8 @@ function get_personnel_person ( $args = array() ) {
 			
 			// Get the display_name
         	$arr_person_name = get_person_display_name( $display_args );
-        	$person_name = $arr_person_name['display_name']."<br />";
-        	$ts_info .= $arr_person_name['info'];
+        	$person_name = $arr_person_name['info']."<br />";
+        	$ts_info .= $arr_person_name['ts_info'];
         
 		}
 	

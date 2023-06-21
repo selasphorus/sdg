@@ -422,8 +422,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             //sdg_log( "editors: ".print_r($editors, true) );
             $persons_args = array( 'arr_persons' => $editors, 'person_category' => 'editors', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => false );
             $arr_editors_str = str_from_persons_array ( $persons_args );
-            $editors_str = $arr_editors_str['str'];
-            $ts_editors = $arr_editors_str['info'];
+            $editors_str = $arr_editors_str['info'];
+            $ts_editors = $arr_editors_str['ts_info'];
             $ts_info .= $ts_editors;
             //sdg_log( "editors_str: ".$editors_str );
             sdg_log( "-----", $do_log );
