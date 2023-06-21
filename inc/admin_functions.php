@@ -316,6 +316,8 @@ function update_title_for_matching ( $post_id ) {
 
 function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
     
+    // Init vars
+    $ts_info = "";
     $do_log = true;
     
     sdg_log( "divline2", $do_log );

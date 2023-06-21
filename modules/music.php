@@ -148,7 +148,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
 	
     $arr_rep_info = get_rep_info( $program_item_obj_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
 	$rep_info = $arr_item_name['rep_info'];
-	$ts_info .= = $arr_item_name['info'];
+	$ts_info .= $arr_item_name['info'];
 						
 	if ( $rep_info ) {
         //$rep_content .= "<h3>The Work:</h3>";
@@ -1064,13 +1064,13 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     } // END if ( $show_authorship == true ):
     
     if ( $format == 'sanitized' ) { 
-        $rep_info = super_sanitize_title( $info );
+        $rep_info = super_sanitize_title( $rep_info );
     } else if ( $format == 'txt' ) { 
         //$rep_info = super_sanitize_title( $info );
     } else if ( $is_single_work == true ) {
         $ts_info .= "<!-- test -->";
     } else {
-        $rep_info = make_link( get_the_permalink( $post_id ), $info, 'subtle', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
+        $rep_info = make_link( get_the_permalink( $post_id ), $rep_info, 'subtle', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
     }
 	
 	$arr_info['rep_info'] = $rep_info;

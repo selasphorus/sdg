@@ -373,7 +373,6 @@ function get_event_personnel( $atts = [] ) {
             
             }
             
-            
             // Check for extra (empty) import rows -- prep to delete them
             if ( ( $row_type != "header" && empty($person_role) && empty($person_name) ) 
             	|| ( $row_type == "header" && empty($header_txt) )
@@ -574,8 +573,8 @@ function get_personnel_person ( $args = array() ) {
 
 	// Init vars
 	$arr_results = array();
-    $ts_info = "";
 	$person_name = "";
+    $ts_info = "";
 	
 	$do_log = true; // false for cleaner logs; true for active TS
     
@@ -657,8 +656,6 @@ function get_personnel_person ( $args = array() ) {
 		// Trim trailing <br />
 		$person_name = substr($person_name, 0, -6);
 		
-	} else { 
-                
 	}
 	
 	if ( empty($person_name) ) {
@@ -864,8 +861,8 @@ function get_event_program_items( $atts = [] ) {
             if ( $num_row_items > 1 ) { $groupings = true; }
                 
             if ( $arr_item_name['program_composers'] ) { $program_composers = $arr_item_name['program_composers']; } // TODO: figure out how to pass program_composers *by reference*
-            if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } else { $show_person_dates = false; }
-            $row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
+            if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
+            //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
             $row_info .= "<!-- START arr_item_name['info'] -->";
             $row_info .= $arr_item_name['info']; // info is already commented
@@ -1154,11 +1151,11 @@ function get_program_item_name ( $args = array() ) {
 	// WIP!
 	// Init vars
 	$arr_results = array();
-	$ts_info = "";
     $item_name = "";
 	$program_item_name = "";
 	$title_as_label = "";
     $show_person_dates = true;
+	$ts_info = "";
     
     $ts_info .= "<!-- ******* get_program_item_name ******* -->";
     //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
@@ -1190,10 +1187,10 @@ function get_program_item_name ( $args = array() ) {
     $num_items = 0; // init
     
 	if ( isset($row['program_item']) && is_array($row['program_item']) ) {
-	
-        //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
 
-		$num_items = count($row['program_item']);
+        //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
+        $num_items = count($row['program_item']);
+		
 		if ( $num_items > 1 ) {
 			// TODO: deal w/ special case of multiple items per program row -- variations per row_type, program_type...
 			$ts_info .= "<!-- *** $num_items program_items found for this row! *** -->";
@@ -1315,7 +1312,7 @@ function get_program_item_name ( $args = array() ) {
 					
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
 						$item_name = $arr_item_name['rep_info'];
-						$ts_info .= = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['info'];
 					
 					} else if ( empty($program_item_label) ) {
 
@@ -1324,7 +1321,7 @@ function get_program_item_name ( $args = array() ) {
 						// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
 						$title_as_label = $arr_item_name['rep_info'];
-						$ts_info .= = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['info'];
 												
 						// TODO: figure out how to show auth info only for one item if all items in group have same info...
 						// WIP
@@ -1339,7 +1336,7 @@ function get_program_item_name ( $args = array() ) {
 
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
 						$item_name = $arr_item_name['rep_info'];
-						$ts_info .= = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['info'];
 
 					}
 
