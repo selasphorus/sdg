@@ -1203,8 +1203,14 @@ function sdg_get_terms_orderby( $orderby, $args ) {
 // WIP -- add term to post programmatically
 function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonomy = "", $return_info = false ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
     $term_ids = array();
-    $info = "";
+    $ts_info = "";
     $result = null;
     
     // If post_id is empty, abort
@@ -1225,35 +1231,37 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
     foreach ( $arr_term_slugs as $term_slug ) {
         
         foreach ( $taxonomies as $taxonomy ) {
-        	//$term = term_exists( $term_slug, $taxonomy );
-        	//if ( !empty($term) ) {}
+        	$arr_term = term_exists( $term_slug, $taxonomy );
+        	if ( $arr_term ) {
+        		if ( has_term( $term_slug, $taxonomy ) ) {
+					$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
+					return $ts_info;
+				}
+        		$term_ids[] = $arr_term['term_id'];
+        	}
         }
         
         //$term = get_term_by( 'slug', $term_slug, $taxonomy_name );
         //$term_id = $term->term_id; // get term id from slug
         //$term_ids[] = $term_id;
         
-        if ( has_term( $term_slug, $taxonomy ) ) {
-            return "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
-        } else {
-            $result = wp_set_post_terms( $post_id, $term_ids, $taxonomy, true ); // wp_set_post_terms( int $post_id, string|array $tags = '', string $taxonomy = 'post_tag', bool $append = false )
-        }
+        $result = wp_set_post_terms( $post_id, $term_ids, $taxonomy, true );
         
     }
     
-    if ( $return_info == true ) {
+    if ( $return_info ) {
         
-        $info .= "<!-- [sdg_add_post_term] ";
-        $info .= "$taxonomy: $term_slug ";
-        //$info .= implode(", ",$arr_term_slugs)." -- ";
+        $ts_info .= "<!-- [sdg_add_post_term] ";
+		$ts_info .= "term_ids: ".print_r($term_ids, true);
+        //$ts_info .= "$taxonomy: $term_slug ";
+        //$ts_info .= implode(", ",$arr_term_slugs)." -- ";
         if ( $result ) { 
-			$info .= ">> success! "; 
+			$ts_info .= ">> success! "; 
 		} else { 
-			$info .= ">> FAILED! ";
-			$info .= print_r($term_ids, true);
+			$ts_info .= ">> FAILED! ";
 		}
-        $info .= " -->";
-        return $info;
+        $ts_info .= " -->";
+        return $ts_info;
         
     } else {
         
