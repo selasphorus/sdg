@@ -636,7 +636,7 @@ function get_authorship_info ( $args = array() ) {
         $anon_info = get_post_meta( $post_id, 'anon_info', true ); // post_meta ok for text fields... but is it better/faster? TODO: RS //$anon_info = get_field( $post_id, 'anon_info', false );//
 
         // TODO: streamline this -- maybe along the lines of is_anon?
-        if ( $format == 'display' ) { $info .= "<!-- display_composer: ".$display_composer." -->"; } // tft
+        if ( $format == 'display' ) { $ts_info .= "<!-- display_composer: ".$display_composer." -->"; } // tft
         if ( $display_composer == 'Plainsong' ) { 
             $plainsong = true;
             if ( $anon_info == "" ) {
