@@ -887,8 +887,8 @@ function get_event_program_items( $atts = [] ) {
             
             //if ( $arr_item_name['title_as_label'] != "" ) {
             if ( $arr_item_name['use_title_as_label'] ) {
-            	$program_item_label = $arr_item_name['title_as_label'];
                 $use_title_as_label = true;
+            	$program_item_label = $arr_item_name['program_title_as_label'];
             	$row_info .= "<!-- title_as_label -->";
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
