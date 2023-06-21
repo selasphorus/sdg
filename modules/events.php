@@ -876,7 +876,7 @@ function get_event_program_items( $atts = [] ) {
             if ( $show_item_label == true ) {
 				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 				$program_item_label = $arr_item_label['item_label'];
-				$row_info .= $arr_item_label['info'];
+				$row_info .= $arr_item_label['ts_info'];
             }
             
             // Get the program item name
@@ -890,6 +890,8 @@ function get_event_program_items( $atts = [] ) {
                 $use_title_as_label = true;
             	$program_item_label = $arr_item_name['program_title_as_label'];
             	$row_info .= "<!-- title_as_label -->";
+            } else {
+            	$use_title_as_label = false;
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
