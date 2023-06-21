@@ -46,9 +46,8 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 function get_related_events ( $meta_field = null, $term_id = null, $return_fields = 'ids' ) {
 
     // Init vars
-    $arr_results = array();
-    $info = "";
-    $meta_key = "";
+    $arr_info = array();
+    $ts_info = "";
     
     // Determine meta_key based on field name, with XYZ as a wildcard placeholder (must do this to avoid hashing)
     if ( $meta_field == "program_label" ) {
@@ -59,9 +58,11 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
         $meta_key = "personnel_XYZ_role";
     } else if ( $meta_field == "person" ) {
         $meta_key = "personnel_XYZ_person";
+    } else {
+    	$meta_key = "";
     }
     
-    $info .= "meta_field: ".$meta_field."; meta_key: ".$meta_key."; term_id: ".$term_id."<br />";
+    $ts_info .= "meta_field: ".$meta_field."; meta_key: ".$meta_key."; term_id: ".$term_id."<br />";
     
     // Build query args
     $args = array(
@@ -84,23 +85,23 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
     $query = new WP_Query( $args );
     $event_posts = $query->posts;
     
-    $arr_results['event_posts'] = $event_posts;
 
-    $info .= "args: <pre>".print_r($args, true)."</pre>";
-    $info .= "event_posts: <pre>".print_r($event_posts, true)."</pre>";
-    $info .= "Last SQL-Query: <pre>{$query->request} </pre><br />";
+    $ts_info .= "args: <pre>".print_r($args, true)."</pre>";
+    $ts_info .= "event_posts: <pre>".print_r($event_posts, true)."</pre>";
+    $ts_info .= "Last SQL-Query: <pre>{$query->request} </pre><br />";
     
     if ( $event_posts ) {
         // WIP
     } else {
-        $info .= "No related events found.<br />";
-        //$info .= "Last SQL-Query: <pre>{$query->request} </pre><br />";
-        //$info .= "Query object: <pre>{$query} </pre><br />";
+        $ts_info .= "No related events found.<br />";
+        //$ts_info .= "Last SQL-Query: <pre>{$query->request} </pre><br />";
+        //$ts_info .= "Query object: <pre>{$query} </pre><br />";
     }
     
-    $arr_results['info'] = $info;
+    $arr_info['event_posts'] = $event_posts;
+    $arr_info['ts_info'] = $ts_info;
     
-    return $arr_results;
+    return $arr_info;
     
 }
 
@@ -508,7 +509,7 @@ function get_event_personnel( $atts = [] ) {
 function get_personnel_role ( $args = array() ) {
 	
 	// Init vars
-	$arr_results = array();
+	$arr_info = array();
 	$info = "";
 	$person_role = "";
     $placeholder_label = false;
@@ -562,17 +563,17 @@ function get_personnel_role ( $args = array() ) {
 		
 	}
 	
-	$arr_results['person_role'] = $person_role;
-	$arr_results['info'] = $info;
+	$arr_info['person_role'] = $person_role;
+	$arr_info['info'] = $info;
 	
-	return $arr_results;
+	return $arr_info;
             
 }
 
 function get_personnel_person ( $args = array() ) {
 
 	// Init vars
-	$arr_results = array();
+	$arr_info = array();
 	$person_name = "";
     $ts_info = "";
 	
@@ -691,10 +692,10 @@ function get_personnel_person ( $args = array() ) {
 			
 	}
 	
-	$arr_results['person_name'] = $person_name;
-	$arr_results['info'] = $ts_info;
+	$arr_info['person_name'] = $person_name;
+	$arr_info['ts_info'] = $ts_info;
 	
-	return $arr_results;
+	return $arr_info;
 }
 
 
@@ -1056,7 +1057,7 @@ function get_event_program_items( $atts = [] ) {
 function get_program_item_label ( $args = array() ) {
 	
 	// Init vars
-	$arr_results = array();
+	$arr_info = array();
 	$info = "";
 	$item_label = "";
 	$placeholder_label = false;
@@ -1138,10 +1139,10 @@ function get_program_item_label ( $args = array() ) {
 	}
     
 	//
-	$arr_results['item_label'] = $item_label;
-	$arr_results['info'] = $info;
+	$arr_info['item_label'] = $item_label;
+	$arr_info['info'] = $info;
 	
-	return $arr_results;
+	return $arr_info;
 	
 }
 
@@ -1150,7 +1151,7 @@ function get_program_item_name ( $args = array() ) {
 
 	// WIP!
 	// Init vars
-	$arr_results = array();
+	$arr_info = array();
     $item_name = "";
 	$program_item_name = "";
 	$title_as_label = "";
@@ -1328,8 +1329,8 @@ function get_program_item_name ( $args = array() ) {
 						if ( $show_item_authorship == true ) { 
 							$authorship_args = array( 'data' => array( 'post_id' => $program_item_obj_id ), 'format' => 'concert_item', 'abbr' => false );
 							$arr_authorship_info = get_authorship_info ( $authorship_args );
-            				$item_name = $arr_authorship_info['authorship'];
-            				$ts_info .= $arr_authorship_info['info'];
+            				$item_name = $arr_authorship_info['info'];
+            				$ts_info .= $arr_authorship_info['ts_info'];
 						}
 
 					} else {
@@ -1440,14 +1441,14 @@ function get_program_item_name ( $args = array() ) {
     $ts_info .= "<!-- program_item_name: $program_item_name -->";
     
 	//
-	$arr_results['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
-	$arr_results['item_name'] = $program_item_name;
-    $arr_results['num_items'] = $num_items; // wip
-	$arr_results['program_composers'] = $program_composers;
-	$arr_results['show_person_dates'] = $show_person_dates;
-	$arr_results['info'] = $ts_info;
+	$arr_info['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
+	$arr_info['item_name'] = $program_item_name;
+    $arr_info['num_items'] = $num_items; // wip
+	$arr_info['program_composers'] = $program_composers;
+	$arr_info['show_person_dates'] = $show_person_dates;
+	$arr_info['ts_info'] = $ts_info;
 	
-	return $arr_results;
+	return $arr_info;
 	
 }
 

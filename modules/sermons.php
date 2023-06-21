@@ -224,7 +224,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
     // TODO: Check to see if related_event field for sermon is populated; if not, try matching via program rows and then store the matching value(s) in that custom sermon field.
     $related_events = get_related_events ( "program_item", $post_id ); // 
     $event_posts = $related_events['event_posts'];
-    $related_events_info = $related_events['info'];
+    $related_events_info = $related_events['ts_info'];
     
     if ( $event_posts ) { 
         if ($authors) { $info .= " | "; }

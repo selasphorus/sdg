@@ -36,7 +36,6 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 		// No event_ids were submitted -> run a query to find ALL event_ids for events with programs containing the rep_id		
 		$related_events = get_related_events ( "program_item", $rep_id );
 		$arr_event_ids = $related_events['event_posts'];
-		//$related_events_info = $related_events['info'];
 	
 		if ( empty($arr_event_ids) ) {
 			$info .= "No related events were found using the get_related_events fcn.<br />"; // tft
@@ -97,7 +96,6 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 		// No litdate_ids were submitted -> run a query to find ALL litdate_ids for litdates with programs containing the rep_id		
 		$related_litdates = get_related_litdates ( "program_item", $rep_id );
 		$arr_litdate_ids = $related_litdates['litdate_posts'];
-		//$related_litdates_info = $related_litdates['info'];
 	
 		if ( empty($arr_litdate_ids) ) {
 			$info .= "No related litdates were found using the get_related_litdates fcn.<br />"; // tft
@@ -148,7 +146,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
 	
     $arr_rep_info = get_rep_info( $program_item_obj_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
 	$rep_info = $arr_item_name['rep_info'];
-	$ts_info .= $arr_item_name['info'];
+	$ts_info .= $arr_item_name['ts_info'];
 						
 	if ( $rep_info ) {
         //$rep_content .= "<h3>The Work:</h3>";
@@ -233,7 +231,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
     //$ts_info .= "test"; // tft
 	
 	$arr_info['rep_content'] = $rep_content;
-    $arr_info['info'] = $ts_info;
+    $arr_info['ts_info'] = $ts_info;
     
     return $arr_info;
 }
@@ -427,7 +425,7 @@ function is_anon( $post_id = null ) {
 // TODO: add option to make_link for each name
 function str_from_persons_array ( $args = array() ) {
     
-    $arr_results = array();
+    $arr_info = array();
     $info = "";
     $ts_info = "";
     
@@ -517,7 +515,7 @@ function str_from_persons_array ( $args = array() ) {
         $person_name = $arr_person_name['display_name'];
             
         $info .= $person_name;
-        $ts_info .= $arr_person_name['info'];
+        $ts_info .= $arr_person_name['ts_info'];
 
         if (count($arr_persons) > 1) { $info .= ", "; }
 
@@ -528,10 +526,10 @@ function str_from_persons_array ( $args = array() ) {
         $info = substr($info, 0, -2); // trim off trailing comma
     }
     
-    $arr_results['str'] = $info;
-	$arr_results['info'] = $ts_info;
+    $arr_info['str'] = $info;
+	$arr_info['ts_info'] = $ts_info;
 	
-	return $arr_results;
+	return $arr_info;
     
 }
 
@@ -622,7 +620,7 @@ function get_authorship_info ( $args = array() ) {
             $persons_args = array( 'arr_persons' => $composers, 'person_category' => 'composers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => 'objects', 'abbr' => false, 'links' => $links );
             $arr_composers_str = str_from_persons_array ( $persons_args );
             $composers_str = $arr_composers_str['str'];
-            $ts_composers = $arr_composers_str['info'];
+            $ts_composers = $arr_composers_str['ts_info'];
             $ts_info .= $ts_composers;
             //args: $arr_persons, $person_category = null, $post_id = null, $format = 'display', $arr_of = "objects", $abbr = false ) {
         }
@@ -687,7 +685,7 @@ function get_authorship_info ( $args = array() ) {
         $ts_info .= "<!-- [authorship_info] persons_args: <pre>".print_r($persons_args, true)."</pre> -->";
         $arr_composers_str = str_from_persons_array ( $persons_args );
         $composer_info = $arr_composers_str['str'];
-        $ts_composers = $arr_composers_str['info'];
+        $ts_composers = $arr_composers_str['ts_info'];
         $ts_info .= $ts_composers;
                 
         // TODO: check instead by ID? Would be more accurate and would allow for comments to be returned by fcn str_from_persons_array
@@ -759,14 +757,14 @@ function get_authorship_info ( $args = array() ) {
 
         if ( $is_single_work == true && $composer_info != "" ) {
             if ( $is_anon == false ) { 
-                $info .= "Composer(s): ";
+                $authorship_info .= "Composer(s): ";
             } else if ( $plainsong == true || stripos($composer_info, 'tone') || stripos($composer_info, 'Plainsong') || stripos($anon_info, 'Plainsong') || $anon_info == 'Plainsong' ) { // also "mode"? -- 
                 // TODO after upgrade to PHP 8: str_contains ( string $haystack , string $needle )
-                $info .= "Tone/Mode: ";
+                $authorship_info .= "Tone/Mode: ";
             } else {
-                $info .= "Authorship: ";
+                $authorship_info .= "Authorship: ";
             }
-            $info .= $composer_info."<br />";
+            $authorship_info .= $composer_info."<br />";
         } else {
             $authorship_info .= $composer_info;
         }
@@ -781,11 +779,11 @@ function get_authorship_info ( $args = array() ) {
         $persons_args = array( 'arr_persons' => $arrangers, 'person_category' => 'arrangers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_arrangers_info = str_from_persons_array ( $persons_args );
         $arrangers_info = $arr_arrangers_info['str'];
-        $ts_arrangers = $arr_arrangers_info['info'];
+        $ts_arrangers = $arr_arrangers_info['ts_info'];
         $ts_info .= $ts_arrangers;
 
         if ( $is_single_work == true && $arrangers_info != "") {
-            $info .= "Arranger(s): ".$arrangers_info."<br />";
+            $authorship_info .= "Arranger(s): ".$arrangers_info."<br />";
         } else {
             if ( $authorship_info != "" ) {
                 //$authorship_info .= ", ";
@@ -811,12 +809,12 @@ function get_authorship_info ( $args = array() ) {
         $persons_args = array( 'arr_persons' => $transcribers, 'person_category' => 'transcribers', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_transcribers_info = str_from_persons_array ( $persons_args );
         $transcribers_info = $arr_transcribers_info['str'];
-        $ts_transcribers = $arr_transcribers_info['info'];
+        $ts_transcribers = $arr_transcribers_info['ts_info'];
         $ts_info .= $ts_transcribers;
 
         if ( $transcribers_info != "" ) {
             if ( $is_single_work == true ) {
-                $info .= "Transcriber(s): ".$transcribers_info."<br />";
+                $authorship_info .= "Transcriber(s): ".$transcribers_info."<br />";
             } else {
                 if ( $authorship_info != "" ) {
                     //$authorship_info .= ", ";
@@ -840,11 +838,11 @@ function get_authorship_info ( $args = array() ) {
         $persons_args = array( 'arr_persons' => $librettists, 'person_category' => 'librettists', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_librettists_info = str_from_persons_array ( $persons_args );
         $librettists_info = $arr_librettists_info['str'];
-        $ts_librettists = $arr_librettists_info['info'];
+        $ts_librettists = $arr_librettists_info['ts_info'];
         $ts_info .= $ts_librettists;
 
         if ( $is_single_work == true && $librettists_info != "") {
-            $info .= "Librettist(s): ".$librettists_info."<br />";
+            $authorship_info .= "Librettist(s): ".$librettists_info."<br />";
         } else {
         	if ( $html ) { 
 				$authorship_info .= '<span class="librettist">text by '.$librettists_info.'</span>';
@@ -862,11 +860,11 @@ function get_authorship_info ( $args = array() ) {
         $persons_args = array( 'arr_persons' => $translators, 'person_category' => 'translators', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => $links );
         $arr_translators_info = str_from_persons_array ( $persons_args );
         $translators_info = $arr_translators_info['str'];
-        $ts_translators = $arr_translators_info['info'];
+        $ts_translators = $arr_translators_info['ts_info'];
         $ts_info .= $ts_translators;
 		
         if ( $is_single_work == true && $translators_info != "") {
-            $info .= "Translator(s): ".$translators_info."<br />";
+            $authorship_info .= "Translator(s): ".$translators_info."<br />";
         } else {
         	if ( $html ) { 
 				$authorship_info .= '<span class="librettist">transl. '.$translators_info.'</span>';
@@ -878,12 +876,8 @@ function get_authorship_info ( $args = array() ) {
 
     }
     
-    //$authorship_info .= $ts_info;
-    
-    //return $authorship_info;
-    
-    $arr_info['authorship'] = $authorship_info;
-    $arr_info['info'] = $ts_info;
+    $arr_info['info'] = $authorship_info;
+    $arr_info['ts_info'] = $ts_info;
     
     return $arr_info;
     
@@ -924,8 +918,8 @@ function get_excerpted_from( $post_id = null ) {
         $excerpted_from = null;
     }
     
-    $arr_info['excerpted_from'] = $excerpted_from;
-    $arr_info['info'] = $ts_info;
+    $arr_info['info'] = $excerpted_from;
+    $arr_info['ts_info'] = $ts_info;
     
     return $arr_info;
     
@@ -1003,8 +997,8 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     }
     
     $arr_excerpted_from = get_excerpted_from( $post_id );
-    $excerpted_from = $arr_excerpted_from['excerpted_from'];
-    if ( $format == 'display' ) { $rep_info .= $arr_excerpted_from['info']; }
+    $excerpted_from = $arr_excerpted_from['info'];
+    if ( $format == 'display' ) { $rep_info .= $arr_excerpted_from['ts_info']; }
        
     if ( $excerpted_from != "" ) {
         if ( $is_single_work == true ) {
@@ -1051,8 +1045,8 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
         $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title ); // $title_clean
         $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title );
         $arr_authorship_info = get_authorship_info ( $authorship_args );
-        $authorship_info = $arr_authorship_info['authorship'];
-        $ts_info .= $arr_authorship_info['info'];
+        $authorship_info = $arr_authorship_info['info'];
+        $ts_info .= $arr_authorship_info['ts_info'];
         
         // ( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) 
         if ( $authorship_info != "Unknown" ) {
@@ -1074,7 +1068,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     }
 	
 	$arr_info['rep_info'] = $rep_info;
-	$arr_info['info'] = $ts_info;
+	$arr_info['ts_info'] = $ts_info;
 	
 	return $arr_info;
 	
@@ -2241,9 +2235,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
 				
 					$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-					$info .= '<div class="troubleshooting">'.$posts_info['troubleshooting'].'</div>';
-					//$ts_info .= $posts_info['info']."<hr />";
-					//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+					$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
 				
 					// Print last SQL query string
 					//global $wpdb;
@@ -2267,7 +2259,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
 
                     $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
-					$info .= '<div class="troubleshooting">'.$related_posts_info['troubleshooting'].'</div>';
+					$info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>';
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
@@ -2364,8 +2356,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 $arr_posts = $posts_info['arr_posts'];//$posts_info['arr_posts']->posts; // Retrieves an array of WP_Post Objects
                 
-                $ts_info .= $posts_info['info']."<hr />";
-                //$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+                $ts_info .= $posts_info['ts_info']."<hr />";
                 
                 if ( !empty($arr_posts) ) {
                     
@@ -2502,8 +2493,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= "&nbsp;";
         $authorship_args = array( 'data' => array( 'post_id' => $post_id ), 'format' => 'display', 'abbr' => false, 'is_single_work' => false, 'show_title' => false, 'links' => true );
         $arr_authorship_info = get_authorship_info ( $authorship_args );
-		$authorship_info = $arr_authorship_info['authorship'];
-		$ts_info .= $arr_authorship_info['info'];
+		$authorship_info = $arr_authorship_info['info'];
+		$ts_info .= $arr_authorship_info['ts_info'];
         $info .= $authorship_info;
         /*
         $info .= " by ";
@@ -2522,7 +2513,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         
         // Excerpted from
         $arr_excerpted_from = get_excerpted_from( $post_id );
-    	$excerpted_from = $arr_excerpted_from['excerpted_from'];
+    	$excerpted_from = $arr_excerpted_from['info'];
         if ( $excerpted_from ) { $info .= '<br /><span class="excerpted_from">Excerpted from: '.$excerpted_from.'</span>'; }
         
         // Tune Name
@@ -2636,7 +2627,6 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
 		/*
 		$related_events = get_related_events ( "program_item", $post_id );
 		$event_post_ids = $related_events['event_posts'];
-		$related_events_info = $related_events['info'];
 
 		if ( $event_post_ids ) {
 			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';

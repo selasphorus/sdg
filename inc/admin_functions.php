@@ -203,12 +203,13 @@ function update_title_for_matching ( $post_id ) {
     
     sdg_log( "function: sdg_update_title_for_matching", $do_log );
     
+    // Init vars
     $post = get_post( $post_id );
     $post_title = $post->post_title;
     $post_type = $post->post_type;
-    
-    $info = ""; // init
+    //
     $new_t4m = "";
+    $ts_info = "";
     $revised = false;
     
     $t4m = get_post_meta( $post_id, 'title_for_matching', true ); // get_post_meta( int $post_id, string $key = '', bool $single = false ) -- Return val will be an array if $single is false. Will be value of the meta field if $single is true.
@@ -218,11 +219,11 @@ function update_title_for_matching ( $post_id ) {
         sdg_log( "No title_clean stored in post_meta for this post -> use make_clean_title", $do_log );
         $title_clean = make_clean_title( $post_id );
     }
-    $info .= "<!-- post_title: $post_title // title_clean: $title_clean // t4m: $t4m -->";
+    $ts_info .= "<!-- post_title: $post_title // title_clean: $title_clean // t4m: $t4m -->";
  
     if ( !empty($t4m) ) {
         
-        $info .= "<!-- t4m already in DB: $t4m -->";
+        $ts_info .= "<!-- t4m already in DB: $t4m -->";
         // TODO: clean up existing T4Ms -- get rid of all spaces and other punctuation
         if (strpos($t4m, ' ') === false) {
             // t4m seems ok... but what if other fields have been updated -- composer or whatever...
@@ -235,14 +236,14 @@ function update_title_for_matching ( $post_id ) {
     // Build a new clean t4m
     
     $new_t4m = ""; // init
-    $info .= "<!-- t4m is empty -> build one -->"; //$info .= '<span class="label">title_for_matching is empty >> build one</span><br />';
+    $ts_info .= "<!-- t4m is empty -> build one -->"; //$info .= '<span class="label">title_for_matching is empty >> build one</span><br />';
 
     $sanitized_title = super_sanitize_title($title_clean);
 
     if ( $post_type == 'event' ) {
 
         $legacy_event_id = get_post_meta( $post_id, 'legacy_event_id', true );
-        //$info .= $indent.'<span class="label">legacy_event_id: </span>'.$legacy_event_id.'<br />';
+        //$ts_info .= $indent.'<span class="label">legacy_event_id: </span>'.$legacy_event_id.'<br />';
 
         if ( !$legacy_event_id || $legacy_event_id == "" || $legacy_event_id == "0" ) {
             // Check to see if the legacy_event_id is contained in the existing slug, even if it somehow got erased from post_meta
@@ -291,7 +292,7 @@ function update_title_for_matching ( $post_id ) {
 
         // update_post_meta: If the meta field for the post does not exist, it will be added and its ID returned. Returns false if error or no change.
         if ( update_post_meta( $post_id, 'title_for_matching', $new_t4m ) ) {
-            $info .= sdg_add_post_term( $post_id, 't4m-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+            $ts_info .= sdg_add_post_term( $post_id, 't4m-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
         }
 
     }
@@ -300,9 +301,9 @@ function update_title_for_matching ( $post_id ) {
         // Now that the title_for_matching is confirmed/updated: if the post_title isn't the clean one, update the post_title -- ???
     }
     
-    $arr_info['info'] = $info;
     $arr_info['title_for_matching'] = $new_t4m;
     //$arr_info['title_clean'] = $new_title_clean;
+    $arr_info['ts_info'] = $ts_info;
     
     return $arr_info;
     // TODO: change to return true/false depending on outcome of add/update?
@@ -376,8 +377,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             
             $authorship_args = array( 'data' => $authorship_arr, 'format' => 'post_title', 'abbr' => $abbr ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
             $arr_authorship_info = get_authorship_info ( $authorship_args );
-            $authorship_info = $arr_authorship_info['authorship'];
-            $ts_info .= $arr_authorship_info['info'];
+            $authorship_info = $arr_authorship_info['info'];
+            $ts_info .= $arr_authorship_info['ts_info'];
             
             //$key_ids = $arr['keys']; // array of ids
             $first_line = $arr['first_line'];
@@ -580,8 +581,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // composer(s), arranger(s), transcriber:
             $authorship_args = array( 'data' => $authorship_arr, 'format' => 'post_title', 'abbr' => $abbr ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
             $arr_authorship_info = get_authorship_info ( $authorship_args );
-            $authorship_info = $arr_authorship_info['authorship'];
-            $ts_info .= $arr_authorship_info['info'];
+            $authorship_info = $arr_authorship_info['info'];
+            $ts_info .= $arr_authorship_info['ts_info'];
 
             $first_line = get_field('first_line', $post_id);
             $tune_name = get_field('tune_name', $post_id);
@@ -799,8 +800,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // A. Short version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => true );
             $arr_authorship_info = get_authorship_info ( $authorship_args );
-            $rep_authorship_short = $arr_authorship_info['authorship'];
-            $ts_info .= $arr_authorship_info['info'];
+            $rep_authorship_short = $arr_authorship_info['info'];
+            $ts_info .= $arr_authorship_info['ts_info'];
             
             //sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short ); // tft
             // ltrim punctuation so as to avoid failed replacement if work, e.g., has no arranger but no composer listed -- TODO: integrate this into get_authorship_info fcn?
@@ -812,8 +813,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // B. Long version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => false );
             $arr_authorship_info = get_authorship_info ( $authorship_args );
-            $rep_authorship_long = $arr_authorship_info['authorship'];
-            $ts_info .= $arr_authorship_info['info'];
+            $rep_authorship_long = $arr_authorship_info['info'];
+            $ts_info .= $arr_authorship_info['ts_info'];
             
             //sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long ); // tft
             // remove punctuation for purposes of string replacement
