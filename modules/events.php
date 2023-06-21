@@ -881,8 +881,8 @@ function get_event_program_items( $atts = [] ) {
             
             // Get the program item name
             // --------------------
-            // TODO: figure out how to not need to pass so many parameters
-            
+            // TODO: figure out how to not need to pass so many parameters?
+            // TODO: figure out how to deal better with multiple program items in a single ACF row            
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
             
             //if ( $arr_item_name['title_as_label'] != "" ) {
@@ -1187,6 +1187,9 @@ function get_program_item_label ( $args = array() ) {
 
 // 
 function get_program_item_name ( $args = array() ) {
+    
+    // TODO: revise function to return array of names so that multiple items from a single ACF row can be presented in separate table rows.
+    // This change is necessary because some item names are too long to fit on a single line in a column, and therefore the alignment is disrupted between concert program item names as labels and the item composers
     
     // TS/logging setup
     $do_ts = true; 
