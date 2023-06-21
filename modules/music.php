@@ -2501,7 +2501,9 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
         $info .= "&nbsp;";
         $authorship_args = array( 'data' => array( 'post_id' => $post_id ), 'format' => 'display', 'abbr' => false, 'is_single_work' => false, 'show_title' => false, 'links' => true );
-        $authorship_info = get_authorship_info ( $authorship_args );
+        $arr_authorship_info = get_authorship_info ( $authorship_args );
+		$authorship_info = $arr_authorship_info['authorship'];
+		$ts_info .= $arr_authorship_info['info'];
         $info .= $authorship_info;
         /*
         $info .= " by ";
