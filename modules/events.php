@@ -1299,7 +1299,7 @@ function get_program_item_name ( $args = array() ) {
 							if ( !empty($row_composer_ids) && $composer_ids == $row_composer_ids ) {
 								$show_item_authorship = false;
 								$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->";
-								$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->";
+								$ts_info .= "<!-- composer_ids: ".print_r($composer_ids, true)." -->";
 								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->";
 							}
 							// Merge arrays
