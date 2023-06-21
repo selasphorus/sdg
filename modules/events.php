@@ -885,9 +885,10 @@ function get_event_program_items( $atts = [] ) {
             
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
             
-            if ( $arr_item_name['title_as_label'] != "" ) { 
+            //if ( $arr_item_name['title_as_label'] != "" ) {
+            if ( $arr_item_name['use_title_as_label'] ) {
             	$program_item_label = $arr_item_name['title_as_label'];
-                $title_as_label = true;
+                $use_title_as_label = true;
             	$row_info .= "<!-- title_as_label -->";
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
@@ -1025,12 +1026,12 @@ function get_event_program_items( $atts = [] ) {
 					if ( $show_item_label != true || empty($program_item_label) ) { $td_class .= " no_label"; }
 					if ( $placeholder_label == true ) { $td_class .= " placeholder"; }
 					if ( $label_update_required == true ) { $td_class .= " update_required"; }
-					if ( $title_as_label == true ) { $td_class .= " title_as_label"; }
+					if ( $use_title_as_label == true ) { $td_class .= " title_as_label"; }
                     
                     $table .= '<td class="'.$td_class.'">'.$program_item_label.'</td>';
                     $td_class = "program_item";
                     if ( $placeholder_item == true ) { $td_class .= " placeholder"; }
-                    if ( $title_as_label == true ) { $td_class .= " authorship"; }
+                    if ( $use_title_as_label == true ) { $td_class .= " authorship"; }
                     $table .= '<td class="'.$td_class.'">'.$program_item_name.'</td>';
                     
 				}
@@ -1192,14 +1193,20 @@ function get_program_item_name ( $args = array() ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
 
-	// WIP!
 	// Init vars
+	// WIP! TODO: simplify
 	$arr_info = array();
+	$ts_info = "";
+	//
     $item_name = "";
 	$program_item_name = "";
+	//
+	$use_title_as_label = false;
 	$title_as_label = "";
+	$program_title_as_label = "";
+	//
     $show_person_dates = true;
-	$ts_info = "";
+    //
     
     $ts_info .= "<!-- ******* get_program_item_name ******* -->";
     //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
@@ -1424,15 +1431,15 @@ function get_program_item_name ( $args = array() ) {
 
 			}
 			
-			if ( $title_as_label != "" ) {
-				$program_item_name .= $title_as_label;
+			if ( $use_title_as_label ) {
+				$program_title_as_label .= $title_as_label;
 			} else {
 				$program_item_name .= $item_name;
 			}
 		
 			// Add spacer, in the case of multiple program items
 			if ( $num_items > 1 && $i != $num_items ) {
-				if ( $title_as_label != "" ) { $title_as_label .= '<p class="spacer">&nbsp;</p>'; }
+				if ( $program_title_as_label != "" ) { $program_title_as_label .= '<p class="spacer">&nbsp;</p>'; }
 				if ( $program_item_name != "" ) { $program_item_name .= '<p class="spacer">&nbsp;</p>'; }
 			}
 			
@@ -1447,8 +1454,8 @@ function get_program_item_name ( $args = array() ) {
 	
 	// Is there a program note for this item? If so, append it to the item name
 	if ( isset($row['program_item_note']) && $row['program_item_note'] != "" ) {
-		if ( $title_as_label != "" ) { 
-			$title_as_label .= "<br /><em>".$row['program_item_note']."</em>";
+		if ( $program_title_as_label != "" ) { 
+			$program_title_as_label .= "<br /><em>".$row['program_item_note']."</em>";
 		} else if ( $program_item_name != "" ) { 
 			$program_item_name .= "<br /><em>".$row['program_item_note']."</em>";
 		}            
@@ -1488,11 +1495,13 @@ function get_program_item_name ( $args = array() ) {
             }
         }
     }
-
+    
+    $ts_info .= "<!-- program_title_as_label: $program_title_as_label -->";
     $ts_info .= "<!-- program_item_name: $program_item_name -->";
     
 	//
-	$arr_info['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
+	$arr_info['use_title_as_label'] = $use_title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
+	$arr_info['title_as_label'] = $program_title_as_label;
 	$arr_info['item_name'] = $program_item_name;
     $arr_info['num_items'] = $num_items; // wip
 	$arr_info['program_composers'] = $program_composers;
