@@ -1322,7 +1322,7 @@ function get_program_item_name ( $args = array() ) {
 
 							if ( count($composer_ids) > 0 ) {
 								$ids_intersect = array_intersect($program_composers, $composer_ids);
-							} else {
+							} else if ( count($author_ids) > 0 ) {
 								$ids_intersect = array_intersect($program_composers, $author_ids);
 							}
 							if ( count($ids_intersect) > 0 ) {
