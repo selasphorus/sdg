@@ -1422,9 +1422,13 @@ function get_program_item_name ( $args = array() ) {
 
 				}                
 
-			}  
-
-			$program_item_name .= $item_name;
+			}
+			
+			if ( $title_as_label != "" ) {
+				$program_item_name .= $title_as_label;
+			} else {
+				$program_item_name .= $item_name;
+			}
 		
 			// Add spacer, in the case of multiple program items
 			if ( $num_items > 1 && $i != $num_items ) {
