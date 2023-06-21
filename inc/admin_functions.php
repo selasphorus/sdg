@@ -155,19 +155,15 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
     sdg_log( "[gtu] post_title: ".$post_title, $do_log );
     sdg_log( "[gtu] uid_field: ".$uid_field, $do_log );
     
-    if ( $post_id == null && $post_title == null ) {
-        return null;
-    }
+    if ( empty($post_id) && empty($post_title) ) { return false; }
     
     $new_t4m = ""; // init 
     
-    if ( !$post_title ) { $post_title = get_the_title( $post_id ); } //if ( !$post_title ) { $post_title = build_the_title( $post_id ); }
+    if ( !$post_title ) { $post_title = get_the_title( $post_id ); }
     if ( !$post_type ) { $post_type = get_post_type( $post_id ); }
     
     // Abort if error
-    if ( strpos($post_title, 'Error! Abort!') !== false ) {
-        return null; // TODO: test!
-    }
+    if ( strpos($post_title, 'Error! Abort!') !== false ) { return false; } // TODO: test!
     
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
     $new_t4m = super_sanitize_title ( $post_title );
@@ -202,10 +198,11 @@ function update_title_for_matching ( $post_id ) {
     
     // TS/logging setup
     $do_ts = false; 
-    $do_log = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log ); 
     sdg_log( "function: sdg_update_title_for_matching", $do_log );
+    
+    if ( empty($post_id) ) { return false; }
     
     // Init vars
     $post = get_post( $post_id );
@@ -307,6 +304,7 @@ function update_title_for_matching ( $post_id ) {
     
     $arr_info['title_for_matching'] = $new_t4m;
     //$arr_info['title_clean'] = $new_title_clean;
+    
     if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
     
     return $arr_info;
@@ -327,14 +325,16 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: build_the_title", $do_log );
     
+    if ( $post_id == null ) { return false; }
+    
     // Init vars
     $ts_info = "";
+    $new_title = "";
+    $authorship_arr = array();
     
     sdg_log( "[btt] post_id: ".$post_id, $do_log );
     sdg_log( "[btt] abbr: ".(int)$abbr, $do_log );
-    
-    if ( $post_id == null ) { return null; }
-    $post_type = get_post_type( $post_id ); //if ( $post_type == null ) { $post_type = get_post_type( $post_id ); }
+    $post_type = get_post_type( $post_id );
     
     // Before we get any further, if this is a repertoire record, check for a title_clean value
     // If there is no title_clean, abort -- there's a problem!
@@ -349,11 +349,6 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     //
     $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
-    
-    $new_title = ""; // init
-    
-    $authorship_arr = array(); // init
-    //$authorship_arr['post_id'] = $post_id;
     
     // Set var values
     if ( !empty($arr) ) {
