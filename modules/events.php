@@ -1436,8 +1436,8 @@ function get_program_item_name ( $args = array() ) {
 
 			}
 			
-			$ts_info .= "<!-- title_as_label: '$title_as_label' -->";
-			$ts_info .= "<!-- item_name: '$item_name' -->";
+			//$ts_info .= "<!-- title_as_label: '$title_as_label' -->";
+			//$ts_info .= "<!-- item_name: '$item_name' -->";
 			
 			$program_title_as_label .= $title_as_label;
 			$program_item_name .= $item_name;
