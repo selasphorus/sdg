@@ -138,44 +138,51 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 
 function get_cpt_repertoire_content( $post_id = null ) {
 	
-	$info = "";
+	// Init vars
+    $arr_info = array();
+    $rep_content = "";
+    $ts_info = "";
+    
 	if ($post_id === null) { $post_id = get_the_ID(); }
-	//$info .="post_id: $post_id<br />";
+	//$ts_info .="post_id: $post_id<br />";
 	
-    $rep_info = get_rep_info( $post_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+    $arr_rep_info = get_rep_info( $program_item_obj_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+	$rep_info = $arr_item_name['rep_info'];
+	$ts_info .= = $arr_item_name['info'];
+						
 	if ( $rep_info ) {
-        //$info .= "<h3>The Work:</h3>";
-        $info .= $rep_info;
+        //$rep_content .= "<h3>The Work:</h3>";
+        $rep_content .= $rep_info;
     }
     
     // Related Events
     $repertoire_events = get_field('repertoire_events', $post_id, false);
 	if ( empty($repertoire_events) && is_dev_site() ) {
 		// Field repertoire_events is empty -> check to see if updates are in order
-		$info .= '<div class="troubleshooting">'.update_repertoire_events( $post_id ).'</div>';
+		$ts_info .= '<div class="troubleshooting">'.update_repertoire_events( $post_id ).'</div>';
 	}
     
     if ( $repertoire_events ) { 
         //global $post;
         //-- STC
-        $info .= "<h3>Performances at Saint Thomas Church:</h3>";
+        $rep_content .= "<h3>Performances at Saint Thomas Church:</h3>";
         $x = 1;
         foreach($repertoire_events as $event_post_id) { 
             //setup_postdata($event_post);
-            //$info .= "[$x] event_post: <pre>".print_r($event_post, true)."</pre>"; // tft
+            //$ts_info .= "[$x] event_post: <pre>".print_r($event_post, true)."</pre>"; // tft
             //$event_post_id = $event_post->ID;
             
             // TODO: modify to show title & event date as link text
             $event_title = get_the_title($event_post_id);
             $date_str = get_post_meta( $event_post_id, '_event_start_date', true );
             if ( $date_str ) { $event_title .= ", ".$date_str; }
-            $info .= make_link( get_the_permalink($event_post_id), $event_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            $rep_content .= make_link( get_the_permalink($event_post_id), $event_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
             
             $x++;
         }
     } else {
         if ( devmode_active() ) { 
-            $info .= "<p>No related events were found.</p>"; // tft
+            $rep_content .= "<p>No related events were found.</p>"; // tft
         }
     }
     
@@ -188,11 +195,11 @@ function get_cpt_repertoire_content( $post_id = null ) {
         ( ( is_dev_site() && current_user_can('read_repertoire') ) || current_user_can('read_music') ) 
        ) {
        	//-- STC
-        $info .= "<h3>Edition(s) in the Saint Thomas Library:</h3>";
-        //$info .= "<pre>related_editions: ".print_r($related_editions, true)."</pre>";
+        $rep_content .= "<h3>Edition(s) in the Saint Thomas Library:</h3>";
+        //$ts_info .= "<pre>related_editions: ".print_r($related_editions, true)."</pre>";
         foreach ( $related_editions as $edition_id ) {
-            //$info .= "edition_id: ".$edition_id."<br />";
-            $info .= make_link( get_the_permalink($edition_id), get_the_title($edition_id) ) . "<br />";
+            //$ts_info .= "edition_id: ".$edition_id."<br />";
+            $rep_content .= make_link( get_the_permalink($edition_id), get_the_title($edition_id) ) . "<br />";
         }        
     }
     
@@ -203,15 +210,15 @@ function get_cpt_repertoire_content( $post_id = null ) {
     
     if ( $duplicate_posts ) { 
         
-        $info .= "<h3>Possible Duplicate(s):</h3>";
+        $ts_info .= "<h3>Possible Duplicate(s):</h3>";
         $x = 1;
         foreach($duplicate_posts as $duplicate_post) { 
         
             setup_postdata($duplicate_post);
-            //$info .= "[$x] duplicate_post: <pre>".print_r($duplicate_post, true)."</pre>"; // tft
+            //$ts_info .= "[$x] duplicate_post: <pre>".print_r($duplicate_post, true)."</pre>"; // tft
             $duplicate_post_id = $duplicate_post->ID;
             
-            $info .= make_link( get_the_permalink($duplicate_post_id), $duplicate_post->post_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            $ts_info .= make_link( get_the_permalink($duplicate_post_id), $duplicate_post->post_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
             
             // TODO: build in merge options
                         
@@ -219,13 +226,16 @@ function get_cpt_repertoire_content( $post_id = null ) {
         }
     } else {
         if ( devmode_active() ) { 
-            $info .= "<p>No duplicate posts were found.</p>"; // tft
+            $ts_info .= "<p>No duplicate posts were found.</p>"; // tft
         }
     }*/
     
-    //$info .= "test"; // tft
+    //$ts_info .= "test"; // tft
 	
-	return $info;
+	$arr_info['rep_content'] = $rep_content;
+    $arr_info['info'] = $ts_info;
+    
+    return $arr_info;
 }
 
 /*********** CPT: EDITION ***********/
@@ -557,8 +567,8 @@ function get_authorship_info ( $args = array() ) {
     */
     
     // Init vars
+    $arr_info = array();
     $authorship_info = "";
-    $info = "";
     $ts_info = "";
     //
     $rep_title = "";
@@ -870,7 +880,12 @@ function get_authorship_info ( $args = array() ) {
     
     //$authorship_info .= $ts_info;
     
-    return $authorship_info;
+    //return $authorship_info;
+    
+    $arr_info['authorship'] = $authorship_info;
+    $arr_info['info'] = $info;
+    
+    return $arr_info;
     
 }
 
@@ -879,23 +894,21 @@ function get_excerpted_from( $post_id = null ) {
     
     // Init vars
     $arr_info = array();
-    $info = "";
+    $excerpted_from = "";
+    $ts_info = "";
     
-    if ( $post_id == null ) { return null; }
-    
-    //$info .= "<!-- seeking excerpted_from info for post_id: $post_id -->"; // tft
+    if ( $post_id == null ) { return null; }    
+    //$ts_info .= "<!-- seeking excerpted_from info for post_id: $post_id -->"; // tft
     
     $excerpted_from_post = get_field('excerpted_from', $post_id, false);
     
-    //$info .= "<!-- -->";
-    
     if ( $excerpted_from_post ) {
         
-        //$info .= "<!-- excerpted_from_post: ".print_r($excerpted_from_post, true)." -->";
+        //$ts_info .= "<!-- excerpted_from_post: ".print_r($excerpted_from_post, true)." -->";
         
         $excerpted_from_id = $excerpted_from_post[0]; // TODO: deal w/ possibility that there may be multiple values in the array
         
-        $info .= "<!-- excerpted_from_id: $excerpted_from_id -->";
+        $ts_info .= "<!-- excerpted_from_id: $excerpted_from_id -->";
         
         $excerpted_from_title_clean = get_post_meta( $excerpted_from_id, 'title_clean', true );
         if ( $excerpted_from_title_clean ) {
@@ -905,14 +918,14 @@ function get_excerpted_from( $post_id = null ) {
         }
         
     } else if ( $excerpted_from_txt = get_post_meta( $post_id, 'excerpted_from_txt', true ) ) {
-        $info .= "<!-- excerpted_from_txt: $excerpted_from_txt -->";
+        $ts_info .= "<!-- excerpted_from_txt: $excerpted_from_txt -->";
         $excerpted_from = $excerpted_from_txt;
     } else {
         $excerpted_from = null;
     }
     
     $arr_info['excerpted_from'] = $excerpted_from;
-    $arr_info['info'] = $info;
+    $arr_info['info'] = $ts_info;
     
     return $arr_info;
     
@@ -921,6 +934,13 @@ function get_excerpted_from( $post_id = null ) {
 // Retrieve full rep title and associated info. 
 // Return formats include 'display' (for front end), 'txt' (for back end(, and 'sanitized' (for DB matching)
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
+    
+	// Init vars
+    $arr_info = array();
+    $rep_info = "";
+    $ts_info = "";
+    
+	if ( $post_id === null ) { $post_id = get_the_ID(); }
 	
 	$do_log = false; // false for cleaner logs; true for active TS
 	
@@ -931,9 +951,6 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     sdg_log( "[get_rep_info] format: ".$format, $do_log );
     sdg_log( "[get_rep_info] show_authorship: ".$show_authorship, $do_log );
     sdg_log( "[get_rep_info] show_title: ".$show_title, $do_log );
-    
-	$info = "";
-	if ( $post_id === null ) { $post_id = get_the_ID(); }
     
     // Do nothing if post_id is empty or this is not a rep record
     if ( $post_id === null || get_post_type( $post_id ) != 'repertoire' ) { return null; }
@@ -982,16 +999,16 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     }
     
     if ( $is_single_work == true && $title != "") {
-        $info .= "Title: ".$title."<br />";
+        $rep_info .= "Title: ".$title."<br />";
     }
     
     $arr_excerpted_from = get_excerpted_from( $post_id );
     $excerpted_from = $arr_excerpted_from['excerpted_from'];
-    if ( $format == 'display' ) { $info .= $arr_excerpted_from['info']; }
+    if ( $format == 'display' ) { $rep_info .= $arr_excerpted_from['info']; }
        
     if ( $excerpted_from != "" ) {
         if ( $is_single_work == true ) {
-            $info .= "Excerpted from: ".$excerpted_from."<br />";
+            $rep_info .= "Excerpted from: ".$excerpted_from."<br />";
         } else {
             $title .= ", from &lsquo;".$excerpted_from."&rsquo;";
             //$title .= ", from <em>".$excerpted_from."</em>";
@@ -1001,14 +1018,14 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     // Catalog & Opus numbers
     if ( $catalog_number != "" && !has_term( 'hymns', 'repertoire_category', $post_id ) ) {
         if ( $is_single_work == true ) {
-            $info .= "Catalog No.: ".$title."<br />";
+            $rep_info .= "Catalog No.: ".$title."<br />";
         } else {
             $title .= ", ".$catalog_number;
         }        
     }
     if ( $opus_number != "" ) {
         if ( $is_single_work == true ) {
-            $info .= "Opus No.: ".$title."<br />";
+            $rep_info .= "Opus No.: ".$title."<br />";
         } else {
             $title .= ", ".$opus_number;
         }
@@ -1017,7 +1034,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     // Tune Name
     if ( $tune_name != "" ) {
         if ( $is_single_work == true ) {
-            $info .= "Tune name: ".$tune_name."<br />";
+            $rep_info .= "Tune name: ".$tune_name."<br />";
         } else {
             $title .= " &ndash; ".$tune_name;
         }
@@ -1025,7 +1042,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     
     // Add the assembled title to the info to be returned
     if ( $is_single_work == false ) {
-        $info .= $title;
+        $rep_info .= $title;
     }
     
     // Display authorship info
@@ -1033,27 +1050,34 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
         
         $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title ); // $title_clean
         $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title );
-        $authorship_info = get_authorship_info ( $authorship_args );
+        $arr_authorship_info = get_authorship_info ( $authorship_args );
+        $authorship_info = $arr_authorship_info['authorship'];
+        $ts_info .= $arr_authorship_info['info'];
+        
         // ( $data = array(), $format = 'post_title', $abbr = false, $is_single_work = false, $show_title = true ) 
         if ( $authorship_info != "Unknown" ) {
-            if ( $format == 'display' ) { $info .= '<span class="authorship">'; }
-            $info .= $authorship_info;
-            if ( $format == 'display' ) { $info .= '</span>'; }
+            if ( $format == 'display' ) { $rep_info .= '<span class="authorship">'; }
+            $rep_info .= $authorship_info;
+            if ( $format == 'display' ) { $rep_info .= '</span>'; }
         }
 
     } // END if ( $show_authorship == true ):
     
     if ( $format == 'sanitized' ) { 
-        $info = super_sanitize_title( $info );
+        $rep_info = super_sanitize_title( $info );
     } else if ( $format == 'txt' ) { 
-        //$info = super_sanitize_title( $info );
+        //$rep_info = super_sanitize_title( $info );
     } else if ( $is_single_work == true ) {
-        $info .= "<!-- test -->";
+        $ts_info .= "<!-- test -->";
     } else {
-        $info = make_link( get_the_permalink( $post_id ), $info, 'subtle', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
+        $rep_info = make_link( get_the_permalink( $post_id ), $info, 'subtle', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
     }
 	
-	return $info;
+	$arr_info['rep_info'] = $rep_info;
+	$arr_info['info'] = $ts_info;
+	
+	return $arr_info;
+	
 } // END function get_rep_info
 
 function get_author_ids ( $post_id = null, $include_composers = true ) {

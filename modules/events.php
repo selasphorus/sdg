@@ -1154,14 +1154,14 @@ function get_program_item_name ( $args = array() ) {
 	// WIP!
 	// Init vars
 	$arr_results = array();
-	$info = "";
+	$ts_info = "";
     $item_name = "";
 	$program_item_name = "";
 	$title_as_label = "";
     $show_person_dates = true;
     
-    $info .= "<!-- ******* get_program_item_name ******* -->";
-    //$info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
+    $ts_info .= "<!-- ******* get_program_item_name ******* -->";
+    //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
     
     // Defaults
 	$defaults = array(
@@ -1184,7 +1184,7 @@ function get_program_item_name ( $args = array() ) {
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
     
-    $info .= "<!-- row: ".print_r($row, true)." -->"; // tft
+    $ts_info .= "<!-- row: ".print_r($row, true)." -->"; // tft
     //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
     
     $num_items = 0; // init
@@ -1196,17 +1196,17 @@ function get_program_item_name ( $args = array() ) {
 		$num_items = count($row['program_item']);
 		if ( $num_items > 1 ) {
 			// TODO: deal w/ special case of multiple items per program row -- variations per row_type, program_type...
-			$info .= "<!-- *** $num_items program_items found for this row! *** -->";
+			$ts_info .= "<!-- *** $num_items program_items found for this row! *** -->";
 		}
 		
-		$info .= "<!-- >>>>>>> START foreach program_item <<<<<<< -->";
+		$ts_info .= "<!-- >>>>>>> START foreach program_item <<<<<<< -->";
 		$i = 1; // init counter
 	
 		// Loop through the program items for this row (usually there is only one)
 		foreach ( $row['program_item'] as $program_item ) {
 	
-			$info .= "<!-- i: $i (program_item counter) -->";
-			$info .= "<!-- ------- -->";
+			$ts_info .= "<!-- i: $i (program_item counter) -->";
+			$ts_info .= "<!-- ------- -->";
 		
 			$item_name = ""; // init
 			$show_item_authorship = true; // init
@@ -1218,13 +1218,13 @@ function get_program_item_name ( $args = array() ) {
 			
 			if ( $program_item_obj_id ) {
 
-				$info .= "<!-- program_item_obj_id: $program_item_obj_id -->";
+				$ts_info .= "<!-- program_item_obj_id: $program_item_obj_id -->";
 			
 				$item_post_type = get_post_type( $program_item_obj_id );
 				//$info .= "<!-- item_post_type: $item_post_type -->";
 				
-				$info .= "<!-- get_program_item_name via postmeta -->";
-				$info .= "<!-- item_post_type: $item_post_type -->";
+				$ts_info .= "<!-- get_program_item_name via postmeta -->";
+				$ts_info .= "<!-- item_post_type: $item_post_type -->";
 
 				if ( $item_post_type == 'repertoire' ) {
 				
@@ -1235,21 +1235,21 @@ function get_program_item_name ( $args = array() ) {
 					$anon = is_anon($program_item_obj_id);
 					if ( $anon != true ) { 
 						$composer_ids = get_composer_ids( $program_item_obj_id );
-						$info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
+						$ts_info .= "<!-- Not anon >> composer_ids: ".print_r($composer_ids, true)." -->";
 					} else { 
 						$composer_ids = array();
 					}
 					$author_ids = get_author_ids( $program_item_obj_id, false );
-					$info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
+					$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->"; // tft
 
 					if ( $num_items > 1 ) {
 						if ( $i == 1 ) { // first row item
 							$row_composer_ids = $composer_ids;
-							$info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; // tft
+							$ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; // tft
 						} else { // subsequent row items
 							if ( $composer_ids == $row_composer_ids ) {
 								$show_item_authorship = false;
-								$info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->"; // tft
+								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->"; // tft
 							}
 						}
 					}
@@ -1259,8 +1259,8 @@ function get_program_item_name ( $args = array() ) {
 					if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && !($row_type == "header") ) {
 
 						// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
-						$info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
-						$info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->";
+						$ts_info .= "<!-- count(composer_ids): ".count($composer_ids)." -->";
+						$ts_info .= "<!-- START program_composers: ".print_r($program_composers, true)." -->";
 					
 						if ( count($program_composers) > 0 ) {
 
@@ -1270,12 +1270,12 @@ function get_program_item_name ( $args = array() ) {
 								$ids_intersect = array_intersect($program_composers, $author_ids);
 							}
 
-							$info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
-							$info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
+							$ts_info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
+							$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
 							if ( count($ids_intersect) > 0 && ( $num_items == 1 || $i > 1 ) ) { 
 								// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
 								$show_person_dates = false;
-								$info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
+								$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
 							}
 
 							if ( count($composer_ids) > 0 ) {
@@ -1286,7 +1286,7 @@ function get_program_item_name ( $args = array() ) {
 
 						} else {
 						
-							$info .= "<!-- count(program_composers) NOT > 0 -->";
+							$ts_info .= "<!-- count(program_composers) NOT > 0 -->";
 						
 							if ( count($composer_ids) > 0 ) {
 								$program_composers = $composer_ids;
@@ -1295,11 +1295,11 @@ function get_program_item_name ( $args = array() ) {
 							}
 
 						}
-						$info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->";
+						$ts_info .= "<!-- UPDATED program_composers: ".print_r($program_composers, true)." -->";
 
 					} else if ( !count($author_ids) > 0 ) {
 
-						$info .= "<!-- author_ids is empty array -->";
+						$ts_info .= "<!-- author_ids is empty array -->";
 
 					} // END if ( count($author_ids) > 0 && !($row_type == "header") )
 				
@@ -1313,14 +1313,19 @@ function get_program_item_name ( $args = array() ) {
 				
 					if ( $row_type == 'title_only' ) {
 					
-						$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true ); 
+						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
+						$item_name = $arr_item_name['rep_info'];
+						$ts_info .= = $arr_item_name['info'];
 					
 					} else if ( empty($program_item_label) ) {
 
-						$info .= "<!-- program_item_label is empty >> use title in left col -->";
+						$ts_info .= "<!-- program_item_label is empty >> use title in left col -->";
 
 						// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
-						$title_as_label .= get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
+						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
+						$title_as_label = $arr_item_name['rep_info'];
+						$ts_info .= = $arr_item_name['info'];
+												
 						// TODO: figure out how to show auth info only for one item if all items in group have same info...
 						// WIP
 						if ( $show_item_authorship == true ) { 
@@ -1330,7 +1335,9 @@ function get_program_item_name ( $args = array() ) {
 
 					} else {
 
-						$item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
+						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
+						$item_name = $arr_item_name['rep_info'];
+						$ts_info .= = $arr_item_name['info'];
 
 					}
 
@@ -1339,7 +1346,7 @@ function get_program_item_name ( $args = array() ) {
 				} else if ( $item_post_type == 'sermon' ) {
 
 					$sermon_author_ids = get_post_meta( $program_item_obj_id, 'sermon_author', true );
-					$info .= "<!-- sermon_author_ids: ".print_r($sermon_author_ids, true)." -->";
+					$ts_info .= "<!-- sermon_author_ids: ".print_r($sermon_author_ids, true)." -->";
 					// TODO: deal w/ possibility of multiple authors
 				
 					$sermon_author = get_the_title( $sermon_author_ids[0] );
@@ -1348,7 +1355,7 @@ function get_program_item_name ( $args = array() ) {
 
 				} else if ( $item_post_type == 'reading' ) {
 
-					$info .= "<!-- item_post_type: reading -->"; // tft
+					$ts_info .= "<!-- item_post_type: reading -->"; // tft
 
 					$post_title = get_the_title($program_item_obj_id);
 					if ( preg_match('/\[(.*)\]/',$post_title) ) {
@@ -1357,7 +1364,7 @@ function get_program_item_name ( $args = array() ) {
 						$item_name = $post_title;
 					}
 
-					$info .= "<!-- post_title: '$post_title' -->"; // tft
+					$ts_info .= "<!-- post_title: '$post_title' -->"; // tft
 
 				} else { // Not of posttype repertoire, sermon, or reading
 
@@ -1400,7 +1407,7 @@ function get_program_item_name ( $args = array() ) {
     
     if ( empty($program_item_name) ) {
         
-        $info .= "<!-- program_item_name is empty >> placeholder -->";
+        $ts_info .= "<!-- program_item_name is empty >> placeholder -->";
         
         if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" && $row['program_item_txt'] != "x" ) { 
 
@@ -1419,19 +1426,19 @@ function get_program_item_name ( $args = array() ) {
                 }
                 //$row_info .= "<!-- title_to_match: [$title_to_match] -->";
 
-                $info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+                $ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
                 $match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $program_item_label, 'repeater_name' => 'program_items', 'field_name' => 'program_item' ); // , 'display' => $display
                 $match_result = match_placeholder( $match_args );
-                $info .= $match_result;
+                $ts_info .= $match_result;
 
             } else {
-                $info .= "<!-- NO match_placeholder for program_item_name -->";
-                $info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+                $ts_info .= "<!-- NO match_placeholder for program_item_name -->";
+                $ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
             }
         }
     }
 
-    $info .= "<!-- program_item_name: $program_item_name -->";
+    $ts_info .= "<!-- program_item_name: $program_item_name -->";
     
 	//
 	$arr_results['title_as_label'] = $title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
@@ -1439,7 +1446,7 @@ function get_program_item_name ( $args = array() ) {
     $arr_results['num_items'] = $num_items; // wip
 	$arr_results['program_composers'] = $program_composers;
 	$arr_results['show_person_dates'] = $show_person_dates;
-	$arr_results['info'] = $info;
+	$arr_results['info'] = $ts_info;
 	
 	return $arr_results;
 	
