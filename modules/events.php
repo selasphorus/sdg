@@ -1329,11 +1329,11 @@ function get_program_item_name ( $args = array() ) {
 								$ts_info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
 								$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
 								
-								if ( $num_items == 1 || $i > 1 ) { 
+								//if ( $num_items == 1 || $i > 1 ) { 
 									// Hide person dates if already shown in this program OR if this is not the first item in a multi-item row
 									$show_person_dates = false;
 									$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
-								}
+								//}
 							
 							}							
 
