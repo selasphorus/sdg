@@ -997,7 +997,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     
     $arr_excerpted_from = get_excerpted_from( $post_id );
     $excerpted_from = $arr_excerpted_from['info'];
-    if ( $format == 'display' ) { $rep_info .= $arr_excerpted_from['ts_info']; }
+    if ( $format == 'display' ) { $info .= $arr_excerpted_from['ts_info']; }
        
     if ( $excerpted_from != "" ) {
         if ( $is_single_work == true ) {
