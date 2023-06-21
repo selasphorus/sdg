@@ -1336,7 +1336,7 @@ function get_program_item_name ( $args = array() ) {
 
 						} else {
 						
-							$ts_info .= "<!-- count(program_composers) NOT > 0 -->";
+							//$ts_info .= "<!-- count(program_composers) NOT > 0 -->";
 						
 							if ( count($composer_ids) > 0 ) {
 								$program_composers = $composer_ids;
@@ -1370,6 +1370,7 @@ function get_program_item_name ( $args = array() ) {
 					} else if ( empty($program_item_label) ) {
 
 						$ts_info .= "<!-- program_item_label is empty >> use title in left col -->";
+						$use_title_as_label = true;
 
 						// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
