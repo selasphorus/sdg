@@ -1502,8 +1502,8 @@ function get_program_item_name ( $args = array() ) {
         }
     }
     
-    $ts_info .= "<!-- program_title_as_label: $program_title_as_label -->";
-    $ts_info .= "<!-- program_item_name: $program_item_name -->";
+    //$ts_info .= "<!-- program_title_as_label: $program_title_as_label -->";
+    //$ts_info .= "<!-- program_item_name: $program_item_name -->";
     
 	//
 	$arr_info['use_title_as_label'] = $use_title_as_label; // if using musical work title in place of label... TODO: make this less convoluted.
