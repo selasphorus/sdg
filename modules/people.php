@@ -249,6 +249,9 @@ function get_cpt_person_content( $post_id = null ) {
 
 function get_person_dates( $post_id, $styled = false ) {
     
+    // Init vars
+    $info = ""; // init
+    //if ( $styled == 'false' ) { $styled = false; } // just in case...
     $do_log = false; // false for cleaner logs; true for active TS
     
     sdg_log( "divline2", $do_log );
@@ -257,9 +260,6 @@ function get_person_dates( $post_id, $styled = false ) {
     //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
     sdg_log( "[get_person_dates] post_id: ".$post_id, $do_log );
     //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
-    
-    $info = ""; // init
-    if ( $styled == 'false' ) { $styled = false; } // just in case...
     
     // Try ACF get_field instead?
     $birth_year = get_post_meta( $post_id, 'birth_year', true );
