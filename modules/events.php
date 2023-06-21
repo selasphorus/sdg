@@ -1303,7 +1303,7 @@ function get_program_item_name ( $args = array() ) {
 								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->";
 							}
 							// Merge arrays
-							array_merge($row_composer_ids, $composer_ids); //if ( is_array($composer_ids) ) { array_merge($row_composer_ids, $composer_ids); }
+							$row_composer_ids = array_merge($row_composer_ids, $composer_ids); //if ( is_array($composer_ids) ) { array_merge($row_composer_ids, $composer_ids); }
 						}
 					}
 				
