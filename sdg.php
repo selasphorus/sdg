@@ -1241,16 +1241,16 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         		$term_id = $arr_term['term_id'];
         		if ( $return_info ) {
 					$ts_info .= "<!-- [sdg_add_post_term] ";
-					$ts_info .= "post_id: ".$post_id;
-					$ts_info .= "taxonomy: ".$taxonomy;
-					$ts_info .= "term_slug: ".$term_slug;
+					$ts_info .= "post_id: ".$post_id."; ";
+					$ts_info .= "taxonomy: ".$taxonomy."; ";
+					$ts_info .= "term_slug: ".$term_slug."; ";
 					$ts_info .= "term_id: ".$term_id;
 				}
         		$result = wp_set_post_terms( $post_id, $term_id, $taxonomy, true );
         		if ( $result ) { 
-					$ts_info .= ">> success! "; 
+					$ts_info .= " >> success!"; 
 				} else { 
-					$ts_info .= ">> FAILED! ";
+					$ts_info .= " >> FAILED!";
 				}
 				$ts_info .= " -->";
         		
