@@ -1246,7 +1246,7 @@ function get_program_item_name ( $args = array() ) {
 		// Loop through the program items for this row (usually there is only one)
 		foreach ( $row['program_item'] as $program_item ) {
 	
-			$ts_info .= "<!-- START program_item #$i -->";
+			$ts_info .= "<!-- +~+~+~+~+ program_item #$i +~+~+~+~+ -->";
 		
 			$item_name = ""; // init
 			$show_item_authorship = true; // init
@@ -1309,14 +1309,17 @@ function get_program_item_name ( $args = array() ) {
 							} else {
 								$ids_intersect = array_intersect($program_composers, $author_ids);
 							}
-
-							$ts_info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
-							$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
-							if ( count($ids_intersect) > 0 && ( $num_items == 1 || $i > 1 ) ) { 
-								// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
-								$show_person_dates = false;
-								$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
-							}
+							if ( count($ids_intersect) > 0 ) {
+								$ts_info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
+								$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
+								
+								if ( $num_items == 1 || $i > 1 ) { 
+									// Hide person dates if already shown in this program OR if this is the first item in a multi-item row
+									$show_person_dates = false;
+									$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
+								}
+							
+							}							
 
 							if ( count($composer_ids) > 0 ) {
 								$program_composers = array_unique(array_merge($program_composers, $composer_ids));
@@ -1429,7 +1432,7 @@ function get_program_item_name ( $args = array() ) {
 				if ( $program_item_name != "" ) { $program_item_name .= '<p class="spacer">&nbsp;</p>'; }
 			}
 			
-			$ts_info .= "<!-- END program_item #$i -->";
+			$ts_info .= "<!-- +~+~+~+~+ END program_item #$i +~+~+~+~+ -->";
 
 			$i++;
 
