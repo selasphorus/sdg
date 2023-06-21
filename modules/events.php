@@ -872,6 +872,7 @@ function get_event_program_items( $atts = [] ) {
         
         	// Get the item label
             // --------------------
+            // TODO: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label
             if ( $show_item_label == true ) {
 				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 				$program_item_label = $arr_item_label['item_label'];
@@ -1095,7 +1096,7 @@ function get_program_item_label ( $args = array() ) {
 	
 	// Init vars
 	$arr_info = array();
-	$info = "";
+	$ts_info = "";
 	$item_label = "";
 	$placeholder_label = false;
 	$label_update_required = false;
@@ -1119,65 +1120,65 @@ function get_program_item_label ( $args = array() ) {
 	if ( isset($row['item_label'][0]) ) { 
 	
 		$item_label = get_the_title($row['item_label'][0]);
-		$info .= "<!-- program_item_label = row['item_label'][0] -->";
+		$ts_info .= "<!-- program_item_label = row['item_label'][0] -->";
 
 	} else if ( isset($row['item_label']) && !empty($row['item_label']) ) { 
 
 		$term = get_term( $row['item_label'] );
 		if ( !empty($term) ) { 
 			$item_label = $term->name;
-			$info .= "<!-- program_item_label = row['item_label']: ".$row['item_label']." -->";
+			$ts_info .= "<!-- program_item_label = row['item_label']: ".$row['item_label']." -->";
 		} else {
-			$info .= "<!-- no term found for: ".$row['item_label']." -->";
+			$ts_info .= "<!-- no term found for: ".$row['item_label']." -->";
 		}
 	}
     
-	if ( !empty ($item_label)) {
+	if ( !empty($item_label)) {
 		
 		// TODO: if a proper item_label is set, delete item_label_old
 		
 	} else {
 		
 		// Program item label is empty -- look for a placeholder value
-		$info .= "<!-- program_item_label is empty -> use placeholder -->";
+		$ts_info .= "<!-- program_item_label is empty -> use placeholder -->";
 		
 		if ( isset($row['item_label_old'][0]) && $row['item_label_old'][0] != "" ) {
 			
 			$label_update_required = true;
 			$item_label = get_the_title($row['item_label_old'][0]);
-			$info .= "<!-- item_label_old[0]: ".$row['item_label_old'][0]." -->";
+			$ts_info .= "<!-- item_label_old[0]: ".$row['item_label_old'][0]." -->";
 			
 		} else if ( isset($row['item_label_old'] ) && $row['item_label_old'] != "" ) { 
 			
 			$label_update_required = true;
 			$item_label = get_the_title($row['item_label_old']);
-			$info .= "<!-- item_label_old: ".print_r($row['item_label_old'], true)." -->";
+			$ts_info .= "<!-- item_label_old: ".print_r($row['item_label_old'], true)." -->";
 			
 		} else if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" && $row['item_label_txt'] != "x" ) { 
 			
 			$placeholder_label = true;
 			$item_label = $row['item_label_txt'];
-			$info .= "<!-- item_label_txt: ".print_r($row['item_label_txt'], true)." -->";
+			$ts_info .= "<!-- item_label_txt: ".print_r($row['item_label_txt'], true)." -->";
 			
 		}
                 
 		// Fill in Placeholder -- see if a matching record can be found to fill in a proper item_label
 		if ( ($label_update_required == true || $placeholder_label == true) && $run_updates == true ) {
 			$title_to_match = $item_label;
-			$info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+			$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => 'true', 'display' => $display );
 			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$ts_info .= $match_result;
 		} else {
-            $info .= "<!-- NO match_placeholder for program_item_label -->";
-			$info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+            $ts_info .= "<!-- NO match_placeholder for program_item_label -->";
+			$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 		}
 		
 	}
     
 	//
 	$arr_info['item_label'] = $item_label;
-	$arr_info['info'] = $info;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
 	
@@ -1187,7 +1188,7 @@ function get_program_item_label ( $args = array() ) {
 function get_program_item_name ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 
