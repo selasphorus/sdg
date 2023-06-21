@@ -1293,7 +1293,7 @@ function get_program_item_name ( $args = array() ) {
 					if ( $num_items > 1 ) {
 						if ( $i == 1 ) { // first row item
 							$row_composer_ids = $composer_ids;
-							if ( !empty($row_composer_ids) ) { $ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; }
+							//if ( !empty($row_composer_ids) ) { $ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; }
 						} else { // subsequent row items
 							// TODO: hide authorship after row one if ALL items in the row have the same composer
 							if ( !empty($row_composer_ids) && $composer_ids == $row_composer_ids ) {
