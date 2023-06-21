@@ -1232,7 +1232,7 @@ function get_program_item_name ( $args = array() ) {
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
     
-    $ts_info .= "<!-- row: ".print_r($row, true)." -->"; // tft
+    //$ts_info .= "<!-- row: ".print_r($row, true)." -->"; // tft
     //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
     
     $num_items = 0; // init
@@ -1394,7 +1394,7 @@ function get_program_item_name ( $args = array() ) {
 
 					}
 
-					//$info .= "<!-- item_name: ".$item_name." -->"; // tft
+					//$info .= "<!-- item_name: ".$item_name." -->";
 
 				} else if ( $item_post_type == 'sermon' ) {
 
@@ -1408,7 +1408,7 @@ function get_program_item_name ( $args = array() ) {
 
 				} else if ( $item_post_type == 'reading' ) {
 
-					$ts_info .= "<!-- item_post_type: reading -->"; // tft
+					$ts_info .= "<!-- item_post_type: reading -->";
 
 					$post_title = get_the_title($program_item_obj_id);
 					if ( preg_match('/\[(.*)\]/',$post_title) ) {
@@ -1417,7 +1417,7 @@ function get_program_item_name ( $args = array() ) {
 						$item_name = $post_title;
 					}
 
-					$ts_info .= "<!-- post_title: '$post_title' -->"; // tft
+					$ts_info .= "<!-- post_title: '$post_title' -->";
 
 				} else { // Not of posttype repertoire, sermon, or reading
 
@@ -1432,13 +1432,11 @@ function get_program_item_name ( $args = array() ) {
 
 			}
 			
+			$ts_info .= "<!-- title_as_label: '$title_as_label' -->";
+			$ts_info .= "<!-- item_name: '$item_name' -->";
+			
 			$program_title_as_label .= $title_as_label;
 			$program_item_name .= $item_name;
-			/*if ( $use_title_as_label ) {
-				$program_title_as_label .= $title_as_label;
-			} else {
-				$program_item_name .= $item_name;
-			}*/
 		
 			// Add spacer, in the case of multiple program items
 			if ( $num_items > 1 && $i != $num_items ) {
