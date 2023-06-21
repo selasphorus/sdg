@@ -1974,7 +1974,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         	$ts_info .= "<!-- show_image is FALSE -->";
         }
         
-        $replace .= $ts_info;
+        if ( $do_ts ) { $replace .= $ts_info; }
         
     } else if ( $result == '#_DAYTITLE' ) {
         
