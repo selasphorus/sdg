@@ -13,9 +13,10 @@ if ( !function_exists( 'add_action' ) ) {
 function get_person_display_name ( $args = array() ) {
 	
 	// TS/logging setup
-	$do_ts = false;
-    sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: get_person_display_name", $do_ts );
+	$do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_person_display_name", $do_log );
 	
 	// Init vars
 	$arr_info = array();
@@ -108,7 +109,7 @@ function get_person_display_name ( $args = array() ) {
 	
 	//return $display_name;
 	$arr_info['info'] = $display_name;
-	$arr_info['ts_info'] = $ts_info;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
 	
@@ -250,17 +251,18 @@ function get_cpt_person_content( $post_id = null ) {
 function get_person_dates( $post_id, $styled = false ) {
     
     // TS/logging setup
-    $do_ts = false;
-    sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: get_person_dates", $do_ts );
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_person_dates", $do_log );
     
     // Init vars
     $info = ""; // init
     //if ( $styled == 'false' ) { $styled = false; } else { $styled = true; }// just in case...
     
     //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
-    sdg_log( "[get_person_dates] post_id: ".$post_id, $do_ts );
-    //sdg_log( "[get_person_dates] styled: ".$styled, $do_ts );
+    sdg_log( "[get_person_dates] post_id: ".$post_id, $do_log );
+    //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
     
     // Try ACF get_field instead?
     $birth_year = get_post_meta( $post_id, 'birth_year', true );

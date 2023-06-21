@@ -44,6 +44,11 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 // WIP: Get Related Events based on program info
 // TODO: make this not so terribly slow!!!
 function get_related_events ( $meta_field = null, $term_id = null, $return_fields = 'ids' ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 
     // Init vars
     $arr_info = array();
@@ -99,7 +104,7 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
     }
     
     $arr_info['event_posts'] = $event_posts;
-    $arr_info['ts_info'] = $ts_info;
+    if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
     
     return $arr_info;
     
@@ -111,6 +116,11 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
 add_shortcode('display_event_ticketing_info', 'get_event_ticketing_info');
 // Get ticketing info per ACF fields for Event post
 function get_event_ticketing_info( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
 	$info = ""; // init
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
@@ -194,8 +204,14 @@ function get_event_ticketing_info( $post_id = null ) {
 add_shortcode('display_event_program', 'get_event_program_content');
 // Get program per ACF fields for Event post
 function get_event_program_content( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
-	$info = ""; // init
+	// Init vars
+	$info = "";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // What type of program is this? Service order or concert program?
@@ -234,6 +250,11 @@ function get_event_program_content( $post_id = null ) {
 // Program/Event personnel via Event CPT & ACF
 add_shortcode('display_event_personnel', 'get_event_personnel');
 function get_event_personnel( $atts = [] ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
     
     $a = shortcode_atts( array(
 		'id'        => get_the_ID(),
@@ -507,6 +528,11 @@ function get_event_personnel( $atts = [] ) {
 }
 
 function get_personnel_role ( $args = array() ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
 	// Init vars
 	$arr_info = array();
@@ -573,9 +599,10 @@ function get_personnel_role ( $args = array() ) {
 function get_personnel_person ( $args = array() ) {
 	
 	// TS/logging setup
-	$do_ts = false;
-    sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: get_personnel_person", $do_ts );
+	$do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_personnel_person", $do_log );
 
 	// Init vars
 	$arr_info = array();
@@ -693,7 +720,7 @@ function get_personnel_person ( $args = array() ) {
 	}
 	
 	$arr_info['info'] = $person_name;
-	$arr_info['ts_info'] = $ts_info;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
 }
@@ -703,13 +730,18 @@ function get_personnel_person ( $args = array() ) {
 add_shortcode('display_event_program_items', 'get_event_program_items');
 function get_event_program_items( $atts = [] ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
 	$a = shortcode_atts( array(
 		'id'        => get_the_ID(),
         'run_updates' => false,
         'display' => 'table'       
     ), $atts );
     
-    // init vars    
+    // Init vars    
     $post_id = $a['id'];
     $run_updates = $a['run_updates'];
     $display = $a['display'];
@@ -1055,6 +1087,11 @@ function get_event_program_items( $atts = [] ) {
 }
 
 function get_program_item_label ( $args = array() ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
 	// Init vars
 	$arr_info = array();
@@ -1148,6 +1185,11 @@ function get_program_item_label ( $args = array() ) {
 
 // 
 function get_program_item_name ( $args = array() ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 
 	// WIP!
 	// Init vars
@@ -1446,7 +1488,7 @@ function get_program_item_name ( $args = array() ) {
     $arr_info['num_items'] = $num_items; // wip
 	$arr_info['program_composers'] = $program_composers;
 	$arr_info['show_person_dates'] = $show_person_dates;
-	$arr_info['ts_info'] = $ts_info;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
 	
@@ -1620,6 +1662,11 @@ function event_personnel_cleanup(  $atts = [] ) {
 
 function get_event_programs_containing_post( $post_id = null ) { // formerly get_program_containing_post
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
     global $post;	
     $info = ""; // init
     $arr_event_ids = array(); // init
@@ -1786,6 +1833,12 @@ function display_webcast_events() {
 add_filter('em_event_output_placeholder','sdg_placeholders',1,3); // TMP DISABLED 03/25/22
 function sdg_placeholders( $replace, $EM_Event, $result ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars    
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
@@ -2012,6 +2065,11 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
 // Filter to force the mini-cal in the sidebar to match the month/year of the individual event [or archive scope? wip]
 add_filter( 'em_widget_calendar_get_args', 'match_widget_to_event_content',1,3 );
 function match_widget_to_event_content ( $instance ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
 	//sdg_log("fcn match_widget_to_event_content");
 	
@@ -2077,12 +2135,17 @@ function em_args_mod($args){
 
 // Create custom scopes: "Upcoming", "This Week", "This Season", "Next Season", "This Year", "Next Year"
 function sdg_em_custom_scopes( $scope = null ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
 	if ( empty($scope) ) {
 		return null;
 	}
 	
-	// Init results vars
+	// Init vars
 	$dates = array();
 	$start_date = null;
 	$end_date = null;
@@ -2187,11 +2250,12 @@ function my_em_scope_conditions($conditions, $args){
 function sdg_em_custom_scope_arg( $args = array() ){
     
     // TS/logging setup
-    $do_ts = false;
-    sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: sdg_em_custom_scope_arg", $do_ts );
-    if( is_admin() ) { sdg_log( "is_admin", $do_ts ); } else { sdg_log( "NOT is_admin", $do_ts ); }
-    sdg_log( "[secsa] args: ". print_r($args,true), $do_ts );
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: sdg_em_custom_scope_arg", $do_log );
+    if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
+    sdg_log( "[secsa] args: ". print_r($args,true), $do_log );
     //sdg_log("conditions: ". print_r($conditions,true) );
     return $args;
 }
@@ -2200,29 +2264,31 @@ add_filter( 'em_events_build_sql_conditions', 'sdg_em_custom_scope_condition',10
 function sdg_em_custom_scope_condition( $conditions, $args ){
 
 	// TS/logging setup
-	$do_ts = false;
-	sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: sdg_em_custom_scope_condition", $do_ts );
-    //sdg_log("args: ". print_r($args,true) );
-    sdg_log( "[secsc] conditions: ". print_r($conditions,true), $do_ts );
+	$do_ts = false; 
+    $do_log = false;
+	sdg_log( "divline2", $do_log );
+    sdg_log( "function called: sdg_em_custom_scope_condition", $do_log );
     
-    if( is_admin() ) { sdg_log( "is_admin", $do_ts ); } else { sdg_log( "NOT is_admin", $do_ts ); }
+    //sdg_log("args: ". print_r($args,true) );
+    sdg_log( "[secsc] conditions: ". print_r($conditions,true), $do_log );
+    
+    if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
     
 	if( is_admin() ) {
 		
         if ( !empty($args['scope']) ) { $scope = $args['scope']; } else { $scope = null; }
 		
 		if ( ! is_array($scope) ) {
-			sdg_log("args['scope']: ".$args['scope'], $do_ts);
+			sdg_log("args['scope']: ".$args['scope'], $do_log);
 		} else {
-			sdg_log("args['scope']: ". print_r($args['scope'],true), $do_ts );
+			sdg_log("args['scope']: ". print_r($args['scope'],true), $do_log );
 		}
         
         if ( !empty($conditions['scope']) ) {
             if ( ! is_array($conditions['scope']) ) {
-                sdg_log( "conditions['scope']".$conditions['scope'], $do_ts );
+                sdg_log( "conditions['scope']".$conditions['scope'], $do_log );
             } else {
-                sdg_log( "conditions['scope']". print_r($conditions['scope'],true), $do_ts );
+                sdg_log( "conditions['scope']". print_r($conditions['scope'],true), $do_log );
             }        
         }
 		
@@ -2235,7 +2301,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
 		
 		if ( in_array($scope, $my_scopes) ) {		
 			
-			sdg_log($scope." is a custom scope.", $do_ts);
+			sdg_log($scope." is a custom scope.", $do_log);
 			$arr_dates = sdg_em_custom_scopes($scope);
 		
 			if ( $arr_dates) {
@@ -2253,7 +2319,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
 		
 	}
     
-    if ( isset($conditions['scope']) ) { sdg_log( "final conditions['scope']: ".$conditions['scope'], $do_ts ); }
+    if ( isset($conditions['scope']) ) { sdg_log( "final conditions['scope']: ".$conditions['scope'], $do_log ); }
     
     //return $args;
     return $conditions;
@@ -2372,9 +2438,10 @@ add_filter( 'em_events_build_sql_conditions', 'sdg_custom_event_search_build_sql
 function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     
     // TS/logging setup
-    $do_ts = false;
-    sdg_log( "divline2", $do_ts );
-    sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_ts );
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_log );
     
     //sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true) );
     //sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true) );
@@ -2383,7 +2450,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     
     if( !empty($args['series']) && is_numeric($args['series']) ){
         
-        sdg_log( "[sdg_custom_event_search...] series is set and valid: ".$args['series'], $do_ts );
+        sdg_log( "[sdg_custom_event_search...] series is set and valid: ".$args['series'], $do_log );
         $meta_value = '%"'.$args['series'].'"%';
         $sql = $wpdb->prepare(
             "SELECT `event_id` FROM ".EM_EVENTS_TABLE.", `wpstc_postmeta` WHERE `meta_value` LIKE %s AND `meta_key`='events_series' AND ".EM_EVENTS_TABLE.".`post_id` = `wpstc_postmeta`.`post_id`", $meta_value
@@ -2397,7 +2464,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     // The following seems to effect only front-end display. Look into affecting back-end display, also.
     if( !empty($args['scope']) ) {
 		
-        sdg_log( "[sdg_custom_event_search...] scope: ".print_r( $args['scope'],true ), $do_ts );
+        sdg_log( "[sdg_custom_event_search...] scope: ".print_r( $args['scope'],true ), $do_log );
         
 		$scope = $args['scope'];
 		$arr_dates = sdg_em_custom_scopes($scope);

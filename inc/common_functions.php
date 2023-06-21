@@ -12,7 +12,13 @@ if ( !function_exists( 'add_action' ) ) {
 
 // TODO: replace w/ sdg_post_title via SDG plugin? or via display_content plugin?
 function sdg_post_title ( $args = array() ) {
-
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
 	$info = "";
 	$ts_info = "";
 	
@@ -167,6 +173,12 @@ function sdg_post_title ( $args = array() ) {
 // Custom fcn for thumbnail/featured image display
 function sdg_post_thumbnail ( $args = array() ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
     $info = "";
 	$ts_info = "";
 	
@@ -584,7 +596,7 @@ function get_possible_duplicate_posts( $post_id = null, $return = 'all' ) {
 // WIP
 function merge_field_values ( $p1_val = null, $p2_val = null ) {
 
-	// init
+	// Init vars
 	$arr_info = array();
 	$merge_value = null;
 	$info = "";
@@ -630,8 +642,13 @@ function merge_field_values ( $p1_val = null, $p2_val = null ) {
 add_shortcode('sdg_merge_form', 'sdg_merge_form');
 //function sdg_merge_form ( $post_ids = array() ) {
 function sdg_merge_form ($atts = [], $content = null, $tag = '') {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
 	
-	// init vars
+	// Init vars
 	$info = "";
     $ts_info = "";
     $form_action = null;

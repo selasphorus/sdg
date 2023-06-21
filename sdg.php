@@ -2027,10 +2027,10 @@ function sdg_console_log($output, $with_script_tags = true) {
     echo $js_code;
 }
 
-function sdg_log( $log_msg, $do_ts = true ) {
+function sdg_log( $log_msg, $do_log = true ) {
     
     // Set do_ts to true for active troubleshooting; false for cleaner source & logs
-    if ( $do_ts === false ) { return; } // Abort if logging is turned off (set per calling fcn)
+    if ( $do_log === false ) { return; } // Abort if logging is turned off (set per calling fcn)
     
 	// Create directory for storage of log files, if it doesn't exist already
 	$log_filename = $_SERVER['DOCUMENT_ROOT']."/_sdg-devlog";
