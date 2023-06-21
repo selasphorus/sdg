@@ -367,8 +367,8 @@ function get_event_personnel( $atts = [] ) {
 				// Get the person
 				// --------------------
 				$arr_person = get_personnel_person( $personnel_args );
-				$person_name = $arr_person['person_name'];
-				$row_info .= $arr_person['info'];
+				$person_name = $arr_person['info'];
+				$row_info .= $arr_person['ts_info'];
 			
 				$row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
             
@@ -692,7 +692,7 @@ function get_personnel_person ( $args = array() ) {
 			
 	}
 	
-	$arr_info['person_name'] = $person_name;
+	$arr_info['info'] = $person_name;
 	$arr_info['ts_info'] = $ts_info;
 	
 	return $arr_info;
@@ -866,7 +866,7 @@ function get_event_program_items( $atts = [] ) {
             //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
             $row_info .= "<!-- START arr_item_name['info'] -->";
-            $row_info .= $arr_item_name['info']; // info is already commented
+            $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
             $row_info .= "<!-- END arr_item_name['info'] -->";
             //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
             //$row_info .= "program_item_name: $program_item_name";
@@ -1312,8 +1312,8 @@ function get_program_item_name ( $args = array() ) {
 					if ( $row_type == 'title_only' ) {
 					
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
-						$item_name = $arr_item_name['rep_info'];
-						$ts_info .= $arr_item_name['info'];
+						$item_name = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['ts_info'];
 					
 					} else if ( empty($program_item_label) ) {
 
@@ -1321,8 +1321,8 @@ function get_program_item_name ( $args = array() ) {
 
 						// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
-						$title_as_label = $arr_item_name['rep_info'];
-						$ts_info .= $arr_item_name['info'];
+						$title_as_label = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['ts_info'];
 												
 						// TODO: figure out how to show auth info only for one item if all items in group have same info...
 						// WIP
@@ -1336,8 +1336,8 @@ function get_program_item_name ( $args = array() ) {
 					} else {
 
 						$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
-						$item_name = $arr_item_name['rep_info'];
-						$ts_info .= $arr_item_name['info'];
+						$item_name = $arr_item_name['info'];
+						$ts_info .= $arr_item_name['ts_info'];
 
 					}
 
