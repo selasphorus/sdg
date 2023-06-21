@@ -1298,7 +1298,7 @@ function get_program_item_name ( $args = array() ) {
 							// merge arrays
 							if ( is_array($composer_ids) ) { array_merge($row_composer_ids, $composer_ids); }
 							// TODO: hide authorship after row one if ALL items in the row have the same composer
-							if ( $composer_ids == $row_composer_ids ) {
+							if ( !empty($row_composer_ids) && $composer_ids == $row_composer_ids ) {
 								$show_item_authorship = false;
 								$ts_info .= "<!-- composer_ids same as first item ids; don't show authorship for this item -->";
 							}
