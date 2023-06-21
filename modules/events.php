@@ -821,7 +821,7 @@ function get_event_program_items( $atts = [] ) {
             $program_item_label = null;
             $program_item_name = null;
             //
-            $title_as_label = false;
+            $use_title_as_label = false;
             //
             $show_person_dates = true;
             //
@@ -888,10 +888,8 @@ function get_event_program_items( $atts = [] ) {
             //if ( $arr_item_name['title_as_label'] != "" ) {
             if ( $arr_item_name['use_title_as_label'] ) {
                 $use_title_as_label = true;
-            	$program_item_label = $arr_item_name['program_title_as_label'];
+            	$program_item_label = $arr_item_name['title_as_label'];
             	$row_info .= "<!-- title_as_label -->";
-            } else {
-            	$use_title_as_label = false;
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
