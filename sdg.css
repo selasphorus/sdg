@@ -123,6 +123,53 @@ a.action {
     padding: 0;
 }
 
+
+/*** Tables ***/
+
+table.program/ {
+	width: auto;
+	border: none;
+}
+
+table.program.personnel {
+    border-bottom: 1px solid rgb(0,0,0,.05);
+    padding-bottom: 1rem;
+}
+
+.first_program_items table.program.personnel {
+    border-top: 1px solid rgb(0,0,0,.05);
+    padding-top: 1rem;
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.concert_program_personnel {
+	text-align: center;
+}
+
+.left_aligned .concert_program_personnel {
+    text-align: left;
+}
+
+.concert_program_personnel .person {
+
+}
+
+.concert_program_personnel .person_role {
+	text-transform: lowercase;
+	font-style: italic;
+}
+
+table.program tr td {
+    border: none;
+    padding: 0.2rem 1rem .5rem 0;
+}
+
+.concert_program table.program tr td,
+table.program tr.grouping td {
+    padding-bottom: 2rem;
+}
+
 /*** FORM STYLES ***/
 
 form#select_ids {
