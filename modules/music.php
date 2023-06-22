@@ -505,7 +505,7 @@ function str_from_persons_array ( $args = array() ) {
         
         if ( ( $format == "post_title" || $format == "edition_title" ) && ( $person_category == "composers" || $person_category == "arrangers" ) ) { 
 			$show_dates = true;
-			 // don't add person_dates span/style for post_titles
+			$styled = false; // don't add person_dates span/style for post_titles
 		} else if ( $abbr !== true ) {
 			$show_dates = true;
 			$styled = true; // add dates with span/style
