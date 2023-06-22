@@ -1201,15 +1201,12 @@ function get_program_item_name ( $args = array() ) {
 	$arr_info = array();
 	$ts_info = "";
 	//
-    $item_name = "";
 	$program_item_name = "";
-	//
-	$use_title_as_label = false;
-	$title_as_label = "";
 	$program_title_as_label = "";
 	//
+	$use_title_as_label = false;	
+	//
 	$row_composer_ids = array();
-    $show_person_dates = true;
     //
     
     $ts_info .= "<!-- ******* get_program_item_name ******* -->";
@@ -1258,9 +1255,12 @@ function get_program_item_name ( $args = array() ) {
 		foreach ( $row['program_item'] as $program_item ) {
 	
 			$ts_info .= "<!-- +~+~+~+~+ program_item #$i +~+~+~+~+ -->";
-		
-			$item_name = ""; // init
-			$show_item_authorship = true; // init
+			
+			// Init vars
+			$item_name = "";
+			$title_as_label = "";
+			$show_item_authorship = true;
+			$show_person_dates = true;
 		
 			$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 			//$program_item_obj_id = $row['program_item'][0]; // ACF is now set to return ID for relationship field, not object
