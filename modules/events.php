@@ -1236,7 +1236,7 @@ function get_program_item_name ( $args = array() ) {
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
     
-    //$ts_info .= "<!-- row: ".print_r($row, true)." -->"; // tft
+    $ts_info .= "<!-- row: ".print_r($row, true)." -->"; // tft
     //$info .= "<!-- program_item: ".print_r($row['program_item'], true)." -->"; // tft
     
     $num_items = 0; // init
@@ -1329,7 +1329,7 @@ function get_program_item_name ( $args = array() ) {
 								$ts_info .= "<!-- ids_intersect: ".print_r($ids_intersect, true)." -->";
 								$ts_info .= "<!-- count(ids_intersect): ".count($ids_intersect)." -->";
 								
-								if ( $num_items == 1 || $i > 1 ) { 
+								if ( $num_items == 1 || $i > 1 ) {
 									// Hide person dates if already shown in this program OR if this is not the first item in a multi-item row
 									$show_person_dates = false;
 									$ts_info .= "<!-- count(ids_intersect) is > 0, therefore set show_person_dates to false -->";
