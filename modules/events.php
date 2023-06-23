@@ -2029,11 +2029,11 @@ function event_program_cleanup( $atts = [] ) {
 			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
-					'key'     => 'is_header',
+					'key'     => 'program_items_XYZ_is_header',
 					'compare' => 'EXISTS'
 				),
 				array(
-					'key'     => 'is_header',
+					'key'     => 'program_items_XYZ_is_header',
 					'compare' => '=',
 					'value'   => 1,
 				),
