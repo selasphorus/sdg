@@ -1916,7 +1916,7 @@ function event_program_cleanup( $atts = [] ) {
     
     // Parse shortcode attributes
 	$a = shortcode_atts( array(
-		'post_id'   => null, //get_the_ID(),
+		'ids'   => null, //get_the_ID(),
         'num_posts' => 1, // default is one post at a time because most have multiple program rows and these meta queries are SLOW!
         'scope'		=> 'both', // personnel, program_items, or both
         'field_check'	=> 'all',
@@ -2094,7 +2094,13 @@ function event_program_cleanup( $atts = [] ) {
 			),*/
 		);
 		
-		// TODO: if fields val contains commas, turn it into an array... etc
+		// Posts by ID
+    	// NB: if IDs are specified, ignore field_check
+		if ( !empty($ids) ) {
+			$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
+			$wp_args['post__in'] = $posts_in;
+			$field_check = "N/A";
+		}
 		
 		if ( $field_check == "all" ) {
 			$wp_args['meta_query'] = array(
@@ -2198,6 +2204,7 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
 			$info .= "field_check: ".$field_check."<br />";
 			
 			foreach ( $posts AS $post ) {
