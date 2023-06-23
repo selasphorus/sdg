@@ -1617,8 +1617,10 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 		
 		// Now that we've dealt with these obsolete field values, we can delete/clear them
-		if ( isset($row['show_item_label']) ) { $arr_field_deletions[] = "show_item_label"; }
-		if ( isset($row['show_item_title']) ) { $arr_field_deletions[] = "show_item_title"; }
+		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
+		// Note that fields with defaults will appear to exist in $row array, but may not actually be in the DB
+		if ( metadata_exists( 'post', $post_id, 'show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
+		if ( metadata_exists( 'post', $post_id, 'show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
 		
 		// Item label
 		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
