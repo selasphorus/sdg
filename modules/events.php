@@ -113,6 +113,51 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
 
 /*********** EVENT PROGRAMS ***********/
 
+add_shortcode('display_event_program', 'get_event_program_content');
+// Get program per ACF fields for Event post
+function get_event_program_content( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+	
+	// Init vars
+	$info = "";
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
+    
+    // What type of program is this? Service order or concert program?
+    $program_type = get_post_meta( $post_id, 'program_type', true );
+    
+    // What program order? (default is personnel first)
+    $program_order = get_post_meta( $post_id, 'program_order', true );
+    
+    // Code comments for troubleshooting
+    $info .= "<!-- post_id: $post_id -->";
+    $info .= "<!-- program_type: $program_type -->";
+    $info .= "<!-- program_order: $program_order -->";
+	
+    $info .= '<div class="event_program '.$program_type.' '.$program_order.'">';
+    
+    if ( $program_order == "first_program_items" ) {
+        $info .= get_event_program_items( $post_id );
+        $info .= get_event_personnel( $post_id );	   
+    } else {
+        $info .= get_event_personnel( $post_id );
+        $info .= get_event_program_items( $post_id );
+    }
+    
+	$info .= '</div>';
+    
+    //if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
+	
+    // TODO: get and display program_pdf?
+	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, "_blank"); // make_link( $url, $linktext, $class = null, $target = null)
+	
+	return $info;
+	
+}
+
 add_shortcode('display_event_ticketing_info', 'get_event_ticketing_info');
 // Get ticketing info per ACF fields for Event post
 function get_event_ticketing_info( $post_id = null ) {
@@ -201,53 +246,9 @@ function get_event_ticketing_info( $post_id = null ) {
 	
 }
 
-add_shortcode('display_event_program', 'get_event_program_content');
-// Get program per ACF fields for Event post
-function get_event_program_content( $post_id = null ) {
-    
-    // TS/logging setup
-    $do_ts = false; 
-    $do_log = false;
-    sdg_log( "divline2", $do_log );
-	
-	// Init vars
-	$info = "";
-	if ( $post_id == null ) { $post_id = get_the_ID(); }
-    
-    // What type of program is this? Service order or concert program?
-    $program_type = get_post_meta( $post_id, 'program_type', true );
-    
-    // What program order? (default is personnel first)
-    $program_order = get_post_meta( $post_id, 'program_order', true );
-    
-    // Code comments for troubleshooting
-    $info .= "<!-- post_id: $post_id -->";
-    $info .= "<!-- program_type: $program_type -->";
-    $info .= "<!-- program_order: $program_order -->";
-	
-    $info .= '<div class="event_program '.$program_type.' '.$program_order.'">';
-    
-    if ( $program_order == "first_program_items" ) {
-        $info .= get_event_program_items( $post_id );
-        $info .= get_event_personnel( $post_id );	   
-    } else {
-        $info .= get_event_personnel( $post_id );
-        $info .= get_event_program_items( $post_id );
-    }
-    
-	$info .= '</div>';
-    
-    //if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
-	
-    // TODO: get and display program_pdf?
-	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, "_blank"); // make_link( $url, $linktext, $class = null, $target = null)
-	
-	return $info;
-	
-}
 
-
-// Program/Event personnel via Event CPT & ACF
+/***  Program/Event personnel via Event CPT & ACF ***/
+//
 add_shortcode('display_event_personnel', 'get_event_personnel');
 function get_event_personnel( $atts = [] ) {
     
@@ -326,7 +327,7 @@ function get_event_personnel( $atts = [] ) {
             $delete_row = false;
             $row_info = "";
             
-            // What's the row type? Options are "default", "header", "role_only", and "name_only"
+            // What's the row type? Options include "default", "header", "role_only", and "name_only"
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
             $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
             
@@ -527,6 +528,7 @@ function get_event_personnel( $atts = [] ) {
 	return $info;
 }
 
+//
 function get_personnel_role ( $args = array() ) {
     
     // TS/logging setup
@@ -596,6 +598,7 @@ function get_personnel_role ( $args = array() ) {
             
 }
 
+//
 function get_personnel_person ( $args = array() ) {
 	
 	// TS/logging setup
@@ -725,8 +728,9 @@ function get_personnel_person ( $args = array() ) {
 	return $arr_info;
 }
 
+/***  Program items per Event CPT & ACF ***/
 
-// Program items per Events CPT & ACF -- NEW way
+//
 add_shortcode('display_event_program_items', 'get_event_program_items');
 function get_event_program_items( $atts = [] ) {
     
@@ -872,12 +876,35 @@ function get_event_program_items( $atts = [] ) {
         
         	// Get the item label
             // --------------------
-            // TODO: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label
-            if ( $show_item_label == true ) {
+            // TODO/WIP: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
+            if ( $show_item_label == true && $row_type != 'title_only' ) {
 				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 				$program_item_label = $arr_item_label['item_label'];
 				$row_info .= $arr_item_label['ts_info'];
             }
+            /*
+            default : Standard two-column row
+            split : Title left/Authorship right
+			header : Header row
+			role_only : Person role only
+			name_only : Person name only
+			label_only : Item label only
+			title_only : Item title only
+			program_note : Program note
+			//
+            if ( $row_type == 'title_only' ) {
+					
+				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
+				$item_name = $arr_item_name['info'];
+				$ts_info .= $arr_item_name['ts_info'];
+			
+			} else if ( empty($program_item_label) ) {
+
+				$ts_info .= "<!-- program_item_label is empty >> use title in left col -->";
+				$use_title_as_label = true;
+				
+			}
+			*/
             
             // Get the program item name
             // --------------------
@@ -908,6 +935,11 @@ function get_event_program_items( $atts = [] ) {
             //$row_info .= "<!-- arr_item_name info: ".$arr_item_name['info']." -->";
             /****************/
             
+            // Match Placeholders
+            if ( $run_updates == true ) {
+            	//match_placeholders($row);
+            }
+            
             // Cleanup/Deletion of extra/empty program rows
             // --------------------
             // Check for extra/empty rows -- prep to delete them
@@ -928,11 +960,7 @@ function get_event_program_items( $atts = [] ) {
                 if ( $program_item_name == "*NULL*" ) { $program_item_name = ""; }
             }
             
-            if ( $run_updates == true ) { 
-                $do_deletions = true; // tft
-            } else {
-                $do_deletions = false; // tft
-            }
+            if ( $run_updates == true ) { $do_deletions = true; } else { $do_deletions = false; }
             $do_deletions = false; // tft -- failsafe!
             
             // If the row is empty/x-filled and needs to be deleted, then do so
@@ -1054,8 +1082,7 @@ function get_event_program_items( $atts = [] ) {
 				}
     
 			}
-							
-			
+
 			// --------------------
             
             $i++;
@@ -1100,19 +1127,21 @@ function get_program_item_label ( $args = array() ) {
 	$ts_info = "";
 	$item_label = "";
 	$placeholder_label = false;
-	$label_update_required = false;
     
     //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
     
+    // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
+    
     // Defaults
 	$defaults = array(
-		'index'   		=> null,
-		'post_id' 		=> null,
-		'row'			=> null,
-		//'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
-		'run_updates'   => false,
-		'display'    	=> null,
+		'row'			=> null, // from event ACF repeater row: program_items
+		//
+		'index'   		=> null, // to be passed as arg to match_placeholder -- WIP
+		'post_id' 		=> null, // to be passed as arg to match_placeholder -- WIP
+		'run_updates'   => false, // to be passed as arg to match_placeholder and/or sdg_add_post_term -- WIP
+		'display'    	=> null, // to be passed as arg to match_placeholder -- WIP
 	);
+	//$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 	
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
@@ -1162,18 +1191,6 @@ function get_program_item_label ( $args = array() ) {
 			$ts_info .= "<!-- item_label_txt: ".print_r($row['item_label_txt'], true)." -->";
 			
 		}
-                
-		// Fill in Placeholder -- see if a matching record can be found to fill in a proper item_label
-		if ( ($label_update_required == true || $placeholder_label == true) && $run_updates == true ) {
-			$title_to_match = $item_label;
-			$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => 'true', 'display' => $display );
-			$match_result = match_placeholder( $match_args );
-			$ts_info .= $match_result;
-		} else {
-            $ts_info .= "<!-- NO match_placeholder for program_item_label -->";
-			$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
-		}
 		
 	}
     
@@ -1188,7 +1205,7 @@ function get_program_item_label ( $args = array() ) {
 // 
 function get_program_item_name ( $args = array() ) {
     
-    // TODO: revise function to return array of names so that multiple items from a single ACF row can be presented in separate table rows.
+    // TODO/WIP: revise function to return array of names so that multiple items from a single ACF row can be presented in separate table rows.
     // This change is necessary because some item names are too long to fit on a single line in a column, and therefore the alignment is disrupted between concert program item names as labels and the item composers
     
     // TS/logging setup
@@ -1197,10 +1214,10 @@ function get_program_item_name ( $args = array() ) {
     sdg_log( "divline2", $do_log );
 
 	// Init vars
-	// WIP! TODO: simplify
 	$arr_info = array();
 	$ts_info = "";
 	//
+	// WIP! TODO: simplify
 	$program_item_name = "";
 	$program_title_as_label = "";
 	//
@@ -1212,18 +1229,20 @@ function get_program_item_name ( $args = array() ) {
     $ts_info .= "<!-- ******* get_program_item_name ******* -->";
     //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
     
+    // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
+    
     // Defaults
 	$defaults = array(
-		'index'   		=> null,
-		'post_id' 		=> null, // needed for match_args
+		'index'   		=> null, // needed for checking whether to show person_dates (???) ; also to be passed as arg to match_placeholder -- WIP
+		'post_id' 		=> null, /// to be passed as arg to match_placeholder -- WIP
 		'row_type'		=> 'default', // other possible values include: "header", ...?
 		'row'			=> null,
-		'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
-		'program_item_label'=> null,
-		'show_item_title'	=> null,
+		//'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
+		'program_item_label'=> null, // used for match args and to determine use_title_as_label >> do this some other way before calling this fcn?
+		//'show_item_title'	=> null, // don't need to pass this as arg -- it's a row parameter, no?
 		'program_composers'	=> null,
-		'run_updates'   => false,
-		'display'    	=> null,
+		'run_updates'   => false, // related to placeholder fill-in functionality -- move this to some other fcn
+		'display'    	=> null, // arg for get_rep_info
 	);
 	
 	// Parse & Extract args
@@ -1462,7 +1481,6 @@ function get_program_item_name ( $args = array() ) {
     
 	}
 	
-	
 	// Is there a program note for this item? If so, append it to the item name
 	if ( isset($row['program_item_note']) && $row['program_item_note'] != "" ) {
 		if ( $program_title_as_label != "" ) { 
@@ -1474,6 +1492,8 @@ function get_program_item_name ( $args = array() ) {
 
     //$info .= "<!-- program_item_name: $program_item_name -->"; // tft
     
+    
+    // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
     if ( empty($program_item_name) ) {
         
         $ts_info .= "<!-- program_item_name is empty >> placeholder -->";
@@ -1483,27 +1503,7 @@ function get_program_item_name ( $args = array() ) {
             $placeholder_item = true;
             $program_item_name = $row['program_item_txt'];
 
-            // Fill in Placeholder -- see if a matching record can be found to fill in a proper program_item
-            if ( $run_updates == true ) {
-
-                if ( isset($row['program_item_title_for_matching']) && $row['program_item_title_for_matching'] != "" ) {
-                    $title_to_match = $row['program_item_title_for_matching'];
-                    //$row_info .= "<!-- title_to_match = program_item_title_for_matching -->";
-                } else {
-                    $title_to_match = $program_item_name;
-                    //$row_info .= "<!-- title_to_match = program_item_name -->";
-                }
-                //$row_info .= "<!-- title_to_match: [$title_to_match] -->";
-
-                $ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-                $match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $program_item_label, 'repeater_name' => 'program_items', 'field_name' => 'program_item' ); // , 'display' => $display
-                $match_result = match_placeholder( $match_args );
-                $ts_info .= $match_result;
-
-            } else {
-                $ts_info .= "<!-- NO match_placeholder for program_item_name -->";
-                $ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
-            }
+            
         }
     }
     
@@ -1523,32 +1523,163 @@ function get_program_item_name ( $args = array() ) {
 	
 }
 
+
+/*********** ADMIN FUNCTIONS ***********/
+
 // WIP
-function match_program_placeholders() {
+
+/* ***
+ * 
+ * 
+ */
+
+
+/* ***
+ * With the introduction of the `row_type` field to the ACF repeater fields `personnel` and `program_items`,
+ * several other fields became obsolete and need to be phased out.
+ * The purpose of this function is to update the `row_type` field as needed and delete the obsolete metadata
+ * 
+ */
+function update_row_type ( $row = null ) { //$row_category = null, 
+
+	// Init vars
+	$run_updates = false;
+	
+	// Get row_type
+	if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; } //else { $row_type = "default"; }
+    $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
+	
+	// Header row?
+	// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record
+	// Is this a header row? (Deprecated field)
+	if ( isset($row['is_header']) && $row['is_header'] == 1 ) { 
+		if ( $row_type == null || $row_type == "default" ) { //if ( $row_type != "header" ) {
+			$row_type = "header"; // TODO: update the row_type in the DB
+			$run_updates = true;
+		}
+	}
+	
+	// if show_item_label == 0 && show_item_title == 1 && row_type is empty/DN exist for the post, then update row_type to "title_only" and remove is_header meta record
+	
+	// if show_item_label == 1 && show_item_title == 0 && row_type is empty/DN exist for the post, then update row_type to "label_only" and remove is_header meta record
+	
+	// Run the updates
+	// ...
+	
+	//return something...
+	
+}
+
+// WIP
+function match_placeholders( $row_category = null, $row = null ) { // match_program_placeholders
     
     // (1) Personnel: person_roles
     // (2) Personnel: persons
     // (3) Program Items: item_labels
     // (4) Personnel: program_items
     
+    
+    /*
+    Fields -- personnel:
+    -------------------
+    *row_type
+    *show_row
+    header_txt -- for row_type == header >> add this to program_items repeater also?
+    role
+    role_txt
+    role_old
+    person
+    person_txt
+    person_url
+    ++++++++++
+    Fields -- program_items:
+    -------------------
+    *row_type
+    (is_header)
+    *show_row
+    show_item_label
+    show_item_title
+    item_label
+    item_label_txt
+    program_item
+    program_item_txt
+    program_item_title_for_matching
+    program_item_note
+    /*
+    
+    // item label
+	if ( isset($row['item_label_old'][0]) && $row['item_label_old'][0] != "" ) {
+
+		$label_update_required = true;
+		$item_label = get_the_title($row['item_label_old'][0]);
+		$ts_info .= "<!-- item_label_old[0]: ".$row['item_label_old'][0]." -->";
+
+	} else if ( isset($row['item_label_old'] ) && $row['item_label_old'] != "" ) { 
+
+		$label_update_required = true;
+		$item_label = get_the_title($row['item_label_old']);
+		$ts_info .= "<!-- item_label_old: ".print_r($row['item_label_old'], true)." -->";
+
+	}
+	// Fill in Placeholder -- see if a matching record can be found to fill in a proper item_label
+	if ( ($label_update_required == true || $placeholder_label == true) && $run_updates == true ) {
+		$title_to_match = $item_label;
+		$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => 'true', 'display' => $display );
+		$match_result = match_placeholder( $match_args );
+		$ts_info .= $match_result;
+	} else {
+		$ts_info .= "<!-- NO match_placeholder for program_item_label -->";
+		$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+	}
+	
+	// program item
+	
+	// Fill in Placeholder -- see if a matching record can be found to fill in a proper program_item
+	
+
+		if ( isset($row['program_item_title_for_matching']) && $row['program_item_title_for_matching'] != "" ) {
+			$title_to_match = $row['program_item_title_for_matching'];
+			//$row_info .= "<!-- title_to_match = program_item_title_for_matching -->";
+		} else {
+			$title_to_match = $program_item_name;
+			//$row_info .= "<!-- title_to_match = program_item_name -->";
+		}
+		//$row_info .= "<!-- title_to_match: [$title_to_match] -->";
+
+		$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $program_item_label, 'repeater_name' => 'program_items', 'field_name' => 'program_item' ); // , 'display' => $display
+		$match_result = match_placeholder( $match_args );
+		$ts_info .= $match_result;
+
+	// WIP
+	if ( $match_result == true ) {
+		//
+	} else {
+		$ts_info .= "<!-- NO match_placeholder for program_item_name -->";
+		$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+	}
+	*/
+    
 }
 
 
-// Clean up Event Personnel: fill in real values from placeholders; remove obsolete/orphaned postmeta
+// Phasing this out in favor of the subsequent more general fcn
+// Clean up Event Personnel: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_personnel_cleanup', 'event_personnel_cleanup');
 function event_personnel_cleanup(  $atts = [] ) {
 	
-    if ( !current_user_can('administrator') ) {
-        // Not an admin? Don't touch my database!
-        return false;
-    }
+    // Not an admin? Don't touch my database!
+    if ( !current_user_can('administrator') ) { return false; }
+    
+    // Parse shortcode attributes
 	$a = shortcode_atts( array(
-		'id'        => null, //get_the_ID(),
+		'post_id'        => null, //get_the_ID(),
         'num_posts' => 5,
     ), $atts );
     
-	//$event_post_id = $a['id'];
-	$num_posts = $a['num_posts'];
+	// Extract attribute values into variables
+    extract($a);
     
     $info = "";
     
@@ -1688,6 +1819,309 @@ function event_personnel_cleanup(  $atts = [] ) {
     
 }
 
+// Clean up Event Program Items: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
+add_shortcode('event_program_cleanup', 'event_program_cleanup');
+function event_program_cleanup( $atts = [] ) {
+
+	// Not an admin? Don't touch my database!
+    if ( !current_user_can('administrator') ) { return false; }
+    
+    // Parse shortcode attributes
+	$a = shortcode_atts( array(
+		'post_id'   => null, //get_the_ID(),
+        'num_posts' => 5,
+        'scope'		=> 'both', // personnel, program_items, or both
+    ), $atts );
+    
+	// Extract attribute values into variables
+    extract($a);
+    
+    // Personnel
+    if ( $scope == "personnel" || $scope == "both" ) {
+    
+    	// TODO: revise to search more specifically for posts with problem meta -- e.g. role_old
+    	// Get all posts w/ personnel rows
+		$wp_args = array(
+			'post_type'   => 'event',
+			'post_status' => 'publish',
+			'posts_per_page' => $num_posts,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'personnel',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key'     => 'personnel',
+					'compare' => '!=',
+					'value'   => 0,
+				),
+				array(
+					'key'     => 'personnel',
+					'compare' => '!=',
+					'value'   => '',
+				)
+			),
+			'orderby'   => 'ID meta_key',
+			'order'     => 'ASC',
+			/*'tax_query' => array(
+				//'relation' => 'AND', //tft
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'program-personnel-placeholders' ),
+					//'terms'    => array( 'program-placeholders' ),
+					//'terms'    => array( $admin_tag_slug ),
+					//'operator' => 'NOT IN',
+				),
+			),*/
+		);
+	
+		$result = new WP_Query( $wp_args );
+		$posts = $result->posts;
+		
+		/*
+		if ( $posts ) {
+        
+			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
+			//$info .= "args: <pre>".print_r($args, true)."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+		
+			foreach ( $posts AS $post ) {
+		
+				setup_postdata( $post );
+				$post_id = $post->ID;
+				
+				// Get rows... loop... update_row_type ( $row )
+				
+				// WIP 06/22/23
+				
+				$meta = get_post_meta( $post_id );
+				//$post_info .= "post_meta: <pre>".print_r($meta, true)."</pre>";
+				$post_info = ""; // init
+				$num_repeater_rows = 0;
+				$arr_repeater_rows_indices = array();
+			
+				$info .= '<div class="code">';
+				$info .= "post_id: $post_id<br />";
+			
+				foreach ( $meta as $key => $value ) {
+				
+					if (strpos($key, 'personnel') == 0) { // meta_key starts w/ 'personnel' (no underscore)
+						$post_info .= "<code>$key => ".$value[0]."</code><br />";
+						if ($key == 'personnel') {
+							$num_repeater_rows = $value[0];
+						} else { // if (strpos($key, 'personnel_') == 0) -- meta_key starts w/ 'personnel_' (with underscore)
+							// Get the int indicating the row index, and add it to the array if it isn't there already
+							$int_str = preg_replace('/[^0-9]+/', '', $key);
+							if ( $int_str != "" && ! in_array($int_str, $arr_repeater_rows_indices) ) { $arr_repeater_rows_indices[] = $int_str; }
+						}
+					}
+				
+					if ( empty($value) || $value == "x" ) {
+						// Delete empty or placeholder postmeta
+						//delete_post_meta( int $post_id, string $meta_key, mixed $meta_value = '' )
+						//delete_post_meta( $post_id, $key, $value );
+						//if ( delete_post_meta( $post_id, $key, $value ) ) {
+							//$post_info .= "delete_post_meta ok for post_id [$post_id], key [$key], post_id [$key]<br />";
+						//} else {
+							//$post_info .= "delete_post_meta FAILED for post_id [$post_id], key [$key], post_id [$key]<br />";
+						//}
+					}
+				
+				}
+			
+				// Check to see if 'personnel' int val matches number of rows indicated by postmeta fields
+				if ( count($arr_repeater_rows_indices) != $num_repeater_rows ) {
+					$post_info .= "<code>".print_r($arr_repeater_rows_indices, true)."</code><br />";
+					$post_info .= "personnel official count [$num_repeater_rows] is ";
+					if ( $num_repeater_rows < count($arr_repeater_rows_indices) ) {
+						$post_info .= "LESS than";
+					} else if ( $num_repeater_rows > count($arr_repeater_rows_indices)) {
+						$post_info .= "GREATER than";
+					}
+					$post_info .= " num of repeater rows in postmeta [".count($arr_repeater_rows_indices)."] => cleanup required!<br />";
+					$post_info .= sdg_add_post_term( $post_id, 'cleanup-required', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+				}
+					
+					// Remove row via ACF function -- ???
+						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
+						//	$row_info .= "<!-- [personnel row $i deleted] -->";
+						//	$deletion_count++;
+						//	sdg_log("[personnel row $i deleted successfully]");
+						//} else {
+						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
+						//	sdg_log("[failed to delete personnel row $i]");
+						//}
+			
+				$post_info .= "<br />";
+				// TODO: figure out how to show info ONLY if changes have been made -- ??
+				$post_info .= get_event_personnel( $post_id, true, 'dev' ); // get_event_personnel( $post_id, $run_updates )
+				//$post_info .= get_event_program_items( $post_id, true, 'dev' );
+			
+				$info .= $post_info;
+				$info .= '</div>';
+			
+			}
+		
+		} else {
+		
+			$info .= "No matching posts found.<br />";
+			$info .= "args: <pre>".print_r($args, true)."</pre>";
+			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+		
+		}*/
+    
+    	// .....
+    
+    }
+    
+    // Program Items
+    if ( $scope == "program_items" || $scope == "both" ) {
+    
+    	// TODO: revise to search more specifically for posts with problem meta -- e.g. is_header, show_item_label, show_item_title
+    	// WIP 06/23
+    	
+    	// Get all posts w/ personnel rows
+		$wp_args = array(
+			'post_type'   => 'event',
+			'post_status' => 'publish',
+			'posts_per_page' => $num_posts,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'program_items',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key'     => 'program_items',
+					'compare' => '!=',
+					'value'   => 0,
+				),
+				array(
+					'key'     => 'program_items',
+					'compare' => '!=',
+					'value'   => '',
+				)
+			),
+			'orderby'   => 'ID meta_key',
+			'order'     => 'ASC',
+			/*'tax_query' => array(
+				//'relation' => 'AND', //tft
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'program-personnel-placeholders' ),
+					//'terms'    => array( 'program-placeholders' ),
+					//'terms'    => array( $admin_tag_slug ),
+					//'operator' => 'NOT IN',
+				),
+			),*/
+		);
+	
+		$result = new WP_Query( $wp_args );
+		$posts = $result->posts;
+		/*
+		if ( $posts ) {
+        
+			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
+			//$info .= "args: <pre>".print_r($args, true)."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+		
+			foreach ( $posts AS $post ) {
+		
+				setup_postdata( $post );
+				$post_id = $post->ID;
+				
+				// Get rows... loop... update_row_type ( $row )
+				
+				// WIP 06/22/23
+				
+				$meta = get_post_meta( $post_id );
+				//$post_info .= "post_meta: <pre>".print_r($meta, true)."</pre>";
+				$post_info = ""; // init
+				$num_repeater_rows = 0;
+				$arr_repeater_rows_indices = array();
+			
+				$info .= '<div class="code">';
+				$info .= "post_id: $post_id<br />";
+			
+				foreach ( $meta as $key => $value ) {
+				
+					if (strpos($key, 'personnel') == 0) { // meta_key starts w/ 'personnel' (no underscore)
+						$post_info .= "<code>$key => ".$value[0]."</code><br />";
+						if ($key == 'personnel') {
+							$num_repeater_rows = $value[0];
+						} else { // if (strpos($key, 'personnel_') == 0) -- meta_key starts w/ 'personnel_' (with underscore)
+							// Get the int indicating the row index, and add it to the array if it isn't there already
+							$int_str = preg_replace('/[^0-9]+/', '', $key);
+							if ( $int_str != "" && ! in_array($int_str, $arr_repeater_rows_indices) ) { $arr_repeater_rows_indices[] = $int_str; }
+						}
+					}
+				
+					if ( empty($value) || $value == "x" ) {
+						// Delete empty or placeholder postmeta
+						//delete_post_meta( int $post_id, string $meta_key, mixed $meta_value = '' )
+						//delete_post_meta( $post_id, $key, $value );
+						//if ( delete_post_meta( $post_id, $key, $value ) ) {
+						//	$post_info .= "delete_post_meta ok for post_id [$post_id], key [$key], post_id [$key]<br />";
+						//} else {
+						//	$post_info .= "delete_post_meta FAILED for post_id [$post_id], key [$key], post_id [$key]<br />";
+						//}
+					}
+				
+				}
+			
+				// Check to see if 'personnel' int val matches number of rows indicated by postmeta fields
+				if ( count($arr_repeater_rows_indices) != $num_repeater_rows ) {
+					$post_info .= "<code>".print_r($arr_repeater_rows_indices, true)."</code><br />";
+					$post_info .= "personnel official count [$num_repeater_rows] is ";
+					if ( $num_repeater_rows < count($arr_repeater_rows_indices) ) {
+						$post_info .= "LESS than";
+					} else if ( $num_repeater_rows > count($arr_repeater_rows_indices)) {
+						$post_info .= "GREATER than";
+					}
+					$post_info .= " num of repeater rows in postmeta [".count($arr_repeater_rows_indices)."] => cleanup required!<br />";
+					$post_info .= sdg_add_post_term( $post_id, 'cleanup-required', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+				}
+					
+					// Remove row via ACF function -- ???
+						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
+						//	$row_info .= "<!-- [personnel row $i deleted] -->";
+						//	$deletion_count++;
+						//	sdg_log("[personnel row $i deleted successfully]");
+						//} else {
+						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
+						//	sdg_log("[failed to delete personnel row $i]");
+						//}
+			
+				$post_info .= "<br />";
+				// TODO: figure out how to show info ONLY if changes have been made -- ??
+				$post_info .= get_event_personnel( $post_id, true, 'dev' ); // get_event_personnel( $post_id, $run_updates )
+				//$post_info .= get_event_program_items( $post_id, true, 'dev' );
+			
+				$info .= $post_info;
+				$info .= '</div>';
+			
+			}
+		
+		} else {
+		
+			$info .= "No matching posts found.<br />";
+			$info .= "args: <pre>".print_r($args, true)."</pre>";
+			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+		
+		}
+    	*/
+    	// .....
+    
+    }    
+    
+    // .....
+    
+    return $info;
+    
+}
 
 function get_event_programs_containing_post( $post_id = null ) { // formerly get_program_containing_post
     
@@ -1778,9 +2212,11 @@ function get_event_programs_containing_post( $post_id = null ) { // formerly get
 	
 }
 
+
 /*** EVENT BOOKINGS ***/
 
 // See sdg_placeholders
+
 
 /*** EVENTS/WEBCASTS ***/
 
@@ -1855,6 +2291,7 @@ function display_webcast_events() {
 	
 	return $info;
 }
+
 
 /*** EM Events Manager Customizations ***/
 
