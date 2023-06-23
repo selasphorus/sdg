@@ -1535,7 +1535,7 @@ function get_program_item_name ( $args = array() ) {
 
 function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i = null, $row = null ) {
 
-	if ( $post_id == null || $repeater_name == null || $i == null || $row == null ) {
+	if ( $post_id === null || $repeater_name === null || $i === null || $row === null ) {
 		return "Insufficient info to run row cleanup<br />";
 	}
 	
@@ -2472,7 +2472,7 @@ function event_program_cleanup( $atts = [] ) {
 				$rows = get_field('program_items', $post_id);
 				if ( empty($rows) ) { $rows = array(); }
 				
-				$post_info .= count($rows)." program_items rows <br />"; // tft
+				$post_info .= count($rows)." program_items row(s) <br />"; // tft
     
 				if ( count($rows) > 0 ) {
 					$i = 0;
