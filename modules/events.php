@@ -1533,38 +1533,33 @@ function get_program_item_name ( $args = array() ) {
  * 
  */
 
-function event_program_row_cleanup ( $i = null, $row = null ) {
+function event_program_row_cleanup ( $post_id, $repeater_name = null, $i = null, $row = null ) {
 
 	// Init vars
-	$run_updates = false;
 	$info = "";
+	$arr_field_updates = array();
 	
+	$info .= "post_id: ".$post_id."<br />";
+	$info .= "repeater_name: ".$repeater_name."<br />";
 	$info .= "row [$i]: <pre>".print_r($row, true)."</pre>";
 						
 	// Is a row_type set?
-	if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
-	
+	if ( isset($row['row_type']) && $row['row_type'] != "" ) {	
 		$row_type = $row['row_type'];
-		$info .= "row_type: ".$row_type."<br />";
-		
-	} else {
-	
+		$info .= "row_type: ".$row_type."<br />";		
+	} else {	
 		$row_type = null;
-		$info .= "row_type not set<br />";
-		
+		$info .= "row_type not set<br />";		
 	}
 	
 	// Check for is_header value
-	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
-		
-		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record
-	
+	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
+		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
 		if ( empty($row_type) || $row_type == "default" ) {
-			$row_type = "header"; // TODO: update the row_type in the DB
 			$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
-			$run_updates = true;
+			$row_type = "header"; // TODO: update the row_type in the DB
+			$arr_field_updates[] = array();
 		}
-
 	} 
 	
 	// Set row type based on whether item label and/or title are set to display
@@ -1624,6 +1619,15 @@ function event_program_row_cleanup ( $i = null, $row = null ) {
 	} else {
 		$program_item_txt = null;
 	}
+	
+	if ( !empty($arr_field_updates) ) {
+		/*if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
+			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+		} else {
+			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+		}*/
+	}	
+	
 	// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
 	// tbd
 	
@@ -1995,6 +1999,7 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$repeater_name = "personnel";
 			/*
 			foreach ( $posts AS $post ) {
 		
@@ -2120,6 +2125,7 @@ function event_program_cleanup( $atts = [] ) {
 			$field_check = "N/A";
 		}
 		
+		// field_check?
 		if ( $field_check == "all" ) {
 			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
@@ -2224,6 +2230,7 @@ function event_program_cleanup( $atts = [] ) {
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
 			$info .= "field_check: ".$field_check."<br />";
+			$repeater_name = "program_items";
 			
 			foreach ( $posts AS $post ) {
 			
@@ -2248,7 +2255,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
-						$row_info = event_program_row_cleanup ( $i, $row );												
+						$row_info = event_program_row_cleanup ( $post_id, $repeater_name, $i, $row );												
 						$post_info .= $row_info;
 						$i++;				
 					}
