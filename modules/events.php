@@ -1992,6 +1992,7 @@ function event_program_cleanup( $atts = [] ) {
 			'posts_per_page' => $num_posts,
 			'orderby'   => 'ID meta_key',
 			'order'     => 'ASC',
+			// TODO: revise and activate tax query to filter out event posts that have already been processed
 			/*'tax_query' => array(
 				//'relation' => 'AND', //tft
 				array(
@@ -2076,6 +2077,18 @@ function event_program_cleanup( $atts = [] ) {
 					'key'     => 'program_items_XYZ_is_header',
 					//'compare' => '=',
 					'value'   => 1,
+				),
+			);
+		} else if ( $field_check == "placeholders" ) {
+			$wp_args['meta_query'] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'program_items_XYZ_item_label_txt',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key'     => 'program_items_XYZ_program_item_txt',
+					'compare' => 'EXISTS'
 				),
 			);
 		}
