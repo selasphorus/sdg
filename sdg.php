@@ -1639,6 +1639,267 @@ function sdg_get_placeholder_img() {
     return $info;
 }
 
+
+
+/*** MATCH PLACEHOLDERS ***/
+
+/*** Match placeholders to real post objects; return id (single match) or posts array (multiple matches) ***/
+function match_placeholder ( $args = [] ) {
+    
+    $result = "";
+
+    $defaults = array( // the defaults will be overidden if set in $args
+        'index'         => null,
+        'post_id'       => null,
+        'item_title'    => null,
+        'item_label'    => null,
+        'repeater_name' => null,
+        'field_name'    => null,
+        'taxonomy'      => null,
+        'display'      => null,
+    );
+    $args = array_merge($defaults, $args);
+    //echo $args['value1'] . ', ' . $args['value2'];
+    
+    $i = $args['index'];
+    $post_id = $args['post_id'];
+    $item_title = $args['item_title'];
+    $item_label = $args['item_label'];
+    $repeater_name = $args['repeater_name'];
+    $field_name = $args['field_name'];
+    $taxonomy = $args['taxonomy'];
+    $display = $args['display'];
+    
+    if ( $display == 'dev' ) {
+        //$result .= "match args: <pre>".print_r($args, true)."</pre>";
+    } else {
+        //$result .= "<!-- match args: ".print_r($args, true)." -->";
+    }
+    
+    // Abort if no post_id. TODO: determine additional conditions for which to abort.
+    if ( empty($post_id) ) { 
+        $result .= "<!-- post_id is empty -> match process aborted -->";
+        return $result;
+        //return false; 
+    } 
+    
+    if ( $taxonomy != 'true' ) {
+        $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
+    } else {
+        $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
+    }
+                        
+    if ( isset($arr_match_results['post_id']) ) {
+        
+        $match_id = $arr_match_results['post_id'];
+        $result .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
+        
+        if ( $repeater_name && $match_id ) {
+                        
+            $sub_field_value = $match_id;
+            // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)
+            
+            $result .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
+            // Update "field_name" within the $i-th row of "repeater_name"
+            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
+                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+            } else {
+                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+            }/**/
+            
+        }
+        
+    } else if ( isset($arr_match_results['term_id']) ) {
+        
+        $term_id = $arr_match_results['term_id'];
+        $result .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
+        
+        // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
+        
+        if ( $repeater_name && $term_id ) {
+            
+            $sub_field_value = $term_id;
+            $result .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
+            // Update "field_name" within the $i row of "repeater_name".
+            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
+                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+            } else {
+                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+            }/**/
+            
+        }
+        
+    } else if ( isset($arr_match_results['posts']) ) { 
+        $result .= "<!-- match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre> -->";
+        // .... more than one item... what to do?
+    } else {
+        
+        if ( $arr_match_results['info'] != "" ) {
+            $result .= "<!-- ".$arr_match_results['info']." -->"; //arr_match_results['info']:\n
+        } else {
+            $result .= "<!-- NO match(es) found for placeholder :-( -->";
+        }
+        
+        // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag
+        $result .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+    }
+    
+    return $result;
+    
+}
+
+function find_matching_post( $title_str = null, $label_str = null, $field_name = null, $return = 'single') {
+    
+    if ( $title_str == null ) { return null; } // Nothing to match if the title_str is empty
+    
+    $sanitized_title = $str = sanitize_title( $title_str );
+    $title_for_matching = super_sanitize_title( $title_str );
+    
+    // Initialize vars
+    $arr_post_types = array( 'repertoire', 'person', 'group', 'ensemble', 'sermon', 'reading' ); // TODO: consider other options for post_types
+    $arr_info = array();
+    $info = "";
+    
+    // Set up the basic query args
+    $args = array(
+		'post_type' => $arr_post_types,
+		'post_status' => 'publish',
+        //'posts_per_page' => $num_posts,
+        //'orderby'	=> $orderby,
+        //'order'	=> $order,
+	);
+    
+    // If we're NOT looking for repertoire, try matching the sanitized title_str to an existing post slug
+    // TODO: account for non-rep program_items other than 'sermon' -- e.g. ???? ...
+    if ( $field_name != 'program_item' || ( $field_name == 'program_item' && $label_str == 'sermon' ) ) {
+        
+        $args['name'] = $sanitized_title;
+        $args['numberposts'] = 1;
+        
+    } else {
+        
+        // For non-sermon program items, add meta_query
+        // (1) Search by title_uid/title_for_matching -- best, most likely to be accurate
+        $args['meta_query'] = 
+            array(
+                //'relation' => 'OR',
+                array(
+                    'key'   => "title_for_matching",
+                    'value' => $title_for_matching,
+                ),
+                /*array(
+                    'key'   => "title_clean",
+                    'value' => $title_str,
+                )*/
+            );
+
+    }
+    
+	$arr_posts = new WP_Query( $args );
+    $posts = $arr_posts->posts;
+    
+    if ( !$posts && $field_name == 'program_item' && $label_str !== 'sermon' ) {
+        
+        $info .= "query args: ".print_r($args, true)."";
+        //$info .= "<!-- query args: ".print_r($args, true)." -->";
+        
+        // TODO:
+        // If no posts were matched, try again
+        //$info .= "No matches found in first query. Try another.\n";
+        
+        // Try again after removing 'Anonymous' -- e.g. 'The Coventry Carol, Anonymous'
+
+        // (2) Search by post_title
+        // (3) Search by title_clean
+
+        // Service Settings
+        // If it's Evensong, then Service = Mag & Nunc
+        // If it's a Eucharist, then Service = Mass setting/Communion service
+        // e.g. Howells' "Collegium Regale":
+        // * Collegium Regale
+        // * Communion Service in B-flat (Collegium Regale)
+        // * Magnificat and Nunc dimittis in B-flat (Collegium Regale)
+        // * Nunc dimittis Collegium Regale
+        // * Te Deum (Collegium Regale)
+        // * Te Deum & Jubilate (Collegium Regale)
+
+        // Hymns (by label_str): search by catalog_num
+        //if ( $label_str == "Hymn" ) {
+            // If $title_str is simply an integer, then search for matching catalog_num w/ Hymns category
+        //}
+        
+        // Psalms
+        // if num only, prepend 'Psalm' or 'Psalms'
+        
+        // Rites
+        // e.g. 'Rite I' -- Program Label to match is 'Holy Eucharist, Rite I'
+        
+    }
+    
+    if ( $posts ) {
+        
+        if ( $return == 'arr' ) {        
+            
+            $arr_info['posts'] = $posts;
+            
+        } else {
+            
+            if ( count($posts) == 1 ) {
+                $arr_info['post_id'] = $posts[0]->ID;
+            } else if ( count($posts) > 1 ) {
+                $arr_info['posts'] = $posts;
+                $info .= "multiple matches found.";
+            }
+            
+        }
+        
+    } else {
+        
+        //$info .= "<!-- Last SQL-Query: <pre>".$arr_posts->request."</pre> -->";        
+        $info .= "No matches found for title_str: $title_str";
+        
+    }
+    
+    $arr_info['info'] = $info;
+    
+    return $arr_info;
+    
+}
+
+function find_matching_term( $title_str = null, $field_name = null, $return = 'single') {
+    
+    if ( $title_str == null ) { return null; } // Nothing to match if the title_str is empty
+    
+    // init vars
+    $arr_info = array();
+    $term_tax = null;
+    $info = "";
+    
+    if ( $field_name == 'item_label' ) {
+        $term_tax = 'program_label';
+    } else if ( $field_name == 'role' ) {
+        $term_tax = 'person_role';
+    } else  {
+        $term_tax = $field_name;
+    }
+    
+    // Get term by name in custom taxonomy: $term_tax.
+    if ( $term = get_term_by('name', $title_str, $term_tax ) ) {
+        $arr_info['term_id'] = $term->term_id;
+        $info .= "term '".$term->name."' found";
+    } else {
+        $info .= "No matching term found for $term_tax: '$title_str'";
+    }
+    
+    $arr_info['info'] = $info;
+    
+    return $arr_info;
+    
+}
+
+/*** End MATCH PLACEHOLDERS ***/
+
+
 /*** MISC UTILITY/HELPER FUNCTIONS ***/
 
 /**
