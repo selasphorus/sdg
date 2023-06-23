@@ -2051,19 +2051,21 @@ function event_program_cleanup( $atts = [] ) {
 			
 			foreach ( $posts AS $post ) {
 		
-				setup_postdata( $post );
-				$post_id = $post->ID;
-				
-				// Get rows... loop... update_row_type ( $row )
-				
-				// WIP 06/22/23
 				// Init
 				$post_info = "";
+				
+				setup_postdata( $post );
+				$post_id = $post->ID;
+				$post_info .= "post_id: ".$post_id."<br />";
+				
+				// WIP 06/22/23				
+				// Get rows... loop... update_row_type ( $row )
 				
 				// Get the program item repeater field values (ACF)
 				$rows = get_field('program_items', $post_id);
 				if ( empty($rows) ) { $rows = array(); }
-				$ts_info .= "<!-- ".count($rows)." program_items rows -->"; // tft
+				
+				$post_info .= count($rows)." program_items rows <br />"; // tft
     
 				if ( count($rows) > 0 ) {
 					foreach ( $rows as $row ) {
@@ -2072,7 +2074,7 @@ function event_program_cleanup( $atts = [] ) {
 					
 						// Is a row_type set?
 						if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
-						$row_info .= "row_type: ".$row_type"<br />";
+						$row_info .= "row_type: ".$row_type."<br />";
 						
 						$post_info .= $row_info;
 					
