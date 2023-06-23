@@ -1829,9 +1829,9 @@ function event_program_cleanup( $atts = [] ) {
     // Parse shortcode attributes
 	$a = shortcode_atts( array(
 		'post_id'   => null, //get_the_ID(),
-        'num_posts' => 5,
+        'num_posts' => 1, // default is one post at a time because most have multiple program rows
         'scope'		=> 'both', // personnel, program_items, or both
-        'fields'	=> 'all',
+        'field_check'	=> 'all',
     ), $atts );
     
 	// Extract attribute values into variables
@@ -2007,7 +2007,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 		// TODO: if fields val contains commas, turn it into an array... etc
 		
-		if ( $fields == "all" ) {
+		if ( $field_check == "all" ) {
 			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
@@ -2025,7 +2025,36 @@ function event_program_cleanup( $atts = [] ) {
 					'value'   => '',
 				)
 			);
-		} else if ( $fields == "is_header" ) {
+		} else if ( $field_check == "row_type" ) {
+			// Check to see if row_type is empty
+			$wp_args['meta_query'] = array(
+				'relation' => 'OR',
+				array(
+					'key'    => 'program_items_XYZ_row_type',
+					'value'  => ''
+				),
+			);
+		} else if ( $field_check == "mismatch" ) {
+			// Check to see if row_type doesn't match show/hide settings
+			$wp_args['meta_query'] = array(
+				'relation' => 'AND',
+				array(
+					'key'    => 'program_items_XYZ_row_type',
+					'value'  => 'default'
+				),
+				array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'program_items_XYZ_show_item_label',
+						'value'   => 0,
+					),
+					array(
+						'key'     => 'program_items_XYZ_show_item_title',
+						'value'   => 0,
+					),
+				),
+			);
+		} else if ( $field_check == "is_header" ) {
 			$wp_args['meta_query'] = array(
 				//'relation' => 'AND',
 				/*array(
