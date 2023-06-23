@@ -1533,24 +1533,24 @@ function get_program_item_name ( $args = array() ) {
  * 
  */
 
-function event_program_row_cleanup ( $row = null ) {
+function event_program_row_cleanup ( $i = null, $row = null ) {
 
 	// Init vars
 	$run_updates = false;
-	$row_info = "";
+	$info = "";
 	
-	$row_info .= "row: <pre>".print_r($row, true)."</pre>";
+	$info .= "row [$i]: <pre>".print_r($row, true)."</pre>";
 						
 	// Is a row_type set?
 	if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
 	
 		$row_type = $row['row_type'];
-		$row_info .= "row_type: ".$row_type."<br />";
+		$info .= "row_type: ".$row_type."<br />";
 		
 	} else {
 	
 		$row_type = null;
-		$row_info .= "row_type not set<br />";
+		$info .= "row_type not set<br />";
 		
 	}
 	
@@ -1561,7 +1561,7 @@ function event_program_row_cleanup ( $row = null ) {
 	
 		if ( empty($row_type) || $row_type == "default" ) {
 			$row_type = "header"; // TODO: update the row_type in the DB
-			$row_info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
+			$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
 			$run_updates = true;
 		}
 
@@ -1584,13 +1584,13 @@ function event_program_row_cleanup ( $row = null ) {
 	// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
 	
 	if ( $show_item_label && $show_item_title ) {
-		$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
+		$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
 		$row_type = "default";
 	} else if ( $show_item_label && !$show_item_title ) {
-		$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
+		$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
 		$row_type = "label_only";
 	} else if ( $show_item_title && !$show_item_label ) {
-		$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
+		$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
 		$row_type = "title_only";
 	}
 	
@@ -1600,25 +1600,35 @@ function event_program_row_cleanup ( $row = null ) {
 	// Item label
 	if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
 		$item_label = $row['item_label'];
-		$row_info .= "item_label: $item_label<br />";
+		$info .= "item_label: $item_label<br />";
 	}
 	if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
 		$item_label_txt = $row['item_label_txt'];
-		$row_info .= "Placeholder item_label_txt: $item_label_txt<br />";
+		$info .= "Placeholder item_label_txt: $item_label_txt<br />";
 		$placeholders = true;
 	}
 	// Program item
 	if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
 		$program_item = $row['program_item'];
-		$row_info .= "program_item: $program_item<br />";
+		$info .= "program_item: $program_item<br />";
 	}
 	if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" ) { 
 		$program_item_txt = $row['program_item_txt'];
 		$placeholders = true;
 	}
-	//
+	// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
+	// tbd
+	
+	// If program_item is empty and program_item_txt is NOT, try to match the placeholder
+	if ( $program_item_txt && !$program_item ) {
+		$title_to_match = $program_item_txt;
+		$info .= ">> seeking match for placeholder value: '$title_to_match'";
+		///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+		///$match_result = match_placeholder( $match_args );
+		///$info .= $match_result;
+	} 
 		
-	return $row_info;
+	return $info;
 	
 }
 
@@ -2228,9 +2238,11 @@ function event_program_cleanup( $atts = [] ) {
 				$post_info .= count($rows)." program_items rows <br />"; // tft
     
 				if ( count($rows) > 0 ) {
+					$i = 0;
 					foreach ( $rows as $row ) {
-						$row_info = event_program_row_cleanup ( $row );												
-						$post_info .= $row_info;					
+						$row_info = event_program_row_cleanup ( $i, $row );												
+						$post_info .= $row_info;
+						$i++;				
 					}
 				}
 				/*
