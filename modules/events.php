@@ -2071,10 +2071,12 @@ function event_program_cleanup( $atts = [] ) {
 					foreach ( $rows as $row ) {
 						
 						$row_info = "";
-					
+						
+						$row_info .= "row: <pre>".print_r($row, true)."</pre>";
+						
 						// Is a row_type set?
-						if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
-						$row_info .= "row_type: ".$row_type."<br />";
+						//if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "NOT SET"; }
+						//$row_info .= "row_type: ".$row_type."<br />";
 						
 						$post_info .= $row_info;
 					
