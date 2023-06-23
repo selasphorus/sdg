@@ -1836,6 +1836,9 @@ function event_program_cleanup( $atts = [] ) {
 	// Extract attribute values into variables
     extract($a);
     
+    // Init vars
+    $info = "";
+    
     // Personnel
     if ( $scope == "personnel" || $scope == "both" ) {
     
@@ -1880,13 +1883,12 @@ function event_program_cleanup( $atts = [] ) {
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
 		
-		/*
 		if ( $posts ) {
         
 			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
 			//$info .= "args: <pre>".print_r($args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
-		
+			/*
 			foreach ( $posts AS $post ) {
 		
 				setup_postdata( $post );
@@ -1962,7 +1964,7 @@ function event_program_cleanup( $atts = [] ) {
 				$info .= $post_info;
 				$info .= '</div>';
 			
-			}
+			}*/
 		
 		} else {
 		
@@ -1970,7 +1972,7 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "args: <pre>".print_r($args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
-		}*/
+		}
     
     	// .....
     
@@ -2021,13 +2023,13 @@ function event_program_cleanup( $atts = [] ) {
 	
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
-		/*
+		
 		if ( $posts ) {
         
 			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
 			//$info .= "args: <pre>".print_r($args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
-		
+			/*
 			foreach ( $posts AS $post ) {
 		
 				setup_postdata( $post );
@@ -2104,6 +2106,7 @@ function event_program_cleanup( $atts = [] ) {
 				$info .= '</div>';
 			
 			}
+    		*/
 		
 		} else {
 		
@@ -2112,7 +2115,6 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 		}
-    	*/
     	// .....
     
     }    
