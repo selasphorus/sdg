@@ -1652,7 +1652,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// tbd
 	
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
-		if ( $item_labeltxt && !($item_label) ) {
+		if ( $item_label_txt && !($item_label) ) {
 			$title_to_match = $program_item_txt;
 			$info .= ">> seeking match for placeholder value: '$title_to_match'";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
@@ -1673,7 +1673,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 	//
 	if ( $row_type_update ) {
-		$arr_field_updates[] = array( "row_type" => $row_type );
+		$arr_field_updates["row_type"] = $row_type;
 		$info .= "do row_type_update<br />";
 	}
 	
@@ -1682,6 +1682,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 	// Do the updates
 	foreach ( $arr_field_updates as $field_name => $field_value ) {
+		//$info .= "update $field_name = $field_value<br />";
 		if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
 			$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
 		} else {
