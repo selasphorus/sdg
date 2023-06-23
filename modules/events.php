@@ -1564,39 +1564,60 @@ function event_program_row_cleanup ( $row = null ) {
 			$row_info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
 			$run_updates = true;
 		}
-		
-		
+
+	} 
+	
+	// Set row type based on whether item label and/or title are set to display
+	// show_item_label?
+	if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
+		$show_item_label = false;
 	} else {
+		$show_item_label = true;
+	}
+	// show_item_title?
+	if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
+		$show_item_title = false;
+	} else {
+		$show_item_title = true;
+	}
+	// Which combo of fields? Both is the default.
+	// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
 	
-		// Set row type based on whether item label and/or title are set to display
-		// show_item_label?
-		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
-			$show_item_label = false;
-		} else {
-			$show_item_label = true;
-		}
-		// show_item_title?
-		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
-			$show_item_title = false;
-		} else {
-			$show_item_title = true;
-		}
-		// Which combo of fields? Both is the default.
-		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-		
-		if ( $show_item_label && $show_item_title ) {
-			$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
-			$row_type = "default";
-		} else if ( $show_item_label && !$show_item_title ) {
-			$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
-			$row_type = "label_only";
-		} else if ( $show_item_title && !$show_item_label ) {
-			$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
-			$row_type = "title_only";
-		}
-	
+	if ( $show_item_label && $show_item_title ) {
+		$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
+		$row_type = "default";
+	} else if ( $show_item_label && !$show_item_title ) {
+		$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
+		$row_type = "label_only";
+	} else if ( $show_item_title && !$show_item_label ) {
+		$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
+		$row_type = "title_only";
 	}
 	
+	// Placeholders?
+	$placeholders = false;
+	
+	// Item label
+	if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
+		$item_label = $row['item_label'];
+		$row_info .= "item_label: $item_label<br />";
+	}
+	if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
+		$item_label_txt = $row['item_label_txt'];
+		$row_info .= "Placeholder item_label_txt: $item_label_txt<br />";
+		$placeholders = true;
+	}
+	// Program item
+	if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
+		$program_item = $row['program_item'];
+		$row_info .= "program_item: $program_item<br />";
+	}
+	if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" ) { 
+		$program_item_txt = $row['program_item_txt'];
+		$placeholders = true;
+	}
+	//
+		
 	return $row_info;
 	
 }
