@@ -1653,8 +1653,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
 		if ( $item_label_txt && !($item_label) ) {
-			$title_to_match = $program_item_txt;
-			$info .= ">> seeking match for placeholder value: '$title_to_match'";
+			$title_to_match = $item_label_txt;
+			$info .= ">> seeking match for placeholder value: '$title_to_match'<br />";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
 			///$match_result = match_placeholder( $match_args );
 			///$info .= $match_result;
@@ -1663,7 +1663,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
 		if ( $program_item_txt && !($program_item) ) {
 			$title_to_match = $program_item_txt;
-			$info .= ">> seeking match for placeholder value: '$title_to_match'";
+			$info .= ">> seeking match for placeholder value: '$title_to_match'<br />";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
 			///$match_result = match_placeholder( $match_args );
 			///$info .= $match_result;
@@ -1684,18 +1684,19 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	foreach ( $arr_field_updates as $field_name => $field_value ) {
 		//$info .= "update $field_name = $field_value<br />";
 		if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
-			$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+			$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!";
 		} else {
-			$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+			$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!";
 		}
 	}	
 	
 	// Do the deletions
 	foreach ( $arr_field_deletions as $field_name ) {
+		//$info .= "delete $field_name<br />";
 		if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
-			$info .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+			$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!";
 		} else {
-			$info .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: FAILED! -->";
+			$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: FAILED!";
 		}
 	}
 	
