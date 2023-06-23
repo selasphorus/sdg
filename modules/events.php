@@ -2144,7 +2144,8 @@ function event_program_cleanup( $atts = [] ) {
 				//$post_info .= get_event_program_items( $post_id, true, 'dev' );
 				*/
 				$info .= $post_info;
-				$info .= '</div>';
+				$info .= '<hr />';
+				//$info .= '</div>';
 			
 			}
 		
