@@ -2146,6 +2146,7 @@ function event_program_cleanup( $atts = [] ) {
 				),
 			);
 		} else if ( $field_check == "placeholders" ) {
+			// TODO: fix this -- yields no results, which can't be right
 			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
@@ -2200,7 +2201,7 @@ function event_program_cleanup( $atts = [] ) {
 					foreach ( $rows as $row ) {
 						
 						//$row_info = "";
-						//$row_info = event_program_row_cleanup ( $row );
+						$row_info = event_program_row_cleanup ( $row );
 												
 						$post_info .= $row_info;
 					
