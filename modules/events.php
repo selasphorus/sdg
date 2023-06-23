@@ -1970,7 +1970,7 @@ function event_program_cleanup( $atts = [] ) {
 		} else {
 		
 			$info .= "No matching posts found.<br />";
-			$info .= "args: <pre>".print_r($args, true)."</pre>";
+			$info .= "args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 		}
@@ -2130,7 +2130,7 @@ function event_program_cleanup( $atts = [] ) {
 		} else {
 		
 			$info .= "No matching posts found.<br />";
-			$info .= "args: <pre>".print_r($args, true)."</pre>";
+			$info .= "args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 		}
