@@ -1887,7 +1887,7 @@ function event_program_cleanup( $atts = [] ) {
 		if ( $posts ) {
         
 			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
-			//$info .= "args: <pre>".print_r($args, true)."</pre>";
+			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			/*
 			foreach ( $posts AS $post ) {
@@ -2046,8 +2046,8 @@ function event_program_cleanup( $atts = [] ) {
 		if ( $posts ) {
         
 			$info .= "Found ".count($posts)." event posts with program_items postmeta.<br /><br />";
-			//$info .= "args: <pre>".print_r($args, true)."</pre>";
-			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			
 			foreach ( $posts AS $post ) {
 		
