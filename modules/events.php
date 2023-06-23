@@ -2075,7 +2075,7 @@ function event_program_cleanup( $atts = [] ) {
 						$row_info .= "row: <pre>".print_r($row, true)."</pre>";
 						
 						// Is a row_type set?
-						if ( isset($row['row_type']) ) { 
+						if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
 							$row_type = $row['row_type'];
 							$row_info .= "row_type: ".$row_type."<br />";
 						} else {
