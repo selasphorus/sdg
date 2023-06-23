@@ -2135,27 +2135,33 @@ function event_program_cleanup( $atts = [] ) {
 			);
 		} else if ( $field_check == "is_header" ) {
 			$wp_args['meta_query'] = array(
-				//'relation' => 'AND',
-				/*array(
-					'key'     => 'program_items_XYZ_is_header',
+				'relation' => 'AND',
+				array(
+					'key'     => 'program_items',
 					'compare' => 'EXISTS'
-				),*/
+				),
 				array(
 					'key'     => 'program_items_XYZ_is_header',
-					//'compare' => '=',
 					'value'   => 1,
 				),
 			);
 		} else if ( $field_check == "placeholders" ) {
 			$wp_args['meta_query'] = array(
-				'relation' => 'OR',
+				'relation' => 'AND',
 				array(
-					'key'     => 'program_items_XYZ_item_label_txt',
+					'key'     => 'program_items',
 					'compare' => 'EXISTS'
 				),
 				array(
-					'key'     => 'program_items_XYZ_program_item_txt',
-					'compare' => 'EXISTS'
+					'relation' => 'OR',
+					array(
+						'key'     => 'program_items_XYZ_item_label_txt',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'key'     => 'program_items_XYZ_program_item_txt',
+						'compare' => 'EXISTS'
+					),
 				),
 			);
 		}
