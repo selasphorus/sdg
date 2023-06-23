@@ -2091,7 +2091,7 @@ function event_program_cleanup( $atts = [] ) {
 						//
 						if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
 							
-							$row_info .= "Set row_type to 'header'<br />";
+							$row_info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
 							$row_type = "header";
 							
 						} else {
@@ -2111,13 +2111,13 @@ function event_program_cleanup( $atts = [] ) {
 							}
 							// Which combo of fields? Both is the default.
 							if ( $show_item_label && $show_item_title ) {
-								$row_info .= "Set row_type to 'default'<br />";
+								$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
 								$row_type = "default";
 							} else if ( $show_item_label && !$show_item_title ) {
-								$row_info .= "Set row_type to 'label_only'<br />";
+								$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
 								$row_type = "label_only";
 							} else if ( $show_item_title && !$show_item_label ) {
-								$row_info .= "Set row_type to 'title_only'<br />";
+								$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
 								$row_type = "title_only";
 							}
 						
