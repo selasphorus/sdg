@@ -2034,7 +2034,7 @@ function event_program_cleanup( $atts = [] ) {
 				),*/
 				array(
 					'key'     => 'program_items_XYZ_is_header',
-					'compare' => '=',
+					//'compare' => '=',
 					'value'   => 1,
 				),
 			);
@@ -2047,7 +2047,7 @@ function event_program_cleanup( $atts = [] ) {
         
 			$info .= "Found ".count($posts)." event posts with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			
 			foreach ( $posts AS $post ) {
 		
