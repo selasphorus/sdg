@@ -2197,11 +2197,13 @@ function event_program_cleanup( $atts = [] ) {
         
 			$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			$info .= "field_check: ".$field_check."<br />";
 			
 			foreach ( $posts AS $post ) {
-		
+			
+				$info .= '<div>';
+				
 				// Init
 				$post_info = "";
 				
@@ -2220,12 +2222,8 @@ function event_program_cleanup( $atts = [] ) {
     
 				if ( count($rows) > 0 ) {
 					foreach ( $rows as $row ) {
-						
-						//$row_info = "";
-						$row_info = event_program_row_cleanup ( $row );
-												
-						$post_info .= $row_info;
-					
+						$row_info = event_program_row_cleanup ( $row );												
+						$post_info .= $row_info;					
 					}
 				}
 				/*
@@ -2292,14 +2290,14 @@ function event_program_cleanup( $atts = [] ) {
 				//$post_info .= get_event_program_items( $post_id, true, 'dev' );
 				*/
 				$info .= $post_info;
-				$info .= '<hr />';
-				//$info .= '</div>';
+				$info .= '</div>';
 			
 			}
 		
 		} else {
 		
 			$info .= "No matching posts found.<br />";
+			$info .= "field_check: ".$field_check."<br />";
 			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
