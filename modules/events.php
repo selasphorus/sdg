@@ -830,13 +830,13 @@ function get_event_program_items( $atts = [] ) {
             $show_person_dates = true;
             //
             $label_update_required = false;
-            $delete_row = false; // init
+            $delete_row = false;
         
-            //$row_info .= "<!-- get_event_program_items ==> program row [$i]: ".print_r($row, true)." -->"; // tft
+            //$row_info .= "<!-- get_event_program_items ==> program row [$i]: ".print_r($row, true)." -->";
             
             // Is a row_type set? WIP
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
-            $row_info .= "<!-- get_event_program_items ==> row_type: ".$row_type." -->"; // tft
+            $row_info .= "<!-- get_event_program_items ==> row_type: ".$row_type." -->";
             
             // Is this a header row? (Deprecated field)
             if ( isset($row['is_header']) && $row['is_header'] == 1 ) { 
@@ -1970,7 +1970,7 @@ function event_program_cleanup( $atts = [] ) {
 		} else {
 		
 			$info .= "No matching posts found.<br />";
-			$info .= "args: <pre>".print_r($wp_args, true)."</pre>";
+			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 		}
@@ -2048,7 +2048,7 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Found ".count($posts)." event posts with program_items postmeta.<br /><br />";
 			//$info .= "args: <pre>".print_r($args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
-			/*
+			
 			foreach ( $posts AS $post ) {
 		
 				setup_postdata( $post );
@@ -2057,10 +2057,30 @@ function event_program_cleanup( $atts = [] ) {
 				// Get rows... loop... update_row_type ( $row )
 				
 				// WIP 06/22/23
+				// Init
+				$post_info = "";
 				
+				// Get the program item repeater field values (ACF)
+				$rows = get_field('program_items', $post_id);
+				if ( empty($rows) ) { $rows = array(); }
+				$ts_info .= "<!-- ".count($rows)." program_items rows -->"; // tft
+    
+				if ( count($rows) > 0 ) {
+					foreach ( $rows as $row ) {
+						
+						$row_info = "";
+					
+						// Is a row_type set?
+						if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
+						$row_info .= "row_type: ".$row_type"<br />";
+						
+						$post_info .= $row_info;
+					
+					}
+				}
+				/*
 				$meta = get_post_meta( $post_id );
 				//$post_info .= "post_meta: <pre>".print_r($meta, true)."</pre>";
-				$post_info = ""; // init
 				$num_repeater_rows = 0;
 				$arr_repeater_rows_indices = array();
 			
@@ -2120,17 +2140,16 @@ function event_program_cleanup( $atts = [] ) {
 				// TODO: figure out how to show info ONLY if changes have been made -- ??
 				$post_info .= get_event_personnel( $post_id, true, 'dev' ); // get_event_personnel( $post_id, $run_updates )
 				//$post_info .= get_event_program_items( $post_id, true, 'dev' );
-			
+				*/
 				$info .= $post_info;
 				$info .= '</div>';
 			
 			}
-    		*/
 		
 		} else {
 		
 			$info .= "No matching posts found.<br />";
-			$info .= "args: <pre>".print_r($wp_args, true)."</pre>";
+			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 		}
