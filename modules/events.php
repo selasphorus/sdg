@@ -2156,11 +2156,13 @@ function event_program_cleanup( $atts = [] ) {
 					'relation' => 'OR',
 					array(
 						'key'     => 'program_items_XYZ_item_label_txt',
-						'compare' => 'EXISTS'
+						'compare' => '!=',
+						'value'   => ' ',
 					),
 					array(
 						'key'     => 'program_items_XYZ_program_item_txt',
-						'compare' => 'EXISTS'
+						'compare' => '!=',
+						'value'   => ' ',
 					),
 				),
 			);
