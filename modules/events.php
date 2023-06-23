@@ -1533,6 +1533,73 @@ function get_program_item_name ( $args = array() ) {
  * 
  */
 
+function event_program_row_cleanup ( $row = null ) {
+
+	// Init vars
+	$run_updates = false;
+	$row_info = "";
+	
+	$row_info .= "row: <pre>".print_r($row, true)."</pre>";
+						
+	// Is a row_type set?
+	if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
+	
+		$row_type = $row['row_type'];
+		$row_info .= "row_type: ".$row_type."<br />";
+		
+	} else {
+	
+		$row_type = null;
+		$row_info .= "row_type not set<br />";
+		
+	}
+	
+	// Check for is_header value
+	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
+		
+		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record
+	
+		if ( empty($row_type) || $row_type == "default" ) {
+			$row_type = "header"; // TODO: update the row_type in the DB
+			$row_info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
+			$run_updates = true;
+		}
+		
+		
+	} else {
+	
+		// Set row type based on whether item label and/or title are set to display
+		// show_item_label?
+		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
+			$show_item_label = false;
+		} else {
+			$show_item_label = true;
+		}
+		// show_item_title?
+		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
+			$show_item_title = false;
+		} else {
+			$show_item_title = true;
+		}
+		// Which combo of fields? Both is the default.
+		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
+		
+		if ( $show_item_label && $show_item_title ) {
+			$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
+			$row_type = "default";
+		} else if ( $show_item_label && !$show_item_title ) {
+			$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
+			$row_type = "label_only";
+		} else if ( $show_item_title && !$show_item_label ) {
+			$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
+			$row_type = "title_only";
+		}
+	
+	}
+	
+	return $row_info;
+	
+}
 
 /* ***
  * With the introduction of the `row_type` field to the ACF repeater fields `personnel` and `program_items`,
@@ -1829,7 +1896,7 @@ function event_program_cleanup( $atts = [] ) {
     // Parse shortcode attributes
 	$a = shortcode_atts( array(
 		'post_id'   => null, //get_the_ID(),
-        'num_posts' => 1, // default is one post at a time because most have multiple program rows
+        'num_posts' => 1, // default is one post at a time because most have multiple program rows and these meta queries are SLOW!
         'scope'		=> 'both', // personnel, program_items, or both
         'field_check'	=> 'all',
     ), $atts );
@@ -2124,59 +2191,9 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					foreach ( $rows as $row ) {
 						
-						$row_info = "";
-						
-						$row_info .= "row: <pre>".print_r($row, true)."</pre>";
-						
-						// Is a row_type set?
-						if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
-						
-							$row_type = $row['row_type'];
-							$row_info .= "row_type: ".$row_type."<br />";
-							
-						} else {
-						
-							$row_info .= "row_type not set<br />";
-							
-						}
-						
-						// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-						
-						//
-						if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
-							
-							$row_info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
-							$row_type = "header";
-							
-						} else {
-						
-							// Set row type based on whether item label and/or title are set to display
-							// show_item_label?
-							if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
-								$show_item_label = false;
-							} else {
-								$show_item_label = true;
-							}
-							// show_item_title?
-							if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
-								$show_item_title = false;
-							} else {
-								$show_item_title = true;
-							}
-							// Which combo of fields? Both is the default.
-							if ( $show_item_label && $show_item_title ) {
-								$row_info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
-								$row_type = "default";
-							} else if ( $show_item_label && !$show_item_title ) {
-								$row_info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
-								$row_type = "label_only";
-							} else if ( $show_item_title && !$show_item_label ) {
-								$row_info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
-								$row_type = "title_only";
-							}
-						
-						}				
-						
+						//$row_info = "";
+						$row_info = event_program_row_cleanup ( $row );
+												
 						$post_info .= $row_info;
 					
 					}
