@@ -1831,6 +1831,7 @@ function event_program_cleanup( $atts = [] ) {
 		'post_id'   => null, //get_the_ID(),
         'num_posts' => 5,
         'scope'		=> 'both', // personnel, program_items, or both
+        'fields'	=> 'all',
     ), $atts );
     
 	// Extract attribute values into variables
@@ -1989,7 +1990,25 @@ function event_program_cleanup( $atts = [] ) {
 			'post_type'   => 'event',
 			'post_status' => 'publish',
 			'posts_per_page' => $num_posts,
-			'meta_query' => array(
+			'orderby'   => 'ID meta_key',
+			'order'     => 'ASC',
+			/*'tax_query' => array(
+				//'relation' => 'AND', //tft
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'program-personnel-placeholders' ),
+					//'terms'    => array( 'program-placeholders' ),
+					//'terms'    => array( $admin_tag_slug ),
+					//'operator' => 'NOT IN',
+				),
+			),*/
+		);
+		
+		// TODO: if fields val contains commas, turn it into an array... etc
+		
+		if ( $fields == "all" ) {
+			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
 					'key'     => 'program_items',
@@ -2005,28 +2024,28 @@ function event_program_cleanup( $atts = [] ) {
 					'compare' => '!=',
 					'value'   => '',
 				)
-			),
-			'orderby'   => 'ID meta_key',
-			'order'     => 'ASC',
-			/*'tax_query' => array(
-				//'relation' => 'AND', //tft
+			);
+		} else if ( $fields == "is_header" ) {
+			$wp_args['meta_query'] = array(
+				'relation' => 'AND',
 				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-personnel-placeholders' ),
-					//'terms'    => array( 'program-placeholders' ),
-					//'terms'    => array( $admin_tag_slug ),
-					//'operator' => 'NOT IN',
+					'key'     => 'is_header',
+					'compare' => 'EXISTS'
 				),
-			),*/
-		);
+				array(
+					'key'     => 'is_header',
+					'compare' => '=',
+					'value'   => 1,
+				),
+			);
+		}
 	
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
 		
 		if ( $posts ) {
         
-			$info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
+			$info .= "Found ".count($posts)." event posts with program_items postmeta.<br /><br />";
 			//$info .= "args: <pre>".print_r($args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			/*
