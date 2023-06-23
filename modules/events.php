@@ -1533,11 +1533,176 @@ function get_program_item_name ( $args = array() ) {
  * 
  */
 
-function event_program_row_cleanup ( $post_id, $repeater_name = null, $i = null, $row = null ) {
+function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i = null, $row = null ) {
 
+	if ( $post_id == null || $repeater_name == null || $i == null || $row == null ) {
+		return "Insufficient info to run row cleanup<br />";
+	}
+	
 	// Init vars
 	$info = "";
+	$row_type_update = false;
+	$placeholders = false;
 	$arr_field_updates = array();
+	$arr_field_deletions = array();
+	
+	$info .= "post_id: ".$post_id."<br />";
+	$info .= "row [$i]: <pre>".print_r($row, true)."</pre>";
+						
+	// Is a row_type set?
+	if ( isset($row['row_type']) && $row['row_type'] != "" ) {	
+		$row_type = $row['row_type'];
+		$info .= "row_type: ".$row_type."<br />";		
+	} else {	
+		$row_type = null;
+		$info .= "row_type not set<br />";		
+	}
+	
+	// Personnel
+	if ( $repeater_name == "personnel" ) {		
+		$info .= "repeater_name: ".$repeater_name."<br />";
+		$arr_obsolete_fields = array( "role_old" );
+		$arr_placeholder_fields = array( "role" => "role_txt", "person" => "person_txt" );
+	
+	}
+	
+	// Program Items
+	if ( $repeater_name == "program_items" ) {
+		$info .= "repeater_name: ".$repeater_name."<br />";
+		//$arr_obsolete_fields = array( "is_header", "show_item_label", "show_item_title" );
+		//$arr_placeholder_fields = array( "item_label" => "item_label_txt", "program_item" => "program_item_txt" );
+		
+		// Check for is_header value
+		if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
+			// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
+			if ( empty($row_type) || $row_type == "default" ) {
+				$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
+				$row_type = "header";
+				$row_type_update = true;
+				$arr_field_deletions[] = "is_header";
+			}
+		}
+		
+		// Set row type based on whether item label and/or title are set to display
+		// show_item_label?
+		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
+			$show_item_label = false;
+		} else {
+			$show_item_label = true;
+		}
+		// show_item_title?
+		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
+			$show_item_title = false;
+		} else {
+			$show_item_title = true;
+		}
+		
+		// Which combo of fields? Both is the default.
+		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
+		if ( $show_item_label && $show_item_title && $row_type !== "default" ) {
+			// If the row_type isn't already set to "default", prep for the update
+			$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
+			$row_type = "default";
+			$row_type_update = true;
+		} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" ) {
+			// If the row_type isn't already set to "label_only", prep for the update
+			$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
+			$row_type = "label_only";
+			$row_type_update = true;
+		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" ) {
+			// If the row_type isn't already set to "title_only", prep for the update
+			$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
+			$row_type = "title_only";
+			$row_type_update = true;
+		}
+		
+		// Now that we've dealt with these obsolete field values, we can delete/clear them
+		$arr_field_deletions[] = "show_item_title";
+		$arr_field_deletions[] = "show_item_label";
+		
+		// Item label
+		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
+			$item_label = $row['item_label'];
+			$info .= "item_label: $item_label<br />";
+		} else {
+			$item_label = null;
+		}
+		if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
+			$item_label_txt = $row['item_label_txt'];
+			$info .= "Placeholder item_label_txt: $item_label_txt<br />";
+			$placeholders = true;
+		} else {
+			$item_label_txt = null;
+		}
+		// Program item
+		if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
+			$program_item = $row['program_item'];
+			$info .= "program_item: $program_item<br />";
+		} else {
+			$program_item = null;
+		}
+		if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" ) { 
+			$program_item_txt = $row['program_item_txt'];
+			$placeholders = true;
+		} else {
+			$program_item_txt = null;
+		}
+	
+		// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
+		// tbd
+	
+		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
+		if ( $program_item_txt && !$program_item ) {
+			$title_to_match = $program_item_txt;
+			$info .= ">> seeking match for placeholder value: '$title_to_match'";
+			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+			///$match_result = match_placeholder( $match_args );
+			///$info .= $match_result;
+		}
+		
+	}
+	
+	//
+	if ( $row_type_update ) {
+		$arr_field_updates[] = array( "row_type" => $row_type );
+	}
+	
+	// Match placeholders
+	// WIP
+	
+	// Do the updates
+	foreach ( $arr_field_updates as $field_name => $field_value ) {
+		if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
+			$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+		} else {
+			$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+		}
+	}	
+	
+	// Do the deletions
+	foreach ( $arr_field_deletions as $field_name ) {
+		if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
+			$info .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+		} else {
+			$info .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: FAILED! -->";
+		}
+	}
+	
+	return $info;
+}
+
+function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
+	$repeater_name = "personnel";
+}
+
+function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
+	/*	
+	// Init vars
+	$info = "";
+	$repeater_name = "program_items";
+	$row_type_update = false;
+	$arr_field_updates = array();
+	$arr_field_deletions = array();
 	
 	$info .= "post_id: ".$post_id."<br />";
 	$info .= "repeater_name: ".$repeater_name."<br />";
@@ -1551,14 +1716,15 @@ function event_program_row_cleanup ( $post_id, $repeater_name = null, $i = null,
 		$row_type = null;
 		$info .= "row_type not set<br />";		
 	}
-	
+	*/
 	// Check for is_header value
 	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
 		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
 		if ( empty($row_type) || $row_type == "default" ) {
 			$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
-			$row_type = "header"; // TODO: update the row_type in the DB
-			$arr_field_updates[] = array();
+			$row_type = "header";
+			$row_type_update = true;
+			$arr_field_deletions[] = "is_header";
 		}
 	} 
 	
@@ -1575,21 +1741,34 @@ function event_program_row_cleanup ( $post_id, $repeater_name = null, $i = null,
 	} else {
 		$show_item_title = true;
 	}
+	
 	// Which combo of fields? Both is the default.
 	// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-	
-	if ( $show_item_label && $show_item_title ) {
+	if ( $show_item_label && $show_item_title && $row_type !== "default" ) {
+		// If the row_type isn't already set to "default", prep for the update
 		$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
 		$row_type = "default";
-	} else if ( $show_item_label && !$show_item_title ) {
+		$row_type_update = true;
+	} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" ) {
+		// If the row_type isn't already set to "label_only", prep for the update
 		$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
 		$row_type = "label_only";
-	} else if ( $show_item_title && !$show_item_label ) {
+		$row_type_update = true;
+	} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" ) {
+		// If the row_type isn't already set to "title_only", prep for the update
 		$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
 		$row_type = "title_only";
+		$row_type_update = true;
+	}
+	// Now that we've dealt with these obsolete field values, we can delete/clear them
+	$arr_field_deletions[] = "show_item_title";
+	$arr_field_deletions[] = "show_item_label";
+	
+	if ( $row_type_update ) {
+		$arr_field_updates[] = array( "row_type" => $row_type );
 	}
 	
-	// Placeholders?
+	// Placeholders? WIP
 	$placeholders = false;
 	
 	// Item label
@@ -1620,13 +1799,26 @@ function event_program_row_cleanup ( $post_id, $repeater_name = null, $i = null,
 		$program_item_txt = null;
 	}
 	
-	if ( !empty($arr_field_updates) ) {
-		/*if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
+	//
+	//
+	
+	// Do the updates
+	foreach ( $arr_field_updates as $field_name => $field_value ) {
+		if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
 			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
 		} else {
 			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-		}*/
+		}
 	}	
+	
+	// Do the deletions
+	foreach ( $arr_field_deletions as $field_name ) {
+		if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
+			$result .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+		} else {
+			$result .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: FAILED! -->";
+		}
+	}
 	
 	// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
 	// tbd
@@ -1999,7 +2191,40 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
+			$info .= "field_check: ".$field_check."<br />";
 			$repeater_name = "personnel";
+			
+			foreach ( $posts AS $post ) {
+			
+				// Init
+				$post_info = "";
+				$info .= '<div>';
+				
+				setup_postdata( $post );
+				$post_id = $post->ID;
+				$post_info .= "post_id: ".$post_id."<br />";
+				
+				// Get the program item repeater field values (ACF)
+				$rows = get_field('personnel', $post_id);
+				if ( empty($rows) ) { $rows = array(); }
+				
+				$post_info .= count($rows)." personnel rows <br />"; // tft
+    
+				if ( count($rows) > 0 ) {
+					$i = 0;
+					foreach ( $rows as $row ) {
+						$row_info = event_program_row_cleanup ( $post_id, "personnel", $i, $row );
+						//$row_info = event_personnel_row_cleanup ( $post_id, $i, $row )										
+						$post_info .= $row_info;
+						$i++;				
+					}
+				}
+				$info .= $post_info;
+				$info .= '</div>';
+			
+			}
+			
 			/*
 			foreach ( $posts AS $post ) {
 		
@@ -2081,6 +2306,7 @@ function event_program_cleanup( $atts = [] ) {
 		} else {
 		
 			$info .= "No matching posts found.<br />";
+			$info .= "field_check: ".$field_check."<br />";
 			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
@@ -2233,18 +2459,14 @@ function event_program_cleanup( $atts = [] ) {
 			$repeater_name = "program_items";
 			
 			foreach ( $posts AS $post ) {
-			
-				$info .= '<div>';
 				
 				// Init
 				$post_info = "";
+				$info .= '<div>';
 				
 				setup_postdata( $post );
 				$post_id = $post->ID;
 				$post_info .= "post_id: ".$post_id."<br />";
-				
-				// WIP 06/22/23				
-				// Get rows... loop... update_row_type ( $row )
 				
 				// Get the program item repeater field values (ACF)
 				$rows = get_field('program_items', $post_id);
@@ -2255,7 +2477,8 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
-						$row_info = event_program_row_cleanup ( $post_id, $repeater_name, $i, $row );												
+						$row_info = event_program_row_cleanup ( $post_id, "program_items", $i, $row );
+						//$row_info = event_program_items_row_cleanup ( $post_id, $i, $row );									
 						$post_info .= $row_info;
 						$i++;				
 					}
