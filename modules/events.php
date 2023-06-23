@@ -2076,42 +2076,52 @@ function event_program_cleanup( $atts = [] ) {
 						
 						// Is a row_type set?
 						if ( isset($row['row_type']) && $row['row_type'] != "" ) { 
+						
 							$row_type = $row['row_type'];
 							$row_info .= "row_type: ".$row_type."<br />";
+							
 						} else {
+						
 							$row_info .= "row_type not set<br />";
-							if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
-								$row_info .= "Set row_type to 'header'<br />";
-								$row_type = "header";
+							
+						}
+						
+						// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
+						
+						//
+						if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
+							
+							$row_info .= "Set row_type to 'header'<br />";
+							$row_type = "header";
+							
+						} else {
+						
+							// Set row type based on whether item label and/or title are set to display
+							// show_item_label?
+							if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
+								$show_item_label = false;
 							} else {
-							
-								// Set row type based on whether item label and/or title are set to display
-								// show_item_label?
-								if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
-									$show_item_label = false;
-								} else {
-									$show_item_label = true;
-								}
-								// show_item_title?
-								if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
-									$show_item_title = false;
-								} else {
-									$show_item_title = true;
-								}
-								// Which combo of fields? Both is the default.
-								if ( $show_item_label && $show_item_title ) {
-									$row_info .= "Set row_type to 'default'<br />";
-									$row_type = "default";
-								} else if ( $show_item_label && !$show_item_title ) {
-									$row_info .= "Set row_type to 'label_only'<br />";
-									$row_type = "label_only";
-								} else if ( $show_item_title && !$show_item_label ) {
-									$row_info .= "Set row_type to 'title_only'<br />";
-									$row_type = "title_only";
-								}
-							
+								$show_item_label = true;
 							}
-						}						
+							// show_item_title?
+							if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
+								$show_item_title = false;
+							} else {
+								$show_item_title = true;
+							}
+							// Which combo of fields? Both is the default.
+							if ( $show_item_label && $show_item_title ) {
+								$row_info .= "Set row_type to 'default'<br />";
+								$row_type = "default";
+							} else if ( $show_item_label && !$show_item_title ) {
+								$row_info .= "Set row_type to 'label_only'<br />";
+								$row_type = "label_only";
+							} else if ( $show_item_title && !$show_item_label ) {
+								$row_info .= "Set row_type to 'title_only'<br />";
+								$row_type = "title_only";
+							}
+						
+						}				
 						
 						$post_info .= $row_info;
 					
