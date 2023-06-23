@@ -2027,11 +2027,11 @@ function event_program_cleanup( $atts = [] ) {
 			);
 		} else if ( $fields == "is_header" ) {
 			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
+				//'relation' => 'AND',
+				/*array(
 					'key'     => 'program_items_XYZ_is_header',
 					'compare' => 'EXISTS'
-				),
+				),*/
 				array(
 					'key'     => 'program_items_XYZ_is_header',
 					'compare' => '=',
