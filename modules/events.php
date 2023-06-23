@@ -2075,8 +2075,23 @@ function event_program_cleanup( $atts = [] ) {
 						$row_info .= "row: <pre>".print_r($row, true)."</pre>";
 						
 						// Is a row_type set?
-						//if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "NOT SET"; }
-						//$row_info .= "row_type: ".$row_type."<br />";
+						if ( isset($row['row_type']) ) { 
+							$row_type = $row['row_type'];
+							$row_info .= "row_type: ".$row_type."<br />";
+						} else {
+							$row_info .= "row_type not set<br />";
+							if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
+								$row_info .= "Set row_type to 'header'<br />";
+								$row_type = "header";
+							} /*else if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
+								$row_info .= "Set row_type to 'label_only'<br />";
+								$row_type = "label_only";
+							} else if ( isset($row['is_header']) && $row['is_header'] == 1 ) {
+								$row_info .= "Set row_type to 'title_only'<br />";
+								$row_type = "title_only";
+							}*/
+						}
+						
 						
 						$post_info .= $row_info;
 					
