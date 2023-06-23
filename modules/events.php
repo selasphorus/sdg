@@ -2028,14 +2028,21 @@ function event_program_cleanup( $atts = [] ) {
 		} else if ( $field_check == "row_type" ) {
 			// Check to see if row_type is empty
 			$wp_args['meta_query'] = array(
-				'relation' => 'OR',
+				'relation' => 'AND',
 				array(
-					'key'    => 'program_items_XYZ_row_type',
-					'value'  => ''
+					'key'     => 'program_items',
+					'compare' => 'EXISTS'
 				),
 				array(
-					'key'    => 'program_items_XYZ_row_type',
-					'compare' => 'NOT EXISTS'
+					'relation' => 'OR',
+					array(
+						'key'    => 'program_items_XYZ_row_type',
+						'value'  => ''
+					),
+					array(
+						'key'    => 'program_items_XYZ_row_type',
+						'compare' => 'NOT EXISTS'
+					),
 				),
 			);
 		} else if ( $field_check == "mismatch" ) {
