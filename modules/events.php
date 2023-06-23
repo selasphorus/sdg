@@ -1563,7 +1563,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		$info .= "repeater_name: ".$repeater_name."<br />";
 		$arr_obsolete_fields = array( "role_old" );
 		$arr_placeholder_fields = array( "role" => "role_txt", "person" => "person_txt" );
-	
+		// WIP
 	}
 	
 	// Program Items
@@ -1652,7 +1652,16 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// tbd
 	
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
-		if ( $program_item_txt && !$program_item ) {
+		if ( $item_labeltxt && !($item_label) ) {
+			$title_to_match = $program_item_txt;
+			$info .= ">> seeking match for placeholder value: '$title_to_match'";
+			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+			///$match_result = match_placeholder( $match_args );
+			///$info .= $match_result;
+		}
+		
+		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
+		if ( $program_item_txt && !($program_item) ) {
 			$title_to_match = $program_item_txt;
 			$info .= ">> seeking match for placeholder value: '$title_to_match'";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
@@ -1665,6 +1674,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	//
 	if ( $row_type_update ) {
 		$arr_field_updates[] = array( "row_type" => $row_type );
+		$info .= "do row_type_update<br />";
 	}
 	
 	// Match placeholders
@@ -1695,8 +1705,9 @@ function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
 	$repeater_name = "personnel";
 }
 
+/*
 function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
-	/*	
+	
 	// Init vars
 	$info = "";
 	$repeater_name = "program_items";
@@ -1716,7 +1727,7 @@ function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
 		$row_type = null;
 		$info .= "row_type not set<br />";		
 	}
-	*/
+	
 	// Check for is_header value
 	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
 		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
@@ -1835,6 +1846,7 @@ function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
 	return $info;
 	
 }
+*/
 
 /* ***
  * With the introduction of the `row_type` field to the ACF repeater fields `personnel` and `program_items`,
