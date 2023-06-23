@@ -2101,6 +2101,7 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$info .= "field_check: ".$field_check."<br />";
 			
 			foreach ( $posts AS $post ) {
 		
