@@ -2192,7 +2192,7 @@ function event_program_cleanup( $atts = [] ) {
 					foreach ( $rows as $row ) {
 						
 						//$row_info = "";
-						$row_info = event_program_row_cleanup ( $row );
+						//$row_info = event_program_row_cleanup ( $row );
 												
 						$post_info .= $row_info;
 					
