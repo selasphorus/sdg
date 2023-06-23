@@ -1601,20 +1601,28 @@ function event_program_row_cleanup ( $i = null, $row = null ) {
 	if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
 		$item_label = $row['item_label'];
 		$info .= "item_label: $item_label<br />";
+	} else {
+		$item_label = null;
 	}
 	if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
 		$item_label_txt = $row['item_label_txt'];
 		$info .= "Placeholder item_label_txt: $item_label_txt<br />";
 		$placeholders = true;
+	} else {
+		$item_label_txt = null;
 	}
 	// Program item
 	if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
 		$program_item = $row['program_item'];
 		$info .= "program_item: $program_item<br />";
+	} else {
+		$program_item = null;
 	}
 	if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" ) { 
 		$program_item_txt = $row['program_item_txt'];
 		$placeholders = true;
+	} else {
+		$program_item_txt = null;
 	}
 	// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
 	// tbd
