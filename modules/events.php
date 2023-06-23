@@ -2033,6 +2033,10 @@ function event_program_cleanup( $atts = [] ) {
 					'key'    => 'program_items_XYZ_row_type',
 					'value'  => ''
 				),
+				array(
+					'key'    => 'program_items_XYZ_row_type',
+					'compare' => 'NOT EXISTS'
+				),
 			);
 		} else if ( $field_check == "mismatch" ) {
 			// Check to see if row_type doesn't match show/hide settings
