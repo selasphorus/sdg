@@ -1593,17 +1593,17 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 		// Which combo of fields? Both is the default.
 		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-		if ( $show_item_label && $show_item_title && $row_type !== "default" ) {
+		if ( $show_item_label && $show_item_title && $row_type !== "default" && $row_type !== "header" && $row_type !== "program_note" ) {
 			// If the row_type isn't already set to "default", prep for the update
 			$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
 			$row_type = "default";
 			$row_type_update = true;
-		} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" ) {
+		} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" && $row_type !== "header" && $row_type !== "program_note" ) {
 			// If the row_type isn't already set to "label_only", prep for the update
 			$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
 			$row_type = "label_only";
 			$row_type_update = true;
-		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" ) {
+		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" && $row_type !== "header" && $row_type !== "program_note" ) {
 			// If the row_type isn't already set to "title_only", prep for the update
 			$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
 			$row_type = "title_only";
@@ -1677,6 +1677,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		$arr_field_updates["row_type"] = $row_type;
 		$info .= "do row_type_update<br />";
 	}
+	
+	// TODO: build in deletion of empty meta data?
+	// TODO: figure out how not to save empty meta rows in the first place...
 	
 	// Do the updates
 	foreach ( $arr_field_updates as $field_name => $field_value ) {
