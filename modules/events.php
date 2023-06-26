@@ -1653,9 +1653,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		if ( $item_label_txt && !($item_label) ) {
 			$title_to_match = $item_label_txt;
 			$info .= ">> seeking match for LABEL placeholder value: '$title_to_match'<br />";
-			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
-			///$match_result = match_placeholder( $match_args );
-			///$info .= $match_result;
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+			$match_result = match_placeholder( $match_args );
+			$info .= $match_result;
 		}
 		
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
