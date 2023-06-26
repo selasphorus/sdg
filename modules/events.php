@@ -1620,7 +1620,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Item label
 		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
 			$item_label = $row['item_label'];
-			$info .= "item_label: $item_label<br />";
+			$info .= "item_label: ".print_r($item_label, true)."<br />";//$info .= "item_label: $item_label<br />";
 		} else {
 			$item_label = null;
 		}
@@ -1634,7 +1634,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Program item
 		if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
 			$program_item = $row['program_item'];
-			$info .= "program_item: $program_item<br />";
+			$info .= "program_item: ".print_r($program_item, true)."<br />";
 		} else {
 			$program_item = null;
 		}
