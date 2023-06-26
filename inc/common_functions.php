@@ -437,7 +437,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
         
         if ( !empty($img_tag) ) {
-        	$classes .= " float-left"; //$classes .= " NOT_is_singular"; // tft
+        	$classes .= " float-left"; //$classes .= " NOT_is_singular";
         	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
         	$img_html .= $img_tag;
         	$img_html .= '</a>';
@@ -445,7 +445,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         
     } // End if is_singular()
     
-    //$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
+    //$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
     if ( $return == "html" ) {
     	$info .= $img_html;
@@ -455,10 +455,10 @@ function sdg_post_thumbnail ( $args = array() ) {
     }
 	
 	if ( $echo == true ) {
-		$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
+		$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
 		echo $info;    
 	} else {
-		//if ( is_dev_site() ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
+		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		return $info;
 	}
 
