@@ -1674,10 +1674,10 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 		
 		// Clear out empty fields not needed per row_type
-		if ( $row_type == "label_only" ) {
+		if ( $row_type == "label_only" || $row_type == "program_note" ) {
 			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
 			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
-		} else if ( $row_type == "title_only" ) {
+		} else if ( $row_type == "title_only" || $row_type == "program_note" ) {
 			// If row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
 			if ( empty($item_label) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label' ) ) { $arr_field_deletions[] = "item_label"; }
 		}
