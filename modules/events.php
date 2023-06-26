@@ -1664,10 +1664,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$row_type = "label_only";
 			$row_type_update = true;
 			
-			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
-			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
-			if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
-			
 		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" && $row_type !== "header" && $row_type !== "program_note" ) {
 		
 			// If the row_type isn't already set to "title_only", prep for the update
@@ -1675,10 +1671,17 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$row_type = "title_only";
 			$row_type_update = true;
 			
+		}
+		
+		// Clear out empty fields not needed per row_type
+		if ( row_type == "label_only" ) {
+			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
+			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
+			if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
+		} else if ( row_type == "title_only" ) {
 			// If row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
 			if ( empty($item_label) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label' ) ) { $arr_field_deletions[] = "item_label"; }
 			if ( empty($item_label_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label_txt' ) ) { $arr_field_deletions[] = "item_label_txt"; }
-			
 		}
 		
 		// Now that we've dealt with the obsolete field values, we can delete/clear them
