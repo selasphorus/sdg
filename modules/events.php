@@ -1677,12 +1677,13 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		if ( $row_type == "label_only" ) {
 			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
 			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
-			if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
 		} else if ( $row_type == "title_only" ) {
 			// If row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
 			if ( empty($item_label) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label' ) ) { $arr_field_deletions[] = "item_label"; }
-			if ( empty($item_label_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label_txt' ) ) { $arr_field_deletions[] = "item_label_txt"; }
 		}
+		// Delete empty placeholder fields, whatever the row_type
+		if ( empty($item_label_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label_txt' ) ) { $arr_field_deletions[] = "item_label_txt"; }
+		if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
 		
 		// Now that we've dealt with the obsolete field values, we can delete/clear them
 		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
