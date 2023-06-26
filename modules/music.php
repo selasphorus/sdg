@@ -2251,7 +2251,6 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
 					//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
 				
-					$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
 					$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
 				
 					// Print last SQL query string
