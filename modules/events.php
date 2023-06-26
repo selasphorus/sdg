@@ -1572,9 +1572,14 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Handle role and person/group, if any
 		
 		// Role
-		if ( isset($row['role']) && $row['role'] != "" ) { 
+		if ( isset($row['role']) && $row['role'] != "" ) {
 			$role = $row['role'];
 			$info .= "role: ".print_r($role, true)."<br />";
+			// If the role is properly set, then we can get rid of the old value, right?
+			// TBD: do we need to keep role_old for X-check?
+			if ( isset($row['role_old']) && $row['role_old'] != "" && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role_old' ) ) {
+				//$arr_field_deletions[] = "role_old";
+			}
 		} else {
 			$role = null;
 		}
@@ -1585,7 +1590,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		} else {
 			$role_txt = null;
 		}
-		// TODO: role_old?
+		// TODO: ?
 		
 		// Person or group
 		if ( isset($row['person']) && $row['person'] != "" ) {
@@ -2319,7 +2324,32 @@ function event_program_cleanup( $atts = [] ) {
 			'post_type'   => 'event',
 			'post_status' => 'publish',
 			'posts_per_page' => $num_posts,
-			'meta_query' => array(
+			'orderby'   => 'ID meta_key',
+			'order'     => 'ASC',
+			/*'tax_query' => array(
+				//'relation' => 'AND', //tft
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'program-personnel-placeholders' ),
+					//'terms'    => array( 'program-placeholders' ),
+					//'terms'    => array( $admin_tag_slug ),
+					//'operator' => 'NOT IN',
+				),
+			),*/
+		);
+		
+		// Posts by ID
+    	// NB: if IDs are specified, ignore field_check
+		if ( !empty($ids) ) {
+			$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
+			$wp_args['post__in'] = $posts_in;
+			$field_check = "N/A";
+		}
+		
+		// field_check?
+		if ( $field_check == "all" ) {
+			$wp_args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
 					'key'     => 'personnel',
@@ -2335,21 +2365,62 @@ function event_program_cleanup( $atts = [] ) {
 					'compare' => '!=',
 					'value'   => '',
 				)
-			),
-			'orderby'   => 'ID meta_key',
-			'order'     => 'ASC',
-			/*'tax_query' => array(
-				//'relation' => 'AND', //tft
+			);
+		} else if ( $field_check == "row_type" ) {
+			// Check to see if row_type is empty
+			$wp_args['meta_query'] = array(
+				'relation' => 'AND',
 				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-personnel-placeholders' ),
-					//'terms'    => array( 'program-placeholders' ),
-					//'terms'    => array( $admin_tag_slug ),
-					//'operator' => 'NOT IN',
+					'key'     => 'personnel',
+					'compare' => 'EXISTS'
 				),
-			),*/
-		);
+				array(
+					'relation' => 'OR',
+					array(
+						'key'    => 'personnel_XYZ_row_type',
+						'value'  => ''
+					),
+					array(
+						'key'    => 'personnel_XYZ_row_type',
+						'compare' => 'NOT EXISTS'
+					),
+				),
+			);
+		} else if ( $field_check == "header_txt" ) {
+			$wp_args['meta_query'] = array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'personnel',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key'     => 'personnel_XYZ_header_txt',
+					'value'   => 1,
+				),
+			);
+		} else if ( $field_check == "placeholders" ) {
+			// TODO: fix this -- yields no results, which can't be right
+			$wp_args['meta_query'] = array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'personnel',
+					'compare' => 'EXISTS'
+				),
+				array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'personnel_XYZ_role_txt',
+						'compare' => '!=',
+						'value'   => ' ',
+					),
+					array(
+						'key'     => 'personnel_XYZ_person_txt',
+						'compare' => '!=',
+						'value'   => ' ',
+					),
+				),
+			);
+		}
 	
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
