@@ -1548,8 +1548,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	$arr_field_deletions = array();
 	
 	$info .= "post_id: ".$post_id."/row [$i]";
-	$info .= "<br />";
-	$info .= "<!-- <pre>".print_r($row, true)."</pre> -->"; //$info .= ": <pre>".print_r($row, true)."</pre>";
+	//$info .= "<br />";
+	$info .= ": <pre>".print_r($row, true)."</pre>";
+	//$info .= "<!-- <pre>".print_r($row, true)."</pre> -->";
 						
 	// Is a row_type set?
 	if ( isset($row['row_type']) && $row['row_type'] != "" ) {	
