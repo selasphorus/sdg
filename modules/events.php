@@ -1827,19 +1827,20 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// TODO: figure out how not to save empty meta rows in the first place...
 	
 		// Do the updates
+		if ( $arr_field_updates ) { $info .= "+++++ Do meta updates +++++<br />"; }
 		foreach ( $arr_field_updates as $field_name => $field_value ) {
-			$info .= "+++++ Do meta updates +++++<br />";
 			$info .= "update $field_name = $field_value<br />";
 			if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
 				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
 			} else {
 				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
 			}
-		}	
+		}
+		if ( $arr_field_updates ) { $info .= "-----------<br />"; }
 	
 		// Do the deletions
+		if ( $arr_field_deletions ) { $info .= "+++++ Do meta deletions +++++<br />"; }
 		foreach ( $arr_field_deletions as $field_name ) {
-			$info .= "+++++ Do meta deletions +++++<br />";
 			$info .= "delete $field_name<br />";
 			if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
@@ -1847,6 +1848,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: FAILED!<br />";
 			}
 		}
+		if ( $arr_field_deletions ) { $info .= "-----------<br />"; }
+		
 	}
 	
 	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
