@@ -1676,6 +1676,12 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			
 		}
 		
+		// If the row_type is STILL empty, set it to the default
+		if ( empty($row_type) ) {
+			$row_type = "default";
+			$row_type_update = true;
+		}
+		
 		// Clear out empty fields not needed per row_type
 		if ( $row_type == "label_only" || $row_type == "program_note" ) {
 			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
@@ -1721,6 +1727,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 		// Do the updates
 		foreach ( $arr_field_updates as $field_name => $field_value ) {
+			$info .= "+++++ Do meta updates +++++<br />";
 			$info .= "update $field_name = $field_value<br />";
 			if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
 				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
@@ -1731,6 +1738,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 		// Do the deletions
 		foreach ( $arr_field_deletions as $field_name ) {
+			$info .= "+++++ Do meta deletions +++++<br />";
 			$info .= "delete $field_name<br />";
 			if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
