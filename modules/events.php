@@ -1568,6 +1568,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 	// Program Items
 	if ( $repeater_name == "program_items" ) {
+	
 		$info .= "repeater_name: ".$repeater_name."<br />";
 		//$arr_obsolete_fields = array( "is_header", "show_item_label", "show_item_title" );
 		//$arr_placeholder_fields = array( "item_label" => "item_label_txt", "program_item" => "program_item_txt" );
@@ -1585,17 +1586,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 		// Set row type based on whether item label and/or title are set to display
 		// show_item_label?
-		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
-			$show_item_label = false;
-		} else {
-			$show_item_label = true;
-		}
+		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { $show_item_label = false; } else { $show_item_label = true; }
 		// show_item_title?
-		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
-			$show_item_title = false;
-		} else {
-			$show_item_title = true;
-		}
+		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { $show_item_title = false; } else { $show_item_title = true; }
 		
 		// Which combo of fields? Both is the default.
 		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
@@ -1652,12 +1645,14 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 	
 		// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
-		// tbd
+		// WIP/TODO/TBD
+	
+		// Match placeholders // WIP 06/23/23
 	
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
 		if ( $item_label_txt && !($item_label) ) {
 			$title_to_match = $item_label_txt;
-			$info .= ">> seeking match for placeholder value: '$title_to_match'<br />";
+			$info .= ">> seeking match for LABEL placeholder value: '$title_to_match'<br />";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
 			///$match_result = match_placeholder( $match_args );
 			///$info .= $match_result;
@@ -1666,7 +1661,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
 		if ( $program_item_txt && !($program_item) ) {
 			$title_to_match = $program_item_txt;
-			$info .= ">> seeking match for placeholder value: '$title_to_match'<br />";
+			$info .= ">> seeking match for ITEM placeholder value: '$title_to_match'<br />";
 			///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
 			///$match_result = match_placeholder( $match_args );
 			///$info .= $match_result;
@@ -1679,9 +1674,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		$arr_field_updates["row_type"] = $row_type;
 		$info .= "do row_type_update<br />";
 	}
-	
-	// Match placeholders
-	// WIP
 	
 	// Do the updates
 	foreach ( $arr_field_updates as $field_name => $field_value ) {
