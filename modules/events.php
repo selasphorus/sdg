@@ -1688,6 +1688,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
 		
+		// Delete the program_item_note meta record, if it exists and is empty
+		if ( isset($row['program_item_note']) && empty($row['program_item_note']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_note' ) ) { $arr_field_deletions[] = "program_item_note"; }
+		
 	}
 	
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
