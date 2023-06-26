@@ -1573,50 +1573,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		//$arr_obsolete_fields = array( "is_header", "show_item_label", "show_item_title" );
 		//$arr_placeholder_fields = array( "item_label" => "item_label_txt", "program_item" => "program_item_txt" );
 		
-		// Check for is_header value
-		if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
-			// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
-			if ( empty($row_type) || $row_type == "default" ) {
-				$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
-				$row_type = "header";
-				$row_type_update = true;
-				$arr_field_deletions[] = "is_header";
-			}
-		}
-		
-		// Set row type based on whether item label and/or title are set to display
-		// show_item_label?
-		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { $show_item_label = false; } else { $show_item_label = true; }
-		// show_item_title?
-		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { $show_item_title = false; } else { $show_item_title = true; }
-		
-		// Which combo of fields? Both is the default.
-		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-		if ( $show_item_label && $show_item_title && $row_type !== "default" && $row_type !== "header" && $row_type !== "program_note" ) {
-			// If the row_type isn't already set to "default", prep for the update
-			$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
-			$row_type = "default";
-			$row_type_update = true;
-		} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" && $row_type !== "header" && $row_type !== "program_note" ) {
-			// If the row_type isn't already set to "label_only", prep for the update
-			$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
-			$row_type = "label_only";
-			$row_type_update = true;
-		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" && $row_type !== "header" && $row_type !== "program_note" ) {
-			// If the row_type isn't already set to "title_only", prep for the update
-			$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
-			$row_type = "title_only";
-			$row_type_update = true;
-		}
-		
-		// Now that we've dealt with these obsolete field values, we can delete/clear them
-		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
-		// Note that fields with defaults will appear to exist in $row array, but may not actually be in the DB
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_is_header' ) ) { $arr_field_deletions[] = "is_header"; }
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
-		// TODO: if row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
-		// TODO: if row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
+		// +~+~+~+~+~+~+~+~+~+~+~
+		// Handle program item label and program item, if any
 		
 		// Item label
 		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
@@ -1670,6 +1628,65 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			///$match_result = match_placeholder( $match_args );
 			///$info .= $match_result;
 		}
+		
+		// +~+~+~+~+~+~+~+~+~+~+~
+		// Deal w/ row settings and obsolete fields
+		
+		// Check for is_header value
+		if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
+			// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
+			if ( empty($row_type) || $row_type == "default" ) {
+				$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
+				$row_type = "header";
+				$row_type_update = true;
+				$arr_field_deletions[] = "is_header";
+			}
+		}
+		
+		// Set row type based on whether item label and/or title are set to display
+		// show_item_label?
+		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { $show_item_label = false; } else { $show_item_label = true; }
+		// show_item_title?
+		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { $show_item_title = false; } else { $show_item_title = true; }
+		
+		// Which combo of fields? Both is the default.
+		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
+		if ( $show_item_label && $show_item_title && $row_type !== "default" && $row_type !== "header" && $row_type !== "program_note" ) {
+		
+			// If the row_type isn't already set to "default", prep for the update
+			$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
+			$row_type = "default";
+			$row_type_update = true;
+			
+		} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" && $row_type !== "header" && $row_type !== "program_note" ) {
+			// If the row_type isn't already set to "label_only", prep for the update
+			$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
+			$row_type = "label_only";
+			$row_type_update = true;
+			
+			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
+			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
+			if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
+			
+		} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" && $row_type !== "header" && $row_type !== "program_note" ) {
+		
+			// If the row_type isn't already set to "title_only", prep for the update
+			$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
+			$row_type = "title_only";
+			$row_type_update = true;
+			
+			// If row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
+			if ( empty($item_label) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label' ) ) { $arr_field_deletions[] = "item_label"; }
+			if ( empty($item_label_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label_txt' ) ) { $arr_field_deletions[] = "item_label_txt"; }
+			
+		}
+		
+		// Now that we've dealt with the obsolete field values, we can delete/clear them
+		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
+		// Note that fields with defaults will appear to exist in $row array, but may not actually be in the DB
+		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_is_header' ) ) { $arr_field_deletions[] = "is_header"; }
+		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
+		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
 		
 	}
 	
