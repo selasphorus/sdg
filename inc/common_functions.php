@@ -174,7 +174,7 @@ function sdg_post_title ( $args = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
