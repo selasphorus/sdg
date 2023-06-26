@@ -1748,7 +1748,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 	}
 	
-	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
+	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
 	
 	return $info;
 }
