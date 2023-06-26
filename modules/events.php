@@ -3102,6 +3102,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	// Get img via sdg_post_thumbnail fcn
             	$img_args = array( 'post_id' => $post_id, 'format' => $format, 'img_size' => $img_size, 'sources' => "all", 'echo' => false );
             	$img_tag = sdg_post_thumbnail ( $img_args );
+            	
+            	if ( empty($img_tag) ) { $ts_info .= "<!-- img_tag is EMPTY! for post_id: $post_id: format: $format; img_size: $img_size; sources: $sources; echo: $echo -->"; }
+            	
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
             } else {
@@ -3119,8 +3122,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
                 $classes .= " has_caption";
             }
             
-            $replace .= $caption."<!-- sdg_placeholders -->";
             $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
+            $replace .= $caption."<!-- sdg_placeholders -->";
             
         } else {
         	
