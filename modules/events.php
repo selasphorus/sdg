@@ -1695,6 +1695,10 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Delete the program_item_note meta record, if it exists and is empty
 		if ( isset($row['program_item_note']) && empty($row['program_item_note']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_note' ) ) { $arr_field_deletions[] = "program_item_note"; }
 		
+		// Delete the program_item_title_for_matching meta record, if it exists and is empty
+		// TODO: phase out this field altogether? Do we need it for anything?
+		if ( isset($row['program_item_title_for_matching']) && empty($row['program_item_title_for_matching']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_title_for_matching' ) ) { $arr_field_deletions[] = "program_item_title_for_matching"; }
+		
 	}
 	
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
