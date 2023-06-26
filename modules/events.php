@@ -1616,6 +1616,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_is_header' ) ) { $arr_field_deletions[] = "is_header"; }
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
+		// TODO: if row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
+		// TODO: if row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
 		
 		// Item label
 		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
