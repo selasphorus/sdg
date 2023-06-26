@@ -1221,7 +1221,8 @@ function get_program_item_name ( $args = array() ) {
 	$program_item_name = "";
 	$program_title_as_label = "";
 	//
-	$use_title_as_label = false;	
+	$use_title_as_label = false;
+	$show_person_dates = true;
 	//
 	$row_composer_ids = array();
     //
