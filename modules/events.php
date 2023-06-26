@@ -1645,9 +1645,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 		// Set row type based on whether item label and/or title are set to display
 		// show_item_label?
-		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { $show_item_label = false; } else { $show_item_label = true; }
+		if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { $show_item_label = false; } else { $show_item_label = null; }
 		// show_item_title?
-		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { $show_item_title = false; } else { $show_item_title = true; }
+		if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { $show_item_title = false; } else { $show_item_title = null; }
 		
 		// Which combo of fields? Both is the default.
 		// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
