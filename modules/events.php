@@ -1613,7 +1613,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
 		// Note that fields with defaults will appear to exist in $row array, but may not actually be in the DB
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_is_header' ) ) { $arr_field_deletions[] = "is_header"; }
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
+		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
 		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
 		// TODO: if row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
 		// TODO: if row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
@@ -1673,7 +1673,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 	}
 	
-	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) {
+	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
 		
 		$info .= "No updates required for this row.<br />";
 		
@@ -1689,7 +1689,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 		// Do the updates
 		foreach ( $arr_field_updates as $field_name => $field_value ) {
-			//$info .= "update $field_name = $field_value<br />";
+			$info .= "update $field_name = $field_value<br />";
 			if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
 				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
 			} else {
@@ -1699,7 +1699,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 		// Do the deletions
 		foreach ( $arr_field_deletions as $field_name ) {
-			//$info .= "delete $field_name<br />";
+			$info .= "delete $field_name<br />";
 			if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
 			} else {
