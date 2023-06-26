@@ -1646,7 +1646,7 @@ function sdg_get_placeholder_img() {
 /*** Match placeholders to real post objects; return id (single match) or posts array (multiple matches) ***/
 function match_placeholder ( $args = [] ) {
     
-    $result = "";
+    $info = "";
 
     $defaults = array( // the defaults will be overidden if set in $args
         'index'         => null,
@@ -1656,10 +1656,10 @@ function match_placeholder ( $args = [] ) {
         'repeater_name' => null,
         'field_name'    => null,
         'taxonomy'      => null,
-        'display'      => null,
+        'display'      => null, // Do we really need this?
     );
     $args = array_merge($defaults, $args);
-    //echo $args['value1'] . ', ' . $args['value2'];
+    //$info .= $args['value1'] . ', ' . $args['value2'];
     
     $i = $args['index'];
     $post_id = $args['post_id'];
@@ -1668,18 +1668,18 @@ function match_placeholder ( $args = [] ) {
     $repeater_name = $args['repeater_name'];
     $field_name = $args['field_name'];
     $taxonomy = $args['taxonomy'];
-    $display = $args['display'];
+    $display = $args['display']; // obsolete?
     
     if ( $display == 'dev' ) {
-        //$result .= "match args: <pre>".print_r($args, true)."</pre>";
+        //$info .= "match args: <pre>".print_r($args, true)."</pre>";
     } else {
-        //$result .= "<!-- match args: ".print_r($args, true)." -->";
+        //$info .= "<!-- match args: ".print_r($args, true)." -->";
     }
     
     // Abort if no post_id. TODO: determine additional conditions for which to abort.
     if ( empty($post_id) ) { 
-        $result .= "<!-- post_id is empty -> match process aborted -->";
-        return $result;
+        $info .= "post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
+        return $info;
         //return false; 
     } 
     
@@ -1692,19 +1692,20 @@ function match_placeholder ( $args = [] ) {
     if ( isset($arr_match_results['post_id']) ) {
         
         $match_id = $arr_match_results['post_id'];
-        $result .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
+        $info .= "match found for placeholder!: post_id [".$match_id."]<br />";//$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
         
         if ( $repeater_name && $match_id ) {
                         
             $sub_field_value = $match_id;
             // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)
             
-            $result .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
+            $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
+            //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
             // Update "field_name" within the $i-th row of "repeater_name"
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
             } else {
-                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
             }/**/
             
         }
@@ -1712,39 +1713,41 @@ function match_placeholder ( $args = [] ) {
     } else if ( isset($arr_match_results['term_id']) ) {
         
         $term_id = $arr_match_results['term_id'];
-        $result .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
+        $info .= "match found for placeholder!: term_id [".$term_id."]<br />";//$info .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
         
         // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
-        
+        // WIP
         if ( $repeater_name && $term_id ) {
             
             $sub_field_value = $term_id;
-            $result .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
+            $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
+            //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
             // Update "field_name" within the $i row of "repeater_name".
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
             } else {
-                $result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
             }/**/
             
         }
         
-    } else if ( isset($arr_match_results['posts']) ) { 
-        $result .= "<!-- match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre> -->";
+    } else if ( isset($arr_match_results['posts']) ) {
+    	$info .= count($arr_match_results['posts'])." match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre><br />";
+    	//$info .= "<!-- match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre> -->";
         // .... more than one item... what to do?
     } else {
         
         if ( $arr_match_results['info'] != "" ) {
-            $result .= "<!-- ".$arr_match_results['info']." -->"; //arr_match_results['info']:\n
+            $info .= $arr_match_results['info']."<br />";//$info .= "<!-- ".$arr_match_results['info']." -->";
         } else {
-            $result .= "<!-- NO match(es) found for placeholder :-( -->";
+            $info .= "NO match(es) found for placeholder :-(<br />";//$info .= "<!-- NO match(es) found for placeholder :-( -->";
         }
         
         // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag
-        $result .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+        $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
     }
     
-    return $result;
+    return $info;
     
 }
 
