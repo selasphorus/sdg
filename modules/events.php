@@ -3082,13 +3082,15 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
+            $ts_info .= "<!-- show_image is TRUE -->";
+            
             $classes = "post-thumbnail sdg event-image";
             
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
             if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
             	
-            	$ts_info .= "<!-- no image! -->";
+            	$ts_info .= "<!-- get image using sdg_post_thumbnail -->";
             	
             	if ( is_singular('event') ) {
             		$img_size = "full";
@@ -3103,10 +3105,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
             } else {
+            
             	$img_tag = $replace;
             	if ( !is_singular('event') ) {
             		$classes .= " float-left";
             	}
+            	
             }
             
             $caption = sdg_featured_image_caption($EM_Event->ID);
@@ -3119,12 +3123,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
             
         } else {
-            $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
-        }
-        if ( $show_image == true ) {
-        	$ts_info .= "<!-- show_image is TRUE -->";
-        } else {
+        	
         	$ts_info .= "<!-- show_image is FALSE -->";
+        	        	
+            $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
+            
         }
         
         if ( $do_ts ) { $replace .= $ts_info; }
