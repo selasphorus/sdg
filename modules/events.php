@@ -1626,11 +1626,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// +~+~+~+~+~+~+~+~+~+~+~
 		// Deal w/ row settings and obsolete fields
 		
-		//......
-		// role_old
-		// personnel_url
-		// row_type: default; header; role_only; name_only
-		
 		// header_txt -- for header rows only (equivalent to program_item_txt)
 		if ( isset($row['header_txt']) ) {
 			if ( $row['header_txt'] != "" ) {
@@ -1652,31 +1647,25 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 		
 		// Clear out empty fields not needed per row_type
-		if ( $row_type == "label_only" || $row_type == "program_note" ) {
-			// If row_type == "label_only" and program_item/program_item_txt is/are empty, delete the empty meta rows
-			if ( empty($program_item) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item' ) ) { $arr_field_deletions[] = "program_item"; }
+		if ( $row_type == "role_only" || $row_type == "header" ) {
+			// If row_type == "role_only" and person/person_txt is/are empty, delete the empty meta rows
+			if ( empty($person) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_person' ) ) { $arr_field_deletions[] = "person"; }
 		}
-		if ( $row_type == "title_only" || $row_type == "program_note" ) {
-			// If row_type == "title_only" and item_label/item_label_txt is/are empty, delete the empty meta rows
-			if ( empty($item_label) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label' ) ) { $arr_field_deletions[] = "item_label"; }
+		if ( $row_type == "name_only" || $row_type == "program_note" ) {
+			// If row_type == "name_only" and role/role_txt is/are empty, delete the empty meta rows
+			if ( empty($role) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role' ) ) { $arr_field_deletions[] = "role"; }
 		}
 		// Delete empty placeholder fields, whatever the row_type
-		if ( empty($item_label_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_item_label_txt' ) ) { $arr_field_deletions[] = "item_label_txt"; }
-		if ( empty($program_item_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_txt' ) ) { $arr_field_deletions[] = "program_item_txt"; }
+		if ( empty($role_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role_txt' ) ) { $arr_field_deletions[] = "role_txt"; }
+		if ( empty($person_txt) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_person_txt' ) ) { $arr_field_deletions[] = "person_txt"; }
 		
 		// Now that we've dealt with the obsolete field values, we can delete/clear them
 		// TODO: check to see if these metadata actually exist in the DB before trying to delete them
 		// Note that fields with defaults will appear to exist in $row array, but may not actually be in the DB
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_is_header' ) ) { $arr_field_deletions[] = "is_header"; }
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_label' ) ) { $arr_field_deletions[] = "show_item_label"; }
-		if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_show_item_title' ) ) { $arr_field_deletions[] = "show_item_title"; }
+		//if ( metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role_old' ) ) { $arr_field_deletions[] = "role_old"; }
 		
-		// Delete the program_item_note meta record, if it exists and is empty
-		if ( isset($row['program_item_note']) && empty($row['program_item_note']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_note' ) ) { $arr_field_deletions[] = "program_item_note"; }
-		
-		// Delete the program_item_title_for_matching meta record, if it exists and is empty
-		// TODO: phase out this field altogether? Do we need it for anything?
-		if ( isset($row['program_item_title_for_matching']) && empty($row['program_item_title_for_matching']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_program_item_title_for_matching' ) ) { $arr_field_deletions[] = "program_item_title_for_matching"; }
+		// Delete the personnel_url meta record, if it exists and is empty
+		if ( isset($row['personnel_url']) && empty($row['personnel_url']) && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_personnel_url' ) ) { $arr_field_deletions[] = "personnel_url"; }
 			
 		
 	}
