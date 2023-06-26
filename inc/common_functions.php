@@ -210,19 +210,6 @@ function sdg_post_thumbnail ( $args = array() ) {
         $img_size = "full";
     }
     
-    /*
-    // Defaults
-	$defaults = array(
-		'post_id'         => null,
-		'preview_length'  => 55,
-		'readmore'        => false,
-	);
-	
-    // Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	*/
-    
     $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
     $ts_info .= "format: $format<br />";
@@ -353,7 +340,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         return;
     } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
         // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
-        return;
+        //return;
     } else if ( has_term( 'video-webcasts', 'category' ) ) {        
         $player_status = get_media_player( $post_id, true ); // get_media_player ( $post_id = null, $status_only = false, $url = null )
         if ( $player_status == "ready" ) {
