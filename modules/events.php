@@ -257,11 +257,14 @@ function get_event_personnel( $atts = [] ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
+    // TODO: rename ast $args for consistency across fcns
     $a = shortcode_atts( array(
 		'id'        => get_the_ID(),
         'run_updates' => false,
         'display' => 'table'       
     ), $atts );
+    
+    // TODO: extract
     
     $post_id = $a['id'];
     $run_updates = $a['run_updates'];
@@ -329,12 +332,12 @@ function get_event_personnel( $atts = [] ) {
             
             // What's the row type? Options include "default", "header", "role_only", and "name_only"
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = "default"; }
-            $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
+            $row_info .= "<!-- row_type: ".$row_type." -->"; // tft
             
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
                 $show_row = $row['show_row'];
-                $row_info .= "<!-- show_row: ".$row['show_row']." -->"; // tft
+                $row_info .= "<!-- show_row: ".$show_row." -->"; // tft
             } else { 
                 $show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
                 $row_info .= "<!-- default: show_row = 1 -->"; // tft
