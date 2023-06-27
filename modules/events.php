@@ -2496,7 +2496,7 @@ function event_program_cleanup( $atts = [] ) {
         	$info .= "<h2>Personnel</h2>";
 			//$info .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
 			$info .= "field_check: ".$field_check."<br />";
 			$repeater_name = "personnel";
