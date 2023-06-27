@@ -1599,7 +1599,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 		// If we've got both role and role_txt OR role_old, take note... Action TBD.
 		if ( $role && ( $role_txt || $role_old ) ) {
-			$info .= "role: ".print_r($role, true)." // role_txt: ".$role_txt." // role_old: ".$role_old."<br />";
+			$info .= "role: ".print_r($role, true)." // role_txt: ".$role_txt." // role_old: ".print_r($role_old, true)."<br />";
 		}
 		// TODO: ?
 		
