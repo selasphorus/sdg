@@ -1555,7 +1555,12 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	
 	$info .= "post_id: ".$post_id."/row [$i]";
 	//$info .= "<br />";
-	$info .= ": <pre>".print_r($row, true)."</pre>";
+	
+	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
+	$exp_args = array( 'text' => $row_as_txt, 'preview_text' => "Show row..." );
+	$info .= expandable_text( $exp_args );
+	//
+	//$info .= ": <pre>".print_r($row, true)."</pre>";
 	//$info .= "<!-- <pre>".print_r($row, true)."</pre> -->";
 						
 	// Is a row_type set?
