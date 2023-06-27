@@ -2522,7 +2522,7 @@ function event_program_cleanup( $atts = [] ) {
 			//if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
         	//
         	//$ts_info_personnel .= "personnel TS:<br />";
-			$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			//$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">';
@@ -2831,7 +2831,7 @@ function event_program_cleanup( $atts = [] ) {
 			//$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//
         	//$ts_info_program_items .= "program_items TS:<br />";
-			$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			//$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">'.$ts_info_program_items.'</div>';
