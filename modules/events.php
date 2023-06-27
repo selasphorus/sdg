@@ -298,7 +298,7 @@ function get_event_personnel( $atts = [] ) {
     } // end if
     */
     if ( empty($rows) ) { $rows = array(); } //$rows = (!empty(get_field('personnel', $post_id))) ? 'default' : array();
-    $info .= "<!-- ".count($rows)." personnel rows -->\n"; // tft
+    $info .= "<!-- ".count($rows)." personnel row(s) -->\n"; // tft
     
     // Loop through the personnel rows and accumulate data for display
 	if ( count($rows) > 0 ) {
@@ -2430,6 +2430,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 		if ( $posts ) {
         
+        	$info .= "<h2>Personnel</h2>";
 			$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
@@ -2451,7 +2452,7 @@ function event_program_cleanup( $atts = [] ) {
 				$rows = get_field('personnel', $post_id);
 				if ( empty($rows) ) { $rows = array(); }
 				
-				$post_info .= count($rows)." personnel rows <br />"; // tft
+				$post_info .= count($rows)." personnel row(s) <br />"; // tft
     
 				if ( count($rows) > 0 ) {
 					$i = 0;
@@ -2693,6 +2694,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 		if ( $posts ) {
         
+        	$info .= "<h2>Program Items</h2>";
 			$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
