@@ -2396,6 +2396,12 @@ function event_program_cleanup( $atts = [] ) {
 			
 			// Add tax_query to filter out event posts that have already been processed
 			$wp_args['tax_query'] = array(
+				'taxonomy' => 'admin_tag',
+				'field'    => 'slug',
+				'terms'    => array( 'program-rows-cleaned' ),
+				'operator' => 'NOT IN',
+			);
+			/*$wp_args['tax_query'] = array(
 				//'relation' => 'OR', //tft
 				array(
 					'taxonomy' => 'admin_tag',
@@ -2403,14 +2409,14 @@ function event_program_cleanup( $atts = [] ) {
 					'terms'    => array( 'program-rows-cleaned' ),
 					//'terms'   => 'programmatically-updated',
 					'operator' => 'NOT IN',
-				),/*
+				),
 				array(
 					'taxonomy' => 'admin_tag',
 					'field'    => 'slug',
 					'terms'    => 't4m-needs-attention',
 					//'operator' => 'NOT IN',
-				),*/
-			);
+				),
+			);*/
         
 			// field_check?
 			if ( $field_check == "all" || $field_check == "row_type" ) {
