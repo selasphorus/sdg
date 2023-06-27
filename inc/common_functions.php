@@ -174,7 +174,7 @@ function sdg_post_title ( $args = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = true; 
+    $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -210,7 +210,6 @@ function sdg_post_thumbnail ( $args = array() ) {
         $img_size = "full";
     }
     
-    $ts_info = "";
     $ts_info .= "post_id: $post_id<br />";
     $ts_info .= "format: $format<br />";
     $ts_info .= "get_the_ID(): ".get_the_ID()."<br />";
