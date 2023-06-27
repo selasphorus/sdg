@@ -1823,7 +1823,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
 		
 		$info .= "No updates required for this row.<br />";
-		$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 		
 	} else {
 	
