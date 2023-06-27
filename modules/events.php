@@ -2556,15 +2556,15 @@ function event_program_cleanup( $atts = [] ) {
 						$i++;				
 					}
 				} else {
-					$info .= "No matching personnel rows found.<br />";
-					$info .= $ts_info_personnel;
+					$post_info .= "No matching personnel rows found.<br />";
+					$post_info .= $ts_info_personnel;
 				}
 				
 				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 				if ( !$post_errors ) {
-					$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-				}		
+					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+				}
 		
 				$info .= $post_info;
 				$info .= '</div>';
@@ -2869,10 +2869,17 @@ function event_program_cleanup( $atts = [] ) {
 						$i++;				
 					}
 				} else {
-					$info .= "No matching program rows found.<br />";
-					//$info .= $ts_info_program_items;
-					//$info .= $ts_info;
+					$post_info .= "No matching program rows found.<br />";
+					//$post_info .= $ts_info_program_items;
+					//$post_info .= $ts_info;
 				}
+				
+				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
+				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
+				if ( !$post_errors ) {
+					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+				}
+				
 				/*
 				$meta = get_post_meta( $post_id );
 				//$post_info .= "post_meta: <pre>".print_r($meta, true)."</pre>";
