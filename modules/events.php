@@ -1826,22 +1826,26 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 	} else {
 	
+		// Prepare to do the updates and deletions
+		// TODO: better error handling
+		$errors = false;
+	
 		if ( $row_type_update ) {
 			$arr_field_updates["row_type"] = $row_type;
 			$info .= "do row_type_update<br />";
 		}
-	
-		// TODO: build in deletion of empty meta data?
+		
 		// TODO: figure out how not to save empty meta rows in the first place...
-	
+
 		// Do the updates
 		if ( $arr_field_updates ) { $info .= "+++++ Do meta updates +++++<br />"; }
 		foreach ( $arr_field_updates as $field_name => $field_value ) {
 			$info .= "update $field_name = $field_value<br />";
 			if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
-				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
+				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";				
 			} else {
 				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+				$errors = true;
 			}
 		}
 		if ( $arr_field_updates ) { $info .= "-----------<br />"; }
@@ -1854,9 +1858,16 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
 			} else {
 				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+				$errors = true;
 			}
 		}
 		if ( $arr_field_deletions ) { $info .= "-----------<br />"; }
+		
+		// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
+		// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
+		if ( !$errors ) {
+			//$ts_info .= sdg_add_post_term( $post_id, 'term-slug', 'admin_tag', true );
+		}
 		
 	}
 	
@@ -2376,10 +2387,28 @@ function event_program_cleanup( $atts = [] ) {
 				'post_status' => 'publish',
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
-				'order'     => 'ASC',
-				// TODO: revise and activate tax query to filter out event posts that have already been processed
+				'order'     => 'ASC',				
 			);
 			
+			// TODO/WIP: add tax_query to filter out event posts that have already been processed
+			/*
+			$wp_args['tax_query'] = array(
+				//'relation' => 'OR', //tft
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'programmatically-updated' ),
+					//'terms'   => 'programmatically-updated',
+					'operator' => 'NOT IN',
+				),
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => 't4m-needs-attention',
+					//'operator' => 'NOT IN',
+				),
+			)*/
+        
 			// field_check?
 			if ( $field_check == "all" || $field_check == "row_type" ) {
 				$wp_args['meta_query'] = array(
@@ -2641,7 +2670,7 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
-				// TODO: revise and activate tax query to filter out event posts that have already been processed
+				// TODO/WIP: add tax_query to filter out event posts that have already been processed
 			);
 				
 			// field_check?
