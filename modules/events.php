@@ -2542,7 +2542,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( empty($rows) ) { $rows = array(); }
 				
 				$post_info .= count($rows)." personnel row(s)<br />";
-				$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
+				//$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
 				$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
     
 				if ( count($rows) > 0 ) {
@@ -2854,7 +2854,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( empty($rows) ) { $rows = array(); }
 				
 				$post_info .= count($rows)." program_items row(s)<br />";
-				$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
+				//$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
 				$post_info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
     
 				if ( count($rows) > 0 ) {
