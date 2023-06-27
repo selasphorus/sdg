@@ -1746,12 +1746,11 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		
 		// Check for is_header value
 		if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
-			// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
+			// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" (later we'll also remove is_header meta record)
 			if ( empty($row_type) || $row_type == "default" ) {
 				$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
 				$row_type = "header";
 				$row_type_update = true;
-				$arr_field_deletions[] = "is_header";
 			}
 		}
 		
