@@ -2395,15 +2395,23 @@ function event_program_cleanup( $atts = [] ) {
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
 				'fields'	=> 'ids',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'admin_tag',
+						'field'    => 'slug',
+						'terms'    => array( 'program-rows-cleaned' ),
+						'operator' => 'NOT IN',
+					),
+				)
 			);
 			
 			// Add tax_query to filter out event posts that have already been processed
-			$wp_args['tax_query'] = array(
+			/*$wp_args['tax_query'] = array(
 				'taxonomy' => 'admin_tag',
 				'field'    => 'slug',
 				'terms'    => array( 'program-rows-cleaned' ),
 				'operator' => 'NOT IN',
-			);
+			);*/
 			/*$wp_args['tax_query'] = array(
 				//'relation' => 'OR', //tft
 				array(
@@ -2688,17 +2696,25 @@ function event_program_cleanup( $atts = [] ) {
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
 				'fields'	=> 'ids',
+				'tax_query' => array(
+					array(
+						'taxonomy' => 'admin_tag',
+						'field'    => 'slug',
+						'terms'    => array( 'program-rows-cleaned' ),
+						'operator' => 'NOT IN',
+					),
+				)
 			);
 			
 			// Add tax_query to filter out event posts that have already been processed
-			$wp_args['tax_query'] = array(
+			/*$wp_args['tax_query'] = array(
 				array(
 					'taxonomy' => 'admin_tag',
 					'field'    => 'slug',
 					'terms'    => array( 'program-rows-cleaned' ),
 					'operator' => 'NOT IN',
 				),
-			);
+			);*/
 				
 			// field_check?
 			// Default to "all" for row_type and header_txt, because check for row_type NOT EXISTS doesn't work, and header_txt is for personnel only
