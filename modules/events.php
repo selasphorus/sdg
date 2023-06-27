@@ -1866,7 +1866,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
 		// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 		if ( !$errors ) {
-			$ts_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+			$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 		}
 		
 	}
