@@ -2807,7 +2807,7 @@ function event_program_cleanup( $atts = [] ) {
 					}
 				} else {
 					$info .= "No matching program rows found.<br />";
-					$info .= $ts_info;
+					//$info .= $ts_info;
 				}
 				/*
 				$meta = get_post_meta( $post_id );
