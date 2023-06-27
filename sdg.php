@@ -1234,13 +1234,15 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         	$arr_term = term_exists( $term_slug, $taxonomy );
         	if ( $arr_term ) {
         		if ( has_term( $term_slug, $taxonomy ) ) {
-					$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
+					$ts_info .= "[sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made.<br />";
+					//$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
 					return $ts_info;
 				}
         		//$term_ids[] = $arr_term['term_id'];
         		$term_id = $arr_term['term_id'];
         		if ( $return_info ) {
-					$ts_info .= "<!-- [sdg_add_post_term] ";
+					$ts_info .= "[sdg_add_post_term] ";
+					//$ts_info .= "<!-- [sdg_add_post_term] ";
 					$ts_info .= "post_id: ".$post_id."; ";
 					$ts_info .= "taxonomy: ".$taxonomy."; ";
 					$ts_info .= "term_slug: ".$term_slug."; ";
@@ -1252,7 +1254,8 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 				} else { 
 					$ts_info .= " >> FAILED!";
 				}
-				$ts_info .= " -->";
+				$ts_info .= "<br />";
+				//$ts_info .= " -->";
         		
         	}
         }
