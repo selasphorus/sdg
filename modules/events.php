@@ -2332,7 +2332,7 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "scope: ".$scope."<br />";
     $info .= "field_check (initial): ".$field_check."<br />";
     $info .= "num_posts: ".$num_posts."<br />";
-    $info .= "ids: ".$ids."<br />";
+    if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
