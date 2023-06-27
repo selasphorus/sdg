@@ -386,8 +386,8 @@ function get_event_personnel( $atts = [] ) {
 				// --------------------
 				$arr_person_role = get_personnel_role( $personnel_args );
 				//$row_info .= "<!-- arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre> -->"; // tft
-				$person_role = $arr_person_role['person_role'];
-				$row_info .= $arr_person_role['info'];
+				$person_role = $arr_person_role['info'];
+				$row_info .= $arr_person_role['ts_info'];
 			
 				// Get the person
 				// --------------------
@@ -541,7 +541,7 @@ function get_personnel_role ( $args = array() ) {
 	
 	// Init vars
 	$arr_info = array();
-	$info = "";
+	$ts_info = "";
 	$person_role = "";
     $placeholder_label = false;
 	
@@ -571,11 +571,11 @@ function get_personnel_role ( $args = array() ) {
 	if ( empty($person_role) ) {
 		
 		if ( isset($row['role_old']) && $row['role_old'] != "" ) {
-			$info .= "<!-- role is empty -> use placeholder role_old -->";
+			$ts_info .= "role is empty -> use placeholder role_old<br />";
 			$person_role = get_the_title($row['role_old'][0]);
 			$placeholder_label = true;
 		} else if ( isset($row['role_txt']) && $row['role_txt'] != "" && $row['role_txt'] != "x" ) {                    
-			$info .= "<!-- role is empty -> use placeholder role_txt -->";
+			$ts_info .= "role is empty -> use placeholder role_txt<br />";
 			$person_role = $row['role_txt'];
 			$placeholder_label = true;                    
 		}
@@ -584,19 +584,19 @@ function get_personnel_role ( $args = array() ) {
 		if ( $placeholder_label == true && $run_updates == true  ) { 
 			$title_to_match = $person_role;
 			// TODO: deal w/ junk values like title_to_match == 'x'
-			$info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+			$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => true, 'display' => $display );
 			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$ts_info .= $match_result;
 		} else {
-            $info .= "<!-- NO match_placeholder for personnel_role -->";
-			$info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+            $ts_info .= "NO match_placeholder for personnel_role<br />";
+			$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 		}
 		
 	}
 	
-	$arr_info['person_role'] = $person_role;
-	$arr_info['info'] = $info;
+	$arr_info['info'] = $person_role;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
             
@@ -679,7 +679,7 @@ function get_personnel_person ( $args = array() ) {
 			}
 			$display_args['url'] = $personnel_url;
 			
-			$ts_info .= "<!-- display_args for get_person_display_name: ".print_r($display_args, true)." -->";
+			$ts_info .= "display_args for get_person_display_name: ".print_r($display_args, true)."<br />";
 			
 			// Get the display_name
         	$arr_person_name = get_person_display_name( $display_args );
@@ -705,7 +705,7 @@ function get_personnel_person ( $args = array() ) {
 		if ( empty($person_name) ) {
 			if ( isset($row['person_txt']) && $row['person_txt'] != "" && $row['person_txt'] != "x" ) { 
 				
-				$ts_info .= "<!-- person is empty -> use placeholder person_txt -->";
+				$ts_info .= "person is empty -> use placeholder person_txt";
 				$placeholder_item = true;
 				$person_name = $row['person_txt'];
 				
@@ -713,12 +713,12 @@ function get_personnel_person ( $args = array() ) {
 				if ( $run_updates == true ) {
 					$title_to_match = $person_name;
 					// TODO: deal w/ junk values like title_to_match == 'x'
-					$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+					$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'taxonomy' => false, 'display' => $display );
 					$match_result = match_placeholder( $match_args );
 					$ts_info .= $match_result;
 				} else {
-                    $ts_info .= "<!-- NO match_placeholder for personnel_person -->";
+                    $ts_info .= "NO match_placeholder for personnel_person<br />";
 					$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 				}
 				
