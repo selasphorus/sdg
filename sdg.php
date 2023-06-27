@@ -1684,9 +1684,9 @@ function match_placeholder ( $args = [] ) {
         $info .= "post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
         return $info;
         //return false; 
-    } 
+    }
     
-    if ( $taxonomy != 'true' ) {
+    if ( !($taxonomy) ) { //if ( $taxonomy != 'true' ) {
         $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
     } else {
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
