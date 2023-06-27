@@ -2526,6 +2526,7 @@ function event_program_cleanup( $atts = [] ) {
 			//$info .= $ts_info_personnel;
 			//$info .= '</div>';
 			//
+			$info .= "=====================<br />";
 			
 			foreach ( $posts AS $post_id ) {
 			
@@ -2840,6 +2841,7 @@ function event_program_cleanup( $atts = [] ) {
 			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">'.$ts_info_program_items.'</div>';
 			//
+			$info .= "=====================<br />";
 			
 			foreach ( $posts AS $post_id ) {
 				
