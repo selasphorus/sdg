@@ -1574,7 +1574,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	// TODO: better error handling
 	$errors = false;
 	
-	$info .= "post_id: ".$post_id."/row [$i]";	
+	$info .= "post_id: ".$post_id."/row [$i]<br />";	
 	$info .= "repeater_name: ".$repeater_name."<br />";
 	//$info .= "<br />";
 	
