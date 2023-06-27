@@ -2364,6 +2364,10 @@ function event_program_cleanup( $atts = [] ) {
 		
 		if ( empty($posts) ) {
 		
+			$info .= "No matching posts found in initial quick query for personnel.<br />";
+			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+		
 			// No posts? Try a more expensive query...
 			
 			// Get all posts w/ personnel rows
@@ -2377,7 +2381,7 @@ function event_program_cleanup( $atts = [] ) {
 			);
 			
 			// field_check?
-			if ( $field_check == "all" ) {
+			if ( $field_check == "all" || $field_check == "row_type" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2624,6 +2628,10 @@ function event_program_cleanup( $atts = [] ) {
 		
 		if ( empty($posts) ) {
 		
+			$info .= "No matching posts found in initial quick query for program_items.<br />";
+			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			
 			// STILL no posts? Try a more expensive query...
 			
 			// Get all posts w/ personnel rows
@@ -2637,7 +2645,7 @@ function event_program_cleanup( $atts = [] ) {
 			);
 				
 			// field_check?
-			if ( $field_check == "all" ) {
+			if ( $field_check == "all" || $field_check == "row_type" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
