@@ -2322,6 +2322,25 @@ function event_program_cleanup( $atts = [] ) {
     if ( $scope == "personnel" || $scope == "both" ) {
     
     	// TODO: revise to search more specifically for posts with problem meta -- e.g. role_old
+    	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
+    			
+    	// Define meta_key and meta_value
+    	if ( $field_check == "row_type" || $field_check == "all" ) {    
+			$meta_key = "personnel_XYZ_row_type";
+			$meta_value = " ";
+    	}
+
+		// Set up the query arguments
+		$wp_args = array(
+			'post_type' => 'event', // 'any'
+			'post_status' => 'publish',
+			'meta_key' => $meta_key,
+			'meta_value' => $meta_value,
+			'posts_per_page' => 1
+		);
+    	
+    	
+		/*
     	// Get all posts w/ personnel rows
 		$wp_args = array(
 			'post_type'   => 'event',
@@ -2329,17 +2348,6 @@ function event_program_cleanup( $atts = [] ) {
 			'posts_per_page' => $num_posts,
 			'orderby'   => 'ID meta_key',
 			'order'     => 'ASC',
-			/*'tax_query' => array(
-				//'relation' => 'AND', //tft
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-personnel-placeholders' ),
-					//'terms'    => array( 'program-placeholders' ),
-					//'terms'    => array( $admin_tag_slug ),
-					//'operator' => 'NOT IN',
-				),
-			),*/
 		);
 		
 		// Posts by ID
@@ -2349,7 +2357,6 @@ function event_program_cleanup( $atts = [] ) {
 			$wp_args['post__in'] = $posts_in;
 			$field_check = "N/A";
 		}
-		
 		// field_check?
 		if ( $field_check == "all" ) {
 			$wp_args['meta_query'] = array(
@@ -2424,14 +2431,15 @@ function event_program_cleanup( $atts = [] ) {
 				),
 			);
 		}
-	
+		*/
+		
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
 		
 		if ( $posts ) {
         
         	$info .= "<h2>Personnel</h2>";
-			$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			//$info .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
@@ -2565,8 +2573,30 @@ function event_program_cleanup( $atts = [] ) {
     if ( $scope == "program_items" || $scope == "both" ) {
     
     	// TODO: revise to search more specifically for posts with problem meta -- e.g. is_header, show_item_label, show_item_title
-    	// WIP 06/23
     	
+    	// If we're only looking at program_items, or if no posts were found in the personnel query, then start fresh
+    	if ( $scope == "program_items" || empty($posts) ) {
+    	
+			// Define meta_key and meta_value
+			if ( $field_check == "row_type" ) {    
+				$meta_key = "program_items_XYZ_row_type";
+				$meta_value = " ";
+			}
+
+			// Set up the query arguments
+			$wp_args = array(
+				'post_type' => 'event',
+				'post_status' => 'publish',
+				'meta_key' => $meta_key,
+				'meta_value' => $meta_value,
+				'posts_per_page' => 1
+			);
+    	
+    	} else {
+    		// Otherwise we'll continue with the posts we found in the personnel query, above
+    	}
+    	
+    	/*
     	// Get all posts w/ personnel rows
 		$wp_args = array(
 			'post_type'   => 'event',
@@ -2575,17 +2605,6 @@ function event_program_cleanup( $atts = [] ) {
 			'orderby'   => 'ID meta_key',
 			'order'     => 'ASC',
 			// TODO: revise and activate tax query to filter out event posts that have already been processed
-			/*'tax_query' => array(
-				//'relation' => 'AND', //tft
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-personnel-placeholders' ),
-					//'terms'    => array( 'program-placeholders' ),
-					//'terms'    => array( $admin_tag_slug ),
-					//'operator' => 'NOT IN',
-				),
-			),*/
 		);
 		
 		// Posts by ID
@@ -2690,14 +2709,15 @@ function event_program_cleanup( $atts = [] ) {
 				),
 			);
 		}
-	
-		$result = new WP_Query( $wp_args );
-		$posts = $result->posts;
+		*/
+		
+		//$result = new WP_Query( $wp_args );
+		//$posts = $result->posts;
 		
 		if ( $posts ) {
         
         	$info .= "<h2>Program Items</h2>";
-			$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
+			//$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
