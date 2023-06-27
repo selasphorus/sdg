@@ -137,9 +137,10 @@ function get_event_program_content( $post_id = null ) {
     $ts_info .= "post_id: $post_id<br />";
     $ts_info .= "program_type: $program_type<br />";
     $ts_info .= "program_order: $program_order<br />";
-    
     // Get and display any admin_tags for the post
-    //$ts_info .=
+    $admin_tags = wp_get_post_terms( $post_id, 'admin_tag', array( 'fields' => 'names' ) );
+    if ( $admin_tags ) { $admin_tags_str = implode(", ", $admin_tags); } else { $admin_tags_str = ""; }
+    $ts_info .= $admin_tags_str."<br />";
 	
     $info .= '<div class="event_program '.$program_type.' '.$program_order.'">';
     
