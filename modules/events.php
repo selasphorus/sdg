@@ -2363,7 +2363,11 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "scope: ".$scope."<br />";
     $info .= "field_check (initial): ".$field_check."<br />";
     $info .= "num_posts: ".$num_posts."<br />";
-    if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
+    if ( !empty($ids) ) {
+    	$info .= "ids: ".$ids."<br />";
+    	$posts_in = array_map( 'intval', birdhive_att_explode( $ids ) );
+		$field_check = "N/A";
+    }
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
@@ -2386,12 +2390,7 @@ function event_program_cleanup( $atts = [] ) {
 			);
 
 			// Posts by ID
-			// NB: if IDs are specified, ignore field_check
-			if ( !empty($ids) ) {
-				$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
-				$wp_args['post__in'] = $posts_in;
-				$field_check = "N/A";
-			}
+			if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
 		
 			// First round query -- the quick ones
 			// Define meta_key and meta_value
@@ -2431,6 +2430,9 @@ function event_program_cleanup( $atts = [] ) {
 					),
 				)
 			);
+			
+			// Posts by ID
+			if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
         
 			// field_check?
 			// Default to "all" for row_type and is_header, because check for row_type NOT EXISTS doesn't work, and is_header is for program_items only
@@ -2672,12 +2674,7 @@ function event_program_cleanup( $atts = [] ) {
 				);
 
 				// Posts by ID
-				// NB: if IDs are specified, ignore field_check
-				if ( !empty($ids) ) {
-					$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
-					$wp_args['post__in'] = $posts_in;
-					$field_check = "N/A";
-				}
+				if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
 		
 				// First round query -- the quick ones
 				// Define meta_key and meta_value
@@ -2719,6 +2716,9 @@ function event_program_cleanup( $atts = [] ) {
 					),
 				)
 			);
+			
+			// Posts by ID
+			if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
 				
 			// field_check?
 			// Default to "all" for row_type and header_txt, because check for row_type NOT EXISTS doesn't work, and header_txt is for personnel only
