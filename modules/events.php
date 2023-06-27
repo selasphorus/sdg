@@ -2318,6 +2318,10 @@ function event_program_cleanup( $atts = [] ) {
     // Init vars
     $info = "";
     
+    $info .= "ids: ".$ids."<br />";
+    $info .= "scope: ".$scope."<br />";
+    $info .= "field_check (initial): ".$field_check."<br />";
+    
     // Personnel
     if ( $scope == "personnel" || $scope == "both" ) {
     
