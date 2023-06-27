@@ -2329,6 +2329,9 @@ function event_program_cleanup( $atts = [] ) {
     // Init vars
     $info = "";
     
+    // If an ID or IDs have been submitted, handle both personnel and program_items, whatever the submitted scope setting
+    if ( !empty($ids) ) { $scope = "both"; }
+    
     $info .= "scope: ".$scope."<br />";
     $info .= "field_check (initial): ".$field_check."<br />";
     $info .= "num_posts: ".$num_posts."<br />";
@@ -2336,7 +2339,7 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
-    if ( $scope == "personnel" || $scope == "both" || !empty($ids) ) {
+    if ( $scope == "personnel" || $scope == "both" ) {
     
     	// First, a quick search to find posts with obsolete or empty meta, or by ID
     	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
