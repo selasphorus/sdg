@@ -1550,6 +1550,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	$placeholders = false;
 	$arr_field_updates = array();
 	$arr_field_deletions = array();
+	// TODO: better error handling
+	$errors = false;
 	
 	$info .= "post_id: ".$post_id."/row [$i]";
 	//$info .= "<br />";
@@ -1851,8 +1853,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	} else {
 	
 		// Prepare to do the updates and deletions
-		// TODO: better error handling
-		$errors = false;
 	
 		if ( $row_type_update ) {
 			$arr_field_updates["row_type"] = $row_type;
