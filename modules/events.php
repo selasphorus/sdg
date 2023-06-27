@@ -2325,7 +2325,7 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
-    if ( $scope == "personnel" || $scope == "both" ) {
+    if ( $scope == "personnel" || $scope == "both" || !empty($ids) ) {
     
     	// TODO: revise to search more specifically for posts with problem meta -- e.g. role_old
     	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
@@ -2373,6 +2373,7 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
+				// TODO: revise and activate tax query to filter out event posts that have already been processed
 			);
 			
 			// field_check?
@@ -2394,7 +2395,8 @@ function event_program_cleanup( $atts = [] ) {
 						'value'   => ' ',
 					)
 				);
-			} else if ( $field_check == "row_type" ) {
+			} /*else if ( $field_check == "row_type" ) {
+				// This doesn't work because of the 'NOT EXISTS' clause -- the XYZ replacement doesn't happen in the table join part of the query
 				// Check to see if row_type is empty
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
@@ -2415,7 +2417,7 @@ function event_program_cleanup( $atts = [] ) {
 						),
 					),
 				);
-			} else if ( $field_check == "header_txt" ) {
+			}*/ else if ( $field_check == "header_txt" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2597,7 +2599,8 @@ function event_program_cleanup( $atts = [] ) {
     	// If we're only looking at program_items, or if no posts were found in the personnel query, then start fresh
     	if ( $scope == "program_items" || empty($posts) ) {
     	
-			// Define meta_key and meta_value
+			// First round query -- the quick ones
+    		// Define meta_key and meta_value
 			if ( $field_check == "row_type" ) {    
 				$meta_key = "program_items_XYZ_row_type";
 				$meta_value = " ";
@@ -2612,127 +2615,126 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => 1
 			);
     	
+    		$result = new WP_Query( $wp_args );
+			$posts = $result->posts;
+		
     	} else {
     		// Otherwise we'll continue with the posts we found in the personnel query, above
     	}
-    	
-    	/*
-    	// Get all posts w/ personnel rows
-		$wp_args = array(
-			'post_type'   => 'event',
-			'post_status' => 'publish',
-			'posts_per_page' => $num_posts,
-			'orderby'   => 'ID meta_key',
-			'order'     => 'ASC',
-			// TODO: revise and activate tax query to filter out event posts that have already been processed
-		);
 		
-		// Posts by ID
-    	// NB: if IDs are specified, ignore field_check
-		if ( !empty($ids) ) {
-			$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
-			$wp_args['post__in'] = $posts_in;
-			$field_check = "N/A";
-		}
+		if ( empty($posts) ) {
 		
-		// field_check?
-		if ( $field_check == "all" ) {
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'program_items',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key'     => 'program_items',
-					'compare' => '!=',
-					'value'   => 0,
-				),
-				array(
-					'key'     => 'program_items',
-					'compare' => '!=',
-					'value'   => '',
-				)
+			// STILL no posts? Try a more expensive query...
+			
+			// Get all posts w/ personnel rows
+			$wp_args = array(
+				'post_type'   => 'event',
+				'post_status' => 'publish',
+				'posts_per_page' => $num_posts,
+				'orderby'   => 'ID meta_key',
+				'order'     => 'ASC',
+				// TODO: revise and activate tax query to filter out event posts that have already been processed
 			);
-		} else if ( $field_check == "row_type" ) {
-			// Check to see if row_type is empty
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'program_items',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'relation' => 'OR',
+				
+			// field_check?
+			if ( $field_check == "all" ) {
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
 					array(
-						'key'    => 'program_items_XYZ_row_type',
-						'value'  => ''
+						'key'     => 'program_items',
+						'compare' => 'EXISTS'
 					),
 					array(
-						'key'    => 'program_items_XYZ_row_type',
-						'compare' => 'NOT EXISTS'
-					),
-				),
-			);
-		} else if ( $field_check == "mismatch" ) {
-			// Check to see if row_type doesn't match show/hide settings
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'    => 'program_items_XYZ_row_type',
-					'value'  => 'default'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'key'     => 'program_items_XYZ_show_item_label',
+						'key'     => 'program_items',
+						'compare' => '!=',
 						'value'   => 0,
 					),
 					array(
-						'key'     => 'program_items_XYZ_show_item_title',
-						'value'   => 0,
-					),
-				),
-			);
-		} else if ( $field_check == "is_header" ) {
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'program_items',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key'     => 'program_items_XYZ_is_header',
-					'value'   => 1,
-				),
-			);
-		} else if ( $field_check == "placeholders" ) {
-			// TODO: fix this -- yields no results, which can't be right
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'program_items',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'key'     => 'program_items_XYZ_item_label_txt',
+						'key'     => 'program_items',
 						'compare' => '!=',
-						'value'   => ' ',
+						'value'   => '',
+					)
+				);
+			} /*else if ( $field_check == "row_type" ) {
+				// Check to see if row_type is empty
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'program_items',
+						'compare' => 'EXISTS'
 					),
 					array(
-						'key'     => 'program_items_XYZ_program_item_txt',
-						'compare' => '!=',
-						'value'   => ' ',
+						'relation' => 'OR',
+						array(
+							'key'    => 'program_items_XYZ_row_type',
+							'value'  => ''
+						),
+						array(
+							'key'    => 'program_items_XYZ_row_type',
+							'compare' => 'NOT EXISTS'
+						),
 					),
-				),
-			);
+				);
+			} */else if ( $field_check == "mismatch" ) {
+				// Check to see if row_type doesn't match show/hide settings
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'    => 'program_items_XYZ_row_type',
+						'value'  => 'default'
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'     => 'program_items_XYZ_show_item_label',
+							'value'   => 0,
+						),
+						array(
+							'key'     => 'program_items_XYZ_show_item_title',
+							'value'   => 0,
+						),
+					),
+				);
+			} else if ( $field_check == "is_header" ) {
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'program_items',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'key'     => 'program_items_XYZ_is_header',
+						'value'   => 1,
+					),
+				);
+			} else if ( $field_check == "placeholders" ) {
+				// TODO: fix this -- yields no results, which can't be right
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'program_items',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'     => 'program_items_XYZ_item_label_txt',
+							'compare' => '!=',
+							'value'   => ' ',
+						),
+						array(
+							'key'     => 'program_items_XYZ_program_item_txt',
+							'compare' => '!=',
+							'value'   => ' ',
+						),
+					),
+				);
+			}
+			
+			$result = new WP_Query( $wp_args );
+			$posts = $result->posts;
+			
 		}
-		*/
-		
-		//$result = new WP_Query( $wp_args );
-		//$posts = $result->posts;
 		
 		if ( $posts ) {
         
