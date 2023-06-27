@@ -2868,7 +2868,7 @@ function event_program_cleanup( $atts = [] ) {
 					}
 				} else {
 					$info .= "No matching program rows found.<br />";
-					$info .= $ts_info_program_items;
+					//$info .= $ts_info_program_items;
 					//$info .= $ts_info;
 				}
 				/*
