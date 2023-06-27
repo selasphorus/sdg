@@ -2321,7 +2321,7 @@ function event_program_cleanup( $atts = [] ) {
 		'ids'   => null, //get_the_ID(),
         'num_posts' => 1, // default is one post at a time because most have multiple program rows and these meta queries are SLOW!
         'scope'		=> 'both', // personnel, program_items, or both
-        'field_check'	=> 'all', // other options include: row_type, header_txt, placeholders
+        'field_check'	=> 'all', // other options include: role_old, header_txt, placeholders, row_type
     ), $atts );
     
 	// Extract attribute values into variables
@@ -2339,14 +2339,17 @@ function event_program_cleanup( $atts = [] ) {
     // Personnel
     if ( $scope == "personnel" || $scope == "both" || !empty($ids) ) {
     
-    	// TODO: revise to search more specifically for posts with problem meta -- e.g. role_old
+    	// First, a quick search to find posts with obsolete or empty meta, or by ID
     	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
 
 		// Set up the query arguments
 		$wp_args = array(
 			'post_type' => 'event', // 'any'
 			'post_status' => 'publish',
-			'posts_per_page' => $num_posts
+			'posts_per_page' => $num_posts,
+			'orderby'   => 'ID meta_key',
+			'order'     => 'ASC',
+			'return'	=> 'ids',
 		);
 
 		// Posts by ID
@@ -2388,11 +2391,11 @@ function event_program_cleanup( $atts = [] ) {
 				'post_status' => 'publish',
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
-				'order'     => 'ASC',				
+				'order'     => 'ASC',
+				'return'	=> 'ids',
 			);
 			
-			// TODO/WIP: add tax_query to filter out event posts that have already been processed
-			
+			// Add tax_query to filter out event posts that have already been processed
 			$wp_args['tax_query'] = array(
 				//'relation' => 'OR', //tft
 				array(
@@ -2429,29 +2432,7 @@ function event_program_cleanup( $atts = [] ) {
 						'value'   => ' ',
 					)
 				);
-			} /*else if ( $field_check == "row_type" ) {
-				// This doesn't work because of the 'NOT EXISTS' clause -- the XYZ replacement doesn't happen in the table join part of the query
-				// Check to see if row_type is empty
-				$wp_args['meta_query'] = array(
-					'relation' => 'AND',
-					array(
-						'key'     => 'personnel',
-						'compare' => 'EXISTS'
-					),
-					array(
-						'relation' => 'OR',
-						array(
-							'key'    => 'personnel_XYZ_row_type',
-							'value'  => ' '
-						),
-						array(
-							'key'    => 'personnel_XYZ_row_type',
-							'compare' => 'NOT EXISTS',
-							'value'  => 'bug #23268' // tft
-						),
-					),
-				);
-			}*/ else if ( $field_check == "header_txt" ) {
+			} else if ( $field_check == "header_txt" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2502,14 +2483,12 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "field_check: ".$field_check."<br />";
 			$repeater_name = "personnel";
 			
-			foreach ( $posts AS $post ) {
+			foreach ( $posts AS $post_id ) {
 			
 				// Init
 				$post_info = "";
 				$info .= '<div>';
 				
-				setup_postdata( $post );
-				$post_id = $post->ID;
 				$post_info .= "post_id: ".$post_id."<br />";
 				
 				// Get the program item repeater field values (ACF)
@@ -2634,20 +2613,29 @@ function event_program_cleanup( $atts = [] ) {
     	if ( $scope == "program_items" || empty($posts) ) {
     	
 			// First round query -- the quick ones
-    		// Define meta_key and meta_value
-			if ( $field_check == "row_type" ) {    
-				$meta_key = "program_items_XYZ_row_type";
-				$meta_value = " ";
-			}
-
+			
 			// Set up the query arguments
 			$wp_args = array(
-				'post_type' => 'event',
+				'post_type' => 'event', // 'any'
 				'post_status' => 'publish',
-				'meta_key' => $meta_key,
-				'meta_value' => $meta_value,
-				'posts_per_page' => 1
+				'posts_per_page' => $num_posts,
+				'orderby'   => 'ID meta_key',
+				'order'     => 'ASC',
+				'return'	=> 'ids',
 			);
+			
+			// Define meta_key and meta_value
+			if ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) {    
+				$meta_key = "program_items_XYZ_".$field_check;
+				$meta_value = " ";
+				$wp_args['meta_key'] = $meta_key;
+				$wp_args['meta_value'] = $meta_value;
+				// TODO: also check to see if post has personnel but no row_type is saved
+			} else if ( $field_check == "all" ) {
+				// Build meta_query to search for....
+			} else if ( $field_check == "placeholders" ) {
+				// Build meta_query to search for populated placeholder fields, in order to run match_placeholder...
+			}
     	
     		$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
@@ -2671,7 +2659,17 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
-				// TODO/WIP: add tax_query to filter out event posts that have already been processed
+				'return'	=> 'ids',
+			);
+			
+			// Add tax_query to filter out event posts that have already been processed
+			$wp_args['tax_query'] = array(
+				array(
+					'taxonomy' => 'admin_tag',
+					'field'    => 'slug',
+					'terms'    => array( 'program-rows-cleaned' ),
+					'operator' => 'NOT IN',
+				),
 			);
 				
 			// field_check?
@@ -2693,28 +2691,9 @@ function event_program_cleanup( $atts = [] ) {
 						'value'   => '',
 					)
 				);
-			} /*else if ( $field_check == "row_type" ) {
-				// Check to see if row_type is empty
-				$wp_args['meta_query'] = array(
-					'relation' => 'AND',
-					array(
-						'key'     => 'program_items',
-						'compare' => 'EXISTS'
-					),
-					array(
-						'relation' => 'OR',
-						array(
-							'key'    => 'program_items_XYZ_row_type',
-							'value'  => ''
-						),
-						array(
-							'key'    => 'program_items_XYZ_row_type',
-							'compare' => 'NOT EXISTS'
-						),
-					),
-				);
-			} */else if ( $field_check == "mismatch" ) {
+			} else if ( $field_check == "mismatch" ) {
 				// Check to see if row_type doesn't match show/hide settings
+				// TODO: revised to check for other incorrect row_type possibilities?
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2778,11 +2757,12 @@ function event_program_cleanup( $atts = [] ) {
         
         	$info .= "<h2>Program Items</h2>";
 			//$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
-			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
-			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
-			$info .= "field_check: ".$field_check."<br />";
+			if ( $ids ) { $ts_info .= "Query ids: ".$ids."<br />"; }
 			$repeater_name = "program_items";
+			
+			$ts_info .= "field_check: ".$field_check."<br />";
+			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			
 			foreach ( $posts AS $post ) {
 				
@@ -2810,6 +2790,9 @@ function event_program_cleanup( $atts = [] ) {
 						$post_info .= $row_info;
 						$i++;				
 					}
+				} else {
+					$info .= "No matching program rows found.<br />";
+					$info .= $ts_info;
 				}
 				/*
 				$meta = get_post_meta( $post_id );
@@ -2883,9 +2866,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 			if ( $scope == "program_items" ) {
 				$info .= "No matching posts found.<br />";
-				$info .= "field_check: ".$field_check."<br />";
-				$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-				$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+				$info .= $ts_info;
 			}
 		
 		}
