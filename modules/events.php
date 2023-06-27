@@ -151,9 +151,9 @@ function get_event_program_content( $post_id = null ) {
         $info .= get_event_program_items( $post_id );
     }
     
-    $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
-    //
 	$info .= '</div>';
+	
+	$info = '<div class="troubleshooting">'.$ts_info.'</div>'.$info;
     
     //if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
 	
