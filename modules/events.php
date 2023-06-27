@@ -2321,6 +2321,7 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "ids: ".$ids."<br />";
     $info .= "scope: ".$scope."<br />";
     $info .= "field_check (initial): ".$field_check."<br />";
+    $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
     if ( $scope == "personnel" || $scope == "both" ) {
