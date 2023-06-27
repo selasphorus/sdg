@@ -2521,9 +2521,9 @@ function event_program_cleanup( $atts = [] ) {
 			$info .= "field_check: ".$field_check."<br />";
 			//if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
         	//
-        	$ts_info .= "personnel TS:<br />";
-			$ts_info .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
-			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+        	//$ts_info_personnel .= "personnel TS:<br />";
+			$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">';
 			//$info .= $ts_info_personnel;
@@ -2559,7 +2559,7 @@ function event_program_cleanup( $atts = [] ) {
 					}
 				} else {
 					$info .= "No matching personnel rows found.<br />";
-					$info .= $ts_info;
+					$info .= $ts_info_personnel;
 				}
 				
 				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
@@ -2830,9 +2830,9 @@ function event_program_cleanup( $atts = [] ) {
 			//if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
 			//$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
 			//
-        	$ts_info .= "program_items TS:<br />";
-			$ts_info .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
-			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+        	//$ts_info_program_items .= "program_items TS:<br />";
+			$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">'.$ts_info_program_items.'</div>';
 			//
@@ -2864,7 +2864,8 @@ function event_program_cleanup( $atts = [] ) {
 					}
 				} else {
 					$info .= "No matching program rows found.<br />";
-					$info .= $ts_info;
+					$info .= $ts_info_program_items;
+					//$info .= $ts_info;
 				}
 				/*
 				$meta = get_post_meta( $post_id );
