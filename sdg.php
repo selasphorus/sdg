@@ -1214,9 +1214,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
     $result = "";
     
     // If post_id is empty, abort
-    if ( empty($post_id) ) {
-    	return false; // wip -- should this be null? or info msg?
-    }
+    if ( empty($post_id) ) { return false; } // wip -- should this be null? or info msg?
     
     // Get the post_type
     $post_type = get_post_type( $post_id );
@@ -1276,8 +1274,18 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 
 function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
     $term_ids = array();
-    $info = "";
+    $ts_info = "";
+    $result = "";
+    
+    // If post_id is empty, abort
+    if ( empty($post_id) ) { return false; } // wip -- should this be null? or info msg?
     
     // TODO -- Cleanup: remove t4m-updated from all events -- it doesn't apply because events don't have a title_for_matching field -- they have title_uid instead
     
