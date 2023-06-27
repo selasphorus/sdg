@@ -2325,6 +2325,7 @@ function event_program_cleanup( $atts = [] ) {
     
     // Init vars
     $info = "";
+    $ts_info = "";
     
     // If an ID or IDs have been submitted, handle both personnel and program_items, whatever the submitted scope setting
     if ( !empty($ids) ) { $scope = "both"; }
@@ -2337,6 +2338,8 @@ function event_program_cleanup( $atts = [] ) {
     
     // Personnel
     if ( $scope == "personnel" || $scope == "both" ) {
+    
+    	$ts_info_personnel = "";
     
     	// First, a quick search to find posts with obsolete or empty meta, or by ID
     	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
@@ -2482,12 +2485,16 @@ function event_program_cleanup( $atts = [] ) {
 		if ( !empty($posts) ) {
         
         	$info .= "<h2>Personnel</h2>";
-			//$info .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
-			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
-			if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
-			$info .= "field_check: ".$field_check."<br />";
 			$repeater_name = "personnel";
+			$info .= "field_check: ".$field_check."<br />";
+			//if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
+        	//
+        	$ts_info_personnel .= "personnel TS:<br />";
+			$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$info .= '<div class="code">'.$ts_info_personnel.'</div>';
+			//
 			
 			foreach ( $posts AS $post_id ) {
 			
@@ -2626,6 +2633,8 @@ function event_program_cleanup( $atts = [] ) {
     // Program Items
     if ( $scope == "program_items" || $scope == "both" ) {
     
+    	$ts_info_program_items = "";
+    	
     	// TODO: revise to search more specifically for posts with problem meta -- e.g. is_header, show_item_label, show_item_title
     	
     	// If we're only looking at program_items, or if no posts were found in the personnel query, then start fresh
@@ -2664,12 +2673,10 @@ function event_program_cleanup( $atts = [] ) {
     	}
 		
 		if ( empty($posts) ) {
-		
-			$info .= "No matching posts found in initial quick query for program_items.<br />";
-			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			
 			// STILL no posts? Try a more expensive query...
+		
+			$info .= "No matching posts found in initial quick query for program_items.<br />";			
 			
 			// Get all posts w/ personnel rows
 			$wp_args = array(
@@ -2776,13 +2783,17 @@ function event_program_cleanup( $atts = [] ) {
 		if ( $posts ) {
         
         	$info .= "<h2>Program Items</h2>";
+			$repeater_name = "program_items";			
+			$info .= "field_check: ".$field_check."<br />";
+			//if ( $ids ) { $info .= "ids: ".$ids."<br />"; }
 			//$info .= "Found ".count($posts)." event post(s) with program_items postmeta.<br /><br />";
-			if ( $ids ) { $ts_info .= "Query ids: ".$ids."<br />"; }
-			$repeater_name = "program_items";
-			
-			$ts_info .= "field_check: ".$field_check."<br />";
-			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-			$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			//
+        	$ts_info_program_items .= "program_items TS:<br />";
+			$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
+			$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$info .= '<div class="code">'.$ts_info_program_items.'</div>';
+			//
 			
 			foreach ( $posts AS $post_id ) {
 				
