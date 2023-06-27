@@ -2419,7 +2419,8 @@ function event_program_cleanup( $atts = [] ) {
 			);*/
         
 			// field_check?
-			if ( $field_check == "all" || $field_check == "row_type" ) {
+			// Default to "all" for row_type and is_header, because check for row_type NOT EXISTS doesn't work, and is_header is for program_items only
+			if ( $field_check == "all" || $field_check == "row_type" || $field_check == "is_header" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2691,7 +2692,8 @@ function event_program_cleanup( $atts = [] ) {
 			);
 				
 			// field_check?
-			if ( $field_check == "all" || $field_check == "row_type" ) {
+			// Default to "all" for row_type and header_txt, because check for row_type NOT EXISTS doesn't work, and header_txt is for personnel only
+			if ( $field_check == "all" || $field_check == "row_type" || $field_check == "header_txt" ) {
 				$wp_args['meta_query'] = array(
 					'relation' => 'AND',
 					array(
@@ -2782,14 +2784,12 @@ function event_program_cleanup( $atts = [] ) {
 			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			
-			foreach ( $posts AS $post ) {
+			foreach ( $posts AS $post_id ) {
 				
 				// Init
 				$post_info = "";
 				$info .= '<div>';
 				
-				setup_postdata( $post );
-				$post_id = $post->ID;
 				$post_info .= "post_id: ".$post_id."<br />";
 				
 				// Get the program item repeater field values (ACF)
