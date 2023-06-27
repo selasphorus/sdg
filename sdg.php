@@ -1875,7 +1875,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     } else {
         
         //$info .= "<!-- Last SQL-Query: <pre>".$arr_posts->request."</pre> -->";        
-        $info .= "No matches found for title_str: $title_str";
+        $info .= "No post matches found for title_str: $title_str";
         
     }
     
