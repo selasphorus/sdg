@@ -2846,8 +2846,8 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 				
 				// Init
+				$info .= '<div style="border-bottom: 1px dashed purple;">';
 				$post_info = "";
-				$info .= '<div>';
 				
 				$post_info .= "post_id: ".$post_id."<br />";
 				
