@@ -2348,7 +2348,7 @@ function event_program_cleanup( $atts = [] ) {
 			'posts_per_page' => $num_posts,
 			'orderby'   => 'ID meta_key',
 			'order'     => 'ASC',
-			'return'	=> 'ids',
+			'fields'	=> 'ids',
 		);
 
 		// Posts by ID
@@ -2391,7 +2391,7 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
-				'return'	=> 'ids',
+				'fields'	=> 'ids',
 			);
 			
 			// Add tax_query to filter out event posts that have already been processed
@@ -2620,7 +2620,7 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
-				'return'	=> 'ids',
+				'fields'	=> 'ids',
 			);
 			
 			// Define meta_key and meta_value
@@ -2658,7 +2658,7 @@ function event_program_cleanup( $atts = [] ) {
 				'posts_per_page' => $num_posts,
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
-				'return'	=> 'ids',
+				'fields'	=> 'ids',
 			);
 			
 			// Add tax_query to filter out event posts that have already been processed
