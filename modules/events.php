@@ -2416,6 +2416,7 @@ function event_program_cleanup( $atts = [] ) {
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
 				'fields'	=> 'ids',
+				// Use admin_tag to filter out posts that have already been processed
 				'tax_query' => array(
 					array(
 						'taxonomy' => 'admin_tag',
@@ -2425,30 +2426,6 @@ function event_program_cleanup( $atts = [] ) {
 					),
 				)
 			);
-			
-			// Add tax_query to filter out event posts that have already been processed
-			/*$wp_args['tax_query'] = array(
-				'taxonomy' => 'admin_tag',
-				'field'    => 'slug',
-				'terms'    => array( 'program-rows-cleaned' ),
-				'operator' => 'NOT IN',
-			);*/
-			/*$wp_args['tax_query'] = array(
-				//'relation' => 'OR', //tft
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-rows-cleaned' ),
-					//'terms'   => 'programmatically-updated',
-					'operator' => 'NOT IN',
-				),
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => 't4m-needs-attention',
-					//'operator' => 'NOT IN',
-				),
-			);*/
         
 			// field_check?
 			// Default to "all" for row_type and is_header, because check for row_type NOT EXISTS doesn't work, and is_header is for program_items only
@@ -2564,7 +2541,8 @@ function event_program_cleanup( $atts = [] ) {
 				if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				} else {
-					// TODO: remove the program-rows-cleaned tag, if it was already added
+					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
+					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				}
 		
 				$info .= $post_info;
@@ -2726,6 +2704,7 @@ function event_program_cleanup( $atts = [] ) {
 				'orderby'   => 'ID meta_key',
 				'order'     => 'ASC',
 				'fields'	=> 'ids',
+				// Use admin_tag to filter out posts that have already been processed
 				'tax_query' => array(
 					array(
 						'taxonomy' => 'admin_tag',
@@ -2735,16 +2714,6 @@ function event_program_cleanup( $atts = [] ) {
 					),
 				)
 			);
-			
-			// Add tax_query to filter out event posts that have already been processed
-			/*$wp_args['tax_query'] = array(
-				array(
-					'taxonomy' => 'admin_tag',
-					'field'    => 'slug',
-					'terms'    => array( 'program-rows-cleaned' ),
-					'operator' => 'NOT IN',
-				),
-			);*/
 				
 			// field_check?
 			// Default to "all" for row_type and header_txt, because check for row_type NOT EXISTS doesn't work, and header_txt is for personnel only
@@ -2881,7 +2850,8 @@ function event_program_cleanup( $atts = [] ) {
 				if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				} else {
-					// TODO: remove the program-rows-cleaned tag, if it was already added
+					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
+					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				}
 				
 				/*
