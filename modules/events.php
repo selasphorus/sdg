@@ -2391,23 +2391,23 @@ function event_program_cleanup( $atts = [] ) {
 			);
 			
 			// TODO/WIP: add tax_query to filter out event posts that have already been processed
-			/*
+			
 			$wp_args['tax_query'] = array(
 				//'relation' => 'OR', //tft
 				array(
 					'taxonomy' => 'admin_tag',
 					'field'    => 'slug',
-					'terms'    => array( 'programmatically-updated' ),
+					'terms'    => array( 'program-rows-cleaned' ),
 					//'terms'   => 'programmatically-updated',
 					'operator' => 'NOT IN',
-				),
+				),/*
 				array(
 					'taxonomy' => 'admin_tag',
 					'field'    => 'slug',
 					'terms'    => 't4m-needs-attention',
 					//'operator' => 'NOT IN',
-				),
-			)*/
+				),*/
+			);
         
 			// field_check?
 			if ( $field_check == "all" || $field_check == "row_type" ) {
