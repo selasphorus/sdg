@@ -2410,7 +2410,8 @@ function event_program_cleanup( $atts = [] ) {
 						),
 						array(
 							'key'    => 'personnel_XYZ_row_type',
-							'compare' => 'NOT EXISTS'
+							'compare' => 'NOT EXISTS',
+							'value'  => 'bug #23268' // tft
 						),
 					),
 				);
