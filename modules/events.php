@@ -1578,28 +1578,35 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Role
 		if ( isset($row['role']) && $row['role'] != "" ) {
 			$role = $row['role'];
-			$info .= "role: ".print_r($role, true)."<br />";
-			// If the role is properly set, then we can get rid of the old value, right?
-			// TBD: do we need to keep role_old for X-check?
-			if ( isset($row['role_old']) && $row['role_old'] != "" && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role_old' ) ) {
-				//$arr_field_deletions[] = "role_old";
-			}
+			//$info .= "role: ".print_r($role, true)."<br />";
 		} else {
 			$role = null;
 		}
+		// TBD: do we need to keep role_old for X-check?
+		if ( isset($row['role_old']) && $row['role_old'] != "" ) {
+			$role_old = $row['role_old'];
+			// If the role is properly set, then we can get rid of the old value, right?
+			//if ( $role && metadata_exists( 'post', $post_id, $repeater_name.'_'.$i.'_role_old' ) ) { $arr_field_deletions[] = "role_old"; }
+		} else {
+			$role_old = null;
+		}
 		if ( isset($row['role_txt']) && $row['role_txt'] != "" ) {
 			$role_txt = $row['role_txt'];
-			$info .= "Placeholder role_txt: $role_txt<br />";
+			//$info .= "Placeholder role_txt: $role_txt<br />";
 			$placeholders = true;
 		} else {
 			$role_txt = null;
+		}
+		// If we've got both role and role_txt OR role_old, take note... Action TBD.
+		if ( $role && ( $role_txt || $role_old ) ) {
+			$info .= "role: ".print_r($role, true)." // role_txt: ".$role_txt." // role_old: ".$role_old."<br />";
 		}
 		// TODO: ?
 		
 		// Person or group
 		if ( isset($row['person']) && $row['person'] != "" ) {
 			$person = $row['person'];
-			$info .= "person: ".print_r($person, true)."<br />";
+			//$info .= "person: ".print_r($person, true)."<br />";
 		} else {
 			$person = null;
 		}
@@ -1608,6 +1615,10 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$placeholders = true;
 		} else {
 			$person_txt = null;
+		}
+		// If we've got both person and person_txt, take note... Action TBD.
+		if ( $person && $person_txt ) {
+			$info .= "person: ".print_r($person, true)." // person_txt: ".$person_txt."<br />";
 		}
 		
 		// Match placeholders
@@ -1692,21 +1703,26 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		// Item label
 		if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
 			$item_label = $row['item_label'];
-			$info .= "item_label: ".print_r($item_label, true)."<br />";//$info .= "item_label: $item_label<br />";
+			//$info .= "item_label: ".print_r($item_label, true)."<br />"; //$info .= "item_label: $item_label<br />";
 		} else {
 			$item_label = null;
 		}
 		if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
 			$item_label_txt = $row['item_label_txt'];
-			$info .= "Placeholder item_label_txt: $item_label_txt<br />";
+			//$info .= "Placeholder item_label_txt: $item_label_txt<br />";
 			$placeholders = true;
 		} else {
 			$item_label_txt = null;
 		}
+		// If we've got both $item_label and $item_label_txt, take note... Action TBD.
+		if ( $item_label && $item_label_txt ) {
+			$info .= "item_label: ".print_r($item_label, true)." // item_label_txt: ".$item_label_txt."<br />";
+		}
+		
 		// Program item
 		if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
 			$program_item = $row['program_item'];
-			$info .= "program_item: ".print_r($program_item, true)."<br />";
+			//$info .= "program_item: ".print_r($program_item, true)."<br />";
 		} else {
 			$program_item = null;
 		}
@@ -1715,6 +1731,10 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$placeholders = true;
 		} else {
 			$program_item_txt = null;
+		}
+		// If we've got both program_item and program_item_txt, take note... Action TBD.
+		if ( $program_item && $program_item_txt ) {
+			$info .= "program_item: ".print_r($program_item, true)." // program_item_txt: ".$program_item_txt."<br />";
 		}
 	
 		// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
