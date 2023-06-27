@@ -1706,10 +1706,14 @@ function match_placeholder ( $args = [] ) {
             //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
             // Update "field_name" within the $i-th row of "repeater_name"
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+                $info .= '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
+                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
+                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
             } else {
-                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-            }/**/
+                $info .=  '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
+                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+            }
             
         }
         
@@ -1727,10 +1731,14 @@ function match_placeholder ( $args = [] ) {
             //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
             // Update "field_name" within the $i row of "repeater_name".
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
+                $info .= '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
+                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
+                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
             } else {
-                $info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";//$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-            }/**/
+                $info .=  '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
+                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
+            }
             
         }
         
