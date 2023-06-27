@@ -1843,9 +1843,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		foreach ( $arr_field_updates as $field_name => $field_value ) {
 			$info .= "update $field_name = $field_value<br />";
 			if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
-				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";				
+				$info .= '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
 			} else {
-				$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+				$info .=  '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
 				$errors = true;
 			}
 		}
@@ -1856,9 +1856,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		foreach ( $arr_field_deletions as $field_name ) {
 			$info .= "delete $field_name<br />";
 			if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
-				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
+				$info .= '<span class="nb">'."[$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
 			} else {
-				$info .= "[$i] delete_sub_field [$repeater_name/$field_name]: FAILED!<br />";
+				$info .= '<span class="nb">'."[$i] delete_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
 				$errors = true;
 			}
 		}
