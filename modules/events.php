@@ -2650,9 +2650,11 @@ function event_program_cleanup( $atts = [] ) {
 		} else {
 		
 			$info .= "No matching posts found.<br />";
+			$info .= '<div class="troubleshooting">';
 			$info .= "field_check: ".$field_check."<br />";
 			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+			$info .= '</div>';
 		
 		}
     
@@ -2955,7 +2957,9 @@ function event_program_cleanup( $atts = [] ) {
 		
 			if ( $scope == "program_items" ) {
 				$info .= "No matching posts found.<br />";
+				$info .= '<div class="troubleshooting">';
 				$info .= $ts_info;
+				$info .= '</div>';
 			}
 		
 		}
