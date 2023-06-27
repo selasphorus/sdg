@@ -2531,10 +2531,9 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 			
 				// Init
+				$info .= '<div style="border-bottom: 2px dashed purple; margin-bottom: 1rem;">';
 				$post_info = "";
 				$post_errors = false;
-				
-				$info .= '<div>';
 				
 				$post_info .= "post_id: ".$post_id."<br />";
 				
@@ -2846,8 +2845,9 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 				
 				// Init
-				$info .= '<div style="border-bottom: 1px dashed purple;">';
+				$info .= '<div style="border-bottom: 2px dashed purple; margin-bottom: 1rem;">';
 				$post_info = "";
+				$post_errors = false;
 				
 				$post_info .= "post_id: ".$post_id."<br />";
 				
