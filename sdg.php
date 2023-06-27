@@ -1695,7 +1695,8 @@ function match_placeholder ( $args = [] ) {
     if ( isset($arr_match_results['post_id']) ) {
         
         $match_id = $arr_match_results['post_id'];
-        $info .= "match found for placeholder!: post_id [".$match_id."]<br />";//$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
+        $info .= '<span class="nb">'."match found for placeholder!: post_id [".$match_id."]".'</span><br />';
+        //$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
         
         if ( $repeater_name && $match_id ) {
                         
@@ -1720,7 +1721,9 @@ function match_placeholder ( $args = [] ) {
     } else if ( isset($arr_match_results['term_id']) ) {
         
         $term_id = $arr_match_results['term_id'];
-        $info .= "match found for placeholder!: term_id [".$term_id."]<br />";//$info .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
+        $info .= '<span class="nb">'."match found for placeholder!: term_id [".$term_id."]".'</span><br />';
+        //$info .= "match found for placeholder!: term_id [".$term_id."]<br />";
+        //$info .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
         
         // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
         // WIP
