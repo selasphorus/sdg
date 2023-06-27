@@ -2350,6 +2350,7 @@ function event_program_cleanup( $atts = [] ) {
     // Init vars
     $info = "";
     $ts_info = "";
+    $posts = array();
     
     // If an ID or IDs have been submitted, handle both personnel and program_items, whatever the submitted scope setting
     if ( !empty($ids) ) { $scope = "both"; }
@@ -2365,47 +2366,43 @@ function event_program_cleanup( $atts = [] ) {
     
     	$ts_info_personnel = "";
     
-    	// First, a quick search to find posts with obsolete or empty meta, or by ID
-    	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
-
-		// Set up the query arguments
-		$wp_args = array(
-			'post_type' => 'event', // 'any'
-			'post_status' => 'publish',
-			'posts_per_page' => $num_posts,
-			'orderby'   => 'ID meta_key',
-			'order'     => 'ASC',
-			'fields'	=> 'ids',
-		);
-
-		// Posts by ID
-		// NB: if IDs are specified, ignore field_check
-		if ( !empty($ids) ) {
-			$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
-			$wp_args['post__in'] = $posts_in;
-			$field_check = "N/A";
-		}
+    	if ( !empty($ids) || ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) ) {
     	
-    	// First round query -- the quick ones
-    	// Define meta_key and meta_value
-    	if ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) {    
+			// First, a quick search to find posts with obsolete or empty meta, or by ID
+
+			// Set up the query arguments
+			$wp_args = array(
+				'post_type' => 'event', // 'any'
+				'post_status' => 'publish',
+				'posts_per_page' => $num_posts,
+				'orderby'   => 'ID meta_key',
+				'order'     => 'ASC',
+				'fields'	=> 'ids',
+			);
+
+			// Posts by ID
+			// NB: if IDs are specified, ignore field_check
+			if ( !empty($ids) ) {
+				$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
+				$wp_args['post__in'] = $posts_in;
+				$field_check = "N/A";
+			}
+		
+			// First round query -- the quick ones
+			// Define meta_key and meta_value
 			$meta_key = "personnel_XYZ_".$field_check;
 			$meta_value = " ";
 			$wp_args['meta_key'] = $meta_key;
 			$wp_args['meta_value'] = $meta_value;
-			// TODO: also check to see if post has personnel but no row_type is saved
-    	} else if ( $field_check == "all" ) {
-    		// Build meta_query to search for....
-    	} else if ( $field_check == "placeholders" ) {
-    		// Build meta_query to search for populated placeholder fields, in order to run match_placeholder...
-    	}
 		
-		$result = new WP_Query( $wp_args );
-		$posts = $result->posts;
+			$result = new WP_Query( $wp_args );
+			$posts = $result->posts;
+			
+		}
 		
 		if ( empty($posts) ) {
 		
-			$info .= "No matching posts found in initial quick query for personnel.<br />";
+			//$info .= "No matching posts found in initial quick query for personnel.<br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
@@ -2674,33 +2671,40 @@ function event_program_cleanup( $atts = [] ) {
     	// If we're only looking at program_items, or if no posts were found in the personnel query, then start fresh
     	if ( $scope == "program_items" || empty($posts) ) {
     	
-			// First round query -- the quick ones
-			
-			// Set up the query arguments
-			$wp_args = array(
-				'post_type' => 'event', // 'any'
-				'post_status' => 'publish',
-				'posts_per_page' => $num_posts,
-				'orderby'   => 'ID meta_key',
-				'order'     => 'ASC',
-				'fields'	=> 'ids',
-			);
-			
-			// Define meta_key and meta_value
-			if ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) {    
+			// First round query -- the quick one			
+			if ( !empty($ids) || ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) ) {
+    	
+				// First, a quick search to find posts with obsolete or empty meta, or by ID
+
+				// Set up the query arguments
+				$wp_args = array(
+					'post_type' => 'event', // 'any'
+					'post_status' => 'publish',
+					'posts_per_page' => $num_posts,
+					'orderby'   => 'ID meta_key',
+					'order'     => 'ASC',
+					'fields'	=> 'ids',
+				);
+
+				// Posts by ID
+				// NB: if IDs are specified, ignore field_check
+				if ( !empty($ids) ) {
+					$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
+					$wp_args['post__in'] = $posts_in;
+					$field_check = "N/A";
+				}
+		
+				// First round query -- the quick ones
+				// Define meta_key and meta_value
 				$meta_key = "program_items_XYZ_".$field_check;
 				$meta_value = " ";
 				$wp_args['meta_key'] = $meta_key;
 				$wp_args['meta_value'] = $meta_value;
-				// TODO: also check to see if post has personnel but no row_type is saved
-			} else if ( $field_check == "all" ) {
-				// Build meta_query to search for....
-			} else if ( $field_check == "placeholders" ) {
-				// Build meta_query to search for populated placeholder fields, in order to run match_placeholder...
+		
+				$result = new WP_Query( $wp_args );
+				$posts = $result->posts;
+			
 			}
-    	
-    		$result = new WP_Query( $wp_args );
-			$posts = $result->posts;
 		
     	} else {
     		// Otherwise we'll continue with the posts we found in the personnel query, above
