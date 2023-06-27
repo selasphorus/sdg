@@ -2515,6 +2515,9 @@ function event_program_cleanup( $atts = [] ) {
 						if ( $row_errors ) { $post_errors = true; }
 						$i++;				
 					}
+				} else {
+					$info .= "No matching personnel rows found.<br />";
+					$info .= $ts_info;
 				}
 				
 				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
@@ -2807,7 +2810,7 @@ function event_program_cleanup( $atts = [] ) {
 					}
 				} else {
 					$info .= "No matching program rows found.<br />";
-					//$info .= $ts_info;
+					$info .= $ts_info;
 				}
 				/*
 				$meta = get_post_meta( $post_id );
