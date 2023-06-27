@@ -505,6 +505,19 @@ function get_event_personnel( $atts = [] ) {
 				$table .= '</tr>';
 			}
             
+            // Data Cleanup -- WIP
+			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
+			if ( is_dev_site() ) {
+			
+				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
+				$ts_info .= $arr_row_info['info'];
+				$row_errors = $arr_row_info['errors'];
+				//if ( $row_errors ) { $post_errors = true; }
+				
+			}
+			
+			// --------------------
+			
             $i++;
             
         } // end foreach $rows
@@ -1071,11 +1084,17 @@ function get_event_program_items( $atts = [] ) {
 				$table .= '</tr>';
 			}
 			
-			// WIP -- figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
+			// Data Cleanup -- WIP
+			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
 			if ( is_dev_site() ) {
 			
-				$rows = get_field('program_items', $post_id);
+				//
+				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
+				$ts_info .= $arr_row_info['info'];
+				$row_errors = $arr_row_info['errors'];
+				//if ( $row_errors ) { $post_errors = true; }
 				
+				//				
 				if ( isset($row['program_item'][0]) ) {
 					foreach ( $row['program_item'] as $program_item_obj_id ) {						
 						$item_post_type = get_post_type( $program_item_obj_id );						
@@ -1539,9 +1558,9 @@ function get_program_item_name ( $args = array() ) {
  * 
  */
 
-function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i = null, $row = null ) {
+function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $repeater_name = null ) {
 
-	if ( $post_id === null || $repeater_name === null || $i === null || $row === null ) {
+	if ( $post_id === null || $i === null || $row === null || $repeater_name === null ) {
 		return "Insufficient info to run row cleanup<br />";
 	}
 	
@@ -1555,7 +1574,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	// TODO: better error handling
 	$errors = false;
 	
-	$info .= "post_id: ".$post_id."/row [$i]";
+	$info .= "post_id: ".$post_id."/row [$i]";	
+	$info .= "repeater_name: ".$repeater_name."<br />";
 	//$info .= "<br />";
 	
 	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
@@ -1576,8 +1596,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	}
 	
 	// Personnel
-	if ( $repeater_name == "personnel" ) {		
-		$info .= "repeater_name: ".$repeater_name."<br />";
+	if ( $repeater_name == "personnel" ) {
+	
 		//$arr_obsolete_fields = array( "role_old" );
 		//$arr_placeholder_fields = array( "role" => "role_txt", "person" => "person_txt" );
 		// WIP
@@ -1707,7 +1727,6 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	// Program Items
 	if ( $repeater_name == "program_items" ) {
 	
-		$info .= "repeater_name: ".$repeater_name."<br />";
 		//$arr_obsolete_fields = array( "is_header", "show_item_label", "show_item_title" );
 		//$arr_placeholder_fields = array( "item_label" => "item_label_txt", "program_item" => "program_item_txt" );
 		
@@ -2549,7 +2568,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
-						$arr_row_info = event_program_row_cleanup ( $post_id, "personnel", $i, $row );								
+						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
 						if ( $row_errors ) { $post_errors = true; }
@@ -2871,7 +2890,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {						
-						$arr_row_info = event_program_row_cleanup ( $post_id, "program_items", $i, $row );								
+						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
 						if ( $row_errors ) { $post_errors = true; }						
