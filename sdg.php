@@ -1687,6 +1687,8 @@ function match_placeholder ( $args = [] ) {
         //$info .= "<!-- match args: ".print_r($args, true)." -->";
     }
     
+    // TODO: deal specially w/ junk placeholders like 'x'
+    
     // Abort if no post_id. TODO: determine additional conditions for which to abort.
     if ( empty($post_id) ) { 
         $info .= "post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
