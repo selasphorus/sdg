@@ -1687,10 +1687,10 @@ function match_placeholder ( $args = [] ) {
     }
     
     if ( !($taxonomy) ) { //if ( $taxonomy != 'true' ) {
-    	$info .= ">>> find_matching_post";
+    	$info .= ">>> find_matching_post<br />";
         $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
     } else {
-    	$info .= ">>> taxonomy: find_matching_term";
+    	$info .= ">>> taxonomy: find_matching_term<br />";
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
                         
