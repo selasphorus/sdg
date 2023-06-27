@@ -2841,7 +2841,9 @@ function event_program_cleanup( $atts = [] ) {
 			//$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
-			$info .= '<div class="troubleshooting">'.$ts_info_program_items.'</div>';
+			if ( $scope == "program_items" ) {
+				$info .= '<div class="troubleshooting">'.$ts_info_program_items.'</div>';
+			}			
 			//
 			$info .= "=====================<br />";
 			
