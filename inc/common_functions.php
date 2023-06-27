@@ -441,7 +441,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     }
 	
 	if ( $echo == true ) {
-		$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		echo $info;    
 	} else {
 		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
