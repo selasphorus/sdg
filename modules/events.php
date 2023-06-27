@@ -2502,7 +2502,7 @@ function event_program_cleanup( $atts = [] ) {
 			$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="code">';
-			$info .= $ts_info_personnel;
+			//$info .= $ts_info_personnel;
 			//$info .= '</div>';
 			//
 			
