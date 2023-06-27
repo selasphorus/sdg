@@ -2309,7 +2309,7 @@ function event_program_cleanup( $atts = [] ) {
 		'ids'   => null, //get_the_ID(),
         'num_posts' => 1, // default is one post at a time because most have multiple program rows and these meta queries are SLOW!
         'scope'		=> 'both', // personnel, program_items, or both
-        'field_check'	=> 'all',
+        'field_check'	=> 'all', // other options include: row_type, header_txt, placeholders
     ), $atts );
     
 	// Extract attribute values into variables
@@ -2323,21 +2323,25 @@ function event_program_cleanup( $atts = [] ) {
     
     	// TODO: revise to search more specifically for posts with problem meta -- e.g. role_old
     	// OR: find just one meta row with an empty row_type, then get the post based on the meta post_id
-    			
-    	// Define meta_key and meta_value
-    	if ( $field_check == "row_type" || $field_check == "all" ) {    
-			$meta_key = "personnel_XYZ_row_type";
-			$meta_value = " ";
-    	}
 
 		// Set up the query arguments
 		$wp_args = array(
 			'post_type' => 'event', // 'any'
 			'post_status' => 'publish',
-			'meta_key' => $meta_key,
-			'meta_value' => $meta_value,
 			'posts_per_page' => 1
 		);
+    			
+    	// Define meta_key and meta_value
+    	if ( $field_check != "all" && $field_check != "placeholders" ) {    
+			$meta_key = "personnel_XYZ_".$field_check;
+			$meta_value = " ";
+			$wp_args['meta_key'] = $meta_key;
+			$wp_args['meta_value'] = $meta_value;
+    	} else if ( $field_check == "all" ) {
+    		// Build meta_query
+    	} else if ( $field_check == "placeholders" ) {
+    		// Build meta_query
+    	}
     	
     	
 		/*
