@@ -2318,9 +2318,10 @@ function event_program_cleanup( $atts = [] ) {
     // Init vars
     $info = "";
     
-    $info .= "ids: ".$ids."<br />";
     $info .= "scope: ".$scope."<br />";
     $info .= "field_check (initial): ".$field_check."<br />";
+    $info .= "num_posts: ".$num_posts."<br />";
+    $info .= "ids: ".$ids."<br />";
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
     // Personnel
@@ -2333,117 +2334,126 @@ function event_program_cleanup( $atts = [] ) {
 		$wp_args = array(
 			'post_type' => 'event', // 'any'
 			'post_status' => 'publish',
-			'posts_per_page' => 1
+			'posts_per_page' => $num_posts
 		);
-    			
-    	// Define meta_key and meta_value
-    	if ( $field_check != "all" && $field_check != "placeholders" ) {    
-			$meta_key = "personnel_XYZ_".$field_check;
-			$meta_value = " ";
-			$wp_args['meta_key'] = $meta_key;
-			$wp_args['meta_value'] = $meta_value;
-    	} else if ( $field_check == "all" ) {
-    		// Build meta_query
-    	} else if ( $field_check == "placeholders" ) {
-    		// Build meta_query
-    	}
-    	
-    	
-		/*
-    	// Get all posts w/ personnel rows
-		$wp_args = array(
-			'post_type'   => 'event',
-			'post_status' => 'publish',
-			'posts_per_page' => $num_posts,
-			'orderby'   => 'ID meta_key',
-			'order'     => 'ASC',
-		);
-		
+
 		// Posts by ID
-    	// NB: if IDs are specified, ignore field_check
+		// NB: if IDs are specified, ignore field_check
 		if ( !empty($ids) ) {
 			$posts_in         = array_map( 'intval', birdhive_att_explode( $ids ) );
 			$wp_args['post__in'] = $posts_in;
 			$field_check = "N/A";
 		}
-		// field_check?
-		if ( $field_check == "all" ) {
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'personnel',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key'     => 'personnel',
-					'compare' => '!=',
-					'value'   => 0,
-				),
-				array(
-					'key'     => 'personnel',
-					'compare' => '!=',
-					'value'   => '',
-				)
-			);
-		} else if ( $field_check == "row_type" ) {
-			// Check to see if row_type is empty
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'personnel',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'key'    => 'personnel_XYZ_row_type',
-						'value'  => ''
-					),
-					array(
-						'key'    => 'personnel_XYZ_row_type',
-						'compare' => 'NOT EXISTS'
-					),
-				),
-			);
-		} else if ( $field_check == "header_txt" ) {
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'personnel',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key'     => 'personnel_XYZ_header_txt',
-					'value'   => 1,
-				),
-			);
-		} else if ( $field_check == "placeholders" ) {
-			// TODO: fix this -- yields no results, which can't be right
-			$wp_args['meta_query'] = array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'personnel',
-					'compare' => 'EXISTS'
-				),
-				array(
-					'relation' => 'OR',
-					array(
-						'key'     => 'personnel_XYZ_role_txt',
-						'compare' => '!=',
-						'value'   => ' ',
-					),
-					array(
-						'key'     => 'personnel_XYZ_person_txt',
-						'compare' => '!=',
-						'value'   => ' ',
-					),
-				),
-			);
-		}
-		*/
+    	
+    	// First round query -- the quick ones
+    	// Define meta_key and meta_value
+    	if ( $field_check != "all" && $field_check != "placeholders" && $field_check != "N/A" ) {    
+			$meta_key = "personnel_XYZ_".$field_check;
+			$meta_value = " ";
+			$wp_args['meta_key'] = $meta_key;
+			$wp_args['meta_value'] = $meta_value;
+			// TODO: also check to see if post has personnel but no row_type is saved
+    	} else if ( $field_check == "all" ) {
+    		// Build meta_query to search for....
+    	} else if ( $field_check == "placeholders" ) {
+    		// Build meta_query to search for populated placeholder fields, in order to run match_placeholder...
+    	}
 		
 		$result = new WP_Query( $wp_args );
 		$posts = $result->posts;
+		
+		if ( empty($posts) ) {
+		
+			// No posts? Try a more expensive query...
+			
+			// Get all posts w/ personnel rows
+			$wp_args = array(
+				'post_type'   => 'event',
+				'post_status' => 'publish',
+				'posts_per_page' => $num_posts,
+				'orderby'   => 'ID meta_key',
+				'order'     => 'ASC',
+			);
+			
+			// field_check?
+			if ( $field_check == "all" ) {
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'personnel',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'key'     => 'personnel',
+						'compare' => '!=',
+						'value'   => 0,
+					),
+					array(
+						'key'     => 'personnel',
+						'compare' => '!=',
+						'value'   => ' ',
+					)
+				);
+			} else if ( $field_check == "row_type" ) {
+				// Check to see if row_type is empty
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'personnel',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'    => 'personnel_XYZ_row_type',
+							'value'  => ' '
+						),
+						array(
+							'key'    => 'personnel_XYZ_row_type',
+							'compare' => 'NOT EXISTS'
+						),
+					),
+				);
+			} else if ( $field_check == "header_txt" ) {
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'personnel',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'key'     => 'personnel_XYZ_header_txt',
+						'value'   => 1,
+					),
+				);
+			} else if ( $field_check == "placeholders" ) {
+				// TODO: fix this -- yields no results, which can't be right
+				$wp_args['meta_query'] = array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'personnel',
+						'compare' => 'EXISTS'
+					),
+					array(
+						'relation' => 'OR',
+						array(
+							'key'     => 'personnel_XYZ_role_txt',
+							'compare' => '!=',
+							'value'   => ' ',
+						),
+						array(
+							'key'     => 'personnel_XYZ_person_txt',
+							'compare' => '!=',
+							'value'   => ' ',
+						),
+					),
+				);
+			}
+			
+			$result = new WP_Query( $wp_args );
+			$posts = $result->posts;
+		
+		}
 		
 		if ( !empty($posts) ) {
         
