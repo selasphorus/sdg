@@ -1544,6 +1544,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	}
 	
 	// Init vars
+	$arr_info = array();
 	$info = "";
 	$row_type_update = false;
 	$placeholders = false;
@@ -1863,17 +1864,14 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		}
 		if ( $arr_field_deletions ) { $info .= "-----------<br />"; }
 		
-		// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
-		// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
-		if ( !$errors ) {
-			$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-		}
-		
 	}
 	
 	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
 	
-	return $info;
+	$arr_info['info'] = $info;
+	$arr_info['errors'] = $errors;
+	
+	return $arr_info;
 }
 
 function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
@@ -2489,6 +2487,8 @@ function event_program_cleanup( $atts = [] ) {
 			
 				// Init
 				$post_info = "";
+				$post_errors = false;
+				
 				$info .= '<div>';
 				
 				$post_info .= "post_id: ".$post_id."<br />";
@@ -2504,12 +2504,20 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
-						$row_info = event_program_row_cleanup ( $post_id, "personnel", $i, $row );
-						//$row_info = event_personnel_row_cleanup ( $post_id, $i, $row )										
-						$post_info .= $row_info;
+						$arr_row_info = event_program_row_cleanup ( $post_id, "personnel", $i, $row );								
+						$post_info .= $arr_row_info['info'];
+						$row_errors = $arr_row_info['errors'];
+						if ( $row_errors ) { $post_errors = true; }
 						$i++;				
 					}
 				}
+				
+				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
+				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
+				if ( !$post_errors ) {
+					$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+				}		
+		
 				$info .= $post_info;
 				$info .= '</div>';
 			
