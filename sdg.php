@@ -1830,7 +1830,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     
     if ( !$posts && $field_name == 'program_item' && $label_str !== 'sermon' ) {
         
-        $info .= "query args: ".print_r($args, true)."";
+        $info .= "query args: ".print_r($args, true)."<br />";
         //$info .= "<!-- query args: ".print_r($args, true)." -->";
         
         // TODO:
