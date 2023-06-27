@@ -1557,8 +1557,9 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	//$info .= "<br />";
 	
 	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
-	$exp_args = array( 'text' => $row_as_txt, 'preview_text' => "Show row..." );
-	$info .= expandable_text( $exp_args );
+	$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+	//$exp_args = array( 'text' => $row_as_txt, 'preview_text' => "Show row..." );
+	//$info .= expandable_text( $exp_args ); // Not working yet
 	//
 	//$info .= ": <pre>".print_r($row, true)."</pre>";
 	//$info .= "<!-- <pre>".print_r($row, true)."</pre> -->";
