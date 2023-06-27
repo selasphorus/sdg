@@ -271,12 +271,13 @@ function get_event_personnel( $atts = [] ) {
     $display = $a['display'];
     
     $info = "";
+    $ts_info = "";
     
     // *** WIP ***
     //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
     //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
-    $info .= "<!-- Event Personnel for post_id: $post_id -->";
+    $ts_info .= "<!-- Event Personnel for post_id: $post_id -->";
 	if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
     
     // What type of program is this? Service order or concert program?
@@ -285,8 +286,8 @@ function get_event_personnel( $atts = [] ) {
     // Program Layout -- left or centered?
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
     
-    $info .= "<!-- run_updates: $run_updates -->";
-    //$info .= "<!-- display: $display -->";
+    $ts_info .= "<!-- run_updates: $run_updates -->";
+    //$ts_info .= "<!-- display: $display -->";
     
 	// Get the program personnel repeater field values (ACF)
     $rows = get_field('personnel', $post_id);  // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -298,7 +299,7 @@ function get_event_personnel( $atts = [] ) {
     } // end if
     */
     if ( empty($rows) ) { $rows = array(); } //$rows = (!empty(get_field('personnel', $post_id))) ? 'default' : array();
-    $info .= "<!-- ".count($rows)." personnel row(s) -->\n"; // tft
+    $ts_info .= "<!-- ".count($rows)." personnel row(s) -->\n"; // tft
     
     // Loop through the personnel rows and accumulate data for display
 	if ( count($rows) > 0 ) {
@@ -451,6 +452,17 @@ function get_event_personnel( $atts = [] ) {
                 }
                 
             }
+            
+            // Data Cleanup -- WIP
+			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
+			if ( is_dev_site() ) {
+			
+				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
+				$row_info .= $arr_row_info['info'];
+				$row_errors = $arr_row_info['errors'];
+				//if ( $row_errors ) { $post_errors = true; }
+				
+			}
                 
 			if ( $delete_row != true ) { // $display == 'table' && 
 				$tr_class = "program_objects";
@@ -459,9 +471,10 @@ function get_event_personnel( $atts = [] ) {
 			}
 			
 			if ( $run_updates == true || is_dev_site() || devmode_active() ) {
-				$table .= "<!-- *** START row_info *** -->";
-                $table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
-                $table .= "<!-- *** END row_info *** -->";
+				$row_info = "<!-- *** START row_info *** -->".$row_info."<!-- *** END row_info *** -->"; // Display comments w/ in row for ease of parsing dev notes
+                $table .= $row_info;
+			} else {
+				//$ts_info .= $row_info;
 			}
 			
 			if ( $delete_row != true ) {
@@ -504,17 +517,6 @@ function get_event_personnel( $atts = [] ) {
                 
 				$table .= '</tr>';
 			}
-            
-            // Data Cleanup -- WIP
-			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
-			if ( is_dev_site() ) {
-			
-				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
-				$ts_info .= $arr_row_info['info'];
-				$row_errors = $arr_row_info['errors'];
-				//if ( $row_errors ) { $post_errors = true; }
-				
-			}
 			
 			// --------------------
 			
@@ -526,6 +528,7 @@ function get_event_personnel( $atts = [] ) {
         $table .= '</table>';
         
         $info .= $table;
+        $info .= $ts_info;
 
         // TODO: remove program-personnel-placeholders tag when ALL personnel placeholders have been replaced...
         //if ( $placeholder_label == false && $placeholder_item == false ) { 
@@ -535,10 +538,10 @@ function get_event_personnel( $atts = [] ) {
     } // end if $rows
 	
     if ( $display == 'dev' ) {
-        $info = str_replace('<!-- ','<code>',$info);
-        $info = str_replace(' -->','</code><br />',$info);
-        $info = str_replace("\n",'<br />',$info);
-        if ( $display == 'dev' ) { $info .= '</div>'; }
+        $ts_info = str_replace('<!-- ','<code>',$ts_info);
+        $ts_info = str_replace(' -->','</code><br />',$ts_info);
+        $ts_info = str_replace("\n",'<br />',$ts_info);
+       	$ts_info .= '</div>';
     }
     
 	return $info;
