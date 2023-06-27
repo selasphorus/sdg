@@ -17,7 +17,7 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 	$info = "";
 	$updates = false;
 	
-	$info .= "About to update repertoire_events for rep item with ID:".$rep_id."<br />";
+	$info .= "About to run update_repertoire_events for rep item with ID:".$rep_id."<br />";
 	
 	// get the repertoire_events field contents for the rep item
 	$repertoire_events = get_field('repertoire_events', $rep_id, false);
