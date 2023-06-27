@@ -758,8 +758,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 				}
 		
 				//$info .= '<div class="troubleshooting">'.$posts_info['info'].'</div>';
-				$ts_info .= $posts_info['info']."<hr />"; // "posts_info: ".
-				//$info .= $posts_info['info']."<hr />"; //$info .= "birdhive_get_posts/posts_info: ".$posts_info['info']."<hr />";
+				$ts_info .= $posts_info['ts_info']."<hr />";
 		
 				// Print last SQL query string
 				//global $wpdb;
