@@ -1823,6 +1823,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
 		
 		$info .= "No updates required for this row.<br />";
+		$info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 		
 	} else {
 	
@@ -2376,7 +2377,7 @@ function event_program_cleanup( $atts = [] ) {
 		if ( empty($posts) ) {
 		
 			$info .= "No matching posts found in initial quick query for personnel.<br />";
-			$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 			// No posts? Try a more expensive query...
