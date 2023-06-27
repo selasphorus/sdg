@@ -1764,7 +1764,7 @@ function match_placeholder ( $args = [] ) {
         if ( $arr_match_results['info'] != "" ) {
             $info .= $arr_match_results['info']."<br />";//$info .= "<!-- ".$arr_match_results['info']." -->";
         } else {
-            $info .= "NO match(es) found for placeholder :-(<br />";//$info .= "<!-- NO match(es) found for placeholder :-( -->";
+            $info .= '<span class="nb">'."NO match(es) found for placeholder :-(</span><br />";//$info .= "<!-- NO match(es) found for placeholder :-( -->";
         }
         
         // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag
@@ -1883,7 +1883,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     } else {
         
         //$info .= "<!-- Last SQL-Query: <pre>".$arr_posts->request."</pre> -->";        
-        $info .= "No post matches found for title_str: $title_str";
+        $info .= '<span class="nb">'."No post matches found for title_str: $title_str".'</span><br />';
         
     }
     
