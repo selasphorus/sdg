@@ -124,6 +124,7 @@ function get_event_program_content( $post_id = null ) {
 	
 	// Init vars
 	$info = "";
+	$ts_info = "";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // What type of program is this? Service order or concert program?
@@ -132,10 +133,13 @@ function get_event_program_content( $post_id = null ) {
     // What program order? (default is personnel first)
     $program_order = get_post_meta( $post_id, 'program_order', true );
     
-    // Code comments for troubleshooting
-    $info .= "<!-- post_id: $post_id -->";
-    $info .= "<!-- program_type: $program_type -->";
-    $info .= "<!-- program_order: $program_order -->";
+    // Troubleshooting
+    $ts_info .= "post_id: $post_id<br />";
+    $ts_info .= "program_type: $program_type<br />";
+    $ts_info .= "program_order: $program_order<br />";
+    
+    // Get and display any admin_tags for the post
+    //$ts_info .=
 	
     $info .= '<div class="event_program '.$program_type.' '.$program_order.'">';
     
@@ -147,6 +151,8 @@ function get_event_program_content( $post_id = null ) {
         $info .= get_event_program_items( $post_id );
     }
     
+    $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+    //
 	$info .= '</div>';
     
     //if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
