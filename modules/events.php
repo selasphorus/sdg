@@ -1597,7 +1597,8 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 		} else {
 			$role_txt = null;
 		}
-		// If we've got both role and role_txt OR role_old, take note... Action TBD.
+		// If we've got both role and role_txt OR role_old, take note... Action TBD. 
+		// Add get_the_title for role, role_old to compare with placeholder value?
 		if ( $role && ( $role_txt || $role_old ) ) {
 			$info .= "role: ".print_r($role, true)." // role_txt: ".$role_txt." // role_old: ".print_r($role_old, true)."<br />";
 		}
@@ -1617,6 +1618,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$person_txt = null;
 		}
 		// If we've got both person and person_txt, take note... Action TBD.
+		// Add get_the_title for person to compare with placeholder value?
 		if ( $person && $person_txt ) {
 			$info .= "person: ".print_r($person, true)." // person_txt: ".$person_txt."<br />";
 		}
@@ -1715,6 +1717,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$item_label_txt = null;
 		}
 		// If we've got both $item_label and $item_label_txt, take note... Action TBD.
+		// Add get_the_title for item_label to compare with placeholder value?
 		if ( $item_label && $item_label_txt ) {
 			$info .= "item_label: ".print_r($item_label, true)." // item_label_txt: ".$item_label_txt."<br />";
 		}
@@ -1733,6 +1736,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$program_item_txt = null;
 		}
 		// If we've got both program_item and program_item_txt, take note... Action TBD.
+		// Add get_the_title for program_item to compare with placeholder value?
 		if ( $program_item && $program_item_txt ) {
 			$info .= "program_item: ".print_r($program_item, true)." // program_item_txt: ".$program_item_txt."<br />";
 		}
