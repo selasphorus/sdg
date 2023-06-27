@@ -1687,8 +1687,10 @@ function match_placeholder ( $args = [] ) {
     }
     
     if ( !($taxonomy) ) { //if ( $taxonomy != 'true' ) {
+    	$info .= ">>> find_matching_post";
         $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
     } else {
+    	$info .= ">>> taxonomy: find_matching_term";
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
                         
@@ -1901,12 +1903,14 @@ function find_matching_term( $title_str = null, $field_name = null, $return = 's
     }
     
     // Get term by name in custom taxonomy: $term_tax.
+    $info .= '<span class="nb">';
     if ( $term = get_term_by('name', $title_str, $term_tax ) ) {
         $arr_info['term_id'] = $term->term_id;
         $info .= "term '".$term->name."' found";
     } else {
         $info .= "No matching term found for $term_tax: '$title_str'";
     }
+    $info .= '</span>';
     
     $arr_info['info'] = $info;
     

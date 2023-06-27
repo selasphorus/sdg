@@ -584,7 +584,7 @@ function get_personnel_role ( $args = array() ) {
 		if ( $placeholder_label == true && $run_updates == true  ) { 
 			$title_to_match = $person_role;
 			$info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => true, 'display' => $display );
 			$match_result = match_placeholder( $match_args );
 			$info .= $match_result;
 		} else {
@@ -712,7 +712,7 @@ function get_personnel_person ( $args = array() ) {
 				if ( $run_updates == true ) {
 					$title_to_match = $person_name;
 					$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'display' => $display );
+					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'taxonomy' => false, 'display' => $display );
 					$match_result = match_placeholder( $match_args );
 					$ts_info .= $match_result;
 				} else {
@@ -1616,7 +1616,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$title_to_match = $role_txt;
 			$field_name = "role";
 			$info .= ">> seeking match for ROLE placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => 'true' ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true ); // , 'display' => $display
 			$match_result = match_placeholder( $match_args );
 			$info .= $match_result;
 		}
@@ -1626,7 +1626,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$title_to_match = $person_txt;
 			$field_name = "person";
 			$info .= ">> seeking match for PERSON placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => 'true' ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
 			$match_result = match_placeholder( $match_args );
 			$info .= $match_result;
 		}
@@ -1726,7 +1726,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$title_to_match = $item_label_txt;
 			$field_name = "item_label";
 			$info .= ">> seeking match for LABEL placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => 'true' ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true ); // , 'display' => $display
 			$match_result = match_placeholder( $match_args );
 			$info .= $match_result;
 		}
@@ -1736,7 +1736,7 @@ function event_program_row_cleanup ( $post_id = null, $repeater_name = null, $i 
 			$title_to_match = $program_item_txt;
 			$field_name = "program_item";
 			$info .= ">> seeking match for ITEM placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => 'true' ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
 			$match_result = match_placeholder( $match_args );
 			$info .= $match_result;
 		}
@@ -2013,7 +2013,7 @@ function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
 	if ( $program_item_txt && !$program_item ) {
 		$title_to_match = $program_item_txt;
 		$info .= ">> seeking match for placeholder value: '$title_to_match'";
-		///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => 'true', 'display' => $display );
+		///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => true, 'display' => $display );
 		///$match_result = match_placeholder( $match_args );
 		///$info .= $match_result;
 	} 
@@ -2114,7 +2114,7 @@ function match_placeholders( $row_category = null, $row = null ) { // match_prog
 	if ( ($label_update_required == true || $placeholder_label == true) && $run_updates == true ) {
 		$title_to_match = $item_label;
 		$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
-		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => 'true', 'display' => $display );
+		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => true, 'display' => $display );
 		$match_result = match_placeholder( $match_args );
 		$ts_info .= $match_result;
 	} else {
