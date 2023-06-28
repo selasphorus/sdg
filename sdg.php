@@ -1704,11 +1704,12 @@ function match_placeholder ( $args = [] ) {
     	$info .= "[match_placeholder] taxonomy: find_matching_term<br />";
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
-                        
+    $info .= $arr_match_results['info'];
+    // WIP 06/27/23
     if ( isset($arr_match_results['post_id']) ) {
         
         $match_id = $arr_match_results['post_id'];
-        $info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: post_id ['.$match_id.']<br />';
+        //$info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: post_id ['.$match_id.']<br />';
         //$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
         
         if ( $repeater_name && $match_id ) {
@@ -1726,7 +1727,7 @@ function match_placeholder ( $args = [] ) {
     } else if ( isset($arr_match_results['term_id']) ) {
         
         $term_id = $arr_match_results['term_id'];
-        $info .= '<span class="nb">'."match found for placeholder!: term_id [".$term_id."]".'</span><br />';
+        //$info .= '<span class="nb">'."match found for placeholder!: term_id [".$term_id."]".'</span><br />';
         //$info .= "match found for placeholder!: term_id [".$term_id."]<br />";
         //$info .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
         
@@ -1863,9 +1864,10 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
             
             if ( count($posts) == 1 ) {
                 $arr_info['post_id'] = $posts[0]->ID;
+                $info .= "matching post found";
             } else if ( count($posts) > 1 ) {
                 $arr_info['posts'] = $posts;
-                $info .= "multiple matches found.";
+                $info .= "multiple post matches found";
             }
             
         }
@@ -1873,10 +1875,11 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     } else {
         
         //$info .= "<!-- Last SQL-Query: <pre>".$arr_posts->request."</pre> -->";        
-        $info .= '<span class="nb">'."No post matches found for title_str: $title_str".'</span><br />';
+        $info .= "No post matches found for title_str: $title_str";
         
     }
     
+    $info = '<span class="nb">'.$info.'</span><br />';
     $arr_info['info'] = $info;
     
     return $arr_info;
