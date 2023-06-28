@@ -1692,42 +1692,34 @@ function match_placeholder ( $args = [] ) {
     
     // Abort if no post_id. TODO: determine additional conditions for which to abort.
     if ( empty($post_id) ) { 
-        $info .= "post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
+        $info .= "[match_placeholder] post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
         return $info;
         //return false; 
     }
     
     if ( !($taxonomy) ) { //if ( $taxonomy != 'true' ) {
-    	$info .= ">>> find_matching_post<br />";
+    	$info .= "[match_placeholder] find_matching_post<br />";
         $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
     } else {
-    	$info .= ">>> taxonomy: find_matching_term<br />";
+    	$info .= "[match_placeholder] taxonomy: find_matching_term<br />";
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
                         
     if ( isset($arr_match_results['post_id']) ) {
         
         $match_id = $arr_match_results['post_id'];
-        $info .= '<span class="nb">'."match found for placeholder!: post_id [".$match_id."]".'</span><br />';
+        $info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: post_id ['.$match_id.']<br />';
         //$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
         
         if ( $repeater_name && $match_id ) {
-                        
-            $sub_field_value = $match_id;
-            // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)
-            
-            $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
-            //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
+        
             // Update "field_name" within the $i-th row of "repeater_name"
-            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $info .= '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
-                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
-                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
-            } else {
-                $info .=  '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
-                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
-                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-            }
+            $sub_field_value = $match_id;
+            // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)            
+            $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
+            $info .= '[match_placeholder] <span class="nb">[$i] update_sub_field [$repeater_name/$field_name]: ';
+            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
+            $info .= '</span><br />';
             
         }
         
@@ -1742,30 +1734,25 @@ function match_placeholder ( $args = [] ) {
         // WIP
         if ( $repeater_name && $term_id ) {
             
+            // Update "field_name" within the $i row of "repeater_name".
             $sub_field_value = $term_id;
             $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
-            //$info .= "<!-- Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] -->";
-            // Update "field_name" within the $i row of "repeater_name".
-            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) {
-                $info .= '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!".'</span><br />';
-                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: SUCCESS!<br />";
-                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
-            } else {
-                $info .=  '<span class="nb">'."[$i] update_sub_field [$repeater_name/$field_name]: FAILED!".'</span><br />';
-                //$info .= "[$i] update_sub_field [$repeater_name/$field_name]: FAILED!<br />";
-                //$info .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-            }
+            $info .= '[match_placeholder] <span class="nb">[$i] update_sub_field [$repeater_name/$field_name]: ';
+            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
+            $info .= '</span><br />';
             
         }
         
     } else if ( isset($arr_match_results['posts']) ) {
+    
     	$info .= count($arr_match_results['posts'])." match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre><br />";
     	//$info .= "<!-- match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre> -->";
         // .... more than one item... what to do?
+        
     } else {
         
         if ( $arr_match_results['info'] != "" ) {
-            $info .= $arr_match_results['info']."<br />";//$info .= "<!-- ".$arr_match_results['info']." -->";
+            $info .= $arr_match_results['info']."<br />"; //$info .= "<!-- ".$arr_match_results['info']." -->";
         } else {
             $info .= '<span class="nb">'."NO match(es) found for placeholder :-(</span><br />";//$info .= "<!-- NO match(es) found for placeholder :-( -->";
         }
