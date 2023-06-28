@@ -544,7 +544,6 @@ function get_event_personnel( $atts = [] ) {
         $table .= '</table>';
         
         $info .= $table;
-        $info .= $ts_info;
 
         // TODO: remove program-personnel-placeholders tag when ALL personnel placeholders have been replaced...
         //if ( $placeholder_label == false && $placeholder_item == false ) { 
