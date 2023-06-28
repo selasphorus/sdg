@@ -144,19 +144,27 @@ function get_event_program_content( $post_id = null ) {
 	
     $info .= '<div class="event_program '.$program_type.' '.$program_order.'">';
     
+    // Get personnel
+    $arr_personnel = get_event_personnel( $post_id );
+    $personnel = $arr_personnel['info'];
+    $ts_info .= $arr_personnel['ts_info'];
+    // Get program_items
+    $arr_program_items = get_event_program_items( $post_id );
+    $program_items = $arr_program_items['info'];
+    $ts_info .= $arr_program_items['ts_info'];
+    //
     if ( $program_order == "first_program_items" ) {
-        $info .= get_event_program_items( $post_id );
-        $info .= get_event_personnel( $post_id );	   
+        $info .= $program_items;
+        $info .= $personnel;	   
     } else {
-        $info .= get_event_personnel( $post_id );
-        $info .= get_event_program_items( $post_id );
+        $info .= $personnel;
+        $info .= $program_items;
     }
     
 	$info .= '</div>';
 	
-	$info = '<div class="troubleshooting">'.$ts_info.'</div>'.$info;
-    
-    //if ( $personnel_url ) { $person_name = make_link( $personnel_url, $person_name, null, "_blank" ); } // make_link( $url, $linktext, $class = null, $target = null)
+	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	$info = $ts_info.$info; // ts_info at the top of the page
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, "_blank"); // make_link( $url, $linktext, $class = null, $target = null)
@@ -272,11 +280,12 @@ function get_event_personnel( $atts = [] ) {
     ), $atts );
     
     // TODO: extract
-    
     $post_id = $a['id'];
     $run_updates = $a['run_updates'];
     $display = $a['display'];
     
+    // Init vars
+    $arr_info = array();
     $info = "";
     $ts_info = "";
     
@@ -284,8 +293,8 @@ function get_event_personnel( $atts = [] ) {
     //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
     //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
-    $ts_info .= "<!-- Event Personnel for post_id: $post_id -->";
-	if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
+    $ts_info .= "Event Personnel for post_id: $post_id<br />";
+	//if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
@@ -293,7 +302,7 @@ function get_event_personnel( $atts = [] ) {
     // Program Layout -- left or centered?
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
     
-    $ts_info .= "<!-- run_updates: $run_updates -->";
+    $ts_info .= "run_updates: $run_updates<br />";
     //$ts_info .= "<!-- display: $display -->";
     
 	// Get the program personnel repeater field values (ACF)
@@ -306,7 +315,7 @@ function get_event_personnel( $atts = [] ) {
     } // end if
     */
     if ( empty($rows) ) { $rows = array(); } //$rows = (!empty(get_field('personnel', $post_id))) ? 'default' : array();
-    $ts_info .= "<!-- ".count($rows)." personnel row(s) -->\n"; // tft
+    $ts_info .= count($rows)." personnel row(s)<br />"; // tft
     
     // Loop through the personnel rows and accumulate data for display
 	if ( count($rows) > 0 ) {
@@ -544,14 +553,17 @@ function get_event_personnel( $atts = [] ) {
         
     } // end if $rows
 	
-    if ( $display == 'dev' ) {
+    /*if ( $display == 'dev' ) {
         $ts_info = str_replace('<!-- ','<code>',$ts_info);
         $ts_info = str_replace(' -->','</code><br />',$ts_info);
         $ts_info = str_replace("\n",'<br />',$ts_info);
-       	$ts_info .= '</div>';
-    }
+       	//$ts_info .= '</div>';
+    }*/
     
-	return $info;
+    $arr_info['info'] = $info;
+    $arr_info['ts_info'] = $ts_info;
+	return $arr_info; //return $info;
+	
 }
 
 //
@@ -773,11 +785,13 @@ function get_event_program_items( $atts = [] ) {
         'display' => 'table'       
     ), $atts );
     
-    // Init vars    
+    // TODO: extract
     $post_id = $a['id'];
     $run_updates = $a['run_updates'];
     $display = $a['display'];
     
+    // Init vars
+    $arr_info = array(); // wip 06/27/23
     $info = "";
     $ts_info = "";
     
@@ -1133,20 +1147,12 @@ function get_event_program_items( $atts = [] ) {
         
     } // end if $rows
 	
-    if ( $display == 'table' ) {
-        $info .= $table;
-    } else if ( $display == 'dev' ) {
-        //$ts_info = str_replace('<!-- ','',$ts_info);
-        //$ts_info = str_replace(' -->','<br />',$ts_info);
-        //$ts_info .= '</p>';
-    }
+    if ( $display == 'table' ) { $info .= $table; }
     
-    if ( is_dev_site() ) {
-    	//$info .= $ts_info;
-    	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
-    }
-    
-	return $info;
+    $arr_info['info'] = $info;
+    $arr_info['ts_info'] = $ts_info;
+	return $arr_info;
+	
 }
 
 function get_program_item_label ( $args = array() ) {
@@ -2350,8 +2356,13 @@ function event_personnel_cleanup(  $atts = [] ) {
             
             $post_info .= "<br />";
             // TODO: figure out how to show info ONLY if changes have been made -- ??
-            $post_info .= get_event_personnel( $post_id, true, 'dev' ); // get_event_personnel( $post_id, $run_updates )
-            //$post_info .= get_event_program_items( $post_id, true, 'dev' );
+            // Get personnel
+    		$arr_personnel = get_event_personnel( $post_id, true, 'dev' ); // get_event_personnel( $post_id, $run_updates )
+			$personnel = $arr_personnel['info'];
+			$ts_info .= $arr_personnel['ts_info'];
+            $post_info .= $personnel;
+            // Get program_items?
+            //$arr_program_items .= get_event_program_items( $post_id, true, 'dev' );
             
             $info .= $post_info;
             $info .= '</div>';
