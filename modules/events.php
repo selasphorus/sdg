@@ -1108,26 +1108,22 @@ function get_event_program_items( $atts = [] ) {
 			
 			// Data Cleanup -- WIP
 			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
-			if ( is_dev_site() ) {
-			
-				//
-				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
-				$ts_info .= $arr_row_info['info'];
-				$row_errors = $arr_row_info['errors'];
-				//if ( $row_errors ) { $post_errors = true; }
-				
-				//				
-				if ( isset($row['program_item'][0]) ) {
-					foreach ( $row['program_item'] as $program_item_obj_id ) {						
-						$item_post_type = get_post_type( $program_item_obj_id );						
-						if ( $item_post_type == 'repertoire' ) {
-							// Update the repertoire_events field for this rep record, as needed
-							$ts_info .= update_repertoire_events( $program_item_obj_id, false, array($post_id) );							
-						}					
-					}
+			//if ( is_dev_site() ) {			
+			//
+			$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
+			$ts_info .= $arr_row_info['info'];
+			$row_errors = $arr_row_info['errors'];
+			//if ( $row_errors ) { $post_errors = true; }
+			if ( isset($row['program_item'][0]) ) {
+				foreach ( $row['program_item'] as $program_item_obj_id ) {						
+					$item_post_type = get_post_type( $program_item_obj_id );						
+					if ( $item_post_type == 'repertoire' ) {
+						// Update the repertoire_events field for this rep record, as needed
+						$ts_info .= update_repertoire_events( $program_item_obj_id, false, array($post_id) );							
+					}					
 				}
-    
-			}
+			}    
+			//}
 
 			// --------------------
             
