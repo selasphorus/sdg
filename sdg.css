@@ -124,6 +124,47 @@ a.action {
 }
 
 
+/*** Troubleshooting & Dev styles ***/
+/* TODO: streamline, simplify */
+.devinfo,
+.dev-only {
+	display: none;
+}
+
+.troubleshooting,
+.troubleshooting.inline {
+	display: none;
+    text-align: left;
+	padding: 1rem;
+	background-color: #d1fb9d;
+}
+
+.dev-view .troubleshooting,
+.stcdev .devinfo,
+.stcdev .dev-only {
+	display: block;
+}
+
+.troubleshooting.inline {
+    background-color: transparent;
+	color: #42A406;
+	color: var(--green);
+	padding: 0 1rem;
+	margin-bottom: 0;
+}
+
+.dev-view .troubleshooting.inline,
+.stcdev span.devinfo,
+.stcdev span.dev-only
+.stcdev .devinfo.inline,
+.stcdev .dev-only.inline {
+	display: inline;
+}
+
+div.dev-view {
+	margin: 1rem 0;
+}
+
 /*** Tables ***/
 
 table.program/ {
