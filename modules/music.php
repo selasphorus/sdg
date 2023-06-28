@@ -144,7 +144,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
 	if ($post_id === null) { $post_id = get_the_ID(); }
 	//$ts_info .="[get_cpt_repertoire_content] post_id: $post_id<br />";
 	
-    $arr_rep_info = get_rep_info( $program_item_obj_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
+    $arr_rep_info = get_rep_info( $post_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
 	$rep_info = $arr_item_name['info'];
 	$ts_info .= $arr_item_name['ts_info'];
 						
