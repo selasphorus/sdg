@@ -1449,7 +1449,7 @@ function sdg_custom_post_content() {
 	} else if ($post_type === "person") {
 		$info .= get_cpt_person_content();
 	} else if ($post_type === "repertoire") {
-		$arr_info .= get_cpt_repertoire_content();
+		$arr_info = get_cpt_repertoire_content();
 		$info .= $arr_info['info'];
 		$ts_info .= $arr_info['ts_info'];
 	} else if ($post_type === "edition") {
