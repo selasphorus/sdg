@@ -3199,14 +3199,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "<!-- EM post_id: $post_id; -->";
+    $ts_info .= "<!-- [sdgp] EM post_id: $post_id; -->";
     //$ts_info .= "<!-- EM result: $result -->";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title
 	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
-    $ts_info .= "<!-- title_args: ".print_r($title_args,true)." -->";
+    $ts_info .= "<!-- [sdgp] title_args: ".print_r($title_args,true)." -->";
     $event_title = sdg_post_title( $title_args );
     
     if ( $result == '#_EVENTNAME' ) {
@@ -3248,20 +3248,20 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         $show_image = true;
         
         $featured_image_display = get_field('featured_image_display', $post_id);
-        $ts_info .= "<!-- featured_image_display: ".$featured_image_display." -->";
+        $ts_info .= "<!-- [sdgp] featured_image_display: ".$featured_image_display." -->";
         
         if ( !is_archive() && !is_page() ) { //&& ! ( is_page() && $post_id == get_the_ID() )
         
-        	$ts_info .= "<!-- !is_archive() && !is_page() -->";
+        	$ts_info .= "<!-- [sdgp] !is_archive() && !is_page() -->";
         	
         	if ( $featured_image_display == "thumbnail" ) {
         	
         		$show_image = false;
-        		$replace = "<!-- featured_image_display: $featured_image_display -->";
+        		$ts_info = "<!-- [sdgp] featured_image_display: $featured_image_display -->";
         		
         	} else if ( is_singular('event') && post_is_webcast_eligible( $post_id ) ) {
 				
-				$ts_info .= "<!-- is_singular('event') -->";
+				$ts_info .= "<!-- [sdgp] is_singular('event') -->";
 				
 				$webcast_status = get_webcast_status( $post_id );
 				$webcast_format = get_field('webcast_format', $post_id);
@@ -3270,7 +3270,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 					$url_ondemand = get_field('url_ondemand', $post_id);
 				}
 				
-				$ts_info .= "<!-- webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
+				$ts_info .= "<!-- [sdgp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
 				
 				// If we've got a video_id and the status is live or on demand, then don't show the image		
 				if ( ( !empty($video_id) && 
@@ -3278,7 +3278,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 					|| ( $webcast_format == "video" && ( !empty($url_ondemand) ) ) 
 				   ) { 
 					$show_image = false;
-					$replace = "<!-- show video, not image -->";
+					$ts_info = "<!-- [sdgp] show video, not image -->";
 				}
 								
 			}
@@ -3286,7 +3286,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
-            $ts_info .= "<!-- show_image is TRUE -->";
+            $ts_info .= "<!-- [sdgp] show_image is TRUE -->";
             
             $classes = "post-thumbnail sdg event-image";
             
@@ -3294,7 +3294,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             // TODO: generalize from STC to something more widely applicable
             if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
             	
-            	$ts_info .= "<!-- get image using sdg_post_thumbnail -->";
+            	$ts_info .= "<!-- [sdgp] get image using sdg_post_thumbnail -->";
             	
             	if ( is_singular('event') ) {
             		$img_size = "full";
@@ -3325,13 +3325,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             
             $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
             //$replace .= $caption;
-            $replace .= "<!-- sdg_placeholders -->";
+            $replace .= "<!-- [sdgp] sdg_placeholders -->";
             
         } else {
         	
-        	$ts_info .= "<!-- show_image is FALSE -->";
+        	$ts_info .= "<!-- [sdgp] show_image is FALSE -->";
         	        	
-            $replace .= "<br /><!-- sdg-calendar >> sdg_placeholders -->"; // If there's no featured image, add a line break to keep the spacing
+            $replace .= "<br />"; // If there's no featured image, add a line break to keep the spacing
+            $ts_info .= "<!-- [sdgp] sdg-calendar >> sdg_placeholders -->";
             
         }
         
