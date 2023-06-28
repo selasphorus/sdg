@@ -1806,7 +1806,8 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 		if ( $program_item_txt && !($program_item) ) {
 			$title_to_match = $program_item_txt;
 			$field_name = "program_item";
-			// TODO: deal w/ junk values like title_to_match == 'x'
+			// TODO: deal w/ complex cases like Psalms where
+			// e.g. program_item_txt = "22" and program_item_title_for_matching = "Psalm"...
 			$info .= ">> seeking match for ITEM placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
 			$match_result = match_placeholder( $match_args );
