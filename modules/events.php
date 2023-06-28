@@ -3320,14 +3320,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	
             }
             
-            $caption = sdg_featured_image_caption($EM_Event->ID);
-
-            if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) {
-                $classes .= " has_caption";
-            }
+            //$caption = sdg_featured_image_caption($EM_Event->ID);
+            if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) { $classes .= " has_caption"; }
             
             $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
-            $replace .= $caption."<!-- sdg_placeholders -->";
+            //$replace .= $caption;
+            $replace .= "<!-- sdg_placeholders -->";
             
         } else {
         	
