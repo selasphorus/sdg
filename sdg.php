@@ -1717,7 +1717,7 @@ function match_placeholder ( $args = [] ) {
             $sub_field_value = $match_id;
             // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)            
             $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
-            $info .= '[match_placeholder] <span class="nb">[$i] update_sub_field [$repeater_name/$field_name]: ';
+            $info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
             $info .= '</span><br />';
             
@@ -1737,7 +1737,7 @@ function match_placeholder ( $args = [] ) {
             // Update "field_name" within the $i row of "repeater_name".
             $sub_field_value = $term_id;
             $info .= "Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
-            $info .= '[match_placeholder] <span class="nb">[$i] update_sub_field [$repeater_name/$field_name]: ';
+            $info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
             $info .= '</span><br />';
             
