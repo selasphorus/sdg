@@ -145,8 +145,8 @@ function get_cpt_repertoire_content( $post_id = null ) {
 	//$ts_info .="[get_cpt_repertoire_content] post_id: $post_id<br />";
 	
     $arr_rep_info = get_rep_info( $post_id, 'display', true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
-	$rep_info = $arr_item_name['info'];
-	$ts_info .= $arr_item_name['ts_info'];
+	$rep_info = $arr_rep_info['info'];
+	$ts_info .= $arr_rep_info['ts_info'];
 						
 	if ( $rep_info ) {
         //$info .= "<h3>The Work:</h3>";
