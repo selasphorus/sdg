@@ -1754,12 +1754,6 @@ function match_placeholder ( $args = [] ) {
         
     } else {
         
-        if ( $arr_match_results['info'] != "" ) {
-            $info .= $arr_match_results['info']."<br />"; //$info .= "<!-- ".$arr_match_results['info']." -->";
-        } else {
-            $info .= '<span class="nb">'."NO match(es) found for placeholder :-(</span><br />";//$info .= "<!-- NO match(es) found for placeholder :-( -->";
-        }
-        
         // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag
         $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
     }
