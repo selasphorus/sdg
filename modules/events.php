@@ -2588,10 +2588,12 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
-						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
+						$post_info .= '<div class="program_row" style="border: 1px solid green; font-size: 0.9rem;">';
+						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );							
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
 						if ( $row_errors ) { $post_errors = true; }
+						$post_info .= '</div>';
 						$i++;				
 					}
 				} else {
