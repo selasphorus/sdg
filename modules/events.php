@@ -3327,7 +3327,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         	
         	$ts_info .= "<!-- [sdgp] show_image is FALSE -->";
         	        	
-            $replace .= "<br />"; // If there's no featured image, add a line break to keep the spacing
+            $replace = "<br />"; // If there's no featured image, add a line break to keep the spacing
             $ts_info .= "<!-- [sdgp] sdg-calendar >> sdg_placeholders -->";
             
         }
