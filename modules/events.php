@@ -474,7 +474,7 @@ function get_event_personnel( $atts = [] ) {
 			if ( is_dev_site() ) {
 			
 				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
-				$row_info .= $arr_row_info['info'];
+				$ts_info .= $arr_row_info['info'];
 				$row_errors = $arr_row_info['errors'];
 				//if ( $row_errors ) { $post_errors = true; }
 				
