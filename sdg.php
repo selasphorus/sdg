@@ -1717,7 +1717,7 @@ function match_placeholder ( $args = [] ) {
             // Update "field_name" within the $i-th row of "repeater_name"
             $sub_field_value = $match_id;
             // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)            
-            $info .= "[match_placeholder] Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
+            $info .= "[match_placeholder] update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] >> ";
             //$info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
             $info .= '<span class="nb">';
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
@@ -1738,7 +1738,7 @@ function match_placeholder ( $args = [] ) {
             
             // Update "field_name" within the $i row of "repeater_name".
             $sub_field_value = $term_id;
-            $info .= "[match_placeholder] Preparing to update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value]<br />";
+            $info .= "[match_placeholder] update_sub_field [$i/$repeater_name/$field_name for post_id: $post_id with val $sub_field_value] >> ";
             //$info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
             $info .= '<span class="nb">';
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
@@ -1860,7 +1860,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
             
             if ( count($posts) == 1 ) {
                 $arr_info['post_id'] = $posts[0]->ID;
-                $info .= "matching post found";
+                $info .= "matching post found [id: ".$posts[0]->ID."]";
             } else if ( count($posts) > 1 ) {
                 $arr_info['posts'] = $posts;
                 $info .= "multiple post matches found";
@@ -1903,7 +1903,7 @@ function find_matching_term( $title_str = null, $field_name = null, $return = 's
     $info .= '<span class="nb">';
     if ( $term = get_term_by('name', $title_str, $term_tax ) ) {
         $arr_info['term_id'] = $term->term_id;
-        $info .= "term '".$term->name."' found";
+        $info .= "term '".$term->name."' found [id: ".$term->term_id."]";
     } else {
         $info .= "No matching term found for $term_tax: '$title_str'";
     }
