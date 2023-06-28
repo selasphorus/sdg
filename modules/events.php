@@ -2895,7 +2895,7 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 				
 				// Init
-				$info .= '<div style="border-bottom: 2px solid purple; padding: 1rem; margin-bottom: 1rem;">';
+				$info .= '<div style="border: 2px solid purple; padding: 1rem; margin-bottom: 1rem;">';
 				$post_info = "";
 				$post_errors = false;
 				
