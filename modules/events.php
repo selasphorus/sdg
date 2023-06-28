@@ -434,6 +434,7 @@ function get_event_personnel( $atts = [] ) {
             $do_deletions = false; // tft
             
             // If the row is empty/x-filled and needs to be deleted, then do so
+            // WIP -- needs work
             if ( $delete_row == true ) {
                 
                 //sdg_log("divline1");
@@ -471,14 +472,12 @@ function get_event_personnel( $atts = [] ) {
             
             // Data Cleanup -- WIP
 			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
-			if ( is_dev_site() ) {
-			
-				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
-				$ts_info .= $arr_row_info['info'];
-				$row_errors = $arr_row_info['errors'];
-				//if ( $row_errors ) { $post_errors = true; }
-				
-			}
+			//if ( is_dev_site() ) {			
+			$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );								
+			$ts_info .= $arr_row_info['info'];
+			$row_errors = $arr_row_info['errors'];
+			//if ( $row_errors ) { $post_errors = true; }				
+			//}
                 
 			if ( $delete_row != true ) { // $display == 'table' && 
 				$tr_class = "program_objects";
@@ -1935,12 +1934,11 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	return $arr_info;
 }
 
-function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
+/*function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
 	$repeater_name = "personnel";
-}
+}*/
 
-/*
-function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
+/*function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
 	
 	// Init vars
 	$info = "";
