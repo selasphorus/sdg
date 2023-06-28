@@ -1902,7 +1902,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	
 		if ( $row_type_update ) {
 			$arr_field_updates["row_type"] = $row_type;
-			$info .= "do row_type_update<br />";
+			//$info .= "do row_type_update<br />";
 		}
 		
 		// TODO: figure out how not to save empty meta rows in the first place...
