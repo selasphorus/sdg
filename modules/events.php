@@ -3191,7 +3191,7 @@ add_filter('em_event_output_placeholder','sdg_placeholders',1,3); // TMP DISABLE
 function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     // TS/logging setup
-    $do_ts = true; 
+    $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
