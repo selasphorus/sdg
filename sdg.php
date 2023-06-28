@@ -1432,7 +1432,14 @@ add_action( 'admin_init', function () {
 // TODO: phase this out? It makes fine-tuning content ordering a bit tricky...
 function sdg_custom_post_content() {
 	
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
 	$info = "";
+	$ts_info = "";
 	$post_type = get_post_type( get_the_ID() );
 	
 	if ($post_type === "group") {
@@ -1442,7 +1449,9 @@ function sdg_custom_post_content() {
 	} else if ($post_type === "person") {
 		$info .= get_cpt_person_content();
 	} else if ($post_type === "repertoire") {
-		$info .= get_cpt_repertoire_content();
+		$arr_info .= get_cpt_repertoire_content();
+		$info .= $arr_info['info'];
+		$ts_info .= $arr_info['ts_info'];
 	} else if ($post_type === "edition") {
 		$info .= get_cpt_edition_content();
 	} else if ($post_type === "reading") {
@@ -1454,6 +1463,8 @@ function sdg_custom_post_content() {
 		//return false;
 		//return;
 	}
+	
+	if ( $do_ts ) { $info .= $ts_info; }
 	
 	return $info;
 }

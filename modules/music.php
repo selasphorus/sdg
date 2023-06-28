@@ -136,6 +136,11 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 
 function get_cpt_repertoire_content( $post_id = null ) {
 	
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
 	// Init vars
     $arr_info = array();
     $info = "";
@@ -1010,7 +1015,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     }
     
     if ( $is_single_work == true && $title != "") {
-        $rep_info .= "Title: ".$title."<br />";
+        $info .= "Title: ".$title."<br />";
     }
     
     $arr_excerpted_from = get_excerpted_from( $post_id );
