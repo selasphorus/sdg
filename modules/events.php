@@ -2858,6 +2858,7 @@ function event_program_cleanup( $atts = [] ) {
     
     // .....
     
+    $info = '<div class="info">'.$info.'</div>';
     return $info;
     
 }
