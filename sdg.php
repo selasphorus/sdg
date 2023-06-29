@@ -1233,7 +1233,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         	$arr_term = term_exists( $term_slug, $taxonomy );
         	if ( $arr_term ) {
         		if ( has_term( $term_slug, $taxonomy ) ) {
-					$ts_info .= "[sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made.<br />";
+					$ts_info .= "[sdg_add_post_term] post $post_id already has $taxonomy: '$term_slug'. No changes made.<br />";
 					//$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
 					//return '<div class="troubleshooting">'.$ts_info.'</div>';
 					return $ts_info;
