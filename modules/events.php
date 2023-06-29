@@ -1908,11 +1908,12 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
 		
 		$info .= "No updates required for this row.<br />";
+		$info .= "<!-- ".$row_as_txt." -->"; // tft
 		
 	} else {
 	
-		// Display the original row info only if we're making changes
-		$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+		// Display the original row info if we're making changes
+		$info .= $row_as_txt; //$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
 		
 		// Prepare to do the updates and deletions
 
