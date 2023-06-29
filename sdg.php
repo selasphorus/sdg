@@ -1758,6 +1758,7 @@ function match_placeholder ( $args = array() ) {
         }
     	$info .= count($matches)." match(es) found for placeholder!: <pre>".print_r($matches, true)."</pre><br />";
         // .... more than one item... what to do in terms of repeater row updates?
+        $info .= sdg_add_post_term( $post_id, 'multiple-placeholder-matches', 'admin_tag', true );
         
     } else {
         
