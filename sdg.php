@@ -1714,7 +1714,7 @@ function match_placeholder ( $args = array() ) {
     	//$info .= "[match_placeholder] taxonomy: find_matching_term<br />";
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
-    $info .= "[match_placeholder] ".$arr_match_results['info']."<br />";
+    $info .= "[match_placeholder] ".$arr_match_results['info']; // ."<br />"
     
     if ( isset($arr_match_results['post_id']) || isset($arr_match_results['term_id']) ) {
         

@@ -1664,7 +1664,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			$field_name = "role";
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$info .= ">> seeking match for ROLE placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true );
 			$arr_matches = match_placeholder( $match_args );
 			$matches = $arr_matches['matches'];
 			$match_info = $arr_matches['info'];
@@ -1672,7 +1672,6 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			if ( empty($matches) ) {				
 				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
 			}
-        	
 			$info .= $match_info;
 		}
 		
@@ -1682,7 +1681,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			$field_name = "person";
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$info .= ">> seeking match for PERSON placeholder value: '$title_to_match'<br />";
-			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
+			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false );
 			$arr_matches = match_placeholder( $match_args );
 			$matches = $arr_matches['matches'];
 			$match_info = $arr_matches['info'];
@@ -1690,6 +1689,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			if ( empty($matches) ) {				
 				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
 			}
+			$info .= $match_info;
 		}
 		
 		// +~+~+~+~+~+~+~+~+~+~+~
