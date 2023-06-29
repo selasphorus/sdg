@@ -1761,6 +1761,7 @@ function match_placeholder ( $args = array() ) {
         
         // No match found
         // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag?
+        $info .= "No matches found.<br />";
         $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true );
     }
     
