@@ -1668,11 +1668,11 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			$arr_matches = match_placeholder( $match_args );
 			$matches = $arr_matches['matches'];
 			$match_info = $arr_matches['info'];
+			$info .= $match_info;
 			// If no match was found, tag the post accordingly
 			if ( empty($matches) ) {				
 				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
 			}
-			$info .= $match_info;
 		}
 		
 		// If person is empty and person_txt is NOT, try to match the placeholder
@@ -1685,11 +1685,11 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			$arr_matches = match_placeholder( $match_args );
 			$matches = $arr_matches['matches'];
 			$match_info = $arr_matches['info'];
+			$info .= $match_info;
 			// If no match was found, tag the post accordingly
 			if ( empty($matches) ) {				
 				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
 			}
-			$info .= $match_info;
 		}
 		
 		// +~+~+~+~+~+~+~+~+~+~+~
