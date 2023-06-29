@@ -1586,7 +1586,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	$info .= "repeater_name: ".$repeater_name."<br />";
 	
 	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
-	$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+	//$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
 	//$exp_args = array( 'text' => $row_as_txt, 'preview_text' => "Show row..." );
 	//$info .= expandable_text( $exp_args ); // Not working yet
 	//
@@ -1909,6 +1909,9 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 		
 	} else {
 	
+		// Display the original row info only if we're making changes
+		$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+		
 		// Prepare to do the updates and deletions
 
 		if ( $row_type_update ) {
