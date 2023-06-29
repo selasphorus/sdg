@@ -1694,6 +1694,8 @@ function match_placeholder ( $args = array() ) {
     // Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	
+	$i = $index; // tmp -- TODO: solve this better
     
     //$info .= "match args: <pre>".print_r($args, true)."</pre>";
     

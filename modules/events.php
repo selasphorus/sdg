@@ -2228,6 +2228,7 @@ function event_program_cleanup( $atts = [] ) {
     $info = "";
     $ts_info = "";
     $posts = array();
+    $wp_args = array();
     
     // If an ID or IDs have been submitted, handle both personnel and program_items, whatever the submitted scope setting
     if ( !empty($ids) ) { $scope = "both"; }
@@ -2239,6 +2240,8 @@ function event_program_cleanup( $atts = [] ) {
     	$info .= "ids: ".$ids."<br />";
     	$posts_in = array_map( 'intval', birdhive_att_explode( $ids ) );
 		$field_check = "N/A";
+    } else {
+    	$posts_in = null;
     }
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
