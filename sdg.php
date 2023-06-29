@@ -1668,8 +1668,16 @@ function sdg_get_placeholder_img() {
 /*** MATCH PLACEHOLDERS ***/
 
 /*** Match placeholders to real post objects; return id (single match) or posts array (multiple matches) ***/
-function match_placeholder ( $args = [] ) {
+function match_placeholder ( $args = array() ) {
     
+    // TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $arr_info = array();
+    $matches = array();
     $info = "";
 
     $defaults = array( // the defaults will be overidden if set in $args
@@ -1682,34 +1690,24 @@ function match_placeholder ( $args = [] ) {
         'taxonomy'      => null,
         'display'      => null, // Do we really need this?
     );
-    $args = array_merge($defaults, $args);
-    //$info .= $args['value1'] . ', ' . $args['value2'];
     
-    $i = $args['index'];
-    $post_id = $args['post_id'];
-    $item_title = $args['item_title'];
-    $item_label = $args['item_label'];
-    $repeater_name = $args['repeater_name'];
-    $field_name = $args['field_name'];
-    $taxonomy = $args['taxonomy'];
-    $display = $args['display']; // obsolete?
+    // Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
     
-    if ( $display == 'dev' ) {
-        //$info .= "match args: <pre>".print_r($args, true)."</pre>";
-    } else {
-        //$info .= "<!-- match args: ".print_r($args, true)." -->";
-    }
+    //$info .= "match args: <pre>".print_r($args, true)."</pre>";
     
-    // TODO: deal specially w/ junk placeholders like 'x'
+    // TODO: deal specially w/ junk placeholders like 'x'? Or just delete these directly via sql queries?
     
-    // Abort if no post_id. TODO: determine additional conditions for which to abort.
+    // Abort if no post_id. TODO: determine additional conditions for which to abort? e.g....?
     if ( empty($post_id) ) { 
-        $info .= "[match_placeholder] post_id is empty -> match process aborted<br />";//$info .= "<!-- post_id is empty -> match process aborted -->";
-        return $info;
-        //return false; 
+        $info .= "[match_placeholder] post_id is empty -> match process aborted<br />";
+        $arr_info['matches'] = $matches; // empty array
+		$arr_info['info'] = $info;
+		return $arr_info;
     }
     
-    if ( !($taxonomy) ) { //if ( $taxonomy != 'true' ) {
+    if ( !($taxonomy) ) {
     	//$info .= "[match_placeholder] find_matching_post<br />";
         $arr_match_results = find_matching_post( $item_title, $item_label, $field_name, 'single' );
     } else {
@@ -1717,12 +1715,23 @@ function match_placeholder ( $args = [] ) {
         $arr_match_results = find_matching_term( $item_title, $field_name, 'single' );
     }
     $info .= "[match_placeholder] ".$arr_match_results['info']."<br />";
-    // WIP 06/27/23
-    if ( isset($arr_match_results['post_id']) ) {
+    
+    if ( isset($arr_match_results['post_id']) || isset($arr_match_results['term_id']) ) {
         
-        $match_id = $arr_match_results['post_id'];
+        // If a single match was found, update the repeater row accordingly
+        
+        if ( isset($arr_match_results['post_id']) ) {
+			$match_id = $arr_match_results['post_id']; // A single matching POST was found
+        } else if ( isset($arr_match_results['term_id']) ) {        	
+        	$match_id = $arr_match_results['term_id']; // A single matching TERM was found
+        }
+        
+        $matches[] = $match_id; // populate the field for return -- is this really needed? maybe not...
+        
         //$info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: post_id ['.$match_id.']<br />';
         //$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
+        
+        // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
         
         if ( $repeater_name && $match_id ) {
         
@@ -1737,40 +1746,27 @@ function match_placeholder ( $args = [] ) {
             
         }
         
-    } else if ( isset($arr_match_results['term_id']) ) {
-        
-        $term_id = $arr_match_results['term_id'];
-        //$info .= '<span class="nb">'."match found for placeholder!: term_id [".$term_id."]".'</span><br />';
-        //$info .= "match found for placeholder!: term_id [".$term_id."]<br />";
-        //$info .= "<!-- match found for placeholder!: term_id [".$term_id."] -->";
-        
-        // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
-        // WIP
-        if ( $repeater_name && $term_id ) {
-            
-            // Update "field_name" within the $i row of "repeater_name".
-            $sub_field_value = $term_id;
-            $info .= "[match_placeholder] update_sub_field ((row $i/$repeater_name/$field_name)) for post_id: $post_id with val: $sub_field_value >> ";
-            //$info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
-            $info .= '<span class="nb">';
-            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
-            $info .= '</span><br />';
-            
-        }
-        
-    } else if ( isset($arr_match_results['posts']) ) {
+    } else if ( isset($arr_match_results['posts']) || isset($arr_match_results['terms']) ) {
     
-    	$info .= count($arr_match_results['posts'])." match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre><br />";
-    	//$info .= "<!-- match(es) found for placeholder!: <pre>".print_r($arr_match_results['posts'], true)."</pre> -->";
-        // .... more than one item... what to do?
+    	// Multiple matches found...
+    	if ( isset($arr_match_results['posts']) ) {
+			$matches = $arr_match_results['posts']; // Multiple matching POSTs were found
+        } else if ( isset($arr_match_results['terms']) ) {        	
+        	$matches = $arr_match_results['terms']; // Multiple matching TERMs were found -- at the moment this is not actually possible given the way the find_matching_term function is written, but this is subject to change
+        }
+    	$info .= count($matches)." match(es) found for placeholder!: <pre>".print_r($matches, true)."</pre><br />";
+        // .... more than one item... what to do in terms of repeater row updates?
         
     } else {
         
-        // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag
-        $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
+        // No match found
+        // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag?
+        $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true );
     }
     
-    return $info;
+    $arr_info['matches'] = $matches;
+    $arr_info['info'] = $info;
+    return $arr_info;
     
 }
 
@@ -1790,9 +1786,9 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     $args = array(
 		'post_type' => $arr_post_types,
 		'post_status' => 'publish',
-        //'posts_per_page' => $num_posts,
-        //'orderby'	=> $orderby,
-        //'order'	=> $order,
+        'posts_per_page' => -1,
+        'orderby'	=> 'ID',
+        'order'	=> 'ASC',
 	);
     
     // If we're NOT looking for repertoire, try matching the sanitized title_str to an existing post slug
@@ -1810,7 +1806,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
             array(
                 //'relation' => 'OR',
                 array(
-                    'key'   => "title_for_matching",
+                    'key'   => "title_for_matching", // is this the only option? what about matching post_title? etc. Also TODO: check to see if the title_for_matching is correctly populated for all posts...
                     'value' => $title_for_matching,
                 ),
                 /*array(
@@ -1824,7 +1820,8 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
 	$arr_posts = new WP_Query( $args );
     $posts = $arr_posts->posts;
     
-    if ( !$posts && $field_name == 'program_item' && $label_str !== 'sermon' ) {
+    // WIP -- things to try if no matches are found with first query
+    if ( !$posts && $field_name == 'program_item' && $label_str !== 'sermon' ) { // also if field_name == "person"?
         
         //$info .= "query args: ".print_r($args, true)."<br />";
         //$info .= "<!-- query args: ".print_r($args, true)." -->";

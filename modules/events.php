@@ -576,7 +576,7 @@ function get_personnel_role ( $args = array() ) {
 	$arr_info = array();
 	$ts_info = "";
 	$person_role = "";
-    $placeholder_label = false;
+    //$placeholder_label = false;
 	
 	//$info .= "<!-- get_personnel_role -->"; // tft
     
@@ -586,7 +586,6 @@ function get_personnel_role ( $args = array() ) {
 		'post_id' 		=> null,
 		'row'			=> null,
 		'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
-		'run_updates'   => false,
 		'display'    	=> "",
 	);
 	
@@ -606,25 +605,24 @@ function get_personnel_role ( $args = array() ) {
 		if ( isset($row['role_old']) && $row['role_old'] != "" ) {
 			$ts_info .= "role is empty -> use placeholder role_old<br />";
 			$person_role = get_the_title($row['role_old'][0]);
-			$placeholder_label = true;
+			//$placeholder_label = true;
 		} else if ( isset($row['role_txt']) && $row['role_txt'] != "" && $row['role_txt'] != "x" ) {                    
 			$ts_info .= "role is empty -> use placeholder role_txt<br />";
 			$person_role = $row['role_txt'];
-			$placeholder_label = true;                    
+			//$placeholder_label = true;                    
 		}
 		
 		// Fill in Placeholder -- see if a matching record can be found to fill in a proper person_role
-		if ( $placeholder_label == true && $run_updates == true  ) { 
+		// TMP(?) disabled to avoid redundancy with event_program_row_cleanup function
+		/*if ( $placeholder_label == true ) { 
 			$title_to_match = $person_role;
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => true, 'display' => $display );
 			$match_result = match_placeholder( $match_args );
 			$ts_info .= $match_result;
-		} else {
-            $ts_info .= "NO match_placeholder for personnel_role<br />";
-			$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
-		}
+			//$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true );
+		}*/
 		
 	}
 	
@@ -739,21 +737,19 @@ function get_personnel_person ( $args = array() ) {
 			if ( isset($row['person_txt']) && $row['person_txt'] != "" && $row['person_txt'] != "x" ) { 
 				
 				$ts_info .= "person is empty -> use placeholder person_txt";
-				$placeholder_item = true;
 				$person_name = $row['person_txt'];
 				
 				// Fill in Placeholder -- see if a matching record can be found to fill in a proper person_name
-				if ( $run_updates == true ) {
+				// TMP(?) disabled to avoid redundancy with event_program_row_cleanup function
+				/*if ( $run_updates == true ) {
 					$title_to_match = $person_name;
 					// TODO: deal w/ junk values like title_to_match == 'x'
 					$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 					$match_args = array('index' => $index, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $person_role, 'repeater_name' => 'personnel', 'field_name' => 'person', 'taxonomy' => false, 'display' => $display );
 					$match_result = match_placeholder( $match_args );
 					$ts_info .= $match_result;
-				} else {
-                    $ts_info .= "NO match_placeholder for personnel_person<br />";
-					$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
-				}
+					//$ts_info .= sdg_add_post_term( $post_id, 'program-personnel-placeholders', 'admin_tag', true );
+				}*/
 				
 			}
 		}
@@ -1577,16 +1573,17 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	// Init vars
 	$arr_info = array();
 	$info = "";
+	
+	// With the introduction of the `row_type` field to the ACF repeater fields `personnel` and `program_items`, many posts need to be updated retroactively and several other fields (e.g. is_header) became obsolete and need to be phased out.
 	$row_type_update = false;
-	$placeholders = false;
 	$arr_field_updates = array();
 	$arr_field_deletions = array();
+	$placeholders = false;
 	// TODO: better error handling
 	$errors = false;
 	
 	$info .= "post_id: ".$post_id."/row [$i]<br />";	
 	$info .= "repeater_name: ".$repeater_name."<br />";
-	//$info .= "<br />";
 	
 	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
 	$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
@@ -1606,13 +1603,9 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	}
 	
 	// Personnel
-	if ( $repeater_name == "personnel" ) {
-	
-		//$arr_obsolete_fields = array( "role_old" );
-		//$arr_placeholder_fields = array( "role" => "role_txt", "person" => "person_txt" );
-		// WIP
+	// +~+~+~+~+~+~+~+~+~+~+~
+	if ( $repeater_name == "personnel" ) {		
 		
-		// +~+~+~+~+~+~+~+~+~+~+~
 		// Handle role and person/group, if any
 		
 		// Role
@@ -1672,8 +1665,15 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$info .= ">> seeking match for ROLE placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true ); // , 'display' => $display
-			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$arr_matches = match_placeholder( $match_args );
+			$matches = $arr_matches['matches'];
+			$match_info = $arr_matches['info'];
+			// If no match was found, tag the post accordingly
+			if ( empty($matches) ) {				
+				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
+			}
+        	
+			$info .= $match_info;
 		}
 		
 		// If person is empty and person_txt is NOT, try to match the placeholder
@@ -1683,8 +1683,13 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$info .= ">> seeking match for PERSON placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
-			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$arr_matches = match_placeholder( $match_args );
+			$matches = $arr_matches['matches'];
+			$match_info = $arr_matches['info'];
+			// If no match was found, tag the post accordingly
+			if ( empty($matches) ) {				
+				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
+			}
 		}
 		
 		// +~+~+~+~+~+~+~+~+~+~+~
@@ -1794,8 +1799,13 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			// TODO: deal w/ junk values like title_to_match == 'x'
 			$info .= ">> seeking match for LABEL placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => true ); // , 'display' => $display
-			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$arr_matches = match_placeholder( $match_args );
+			$matches = $arr_matches['matches'];
+			$match_info = $arr_matches['info'];
+			// If no match was found, tag the post accordingly
+			if ( empty($matches) ) {				
+				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
+			}
 		}
 		
 		// If program_item is empty and program_item_txt is NOT, try to match the placeholder
@@ -1806,8 +1816,13 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 			// e.g. program_item_txt = "22" and program_item_title_for_matching = "Psalm"...
 			$info .= ">> seeking match for ITEM placeholder value: '$title_to_match'<br />";
 			$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => $repeater_name, 'field_name' => $field_name, 'taxonomy' => false ); // , 'display' => $display
-			$match_result = match_placeholder( $match_args );
-			$info .= $match_result;
+			$arr_matches = match_placeholder( $match_args );
+			$matches = $arr_matches['matches'];
+			$match_info = $arr_matches['info'];
+			// If no match was found, tag the post accordingly
+			if ( empty($matches) ) {				
+				$info .= sdg_add_post_term( $post_id, 'unmatched-placeholder-only', 'admin_tag', true );
+			}
 		}
 		
 		// +~+~+~+~+~+~+~+~+~+~+~
@@ -1895,7 +1910,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	} else {
 	
 		// Prepare to do the updates and deletions
-	
+
 		if ( $row_type_update ) {
 			$arr_field_updates["row_type"] = $row_type;
 			//$info .= "do row_type_update<br />";
@@ -1931,190 +1946,9 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	return $arr_info;
 }
 
-/*function event_personnel_row_cleanup ( $post_id, $i = null, $row = null ) {
-	$repeater_name = "personnel";
-}*/
-
-/*function event_program_items_row_cleanup ( $post_id, $i = null, $row = null ) {
-	
-	// Init vars
-	$info = "";
-	$repeater_name = "program_items";
-	$row_type_update = false;
-	$arr_field_updates = array();
-	$arr_field_deletions = array();
-	
-	$info .= "post_id: ".$post_id."<br />";
-	$info .= "repeater_name: ".$repeater_name."<br />";
-	$info .= "row [$i]: <pre>".print_r($row, true)."</pre>";
-						
-	// Is a row_type set?
-	if ( isset($row['row_type']) && $row['row_type'] != "" ) {	
-		$row_type = $row['row_type'];
-		$info .= "row_type: ".$row_type."<br />";		
-	} else {	
-		$row_type = null;
-		$info .= "row_type not set<br />";		
-	}
-	
-	// Check for is_header value
-	if ( isset($row['is_header']) && $row['is_header'] == 1 ) {		
-		// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record	
-		if ( empty($row_type) || $row_type == "default" ) {
-			$info .= "Field is_header is set to TRUE >> Set row_type to 'header'<br />";
-			$row_type = "header";
-			$row_type_update = true;
-			$arr_field_deletions[] = "is_header";
-		}
-	} 
-	
-	// Set row type based on whether item label and/or title are set to display
-	// show_item_label?
-	if ( isset($row['show_item_label']) && $row['show_item_label'] == 0 ) { 
-		$show_item_label = false;
-	} else {
-		$show_item_label = true;
-	}
-	// show_item_title?
-	if ( isset($row['show_item_title']) && $row['show_item_title'] == 0 ) { 
-		$show_item_title = false;
-	} else {
-		$show_item_title = true;
-	}
-	
-	// Which combo of fields? Both is the default.
-	// TODO: Check to see if the field settings are contradictory -- e.g. row_type == "default" but show_item_title is set to false
-	if ( $show_item_label && $show_item_title && $row_type !== "default" ) {
-		// If the row_type isn't already set to "default", prep for the update
-		$info .= "Fields show_item_label AND show_item_title are set to TRUE >> Set row_type to 'default'<br />";
-		$row_type = "default";
-		$row_type_update = true;
-	} else if ( $show_item_label && !$show_item_title && $row_type !== "label_only" ) {
-		// If the row_type isn't already set to "label_only", prep for the update
-		$info .= "Field show_item_label == true / show_item_title == false >> Set row_type to 'label_only'<br />";
-		$row_type = "label_only";
-		$row_type_update = true;
-	} else if ( $show_item_title && !$show_item_label && $row_type !== "title_only" ) {
-		// If the row_type isn't already set to "title_only", prep for the update
-		$info .= "Field show_item_title == true / show_item_label == false >> Set row_type to 'title_only'<br />";
-		$row_type = "title_only";
-		$row_type_update = true;
-	}
-	// Now that we've dealt with these obsolete field values, we can delete/clear them
-	$arr_field_deletions[] = "show_item_title";
-	$arr_field_deletions[] = "show_item_label";
-	
-	if ( $row_type_update ) {
-		$arr_field_updates[] = array( "row_type" => $row_type );
-	}
-	
-	// Placeholders? WIP
-	$placeholders = false;
-	
-	// Item label
-	if ( isset($row['item_label']) && $row['item_label'] != "" ) { 
-		$item_label = $row['item_label'];
-		$info .= "item_label: $item_label<br />";
-	} else {
-		$item_label = null;
-	}
-	if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" ) {
-		$item_label_txt = $row['item_label_txt'];
-		$info .= "Placeholder item_label_txt: $item_label_txt<br />";
-		$placeholders = true;
-	} else {
-		$item_label_txt = null;
-	}
-	// Program item
-	if ( isset($row['program_item']) && $row['program_item'] != "" ) { 
-		$program_item = $row['program_item'];
-		$info .= "program_item: $program_item<br />";
-	} else {
-		$program_item = null;
-	}
-	if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" ) { 
-		$program_item_txt = $row['program_item_txt'];
-		$placeholders = true;
-	} else {
-		$program_item_txt = null;
-	}
-	
-	//
-	//
-	
-	// Do the updates
-	foreach ( $arr_field_updates as $field_name => $field_value ) {
-		if ( update_sub_field( array($repeater_name, $i, $field_name), $field_value, $post_id ) ) {
-			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
-		} else {
-			$result .= "<!-- [$i] update_sub_field [$repeater_name/$field_name]: FAILED! -->";
-		}
-	}	
-	
-	// Do the deletions
-	foreach ( $arr_field_deletions as $field_name ) {
-		if ( delete_sub_field( array($repeater_name, $i, $field_name), $post_id ) ) {
-			$result .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: SUCCESS! -->";
-		} else {
-			$result .= "<!-- [$i] delete_sub_field [$repeater_name/$field_name]: FAILED! -->";
-		}
-	}
-	
-	// If values are saved for both program_item AND program_item_txt, then clear out the placeholder value -- ???
-	// tbd
-	
-	// If program_item is empty and program_item_txt is NOT, try to match the placeholder
-	if ( $program_item_txt && !$program_item ) {
-		$title_to_match = $program_item_txt;
-		$info .= ">> seeking match for placeholder value: '$title_to_match'";
-		///$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'personnel', 'field_name' => 'role', 'taxonomy' => true, 'display' => $display );
-		///$match_result = match_placeholder( $match_args );
-		///$info .= $match_result;
-	} 
-		
-	return $info;
-	
-}
-*/
-
-/* ***
- * With the introduction of the `row_type` field to the ACF repeater fields `personnel` and `program_items`,
- * several other fields became obsolete and need to be phased out.
- * The purpose of this function is to update the `row_type` field as needed and delete the obsolete metadata
- * 
- */
-function update_row_type ( $row = null ) { //$row_category = null, 
-
-	// Init vars
-	$run_updates = false;
-	
-	// Get row_type
-	if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; } //else { $row_type = "default"; }
-    $row_info .= "<!-- row_type: ".$row['row_type']." -->"; // tft
-	
-	// Header row?
-	// if is_header == 1 && row_type is empty/DN exist for the post, then update row_type to "header" and remove is_header meta record
-	// Is this a header row? (Deprecated field)
-	if ( isset($row['is_header']) && $row['is_header'] == 1 ) { 
-		if ( $row_type == null || $row_type == "default" ) { //if ( $row_type != "header" ) {
-			$row_type = "header"; // TODO: update the row_type in the DB
-			$run_updates = true;
-		}
-	}
-	
-	// if show_item_label == 0 && show_item_title == 1 && row_type is empty/DN exist for the post, then update row_type to "title_only" and remove is_header meta record
-	
-	// if show_item_label == 1 && show_item_title == 0 && row_type is empty/DN exist for the post, then update row_type to "label_only" and remove is_header meta record
-	
-	// Run the updates
-	// ...
-	
-	//return something...
-	
-}
 
 // WIP
-function match_placeholders( $row_category = null, $row = null ) { // match_program_placeholders
+function match_program_placeholders( $row_category = null, $row = null ) { // match_program_placeholders
     
     // (1) Personnel: person_roles
     // (2) Personnel: persons
