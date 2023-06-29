@@ -1746,6 +1746,8 @@ function match_placeholder ( $args = array() ) {
             if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
             $info .= '</span><br />';
             
+            $info .= sdg_add_post_term( $post_id, 'placeholder-matched', 'admin_tag', true );
+            
         }
         
     } else if ( isset($arr_match_results['posts']) || isset($arr_match_results['terms']) ) {
