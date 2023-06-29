@@ -2434,7 +2434,7 @@ function event_program_cleanup( $atts = [] ) {
 				
 				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
-				if ( !$post_errors ) {
+				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				} else {
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
@@ -2761,7 +2761,7 @@ function event_program_cleanup( $atts = [] ) {
 				
 				// If there were no errors, add an admin_tag to indicate that this row has been cleaned up
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
-				if ( !$post_errors ) {
+				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
 				} else {
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
