@@ -1885,7 +1885,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
         
     }
     
-    $info = '<span class="nb">'.$info.'</span><br />';
+    $info = '[find_matching_post] <span class="nb">'.$info.'</span><br />';
     $arr_info['info'] = $info;
     
     return $arr_info;
@@ -1910,15 +1910,14 @@ function find_matching_term( $title_str = null, $field_name = null, $return = 's
     }
     
     // Get term by name in custom taxonomy: $term_tax.
-    $info .= '<span class="nb">';
     if ( $term = get_term_by('name', $title_str, $term_tax ) ) {
         $arr_info['term_id'] = $term->term_id;
         $info .= "term '".$term->name."' found [id: ".$term->term_id."]";
     } else {
         $info .= "No matching term found for $term_tax: '$title_str'";
     }
-    $info .= '</span>';
     
+    $info = '[find_matching_term] <span class="nb">'.$info.'</span><br />';
     $arr_info['info'] = $info;
     
     return $arr_info;
