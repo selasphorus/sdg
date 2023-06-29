@@ -2277,13 +2277,14 @@ function event_program_cleanup( $atts = [] ) {
 		
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
+			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
 			
 		}
 		
 		if ( empty($posts) ) {
 		
 			//$ts_info .= "No matching posts found in initial quick query for personnel.<br />";
-			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 		
 			// No posts? Try a more expensive query...
@@ -2380,6 +2381,7 @@ function event_program_cleanup( $atts = [] ) {
 			
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
+			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
 		
 		}
 		
@@ -2392,7 +2394,7 @@ function event_program_cleanup( $atts = [] ) {
         	//
         	//$ts_info_personnel .= "personnel TS:<br />";
 			//$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
-			$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="troubleshooting">'.$ts_info_personnel.'</div>';
 			//
@@ -2575,6 +2577,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 				$result = new WP_Query( $wp_args );
 				$posts = $result->posts;
+				$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
 			
 			}
 		
@@ -2701,6 +2704,7 @@ function event_program_cleanup( $atts = [] ) {
 			
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
+			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
 			
 		}
 		
@@ -2714,7 +2718,7 @@ function event_program_cleanup( $atts = [] ) {
 			//
         	//$ts_info_program_items .= "program_items TS:<br />";
 			//$ts_info_program_items .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
-			$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+			//$ts_info_program_items .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_program_items .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			if ( $scope == "program_items" ) {
 				$info .= '<div class="troubleshooting">'.$ts_info_program_items.'</div>';
@@ -2839,6 +2843,11 @@ function event_program_cleanup( $atts = [] ) {
 				$info .= "No matching posts found.<br />";
 				$info .= '<div class="troubleshooting">';
 				$info .= $ts_info;
+				/*
+				$info .= "field_check: ".$field_check."<br />";
+				$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+				$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+				*/
 				$info .= '</div>';
 			}
 		
