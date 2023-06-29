@@ -23,8 +23,9 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 	$repertoire_events = get_field('repertoire_events', $rep_id, false);
 	
 	if ( !empty($repertoire_events) ) {
-		$info .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre>";								
-		if ( !is_array($repertoire_events) ) { $repertoire_events = explode( ", ",$repertoire_events ); } // If it's not an array already, make it one		
+		//$info .= "This rep item currently has the following repertoire_events: <pre>".print_r($repertoire_events,true)."</pre>";
+		if ( !is_array($repertoire_events) ) { $repertoire_events = explode( ", ",$repertoire_events ); } // If it's not an array already, make it one
+		$info .= "This rep item currently has [".count($repertoire_events)."] repertoire_events<br />";	
 	} else {
 		$info .= "This rep item currently has no repertoire_events.<br />";
 		$repertoire_events = array(); // No repertoire_events set yet, so prep an empty array
