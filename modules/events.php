@@ -2402,7 +2402,7 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 			
 				// Init
-				$info .= '<div style="border: 2px solid purple; padding: 1rem; margin-bottom: 1rem;">';
+				$info .= '<div class="post">';
 				$post_info = "";
 				$post_errors = false;
 				
@@ -2729,7 +2729,7 @@ function event_program_cleanup( $atts = [] ) {
 			foreach ( $posts AS $post_id ) {
 				
 				// Init
-				$info .= '<div style="border: 2px solid purple; padding: 1rem; margin-bottom: 1rem;">';
+				$info .= '<div class="post">';
 				$post_info = "";
 				$post_errors = false;
 				
