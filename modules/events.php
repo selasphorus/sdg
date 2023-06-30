@@ -2424,7 +2424,7 @@ function event_program_cleanup( $atts = [] ) {
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );							
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
-						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } else { $post_info .= "( no row_errors )<br />"; }
+						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } //else { $post_info .= "( no row_errors )<br />"; }
 						$post_info .= '</div>';
 						$i++;				
 					}
@@ -2437,11 +2437,11 @@ function event_program_cleanup( $atts = [] ) {
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-					$post_info .= "( no post_errors )<br />";
+					//$post_info .= "( no post_errors )<br />";
 				} else {
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
 					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-					$post_info .= "( post_errors! )<br />";
+					//$post_info .= "( post_errors! )<br />";
 				}
 		
 				$info .= $post_info;
@@ -2753,7 +2753,7 @@ function event_program_cleanup( $atts = [] ) {
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
-						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } else { $post_info .= "( no row_errors )<br />"; }
+						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } //else { $post_info .= "( no row_errors )<br />"; }
 						$post_info .= '</div>';					
 						$i++;				
 					}
@@ -2767,11 +2767,11 @@ function event_program_cleanup( $atts = [] ) {
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-					$post_info .= "( no post_errors )<br />";
+					//$post_info .= "( no post_errors )<br />";
 				} else {
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
 					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
-					$post_info .= "( post_errors! )<br />";
+					//$post_info .= "( post_errors! )<br />";
 				}
 				
 				/*
