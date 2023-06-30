@@ -2437,10 +2437,11 @@ function event_program_cleanup( $atts = [] ) {
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+					$post_info .= "( no post_errors )<br />";
 				} else {
-					$post_info .= "( post_errors! )<br />";
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
 					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+					$post_info .= "( post_errors! )<br />";
 				}
 		
 				$info .= $post_info;
@@ -2766,10 +2767,11 @@ function event_program_cleanup( $atts = [] ) {
 				// TODO: figure out how to handle subsequent rounds of cleanup, if/when needed
 				if ( $post_errors == false) { //if ( !$post_errors ) {
 					$post_info .= sdg_add_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+					$post_info .= "( no post_errors )<br />";
 				} else {
-					$post_info .= "( post_errors! )<br />";
 					// Since there were errors that must be resolved, remove the program-rows-cleaned tag, if it was already added
 					$post_info .= sdg_remove_post_term( $post_id, 'program-rows-cleaned', 'admin_tag', true );
+					$post_info .= "( post_errors! )<br />";
 				}
 				
 				/*
