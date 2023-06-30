@@ -53,7 +53,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'admin_note' ),
+			'rewrite'            => array( 'slug' => 'notes' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -139,7 +139,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=admin_note',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'data_table' ),
+			'rewrite'            => array( 'slug' => 'data-tables' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -187,7 +187,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'person' ),
+			'rewrite'            => array( 'slug' => 'people' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -235,7 +235,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'group' ),
+			'rewrite'            => array( 'slug' => 'groups' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -279,7 +279,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'ensemble' ),
+			'rewrite'            => array( 'slug' => 'ensembles' ),
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -323,7 +323,7 @@ if ( in_array('organizations', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'organization' ),
+			'rewrite'            => array( 'slug' => 'organizations' ),
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -370,7 +370,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'project' ),
+			'rewrite'            => array( 'slug' => 'projects' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -412,7 +412,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'recording' ),
+			'rewrite'            => array( 'slug' => 'recordings' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -459,7 +459,7 @@ if ( in_array('press', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'press' ),
+			'rewrite'            => array( 'slug' => 'press' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -505,7 +505,7 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'newsletter' ),
+			'rewrite'            => array( 'slug' => 'newsletters' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -553,7 +553,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'repertoire' ),
+			'rewrite'            => array( 'slug' => 'repertoire' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -595,7 +595,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=repertoire',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'edition' ),
+			'rewrite'            => array( 'slug' => 'editions' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -637,7 +637,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=publication',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'publisher' ),
+			'rewrite'            => array( 'slug' => 'publishers' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -679,7 +679,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'publication' ),
+			'rewrite'            => array( 'slug' => 'publications' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -721,7 +721,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'music_list' ),
+			'rewrite'            => array( 'slug' => 'music-lists' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -769,7 +769,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'bible_book' ),
+			'rewrite'            => array( 'slug' => 'bible-books' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -811,7 +811,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'reading' ),
+			'rewrite'            => array( 'slug' => 'readings' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -853,7 +853,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'lectionary' ),
+			'rewrite'            => array( 'slug' => 'lectionary' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -895,7 +895,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'liturgical_date' ),
+			'rewrite'            => array( 'slug' => 'liturgical-dates' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -940,7 +940,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'rewrite'            => array( 'slug' => 'liturgical_date_calc' ),
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
-			'has_archive'        => true,
+			'has_archive'        => false,
 			'hierarchical'       => false,
 			//'menu_icon'          => 'dashicons-calendar-alt',
 			'menu_position'      => null,
@@ -979,7 +979,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'collect' ),
+			'rewrite'            => array( 'slug' => 'collects' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1021,10 +1021,10 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=lectionary',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'psalms_of_the_day' ),
+			'rewrite'            => array( 'slug' => 'psalms_of_the_day' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
-			'has_archive'        => true,
+			'has_archive'        => false,
 			'hierarchical'       => false,
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
@@ -1069,7 +1069,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'sermon' ),
+			'rewrite'            => array( 'slug' => 'sermons' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => 'sermon-archive',
@@ -1112,7 +1112,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=sermon',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'sermon_series' ),
+			'rewrite'            => array( 'slug' => 'sermon-series' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1160,7 +1160,7 @@ if ( in_array('events', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=event',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'event_series' ),
+			'rewrite'            => array( 'slug' => 'event-series' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1209,7 +1209,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'organ' ),
+			'rewrite'            => array( 'slug' => 'organs' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1251,7 +1251,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'builder' ),
+			'rewrite'            => array( 'slug' => 'builders' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1293,7 +1293,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'division' ),
+			'rewrite'            => array( 'slug' => 'divisions' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1335,7 +1335,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'manual' ),
+			'rewrite'            => array( 'slug' => 'manuals' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1377,7 +1377,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=organ',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'stop' ),
+			'rewrite'            => array( 'slug' => 'stops' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1425,7 +1425,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'venue' ),
+			'rewrite'            => array( 'slug' => 'venues' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1467,7 +1467,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => 'edit.php?post_type=venue',
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'address' ),
+			'rewrite'            => array( 'slug' => 'addresses' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1515,7 +1515,7 @@ if ( in_array('sources', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'source' ),
+			'rewrite'            => array( 'slug' => 'sources' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1563,7 +1563,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'link' ),
+			'rewrite'            => array( 'slug' => 'links' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1611,7 +1611,7 @@ if ( in_array('resources', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'resource' ),
+			'rewrite'            => array( 'slug' => 'resources' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1664,7 +1664,7 @@ if ( in_array('logbook', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'log_entry' ),
+			'rewrite'            => array( 'slug' => 'logbook' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
@@ -1711,7 +1711,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
 			'show_ui'            => true,
 			'show_in_menu'       => true,
 			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'thing' ),
+			'rewrite'            => array( 'slug' => 'things' ), // permalink structure slug
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
