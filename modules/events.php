@@ -1943,7 +1943,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 		
 	}
 	
-	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br /><br />";
+	$info .= "+~+~+~+~+~+~+~+~+~+~+~<br />";
 	
 	$arr_info['info'] = $info;
 	$arr_info['errors'] = $errors;
