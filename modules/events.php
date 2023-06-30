@@ -2419,6 +2419,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
+						$row_errors = false;
 						$post_info .= '<div class="program_row" style="border: 1px solid green; padding: 1rem; font-size: 0.9rem;">';
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );							
 						$post_info .= $arr_row_info['info'];
@@ -2745,6 +2746,7 @@ function event_program_cleanup( $atts = [] ) {
 				if ( count($rows) > 0 ) {
 					$i = 0;
 					foreach ( $rows as $row ) {
+						$row_errors = false;
 						$post_info .= '<div class="program_row" style="border: 1px solid green; padding: 1rem; font-size: 0.9rem;">';				
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
 						$post_info .= $arr_row_info['info'];
