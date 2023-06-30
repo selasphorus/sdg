@@ -2424,7 +2424,7 @@ function event_program_cleanup( $atts = [] ) {
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "personnel" );							
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
-						if ( $row_errors ) { $post_errors = true; }
+						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; }
 						$post_info .= '</div>';
 						$i++;				
 					}
@@ -2751,7 +2751,7 @@ function event_program_cleanup( $atts = [] ) {
 						$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
-						if ( $row_errors ) { $post_errors = true; }	
+						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; }	
 						$post_info .= '</div>';					
 						$i++;				
 					}
