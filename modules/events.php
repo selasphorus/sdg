@@ -3298,30 +3298,23 @@ function sdg_custom_conditional_placeholders($show, $condition, $full_match, $EM
 add_filter('em_category_output_placeholder','cat_em_placeholder_mod',1,3); // may cause issues w/ latest version of EM (6.x)
 function cat_em_placeholder_mod($replace, $EM_Category, $result){
 	
-	 if ( $result == '#_CATEGORYEVENTS') {
+	if ( $result == '#_CATEGORYEVENTS') {
     
     	//$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
     	
     	if ( $EM_Category->slug == 'webcasts' ) {
     		$replace = "This is the webcasts category...";
+    		$replace .= '<h2 class="em_events">Up Next</h2>';
+    		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENT").'</div>';
+    		$replace .= '<h2 class="em_events">Past Events</h2>';
+    		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYPASTEVENTS").'</div>';
+    		//$EM_Category->output("#_CATEGORYLINK");
+    		//$replace['#_CATEGORYEVENTS'] = $next_event ? $next_event->output('#_CATEGORYNEXTEVENT') : '';
     	} else {
     		$replace = "This is NOT the webcasts category... It is the '".$EM_Category->slug."' category.";
-    	}
-    	#_CATEGORYEVENTS
-		/*
-		for everything except webcasts:
-		--------
-		<h2 class="em_events">Upcoming Events</h2>
-		<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
-
-		for webcasts:
-		--------
-		<h2 class="em_events">Up Next</h2>
-		<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
-
-		<h2 class="em_events">Past Events</h2>
-		<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
-		*/
+    		$replace .= '<h2 class="em_events">Upcoming Events</h2>';
+    		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENTS").'</div>';
+    	}		
     	
     }
     
