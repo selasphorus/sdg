@@ -3293,14 +3293,11 @@ function sdg_custom_conditional_placeholders($show, $condition, $full_match, $EM
     return $show;
 }*/
 
-// Set order of display to reverse chronological for event category archives
-// https://wordpress.org/support/topic/set-event-ordering-for-_categorypastevents-placeholder/
+// Custom category placeholder(s)
 add_filter('em_category_output_placeholder','cat_em_placeholder_mod',1,3); // may cause issues w/ latest version of EM (6.x)
 function cat_em_placeholder_mod($replace, $EM_Category, $result){
 	
 	if ( $result == '#_CATEGORYEVENTS') {
-    
-    	//$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
     	
     	if ( $EM_Category->slug == 'webcasts' ) {
     		//$replace = "This is the webcasts category...";
@@ -3316,6 +3313,8 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
     	
     }
     
+    // Set order of display to reverse chronological for event category archives
+	// https://wordpress.org/support/topic/set-event-ordering-for-_categorypastevents-placeholder/
 	/*if ( $result == '#_CATEGORYPASTEVENTS' || $result == '#_CATEGORYNEXTEVENTS' ) {
         $args['tag'] = "-unlisted"; // exclude unlisted
         $args['format'] = get_option('dbem_category_event_list_item_format');
