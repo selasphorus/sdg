@@ -3303,15 +3303,13 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
     	//$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
     	
     	if ( $EM_Category->slug == 'webcasts' ) {
-    		$replace = "This is the webcasts category...";
+    		//$replace = "This is the webcasts category...";
     		$replace .= '<h2 class="em_events">Up Next</h2>';
     		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENT").'</div>';
     		$replace .= '<h2 class="em_events">Past Events</h2>';
     		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYPASTEVENTS").'</div>';
-    		//$EM_Category->output("#_CATEGORYLINK");
-    		//$replace['#_CATEGORYEVENTS'] = $next_event ? $next_event->output('#_CATEGORYNEXTEVENT') : '';
     	} else {
-    		$replace = "This is NOT the webcasts category... It is the '".$EM_Category->slug."' category.";
+    		//$replace = "This is NOT the webcasts category... It is the '".$EM_Category->slug."' category.";
     		$replace .= '<h2 class="em_events">Upcoming Events</h2>';
     		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENTS").'</div>';
     	}		
