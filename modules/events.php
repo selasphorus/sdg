@@ -3300,7 +3300,7 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
 	
 	 if ( $result == '#_CATEGORYEVENTS') {
     
-    	$replace = "testing...categoryevents...";
+    	$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
     	
     	#_CATEGORYEVENTS
 		/*
