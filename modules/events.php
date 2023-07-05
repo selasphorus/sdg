@@ -3247,26 +3247,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     	$replace = $info;
     
-    } else if ( $result == '#_CATEGORYEVENTS') {
-    
-    	$replace = "testing...categoryevents...";
-    	
-    	#_CATEGORYEVENTS
-		/*
-		for everything except webcasts:
-		--------
-		<h2 class="em_events">Upcoming Events</h2>
-		<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
-
-		for webcasts:
-		--------
-		<h2 class="em_events">Up Next</h2>
-		<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
-
-		<h2 class="em_events">Past Events</h2>
-		<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
-		*/
-    	
     } else {
     
     	//$replace .= "result: ".print_r($result,true)." -->";
@@ -3315,15 +3295,38 @@ function sdg_custom_conditional_placeholders($show, $condition, $full_match, $EM
 
 // Set order of display to reverse chronological for event category archives
 // https://wordpress.org/support/topic/set-event-ordering-for-_categorypastevents-placeholder/
-//add_filter('em_category_output_placeholder','cat_em_placeholder_mod',1,3); // may cause issues w/ latest version of EM (6.x)
+add_filter('em_category_output_placeholder','cat_em_placeholder_mod',1,3); // may cause issues w/ latest version of EM (6.x)
 function cat_em_placeholder_mod($replace, $EM_Category, $result){
-	if ( $result == '#_CATEGORYPASTEVENTS' || $result == '#_CATEGORYNEXTEVENTS' ) {
+	
+	 if ( $result == '#_CATEGORYEVENTS') {
+    
+    	$replace = "testing...categoryevents...";
+    	
+    	#_CATEGORYEVENTS
+		/*
+		for everything except webcasts:
+		--------
+		<h2 class="em_events">Upcoming Events</h2>
+		<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
+
+		for webcasts:
+		--------
+		<h2 class="em_events">Up Next</h2>
+		<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
+
+		<h2 class="em_events">Past Events</h2>
+		<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
+		*/
+    	
+    }
+    
+	/*if ( $result == '#_CATEGORYPASTEVENTS' || $result == '#_CATEGORYNEXTEVENTS' ) {
         $args['tag'] = "-unlisted"; // exclude unlisted
         $args['format'] = get_option('dbem_category_event_list_item_format');
         $args['format_header'] = get_option('dbem_category_event_list_item_header_format');
         $args['format_footer'] = get_option('dbem_category_event_list_item_footer_format');
         $replace = EM_Events::output($args);
-    }
+    }*/
     /*if ( $result == '#_CATEGORYPASTEVENTS' ) {
         $em_termID = $EM_Category->term_id;
         $args = array('category'=>$em_termID,'order'=>'DESC','scope'=>'past','pagination'=>1, 'limit'=>20);
