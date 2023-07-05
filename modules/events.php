@@ -3040,8 +3040,8 @@ function display_webcast_events() {
 
 /*** EM Events Manager Customizations ***/
 
-// Function to modify default #_EVENTLINK placeholder
-add_filter('em_event_output_placeholder','sdg_placeholders',1,3); // TMP DISABLED 03/25/22
+// Function to modify default #_XXX placeholders
+add_filter('em_event_output_placeholder','sdg_placeholders',1,3);
 function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     // TS/logging setup
@@ -3246,6 +3246,26 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 		$info .= '</div>';
     
     	$replace = $info;
+    
+    } else if ( $result == '#_CATEGORYEVENTS') {
+    
+    	$replace = "testing...categoryevents...";
+    	
+    	#_CATEGORYEVENTS
+		/*
+		for everything except webcasts:
+		--------
+		<h2 class="em_events">Upcoming Events</h2>
+		<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
+
+		for webcasts:
+		--------
+		<h2 class="em_events">Up Next</h2>
+		<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
+
+		<h2 class="em_events">Past Events</h2>
+		<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
+		*/
     	
     } else {
     
@@ -3255,6 +3275,43 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     return $replace;
 }
+
+
+/*
+#_CATEGORYEVENTS
+
+for everything except webcasts:
+--------
+<h2 class="em_events">Upcoming Events</h2>
+<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
+
+for webcasts:
+--------
+<h2 class="em_events">Up Next</h2>
+<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
+
+<h2 class="em_events">Past Events</h2>
+<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
+*/
+
+// Custom Conditional Placeholder(s)
+/*
+add_action('em_event_output_show_condition', 'sdg_custom_conditional_placeholders', 1, 4);
+function sdg_custom_conditional_placeholders($show, $condition, $full_match, $EM_Event){
+    
+    if ( !empty( $EM_Event->styles ) && preg_match('/^is_category_(.+)$/',$condition, $matches) ){
+        if( is_array($EM_Event->styles) && in_array($matches[1],$EM_Event->styles) ){
+            $show = true;
+        }
+    }
+    
+    //if( !empty( $EM_Event->styles ) && preg_match('/^has_style_(.+)$/',$condition, $matches) ){
+       // if( is_array($EM_Event->styles) && in_array($matches[1],$EM_Event->styles) ){
+       //     $show = true;
+       // }
+    //}
+    return $show;
+}*/
 
 // Set order of display to reverse chronological for event category archives
 // https://wordpress.org/support/topic/set-event-ordering-for-_categorypastevents-placeholder/
