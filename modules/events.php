@@ -3300,8 +3300,13 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
 	
 	 if ( $result == '#_CATEGORYEVENTS') {
     
-    	$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
+    	//$replace = "EM_Category: <pre>".print_r($EM_Category, true).'</pre>';
     	
+    	if ( $EM_Category->slug == 'webcasts' ) {
+    		$replace = "This is the webcasts category...";
+    	} else {
+    		$replace = "This is NOT the webcasts category... It is the '".$EM_Category->slug."' category.";
+    	}
     	#_CATEGORYEVENTS
 		/*
 		for everything except webcasts:
