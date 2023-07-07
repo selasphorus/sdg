@@ -3257,23 +3257,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 }
 
 
-/*
-#_CATEGORYEVENTS
-
-for everything except webcasts:
---------
-<h2 class="em_events">Upcoming Events</h2>
-<div class="sdg_em_events">#_CATEGORYNEXTEVENTS</div>
-
-for webcasts:
---------
-<h2 class="em_events">Up Next</h2>
-<div class="sdg_em_events">#_CATEGORYNEXTEVENT</div>
-
-<h2 class="em_events">Past Events</h2>
-<div class="sdg_em_events">#_CATEGORYPASTEVENTS</div>
-*/
-
 // Custom Conditional Placeholder(s)
 /*
 add_action('em_event_output_show_condition', 'sdg_custom_conditional_placeholders', 1, 4);
@@ -3310,6 +3293,10 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
     		$replace = '<h2 class="em_events">Upcoming Events</h2>';
     		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENTS").'</div>';
     	}		
+    	
+    } else if ( $result == "#_CATEGORYNEXTEVENTS" ) {
+    	
+    	$args['order'] = "ASC";
     	
     }
     
