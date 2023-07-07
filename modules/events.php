@@ -3294,9 +3294,23 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
     		$replace .= '<div class="sdg_em_events">'.$EM_Category->output("#_CATEGORYNEXTEVENTS").'</div>';
     	}		
     	
-    } else if ( $result == "#_CATEGORYNEXTEVENTS" ) {
+    } else if ( $result == "#_CATEGORYPASTEVENTS" ) {
     	
-    	$args['order'] = "ASC";
+    	// Rebuild call to output function for past events so as to be able to set correct DESC order
+    	$args = array( 'category' => $EM_Category->slug, 'scope'=> 'past', 'pagination'=>1, 'ajax'=>0 );
+    	$args['format_header'] = get_option('dbem_category_event_list_item_header_format');
+		$args['format_footer'] = get_option('dbem_category_event_list_item_footer_format');
+		$args['format'] = get_option('dbem_category_event_list_item_format');
+		$args['no_results_msg'] = get_option('dbem_category_no_events_message'); 
+		$args['limit'] = get_option('dbem_category_event_list_limit');
+		$args['orderby'] = get_option('dbem_category_event_list_orderby');
+		$args['order'] = 'DESC';
+		$args['page'] = (!empty($_REQUEST['pno']) && is_numeric($_REQUEST['pno']) )? $_REQUEST['pno'] : 1;
+		/*if( $target == 'email' ){
+			$args['pagination'] = 0;
+			$args['page'] = 1;
+		}*/
+    	$replace = EM_Events::output($args);
     	
     }
     
