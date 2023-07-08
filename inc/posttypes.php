@@ -1483,6 +1483,12 @@ if ( in_array('venues', $sdg_modules ) ) {
 	
 	}
 	//add_action( 'init', 'register_post_type_address' ); // disabled as redundant w/ EM locations 08/20/22
+	// Fields to add via ACF to EM location: cross_street, neighborhood, location_status, notes... related_entities....
+	
+	// Building
+	// TBD: does it make sense to have a separate post type for buildings?
+	// Consider possibilities: multiple buildings at same address/location over time; buildings re-purposed, e.g. synagogue turned into church, etc.
+	// Fields to include: location_id, related_entities, building_status (e.g. extant; raised), date_built, date_demolished, building_history (renovations etc.)
 	
 }
 
