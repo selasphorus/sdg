@@ -1333,7 +1333,7 @@ function get_program_item_name ( $args = array() ) {
 					
 					// First, check to see if this is a chant record or other special rep type for which person_dates are NEVER to be shown.
 					// Exclude such records from the following procedures
-					if ( has_term( 'psalms', 'repertoire_category', $post_id ) || has_term( 'anglican-chant', 'repertoire_category', $post_id ) && ( !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) ) { 
+					if ( has_term( 'psalms', 'repertoire_category', $program_item_obj_id ) || has_term( 'anglican-chant', 'repertoire_category', $program_item_obj_id ) && ( !has_term( 'motets', 'repertoire_category', $program_item_obj_id ) && !has_term( 'anthems', 'repertoire_category', $program_item_obj_id ) ) ) { 
 						$show_person_dates = false;
 						$ts_info .= "<!-- item is in psalms or anglican-chant category, therefore set show_person_dates to false -->";
 					}
