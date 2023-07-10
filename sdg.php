@@ -2375,19 +2375,22 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
     if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
-    	$html .= '<!-- fcn sdg_post_image_html -->';
-    	
-        $featured_image_id = get_post_thumbnail_id();
-        if ( $featured_image_id ) {
-            $caption = get_post( $featured_image_id )->post_excerpt;
-            if ( $caption != "" ) {
-                $caption_class = "featured_image_caption";
-                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
-            } else {
-                $html = $html . '<br />';
-            }
-        }
+    	$html .= '<!-- fcn sdg_post_image_html -->';    	
+    	$html .= get_formatted_image_caption ( $img_id );        
+        $html .= '<!-- /fcn sdg_post_image_html -->';
         
+    }
+    
+    return $html;
+}
+// Do the same for attachment images
+add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
+function sdg_attachment_image_html( $html, $attachment_id ) {
+    
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    
+    	$html .= '<!-- fcn sdg_post_image_html -->';    	
+    	$html .= get_formatted_image_caption ( $attachment_id );        
         $html .= '<!-- /fcn sdg_post_image_html -->';
         
     }
@@ -2395,29 +2398,43 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     return $html;
 }
 
+//wp_get_attachment_image
+//apply_filters( 'wp_get_attachment_image', string $html, int $attachment_id, string|int[] $size, bool $icon, string[] $attr )
+
+function get_formatted_image_caption ( $img_id = null ) {
+
+	$info = "";
+	
+	if ( empty($img_id) ) {
+		return null;
+	}
+    
+    $caption = get_post( $img_id )->post_excerpt;
+    if ( $caption != "" ) {
+		$caption_class = "featured_image_caption";
+		$info = '<p class="'. $caption_class . '">' . $caption . '</p>';
+	} else {
+		$info = '<br />';
+	}
+    
+}
+
 // Function to display featured caption in EM event template
 add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );
 function sdg_featured_image_caption ( $post_id = null ) {
 	
 	global $post;
-	global $wp_query;
     $info = "";
-    $caption = "";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); }
 	
 	// Retrieve the caption (if any) and return it for display
-    if ( get_post_thumbnail_id() ) {
-        $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
-    }
+	$img_id = get_post_thumbnail_id( $post_id );
     
-    if ( $caption != "" && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
-        $caption_class = "featured_image_caption";
-        $info .= '<p class="'. $caption_class . '">';
-        $info .= $caption;	
-        $info .= '</p>';
+    if ( $img_id && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    	$info = get_formatted_image_caption ( $img_id );
     } else {
-        $info .= '<p class="zeromargin">&nbsp;</p>'; //$info .= '<br class="empty_caption" />';
+        $info = '<p class="zeromargin">&nbsp;</p>'; // Is this still necessary?
     }
 	
 	return $info;
