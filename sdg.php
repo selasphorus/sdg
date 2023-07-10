@@ -2417,6 +2417,8 @@ function get_formatted_image_caption ( $img_id = null ) {
 		$info = '<br />';
 	}
     
+    return $info;
+    
 }
 
 // Function to display featured caption in EM event template
