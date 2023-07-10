@@ -1330,7 +1330,14 @@ function get_program_item_name ( $args = array() ) {
 				
 					// First, deal w/ authorship display questions
 					// *********************
-				
+					
+					// First, check to see if this is a chant record or other special rep type for which person_dates are NEVER to be shown.
+					// Exclude such records from the following procedures
+					if ( has_term( 'psalms', 'repertoire_category', $post_id ) || has_term( 'anglican-chant', 'repertoire_category', $post_id ) && ( !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) ) { 
+						$show_person_dates = false;
+					}
+					// ... WIP 07/23
+					
 					// Store the composer ID(s) so as to check to determine whether to show person_dates or not (goal is to show each composer's dates only once per program)
 					$anon = is_anon($program_item_obj_id);
 					if ( $anon != true ) { 
@@ -1360,7 +1367,7 @@ function get_program_item_name ( $args = array() ) {
 					}
 				
 					// TODO: also check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
-
+					
 					if ( $show_item_authorship == true && (count($composer_ids) > 0 || count($author_ids) > 0) && !($row_type == "header") ) {
 
 						// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
