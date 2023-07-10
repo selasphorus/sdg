@@ -357,7 +357,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     $classes = "post-thumbnail sdg";
     if ( is_dev_site() ) { $classes .= " zoom-fade"; }
     if ( is_singular('event') ) { $classes .= " event-image"; }
-    if ( is_archive || is_post_type_archive() ) { $classes .= " float-left"; }
+    if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
     
     // Retrieve the caption (if any) and return it for display
     if ( get_post( $img_id  ) ) {
