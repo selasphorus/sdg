@@ -360,7 +360,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
     
     // Retrieve the caption (if any) and return it for display
-    if ( get_post( $img_id  ) ) {
+    if ( $format == "singular" && get_post( $img_id  ) ) {
 		$caption = get_post( $img_id  )->post_excerpt;
 		if ( !empty($caption) && !is_singular('person') ) {
 			$classes .= " has-caption";
