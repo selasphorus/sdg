@@ -197,7 +197,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	$ts_info .= "<pre>sdg_post_thumbnail parsed/extracted args: ".print_r($args, true)."</pre>";
+	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $img_id = null;
@@ -398,8 +398,10 @@ function sdg_post_thumbnail ( $args = array() ) {
         
         	// If an image_gallery was found, show one image as the featured image
         	// TODO: streamline this
-        	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
+        	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 && $return == "html" ) {
+        		$img_html .= '<div class="'.$classes.'">';
         		$img_html = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+        		$img_html .= '</div><!-- .post-thumbnail -->';
         	}
         	
         }
