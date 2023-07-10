@@ -201,6 +201,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $img_id = null;
     $img_html = "";
+    $caption = null;
     $image_gallery = array();
     if ( $sources == "all" ) {
     	$sources = array("featured", "gallery", "custom_thumb", "content");
