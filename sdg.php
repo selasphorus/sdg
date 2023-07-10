@@ -2375,7 +2375,7 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
     if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
-    	$html .= '<!-- fcn sdg_post_image_html -->';    	
+    	$html .= '<!-- fcn sdg_post_image_html ['.$img_id.'] -->';    	
     	$html .= get_formatted_image_caption ( $img_id );        
         $html .= '<!-- /fcn sdg_post_image_html -->';
         
@@ -2389,9 +2389,9 @@ function sdg_attachment_image_html( $html, $attachment_id ) {
     
     if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
-    	$html .= '<!-- fcn sdg_post_image_html -->';    	
+    	$html .= '<!-- fcn sdg_attachment_image_html ['.$attachment_id.'] -->';    	
     	$html .= get_formatted_image_caption ( $attachment_id );        
-        $html .= '<!-- /fcn sdg_post_image_html -->';
+        $html .= '<!-- /fcn sdg_attachment_image_html -->';
         
     }
     
