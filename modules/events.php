@@ -1335,6 +1335,7 @@ function get_program_item_name ( $args = array() ) {
 					// Exclude such records from the following procedures
 					if ( has_term( 'psalms', 'repertoire_category', $post_id ) || has_term( 'anglican-chant', 'repertoire_category', $post_id ) && ( !has_term( 'motets', 'repertoire_category', $post_id ) && !has_term( 'anthems', 'repertoire_category', $post_id ) ) ) { 
 						$show_person_dates = false;
+						$ts_info .= "<!-- item is in psalms or anglican-chant category, therefore set show_person_dates to false -->";
 					}
 					// ... WIP 07/23
 					
