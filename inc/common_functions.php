@@ -174,7 +174,7 @@ function sdg_post_title ( $args = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -182,7 +182,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     $info = "";
 	$ts_info = "";
 	
-	$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+	//$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -403,6 +403,8 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
         
     } else if ( !( $format == "singular" && is_page('events') ) ) { 
+        
+        $ts_info .= "NOT is_singular<br />";
         
         // NOT singular -- aka archives, search results, &c.
         $img_tag = "";
