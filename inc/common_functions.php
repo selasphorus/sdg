@@ -424,7 +424,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         
         if ( !empty($img_tag) ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular";
-        	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink().'" aria-hidden="true">';
+        	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
         	$img_html .= $img_tag;
         	$img_html .= '</a>';
         }        
