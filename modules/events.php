@@ -3150,8 +3150,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             
             $ts_info .= "<!-- [sdgp] show_image is TRUE -->";
             
-            $classes = "post-thumbnail sdg event-image";
-            
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
             if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
@@ -3177,16 +3175,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             } else {
             
             	$img_tag = $replace;
-            	if ( !is_singular('event') ) {
-            		$classes .= " float-left";
-            	}
             	
             }
             
             //$caption = sdg_featured_image_caption($EM_Event->ID);
             if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) { $classes .= " has_caption"; }
             
-            $replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
+            $replace = $img_tag;
+            //$replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
             //$replace .= $caption;
             $replace .= "<!-- [sdgp] sdg_placeholders -->";
             
