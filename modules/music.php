@@ -755,7 +755,7 @@ function get_authorship_info ( $args = array() ) {
                 // 1b. Composer name(s)
                 if ( $format == "post_title" && $composer_info != "Unknown" && $composer_info != "" ) { // && $composer_info != "Anonymous"
                     $composer_info = " -- ".$composer_info;
-                } else if ( $is_psalm ) { // has_term( 'psalms', 'repertoire_category', $post_id )
+                } else if ( $is_psalm && $format != "concert_item" ) { // has_term( 'psalms', 'repertoire_category', $post_id )
                     $composer_info = " (".$composer_info.")";
                 } else if ( $plainsong == true ) {
                     if ( $show_title == true ) {

@@ -281,7 +281,7 @@ function get_person_dates( $post_id, $styled = false ) {
     
     if ( !empty($info) ) {
         if ( $styled ) {
-            $info = ' <span class="person_dates">'.$info.'</span>';
+            $info = '<span class="person_dates">&nbsp;'.$info.'</span>';
         } else {
             $info = ' '.$info; // add space before dates str
         }
