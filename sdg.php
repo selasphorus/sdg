@@ -2373,18 +2373,24 @@ function sdg_log( $log_msg, $do_log = true ) {
 add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
 function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
-    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ):
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    
+    	$html .= '<!-- fcn sdg_post_image_html -->';
+    	
         $featured_image_id = get_post_thumbnail_id();
         if ( $featured_image_id ) {
             $caption = get_post( $featured_image_id )->post_excerpt;
             if ( $caption != "" ) {
                 $caption_class = "featured_image_caption";
-                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p><!-- sdg_post_image_html -->'; // <!-- This displays the caption below the featured image -->
+                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
             } else {
-                $html = $html . '<br /><!-- sdg_post_image_html -->';
+                $html = $html . '<br />';
             }
-        }        
-    endif;
+        }
+        
+        $html .= '<!-- /fcn sdg_post_image_html -->';
+        
+    }
     
     return $html;
 }
