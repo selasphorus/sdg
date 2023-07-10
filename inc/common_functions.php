@@ -399,6 +399,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         	// If an image_gallery was found, show one image as the featured image
         	// TODO: streamline this
         	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 && $return == "html" ) {
+        		$ts_info .= "image_gallery image<br />";
         		$img_html .= '<div class="'.$classes.'">';
         		$img_html = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
         		$img_html .= '</div><!-- .post-thumbnail -->';
