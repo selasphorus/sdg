@@ -3168,7 +3168,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$img_tag = sdg_post_thumbnail ( $img_args );
             	
             	//if ( empty($img_tag) ) { $ts_info .= "<!-- img_tag is EMPTY! for post_id: $post_id: format: $format; img_size: $img_size; sources: all; echo: false -->"; }
-            	if ( empty($img_tag) ) { $ts_info .= "<!-- img_tag is EMPTY! for img_args: ".print_r($img_args, true)." -->"; } else { $ts_info .= "<!-- img_tag found for img_args: ".print_r($img_args, true)." -->"; }
+            	if ( empty($img_tag) ) { $ts_info .= "<!-- [sdgp] img_tag is EMPTY! for img_args: ".print_r($img_args, true)." -->"; } else { $ts_info .= "<!-- [sdgp] img_tag found -->"; }
             	
             	//if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
