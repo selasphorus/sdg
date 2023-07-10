@@ -197,6 +197,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	$ts_info .= "<pre>sdg_post_thumbnail parsed/extracted args: ".print_r($args, true)."</pre>";
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $img_id = null;
