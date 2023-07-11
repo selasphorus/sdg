@@ -2373,7 +2373,7 @@ function sdg_log( $log_msg, $do_log = true ) {
 add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
 function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
-    if ( is_singular() && !is_page('events') && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
     	$html .= '<!-- fcn sdg_post_image_html ['.$post_image_id.'] -->';    	
     	$html .= get_formatted_image_caption ( $post_image_id );        
@@ -2384,10 +2384,10 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     return $html;
 }
 // Do the same for attachment images
-add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
+//add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
 function sdg_attachment_image_html( $html, $attachment_id ) {
     
-    if ( is_singular() && !is_page('events') && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
     	$html .= '<!-- fcn sdg_attachment_image_html ['.$attachment_id.'] -->';    	
     	$html .= get_formatted_image_caption ( $attachment_id );        
