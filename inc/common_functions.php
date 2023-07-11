@@ -377,19 +377,19 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( is_singular('event') ) { $classes .= " event-image"; }
     if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
     
-    // Retrieve the caption (if any) and return it for display
-    if ( $format == "singular" && get_post( $img_id  ) ) {
+    
+    
+    if ( $format == "singular" && !( is_page('events') ) ) {
+        
+        $ts_info .= "is_singular<br />";
+        
+        // Retrieve the caption (if any) and return it for display
 		$caption = get_post( $img_id  )->post_excerpt;
 		if ( !empty($caption) && !is_singular('person') ) {
 			$classes .= " has-caption";
 		} else {
 			$classes .= " no-caption";
 		}
-    }
-    
-    if ( $format == "singular" && !( is_page('events') ) ) {
-        
-        $ts_info .= "is_singular<br />";
     
 		//if ( is_dev_site() ) { $classes .= " zoom-fade"; }
 		
