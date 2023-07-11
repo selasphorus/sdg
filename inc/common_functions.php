@@ -26,6 +26,7 @@ function sdg_post_title ( $args = array() ) {
 	
 	// Defaults
 	$defaults = array(
+		'the_title'		=> null, // optional override to set title via fcn arg, not via post
 		'post'			=> null,
 		'line_breaks'	=> false,
 		'show_subtitle'	=> false,
@@ -52,8 +53,15 @@ function sdg_post_title ( $args = array() ) {
 	}
 	//$ts_info .= "post_id: ".$post_id."<br />";
 	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
-	$title = $post->post_title;
 	
+	// If a title has been submitted, use it; if not, get the post_title
+	if ( $the_title ) {
+		$title = $the_title;
+	} else {
+		$title = $post->post_title;
+	}
+	
+	// If both title and post_id are empty, abort
 	if ( strlen( $title ) == 0 || $post_id == 0) {
 		return;
 	}
@@ -68,6 +76,7 @@ function sdg_post_title ( $args = array() ) {
         $event_title = $EM_Event->event_name;
     }
     */
+    
     // Clean it up
 	if ( preg_match('/([0-9]+)_(.*)/', $title) ) {
         $title = preg_replace('/([0-9]+)_(.*)/', '$2', $title);
@@ -85,6 +94,7 @@ function sdg_post_title ( $args = array() ) {
 
 	$title = $before.$title;
 	
+	// If we're showing the subtitle, retrieve and format the relevant text
 	if ( $show_subtitle ) { // && function_exists( 'is_dev_site' ) && is_dev_site()
 		$subtitle = get_post_meta( $post_id, 'subtitle', true );
 		if ( strlen( $subtitle ) != 0 ) {
@@ -100,6 +110,7 @@ function sdg_post_title ( $args = array() ) {
 		$subtitle = "";
 	}
 	
+	// If we're showing a series subtitle, retrieve and format the relevant text
 	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
 	
 		$info .= "<!-- show_series_title -->";
@@ -149,18 +160,23 @@ function sdg_post_title ( $args = array() ) {
         if ( $series_title != "" ) { $event_title = $series_title.": ".$event_title; }
     }
     */
+    
+    // Hyperlink the title, if applicable
 	if ( $link ) {
 		$title = '<a href="'.esc_url( get_permalink($post_id) ).'" rel="bookmark">'.$title.'</a>';
 	}
 	
+	// Format the title according to the parameters for heading level and class
 	if ( $hlevel ) {
-		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>';
+		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>'; // '<h1 class="entry-title">'
 	}
 	
+	// Add the title, subtitle, and series_subtitle to the info for return
 	$info .= $title;
 	$info .= $subtitle;
 	$info .= $series_subtitle;
 	
+	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
 		echo $info;
 	} else {
