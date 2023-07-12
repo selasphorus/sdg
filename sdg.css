@@ -93,6 +93,10 @@ a.action {
     line-height: normal;
 }
 
+.msg_bar p {
+	margin: 0.5rem 0;
+}
+
 .msg_bar.greens {
     background-color: rgb(153, 204, 0, 0.5);
     color: var(--dkgreen);
