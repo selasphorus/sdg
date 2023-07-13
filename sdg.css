@@ -120,7 +120,7 @@ a.action {
     content: '×';
     display: block;
     font-family: helvetica,arial,sans-serif;
-    font-size: 1em;
+    font-size: 2rem;
     font-weight: 100;
     line-height: 2rem;
     letter-spacing: normal;
@@ -245,7 +245,7 @@ input[type="text"].merge-input {
 	}
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: calc(1rem + 46px);
+		top: calc(2rem + 46px);
 	}
 	
 }
@@ -257,7 +257,7 @@ input[type="text"].merge-input {
 	}
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: calc(1rem + 32px);
+		top: calc(2rem + 32px);
 	}
 	
 }
