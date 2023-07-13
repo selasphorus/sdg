@@ -216,6 +216,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
+    $post_type = get_post_type( $post_id );
     $img_id = null;
     $img_html = "";
     $caption = null;
@@ -244,6 +245,11 @@ function sdg_post_thumbnail ( $args = array() ) {
         	$ts_info .= "custom_thumb_id found: $custom_thumb_id<br />";
             $img_id = $custom_thumb_id;
         }
+    }
+    
+    // If this is a sermon, are we using the author image
+    if ( $format != "singular" && $post_type == "sermon" ) { 
+    	$img_id = get_author_img_id ( $post_id );
     }
 
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
@@ -423,7 +429,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         	
         }
         
-    } else if ( !( $format == "singular" && is_page('events') ) ) { 
+    } else if ( !( $format == "singular" && is_page('events') ) ) {
         
         $ts_info .= "NOT is_singular<br />";
         
