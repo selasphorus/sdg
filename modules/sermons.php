@@ -91,8 +91,7 @@ function sdg_sermons_settings_section_callback( $args ) {
  * Display callback for the submenu page.
  */
 
-/*
-function sermons_options_page_callback() { 
+/*function sermons_options_page_callback() { 
     
     // check user capabilities
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -133,8 +132,8 @@ function sermons_options_page_callback() {
 	</div>
 	<?php
 	
-}
-*/
+}*/
+
 /*
 // Render a text field
 function sdg_archive_content_field_cb( $args ) {
@@ -569,6 +568,23 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     
 }
 
+// Get Sermon Author image id
+function get_author_img_id ( $post_id ) {
+
+	$img_id = null;
+	
+	// Get the sermon author(s)
+	$sermon_author_ids = get_post_meta( $post_id, 'sermon_author', true );
+	
+	// Get the sermon author image for the first author with an image
+	foreach ( $sermon_author_ids as $author_id ) {
+		$img_id = get_post_thumbnail_id($author_id);
+		if ( $img_id ) { break; }
+	}
+	
+	return $img_id;
+	
+}
 
 // Add shortcode for display of sermon filters form
 add_shortcode('sermon_filters', 'build_sermon_filters');
