@@ -114,8 +114,8 @@ a.action {
     right: 0;
     /*top: 1rem;
     right: 1rem;*/
-    width: 2rem;
-    height: 2rem;
+    width: 6rem;
+    height: 6rem;
     background-color: #aba9a5;
 }
 
@@ -125,7 +125,7 @@ a.action {
     font-family: helvetica,arial,sans-serif;
     font-size: 2rem;
     font-weight: 100;
-    line-height: 2rem;
+    line-height: 5rem;
     letter-spacing: normal;
     padding: 0;
 }
