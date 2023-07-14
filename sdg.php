@@ -883,8 +883,9 @@ function sdg_msg_bar( $args = array() ) {
 			//$info .= get_the_content($post_id);
 		}*/
 		if ( $post_type == "event" ) {
-			$msg = "A webcast is currently live streaming...";
-			//$msg .= //linked title of event
+			$msg = "Currently livestreaming: ";
+			$event_title = get_the_title( $post_id );
+            $msg .= make_link( get_permalink($post_id), $event_title );
 		} else {
 			$msg = get_the_excerpt( $post_id );	
 		}
