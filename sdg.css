@@ -82,9 +82,9 @@ a.action {
 
 .msg_bar {
 	width: 100%;
-    height: auto;
+    height: 4rem;
     margin: 0px auto 0 auto;
-    padding: 1.5rem;
+    padding: 0;
     background-color: var(--ltgrey);
     font-family: 'worksans-extralight', 'work sans', sans-serif;
 	font-size: 1.3rem;
@@ -95,6 +95,7 @@ a.action {
 
 .msg_bar p {
 	margin: 0.5rem 0;
+	padding: 1.5rem;
 }
 
 .msg_bar.greens {
