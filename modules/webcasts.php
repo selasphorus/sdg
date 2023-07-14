@@ -232,7 +232,7 @@ function get_live_webcast_id () {
     $wp_args = array(
 		'post_type'   => 'event',
 		'post_status' => 'publish',
-        'posts_per_page' => $num_posts,
+        'posts_per_page' => 1,
         'meta_query' => array(
             'relation' => 'AND',
             array(
