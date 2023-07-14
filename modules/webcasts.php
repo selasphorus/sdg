@@ -152,175 +152,6 @@ function get_webcast_status( $post_id = null ) {
 	return $webcast_status;
 }
 
-// TODO (?): refashion as more generic helper function: get_related_event_link( $post_type = null, $post_id = null )
-/*function get_webcast_event_link( $webcast_id = null ) {
-	
-	$info = ""; // init
-	if ($webcast_id === null) { $webcast_id = get_the_ID(); }
-	
-	$event_id = get_webcast_event_id( $webcast_id );
-	//$info .= "<!-- event_id: $event_id; webcast_id: $webcast_id -->";
-	if ($event_id && $event_id !== "no posts") {
-		$info .= '<a href="'. esc_url(get_the_permalink($event_id)) . '" title="event_id: '.$event_id.'/webcast_id: '.$webcast_id.'">' . get_the_title($event_id) . '</a>';
-	} else {
-		//$info .= "<!-- event_id: $event_id; webcast_id: $webcast_id -->";
-		return null;
-	}
-	//$info .= '<a href="'. esc_url(get_permalink($event_id)) . '">' . get_the_title($event_id) . '</a>';
-	
-	return $info;
-	
-}*/
-
-
-add_shortcode('vimeo_api_test', 'vimeo_api_test');
-function vimeo_api_test() {
-    
-    $info = "";
-    $filepath = ABSPATH.'vendor/autoload.php';
-    
-    if (file_exists($filepath)) {
-        $info = "Found $filepath!\n";
-        require $filepath;
-    } else {
-        $info = "$filepath not found...\n";
-        return $info;
-    }
-
-    //use Vimeo\Vimeo; // causes fatal error!
-
-    //$client = new Vimeo("b7f2f8e088399f314a5a0a491cbf6aec02e06695", "nMSMhds9TKKT2LXv8usyakteyzBtfVgUDs6WeOrvzgr7YrZGmu/sHrrJFFsSeeKhu/Z2/T0A2jldwiENhAABXdqXTquVitGl7Z8YUc2hNajNFmETIWHDxVEGRrGuNudH", "63c1738d4271a716bf1fc9f0a90d846c");
-    //$client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
-
-    //$response = $client->request('/tutorial', array(), 'GET');
-    //print_r($response);
-    
-    //$info = $response;
-    
-    
-    return $info;
-
-}
-
-//add_shortcode('vimeo_player_js', 'vimeo_player_js');
-function vimeo_player_js() {
-    
-    // See e.g. https://dev.saintthomaschurch.org/events/vimeo-player-test-sdk-using-an-existing-player-2020-04-05/
-    
-    $info = "";
-    
-    $info .= '<script src="https://player.vimeo.com/api/player.js"></script>';
-    $info .= '<script>';
-    $info .= 'var iframe = document.querySelector("iframe");';
-    $info .= 'var player = new Vimeo.Player(iframe);';
-    $info .= 'console.log("-- Vimeo Test --");';
-    $info .= 'player.on("play", function() {';
-    $info .= '    console.log("Played the video");';
-    $info .= '});';
-    $info .= 'player.getVideoTitle().then(function(title) {';
-    $info .= '    console.log("title:", title);';
-    $info .= '});';
-    $info .= '</script>';
-    
-    return $info;
-    
-}
-
-add_shortcode('video_player_test', 'load_hls_js');
-function load_hls_js( $atts = [] ) {
-
-	$info = "";
-
-	$a = shortcode_atts( array(
-        'player_id' => null,
-        'src' => null,
-        'masked' => null
-    ), $atts );
-    
-    $player_id = $a['player_id'];
-    $src = $a['src'];
-    $masked = $a['masked'];
-    
-    $info = "";
-    
-    // See https://stackoverflow.com/a/48688707/264547
-    // Use the JavaScript HLS client hls.js package to play m3u8 file via HTML5 audio/video tags
-    $info .= '<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>';
-    $info .= '<script>';
-    
-    $info .= 'if(Hls.isSupported()) {';
-    $info .= "var video = document.getElementById('".$player_id."');";
-    $info .= 'var hls = new Hls();';
-    $info .= "hls.loadSource('".$src."');";
-    $info .= 'hls.attachMedia(video);';
-    $info .= 'hls.on(Hls.Events.MANIFEST_PARSED,function() {';
-    //$info .= 'video.play();';
-    $info .= '});';
-    $info .= "} else if (video.canPlayType('application/vnd.apple.mpegurl')) {";
-    $info .= "video.src = '".$src."';";
-    $info .= "video.addEventListener('canplay',function() {";
-    //$info .= 'video.play();';
-    $info .= '});';
-    $info .= '}';
-    
-    $info .= '</script>';
-    
-    if ( $masked !== null ) {
-        $info .= '<div class="video_mask" style="background-color: teal;">test</div>';
-    }
-    
-    return $info;
-
-}    
-
-add_shortcode('vimeo_player_test', 'vimeo_player_js_test');
-function vimeo_player_js_test() {
-    
-    $info = "";
-    
-    //$info .= '<script src="{url}"></script>';
-    $info .= '<script src="https://player.vimeo.com/api/player.js"></script>';
-    $info .= '<script>';
-    
-    $info .= 'var video01Player = new Vimeo.Player("vimeo_video_01");
-    video01Player.on("play", function() {
-      console.log("Played the first video");
-    });';
-
-    $info .= 'var video02Player = new Vimeo.Player("vimeo_video_02");
-    video02Player.on("play", function() {
-      console.log("Played the second video");
-    });';
-      
-    /*
-    $info .= 'var options01 = {
-      id: {video01_id},
-      width: {video01_width}
-    };';
-    $info .= 'var options02 = {
-      url: {video02_url},
-      width: {video02_width}
-    };';
-
-    $info .= 'var video01Player = new Vimeo.Player("{video01_name}", options01);';
-    $info .= 'var video02Player = new Vimeo.Player("{video02_name}", options02);';
-
-    $info .= 'video01Player.setVolume(0);';
-    $info .= 'video02Player.setVolume(0);';
-
-    $info .= 'video01Player.on("play", function() {
-      console.log("Played the first video");
-    });';
-    $info .= 'video02Player.on("play", function() {
-      console.log("Played the second video");
-    });';
-    */
-    
-    $info .= '</script>';
-    
-    return $info;
-}
-
 function get_status_message ( $post_id = null, $message_type = 'webcast_status' ) {
     
     if ( $post_id == null ) { $post_id = get_the_ID(); }
@@ -393,8 +224,47 @@ function get_status_message ( $post_id = null, $message_type = 'webcast_status' 
     return $status_message;
 }
 
-// This can't go inside the get_media_player function because of scoping rules -- see https://www.php.net/manual/en/language.namespaces.importing.php
-use \Vimeo\Vimeo as Vimeo;
+// Get ID of post which is currently livestreaming, if any
+function get_live_webcast_id () {
+
+	$post_id = null;
+
+    $wp_args = array(
+		'post_type'   => 'event',
+		'post_status' => 'publish',
+        'posts_per_page' => $num_posts,
+        'meta_query' => array(
+            'relation' => 'AND',
+            array(
+                'key'     => 'webcast_status',
+                'value'   => 'live'
+            ),
+            'date_clause' => array(
+                'key'     => '_event_start_date',
+                'value'   => date('Y-m-d'), // today! (in case AG forgot to update the status after a live stream was over...)
+            ),
+			'time_clause' => array(
+				'key' => '_event_start_time',
+				'compare' => 'EXISTS',
+			),
+        ),
+        'orderby'	=> array(
+			'date_clause' => 'ASC',
+			'time_clause' => 'DESC',
+		),
+		'fields' => 'ids',
+    );
+    
+    $query = new WP_Query( $wp_args );
+    $posts = $query->posts;
+    
+    if ( count($posts) > 0 ) {
+        $post_id = $posts[0];        
+    }
+    
+    return $post_id;
+
+}
 
 // Get Media Player -- Based on contents of ACF/Webcast Info fields
 function get_media_player ( $post_id = null, $status_only = false, $url = null ) {
@@ -937,6 +807,180 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 	
     return null; // if all else fails...
 	
+}
+
+// TODO (?): refashion as more generic helper function: get_related_event_link( $post_type = null, $post_id = null )
+/*function get_webcast_event_link( $webcast_id = null ) {
+	
+	$info = ""; // init
+	if ($webcast_id === null) { $webcast_id = get_the_ID(); }
+	
+	$event_id = get_webcast_event_id( $webcast_id );
+	//$info .= "<!-- event_id: $event_id; webcast_id: $webcast_id -->";
+	if ($event_id && $event_id !== "no posts") {
+		$info .= '<a href="'. esc_url(get_the_permalink($event_id)) . '" title="event_id: '.$event_id.'/webcast_id: '.$webcast_id.'">' . get_the_title($event_id) . '</a>';
+	} else {
+		//$info .= "<!-- event_id: $event_id; webcast_id: $webcast_id -->";
+		return null;
+	}
+	//$info .= '<a href="'. esc_url(get_permalink($event_id)) . '">' . get_the_title($event_id) . '</a>';
+	
+	return $info;
+	
+}*/
+
+/*** VIMEO ***/
+// This can't go inside the get_media_player function because of scoping rules -- see https://www.php.net/manual/en/language.namespaces.importing.php
+use \Vimeo\Vimeo as Vimeo;
+
+add_shortcode('vimeo_api_test', 'vimeo_api_test');
+function vimeo_api_test() {
+    
+    $info = "";
+    $filepath = ABSPATH.'vendor/autoload.php';
+    
+    if (file_exists($filepath)) {
+        $info = "Found $filepath!\n";
+        require $filepath;
+    } else {
+        $info = "$filepath not found...\n";
+        return $info;
+    }
+
+    //use Vimeo\Vimeo; // causes fatal error!
+
+    //$client = new Vimeo("b7f2f8e088399f314a5a0a491cbf6aec02e06695", "nMSMhds9TKKT2LXv8usyakteyzBtfVgUDs6WeOrvzgr7YrZGmu/sHrrJFFsSeeKhu/Z2/T0A2jldwiENhAABXdqXTquVitGl7Z8YUc2hNajNFmETIWHDxVEGRrGuNudH", "63c1738d4271a716bf1fc9f0a90d846c");
+    //$client = new Vimeo("{client_id}", "{client_secret}", "{access_token}");
+
+    //$response = $client->request('/tutorial', array(), 'GET');
+    //print_r($response);
+    
+    //$info = $response;
+    
+    
+    return $info;
+
+}
+
+//add_shortcode('vimeo_player_js', 'vimeo_player_js');
+function vimeo_player_js() {
+    
+    // See e.g. https://dev.saintthomaschurch.org/events/vimeo-player-test-sdk-using-an-existing-player-2020-04-05/
+    
+    $info = "";
+    
+    $info .= '<script src="https://player.vimeo.com/api/player.js"></script>';
+    $info .= '<script>';
+    $info .= 'var iframe = document.querySelector("iframe");';
+    $info .= 'var player = new Vimeo.Player(iframe);';
+    $info .= 'console.log("-- Vimeo Test --");';
+    $info .= 'player.on("play", function() {';
+    $info .= '    console.log("Played the video");';
+    $info .= '});';
+    $info .= 'player.getVideoTitle().then(function(title) {';
+    $info .= '    console.log("title:", title);';
+    $info .= '});';
+    $info .= '</script>';
+    
+    return $info;
+    
+}  
+
+add_shortcode('vimeo_player_test', 'vimeo_player_js_test');
+function vimeo_player_js_test() {
+    
+    $info = "";
+    
+    //$info .= '<script src="{url}"></script>';
+    $info .= '<script src="https://player.vimeo.com/api/player.js"></script>';
+    $info .= '<script>';
+    
+    $info .= 'var video01Player = new Vimeo.Player("vimeo_video_01");
+    video01Player.on("play", function() {
+      console.log("Played the first video");
+    });';
+
+    $info .= 'var video02Player = new Vimeo.Player("vimeo_video_02");
+    video02Player.on("play", function() {
+      console.log("Played the second video");
+    });';
+      
+    /*
+    $info .= 'var options01 = {
+      id: {video01_id},
+      width: {video01_width}
+    };';
+    $info .= 'var options02 = {
+      url: {video02_url},
+      width: {video02_width}
+    };';
+
+    $info .= 'var video01Player = new Vimeo.Player("{video01_name}", options01);';
+    $info .= 'var video02Player = new Vimeo.Player("{video02_name}", options02);';
+
+    $info .= 'video01Player.setVolume(0);';
+    $info .= 'video02Player.setVolume(0);';
+
+    $info .= 'video01Player.on("play", function() {
+      console.log("Played the first video");
+    });';
+    $info .= 'video02Player.on("play", function() {
+      console.log("Played the second video");
+    });';
+    */
+    
+    $info .= '</script>';
+    
+    return $info;
+}
+
+/*** ***/
+
+add_shortcode('video_player_test', 'load_hls_js');
+function load_hls_js( $atts = [] ) {
+
+	$info = "";
+
+	$a = shortcode_atts( array(
+        'player_id' => null,
+        'src' => null,
+        'masked' => null
+    ), $atts );
+    
+    $player_id = $a['player_id'];
+    $src = $a['src'];
+    $masked = $a['masked'];
+    
+    $info = "";
+    
+    // See https://stackoverflow.com/a/48688707/264547
+    // Use the JavaScript HLS client hls.js package to play m3u8 file via HTML5 audio/video tags
+    $info .= '<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>';
+    $info .= '<script>';
+    
+    $info .= 'if(Hls.isSupported()) {';
+    $info .= "var video = document.getElementById('".$player_id."');";
+    $info .= 'var hls = new Hls();';
+    $info .= "hls.loadSource('".$src."');";
+    $info .= 'hls.attachMedia(video);';
+    $info .= 'hls.on(Hls.Events.MANIFEST_PARSED,function() {';
+    //$info .= 'video.play();';
+    $info .= '});';
+    $info .= "} else if (video.canPlayType('application/vnd.apple.mpegurl')) {";
+    $info .= "video.src = '".$src."';";
+    $info .= "video.addEventListener('canplay',function() {";
+    //$info .= 'video.play();';
+    $info .= '});';
+    $info .= '}';
+    
+    $info .= '</script>';
+    
+    if ( $masked !== null ) {
+        $info .= '<div class="video_mask" style="background-color: teal;">test</div>';
+    }
+    
+    return $info;
+
 }
 
 
