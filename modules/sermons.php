@@ -91,7 +91,8 @@ function sdg_sermons_settings_section_callback( $args ) {
  * Display callback for the submenu page.
  */
 
-/*function sermons_options_page_callback() { 
+/*
+function sermons_options_page_callback() { 
     
     // check user capabilities
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -132,7 +133,8 @@ function sdg_sermons_settings_section_callback( $args ) {
 	</div>
 	<?php
 	
-}*/
+}
+*/
 
 /*
 // Render a text field
