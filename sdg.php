@@ -866,7 +866,7 @@ function sdg_msg_bar( $args = array() ) {
 			
 		$colorscheme = "";
 																  
-		$info .= '<div class="msg_bar '.$post_type.$colorscheme.'">';
+		$info .= '<div id="msg_bar" class="msg_bar '.$post_type.$colorscheme.'">';
 		$info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
 	
 		/*if ( has_post_thumbnail($post_id) ) {

@@ -299,6 +299,10 @@ jQuery(document).ready(function($) {
         });
     });
     
+    // Msg bar
+    $( ".msg_bar_close" ).click(function() {
+        $("#msg_bar").hide();
+    });
 	
 	
     // EM Datepicker
