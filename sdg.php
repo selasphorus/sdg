@@ -797,142 +797,110 @@ function sdg_msg_bar( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
-	$ts_info .= "<!-- <pre>sdg_msg_bar args: ".print_r($args, true)."</pre> -->";
-	
+	$ts_info .= "<!-- <pre>sdg_msg_bar args: ".print_r($args, true)."</pre> -->";	
+    
 	// Defaults
 	$defaults = array(
 		'post_type'	=> "post",
 		'num_posts' => 1,
+		'prioritize_livestream' => true,
+		'post_id' => null,
 	);
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	
+	// If no specific post id was passed to the fcn, then look for a post to feature
+	
+	// First, check to see if there is a webcast event currently livestreaming
+	if ( !$post_id && $prioritize_livestream ) {
+		$post_id = get_live_webcast_id();
+		if ( $post_id ) { $post_type = 'event'; }
+	}
     
-    $wp_args = array(
-		'post_type'   => $post_type,
-		'post_status' => 'publish',
-        'posts_per_page' => $num_posts,
-        'orderby'   => 'date',
-        'order'     => 'DESC'
-    );
+    // If no ID was submitted AND there's no livestreaming event, look for a featured post
+    // TODO: consider building a separate get_featured_post_id fcn
+    if ( !$post_id ) {
     
-    if ( $post_type == "post" ) {
-    	$wp_args['category_name'] = 'featured-posts';
-    }
-    
-    /*    
-    $tax_query = array(
-        array(
-            'taxonomy' => 'notes_category',
-            'field'    => 'slug',
-            'terms'    => 'banners', //$category
-        ),
-    );
-    //$info .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
-    $args['tax_query'] = $tax_query;
-    */
+    	$wp_args = array(
+			'post_type'   => $post_type,
+			'post_status' => 'publish',
+			'posts_per_page' => $num_posts,
+			'orderby'   => 'date',
+			'order'     => 'DESC',
+			'fields'	=> 'ids',
+		);
 		
-    $query = new WP_Query( $wp_args );
-    //$info .= "<!-- args: ".print_r($args, true)." -->"; // tft <pre></pre>
-    //$info .= "<!-- Last SQL-Query (query): {$query->request} -->";
+		// TODO: change this to accept taxonomy & slug for more general use
+		if ( $post_type == "post" ) {
+			$wp_args['category_name'] = 'featured-posts';
+		}
+    	
+    	// Tax query? TBD maybe later
+    	/*    
+		$tax_query = array(
+			array(
+				'taxonomy' => 'notes_category',
+				'field'    => 'slug',
+				'terms'    => 'banners', //$category
+			),
+		);
+		//$info .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
+		$args['tax_query'] = $tax_query;
+		*/
+		
+		$query = new WP_Query( $wp_args );
+		$posts = $query->posts;    
+		if ( count($posts) > 0 ) {
+			$post_id = $posts[0];        
+		}
+		//$info .= "<!-- args: ".print_r($args, true)." -->"; // tft <pre></pre>
+		//$info .= "<!-- Last SQL-Query (query): {$query->request} -->";
 
-    if ( $query->have_posts() ) {
-        
-        while ( $query->have_posts() ) {
-            
-            $query->the_post();
-            $post_id = get_the_ID();
-            $ts_info .= "<!-- post_id: $post_id -->";
-        	
-        	$colorscheme = "";
-            /*if ( has_term( 'greens', 'notes_category', $post_id ) ) {
-                $colorscheme = " greens";
-            } else if ( has_term( 'reds', 'notes_category', $post_id ) ) {
-                $colorscheme = " reds";
-            } else {
-                $colorscheme = "";
-            }*/
-                                                                          
-            $info .= '<div class="msg_bar'.$colorscheme.'">';
-            
-            /*if ( has_post_thumbnail($post_id) ) {
-                $img = get_the_post_thumbnail( $post_id, 'full' );
-                if ( !empty($img) ) {
-                    $ts_info .= "<!-- img -->";
-                    $info .= $img;
-                }
-            } else {
-                $ts_info .= "<!-- content -->";
-                $post = get_post( $post_id );
-                $the_content = apply_filters('the_content', $post->post_content);
-                $info .= $the_content;
-                //$info .= get_the_content();
-                //$info .= get_the_content($post_id);
-            }*/
-            
-            $excerpt = get_the_excerpt( $post_id );
-            $info .= "<p>";
-            $info .= $excerpt;
-            $info .= $ts_info;
-            $info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
-            $info .= "</p>";
-            $info .= '</div><!-- /banner -->';
-            
-        }
-
-        wp_reset_postdata(); // Reset postdata
-
-    } // endif
-    
-    /*
-    // V3 Webcast Event
-    // WIP: determine whether a webcast is currently streaming live
-    // TODO: move this part to a separate function to be called from the livestream banner notification post instead of this function...
-    $args = array(
-		'post_type'   => 'event',
-		'post_status' => 'publish',
-        'posts_per_page' => $num_posts,
-        'meta_query' => array(
-            'relation' => 'AND',
-            array(
-                'key'     => 'webcast_status',
-                'value'   => 'live'
-            ),
-            array(
-                'key'     => '_event_start_date',
-                'value'   => date('Y-m-d'), // today! (in case AG forgot to update the status after a live stream was over...)
-            )
-        ),
-        'orderby'   => 'ID',
-        'order'     => 'ASC'
-    );
-    $webcasts_query = new WP_Query( $args );
-    $webcasts_posts = $webcasts_query->posts;
-    
-    if ( count($webcasts_posts) > 0 ) {
-        $livestream = true;
-        //$info .= "Livestream(s): ".count($webcasts_posts); // tft
-        
-        foreach ( $webcasts_posts as $post ) {
-
-            setup_postdata( $post );
-            
-            $title = $post->post_title;
-            //$post_id = $post->ID;
-            $url = make_link( get_permalink($post->ID), $title ); // make_link( $url, $linktext, $class = null, $target = null)
-        }
-        
-    } else {
-        $livestream = false;
-        //$info .= "NO Livestream."; // tft
-        $url = null;
+	}
+	
+	if ( $post_id ) {
+	
+		$ts_info .= "<!-- post_id: $post_id -->";
+			
+		$colorscheme = "";
+																  
+		$info .= '<div class="msg_bar '.$post_type.$colorscheme.'">';
+	
+		/*if ( has_post_thumbnail($post_id) ) {
+			$img = get_the_post_thumbnail( $post_id, 'full' );
+			if ( !empty($img) ) {
+				$ts_info .= "<!-- img -->";
+				$info .= $img;
+			}
+		} else {
+			$ts_info .= "<!-- content -->";
+			$post = get_post( $post_id );
+			$the_content = apply_filters('the_content', $post->post_content);
+			$info .= $the_content;
+			//$info .= get_the_content();
+			//$info .= get_the_content($post_id);
+		}*/
+		if ( $post_type == "event" ) {
+			$msg = "A webcast is currently live streaming...";
+			//$msg .= //linked title of event
+		} else {
+			$msg = get_the_excerpt( $post_id );	
+		}
+		
+		$info .= "<p>";
+		$info .= $msg;
+		$info .= $ts_info;
+		$info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
+		$info .= "</p>";
+		$info .= '</div><!-- /banner -->';
+		
     }
     
     //$info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     //$info .= "year: $year<br />";
     //$info .= "[num posts: ".count($webcasts_posts)."]<br />";
-	*/
 	
     return $info;
     
@@ -993,8 +961,6 @@ function get_default_category () {
 	
 	return $default_cat;
 }
-
-///
 
 function sdg_digit_to_word($number){
     switch($number){
