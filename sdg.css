@@ -243,24 +243,24 @@ input[type="text"].merge-input {
 
 @media screen and (min-width: 44.375em) {
 
-	body.admin-bar .msg_bar {
+	/*body.admin-bar .msg_bar {
 		padding-top: 46px;
-	}
+	}*/
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: calc(2rem + 46px);
+		top: 46px; /*top: calc(2rem + 46px);*/
 	}
 	
 }
 
 @media screen and (min-width: 48.9375em) {
 	
-	body.admin-bar .msg_bar {
+	/*body.admin-bar .msg_bar {
 		padding-top: 32px;
-	}
+	}*/
 	
 	body.admin-bar .msg_bar .msg_bar_close {
-		top: calc(2rem + 32px);
+		top: 32px; /*top: calc(2rem + 32px);*/
 	}
 	
 }
