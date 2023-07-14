@@ -110,10 +110,13 @@ a.action {
 .msg_bar_close {
     cursor: pointer;
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0;
+    right: 0;
+    /*top: 1rem;
+    right: 1rem;*/
     width: 2rem;
     height: 2rem;
+    background-color: #aba9a5;
 }
 
 .msg_bar_close:after {

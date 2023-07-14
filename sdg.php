@@ -867,6 +867,7 @@ function sdg_msg_bar( $args = array() ) {
 		$colorscheme = "";
 																  
 		$info .= '<div class="msg_bar '.$post_type.$colorscheme.'">';
+		$info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
 	
 		/*if ( has_post_thumbnail($post_id) ) {
 			$img = get_the_post_thumbnail( $post_id, 'full' );
@@ -890,11 +891,12 @@ function sdg_msg_bar( $args = array() ) {
 			$msg = get_the_excerpt( $post_id );	
 		}
 		
+		$info .= '<div>';
 		$info .= "<p>";
 		$info .= $msg;
 		$info .= $ts_info;
-		$info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
 		$info .= "</p>";
+		$info .= '</div>';
 		$info .= '</div><!-- /banner -->';
 		
     }
