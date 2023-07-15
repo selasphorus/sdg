@@ -94,7 +94,8 @@ a.action {
 }
 
 .msg_bar p {
-	margin: 0;
+	max-width: 80%;
+	margin: 0 auto;
 	padding: 1rem;
 }
 
@@ -129,6 +130,10 @@ a.action {
     line-height: 4rem;
     letter-spacing: normal;
     padding: 0;
+}
+
+body.admin-bar .msg_bar_close {
+    top: 46px;
 }
 
 
@@ -240,7 +245,6 @@ form#select_ids {
 input[type="text"].merge-input {
 	width: 7rem;
 }
-
 
 @media screen and (min-width: 44.375em) {
 
