@@ -246,6 +246,14 @@ input[type="text"].merge-input {
 	width: 7rem;
 }
 
+@media screen and (max-width: 600px) {
+
+	.msg_bar p {
+		font-size: 1.1rem;
+	}
+	
+}
+
 @media screen and (min-width: 44.375em) {
 
 	/*body.admin-bar .msg_bar {
