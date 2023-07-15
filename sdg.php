@@ -797,7 +797,7 @@ function sdg_msg_bar( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
-	$ts_info .= "<!-- <pre>sdg_msg_bar args: ".print_r($args, true)."</pre> -->";	
+	//$ts_info .= "<!-- <pre>sdg_msg_bar args: ".print_r($args, true)."</pre> -->";	
     
 	// Defaults
 	$defaults = array(
@@ -888,7 +888,8 @@ function sdg_msg_bar( $args = array() ) {
 			$event_title = get_the_title( $post_id );
             $msg .= make_link( get_permalink($post_id), $event_title );
 		} else {
-			$msg = get_the_excerpt( $post_id );	
+			$msg = get_the_excerpt( $post_id );
+			$msg .= make_link( get_permalink($post_id), "Read More..." );
 		}
 		
 		$info .= '<div>';
