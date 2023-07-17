@@ -379,7 +379,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // Ok to display the image! Set up classes for styling
     $classes = "post-thumbnail sdg";
-    if ( is_dev_site() ) { $classes .= " zoom-fade"; }
+    $classes .= " zoom-fade"; //if ( is_dev_site() ) { $classes .= " zoom-fade"; }
     if ( is_singular('event') ) { $classes .= " event-image"; }
     if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
     
@@ -396,8 +396,6 @@ function sdg_post_thumbnail ( $args = array() ) {
 		} else {
 			$classes .= " no-caption";
 		}
-    
-		//if ( is_dev_site() ) { $classes .= " zoom-fade"; }
 		
         if ( has_post_thumbnail($post_id) ) {
             
