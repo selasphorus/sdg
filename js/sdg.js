@@ -300,6 +300,7 @@ jQuery(document).ready(function($) {
     });
     
     // Msg bar
+    // TBD: how and when to re-open it once the user has closed it?
     $( ".msg_bar_close" ).click(function() {
         $("#msg_bar").hide();
     });
