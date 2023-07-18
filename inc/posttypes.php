@@ -239,7 +239,7 @@ if ( in_array('groups', $sdg_modules ) ) {
 			'capability_type' 	 => $caps,
 			'map_meta_cap'       => true,
 			'has_archive'        => true,
-			'hierarchical'       => false,
+			'hierarchical'       => true,
 			//'menu_icon'          => 'dashicons-groups',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
