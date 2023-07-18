@@ -336,7 +336,7 @@ jQuery(document).ready(function($) {
 		} else {
 		
 			console.log('NO cvalue found for '+cname);
-			//setCookie(cname, 'true', 365);
+			setCookie(cname, post_id, 365);
 	 
 		}
 	}
