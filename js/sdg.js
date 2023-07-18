@@ -308,9 +308,9 @@ jQuery(document).ready(function($) {
 		var msg_bar = "#msg_bar";
 		
 		// Check to see if the msg_bar is hidden
-		if ( msg_bar.hasClass('hidden') ) {
+		/*if ( msg_bar.hasClass('hidden') ) {
 			console.log('msg_bar hasClass hidden');
-		}
+		}*/
 		
 		// Get the msg_bar post_id
 		var post_id = msg_bar.closest('div.featured-post').attr('id');    	
