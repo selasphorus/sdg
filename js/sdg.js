@@ -301,8 +301,47 @@ jQuery(document).ready(function($) {
     
     // Msg bar
     // TBD: how and when to re-open it once the user has closed it?
+    // >> check to see if post_id cookie is set and current post_id matches. If not, show msg_bar and set cookie with current post_id
+    
+    if ( $('#msg_bar') ) {
+    
+		var msg_bar = "#msg_bar";
+		
+		// Check to see if the msg_bar is hidden
+		if ( msg_bar.hasClass('hidden') ) {
+			console.log('msg_bar hasClass hidden');
+		}
+		
+		// Get the msg_bar post_id
+		var post_id = msg_bar.closest('div.featured-post').attr('id');    	
+    	console.log('post_id: '+post_id);
+    	
+    	// Check cookie
+		var cname = 'sdg_featured_post';
+		var cvalue = getCookie(cname);
+	
+		if (cvalue != "") {
+	
+			console.log('cvalue of "'+cvalue+'" found for '+cname);
+			//alert("cookie '" + cname+"' = '" + cvalue + "'");
+			
+			// Compare cvalue with post_id
+			if ( cvalue == post_id ) {
+				console.log('cvalue == post_id');
+			} else {
+				console.log('cvalue NE post_id');
+			}
+					
+		} else {
+		
+			console.log('NO cvalue found for '+cname);
+			//setCookie(cname, 'true', 365);
+	 
+		}
+	}
+        
     $( ".msg_bar_close" ).click(function() {
-        $("#msg_bar").hide();
+        $("#msg_bar").addClass('hidden');
     });
 	
 	

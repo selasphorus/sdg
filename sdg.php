@@ -889,10 +889,10 @@ function sdg_msg_bar( $args = array() ) {
             $msg .= make_link( get_permalink($post_id), $event_title );
 		} else {
 			$msg = get_the_excerpt( $post_id );
-			$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
+			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
 		
-		$info .= '<div>';
+		$info .= '<div id="post-'.$post_id.' class="featured-post"">';
 		$info .= "<p>";
 		$info .= $msg;
 		$info .= $ts_info;
