@@ -232,6 +232,44 @@ function register_taxonomy_media_category() {
 }
 add_action( 'init', 'register_taxonomy_media_category' );
 
+// Custom Taxonomy: Media Tag
+function register_taxonomy_media_tag() {
+    //$cap = 'XXX';
+    $labels = array(
+        'name'              => _x( 'Media Tags', 'taxonomy general name' ),
+        'singular_name'     => _x( 'Media Tag', 'taxonomy singular name' ),
+        'search_items'      => __( 'Search Media Tags' ),
+        'all_items'         => __( 'All Media Tags' ),
+        'parent_item'       => __( 'Parent Media Tag' ),
+        'parent_item_colon' => __( 'Parent Media Tag:' ),
+        'edit_item'         => __( 'Edit Media Tag' ),
+        'update_item'       => __( 'Update Media Tag' ),
+        'add_new_item'      => __( 'Add New Media Tag' ),
+        'new_item_name'     => __( 'New Media Tag Name' ),
+        'menu_name'         => __( 'Media Tags' ),
+    );
+    $args = array(
+        'labels'            => $labels,
+        'description'          => '',
+        'public'               => true,
+        'hierarchical'      => false,
+        'show_ui'           => true,
+        'show_admin_column' => true,
+        'show_in_rest'      => true,
+        /*'capabilities'         => array(
+            'manage_terms'  =>   'manage_'.$cap.'_terms',
+            'edit_terms'    =>   'edit_'.$cap.'_terms',
+            'delete_terms'  =>   'delete_'.$cap.'_terms',
+            'assign_terms'  =>   'assign_'.$cap.'_terms',
+        ),*/
+        'query_var'         => true,
+        'rewrite'           => [ 'slug' => 'media_tag' ],
+    );
+    register_taxonomy( 'media_tag', [ 'attachment' ], $args );
+}
+add_action( 'init', 'register_taxonomy_media_tag' );
+
+
 // Custom Taxonomy: Page Tag
 function register_taxonomy_page_tag() {
     //$cap = 'XXX';
