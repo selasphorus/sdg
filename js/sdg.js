@@ -306,12 +306,14 @@ jQuery(document).ready(function($) {
     if ( $('#msg_bar') ) {
     
 		var msg_bar = "#msg_bar";
+		var visible = false;
 		
 		// Check to see if the msg_bar is hidden
-		if ( $('#msg_bar').hasClass('hidden') ) {
-			console.log('msg_bar hasClass hidden');
+		if ( $("#msg_bar").is(':visible') ) {
+			console.log('msg_bar IS visible');
+			var visible = true;
 		} else {
-			console.log('msg_bar NOT hasClass hidden');
+			console.log('msg_bar NOT is visible');		
 		}
 		
 		// Get the msg_bar post_id
@@ -333,6 +335,7 @@ jQuery(document).ready(function($) {
 				console.log('cvalue == post_id');
 			} else {
 				console.log('cvalue NE post_id');
+				if ( !visible ) { $("#msg_bar").show(); }
 			}
 					
 		} else {
@@ -344,7 +347,8 @@ jQuery(document).ready(function($) {
 	}
         
     $( ".msg_bar_close" ).click(function() {
-        $("#msg_bar").addClass('hidden');
+        $("#msg_bar").hide();
+        //$("#msg_bar").addClass('hidden');
     });
 	
 	
