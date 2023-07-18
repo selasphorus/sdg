@@ -313,7 +313,7 @@ jQuery(document).ready(function($) {
 		}*/
 		
 		// Get the msg_bar post_id
-		var post_id = $('#msg_bar').closest('div.featured-post').attr('id');
+		var post_id = $('#msg_bar div.featured-post').attr('id');
 		//var post_id = msg_bar.closest('div.featured-post').attr('id');    	
     	console.log('post_id: '+post_id);
     	
