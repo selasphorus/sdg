@@ -195,7 +195,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'menu_icon'          => 'dashicons-groups',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'people_category', 'people_tag', 'admin_tag' ),
+			'taxonomies' => array( 'person_category', 'person_title', 'admin_tag' ), //, 'person_tag'
 			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
@@ -378,7 +378,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'admin_tag', 'project_category' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag', 'project_category' ),
 			'show_in_rest' => false, // false = use classic, not block editor
 		);
 
@@ -1217,7 +1217,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'menu_icon'          => 'dashicons-playlist-audio',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1259,7 +1259,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1301,7 +1301,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1343,7 +1343,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1385,7 +1385,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1433,7 +1433,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'menu_icon'          => 'dashicons-admin-multisite',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag', 'venue_category' ), //'venue_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag', 'venue_category' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1475,7 +1475,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1529,7 +1529,7 @@ if ( in_array('sources', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1577,7 +1577,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 
@@ -1625,7 +1625,7 @@ if ( in_array('resources', $sdg_modules ) ) {
 			//'menu_icon'          => 'dashicons-welcome-write-blog',
 			'menu_position'      => null,
 			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'people_category', 'people_tag', 
+			'taxonomies' => array( 'admin_tag' ),
 			'show_in_rest' => false, // i.e. false = use classic, not block editor
 		);
 

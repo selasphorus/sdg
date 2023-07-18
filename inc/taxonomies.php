@@ -311,8 +311,9 @@ add_action( 'init', 'register_taxonomy_page_tag' );
 /*** Taxonomies for PEOPLE ***/
 
 if ( in_array('people', $sdg_modules ) ) {
+
 	// Custom Taxonomy: People Category
-	function register_taxonomy_people_category() {
+	function register_taxonomy_person_category() {
 		//$cap = 'person'; // WIP
 		$labels = array(
 			'name'              => _x( 'Person Categories', 'taxonomy general name' ),
@@ -343,11 +344,49 @@ if ( in_array('people', $sdg_modules ) ) {
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
 			),*/
 			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'people_category' ],
+			'rewrite'           => [ 'slug' => 'person_category' ],
 		);
-		register_taxonomy( 'people_category', [ 'person' ], $args );
+		register_taxonomy( 'person_category', [ 'person' ], $args );
 	}
-	add_action( 'init', 'register_taxonomy_people_category' );
+	add_action( 'init', 'register_taxonomy_person_category' );
+	
+	// Custom Taxonomy: Person Title
+	function register_taxonomy_person_title() {
+		//$cap = 'person'; // WIP
+		$labels = array(
+			'name'              => _x( 'Person Titles', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Person Title', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Person Titles' ),
+			'all_items'         => __( 'All Person Titles' ),
+			'parent_item'       => __( 'Parent Person Title' ),
+			'parent_item_colon' => __( 'Parent Person Title:' ),
+			'edit_item'         => __( 'Edit Person Title' ),
+			'update_item'       => __( 'Update Person Title' ),
+			'add_new_item'      => __( 'Add New Person Title' ),
+			'new_item_name'     => __( 'New Person Title Name' ),
+			'menu_name'         => __( 'Person Titles' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_rest'      => true,
+            // CAPS WIP -- make this not dependent on Members plugin
+			/*'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),*/
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'person_title' ],
+		);
+		register_taxonomy( 'person_title', [ 'person' ], $args );
+	}
+	add_action( 'init', 'register_taxonomy_person_title' );
 }
 
 /*** Taxonomies for GROUPS (ORGS/ENSEMBLES) ***/
