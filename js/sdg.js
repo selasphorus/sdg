@@ -317,6 +317,8 @@ jQuery(document).ready(function($) {
 			console.log('sdg_featured_post: '+sdg_featured_post);
 			
 			var sdg_user_closed_msg_bar = getCookie('sdg_user_closed_msg_bar');
+			console.log('sdg_user_closed_msg_bar: '+sdg_user_closed_msg_bar);
+			
 			// Compare cvalue with post_id
 			if ( sdg_featured_post == post_id ) {				
 				console.log('sdg_featured_post == post_id');				
