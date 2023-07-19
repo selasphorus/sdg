@@ -323,12 +323,12 @@ jQuery(document).ready(function($) {
 			if ( sdg_featured_post == post_id ) {				
 				console.log('sdg_featured_post == post_id');				
 			} else {
-				console.log('sdg_featured_post NE post_id');
-				if ( !sdg_user_closed_msg_bar ) {
-					$("#msg_bar").show();
-					deleteCookie('sdg_user_closed_msg_bar');
-				}
-				
+				console.log('sdg_featured_post NE post_id');							
+			}
+			
+			if ( !sdg_user_closed_msg_bar || sdg_featured_post !== post_id ) {
+				$("#msg_bar").show();
+				deleteCookie('sdg_user_closed_msg_bar');
 			}
 					
 		} else {
