@@ -306,14 +306,14 @@ jQuery(document).ready(function($) {
     if ( $('#msg_bar') ) {
     
 		var msg_bar = "#msg_bar";
-		var visible = false;
+		var visible = true;
 		
 		// Check to see if the msg_bar is hidden
 		if ( $("#msg_bar").is(':visible') ) {
 			console.log('msg_bar IS visible');
-			var visible = true;
 		} else {
-			console.log('msg_bar NOT is visible');		
+			console.log('msg_bar NOT is visible');
+			var visible = false;
 		}
 		
 		// Get the msg_bar post_id
@@ -324,7 +324,7 @@ jQuery(document).ready(function($) {
     	// Check cookie
 		var cname = 'sdg_featured_post';
 		var cvalue = getCookie(cname);
-	
+		
 		if (cvalue != "") {
 	
 			console.log('cvalue of "'+cvalue+'" found for '+cname);
@@ -335,7 +335,11 @@ jQuery(document).ready(function($) {
 				console.log('cvalue == post_id');
 			} else {
 				console.log('cvalue NE post_id');
-				if ( !visible ) { $("#msg_bar").show(); }
+				if ( !visible ) {
+					$("#msg_bar").show();
+					deleteCookie('sdg_user_closed_msg_bar');
+				}
+				
 			}
 					
 		} else {
@@ -349,6 +353,7 @@ jQuery(document).ready(function($) {
     $( ".msg_bar_close" ).click(function() {
         $("#msg_bar").hide();
         //$("#msg_bar").addClass('hidden');
+        setCookie('sdg_user_closed_msg_bar', 'true', 365);
     });
 	
 	
