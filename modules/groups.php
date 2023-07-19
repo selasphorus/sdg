@@ -15,7 +15,7 @@ if ( !function_exists( 'add_action' ) ) {
 function display_group_personnel ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 
@@ -82,7 +82,7 @@ function sdg_group_personnel ( $atts = [] ) {
 	
 	$args = shortcode_atts( array(
         'id' => null,
-        'subgroup_ids' => array(),
+        //'subgroup_ids' => array(),
     ), $atts );
     
     $group_id = $args['id'];
