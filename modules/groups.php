@@ -103,9 +103,9 @@ function display_group_personnel ( $args = array() ) {
 					$query = new WP_Query( $wp_args );
 					$persons = $query->posts;
 					
-					$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-					$info .= "persons: <pre>".print_r($persons, true)."</pre>";
-					$info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
+					$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+					$ts_info .= "persons: <pre>".print_r($persons, true)."</pre>";
+					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
 					foreach ( $persons as $person_id ) {
 						$info .= get_the_title($person_id)."<br />";
