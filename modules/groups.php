@@ -71,7 +71,7 @@ function display_group_personnel ( $args = array() ) {
 				$title_term = get_term($title_id);
 				if ( $title_term ) { 
 				
-					$info .= $title_term->name."<br />";
+					$group_title = $title_term->name;
 					
 					// Get all persons matching this group_id and title_id which are current
 					//...
@@ -107,8 +107,10 @@ function display_group_personnel ( $args = array() ) {
 					$ts_info .= "persons: <pre>".print_r($persons, true)."</pre>";
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
+					if ( $persons ) { $info .= $group_title."<br />"; }
 					foreach ( $persons as $person_id ) {
-						$info .= get_the_title($person_id)."<br />";
+						$person_name = get_the_title($person_id);
+						$info .= $person_name."<br />";
 					}
 				}
 			}
