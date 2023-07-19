@@ -64,8 +64,12 @@ function display_group_personnel ( $args = array() ) {
 			if ( !$show_subgroup ) {
 				continue;
 			}
-			$info .= "[$i] ".$subgroup_name."<br />";
+			//$info .= "[$i] ".$subgroup_name."<br />";
+			
+			$subgroup_info = ""; // init
+			
 			foreach ( $subgroup_personnel as $group_person ) {
+			
 				//$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
 				$title_id = $group_person['title'];
 				$title_term = get_term($title_id);
@@ -107,12 +111,17 @@ function display_group_personnel ( $args = array() ) {
 					$ts_info .= "persons: <pre>".print_r($persons, true)."</pre>";
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
-					if ( $persons ) { $info .= $group_title."<br />"; }
+					if ( $persons ) { $subgroup_info .= $group_title."<br />"; }
 					foreach ( $persons as $person_id ) {
 						$person_name = get_the_title($person_id);
-						$info .= $person_name."<br />";
+						$subgroup_info .= $person_name."<br />";
 					}
 				}
+			}
+			
+			if ( !empty($subgroup_info) ) {
+				$info .= $subgroup_name."<br />";
+				$info .= $subgroup_info;
 			}
 		}
     	
