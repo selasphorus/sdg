@@ -81,6 +81,7 @@ a.action {
 }
 
 .msg_bar {
+	display: none;
 	width: 100%;
     height: 4rem;
     margin: 0px auto 0 auto;

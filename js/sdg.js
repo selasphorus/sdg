@@ -304,38 +304,25 @@ jQuery(document).ready(function($) {
     // >> check to see if post_id cookie is set and current post_id matches. If not, show msg_bar and set cookie with current post_id
     
     if ( $('#msg_bar') ) {
-    
-		var msg_bar = "#msg_bar";
-		var visible = true;
-		
-		// Check to see if the msg_bar is hidden
-		if ( $("#msg_bar").is(':visible') ) {
-			console.log('msg_bar IS visible');
-		} else {
-			console.log('msg_bar NOT is visible');
-			var visible = false;
-		}
-		
-		// Get the msg_bar post_id
-		var post_id = $('#msg_bar div.featured-post').attr('id');
-		//var post_id = msg_bar.closest('div.featured-post').attr('id');    	
-    	console.log('post_id: '+post_id);
     	
-    	// Check cookie
-		var cname = 'sdg_featured_post';
-		var cvalue = getCookie(cname);
+		// Get the msg_bar post_id
+		var post_id = $('#msg_bar div.featured-post').attr('id');	
+    	console.log('post_id: '+post_id);
 		
-		if (cvalue != "") {
+		// Check cookie
+		var sdg_featured_post = getCookie('sdg_featured_post');
+		
+		if (sdg_featured_post != "") {
 	
-			console.log('cvalue of "'+cvalue+'" found for '+cname);
-			//alert("cookie '" + cname+"' = '" + cvalue + "'");
+			console.log('sdg_featured_post: '+sdg_featured_post);
 			
+			var sdg_user_closed_msg_bar = getCookie('sdg_user_closed_msg_bar');
 			// Compare cvalue with post_id
-			if ( cvalue == post_id ) {
-				console.log('cvalue == post_id');
+			if ( sdg_featured_post == post_id ) {				
+				console.log('sdg_featured_post == post_id');				
 			} else {
-				console.log('cvalue NE post_id');
-				if ( !visible ) {
+				console.log('sdg_featured_post NE post_id');
+				if ( !sdg_user_closed_msg_bar ) {
 					$("#msg_bar").show();
 					deleteCookie('sdg_user_closed_msg_bar');
 				}
@@ -344,17 +331,18 @@ jQuery(document).ready(function($) {
 					
 		} else {
 		
-			console.log('NO cvalue found for '+cname);
-			setCookie(cname, post_id, 365);
+			console.log('NO sdg_featured_post found ');
+			setCookie('sdg_featured_post', post_id, 365);
 	 
-		}
+		}    	
+    	
 	}
         
     $( ".msg_bar_close" ).click(function() {
         $("#msg_bar").hide();
         //$("#msg_bar").addClass('hidden');
         setCookie('sdg_user_closed_msg_bar', 'true', 365);
-        console.log('sdg_user_closed_msg_bar');
+        console.log('setCookie sdg_user_closed_msg_bar');
     });
 	
 	
