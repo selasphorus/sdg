@@ -77,13 +77,12 @@ function display_group_personnel ( $args = array() ) {
 add_shortcode('group_personnel', 'sdg_group_personnel');
 function sdg_group_personnel ( $atts = [] ) {
 
-	global $wpdb;
 	$info = "";
 	$ts_info = "";
 	
 	$args = shortcode_atts( array(
         'id' => null,
-        'subgroup_ids', array()
+        'subgroup_ids' => array(),
     ), $atts );
     
     $group_id = $args['id'];
