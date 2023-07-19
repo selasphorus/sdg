@@ -61,12 +61,12 @@ function display_group_personnel ( $args = array() ) {
 			$subgroup_name = $subgroup['name'];
 			$subgroup_personnel = $subgroup['personnel'];
 			//
-			if ( $show_subgroup ) {
-				$info .= "[$i] ".$subgroup_name."<br />";
-			}			
-			//
+			if ( !$show_subgroup ) {
+				next;
+			}
+			$info .= "[$i] ".$subgroup_name."<br />";
 			foreach ( $subgroup_personnel as $group_person ) {
-				//
+				$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
 			}
 		}
     	
