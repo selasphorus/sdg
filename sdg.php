@@ -929,7 +929,7 @@ function get_default_taxonomy ( $post_type = null ) {
         case "repertoire":
             return "repertoire_category";
         case "person":
-            return "people_category";
+            return "person_category";
         case "sermon":
             return "sermon_topic";
         default:

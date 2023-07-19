@@ -1874,7 +1874,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // For instance, what if the user can't remember which Bach wrote a piece? Should be able to search for all...
                                 
                                 // e.g. field_post_type = person, field_name = composer 
-                                // ==> find all people in Composers people_category -- PROBLEM: people might not be correctly categorized -- this depends on good data entry
+                                // ==> find all people in Composers person_category -- PROBLEM: people might not be correctly categorized -- this depends on good data entry
                                 // -- alt: get list of composers who are represented in the music library -- get unique meta_values for meta_key="composer"
 
                                 // TODO: figure out how to filter for only composers related to editions? or lit dates related to rep... &c.

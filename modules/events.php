@@ -684,7 +684,7 @@ function get_personnel_person ( $args = array() ) {
 				$show_suffix = true;
 				$show_job_title = true;
 				// Check to see if this is a clergy person >> show prefix and lastname only, i.e. abbr
-				if ( has_term( 'clergy', 'people_category', $person_id ) ) { 
+				if ( has_term( 'clergy', 'person_category', $person_id ) ) { 
 					$name_abbr = "abbr";
 				}				
 				$override = "special_name";
