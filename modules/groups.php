@@ -26,7 +26,7 @@ function display_group_personnel ( $args = array() ) {
 	// Defaults
 	$defaults = array(
 		'group_id'		=> null,
-		'subgroup_ids'	=> array(), // WIP -- how to limit display to chosen indices?
+		'subgroup_ids'	=> array(),
 	);
 
 	// Parse & Extract args
@@ -50,12 +50,19 @@ function display_group_personnel ( $args = array() ) {
 		foreach ( $subgroups as $i => $subgroup ) {
 		
 			$ts_info .= "i: $i<br />";
+			$show_subgroup = true;
+			
+			if ( $subgroup_ids && !in_array($i, $subgroup_ids) ) {
+				$show_subgroup = false;
+			}
 			
 			//$subgroup = $subgroups[$subgroup_id];
 			$subgroup_name = $subgroup['name'];
 			$subgroup_personnel = $subgroup['personnel'];
 			//
-			$info .= "[$i] ".$subgroup_name."<br />";
+			if ( $show_subgroup ) {
+				$info .= "[$i] ".$subgroup_name."<br />";
+			}			
 			//
 			foreach ( $subgroup_personnel as $group_person ) {
 				//
@@ -84,12 +91,16 @@ function sdg_group_personnel ( $atts = [] ) {
 	
 	$args = shortcode_atts( array(
         'id' => null,
-        //'subgroup_ids' => array(),
+        'subgroup_ids' => array(),
     ), $atts );
     
     $group_id = $args['id'];
+    $subgroup_ids = $args['subgroups'];
     
-    $info .= display_group_personnel( array('group_id' => $group_id) );
+	// Turn the list of subgroup_ids (if any) into a proper array
+	if ( $subgroup_ids ) { $subgroup_ids = array_map( 'intval', birdhive_att_explode( $subgroup_ids ) ); }
+    
+    $info .= display_group_personnel( array('group_id' => $group_id, 'subgroup_ids' => $subgroup_ids ) );
     
     $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
