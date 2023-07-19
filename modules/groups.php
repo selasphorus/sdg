@@ -55,6 +55,8 @@ function display_group_personnel ( $args = array() ) {
 			$subgroup_name = $subgroup['name'];
 			$subgroup_personnel = $subgroup['personnel'];
 			//
+			$info .= "[$i] ".$subgroup_name."<br />";
+			//
 			foreach ( $subgroup_personnel as $group_person ) {
 				//
 			}
