@@ -306,6 +306,7 @@ jQuery(document).ready(function($) {
     if ( $('#msg_bar') ) {
     	
     	var show_msg_bar = false;
+    	$("#msg_bar").hide();
     	
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
