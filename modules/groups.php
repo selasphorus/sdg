@@ -103,6 +103,7 @@ function display_group_personnel ( $args = array() ) {
 					
 					$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 					$info .= "persons: <pre>".print_r($persons, true)."</pre>";
+					$info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
 					foreach ( $persons as $person_id ) {
 						$info .= get_the_title($person_id)."<br />";
