@@ -95,7 +95,7 @@ function sdg_group_personnel ( $atts = [] ) {
     ), $atts );
     
     $group_id = $args['id'];
-    $subgroup_ids = $args['subgroups'];
+    $subgroup_ids = $args['subgroup_ids'];
     
 	// Turn the list of subgroup_ids (if any) into a proper array
 	if ( $subgroup_ids ) { $subgroup_ids = array_map( 'intval', birdhive_att_explode( $subgroup_ids ) ); }
