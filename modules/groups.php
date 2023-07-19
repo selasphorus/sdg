@@ -52,7 +52,8 @@ function display_group_personnel ( $args = array() ) {
 			$ts_info .= "i: $i<br />";
 			$show_subgroup = true;
 			
-			if ( $subgroup_ids && !in_array($i, $subgroup_ids) ) {
+			// NB: subgroup_ids are passed starting with "1" instead of zero
+			if ( $subgroup_ids && !in_array($i+1, $subgroup_ids) ) {
 				$show_subgroup = false;
 			}
 			
@@ -98,8 +99,8 @@ function sdg_group_personnel ( $atts = [] ) {
     $subgroup_ids = $args['subgroup_ids'];
     
 	// Turn the list of subgroup_ids (if any) into a proper array
-	if ( $subgroup_ids ) { $subgroup_ids = birdhive_att_explode( $subgroup_ids ); }
-	//if ( $subgroup_ids ) { $subgroup_ids = array_map( 'intval', birdhive_att_explode( $subgroup_ids ) ); }
+	//if ( $subgroup_ids ) { $subgroup_ids = birdhive_att_explode( $subgroup_ids ); }
+	if ( $subgroup_ids ) { $subgroup_ids = array_map( 'intval', birdhive_att_explode( $subgroup_ids ) ); }
     
     $info .= display_group_personnel( array('group_id' => $group_id, 'subgroup_ids' => $subgroup_ids ) );
     
