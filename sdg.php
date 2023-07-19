@@ -896,6 +896,7 @@ function sdg_msg_bar( $args = array() ) {
 				$excerpt = get_the_excerpt( $post_id );
 			}*/
 			$msg = $excerpt;
+			$msg .= "testing...";
 			//$msg = get_the_excerpt( $post_id );
 			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
