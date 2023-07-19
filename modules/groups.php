@@ -86,13 +86,15 @@ function display_group_personnel ( $args = array() ) {
 							'relation' => 'AND',
 							array(
 								'key'		=> "titles_XYZ_group", // name of custom field, with XYZ as a wildcard placeholder (must do this to avoid hashing)
-								'compare' 	=> 'LIKE',
-								'value' 	=> '"' . $group_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+								//'compare' 	=> 'LIKE',
+								//'value' 	=> '"' . $group_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+								'value' 	=> $group_id,
 							),
 							array(
 								'key'		=> "titles_XYZ_title", // name of custom field, with XYZ as a wildcard placeholder (must do this to avoid hashing)
-								'compare' 	=> 'LIKE',
-								'value' 	=> '"' . $title_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+								//'compare' 	=> 'LIKE',
+								//'value' 	=> '"' . $title_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+								'value' 	=> $title_id,
 							),
 						),
 						'fields' => 'ids',
