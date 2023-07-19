@@ -66,7 +66,10 @@ function display_group_personnel ( $args = array() ) {
 			}
 			$info .= "[$i] ".$subgroup_name."<br />";
 			foreach ( $subgroup_personnel as $group_person ) {
-				$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
+				//$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
+				$title_id = $group_person['title'];
+				$title_term = get_term($title_id);
+				if ( $title_term ) { $info .= $title_term->name."<br />"; }
 			}
 		}
     	
