@@ -816,7 +816,6 @@ function sdg_msg_bar( $args = array() ) {
 	// First, check to see if there is a webcast event currently livestreaming
 	if ( !$post_id && $prioritize_livestream ) {
 		$post_id = get_live_webcast_id();
-		if ( $post_id ) { $post_type = 'event'; }
 	}
     
     // If no ID was submitted AND there's no livestreaming event, look for a featured post
@@ -863,7 +862,8 @@ function sdg_msg_bar( $args = array() ) {
 	if ( $post_id ) {
 	
 		$ts_info .= "<!-- post_id: $post_id -->";
-			
+		$post_type = get_post_type( $post_id );
+		
 		$colorscheme = "";
 																  
 		$info .= '<div id="msg_bar" class="msg_bar '.$post_type.$colorscheme.'">';
