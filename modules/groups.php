@@ -71,7 +71,7 @@ function display_group_personnel ( $args = array() ) {
 	// Return info for display
 	return $info;
 	
-} // END function birdhive_display_collection ( $args = array() ) 
+} // END function display_group_personnel ( $args = array() ) 
 
 
 add_shortcode('group_personnel', 'sdg_group_personnel');
