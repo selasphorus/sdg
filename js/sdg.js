@@ -354,6 +354,7 @@ jQuery(document).ready(function($) {
         $("#msg_bar").hide();
         //$("#msg_bar").addClass('hidden');
         setCookie('sdg_user_closed_msg_bar', 'true', 365);
+        console.log('sdg_user_closed_msg_bar');
     });
 	
 	
