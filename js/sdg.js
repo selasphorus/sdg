@@ -336,6 +336,7 @@ jQuery(document).ready(function($) {
 			}
 			
 			if ( show_msg_bar == true ) {
+				console.log('show_msg_bar');
 				$("#msg_bar").show();
 				deleteCookie('sdg_user_closed_msg_bar');
 			}
