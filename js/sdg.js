@@ -305,6 +305,8 @@ jQuery(document).ready(function($) {
     
     if ( $('#msg_bar') ) {
     	
+    	var show_msg_bar = false;
+    	
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
     	console.log('post_id: '+post_id);
@@ -319,14 +321,21 @@ jQuery(document).ready(function($) {
 			var sdg_user_closed_msg_bar = getCookie('sdg_user_closed_msg_bar');
 			//console.log('sdg_user_closed_msg_bar: '+sdg_user_closed_msg_bar);
 			
+			if ( sdg_user_closed_msg_bar ) {
+				console.log('sdg_user_closed_msg_bar');
+			} else {
+				show_msg_bar = true;
+			}
+			
 			// Compare cvalue with post_id
 			if ( sdg_featured_post == post_id ) {				
 				console.log('sdg_featured_post == post_id');				
 			} else {
-				console.log('sdg_featured_post NE post_id');							
+				console.log('sdg_featured_post NE post_id');
+				show_msg_bar = true;
 			}
 			
-			if ( sdg_featured_post !== post_id ) { // !sdg_user_closed_msg_bar || 
+			if ( show_msg_bar == true ) {
 				$("#msg_bar").show();
 				deleteCookie('sdg_user_closed_msg_bar');
 			}
@@ -336,7 +345,7 @@ jQuery(document).ready(function($) {
 			console.log('NO sdg_featured_post found ');
 			setCookie('sdg_featured_post', post_id, 365);
 	 
-		}    	
+		}
     	
 	}
         
