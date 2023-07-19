@@ -333,6 +333,7 @@ jQuery(document).ready(function($) {
 				console.log('sdg_featured_post == post_id');				
 			} else {
 				console.log('sdg_featured_post ('+sdg_featured_post+') NE post_id ('+post_id+')');
+			console.log('setCookie sdg_featured_post');
 				setCookie('sdg_featured_post', post_id, 365);
 				show_msg_bar = true;
 			}
@@ -346,6 +347,7 @@ jQuery(document).ready(function($) {
 		} else {
 		
 			console.log('NO sdg_featured_post found ');
+			console.log('setCookie sdg_featured_post');
 			setCookie('sdg_featured_post', post_id, 365);
 	 
 		}
