@@ -315,7 +315,7 @@ jQuery(document).ready(function($) {
 		// Check cookie
 		var sdg_featured_post = getCookie('sdg_featured_post');
 		
-		if (sdg_featured_post != "") {
+		if (sdg_featured_post ) {
 	
 			console.log('sdg_featured_post: '+sdg_featured_post);
 			
@@ -332,7 +332,7 @@ jQuery(document).ready(function($) {
 			if ( sdg_featured_post == post_id ) {				
 				console.log('sdg_featured_post == post_id');				
 			} else {
-				console.log('sdg_featured_post NE post_id');
+				console.log('sdg_featured_post ('+sdg_featured_post+') NE post_id ('+post_id+')');
 				show_msg_bar = true;
 			}
 			
