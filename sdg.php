@@ -861,8 +861,8 @@ function sdg_msg_bar( $args = array() ) {
 	
 	if ( $post_id ) {
 	
-		$ts_info .= "<!-- post_id: $post_id -->";
 		$post_type = get_post_type( $post_id );
+		$ts_info .= "<!-- post_id: $post_id; post_type: $post_type -->";
 		
 		$colorscheme = "";
 																  
