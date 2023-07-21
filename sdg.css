@@ -95,6 +95,9 @@ a.action {
 }
 
 .msg_bar div.post {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	max-width: 90%;
 	height: inherit;
 }
