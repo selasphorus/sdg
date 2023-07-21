@@ -891,11 +891,12 @@ function sdg_msg_bar( $args = array() ) {
 			$post = get_post( $post_id );
 			//$excerpt = $post->post_excerpt;
 			if ( has_excerpt( $post_id ) ) { 
-				$excerpt = $post->post_excerpt; // custom excerpt
+				$msg = $post->post_excerpt; // custom excerpt
+				$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 			} else {
-				$excerpt = get_the_excerpt( $post_id );
+				$msg = get_the_excerpt( $post_id );
 			}
-			$msg = $excerpt;
+			//$msg = $excerpt;
 			//$msg = get_the_excerpt( $post_id );
 			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
