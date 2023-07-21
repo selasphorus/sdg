@@ -94,7 +94,8 @@ a.action {
     line-height: normal;
 }
 
-.msg_bar div.post {
+.msg_bar div.post,
+.msg_bar div.event {
 	display: flex;
 	justify-content: center;
 	align-items: center;
