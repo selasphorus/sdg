@@ -889,14 +889,13 @@ function sdg_msg_bar( $args = array() ) {
             $msg .= make_link( get_permalink($post_id), $event_title );
 		} else {
 			$post = get_post( $post_id );
-			$excerpt = $post->post_excerpt;
-			/*if ( has_excerpt( $post_id ) ) { 
-				$excerpt = $post->post_excerpt; // ??
+			//$excerpt = $post->post_excerpt;
+			if ( has_excerpt( $post_id ) ) { 
+				$excerpt = $post->post_excerpt; // custom excerpt
 			} else {
 				$excerpt = get_the_excerpt( $post_id );
-			}*/
+			}
 			$msg = $excerpt;
-			$msg .= "testing...";
 			//$msg = get_the_excerpt( $post_id );
 			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
