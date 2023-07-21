@@ -100,6 +100,11 @@ a.action {
 	padding: 1rem;
 }
 
+.msg_bar .moretag {
+	display: inline;
+	margin: 0 1rem;
+}
+
 .msg_bar.greens {
     background-color: rgb(153, 204, 0, 0.5);
     color: var(--dkgreen);
@@ -110,6 +115,10 @@ a.action {
     color: rgb(156, 67, 22);
 }
 
+.msg_bar div.post {
+	max-width: 90%;
+}
+
 .msg_bar_close {
     cursor: pointer;
     position: absolute;
@@ -118,6 +127,7 @@ a.action {
     /*top: 1rem;
     right: 1rem;*/
     width: 6rem;
+    max-width: 10%;
     height: 6rem;
     background-color: #cccbca;
 }
@@ -137,6 +147,8 @@ body.admin-bar .msg_bar_close {
     top: 46px;
 }
 
+
+/*** End msg_bar styles ***/
 
 /*** Troubleshooting & Dev styles ***/
 /* TODO: streamline, simplify */
