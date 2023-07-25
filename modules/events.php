@@ -3178,12 +3178,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	
             }
             
-            //$caption = sdg_featured_image_caption($EM_Event->ID);
+            $caption = sdg_featured_image_caption($EM_Event->ID);
             //if ( !empty($caption) && $caption != '<p class="zeromargin">&nbsp;</p>' ) { $classes .= " has_caption"; }
             
             $replace = $img_tag;
             //$replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
-            //$replace .= $caption;
+            $replace .= $caption;
             //$replace .= "<!-- [sdgp] sdg_placeholders -->";
             
         } else {
