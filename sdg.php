@@ -2389,7 +2389,8 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
 add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
 function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
     
-    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    // TODO: fix this for other post types. How to tell if attachment was called from content-excerpt.php template?
+    if ( is_singular('event') && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
     	$html .= '<!-- fcn sdg_attachment_image_html -->';
     	
