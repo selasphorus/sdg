@@ -2024,13 +2024,13 @@ function make_link( $url, $linktext, $class = null, $target = null) {
 
 // Check to see if a postmeta record already exists for the specified post_type, meta_key, and meta_value.
 // Option to exclude a specific post_id from the search -- e.g. in searching to see if any *other* post has the same title_for_matching.
-function meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value, $num_posts = "-1") {
+function meta_value_exists( $post_type, $post_id, $meta_key, $meta_value, $num_posts ) {
     
     if ( ! ($post_type && $meta_key && $meta_value) ){
         return null;
     }
     
-    $args = array(
+    $wp_args = array(
         'post_type'   => $post_type,
         'post_status' => 'publish',
         'numberposts' => $num_posts,
@@ -2040,10 +2040,10 @@ function meta_value_exists( $post_type, $post_id = null, $meta_key, $meta_value,
     );
     // if post_id has been provided, then exclude that ID from the search
     if ($post_id ) {
-        $args['exclude'] = array( $post_id );
+        $wp_args['exclude'] = array( $post_id );
     } 
     
-    $matching_posts = get_posts($args);
+    $matching_posts = get_posts($wp_args);
     
     if( count($matching_posts) > 0 ) {
         return count($matching_posts);
@@ -2351,7 +2351,7 @@ function sdg_log( $log_msg, $do_log = true ) {
  * @param int    $post_image_id Post image ID.
  * @return string Filtered post image HTML.
  */
-add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
+//add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
 function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
     if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
@@ -2413,14 +2413,18 @@ function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
 
 // Function to display featured caption in EM event template
 add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );
-function sdg_featured_image_caption ( $post_id = null ) {
+function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
 	
 	global $post;
 	global $wp_query;
     $info = "";
     $caption = "";
     
-    if ( $post_id == null ) { $post_id = get_the_ID(); }
+    if ( $attachment_id ) {
+    
+    } else {
+    	if ( $post_id == null ) { $post_id = get_the_ID(); }
+    }
 	
 	// Retrieve the caption (if any) and return it for display
     if ( get_post_thumbnail_id() ) {
