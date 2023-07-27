@@ -2386,7 +2386,7 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
  * @return string Filtered post image HTML.
  */
 //apply_filters( 'wp_get_attachment_image', string $html, int $attachment_id, string|int[] $size, bool $icon, string[] $attr )
-add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
+/*add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
 function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
     
     // TODO: fix this for other post types. How to tell if attachment was called from content-excerpt.php template?
@@ -2409,7 +2409,7 @@ function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
     }
     
     return $html;
-}
+}*/
 
 // Function to display featured caption in EM event template
 add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );

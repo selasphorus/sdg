@@ -219,6 +219,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     $post_type = get_post_type( $post_id );
     $img_id = null;
     $img_html = "";
+    $img_type = "post_image"; // other option: attachment_image
     $caption = null;
     $image_gallery = array();
     if ( $sources == "all" ) {
@@ -315,6 +316,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 					}
 					*/
 					$img_id = $image_gallery[$i];
+					$img_type = "attachment_image";
 					$ts_info .= "Random thumbnail ID: $img_id<br />";
 				} else {
 					$ts_info .= "No image_gallery found.<br />";
@@ -382,8 +384,6 @@ function sdg_post_thumbnail ( $args = array() ) {
     //$classes .= " zoom-fade"; //if ( is_dev_site() ) { $classes .= " zoom-fade"; }
     if ( is_singular('event') ) { $classes .= " event-image"; }
     if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
-    
-    
     
     if ( $format == "singular" && !( is_page('events') ) ) {
         
@@ -456,7 +456,14 @@ function sdg_post_thumbnail ( $args = array() ) {
         	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
         	$img_html .= $img_tag;
         	$img_html .= '</a>';
-        }        
+        	// Add caption if any
+            if ( $caption != "" ) {
+                $caption_class = "featured_image_caption";
+                $img_html .= '<p class="'. $caption_class . '">' . $caption . '</p>';
+            } else {
+                $img_html .= '<br />';
+            }
+        }
         
     } // End if is_singular()
     
