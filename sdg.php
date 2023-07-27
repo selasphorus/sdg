@@ -2376,6 +2376,40 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     return $html;
 }
 
+// TODO: combine this next function with the previous one to remove redundancy
+
+/**
+ * Show captions for attachment images
+ *
+ * @param string $html          Image HTML.
+ * @param int    $attachment_id Image ID.
+ * @return string Filtered post image HTML.
+ */
+//apply_filters( 'wp_get_attachment_image', string $html, int $attachment_id, string|int[] $size, bool $icon, string[] $attr )
+add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
+function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
+    
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    
+    	$html .= '<!-- fcn sdg_attachment_image_html -->';
+    	
+        if ( $attachment_id ) {
+            $caption = get_post( $attachment_id )->post_excerpt;
+            if ( $caption != "" ) {
+                $caption_class = "featured_image_caption";
+                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
+            } else {
+                $html = $html . '<br />';
+            }
+        }
+        
+        $html .= '<!-- /fcn sdg_attachment_image_html -->';
+        
+    }
+    
+    return $html;
+}
+
 // Function to display featured caption in EM event template
 add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );
 function sdg_featured_image_caption ( $post_id = null ) {
