@@ -171,7 +171,7 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
     sdg_log( "[gtu] old_t4m: ".$old_t4m, $do_log );    
     
     // Check to see if new_t4m is in fact unique to this post
-    $t4m_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); //meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
+    $t4m_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); // meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
     if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
         
         // not unique! fix it...
