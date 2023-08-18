@@ -238,7 +238,8 @@ function sdg_post_thumbnail ( $args = array() ) {
     $ts_info .= "return: $return<br />";
     
     // Are we using the custom image, if any is set?
-    if ( in_array("custom_thumb", $sources ) ) {
+    // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
+    if ( $format != "singular" && in_array("custom_thumb", $sources ) ) {
     	$ts_info .= "Check for custom_thumb<br />";
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
