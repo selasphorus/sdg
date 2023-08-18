@@ -3101,6 +3101,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         }
         $replace = $event_title;
         
+    } else if ( $result == '#_EVENTTIMES' ) {
+        
+        $replace = str_replace(array('am','pm'),array('a.m','p.m'),$replace);
+        
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
         //if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
