@@ -2146,7 +2146,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 				$tax_query['relation'] = $search_operator;
 			}
 			
-			$term_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+			$rep_cat_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+			$admin_tag_exclusions = array('exclude-from-search', 'external-repertoire');
 			
 			foreach ( $tq_components_primary AS $component ) {
 		
@@ -2172,14 +2173,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 							array(
 								'taxonomy' => 'repertoire_category',
 								'field'    => 'slug',
-								'terms'    => $term_exclusions,
+								'terms'    => $rep_cat_exclusions,
 								'operator' => 'NOT IN',
 								//'include_children' => true,
 							),
 							array(
 								'taxonomy' => 'admin_tag',
 								'field'    => 'slug',
-								'terms'    => array('external-repertoire'),
+								'terms'    => $admin_tag_exclusions,
 								'operator' => 'NOT IN',
 								//'include_children' => true,
 							),
@@ -2195,14 +2196,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					array(
 						'taxonomy' => 'repertoire_category',
 						'field'    => 'slug',
-						'terms'    => $term_exclusions,
+						'terms'    => $rep_cat_exclusions,
 						'operator' => 'NOT IN',
 						//'include_children' => true,
 					),
 					array(
 						'taxonomy' => 'admin_tag',
 						'field'    => 'slug',
-						'terms'    => array('external-repertoire'),
+						'terms'    => $admin_tag_exclusions,
 						'operator' => 'NOT IN',
 						//'include_children' => true,
 					),
