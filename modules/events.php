@@ -3103,8 +3103,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTTIMES' || $result == '#_12HSTARTTIME') {
         
+        if ( str_contains($replace, "pm" ) ) { $replace .= "*"; }
         $replace = str_replace(array('am','pm'),array('a.m','p.m'),$replace);
-        $replace .= "*";
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
