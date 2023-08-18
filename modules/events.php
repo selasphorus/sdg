@@ -3101,7 +3101,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         }
         $replace = $event_title;
         
-    } else if ( $result == '#_EVENTTIMES' || $result == '#_12HSTARTTIME') {
+    } else if ( $result == '#_EVENTTIMES' || $result == '#_12HSTARTTIME' ) {
         
         //if ( str_contains($replace, "pm" ) ) { $replace .= "*"; }
         $replace = str_replace('am','a.m.',$replace);
