@@ -387,14 +387,16 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     if ( $format == "singular" && !( is_page('events') ) ) {
         
-        $ts_info .= "is_singular<br />";
+        $ts_info .= "post format is_singular<br />";
         
         // Retrieve the caption (if any) and return it for display
-		$caption = get_post( $img_id  )->post_excerpt;
+		$caption = get_post( $img_id )->post_excerpt;
 		if ( !empty($caption) && !is_singular('person') ) {
 			$classes .= " has-caption";
+			$ts_info .= "Caption found for img_id $img_id: '$caption'<br />";
 		} else {
 			$classes .= " no-caption";
+			$ts_info .= "No caption found for img_id $img_id<br />";
 		}
 		
         if ( has_post_thumbnail($post_id) ) {
