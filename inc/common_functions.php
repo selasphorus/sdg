@@ -57,8 +57,10 @@ function sdg_post_title ( $args = array() ) {
 	// If a title has been submitted, use it; if not, get the post_title
 	if ( $the_title ) {
 		$title = $the_title;
-	} else {
+	} else if ( $post ) {
 		$title = $post->post_title;
+	} else {
+		$title = "";
 	}
 	
 	// If both title and post_id are empty, abort
