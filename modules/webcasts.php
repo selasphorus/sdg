@@ -355,7 +355,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             if ( $status_only == false ) {
                 $src = 'https://www.youtube.com/watch?v='.$video_id;
                 //$player = do_shortcode('[video src="'.$src.'"]'); //height="300"
-                $player .= '<div class="responsive-youtube"><iframe width="900" height="475" src="https://www.youtube.com/embed/'.$video_id.'?controls=1" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+                $player .= '<div class="responsive-youtube"><iframe width="850" height="475" src="https://www.youtube.com/embed/'.$video_id.'?controls=1" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
             }
             
         }        
