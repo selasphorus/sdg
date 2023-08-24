@@ -3648,59 +3648,61 @@ add_filter('em_cp_event_recurring_public','__return_true');
 function get_special_date_content( $the_date = null ) {
 
 	$info = "";
-	$ts_info = "\n<!-- get_special_date_content -->\n";
+	$ts_info = "<!-- get_special_date_content -->";
+    $ts_info .= "<!-- the_date: '$the_date' -->";
+    $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->"; // tft
     
-    /*$args = shortcode_atts( 
-        array(
-            //'post_id'   => get_the_ID(),
-            //'series_id' => null,
-            'the_date'  => null,
-        ), 
-        $atts
-    );*/
-    
-    //$post_id = (int) $args['post_id'];
-    //$series_id = (int) $args['series_id'];
-    //$the_date = $args['the_date'];
-    $ts_info .= "<!-- the_date: '$the_date' -->\n";
-    $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->\n"; // tft
-    
-    // TODO: make this a real thing that retrieves content from the DB based on the date...
-    // via meta_query
     // WIP...
+    // For date notices, set event record to "All day" and assign 'special-notice' event category
     
     // Build query args
-    /*$args = array(
-        'posts_per_page'=> -1,
-        'post_type'		=> 'event', // ???
+    $args = array(
+        'posts_per_page'=> 1, // get one event only
+        'post_type'		=> 'event',
         'meta_query'	=> array(
             array(
-                'key'		=> $meta_key,
-                'compare' 	=> 'LIKE',
-                'value' 	=> $the_date,
+                'key'     => '_event_start_date',
+                'value'   => $the_date,
             )
         ),
-        'orderby'	=> 'meta_value',
-		'order'     => 'DESC',
-		'meta_key' 	=> '_event_start_date',
+        'tax_query'	=> array(
+            array(
+                'taxonomy' => 'event-categories',
+                'field'    => 'slug',
+                'terms'    => 'special-notice',
+            )
+        ),
+        //'orderby'	=> 'meta_value',
+		//'order'     => 'DESC',
+		//'meta_key' 	=> '_event_start_date',
     );
     
     $query = new WP_Query( $args );
     $posts = $query->posts;
-    // WIP...
-    */
-    if ($the_date == "2022-12-24") {
-        
-        $timestamp = strtotime($the_date);
-        $ts_info .= "<!-- timestamp: '$timestamp' -->\n"; // tft
-        
+    
+    if ( $posts ) {
+    	
+    	$timestamp = strtotime($the_date);
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
+        $ts_info .= "<!-- timestamp: '$timestamp' -->\n";
+        $info .= $ts_info;
+        
+        $info .= '<div class="message centered">';
+        $info .= '<p class="scalloped narrow">';
+    	foreach ( $posts as $post ) {
+    		$info .= $post->the_content;
+    	}
+    	$info .= '</p>';
+        $info .= '</div>';
+    }
+    /*
+    if ($the_date == "2022-12-24") {        
         $info .= '<div class="message centered">';
         $info .= '<p class="scalloped narrow">Saint Thomas Church will be open to the public during the following hours on Christmas Eve:<br />';
         $info .= "10am-1pm<br />3pm-6:30pm<br />9:30pm-12:30am</p>";
         $info .= '</div>';
     }
-	
+	*/
 	return $info;
 	
 }
