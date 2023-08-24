@@ -3644,8 +3644,6 @@ add_filter('em_cp_event_recurring_public','__return_true');
 // Event archives -- top-of-page content
 
 // Special Date Content
-//add_shortcode('special_date_content', 'get_special_date_content');
-//function get_special_date_content( $atts = [], $content = null, $tag = '' ) {
 function get_special_date_content( $the_date = null ) {
 
 	$info = "";
@@ -3653,8 +3651,7 @@ function get_special_date_content( $the_date = null ) {
     $ts_info .= "<!-- the_date: '$the_date' -->";
     $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->"; // tft
     
-    // WIP...
-    // For date notices, set event record to "All day" and assign 'special-notice' event category
+    // NB: set event record to "All day" and assign 'special-notice' event category
     
     // Build query args
     $args = array(
@@ -3673,9 +3670,6 @@ function get_special_date_content( $the_date = null ) {
                 'terms'    => 'special-notice',
             )
         ),
-        //'orderby'	=> 'meta_value',
-		//'order'     => 'DESC',
-		//'meta_key' 	=> '_event_start_date',
     );
     
     $query = new WP_Query( $args );
@@ -3693,9 +3687,7 @@ function get_special_date_content( $the_date = null ) {
     	foreach ( $posts as $post ) {
     		//$info .= "<pre>".print_r($post, true)."</pre>"; // tft
     		$post_id = $post->ID;
-    		//$info .= "post_id: ".$post_id;
     		if ( $post_id ) {
-    			//$notice_text = get_the_excerpt( $post_id );
     			$notice_text = $post->post_content;
     			// TODO: strip any <p></p> tags?
     			$info .= $notice_text;
@@ -3706,14 +3698,6 @@ function get_special_date_content( $the_date = null ) {
     } else {
     	$info .= "<!-- No posts found by fcn get_special_date_content -->";
     }
-    /*
-    if ($the_date == "2022-12-24") {        
-        $info .= '<div class="message centered">';
-        $info .= '<p class="scalloped narrow">Saint Thomas Church will be open to the public during the following hours on Christmas Eve:<br />';
-        $info .= "10am-1pm<br />3pm-6:30pm<br />9:30pm-12:30am</p>";
-        $info .= '</div>';
-    }
-	*/
 	return $info;
 	
 }
