@@ -3692,9 +3692,11 @@ function get_special_date_content( $the_date = null ) {
     	foreach ( $posts as $post ) {
     		//$info .= print_r($post, true); // tft
     		$post_id = $post->ID;
-    		$info .= "post_id: ".$post_id;
-    		//$text = get_the_excerpt($post->ID);
-    		//$info .= $text;
+    		//$info .= "post_id: ".$post_id;
+    		if ( $post_id ) {
+    			$notice_text = get_the_excerpt($post_id);
+    			$info .= $notice_text;
+    		}
     	}
     	$info .= '</p>';
         $info .= '</div>';
