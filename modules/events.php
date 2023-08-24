@@ -3703,6 +3703,8 @@ function get_special_date_content( $the_date = null ) {
     	}
     	$info .= '</p>';
         $info .= '</div>';
+    } else {
+    	$info .= "<!-- No posts found by fcn get_special_date_content -->";
     }
     /*
     if ($the_date == "2022-12-24") {        
