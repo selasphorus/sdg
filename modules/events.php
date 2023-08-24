@@ -3690,12 +3690,14 @@ function get_special_date_content( $the_date = null ) {
         $info .= '<div class="message centered">';
         $info .= '<p class="scalloped narrow">';
     	foreach ( $posts as $post ) {
-    		$info .= "<pre>".print_r($post, true)."</pre>"; // tft
+    		//$info .= "<pre>".print_r($post, true)."</pre>"; // tft
     		$post_id = $post->ID;
     		//$info .= "post_id: ".$post_id;
     		if ( $post_id ) {
     			//$notice_text = get_the_excerpt( $post_id );
-    			//$info .= $notice_text;
+    			$notice_text = $post->post_content;
+    			// TODO: strip any <p></p> tags?
+    			$info .= $notice_text;
     		}
     	}
     	$info .= '</p>';
