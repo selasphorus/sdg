@@ -3690,7 +3690,7 @@ function get_special_date_content( $the_date = null ) {
         $info .= '<div class="message centered">';
         $info .= '<p class="scalloped narrow">';
     	foreach ( $posts as $post ) {
-    		$info .= $post->post_content;
+    		$info .= $post->post_excerpt;
     	}
     	$info .= '</p>';
         $info .= '</div>';
