@@ -3383,7 +3383,8 @@ function exclude_unlisted_events ( $args ) {
     $args['tag'] = "-unlisted"; // 3066 (stc-live)
     if ( !isset($args['category']) ) { 
     	$args['category'] = "-special-notice";
-    } else {
+    } else if ( is_dev_site() ) {
+    	// WIP -- not working
     	if( !is_array($args['category']) ){
 			$args['category'] .= ", -special-notice";
 		} else {
