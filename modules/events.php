@@ -3385,7 +3385,7 @@ function exclude_unlisted_events ( $args ) {
     	$args['category'] = "-special-notice";
     } else {
     	if( !is_array($args['category']) ){
-			$args['category'] .= "-special-notice";
+			$args['category'] .= ", -special-notice";
 		} else {
 			$args['category'][] = "-special-notice";
 		}
