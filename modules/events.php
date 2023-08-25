@@ -3381,7 +3381,11 @@ add_filter( 'em_object_build_sql_conditions_args', 'exclude_unlisted_events',10,
 add_filter( 'em_content_events_args', 'exclude_unlisted_events' );
 function exclude_unlisted_events ( $args ) {
     $args['tag'] = "-unlisted"; // 3066 (stc-live)
-    //$args['category'] = "-special-notice";
+    if ( !isset($args['category']) ) { 
+    	$args['category'] = "-special-notice";
+    } else {
+    	$args['category'] .= "-special-notice";
+    }
     return $args;
 }
 
