@@ -398,7 +398,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         
         // Retrieve the caption
 		$caption = get_post( $img_id )->post_excerpt;
-		if ( !empty($caption) && !is_singular('person') ) {
+		if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
 			$classes .= " has-caption";
 			$ts_info .= "Caption found for img_id $img_id: '$caption'<br />";
 		} else {
