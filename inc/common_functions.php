@@ -220,9 +220,13 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
     $img_id = null;
-    $img_html = "";
+    if ( $return == "html" ) {
+    	$img_html = "";
+    	$caption_html = "";
+    }
+    
     $img_type = "post_image"; // other option: attachment_image
-    $caption = null;
+    
     $image_gallery = array();
     if ( $sources == "all" ) {
     	$sources = array("featured", "gallery", "custom_thumb", "content");
@@ -238,6 +242,33 @@ function sdg_post_thumbnail ( $args = array() ) {
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
     $ts_info .= "sources: ".print_r($sources, true)."<br />";
     $ts_info .= "return: $return<br />";
+    //
+    
+    // Make sure this is a proper context for display of the featured image
+    if ( post_password_required($post_id) || is_attachment($post_id) ) {
+        return;
+    } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
+        // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
+        //return;
+    } else if ( has_term( 'video-webcasts', 'category' ) ) {        
+        $player_status = get_media_player( $post_id, true ); // get_media_player ( $post_id = null, $status_only = false, $url = null )
+        if ( $player_status == "ready" ) {
+            return;
+        }        
+    } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
+		return;
+	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
+        return; // wip
+    }
+
+    $ts_info .= "Ok to display the image, if one has been found.<br />";
+    
+    // Ok to display the image! Set up classes for styling
+    $classes = "post-thumbnail sdg";
+    //$classes .= " zoom-fade"; //if ( is_dev_site() ) { $classes .= " zoom-fade"; }
+    if ( is_singular('event') ) { $classes .= " event-image"; }
+    if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
+    //
     
     // Are we using the custom image, if any is set?
     // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
@@ -251,6 +282,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
     }
     
+    // WIP: order?
     // If this is a sermon, are we using the author image
     if ( $format != "singular" && $post_type == "sermon" ) { 
     	$img_id = get_author_img_id ( $post_id );
@@ -327,17 +359,14 @@ function sdg_post_thumbnail ( $args = array() ) {
             }
             
             // Image(s) in post content?
-            if ( in_array("content", $sources ) ) {
-				if ( empty($img_id) && function_exists('get_first_image_from_post_content') ) { 
-					$image_info = get_first_image_from_post_content( $post_id );
-					if ( $image_info ) {
-						$img_id = $image_info['id'];
-					} else {
-						//$img_id = "test"; // tft
-					}
+            if ( empty($img_id) && in_array("content", $sources ) && function_exists('get_first_image_from_post_content') ) {
+				$image_info = get_first_image_from_post_content( $post_id );
+				if ( $image_info ) {
+					$img_id = $image_info['id'];
 				}
 			}
 
+			// Image attachment(s)?
             if ( empty($img_id) ) {
 
                 // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
@@ -363,36 +392,11 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
     }
     
-    // Make sure this is a proper context for display of the featured image
-    if ( post_password_required($post_id) || is_attachment($post_id) ) {
-        return;
-    } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
-        // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
-        //return;
-    } else if ( has_term( 'video-webcasts', 'category' ) ) {        
-        $player_status = get_media_player( $post_id, true ); // get_media_player ( $post_id = null, $status_only = false, $url = null )
-        if ( $player_status == "ready" ) {
-            return;
-        }        
-    } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
-		return;
-	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
-        return; // wip
-    }
-
-    $ts_info .= "Ok to display the image, if one is found.<br />";
+    if ( $return == "html" && !empty($img_id ) {
     
-    // Ok to display the image! Set up classes for styling
-    $classes = "post-thumbnail sdg";
-    //$classes .= " zoom-fade"; //if ( is_dev_site() ) { $classes .= " zoom-fade"; }
-    if ( is_singular('event') ) { $classes .= " event-image"; }
-    if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
-    
-    if ( $format == "singular" && !( is_page('events') ) ) {
+		// For html return format, add caption, if there is one
         
-        $ts_info .= "post format is_singular<br />";
-        
-        // Retrieve the caption (if any) and return it for display
+        // Retrieve the caption
 		$caption = get_post( $img_id )->post_excerpt;
 		if ( !empty($caption) && !is_singular('person') ) {
 			$classes .= " has-caption";
@@ -402,78 +406,81 @@ function sdg_post_thumbnail ( $args = array() ) {
 			$ts_info .= "No caption found for img_id $img_id<br />";
 		}
 		
-        if ( has_post_thumbnail($post_id) ) {
-            
-            if ( $return == "html" ) {
-            	if ( is_singular('person') ) {
-					$img_size = "medium"; // portrait
-					$classes .= " float-left";
-				}
-			
-				$classes .= " is_singular";
-			
-				$img_html .= '<div class="'.$classes.'">';
-				$img_html .= get_the_post_thumbnail( $post_id, $img_size );
-				$img_html .= '</div><!-- .post-thumbnail -->';
-            } else {
-            	$img_id = get_post_thumbnail_id( $post_id );
-            }
-
-        } else {
-        
-        	// If an image_gallery was found, show one image as the featured image
-        	// TODO: streamline this
-        	if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 && $return == "html" ) {
-        		$ts_info .= "image_gallery image<br />";
-        		$img_html .= '<div class="'.$classes.'">';
-        		$img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
-        		$img_html .= '</div><!-- .post-thumbnail -->';
-        	}
-        	
-        }
-        
-    } else if ( !( $format == "singular" && is_page('events') ) ) {
-        
-        $ts_info .= "NOT is_singular<br />";
-        
-        // NOT singular -- aka archives, search results, &c.
-        $img_tag = "";
-        
-        if ( $img_id ) {
-            
-            // display attachment via thumbnail_id
-            $img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
-            
-            $ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
-            if ( isset($images)) { $ts_info .= '<pre>'.print_r($images,true).'</pre>'; }
-            
-        } else {
-            
-            $ts_info .= 'Use placeholder img';
-            
-            if ( function_exists( 'get_placeholder_img' ) ) { 
-                $img_tag = get_placeholder_img();
-            }
-        }
-        
-        if ( !empty($img_tag) && $return == "html" ) {
-        	$classes .= " float-left"; //$classes .= " NOT_is_singular";
-        	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
-        	$img_html .= $img_tag;
-        	$img_html .= '</a>';
-        }
-        
-    } // End if is_singular()
-	
-	// Add caption if any -- but only if an image tag has already been added to the html to return
-	if ( $img_html != "" && $format == "singular" ) {
 		if ( $caption != "" ) {
 			$caption_class = "sdg_post_thumbnail featured_image_caption";
-			$img_html .= '<p class="'. $caption_class . '">' . $caption . '</p>';
+			$caption_html = '<p class="'. $caption_class . '">' . $caption . '</p>';
 		} else {
-			$img_html .= '<br />';
+			$caption_html = '<br />';
 		}
-    }
+		
+		// Set up the img_html
+		if ( $format == "singular" && !( is_page('events') ) ) {
+		
+			$ts_info .= "post format is_singular<br />";
+			if ( has_post_thumbnail($post_id) ) {
+			
+				if ( $return == "html" ) {
+					if ( is_singular('person') ) {
+						$img_size = "medium"; // portrait
+						$classes .= " float-left";
+					}
+			
+					$classes .= " is_singular";
+			
+					$img_html .= '<div class="'.$classes.'">';
+					$img_html .= get_the_post_thumbnail( $post_id, $img_size );
+					$img_html .= $caption_html;
+					$img_html .= '</div><!-- .post-thumbnail -->';
+				}
+
+			} else {
+		
+				// If an image_gallery was found, show one image as the featured image
+				// TODO: streamline this
+				if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 && $return == "html" ) {
+					$ts_info .= "image_gallery image<br />";
+					$img_html .= '<div class="'.$classes.'">';
+					$img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+					$img_html .= $caption_html;
+					$img_html .= '</div><!-- .post-thumbnail -->';
+				}
+			
+			}
+		
+		} else if ( !( $format == "singular" && is_page('events') ) ) {
+		
+			$ts_info .= "NOT is_singular<br />";
+		
+			// NOT singular -- aka archives, search results, &c.
+			$img_tag = "";
+		
+			if ( $img_id ) {
+			
+				// display attachment via thumbnail_id
+				$img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+			
+				$ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
+				if ( isset($images)) { $ts_info .= '<pre>'.print_r($images,true).'</pre>'; }
+			
+			} else {
+			
+				$ts_info .= 'Use placeholder img';
+			
+				if ( function_exists( 'get_placeholder_img' ) ) { 
+					$img_tag = get_placeholder_img();
+				}
+			}
+		
+			if ( !empty($img_tag) && $return == "html" ) {
+				$classes .= " float-left"; //$classes .= " NOT_is_singular";
+				$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
+				$img_html .= $img_tag;
+				$img_html .= '</a>';
+			}
+		
+		} // END if is_singular()
+	} // END if ( $return == "html" && !empty($img_id )
+	    
     //$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
     if ( $return == "html" ) {
