@@ -465,14 +465,15 @@ function sdg_post_thumbnail ( $args = array() ) {
         
     } // End if is_singular()
 	
-	// Add caption if any
-	if ( $caption != "" ) {
-		$caption_class = "featured_image_caption";
-		$img_html .= '<p class="'. $caption_class . '">' . $caption . '</p>';
-	} else {
-		$img_html .= '<br />';
-	}
-    
+	// Add caption if any -- but only if we're returning HTML *and* an image tag has already been added to the html to return
+	if ( $return == "html" && $img_html != "" ) {
+		if ( $caption != "" ) {
+			$caption_class = "featured_image_caption";
+			$img_html .= '<p class="'. $caption_class . '">' . $caption . '</p>';
+		} else {
+			$img_html .= '<br />';
+		}
+    }
     //$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
     if ( $return == "html" ) {
