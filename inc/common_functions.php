@@ -456,7 +456,7 @@ function sdg_post_thumbnail ( $args = array() ) {
             }
         }
         
-        if ( !empty($img_tag) ) {
+        if ( !empty($img_tag) && $return == "html" ) {
         	$classes .= " float-left"; //$classes .= " NOT_is_singular";
         	$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
         	$img_html .= $img_tag;
@@ -465,10 +465,10 @@ function sdg_post_thumbnail ( $args = array() ) {
         
     } // End if is_singular()
 	
-	// Add caption if any -- but only if we're returning HTML *and* an image tag has already been added to the html to return
-	if ( $return == "html" && $img_html != "" && $format == "singular" ) {
+	// Add caption if any -- but only if an image tag has already been added to the html to return
+	if ( $img_html != "" && $format == "singular" ) {
 		if ( $caption != "" ) {
-			$caption_class = "featured_image_caption";
+			$caption_class = "sdg_post_thumbnail featured_image_caption";
 			$img_html .= '<p class="'. $caption_class . '">' . $caption . '</p>';
 		} else {
 			$img_html .= '<br />';
