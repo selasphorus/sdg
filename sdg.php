@@ -2362,7 +2362,7 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
         if ( $featured_image_id ) {
             $caption = get_post( $featured_image_id )->post_excerpt;
             if ( $caption != "" ) {
-                $caption_class = "featured_image_caption";
+                $caption_class = "sdg_post_image featured_image_caption";
                 $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
             } else {
                 $html = $html . '<br />';
@@ -2432,7 +2432,7 @@ function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
     }
     
     if ( $caption != "" && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
-        $caption_class = "featured_image_caption";
+        $caption_class = "sdg_featured_image_caption";
         $info .= '<p class="'. $caption_class . '">';
         $info .= $caption;	
         $info .= '</p>';
