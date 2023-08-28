@@ -392,7 +392,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
     }
     
-    if ( $return == "html" && !empty($img_id ) {
+    if ( $return == "html" && !empty($img_id ) ) {
     
 		// For html return format, add caption, if there is one
         
