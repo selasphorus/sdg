@@ -608,7 +608,7 @@ function get_authorship_info ( $args = array() ) {
     // Get info either via post_id, if set, or from data array
     if ( isset($data['post_id']) ) {
         
-        sdg_log( "[authorship_info] get info from data['post_id']" );
+        sdg_log( "[authorship_info] get info from data['post_id']", $do_log );
         
         $post_id = $data['post_id'];
         ///$ts_info .= "<!-- [authorship_info] post_id: ".$post_id." -->";
@@ -669,7 +669,7 @@ function get_authorship_info ( $args = array() ) {
         
     } else {
         
-        sdg_log( "[authorship_info] get info from data without post_id" );
+        sdg_log( "[authorship_info] get info from data without post_id", $do_log );
         
         $post_id = null;
         //$is_hymn

@@ -260,7 +260,7 @@ function get_person_dates( $post_id, $styled = false ) {
     $info = ""; // init
     //if ( $styled == 'false' ) { $styled = false; } else { $styled = true; }// just in case...
     
-    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true) );
+    //sdg_log( "[str_from_persons] arr_persons: ".print_r($arr_persons, true), $do_log );
     sdg_log( "[get_person_dates] post_id: ".$post_id, $do_log );
     //sdg_log( "[get_person_dates] styled: ".$styled, $do_log );
     

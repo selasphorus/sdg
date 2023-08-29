@@ -437,9 +437,9 @@ function get_event_personnel( $atts = [] ) {
             // WIP -- needs work
             if ( $delete_row == true ) {
                 
-                //sdg_log("divline1");
-                //sdg_log("personnel row to be deleted:");
-                //sdg_log( print_r($row, true) );
+                //sdg_log( "divline1", $do_log );
+                //sdg_log( "personnel row to be deleted:", $do_log );
+                //sdg_log( print_r($row, true), $do_log );
                 //$row_info .= "<!-- <pre>".print_r($row, true)."</pre> -->"; // tft
                 
                 // ... but only run the action if this is the first deletion for this post_id in this round
@@ -450,20 +450,20 @@ function get_event_personnel( $atts = [] ) {
                     if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
                         $row_info .= "<!-- [personnel row $i deleted] -->";
                         $deletion_count++;
-                        //sdg_log("[personnel row $i deleted successfully]");
+                        //sdg_log( "[personnel row $i deleted successfully]", $do_log );
                     } else {
                         $row_info .= "<!-- [deletion failed for personnel row $i] -->";
-                        //sdg_log("[failed to delete personnel row $i]");
+                        //sdg_log( "[failed to delete personnel row $i]", $do_log );
                     }
                     
                 } else {
                     
                     if ( $do_deletions == true ) {
                         $row_info .= "<!-- [$i] row to be deleted on next round due to row_index issues. -->";
-                        //sdg_log("row to be deleted on next round due to row_index issues.");
+                        //sdg_log( "row to be deleted on next round due to row_index issues.", $do_log );
                     } else {
                         $row_info .= "<!-- [$i] row to be deleted when do_deletions is re-enabled. -->";
-                        //sdg_log("row to be deleted when do_deletions is re-enabled.");
+                        //sdg_log( "row to be deleted when do_deletions is re-enabled.", $do_log );
                     }
                     
                 }
@@ -1002,9 +1002,9 @@ function get_event_program_items( $atts = [] ) {
             // If the row is empty/x-filled and needs to be deleted, then do so
             if ( $delete_row == true ) {
                 
-                //sdg_log("divline1");
-                //sdg_log("program row to be deleted:");
-                //sdg_log( print_r($row, true) );
+                //sdg_log( "divline1", $do_log );
+                //sdg_log( "program row to be deleted:", $do_log );
+                //sdg_log( print_r($row, true), $do_log );
                 $row_info .= "<!-- row: ".print_r($row, true)." -->";
                 $row_info .= "<!-- [$i] program row to be deleted -->";
                 $row_info .= "<!-- [$i] program row: item_label_txt='".$row['item_label_txt']."'; item_label='".$row['item_label']."'; program_item_txt='".$row['program_item_txt']."' -->";
@@ -1018,20 +1018,20 @@ function get_event_program_items( $atts = [] ) {
                     if ( delete_row('program_items', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
                         $row_info .= "<!-- [program row $i deleted] -->";
                         $deletion_count++;
-                        //sdg_log("[program row $i deleted successfully]");
+                        //sdg_log( "[program row $i deleted successfully]", $do_log );
                     } else {
                         $row_info .= "<!-- [deletion failed for program row $i] -->";
-                        //sdg_log("[failed to delete program row $i]");
+                        //sdg_log( "[failed to delete program row $i]", $do_log );
                     }
                     
                 } else {
                     
                     if ( $do_deletions == true ) {
                         $row_info .= "<!-- [$i] row to be deleted on next round due to row_index issues. -->";
-                        //sdg_log("row to be deleted on next round due to row_index issues.");
+                        //sdg_log( "row to be deleted on next round due to row_index issues.", $do_log );
                     } else {
                         $row_info .= "<!-- [$i] row to be deleted when do_deletions is re-enabled. -->";
-                        //sdg_log("row to be deleted when do_deletions is re-enabled.");
+                        //sdg_log( "row to be deleted when do_deletions is re-enabled.", $do_log );
                     }
                 }
                 
@@ -2181,10 +2181,10 @@ function event_personnel_cleanup(  $atts = [] ) {
                     /*if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
                         $row_info .= "<!-- [personnel row $i deleted] -->";
                         $deletion_count++;
-                        sdg_log("[personnel row $i deleted successfully]");
+                        sdg_log( "[personnel row $i deleted successfully]", $do_log );
                     } else {
                         $row_info .= "<!-- [deletion failed for personnel row $i] -->";
-                        sdg_log("[failed to delete personnel row $i]");
+                        sdg_log( "[failed to delete personnel row $i]", $do_log );
                     }*/
             
             $post_info .= "<br />";
@@ -2519,10 +2519,10 @@ function event_program_cleanup( $atts = [] ) {
 						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
 						//	$row_info .= "<!-- [personnel row $i deleted] -->";
 						//	$deletion_count++;
-						//	sdg_log("[personnel row $i deleted successfully]");
+						//	sdg_log( "[personnel row $i deleted successfully]", $do_log );
 						//} else {
 						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
-						//	sdg_log("[failed to delete personnel row $i]");
+						//	sdg_log( "[failed to delete personnel row $i]", $do_log );
 						//}
 			
 				$post_info .= "<br />";
@@ -2834,10 +2834,10 @@ function event_program_cleanup( $atts = [] ) {
 						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
 						//	$row_info .= "<!-- [personnel row $i deleted] -->";
 						//	$deletion_count++;
-						//	sdg_log("[personnel row $i deleted successfully]");
+						//	sdg_log( "[personnel row $i deleted successfully]", $do_log );
 						//} else {
 						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
-						//	sdg_log("[failed to delete personnel row $i]");
+						//	sdg_log( "[failed to delete personnel row $i]", $do_log );
 						//}
 			
 				$post_info .= "<br />";
@@ -3356,23 +3356,23 @@ function match_widget_to_event_content ( $instance ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
-	//sdg_log("fcn match_widget_to_event_content");
+	//sdg_log( "fcn match_widget_to_event_content", $do_log );
 	
 	global $post;
 	$post_id = get_the_ID();
 	$post_type = get_post_type( $post_id );
-    //sdg_log("post_id: ".$post_id);
-    //sdg_log("post_type: ".$post_type);
+    //sdg_log( "post_id: ".$post_id, $do_log );
+    //sdg_log( "post_type: ".$post_type, $do_log );
 	
     if ( $post_type == 'event' ) {
     	$event_date = get_post_meta( $post_id, '_event_start_date', true );
         $date = explode('-', $event_date);
 		$instance['month'] = $date[1];
 		$instance['year'] = $date[0];
-		//sdg_log("set instance month/year to ".$date[1]."/".$date[0]);
+		//sdg_log( "set instance month/year to ".$date[1]."/".$date[0], $do_log );
     } else {
-    	//sdg_log("instance['month']: ".$instance['month']);
-    	//sdg_log("instance['year']: ".$instance['year']);
+    	//sdg_log( "instance['month']: ".$instance['month'], $do_log );
+    	//sdg_log( "instance['year']: ".$instance['year'], $do_log );
     }
     return $instance;
 }
@@ -3383,8 +3383,7 @@ function exclude_unlisted_events ( $args ) {
     $args['tag'] = "-unlisted"; // 3066 (stc-live)
     if ( !isset($args['category']) ) { 
     	$args['category'] = "-special-notice";
-    } else { //if ( is_dev_site() ) 
-    	// WIP -- not working
+    } else {
     	if( !is_array($args['category']) ){
 			$args['category'] .= ", -special-notice";
 		} else {
@@ -3423,7 +3422,7 @@ function em_args_mod($args){
         //$args['header_format'] .= "***"; // tft
         
 	}
-    //sdg_log("em_events_output_grouped_args: ".print_r($args, true));
+    //sdg_log( "em_events_output_grouped_args: ".print_r($args, true), $do_log );
 	return $args;
 }
 
@@ -3551,7 +3550,7 @@ function sdg_em_custom_scope_arg( $args = array() ){
     sdg_log( "function called: sdg_em_custom_scope_arg", $do_log );
     if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
     sdg_log( "[secsa] args: ". print_r($args,true), $do_log );
-    //sdg_log("conditions: ". print_r($conditions,true) );
+    //sdg_log( "conditions: ". print_r($conditions,true), $do_log );
     return $args;
 }
 
@@ -3564,7 +3563,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
 	sdg_log( "divline2", $do_log );
     sdg_log( "function called: sdg_em_custom_scope_condition", $do_log );
     
-    //sdg_log("args: ". print_r($args,true) );
+    //sdg_log( "args: ". print_r($args,true), $do_log );
     sdg_log( "[secsc] conditions: ". print_r($conditions,true), $do_log );
     
     if( is_admin() ) { sdg_log( "is_admin", $do_log ); } else { sdg_log( "NOT is_admin", $do_log ); }
@@ -3588,7 +3587,7 @@ function sdg_em_custom_scope_condition( $conditions, $args ){
         }
 		
         // If this is the main admin events page...
-        //sdg_log("args: ". print_r($args, true) );
+        //sdg_log( "args: ". print_r($args, true), $do_log );
         //https://dev.saintthomaschurch.org/wp-admin/edit.php?s&post_status=all&post_type=event
         
 		// TODO: figure out how to eliminate redundancy of array declaration w/ sdg_em_scopes
@@ -3734,8 +3733,8 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_log );
     
-    //sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true) );
-    //sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true) );
+    //sdg_log( "[sdg_custom_event_search...] conditions: ".print_r($conditions, true), $do_log );
+    //sdg_log( "[sdg_custom_event_search...] args: ".print_r($args, true), $do_log );
     
     global $wpdb;
     
@@ -3770,7 +3769,7 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
 		
 	}
     
-    //sdg_log( "[sdg_custom_event_search...] modified conditions: ".print_r($conditions, true) );
+    //sdg_log( "[sdg_custom_event_search...] modified conditions: ".print_r($conditions, true), $do_log );
     
     return $conditions;
 }

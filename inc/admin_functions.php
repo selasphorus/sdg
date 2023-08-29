@@ -420,17 +420,17 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
             //
             $editors = $arr['editor']; // array of ids
-            //sdg_log( "editors: ".print_r($editors, true) );
+            //sdg_log( "editors: ".print_r($editors, true), $do_log );
             $persons_args = array( 'arr_persons' => $editors, 'person_category' => 'editors', 'post_id' => $post_id, 'format' => $format, 'arr_of' => $arr_of, 'abbr' => $abbr, 'links' => false );
             $arr_editors_str = str_from_persons_array ( $persons_args );
             $editors_str = $arr_editors_str['info'];
             $ts_editors = $arr_editors_str['ts_info'];
             $ts_info .= $ts_editors;
-            //sdg_log( "editors_str: ".$editors_str );
+            //sdg_log( "editors_str: ".$editors_str, $do_log );
             sdg_log( "-----", $do_log );
             
             $publication_id = $arr['publication']; // single id
-            //sdg_log( "[btt/arr] publication_id: ".$publication_id ); // tft
+            //sdg_log( "[btt/arr] publication_id: ".$publication_id, $do_log );
             if ( $publication_id ) {
                 $publication = get_post_field( 'post_title', $publication_id, 'raw' );
             } else {
@@ -438,7 +438,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
             //
             $publisher_id = $arr['publisher']; // single id
-            //sdg_log( "[btt/arr] publisher_id: ".$publisher_id ); // tft
+            //sdg_log( "[btt/arr] publisher_id: ".$publisher_id, $do_log );
             if ( $publisher_id ) {
                 $publisher = get_post_field( 'post_title', $publisher_id, 'raw' );
             } else {
@@ -457,12 +457,12 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             
             $voicings_str = "";
             if ( is_array($voicings) && count($voicings) > 0 ) {
-                //sdg_log( "[btt/arr] voicings: ".print_r($voicings, true) );
+                //sdg_log( "[btt/arr] voicings: ".print_r($voicings, true), $do_log );
                 foreach ( $voicings as $voicing_id ) {
                     if ( $voicing_id != 0) {
                         $term = get_term( $voicing_id );
                         if ($term) { 
-                            //sdg_log( "[btt] voicing_id: $voicing_id/ term->name: ".$term->name );
+                            //sdg_log( "[btt] voicing_id: $voicing_id/ term->name: ".$term->name, $do_log );
                             $voicings_str .= $term->name;
                             if ( count($voicings) > 1 ) {
                                 $voicings_str .= ", ";
@@ -474,16 +474,16 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                     // Trim trailing comma and space
                     $voicings_str = substr($voicings_str, 0, -2);
                 }
-                //sdg_log( "[btt/arr] voicings_str: ".$voicings_str );
+                //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
             if ( $voicings_str == "" ) {
-                //sdg_log( "[btt/arr] voicings_str is empty." );
+                //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {
                     $voicings_str = $arr['voicing_txt'];
                     sdg_log( "[btt/arr] using backup txt field for voicings_str", $do_log );
                 }
             } else {
-                //sdg_log( "[btt/arr] voicings_str: ".$voicings_str );
+                //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
             
             $soloists_str = "";
@@ -506,7 +506,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
             if ( $soloists_str == "" && $arr['soloists_txt'] != "" ) {
                 $soloists_str = $arr['soloists_txt'];
-                sdg_log( "[btt/arr] using backup txt field for soloists_str" );
+                sdg_log( "[btt/arr] using backup txt field for soloists_str", $do_log );
             }
             
             $instruments_str = "";
@@ -649,7 +649,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     // Taxonomies
     if ( empty($arr) && $post_id && ( $post_type == 'repertoire' || $post_type == 'edition' ) ) {
 
-        sdg_log( "[btt] get taxonomy info from post_id: ".$post_id ); // tft
+        sdg_log( "[btt] get taxonomy info from post_id: ".$post_id, $do_log );
         
         // Keys    
         // Get term names for "key".
@@ -662,7 +662,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 $keys_str = get_field('key_name', $post_id, false);
             }*/
         }
-        sdg_log( "[btt] keys_str: ".$keys_str ); // tft
+        sdg_log( "[btt] keys_str: ".$keys_str, $do_log );
         
         if ( $post_type == 'repertoire' ) {
             $rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'ids' ) );
@@ -673,7 +673,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // Get term names for "voicing".
             $voicings = wp_get_post_terms( $post_id, 'voicing', array( 'fields' => 'names' ) );
             if ( $voicings ) { $voicings_str = implode(", ", $voicings); } else { $voicings_str = ""; }
-            sdg_log( "[btt] voicings_str: ".$voicings_str ); // tft
+            sdg_log( "[btt] voicings_str: ".$voicings_str, $do_log );
 
             // Get term names for "soloist".
             $soloists = wp_get_post_terms( $post_id, 'soloist', array( 'fields' => 'names' ) );
@@ -706,7 +706,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
             // Hymns
             
-            sdg_log( "[btt] This is a hymn.", $do_log ); // tft
+            sdg_log( "[btt] This is a hymn.", $do_log );
             // TODO: deal w/ miscategorizations -- e.g. 
             // Blest are the pure in heart (Ten Orisons) -- M. Searle Wright (1918-2004)
             
@@ -805,12 +805,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $rep_authorship_short = $arr_authorship_info['info'];
             $ts_info .= $arr_authorship_info['ts_info'];
             
-            //sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short ); // tft
             // ltrim punctuation so as to avoid failed replacement if work, e.g., has no arranger but no composer listed -- TODO: integrate this into get_authorship_info fcn?
             $rep_authorship_short = ltrim( $rep_authorship_short, ', ' );
             $rep_authorship_short = ltrim( $rep_authorship_short, '-- ' );
             $rep_authorship_short = trim( $rep_authorship_short, '()' );
-            sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short, $do_log ); // tft
+            sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short, $do_log );
             
             // B. Long version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => false );
@@ -818,7 +817,6 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $rep_authorship_long = $arr_authorship_info['info'];
             $ts_info .= $arr_authorship_info['ts_info'];
             
-            //sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long ); // tft
             // remove punctuation for purposes of string replacement
             $rep_authorship_long = ltrim( $rep_authorship_long, ', ' );
             $rep_authorship_long = ltrim( $rep_authorship_long, '-- ' );
@@ -826,26 +824,26 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $rep_authorship_long = ltrim( $rep_authorship_long, '(' ); // left enclosing paren
             $rep_authorship_long = str_replace( "))", ")", $rep_authorship_long ); // get rid of final left enclosing paren but not closing paren for author dates
             
-            sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long, $do_log ); // tft
-            sdg_log( "[btt/edition] musical_work_title: ".$musical_work_title, $do_log ); // tft
+            sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long, $do_log );
+            sdg_log( "[btt/edition] musical_work_title: ".$musical_work_title, $do_log );
             
             // Compare short/long authorship; replace as needed
             if ( $rep_authorship_long != $rep_authorship_short ) {
-                sdg_log( "[btt/edition] replace long with short authorship info." ); // tft
+                sdg_log( "[btt/edition] replace long with short authorship info.", $do_log );
                 //htmlspecialchars_decode()
                 //html_entity_decode()
                 // TODO: figure out why this doesn't always work as expected -- sometimes no replacement is made despite the availability of valid strings.
                 $count = 0;
                 $musical_work = str_replace( $rep_authorship_long, $rep_authorship_short, $musical_work_title, $count );
                 sdg_log( "[btt/edition] num replacements made: ".$count." (Replace [".$rep_authorship_long."] with [".$rep_authorship_short."] in [".$musical_work_title."] )", $do_log ); // tft
-                sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work, $do_log ); // tft
+                sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work, $do_log );
             } else {
-                sdg_log( "[btt/edition] rep_authorship_long same as rep_authorship_short.", $do_log ); // tft
+                sdg_log( "[btt/edition] rep_authorship_long same as rep_authorship_short.", $do_log );
                 $musical_work = $musical_work_title;
             }
             $new_title .= $musical_work;
-            //sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work ); // tft
-            //sdg_log( "[btt/edition] new_title (after adding musical_work info): ".$new_title );
+            //sdg_log( "[btt/edition] revised musical_work_title: ".$musical_work, $do_log );
+            //sdg_log( "[btt/edition] new_title (after adding musical_work info): ".$new_title, $do_log );
         } else {
             sdg_log( "[btt/edition] Abort! No musical_work found upon which to build the title.", $do_log );
             return "<pre>*** Error! Abort! No musical_work found upon which to build the title for Edition with post_id: $post_id. ***</pre>";
@@ -859,38 +857,38 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
         // 3. Editor
         if ( $editors_str != "" ) { $new_title .= " / ed. ".$editors_str; }
-        //sdg_log( "[btt/edition] new_title (after editors_str): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after editors_str): ".$new_title, $do_log );
         
         // 4. Publication
         if ( $publication != "" ) { $new_title .= " / ".$publication; }
-        //sdg_log( "[btt/edition] new_title (after publication): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after publication): ".$new_title, $do_log );
         
         // 5. Publisher
         if ( $publisher != "" ) { $new_title .= " / ".$publisher; }
-        //sdg_log( "[btt/edition] new_title (after publisher): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after publisher): ".$new_title, $do_log );
         
         // 6. Voicings
-        //sdg_log( "[btt/edition] voicings_str: ".$voicings_str ); // tft
+        //sdg_log( "[btt/edition] voicings_str: ".$voicings_str, $do_log );
         if ( $voicings_str == "" ) { 
-            //sdg_log( "[btt/edition] voicings_str is empty >> try voicing_txt." ); // tft
+            //sdg_log( "[btt/edition] voicings_str is empty >> try voicing_txt.", $do_log );
             if ( $voicing_txt != "" ) {
                 $voicings_str = $voicing_txt;
-                //sdg_log( "[btt/edition] voicings_str from voicing_txt: ".$voicings_str ); // tft
+                //sdg_log( "[btt/edition] voicings_str from voicing_txt: ".$voicings_str, $do_log );
             } else {
-                //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]" ); // tft
+                //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]", $do_log );
             }
         }
         if ( $voicings_str !== "" && $uid_field == 'title_for_matching' ) { 
-            //sdg_log( "[btt/edition] add voicings_str to new_title." ); // tft
+            //sdg_log( "[btt/edition] add voicings_str to new_title.", $do_log );
             $new_title .= " / for ".$voicings_str;
         }
-        //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
         
         // (if no voicing, but yes soloists, then "for soloists")
         // multiple voicings &c. -- connect w/ ampersand?
         
         // 7. Soloists
-        //sdg_log( "[btt/edition] soloists_str: ".$soloists_str ); // tft
+        //sdg_log( "[btt/edition] soloists_str: ".$soloists_str, $do_log );
         if ( $soloists_str == "" && $soloists_txt != "" ) { $soloists_str = $soloists_txt; }
         if ( $soloists_str != "" && $uid_field == 'title_for_matching' ) { 
             if ( $voicings_str != "" ) { 
@@ -899,18 +897,18 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 $new_title .= " / for ".$soloists_str;
             }
         }
-        //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title, $do_log );
         
         // Choir Forces -- if no Voicings or Soloists
         if ( $choir_forces_str != "" & $voicings_str == "" && $soloists_str == "" && $uid_field == 'title_for_matching' ) {
-            sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".$choir_forces_str );
+            sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".$choir_forces_str, $do_log );
             $new_title .= " / for ".$choir_forces_str;
         } else {
-            sdg_log( "[btt/edition] choir_forces: ".$choir_forces_str );
+            sdg_log( "[btt/edition] choir_forces: ".$choir_forces_str, $do_log );
         }
         
         // 8. Instrumentation
-        //sdg_log( "[btt/edition] instruments_str: ".$instruments_str ); // tft
+        //sdg_log( "[btt/edition] instruments_str: ".$instruments_str, $do_log );
         if ( $instruments_str == "" && $instrumentation_txt != "" ) { $instruments_str = $instrumentation_txt; }
         if ( $instruments_str != "" && $uid_field == 'title_for_matching' ) { 
             if ( $voicings_str == "" && $soloists_str == "" ){
@@ -924,11 +922,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 $new_title .= " for ".$instruments_str; 
             }
         }
-        //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title, $do_log );
         
         // 9. Box num
         if ( $box_num != "" ) { $new_title .= " [in ".$box_num."]"; }
-        //sdg_log( "[btt/edition] new_title (after box_num): ".$new_title );
+        //sdg_log( "[btt/edition] new_title (after box_num): ".$new_title, $do_log );
         
     }
     
@@ -1002,9 +1000,9 @@ function build_the_title_on_insert( $data, $postarr ) {
     // TS/logging setup
     $do_ts = false; 
     $do_log = false;
-    sdg_log( "divline1" );
-    sdg_log( "function called: build_the_title_on_insert" );
-    sdg_log( ">> filter: wp_insert_post_data" );
+    sdg_log( "divline1", $do_log );
+    sdg_log( "function called: build_the_title_on_insert", $do_log );
+    sdg_log( ">> filter: wp_insert_post_data", $do_log );
     
     // $data: (array) An array of slashed, sanitized, and processed post data.
     // $postarr: (array) An array of sanitized (and slashed) but otherwise unmodified post data.
@@ -1013,7 +1011,7 @@ function build_the_title_on_insert( $data, $postarr ) {
     $post_type = $data['post_type'];
     $new_title = null;
     
-    sdg_log( "[bttoi] post_id: ".$post_id."; post_type: ".$post_type );
+    sdg_log( "[bttoi] post_id: ".$post_id."; post_type: ".$post_type, $do_log );
     
     if ( $post_id == 0 || ( $post_type != 'repertoire' && $post_type != 'edition' ) ) {
         return $data;
@@ -1037,15 +1035,15 @@ function build_the_title_on_insert( $data, $postarr ) {
     //if ( !in_array($post_id, $test_ids) ) { return $data; }
     */
     
-    //sdg_log( "data: ".print_r($data, true) ); // tft
-    //sdg_log( "postarr: ".print_r($postarr, true) ); // tft
-    //sdg_log( "_POST array: ".print_r($_POST, true) ); // tft
+    //sdg_log( "data: ".print_r($data, true), $do_log );
+    //sdg_log( "postarr: ".print_r($postarr, true), $do_log );
+    //sdg_log( "_POST array: ".print_r($_POST, true), $do_log );
     
     // TODO: figure out how to run this ONLY if the post is being saved for the first time... Or is it not needed at all? Only run btt via sspc?
     /*
     if ( $post_type == 'repertoire' && isset($_POST['acf']['field_624615e7eca6f']) ) {
         
-        sdg_log( "[bttoi] build the array of repertoire _POST data for submission to fcn build_the_title." );
+        sdg_log( "[bttoi] build the array of repertoire _POST data for submission to fcn build_the_title.", $do_log );
         
         // Get custom field data from $_POST array
         $arr = array(); // init
@@ -1079,9 +1077,9 @@ function build_the_title_on_insert( $data, $postarr ) {
         
     } else if ( $data['post_type'] == 'edition' && ( isset($_POST['acf']['field_6244d279cde53']) || isset($_POST['acf']['field_626811b538d8e']) ) ) { //  field_626811b538d8e
         
-        sdg_log( "[bttoi] build the array of edition _POST data for submission to fcn build_the_title." );
+        sdg_log( "[bttoi] build the array of edition _POST data for submission to fcn build_the_title.", $do_log );
         
-        //sdg_log( "_POST array: ".print_r($_POST, true) ); // tft
+        //sdg_log( "_POST array: ".print_r($_POST, true), $do_log );
         
         // Get custom field data from $_POST array
         $arr = array(); // init
@@ -1127,16 +1125,16 @@ function build_the_title_on_insert( $data, $postarr ) {
         // Abort if error
         if ( strpos($new_title, 'Error! Abort!') !== false ) {
             
-            sdg_log( $new_title );
+            sdg_log( $new_title, $do_log );
             
         } else if ( $new_title == $data['post_title'] ) {
             
-            sdg_log( "[bttoi] new_title same as old_title.");
+            sdg_log( "[bttoi] new_title same as old_title.", $do_log );
             
         } else {
 
-            sdg_log( "[bttoi] old_title: ".$data['post_title'] );
-            sdg_log( "[bttoi] new_title: ".$new_title );
+            sdg_log( "[bttoi] old_title: ".$data['post_title'], $do_log );
+            sdg_log( "[bttoi] new_title: ".$new_title, $do_log );
 
             // Save new title to data array
             $data['post_title'] = $new_title;
@@ -1182,7 +1180,7 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
 function remove_bracketed_info ( $str ) { //function sdg_remove_bracketed_info ( $str ) {
 
-	//sdg_log( "function: remove_bracketed_info" );
+	//sdg_log( "function: remove_bracketed_info", $do_log );
 
 	if (strpos($str, '[') !== false) { 
 		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str);
@@ -1196,7 +1194,7 @@ function remove_bracketed_info ( $str ) { //function sdg_remove_bracketed_info (
 add_filter( 'the_title', 'filter_the_title', 100, 2 );
 function filter_the_title( $post_title, $post_id = null ) {
  
-    //sdg_log( "function: filter_the_title" );
+    //sdg_log( "function: filter_the_title", $do_log );
     $post_type = ""; // init
     
     if ( !is_admin() ) {
@@ -1234,7 +1232,7 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
     $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    sdg_log( "function: make_clean_title");
+    sdg_log( "function: make_clean_title", $do_log );
     
     //if ( $post_id === null ) { $post_id = get_the_ID(); }
     
@@ -1252,10 +1250,10 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
         }
     }
     
-    //sdg_log( "[smct] post_id: ".$post_id."; post_title: ".$post_title );
+    //sdg_log( "[smct] post_id: ".$post_id."; post_title: ".$post_title, $do_log );
     
     if ( $return_revised == true ) {
-        //sdg_log( "[smct] >> return_revised" );
+        //sdg_log( "[smct] >> return_revised", $do_log );
     }
     
 	if ( is_admin() && $return_revised == true ) {
@@ -1372,10 +1370,10 @@ function clean_slug( $post_id ) {
 
     // Clean title
     $title_clean = get_post_meta( $post_id, 'title_clean', true );
-    //sdg_log( "title_clean (get_post_meta): ".$title_clean);
+    //sdg_log( "title_clean (get_post_meta): ".$title_clean, $do_log );
     if ( empty ($title_clean) || strpos($title_clean, '[') !== false ) { 
         $title_clean = make_clean_title( $post_id );
-        //sdg_log( "title_clean (make_clean_title): ".$title_clean);    
+        //sdg_log( "title_clean (make_clean_title): ".$title_clean, $do_log );    
     }
     sdg_log( "title_clean: ".$title_clean);
 
@@ -1387,9 +1385,9 @@ function clean_slug( $post_id ) {
     if ( preg_match($match_pattern, $title_clean) ) {
         //$info .= $indent."** title_clean contains date info.<br />";
         $append_date = false;
-        sdg_log( "append_date FALSE");
+        sdg_log( "append_date FALSE", $do_log );
     } else {
-        sdg_log( "append_date TRUE");
+        sdg_log( "append_date TRUE", $do_log );
         //$info .= $indent."title_clean does NOT contain date info.<br />";
     }
     //$info .= "title_clean: $title_clean<br />";
@@ -1626,7 +1624,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             sdg_log( "meta_update: ".$meta_update, $do_log );
             if ( $meta_update === true ) {
                 sdg_log( "success!", $do_log );
-                //sdg_log(sdg_add_post_term( $post_id, array('t4m-updated', 'programmatically-updated'), 'admin_tag', true ));
+                //sdg_log( sdg_add_post_term( $post_id, array('t4m-updated', 'programmatically-updated'), 'admin_tag', true ), $do_log );
             } else {
                 //(int|bool) Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
             }
@@ -1911,10 +1909,10 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
             $new_title = build_the_title( $post_id, 'title_for_matching', null ); // 
             $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
             
-            sdg_log( "[run_title_updates] old_title: ".$old_title );
-            sdg_log( "[run_title_updates] old_t4m: ".$old_t4m );
-            sdg_log( "[run_title_updates] new_title: ".$new_title );
-            sdg_log( "[run_title_updates] new_t4m: ".$new_t4m );
+            sdg_log( "[run_title_updates] old_title: ".$old_title, $do_log );
+            sdg_log( "[run_title_updates] old_t4m: ".$old_t4m, $do_log );
+            sdg_log( "[run_title_updates] new_title: ".$new_title, $do_log );
+            sdg_log( "[run_title_updates] new_t4m: ".$new_t4m, $do_log );
             
             if ( strpos($new_title, 'Error! Abort!') !== false || strpos($new_title, 'Problem!') !== false ) {
                 
@@ -2084,7 +2082,7 @@ function posts_cleanup( $atts = [] ) {
             if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
 
                 // not unique! fix it...
-                sdg_log( "[posts_cleanup] new_t4m not unique! Fix it.");
+                sdg_log( "[posts_cleanup] new_t4m not unique! Fix it.", $do_log );
 
                 if ( $old_t4m != $new_t4m ) {
                     $i = $t4m_posts+1;

@@ -1965,7 +1965,7 @@ function sdg_array_sorter( $key, $key_type = 'array_key' ) {
 // Filters the parts of the document title.
 add_filter( 'document_title_parts', function( $title_parts_array ) {
     
-    sdg_log( "filter: document_title_parts" );
+    sdg_log( "filter: document_title_parts", $do_log );
     
     if ( get_post_type( get_the_ID() ) == 'event' ) {
     	$post_id = get_the_ID();
@@ -2325,7 +2325,7 @@ function sdg_log( $log_msg, $do_log = true ) {
 	$timestamp = current_time('mysql'); // use WordPress function instead of straight PHP so that timezone is correct -- see https://codex.wordpress.org/Function_Reference/current_time
 	$datestamp = current_time('Ymd'); // date('d-M-Y')
 	
-	//sdg_log("loop_item_divider");
+	//sdg_log( "loop_item_divider", $do_log );
 	if ($log_msg == "divline1") {
 		$log_msg = "\n=================================================================================\n";
 	} else if ($log_msg == "divline2") {
