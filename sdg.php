@@ -1965,6 +1965,12 @@ function sdg_array_sorter( $key, $key_type = 'array_key' ) {
 // Filters the parts of the document title.
 add_filter( 'document_title_parts', function( $title_parts_array ) {
     
+    // TS/logging setup
+    $do_ts = true; 
+    $do_log = false;
+    if ( get_post_type( get_the_ID() ) == 'event' ) { $do_log = true; }
+    sdg_log( "divline2", $do_log );
+    
     sdg_log( "filter: document_title_parts", $do_log );
     
     if ( get_post_type( get_the_ID() ) == 'event' ) {
