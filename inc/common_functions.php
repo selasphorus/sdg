@@ -57,7 +57,7 @@ function sdg_post_title ( $args = array() ) {
 	// If a title has been submitted, use it; if not, get the post_title
 	if ( $the_title ) {
 		$title = $the_title;
-	} else if ( $post ) {
+	} else if ( is_object($post) ) {
 		$title = $post->post_title;
 	} else {
 		$title = "";
