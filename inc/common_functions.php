@@ -39,6 +39,7 @@ function sdg_post_title ( $args = array() ) {
 		'hclass_sub'  	=> 'subtitle',
 		'before'  		=> '',
 		'after'  		=> '',
+		'do_ts'  		=> false,
 	);
 
 	// Parse & Extract args
@@ -177,6 +178,8 @@ function sdg_post_title ( $args = array() ) {
 	$info .= $title;
 	$info .= $subtitle;
 	$info .= $series_subtitle;
+	
+	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
