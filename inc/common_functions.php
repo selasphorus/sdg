@@ -53,7 +53,7 @@ function sdg_post_title ( $args = array() ) {
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
 	$ts_info .= "post_id: ".$post_id."<br />";
-	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
+	$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
 	
 	// If a title has been submitted, use it; if not, get the post_title
 	if ( $the_title ) {
@@ -66,8 +66,9 @@ function sdg_post_title ( $args = array() ) {
 	
 	// If both title and post_id are empty, abort
 	if ( strlen( $title ) == 0 || $post_id == 0) {
-		if ( $do_ts ) { return $ts_info; }
-		return;
+		return $ts_info;
+		//if ( $do_ts ) { return $ts_info; }
+		//return;
 	}
 	
 	// WIP
