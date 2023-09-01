@@ -46,7 +46,7 @@ function sdg_post_title ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
-	if ( is_int($post) ) { 
+	if ( is_numeric($post) ) { 
 		$post_id = $post;
 		$post = get_post( $post_id );
 	} else {
