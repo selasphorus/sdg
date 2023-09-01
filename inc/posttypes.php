@@ -49,20 +49,20 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'notes' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-			'taxonomies' => array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite' 			=> array( 'slug' => 'notes' ), // permalink structure slug
+			'capability_type' 	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'   		=> 'dashicons-groups',
+			'menu_position'     => null,
+			'supports'			=> array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
+			'taxonomies' 		=> array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
+			'show_in_rest' 		=> true,    
 		);
 
 		register_post_type( 'admin_note', $args );
@@ -92,20 +92,20 @@ function register_post_type_db_query() {
 	$args = array(
 		'labels' => $labels,
 	 	'public' => true,
-        'publicly_queryable' => true,
-        'show_ui'            => true,
-        'show_in_menu'       => 'edit.php?post_type=admin_note',
-        'query_var'          => true,
-        'rewrite'            => array( 'slug' => 'db_query' ),
-        'capability_type' 	 => $caps,
-        'map_meta_cap'       => true,
-        'has_archive'        => true,
-        'hierarchical'       => false,
-	 	//'menu_icon'          => 'dashicons-welcome-write-blog',
-        'menu_position'      => null,
-        'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-		'taxonomies' => array( 'data_table', 'query_tag', 'admin_tag' ),
-		'show_in_rest' => true,    
+        'publicly_queryable'=> true,
+        'show_ui'  			=> true,
+        'show_in_menu' 		=> 'edit.php?post_type=admin_note',
+        'query_var'			=> true,
+        'rewrite'			=> array( 'slug' => 'db_query' ),
+        'capability_type'	=> $caps,
+        'map_meta_cap' 		=> true,
+        'has_archive'  		=> true,
+        'hierarchical' 		=> false,
+	 	//'menu_icon'			=> 'dashicons-welcome-write-blog',
+        'menu_position'		=> null,
+        'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+		'taxonomies'		=> array( 'data_table', 'query_tag', 'admin_tag' ),
+		'show_in_rest'		=> true,    
 	);
 
 	register_post_type( 'db_query', $args );
@@ -135,20 +135,20 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=admin_note',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'data-tables' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=admin_note',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'data-tables' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'data_table', $args );
@@ -183,20 +183,20 @@ if ( in_array('people', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'people' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'person_category', 'person_title', 'admin_tag' ), //, 'person_tag'
-			'show_in_rest' => false, // false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'people' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-groups',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies'		=> array( 'person_category', 'person_title', 'admin_tag' ), //, 'person_tag'
+			'show_in_rest'		=> false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'person', $args );
@@ -231,20 +231,20 @@ if ( in_array('groups', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'groups' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => true,
-			//'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-			'taxonomies' => array( 'admin_tag', 'group_category' ),
-			'show_in_rest' => false,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'groups' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap' 		=> true,
+			'has_archive'  		=> true,
+			'hierarchical' 		=> true,
+			//'menu_icon'			=> 'dashicons-groups',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
+			'taxonomies'		=> array( 'admin_tag', 'group_category' ),
+			'show_in_rest'		=> false,    
 		);
 
 		register_post_type( 'group', $args );
@@ -275,20 +275,20 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'ensembles' ),
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'ensembles' ),
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-groups',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'ensemble', $args );
@@ -319,20 +319,20 @@ if ( in_array('organizations', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'organizations' ),
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-groups',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'organizations' ),
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-groups',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'organization', $args );
@@ -366,20 +366,20 @@ if ( in_array('projects', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'projects' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'admin_tag', 'project_category' ),
-			'show_in_rest' => false, // false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'projects' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies'		=> array( 'admin_tag', 'project_category' ),
+			'show_in_rest'		=> false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'project', $args );
@@ -408,20 +408,20 @@ if ( in_array('projects', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'recordings' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-album',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'recording_category', 'admin_tag' ),
-			'show_in_rest' => false, // false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'recordings' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-album',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'recording_category', 'admin_tag' ),
+			'show_in_rest'		=> false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'recording', $args );
@@ -455,20 +455,20 @@ if ( in_array('press', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'press' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'press' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			'taxonomies'		=> array( 'admin_tag', 'press_category' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'press', $args );
@@ -501,20 +501,20 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'newsletters' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'newsletters' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies'		=> array( 'admin_tag', 'press_category' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'newsletter', $args );
@@ -549,20 +549,20 @@ if ( in_array('music', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'repertoire' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'repertoire_category', 'occasion', 'post_tag', 'admin_tag' ), //, 'season'
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'repertoire' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'repertoire_category', 'occasion', 'post_tag', 'admin_tag' ), //, 'season'
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'repertoire', $args );
@@ -591,20 +591,20 @@ if ( in_array('music', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=repertoire',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'editions' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'instrument', 'key', 'soloist', 'voicing', 'library_tag', 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=repertoire',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'editions' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'instrument', 'key', 'soloist', 'voicing', 'library_tag', 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'edition', $args );
@@ -633,20 +633,20 @@ if ( in_array('music', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=publication',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'publishers' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=publication',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'publishers' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'publisher', $args );
@@ -675,20 +675,20 @@ if ( in_array('music', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'publications' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-book-alt',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'publication_category', 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'publications' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-book-alt',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'publication_category', 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'publication', $args );
@@ -717,20 +717,20 @@ if ( in_array('music', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'music-lists' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'          	=> true,
+			'show_in_menu'		=> true,
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'music-lists' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'music_list', $args );
@@ -765,20 +765,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'bible-books' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'bible-books' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'bible_book', $args );
@@ -807,20 +807,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'readings' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'readings' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'reading', $args );
@@ -849,20 +849,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'lectionary' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-calendar-alt',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'lectionary' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-calendar-alt',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'lectionary', $args );
@@ -891,20 +891,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'liturgical-dates' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-calendar-alt',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'liturgical-dates' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-calendar-alt',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'liturgical_date', $args );
@@ -933,20 +933,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'liturgical_date_calc' ),
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => false,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-calendar-alt',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'liturgical_date_calc' ),
+			'capability_type'	=> $caps,
+			'map_meta_cap' 		=> true,
+			'has_archive'  		=> false,
+			'hierarchical' 		=> false,
+			//'menu_icon'			=> 'dashicons-calendar-alt',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'liturgical_date_calc', $args );
@@ -975,20 +975,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'collects' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ), //'season', 
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'collects' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ), //'season', 
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'collect', $args );
@@ -1017,20 +1017,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=lectionary',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'psalms_of_the_day' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => false,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'psalms_of_the_day' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap' 		=> true,
+			'has_archive'  		=> false,
+			'hierarchical' 		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'psalms_of_the_day', $args );
@@ -1065,21 +1065,21 @@ if ( in_array('sermons', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'sermons' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => 'sermon-archive',
-			//'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'sermon_topic', 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'sermons' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap' 		=> true,
+			'has_archive'  		=> 'sermon-archive',
+			//'has_archive'  		=> true,
+			'hierarchical' 		=> false,
+			'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'sermon_topic', 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'sermon', $args );
@@ -1108,20 +1108,20 @@ if ( in_array('sermons', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=sermon',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'sermon-series' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=sermon',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'sermon-series' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'sermon_series', $args );
@@ -1156,20 +1156,20 @@ if ( in_array('events', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=event',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'event-series' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-book',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=event',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'event-series' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false,
 		);
 
 		register_post_type( 'event_series', $args );
@@ -1205,20 +1205,20 @@ if ( in_array('organs', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'organs' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-playlist-audio',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'organs' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-playlist-audio',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'organ', $args );
@@ -1247,20 +1247,20 @@ if ( in_array('organs', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=organ',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'builders' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=organ',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'builders' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'builder', $args );
@@ -1289,20 +1289,20 @@ if ( in_array('organs', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=organ',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'divisions' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=organ',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'divisions' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'division', $args );
@@ -1331,20 +1331,20 @@ if ( in_array('organs', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=organ',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'manuals' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=organ',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'manuals' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'manual', $args );
@@ -1373,20 +1373,20 @@ if ( in_array('organs', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=organ',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'stops' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=organ',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'stops' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'stop', $args );
@@ -1421,20 +1421,20 @@ if ( in_array('venues', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'venues' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-admin-multisite',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag', 'venue_category' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'venues' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-admin-multisite',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag', 'venue_category' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'venue', $args );
@@ -1463,20 +1463,20 @@ if ( in_array('venues', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => 'edit.php?post_type=venue',
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'addresses' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=venue',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'addresses' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'address', $args );
@@ -1517,20 +1517,20 @@ if ( in_array('sources', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'sources' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'sources' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'source', $args );
@@ -1565,20 +1565,20 @@ if ( in_array('links', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'links' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'links' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'link', $args );
@@ -1613,20 +1613,20 @@ if ( in_array('resources', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'resources' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies' => array( 'admin_tag' ),
-			'show_in_rest' => false, // i.e. false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'resources' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
 		register_post_type( 'resource', $args );
@@ -1666,20 +1666,20 @@ if ( in_array('logbook', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'logbook' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			//'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => false, // false = use classic, not block editor
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite' 			=> array( 'slug' => 'logbook' ), // permalink structure slug
+			'capability_type' 	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies' 		=> array( 'admin_tag', 'press_category' ),
+			'show_in_rest'		=> false, // false = use classic, not block editor
 		);
 
 		register_post_type( 'log_entry', $args );
@@ -1713,20 +1713,20 @@ if ( in_array('inventory', $sdg_modules ) ) {
 		$args = array(
 			'labels' => $labels,
 			'public' => true,
-			'publicly_queryable' => true,
-			'show_ui'            => true,
-			'show_in_menu'       => true,
-			'query_var'          => true,
-			'rewrite'            => array( 'slug' => 'things' ), // permalink structure slug
-			'capability_type' 	 => $caps,
-			'map_meta_cap'       => true,
-			'has_archive'        => true,
-			'hierarchical'       => false,
-			'menu_icon'          => 'dashicons-welcome-write-blog',
-			'menu_position'      => null,
-			'supports'           => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			//'taxonomies' => array( 'admin_tag', 'press_category' ),
-			'show_in_rest' => true,    
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite'			=> array( 'slug' => 'things' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			'menu_icon'			=> 'dashicons-welcome-write-blog',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
+			//'taxonomies'		=> array( 'admin_tag', 'press_category' ),
+			'show_in_rest'		=> true,
 		);
 
 		register_post_type( 'thing', $args );
