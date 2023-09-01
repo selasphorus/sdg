@@ -50,6 +50,7 @@ function sdg_post_title ( $args = array() ) {
 		$post_id = $post;
 		$post = get_post( $post_id );
 	} else {
+		$info .= "Not is_numeric: ".$post."<br />";
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
 	$ts_info .= "post_id: ".$post_id."<br />";
