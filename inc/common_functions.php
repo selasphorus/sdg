@@ -52,7 +52,7 @@ function sdg_post_title ( $args = array() ) {
 	} else {
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
-	//$ts_info .= "post_id: ".$post_id."<br />";
+	$ts_info .= "post_id: ".$post_id."<br />";
 	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
 	
 	// If a title has been submitted, use it; if not, get the post_title
