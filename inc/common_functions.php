@@ -50,7 +50,7 @@ function sdg_post_title ( $args = array() ) {
 		$post_id = $post;
 		$post = get_post( $post_id );
 	} else {
-		$ts_info .= "Not is_numeric: ".$post."<br />";
+		//$ts_info .= "Not is_numeric: ".$post."<br />";
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
 	$ts_info .= "post_id: ".$post_id."<br />";
@@ -67,9 +67,8 @@ function sdg_post_title ( $args = array() ) {
 	
 	// If both title and post_id are empty, abort
 	if ( strlen( $title ) == 0 || $post_id == 0) {
-		return $ts_info;
-		//if ( $do_ts ) { return $ts_info; }
-		//return;
+		if ( $do_ts ) { return $ts_info; }
+		return;
 	}
 	
 	// WIP
