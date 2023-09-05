@@ -3421,7 +3421,7 @@ function em_args_mod($args){
         //$header_format = "do_shortcode('[day_title the_date=\"#s\"]')";
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', $header_format, $args['header_format']); // ??
         
-        //$args['header_format'] = apply_shortcodes( $args['header_format'] );
+        $args['header_format'] = apply_shortcodes( $args['header_format'] );
         
         //// For now, just hide the day_title shortcode -- can't get it to run except on main calendar page
         
