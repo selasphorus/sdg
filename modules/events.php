@@ -3398,8 +3398,7 @@ add_filter('em_events_output_grouped_args','em_args_mod',1,3);
 function em_args_mod($args){
     
     /*
-    $header_str = apply_shortcodes( str_replace('#s', $EM_DateTime->modify($date)->i18n($format),
-	$args['header_format']) ); // atc
+    $header_str = apply_shortcodes( str_replace('#s', $EM_DateTime->modify($date)->i18n($format), $args['header_format']) ); // atc
 	echo $header_str;
 	*/
 
@@ -3421,7 +3420,7 @@ function em_args_mod($args){
         //$header_format = "do_shortcode('[day_title the_date=\"#s\"]')";
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', $header_format, $args['header_format']); // ??
         
-        $args['header_format'] = apply_shortcodes( $args['header_format'] );
+        //$args['header_format'] = apply_shortcodes( $args['header_format'] );
         
         //// For now, just hide the day_title shortcode -- can't get it to run except on main calendar page
         
