@@ -197,7 +197,7 @@ function sdg_post_title ( $args = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = true; 
+    $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -215,6 +215,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
 		'return'  	=> 'html',
+		'do_ts'  	=> false,
 	);
 
 	// Parse & Extract args
