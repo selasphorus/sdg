@@ -3404,13 +3404,13 @@ function em_args_mod($args){
 	*/
 
     // WIP because day_title shortcode isn't working in context of filtered events_list_grouped
-    if ( isset($args['format_header']) && ! is_page('events') ) {
+    if ( isset($args['format_header']) ) { // && ! is_page('events')
         //$args['format_header'] = apply_shortcodes( $args['format_header'] );
         //$args['format_header'] = "***".$args['format_header']."***"; // tft
-        $args['format_header'] = "+++";
+        $args['format_header'] .= "[fh]";
     }
     
-    if ( isset($args['header_format']) ) {
+    if ( isset($args['header_format']) ) { // && ! is_page('events')
               
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', '<!-- TBD: day_title -->', $args['header_format']); // ok for testing
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', do_shortcode('[day_title the_date="2020-11-22"]'), $args['header_format']); // tft -- ok -- but not very useful
@@ -3425,7 +3425,7 @@ function em_args_mod($args){
         
         //// For now, just hide the day_title shortcode -- can't get it to run except on main calendar page
         
-        $args['header_format'] .= "***"; // tft
+        $args['header_format'] .= "[hf]"; // tft
         
 	}
     //sdg_log( "em_events_output_grouped_args: ".print_r($args, true), $do_log );
