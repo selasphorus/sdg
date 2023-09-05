@@ -3393,18 +3393,24 @@ function exclude_unlisted_events ( $args ) {
     return $args;
 }
 
-// SEE INSTEAD -- custom code in events-manager/classes/em-events.php -- search for "atc"
-//add_filter('em_events_output_grouped_args','em_args_mod',1,3);
+// WIP -- alt approach is via custom code in events-manager/classes/em-events.php -- search for "atc" (v 3.2.1...)
+add_filter('em_events_output_grouped_args','em_args_mod',1,3);
 function em_args_mod($args){
     
-    // This was WIP because day_title shortcode wasn't working in context of events_list_grouped -- i.e. on pages where that EM shortcode is in use. 
+    /*
+    $header_str = apply_shortcodes( str_replace('#s', $EM_DateTime->modify($date)->i18n($format),
+	$args['header_format']) ); // atc
+	echo $header_str;
+	*/
+
+    // WIP because day_title shortcode isn't working in context of filtered events_list_grouped
     if ( isset($args['format_header']) && ! is_page('events') ) {
         //$args['format_header'] = apply_shortcodes( $args['format_header'] );
         //$args['format_header'] = "***".$args['format_header']."***"; // tft
-        $args['format_header'] = "***";
+        $args['format_header'] = "+++";
     }
     
-    if ( isset($args['header_format']) && ! is_page('events') ) {
+    if ( isset($args['header_format']) ) {
               
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', '<!-- TBD: day_title -->', $args['header_format']); // ok for testing
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', do_shortcode('[day_title the_date="2020-11-22"]'), $args['header_format']); // tft -- ok -- but not very useful
@@ -3419,7 +3425,7 @@ function em_args_mod($args){
         
         //// For now, just hide the day_title shortcode -- can't get it to run except on main calendar page
         
-        //$args['header_format'] .= "***"; // tft
+        $args['header_format'] .= "***"; // tft
         
 	}
     //sdg_log( "em_events_output_grouped_args: ".print_r($args, true), $do_log );
