@@ -3394,7 +3394,7 @@ function exclude_unlisted_events ( $args ) {
 }
 
 // WIP -- alt approach is via custom code in events-manager/classes/em-events.php -- search for "atc" (v 3.2.1...)
-add_filter('em_events_output_grouped_args','em_args_mod',1,3);
+//add_filter('em_events_output_grouped_args','em_args_mod',1,3);
 function em_args_mod($args){
     
     /*
