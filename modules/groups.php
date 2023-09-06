@@ -79,7 +79,7 @@ function display_group_personnel ( $args = array() ) {
 					
 					// Get all persons matching this group_id and title_id which are current
 					//...
-					// best to do this via a bidirectional field along the lines of repertoire_events rather than trying to query ACF repeater rows?
+					// TODO: would it be better to do this via a bidirectional field along the lines of repertoire_events rather than trying to query ACF repeater rows?
 					//...
 					
 					$wp_args = array(
@@ -111,7 +111,7 @@ function display_group_personnel ( $args = array() ) {
 					$ts_info .= "persons: <pre>".print_r($persons, true)."</pre>";
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
-					if ( $persons ) { $subgroup_info .= $group_title."<br />"; }
+					if ( $persons ) { $subgroup_info .= $group_title.": "; }
 					
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
 					if ( function_exists( 'birdhive_display_collection' ) ) {
