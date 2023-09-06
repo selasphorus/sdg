@@ -68,12 +68,7 @@ function display_group_personnel ( $args = array() ) {
 			//$info .= "[$i] ".$subgroup_name."<br />";
 			
 			// WIP
-			// If the display-content plugin is active, then use its functionality to display the subgroup personnel
-			if ( function_exists( 'birdhive_display_collection' ) ) {
-				$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $subgroup_personnel ); //, 'arr_dpatts' => $args
-        		$subgroup_info .= birdhive_display_collection( $display_args );
-			} else {
-				foreach ( $subgroup_personnel as $group_person ) {
+			foreach ( $subgroup_personnel as $group_person ) {
 			
 				//$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
 				$title_id = $group_person['title'];
@@ -117,13 +112,23 @@ function display_group_personnel ( $args = array() ) {
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
 					if ( $persons ) { $subgroup_info .= $group_title."<br />"; }
-					foreach ( $persons as $person_id ) {
-						$person_name = get_the_title($person_id);
-						$subgroup_info .= $person_name."<br />";
+					
+					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
+					if ( function_exists( 'birdhive_display_collection' ) ) {
+						$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $persons ); //, 'arr_dpatts' => $args
+						$subgroup_info .= birdhive_display_collection( $display_args );
+					} else {
+						foreach ( $persons as $person_id ) {
+							$person_name = get_the_title($person_id);
+							$subgroup_info .= $person_name."<br />";
+						}
 					}
+			
+					
 				}
 			}
-			}
+			
+			
 			
 			if ( !empty($subgroup_info) ) {
 				$info .= $subgroup_name."<br />";
