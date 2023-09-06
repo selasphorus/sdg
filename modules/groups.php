@@ -11,6 +11,8 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: GROUP ***********/
 
+// TODO: consider folding this in to the display-content plugin as a special content structure (group/subgroup)
+// AND generalize it so as to be able to use it for links and other content types...
 // Display the titles and personnel for a given subgroup or groups
 function display_group_personnel ( $args = array() ) {
 
@@ -27,6 +29,8 @@ function display_group_personnel ( $args = array() ) {
 	$defaults = array(
 		'group_id'		=> null,
 		'subgroup_ids'	=> array(),
+		'return_format' => 'links', // other options: excerpts; archive (full post content); grid; table
+		//TODO: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
 	);
 
 	// Parse & Extract args
@@ -50,25 +54,26 @@ function display_group_personnel ( $args = array() ) {
 		foreach ( $subgroups as $i => $subgroup ) {
 		
 			$ts_info .= "i: $i<br />";
-			$show_subgroup = true;
 			
 			// NB: subgroup_ids are passed starting with "1" instead of zero
 			if ( $subgroup_ids && !in_array($i+1, $subgroup_ids) ) {
-				$show_subgroup = false;
+				continue; // don't show this subgroup; continue on to the next in the array
 			}
 			
-			//$subgroup = $subgroups[$subgroup_id];
+			//$subgroup_id = $subgroups[$subgroup_id];
 			$subgroup_name = $subgroup['name'];
-			$subgroup_personnel = $subgroup['personnel'];
+			$subgroup_personnel = $subgroup['personnel'];			
+			$subgroup_info = ""; // init
 			//
-			if ( !$show_subgroup ) {
-				continue;
-			}
 			//$info .= "[$i] ".$subgroup_name."<br />";
 			
-			$subgroup_info = ""; // init
-			
-			foreach ( $subgroup_personnel as $group_person ) {
+			// WIP
+			// If the display-content plugin is active, then use its functionality to display the subgroup personnel
+			if ( function_exists( 'birdhive_display_collection' ) ) {
+				//$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $posts, 'arr_dpatts' => $args );
+        		$subgroup_info .= birdhive_display_collection( $display_args );
+			} else {
+				foreach ( $subgroup_personnel as $group_person ) {
 			
 				//$info .= "group_person: <pre>".print_r($group_person, true)."</pre>";
 				$title_id = $group_person['title'];
@@ -117,6 +122,7 @@ function display_group_personnel ( $args = array() ) {
 						$subgroup_info .= $person_name."<br />";
 					}
 				}
+			}
 			}
 			
 			if ( !empty($subgroup_info) ) {
