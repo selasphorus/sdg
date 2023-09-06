@@ -70,7 +70,7 @@ function display_group_personnel ( $args = array() ) {
 			// WIP
 			// If the display-content plugin is active, then use its functionality to display the subgroup personnel
 			if ( function_exists( 'birdhive_display_collection' ) ) {
-				//$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $posts, 'arr_dpatts' => $args );
+				$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $subgroup_personnel ); //, 'arr_dpatts' => $args
         		$subgroup_info .= birdhive_display_collection( $display_args );
 			} else {
 				foreach ( $subgroup_personnel as $group_person ) {
