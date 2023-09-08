@@ -29,7 +29,7 @@ function display_group_personnel ( $args = array() ) {
 	$defaults = array(
 		'group_id'		=> null,
 		'subgroup_ids'	=> array(),
-		'return_format' => 'links', // other options: excerpts; archive (full post content); grid; table
+		'return_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
 		//TODO: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
 	);
 
