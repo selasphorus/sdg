@@ -76,6 +76,7 @@ function display_group_personnel ( $args = array() ) {
 				if ( $title_term ) { 
 				
 					$group_title = $title_term->name;
+					$group_title = '<span class="group_title">'.$group_title.'</span>';	
 					
 					// Get all persons matching this group_id and title_id which are current
 					//...
@@ -116,7 +117,7 @@ function display_group_personnel ( $args = array() ) {
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
 					if ( function_exists( 'birdhive_display_collection' ) ) {
 						$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $persons ); //, 'arr_dpatts' => $args
-						$subgroup_info .= birdhive_display_collection( $display_args );
+						$subgroup_info .= '<span class="group_persons">'.birdhive_display_collection( $display_args ).'</span>';
 					} else {
 						foreach ( $persons as $person_id ) {
 							$person_name = get_the_title($person_id);
