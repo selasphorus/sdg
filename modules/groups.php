@@ -123,12 +123,9 @@ function display_group_personnel ( $args = array() ) {
 							$subgroup_info .= $person_name."<br />";
 						}
 					}
-			
 					
 				}
 			}
-			
-			
 			
 			if ( !empty($subgroup_info) ) {
 				$info .= $subgroup_name."<br />";
