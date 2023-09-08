@@ -333,6 +333,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	$info = "";
 	$dates = array();
 	$arr_info = array();
+	$fixed_date_str = ""; 
 	
 	// Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $post_id, 'date_type', true );
@@ -342,7 +343,6 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	if ( $date_type == "fixed" ) {
 		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id ) ) { 
 			$info .= "<!-- No fixed_date_str found. -->";
-			$fixed_date_str = ""; 
 		} else {
 			$info .= "<!-- fixed_date_str: ".$fixed_date_str." -->";
 			$formatted_fixed_date_str = date("Y-m-d",strtotime($fixed_date_str));
