@@ -237,8 +237,8 @@ table.program tr td {
     padding: 0.2rem 1rem .5rem 0;
 }
 
-.concert_program table.program:not(.personnel) tr td,
-table.program tr.grouping td {
+.concert_program table.program:not(.personnel) tr td/*,
+table.program tr.grouping td*/ {
     padding-bottom: 2rem;
 }
 
