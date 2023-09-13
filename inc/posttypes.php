@@ -62,7 +62,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'menu_position'     => null,
 			'supports'			=> array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
 			'taxonomies' 		=> array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
-			'show_in_rest' 		=> true,    
+			'show_in_rest'		=> true,    
 		);
 
 		register_post_type( 'admin_note', $args );
