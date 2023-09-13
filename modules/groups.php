@@ -157,6 +157,7 @@ function sdg_group_personnel ( $atts = [] ) {
 	$args = shortcode_atts( array(
         'id' => null,
         'subgroup_ids' => array(),
+		'return_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
     ), $atts );
     
     $group_id = $args['id'];
@@ -166,7 +167,7 @@ function sdg_group_personnel ( $atts = [] ) {
 	//if ( $subgroup_ids ) { $subgroup_ids = birdhive_att_explode( $subgroup_ids ); }
 	if ( $subgroup_ids ) { $subgroup_ids = array_map( 'intval', birdhive_att_explode( $subgroup_ids ) ); }
     
-    $info .= display_group_personnel( array('group_id' => $group_id, 'subgroup_ids' => $subgroup_ids ) );
+    $info .= display_group_personnel( array('group_id' => $group_id, 'subgroup_ids' => $subgroup_ids, 'return_format' => $return_format ) );
     
     $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
