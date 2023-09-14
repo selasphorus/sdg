@@ -10,7 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** POST BASICS ***********/
 
-// TODO: replace w/ sdg_post_title via SDG plugin? or via display_content plugin?
+// WIP
 function sdg_post_title ( $args = array() ) {
     
     // TS/logging setup
@@ -30,6 +30,7 @@ function sdg_post_title ( $args = array() ) {
 		'post'			=> null,
 		'line_breaks'	=> false,
 		'show_subtitle'	=> false,
+		'show_person_title' => false, // WIP
 		'show_series_title' => false,
 		'link'			=> false,
 		'echo'			=> true,
@@ -113,6 +114,15 @@ function sdg_post_title ( $args = array() ) {
 		}
 	} else {
 		$subtitle = "";
+	}
+	
+	// If we're showing the person_title, retrieve and format the relevant text
+	// WIP!
+	if ( $show_person_title ) {
+		/*$person_title = get_post_meta( $post_id, 'subtitle', true );
+		if ( strlen( $person_title ) != 0 ) {
+			$title .= ", ".$person_title;
+		}*/
 	}
 	
 	// If we're showing a series subtitle, retrieve and format the relevant text
