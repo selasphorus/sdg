@@ -114,6 +114,7 @@ function display_group_personnel ( $args = array() ) {
 					$ts_info .= "persons: <pre>".print_r($persons, true)."</pre>";
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
+					// WIP -- this needs work -- if there's only one person, append the group_title to the item_title? if multiple, then -- ???
 					if ( $persons ) { $subgroup_info .= $group_title.": "; }
 					
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
@@ -123,6 +124,7 @@ function display_group_personnel ( $args = array() ) {
 						foreach ( $persons as $person ) {
 							$item_arr = build_item_arr ( $person, "post", $display_format );
 							$subgroup_info .= display_item( $display_format, $item_arr );
+							$subgroup_info .= "<br />";
 						}
 						//$display_args = array( 'content_type' => 'posts', 'display_format' => $display_format, 'items' => $persons ); //, 'arr_dpatts' => $args
 						//$subgroup_info .= '<span class="group_persons">'.birdhive_display_collection( $display_args ).'</span><br />';
