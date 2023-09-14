@@ -115,7 +115,7 @@ function display_group_personnel ( $args = array() ) {
 					//$ts_info .= "Last SQL-Query (query): <pre>{$query->request}</pre>";
 					
 					// WIP -- this needs work -- if there's only one person, append the group_title to the item_title? if multiple, then -- ???
-					if ( $persons ) { $subgroup_info .= $group_title.": "; }
+					//if ( $persons ) { $subgroup_info .= $group_title.": "; }
 					
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
 					// ??? this is more than we need -- instead just use the build_item_arr and display_post_item fcns?
@@ -123,6 +123,7 @@ function display_group_personnel ( $args = array() ) {
 					if ( function_exists( 'birdhive_display_collection' ) ) {
 						foreach ( $persons as $person ) {
 							$item_arr = build_item_arr ( $person, "post", $display_format );
+							$subgroup_info .= $group_title.": ";
 							$subgroup_info .= display_item( $display_format, $item_arr );
 							$subgroup_info .= "<br />";
 						}
