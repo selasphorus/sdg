@@ -41,7 +41,8 @@ function display_group_personnel ( $args = array() ) {
 	
 	// Get args from array
 	if ( $group_id ) {
-			
+		
+		$ts_info .= "display_format: $display_format<br />";
 		$ts_info .= "group_id: $group_id<br />";
 		
     	$subgroups = get_field('subgroups', $group_id); // ACF collection item repeater field values
