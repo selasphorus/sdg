@@ -29,7 +29,7 @@ function display_group_personnel ( $args = array() ) {
 	$defaults = array(
 		'group_id'		=> null,
 		'subgroup_ids'	=> array(),
-		'return_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
+		'display_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
 		//TODO: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
 	);
 
@@ -76,6 +76,7 @@ function display_group_personnel ( $args = array() ) {
 				if ( $title_term ) { 
 				
 					$group_title = $title_term->name;
+					// TODO: instead of the following, show the title as part of the personnel record
 					$group_title = '<span class="group_title">'.$group_title.'</span>';	
 					
 					// Get all persons matching this group_id and title_id which are current
@@ -115,9 +116,15 @@ function display_group_personnel ( $args = array() ) {
 					if ( $persons ) { $subgroup_info .= $group_title.": "; }
 					
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
+					// ??? this is more than we need -- instead just use the build_item_arr and display_post_item fcns?
+					// WIP!
 					if ( function_exists( 'birdhive_display_collection' ) ) {
-						$display_args = array( 'content_type' => 'posts', 'display_format' => $return_format, 'items' => $persons ); //, 'arr_dpatts' => $args
-						$subgroup_info .= '<span class="group_persons">'.birdhive_display_collection( $display_args ).'</span><br />';
+						foreach ( $persons as $person ) {
+							$item_arr = build_item_arr ( $person, "post", $display_format );
+							$subgroup_info .= display_item( $display_format, $item_arr );
+						}
+						//$display_args = array( 'content_type' => 'posts', 'display_format' => $display_format, 'items' => $persons ); //, 'arr_dpatts' => $args
+						//$subgroup_info .= '<span class="group_persons">'.birdhive_display_collection( $display_args ).'</span><br />';
 					} else {
 						foreach ( $persons as $person_id ) {
 							$person_name = get_the_title($person_id);
