@@ -1477,9 +1477,21 @@ function sdg_pre_get_posts( $query ) {
                 $query->set('meta_key', 'last_name');
                 $query->set('order', 'ASC');
             } else if ($post_type === 'newsletter') {
-                $query->set('orderby', 'meta_value');
-                $query->set('meta_key', 'vol_num');
-                $query->set('order', 'DESC');
+                $meta_query =  array(
+					'relation' => 'AND',
+					'volume' => array(
+						'key' => 'volume_num',
+						//'value' => 'Wisconsin',
+					),
+					'number' => array(
+						'key' => 'newsletter_num',
+						//'compare' => 'EXISTS',
+					),
+				);
+				$query->set('meta_query', $meta_query);
+                $query->set('orderby', array( 'volume' => 'DESC', 'number' => 'DESC' ) );
+                //$query->set('meta_key', 'volume_num, newsletter_num');
+                //$query->set('order', 'DESC');
             } /*else if ($post_type === 'liturgical_date') { // atcwip
                 $query->set('orderby', 'meta_value');
                 $query->set('meta_key', 'date_time');
