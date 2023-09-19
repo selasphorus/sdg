@@ -1451,8 +1451,8 @@ function sdg_custom_post_content() {
 }
 
 // Modify the display order of CPT archives
-add_action('pre_get_posts', 'sdg_pre_get_posts'); //mind_pre_get_posts
 //add_filter( 'posts_orderby' , 'custom_cpt_order' );
+add_action('pre_get_posts', 'sdg_pre_get_posts'); //mind_pre_get_posts
 function sdg_pre_get_posts( $query ) {
   
     if ( is_admin() ) {
@@ -1490,8 +1490,6 @@ function sdg_pre_get_posts( $query ) {
 				);
 				$query->set('meta_query', $meta_query);
                 $query->set('orderby', array( 'volume' => 'DESC', 'number' => 'DESC' ) );
-                //$query->set('meta_key', 'volume_num, newsletter_num');
-                //$query->set('order', 'DESC');
             } /*else if ($post_type === 'liturgical_date') { // atcwip
                 $query->set('orderby', 'meta_value');
                 $query->set('meta_key', 'date_time');
