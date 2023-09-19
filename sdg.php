@@ -1478,7 +1478,7 @@ function sdg_pre_get_posts( $query ) {
                 $query->set('order', 'ASC');
             } else if ($post_type === 'newsletter') {
                 $query->set('orderby', 'meta_value');
-                $query->set('meta_key', 'volume_num');
+                $query->set('meta_key', 'volume_num, newsletter_num');
                 $query->set('order', 'DESC');
             } /*else if ($post_type === 'liturgical_date') { // atcwip
                 $query->set('orderby', 'meta_value');
