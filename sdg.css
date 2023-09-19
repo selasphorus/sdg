@@ -40,6 +40,10 @@
 
 /*** ***/
 
+.anchor_top {
+	float: right;
+}
+
 .up {
 	width: 0;
 	height: 0;
