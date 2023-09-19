@@ -920,7 +920,7 @@ function sdg_msg_bar( $args = array() ) {
 
 add_shortcode('top','anchor_link_top');
 function anchor_link_top() {
-    return '<span class="up"></span><a href="#top" class="anchor_top">top</a>';
+    return '<a href="#top" class="anchor_top"><span class="up"></span>top</a>';
 }
 
 // Function to determine default taxonomy for a given post_type, for use with display_posts shortcode, &c.
