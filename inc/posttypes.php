@@ -1576,7 +1576,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			'hierarchical'		=> false,
 			//'menu_icon'			=> 'dashicons-welcome-write-blog',
 			'menu_position'		=> null,
-			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ), //, 'excerpt' , 'editor'
 			'taxonomies'		=> array( 'admin_tag' ),
 			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
