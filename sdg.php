@@ -1481,11 +1481,11 @@ function sdg_pre_get_posts( $query ) {
 					'relation' => 'AND',
 					'volume' => array(
 						'key' => 'volume_num',
-						//'value' => 'Wisconsin',
+						'type' => NUMERIC,
 					),
 					'number' => array(
 						'key' => 'newsletter_num',
-						//'compare' => 'EXISTS',
+						'type' => NUMERIC
 					),
 				);
 				$query->set('meta_query', $meta_query);
