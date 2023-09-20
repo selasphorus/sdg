@@ -2029,13 +2029,14 @@ function restore_html( $info ) {
 }
 
 // Make hyperlink
-function make_link( $url, $linktext, $class = null, $target = null) {
+function make_link( $url, $text, $title = null, $class = null, $target = null) {
 	
 	// TODO: sanitize URL?
 	$link = '<a href="'.$url.'"';
+	if ($title !== null ) { $link .= ' title="'.$title.'"'; }
 	if ($target !== null ) { $link .= ' target="'.$target.'"'; }
     if ($class !== null ) { $link .= ' class="'.$class.'"'; }
-	$link .= '>'.$linktext.'</a>';
+	$link .= '>'.$text.'</a>';
 	//return '<a href="'.$url.'">'.$linktext.'</a>';
 	
 	return $link;
