@@ -122,10 +122,16 @@ function get_cpt_person_content( $post_id = null ) {
     $info = ""; // init
     if ($post_id === null) { $post_id = get_the_ID(); }
     
-    if ( $post_id === null ) {
-        return false;
-    }
+    if ( $post_id === null ) { return false; }
     
+    // Group <> Titles & Associations
+    // WIP
+    
+    // Awards
+    // WIP
+    // TODO: include theme-specific content? via apply_filters?
+    
+    // Dates
     /*
     // TODO: figure out where to put this -- probably appended to post_title?
     $dates = get_person_dates( $post_id, true );
@@ -133,6 +139,7 @@ function get_cpt_person_content( $post_id = null ) {
         $info .= $dates; 
     }*/
     
+    // Compositions
     // TODO: consider eliminating check for has_term, in case someone forgot to apply the appropriate category
     if ( has_term( 'composers', 'person_category', $post_id ) ) {
         // Get compositions
@@ -152,10 +159,8 @@ function get_cpt_person_content( $post_id = null ) {
     
     // TODO: arranger, transcriber, translator, librettist
     
-    // Find and display any associated Editions, Publications, Sermons, and/or Events
-    
+    // Publications
     if ( is_dev_site() ) {
-        
         // Editions
         $arr_obj_editions = get_related_posts( $post_id, 'edition', 'editor' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
         
@@ -189,8 +194,8 @@ function get_cpt_person_content( $post_id = null ) {
         $info .= '</div>';
     }
     
+    // Related Events
     if ( is_dev_site() ) {
-        
         /*
         // Get Related Events
         $args = array(
@@ -233,7 +238,8 @@ function get_cpt_person_content( $post_id = null ) {
         wp_reset_query();
         */
     }
-        
+    
+    // Person Categories
 	$term_obj_list = get_the_terms( $post_id, 'person_category' );
 	if ( $term_obj_list ) {
 		$terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
