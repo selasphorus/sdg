@@ -2506,12 +2506,14 @@ function sdg_include_slug_in_search( $search, $query ) {
 	if ( $query->is_search() && $query->is_admin && 'event' == $query->query_vars['post_type'] ) {
 		$search = ''; // We will rebuild the entire clause
 		$searchand = '';
-		foreach ( $query->query_vars['search_terms'] as $term ) {
-			$like = '%' . $wpdb->esc_like( $term ) . '%';
-			$search .= $wpdb->prepare( "{$searchand}(($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_name LIKE %s))", $like, $like, $like );
-			$searchand = ' AND ';
-		}
-
+		if ( isset($query->query_vars['search_terms']) ) {
+			foreach ( $query->query_vars['search_terms'] as $term ) {
+				$like = '%' . $wpdb->esc_like( $term ) . '%';
+				$search .= $wpdb->prepare( "{$searchand}(($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_name LIKE %s))", $like, $like, $like );
+				$searchand = ' AND ';
+			}
+		}		
+		//
 		if ( ! empty( $search ) ) {
 			$search = " AND ({$search}) ";
 			if ( ! is_user_logged_in() ) {
