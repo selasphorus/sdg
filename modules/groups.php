@@ -30,7 +30,10 @@ function display_group_personnel ( $args = array() ) {
 		'group_id'		=> null,
 		'subgroup_ids'	=> array(),
 		'display_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
-		//TODO: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
+		// TODO/WIP: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
+		// For table display_format
+        'fields'  => null, // ***
+        'headers'  => null, // ***
 	);
 
 	// Parse & Extract args
@@ -120,11 +123,11 @@ function display_group_personnel ( $args = array() ) {
 					// If the display-content plugin is active, then use its functionality to display the subgroup personnel
 					// ??? this is more than we need -- instead just use the build_item_arr and display_post_item fcns?
 					// WIP!
-					if ( function_exists( 'birdhive_display_collection' ) ) {
+					if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
 						foreach ( $persons as $person ) {
 							$item_arr = build_item_arr ( $person, "post", $display_format );
 							$subgroup_info .= $group_title.": ";
-							$subgroup_info .= display_item( $display_format, $item_arr );
+							$subgroup_info .= display_item( $display_format, $item_arr, null, $fields ); // display_item ( $display_format, $item_arr, $display_atts, $table_fields, $item_ts_info ) {
 							$subgroup_info .= "<br />";
 						}
 						//$display_args = array( 'content_type' => 'posts', 'display_format' => $display_format, 'items' => $persons ); //, 'arr_dpatts' => $args
