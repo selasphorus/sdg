@@ -3071,7 +3071,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info .= "<!-- [sdgp] title_args: ".print_r($title_args,true)." -->";
     $event_title = sdg_post_title( $title_args );
     
-    if ( $result == '#_EVENTNAME' ) {
+    if ( $result == '#_EVENT_LIST_ITEM' ) {
+    
+    	$replace = $EM_Event->output(get_option('dbem_event_list_item_format'));
+    
+    } else if ( $result == '#_EVENTNAME' ) {
     
     	$replace = $event_title;
     	//$replace .= " [_EVENTNAME] >> ".$event_title." << ";
