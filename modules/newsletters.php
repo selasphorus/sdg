@@ -22,7 +22,7 @@ function get_cpt_newsletter_content( $post_id = null ) {
     $post_pdf = get_field('pdf_file', $post_id);
     $info .= "<!-- post_pdf: ".print_r($post_pdf, true)." -->";
 	if ($post_pdf) { 
-        $info .= make_link($post_pdf['url'], "Newsletter PDF", get_the_title($post_id), null, "_blank"); // make_link( $url, $text, $title = null, $class = null, $target = null) 
+        $info .= make_link($post_pdf['url'], "Newsletter PDF", "NYC AGO Newsletter PDF: ".get_the_title($post_id), null, "_blank"); // make_link( $url, $text, $title = null, $class = null, $target = null) 
 	} else {
 		//
 	}
