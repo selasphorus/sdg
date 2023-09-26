@@ -3132,7 +3132,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         		$show_image = false;
         		$ts_info = "<!-- [sdgp] featured_image_display: $featured_image_display -->";
         		
-        	} else if ( is_singular('event') && post_is_webcast_eligible( $post_id ) ) {
+        	} else if ( is_singular('event') && function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) ) {
 				
 				$ts_info .= "<!-- [sdgp] is_singular('event') -->";
 				
