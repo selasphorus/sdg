@@ -1583,7 +1583,7 @@ function get_post_resources ( $post_id = null ) {
                 $attachment_title = 'Program';
             }
             
-            $info .= make_link($attachment_url, $attachment_title, $link_class, "_blank")."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
+            $info .= make_link($attachment_url, $attachment_title, null, $link_class, "_blank")."<br />";
 
         }
     } else {
@@ -2008,9 +2008,10 @@ function make_link( $url, $text, $title = null, $class = null, $target = null) {
 	
 	// TODO: sanitize URL?
 	$link = '<a href="'.$url.'"';
-	if ($title !== null ) { $link .= ' title="'.$title.'"'; }
-	if ($target !== null ) { $link .= ' target="'.$target.'"'; }
-    if ($class !== null ) { $link .= ' class="'.$class.'"'; }
+	if ( $text && empty($title) ) { $title = $text; } // Use text as title if title is empty
+	if ( $title ) { $link .= ' title="'.$title.'"'; }
+	if ( $target ) { $link .= ' target="'.$target.'"'; }
+    if ( $class ) { $link .= ' class="'.$class.'"'; }
 	$link .= '>'.$text.'</a>';
 	//return '<a href="'.$url.'">'.$linktext.'</a>';
 	

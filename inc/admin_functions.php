@@ -2345,8 +2345,9 @@ function sermon_updates ( $atts = [] ) {
         setup_postdata( $sermon_post );
         
         $sermon_post_id = $sermon_post->ID;
+        $sermon_title = get_the_title( $sermon_post_id );
         //$info .= "sermon_post_id: $sermon_post_id // ";
-        $info .= make_link( get_the_permalink( $sermon_post_id ), '<em>'.get_the_title( $sermon_post_id ).'</em>' );
+        $info .= make_link( get_the_permalink( $sermon_post_id ), '<em>'.$sermon_title.'</em>', $sermon_title );
         $info .= '&nbsp;[id:'.$sermon_post_id.'] // ';
         
         if ( $a['legacy'] == 'true' ) {
@@ -2434,9 +2435,10 @@ function sermon_updates ( $atts = [] ) {
                 
                 setup_postdata( $event_post );
                 $event_id = $event_post->ID;
+                $event_title = get_the_title( $event_id );
                 
                 //$info .= "&nbsp&nbsp&nbsp&nbsp[".$event_id."] ".$event_post->post_title."<br />";
-                $info .= make_link( get_the_permalink( $event_id ), '&nbsp&nbsp&nbsp&nbsp'.get_the_title( $event_id ) );
+                $info .= make_link( get_the_permalink( $event_id ), '&nbsp&nbsp&nbsp&nbsp'.$event_title, $event_title );
                 $info .= '&nbsp;[id:'.$event_id.']<br />';
                 
                 // Add postmeta for the sermon with this info

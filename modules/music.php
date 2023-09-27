@@ -180,7 +180,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
             $event_title = get_the_title($event_post_id);
             $date_str = get_post_meta( $event_post_id, '_event_start_date', true );
             if ( $date_str ) { $event_title .= ", ".$date_str; }
-            $info .= make_link( get_the_permalink($event_post_id), $event_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            $info .= make_link( get_the_permalink($event_post_id), $event_title, null, null, "_blank" ) . "<br />";
             
             $x++;
         }
@@ -222,7 +222,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
             //$ts_info .= "[$x] duplicate_post: <pre>".print_r($duplicate_post, true)."</pre>"; // tft
             $duplicate_post_id = $duplicate_post->ID;
             
-            $ts_info .= make_link( get_the_permalink($duplicate_post_id), $duplicate_post->post_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            $ts_info .= make_link( get_the_permalink($duplicate_post_id), $duplicate_post->post_title, null, null, "_blank" ) . "<br />";
             
             // TODO: build in merge options
                         
@@ -1087,7 +1087,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     } else if ( $is_single_work == true ) {
         $ts_info .= "<!-- test -->";
     } else {
-        $info = make_link( get_the_permalink( $post_id ), $info, 'subtle', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
+        $info = make_link( get_the_permalink( $post_id ), $info, null, 'subtle', '_blank' );
     }
 	
 	$arr_info['info'] = $info;
@@ -2512,7 +2512,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         //
         $info .= '<td class="repertoire">';
         $info .= '<div class="rep_item">';
-        $info .= make_link( esc_url( get_permalink($post_id) ), $title, '', '_blank' );
+        $info .= make_link( esc_url( get_permalink($post_id) ), $title, null, null, '_blank' );
         $info .= "&nbsp;";
         $authorship_args = array( 'data' => array( 'post_id' => $post_id ), 'format' => 'display', 'abbr' => false, 'is_single_work' => false, 'show_title' => false, 'links' => true );
         $arr_authorship_info = get_authorship_info ( $authorship_args );
@@ -2528,7 +2528,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 //$info .= "<pre>".print_r($composer, true)."</pre>";
                 $composer_name = get_the_title($person_id);
                 $composer_url = esc_url( get_permalink( $person_id ) );
-                $info .= make_link( $composer_url, $composer_name, '', '_blank' );
+                $info .= make_link( $composer_url, $composer_name, null, null, '_blank' );
             }
         }
         */
@@ -2689,8 +2689,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 $editions .= '<div class="edition_info">';
                 $editions .= '<span class="counter">';
                 $edition_url = esc_url( get_permalink( $edition_id ) );
-                $editions .= make_link( $edition_url, '('.$i.')', '', '_blank' );
-                //$editions .= make_link( get_permalink($edition_id), '('.$i.')', '', '_blank' ); // make_link( $url, $linktext, $class = null, $target = null)
+                $editions .= make_link( $edition_url, '('.$i.')', null, null, '_blank' );
                 //$editions .= '('.$i.')';
                 $editions .= '</span>';
 
@@ -2799,7 +2798,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
                 if ( $box_num ){
                     $editions .= '<div class="box_num">';
                     $editions .= $box_num;
-                    //$editions .= make_link( $edition_url, $box_num ); // make_link( $url, $linktext, $class = null, $target = null)
+                    //$editions .= make_link( $edition_url, $box_num );
                     $editions .= '</div>';
                 }
 

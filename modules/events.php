@@ -167,7 +167,7 @@ function get_event_program_content( $post_id = null ) {
 	$info = $ts_info.$info; // ts_info at the top of the page
 	
     // TODO: get and display program_pdf?
-	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, "_blank"); // make_link( $url, $linktext, $class = null, $target = null)
+	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
 	
 	return $info;
 	
@@ -241,7 +241,7 @@ function get_event_ticketing_info( $post_id = null ) {
             $info .= "<!-- ticket_url: $ticket_url -->";
             
             if ( $ticket_url) { 
-                $info .= make_link( $ticket_url, $link_text, "button", "_blank")."<br />";
+                $info .= make_link( $ticket_url, $link_text, $link_text, "button", "_blank")."<br />";
             } else {
                 $info .= "No ticket_url for link_text ".$link_text."<br />";
             }
@@ -3298,6 +3298,8 @@ function cat_em_placeholder_mod($replace, $EM_Category, $result){
 	
 	if ( $result == '#_CATEGORYEVENTS') {
     	
+    	// STC defaults
+    	// TODO: build in options for other sites via plugin options page
     	if ( $EM_Category->slug == 'webcasts' ) {
     		//$replace = "This is the webcasts category...";
     		$replace = '<h2 class="em_events">Up Next</h2>';

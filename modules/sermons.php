@@ -239,7 +239,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             $event_title = get_the_title($event_post_id);
             $date_str = get_post_meta( $event_post_id, '_event_start_date', true );
             if ( $date_str ) { $event_title .= ", ".$date_str; }
-            $info .= make_link( get_the_permalink($event_post_id), $event_title, null, "_blank" ) . "<br />"; //( $url, $linktext, $class = null, $target = null)
+            $info .= make_link( get_the_permalink($event_post_id), $event_title, null, null, "_blank" ) . "<br />";
             
             $x++;
         }
@@ -330,7 +330,7 @@ function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
         // 
         $info .= "<!-- sermon_pdf: ".print_r($sermon_pdf, true)." -->";
         // TODO: the following line happens twice -- if it happens one more time, make it a mini-function?
-        $info .= make_link($sermon_pdf['url'], "Printable Transcript", null, "_blank"); // make_link( $url, $linktext, $class = null, $target = null)
+        $info .= make_link($sermon_pdf['url'], "Printable Transcript", null, null, "_blank");
 	} else {
 		//$info .= "No sermon transcript associated with this record (post_id: $post_id)"; // tft
 	}

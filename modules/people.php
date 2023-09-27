@@ -104,7 +104,7 @@ function get_person_display_name ( $args = array() ) {
 	}
 	
 	if ( $url ) {
-		$display_name = make_link( $url, $display_name, '', '_blank' );
+		$display_name = make_link( $url, $display_name, null, null, '_blank' );
 	}
 	
 	//return $display_name;
@@ -152,7 +152,7 @@ function get_cpt_person_content( $post_id = null ) {
             foreach ( $arr_obj_compositions as $composition ) {
                 //$info .= $composition->post_title."<br />";
                 $rep_info = get_rep_info( $composition->ID, 'display', false, true ); // ( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true )
-                $info .= make_link( get_permalink($composition->ID), $rep_info )."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
+                $info .= make_link( get_permalink($composition->ID), $rep_info )."<br />";
             }
         }
     }
@@ -172,7 +172,7 @@ function get_cpt_person_content( $post_id = null ) {
             //$info .= "<p>arr_obj_editions (".count($arr_obj_editionss)."): <pre>".print_r($arr_obj_editions, true)."</pre></p>";
             foreach ( $arr_obj_editions as $edition ) {
                 //$info .= $edition->post_title."<br />";
-                $info .= make_link( get_permalink($edition->ID), $edition->post_title )."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
+                $info .= make_link( get_permalink($edition->ID), $edition->post_title )."<br />";
             }
 
             $info .= '</div>';
@@ -188,7 +188,7 @@ function get_cpt_person_content( $post_id = null ) {
 
         foreach ( $arr_obj_sermons as $sermon ) {
             //$info .= $sermon->post_title."<br />";
-            $info .= make_link( get_permalink($sermon->ID), $sermon->post_title )."<br />"; // make_link( $url, $linktext, $class = null, $target = null)
+            $info .= make_link( get_permalink($sermon->ID), $sermon->post_title )."<br />";
         }
         
         $info .= '</div>';
