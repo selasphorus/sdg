@@ -34,6 +34,7 @@ function display_group_personnel ( $args = array() ) {
 		// For table display_format
         'fields'  => null, // ***
         'headers'  => null, // ***
+        //show_excerpts => false, // wip
 	);
 
 	// Parse & Extract args

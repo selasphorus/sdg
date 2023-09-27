@@ -10,7 +10,6 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** POST BASICS ***********/
 
-// WIP
 function sdg_post_title ( $args = array() ) {
     
     // TS/logging setup
@@ -203,6 +202,8 @@ function sdg_post_title ( $args = array() ) {
 }
 
 
+/************** IMAGE FUNCTIONS ***************/
+
 // Custom fcn for thumbnail/featured image display
 function sdg_post_thumbnail ( $args = array() ) {
     
@@ -300,8 +301,10 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // WIP: order?
     // If this is a sermon, are we using the author image
-    if ( $format != "singular" && $post_type == "sermon" ) { 
-    	$img_id = get_author_img_id ( $post_id );
+    if ( $format != "singular" && $post_type == "sermon" ) {
+    	if ( get_field('author_image_for_archive') ) {
+    		$img_id = get_author_img_id ( $post_id );
+    	}    	
     }
 
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
@@ -514,6 +517,129 @@ function sdg_post_thumbnail ( $args = array() ) {
 		return $info;
 	}
 
+}
+
+function sdg_get_placeholder_img() {
+    
+    $info = "";
+    
+    $placeholder = get_page_by_title('woocommerce-placeholder', OBJECT, 'attachment');
+    if ( $placeholder ) { 
+        $placeholder_id = $placeholder->ID;
+        if ( wp_attachment_is_image($placeholder_id) ) {
+            //$info .= "Placeholder image found with id '$placeholder_id'."; // tft
+            $img_atts = wp_get_attachment_image_src($placeholder_id, 'medium');
+            $img = '<img src="'.$img_atts[0].'" class="bordered" />';
+        } else {
+            //$info. "Attachment with id '$placeholder_id' is not an image."; // tft
+        }
+    } else {
+        //$info .= "woocommerce-placeholder not found"; // tft
+    }
+    
+    $info .= $img;
+    
+    return $info;
+}
+
+/**
+ * Show captions for featured images
+ *
+ * @param string $html          Post thumbnail HTML.
+ * @param int    $post_id       Post ID.
+ * @param int    $post_image_id Post image ID.
+ * @return string Filtered post image HTML.
+ */
+//add_filter( 'post_thumbnail_html', 'sdg_post_image_html', 10, 3 );
+function sdg_post_image_html( $html, $post_id, $post_image_id ) {
+    
+    if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    
+    	$html .= '<!-- fcn sdg_post_image_html -->';
+    	
+        $featured_image_id = get_post_thumbnail_id();
+        if ( $featured_image_id ) {
+            $caption = get_post( $featured_image_id )->post_excerpt;
+            if ( $caption != "" ) {
+                $caption_class = "sdg_post_image featured_image_caption";
+                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
+            } else {
+                $html = $html . '<br />';
+            }
+        }
+        
+        $html .= '<!-- /fcn sdg_post_image_html -->';
+        
+    }
+    
+    return $html;
+}
+
+// TODO: combine this next function with the previous one to remove redundancy
+/**
+ * Show captions for attachment images
+ *
+ * @param string $html          Image HTML.
+ * @param int    $attachment_id Image ID.
+ * @return string Filtered post image HTML.
+ */
+//apply_filters( 'wp_get_attachment_image', string $html, int $attachment_id, string|int[] $size, bool $icon, string[] $attr )
+/*add_filter( 'wp_get_attachment_image', 'sdg_attachment_image_html', 10, 3 );
+function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
+    
+    // TODO: fix this for other post types. How to tell if attachment was called from content-excerpt.php template?
+    if ( is_singular('event') && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+    
+    	$html .= '<!-- fcn sdg_attachment_image_html -->';
+    	
+        if ( $attachment_id ) {
+            $caption = get_post( $attachment_id )->post_excerpt;
+            if ( $caption != "" ) {
+                $caption_class = "featured_image_caption";
+                $html = $html . '<p class="'. $caption_class . '">' . $caption . '</p>'; // <!-- This displays the caption below the featured image -->
+            } else {
+                $html = $html . '<br />';
+            }
+        }
+        
+        $html .= '<!-- /fcn sdg_attachment_image_html -->';
+        
+    }
+    
+    return $html;
+}*/
+
+// Function to display featured caption in EM event template
+add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );
+function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
+	
+	global $post;
+	global $wp_query;
+    $info = "";
+    $caption = "";
+    
+    if ( $attachment_id ) {
+    
+    } else {
+    	if ( $post_id == null ) { $post_id = get_the_ID(); }
+    }
+	
+	// Retrieve the caption (if any) and return it for display
+    if ( get_post_thumbnail_id() ) {
+        $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
+    }
+    
+    if ( $caption != "" && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
+        $caption_class = "sdg_featured_image_caption";
+        $info .= '<p class="'. $caption_class . '">';
+        $info .= $caption;	
+        $info .= '</p>';
+    } else {
+        $info .= '<p class="zeromargin">&nbsp;</p>'; //$info .= '<br class="empty_caption" />';
+    }
+	
+	return $info;
+	
 }
 
 
