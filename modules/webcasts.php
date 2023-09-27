@@ -353,11 +353,15 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             
             $player_status = "ready";
             if ( $status_only == false ) {
-                $src = 'https://www.youtube.com/watch?v='.$video_id;
                 $youtube_ts = get_field('youtube_ts');
-                if ( $youtube_ts ) { $src .= "&start=".$youtube_ts; }
+                //$src = 'https://www.youtube.com/watch?v='.$video_id;
+                $src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=0&loop=1&mute=0&controls=0';
+				if ( $youtube_ts ) { $src .= "&start=".$youtube_ts; }
                 //$player = do_shortcode('[video src="'.$src.'"]'); //height="300"
-                $player .= '<div class="responsive-youtube"><iframe width="850" height="475" src="https://www.youtube.com/embed/'.$video_id.'?controls=1" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+                //$player .= '<div class="responsive-youtube"><iframe width="850" height="475" src="https://www.youtube.com/embed/'.$video_id.'?controls=1" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+                $player .= '<div class="hero video-container youtube-responsive-container">';
+				$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				$player .= '</div>';
             }
             
         }        
