@@ -1087,7 +1087,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     } else if ( $is_single_work == true ) {
         $ts_info .= "<!-- test -->";
     } else {
-        $info = make_link( get_the_permalink( $post_id ), $info, null, 'subtle', '_blank' );
+        $info = make_link( get_the_permalink( $post_id ), $info, $title, 'subtle', '_blank' );
     }
 	
 	$arr_info['info'] = $info;
