@@ -3107,6 +3107,13 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTTIMES' || $result == '#_12HSTARTTIME' ) {
         
+        // If #_EVENTTIMES and no end time, then use #_12HSTARTTIME
+        if ( $result == '#_EVENTTIMES' ) {
+        	//$start_time = $EM_Event->output('#_12HSTARTTIME');
+        }
+        
+        // Format am/pm to add periods
+        // TODO: make this a plugin option, or at least for now limit it per domain/site name, since it's just a weird STC preference
         //if ( str_contains($replace, "pm" ) ) { $replace .= "*"; }
         //$replace = str_replace('am','a.m.',$replace);
         //$replace = str_replace('pm','p.m.',$replace);
