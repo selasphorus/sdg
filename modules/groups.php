@@ -129,13 +129,14 @@ function display_group_personnel ( $args = array() ) {
 						foreach ( $persons as $person ) {
 						
 							// Assemble the array of styling parameters
-							$arr_styling = array( 'item_type' => $item_type, 'display_format' => $display_format ); // wip
+							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format ); // wip
+							
+							$item_title = get_the_title( $post_id ).", ".$group_title;
+							$item = array( 'post_id' => $post_id, 'item_title' => $item_title );
 							
 							// Assemble the arr_item
-							$arr_item = build_item_arr ( $person, $arr_styling ); // passing person as post obj
-							//$arr_item = build_item_arr ( $person, "post", $display_format ); // TODO: add option to append sthg to title?
+							$arr_item = build_item_arr ( $item, $arr_styling );
 							
-							$subgroup_info .= $group_title.": ";
 							$subgroup_info .= display_item( $arr_item, $arr_styling );
 							$subgroup_info .= "<br />";
 						}
