@@ -44,7 +44,7 @@ function display_group_personnel ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );	
 	
-	//$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
+	$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
 	
 	// Get args from array
 	if ( $group_id ) {
