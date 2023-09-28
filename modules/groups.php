@@ -31,7 +31,7 @@ function display_group_personnel ( $args = array() ) {
 		'subgroup_ids'	=> array(),
 		'display_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
 		//
-        'show_excerpts' => 'excerpts', // wip -- options to include 'full', 'excerpts', 'none?
+        'show_content' => 'excerpts', // wip -- options to include 'full', 'excerpts', 'none?
 		//
 		// TODO/WIP: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
 		// For table display_format -- WIP
