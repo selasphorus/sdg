@@ -127,9 +127,16 @@ function display_group_personnel ( $args = array() ) {
 					// WIP!
 					if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
 						foreach ( $persons as $person ) {
-							$item_arr = build_item_arr ( $person, "post", $display_format );
+						
+							// Assemble the array of styling parameters
+							$arr_styling = array( 'item_type' => $item_type, 'display_format' => $display_format ); // wip
+							
+							// Assemble the arr_item
+							$arr_item = build_item_arr ( $person, $arr_styling ); // passing person as post obj
+							//$arr_item = build_item_arr ( $person, "post", $display_format ); // TODO: add option to append sthg to title?
+							
 							$subgroup_info .= $group_title.": ";
-							$subgroup_info .= display_item( $display_format, $item_arr, null, $fields ); // display_item ( $display_format, $item_arr, $display_atts, $table_fields, $item_ts_info ) {
+							$subgroup_info .= display_item( $arr_item, $arr_styling );
 							$subgroup_info .= "<br />";
 						}
 						//$display_args = array( 'content_type' => 'posts', 'display_format' => $display_format, 'items' => $persons ); //, 'arr_dpatts' => $args
