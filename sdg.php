@@ -489,6 +489,9 @@ function sdg_scripts_method() {
     //$wp_scripts = wp_scripts();
     //wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-autocomplete']->ver . '/themes/smoothness/jquery-ui.css', false, null, false );
     
+    // Font Awesome 5 (Free)
+    
+    
 }
 
 // Add custom query vars
@@ -888,10 +891,11 @@ function sdg_msg_bar( $args = array() ) {
             $msg .= make_link( get_permalink($post_id), $event_title );
 		} else {
 			$post = get_post( $post_id );
+			$post_title = get_the_title( $post_id );
 			//$excerpt = $post->post_excerpt;
 			if ( has_excerpt( $post_id ) ) { 
 				$msg = $post->post_excerpt; // custom excerpt
-				$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
+				$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>', $post_title );
 			} else {
 				$msg = get_the_excerpt( $post_id );
 			}
