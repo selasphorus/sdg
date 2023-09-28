@@ -128,11 +128,13 @@ function display_group_personnel ( $args = array() ) {
 					if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
 						foreach ( $persons as $person ) {
 						
+							$person_id = $person->post_id;
+							
 							// Assemble the array of styling parameters
 							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format ); // wip
 							
-							$item_title = get_the_title( $person->post_id ).", ".$group_title;
-							$item = array( 'post_id' => $post_id, 'item_title' => $item_title );
+							$item_title = get_the_title( $person_id ).", ".$group_title;
+							$item = array( 'post_id' => $person_id, 'item_title' => $item_title );
 							
 							// Assemble the arr_item
 							$arr_item = build_item_arr ( $item, $arr_styling );
