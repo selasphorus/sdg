@@ -142,8 +142,6 @@ function display_group_personnel ( $args = array() ) {
 							$subgroup_info .= display_item( $arr_item, $arr_styling );
 							$subgroup_info .= "<br />";
 						}
-						//$display_args = array( 'content_type' => 'posts', 'display_format' => $display_format, 'items' => $persons ); //, 'arr_dpatts' => $args
-						//$subgroup_info .= '<span class="group_persons">'.birdhive_display_collection( $display_args ).'</span><br />';
 					} else {
 						foreach ( $persons as $person_id ) {
 							$person_name = get_the_title($person_id);
