@@ -131,7 +131,7 @@ function display_group_personnel ( $args = array() ) {
 							// Assemble the array of styling parameters
 							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format ); // wip
 							
-							$item_title = get_the_title( $post_id ).", ".$group_title;
+							$item_title = get_the_title( $person->post_id ).", ".$group_title;
 							$item = array( 'post_id' => $post_id, 'item_title' => $item_title );
 							
 							// Assemble the arr_item
