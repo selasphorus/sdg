@@ -126,9 +126,7 @@ function display_group_personnel ( $args = array() ) {
 					// ??? this is more than we need -- instead just use the build_item_arr and display_post_item fcns?
 					// WIP!
 					if ( function_exists( 'birdhive_display_collection' ) ) { // TBD: check instead if plugin_exists display-content?
-						foreach ( $persons as $person ) {
-						
-							$person_id = $person->post_id;
+						foreach ( $persons as $person_id ) {
 							
 							// Assemble the array of styling parameters
 							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format ); // wip
