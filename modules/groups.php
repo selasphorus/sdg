@@ -30,11 +30,14 @@ function display_group_personnel ( $args = array() ) {
 		'group_id'		=> null,
 		'subgroup_ids'	=> array(),
 		'display_format' => 'links', // other options: list; excerpts; archive (full post content); grid; table
+		//
+        'show_excerpts' => 'excerpts', // wip -- options to include 'full', 'excerpts', 'none?
+		//
 		// TODO/WIP: add display options -- e.g. list, table, &c. -- OR -- do this via display_content functions...
-		// For table display_format
+		// For table display_format -- WIP
         'fields'  => null, // ***
         'headers'  => null, // ***
-        //show_excerpts => false, // wip
+        //
 	);
 
 	// Parse & Extract args
@@ -128,7 +131,7 @@ function display_group_personnel ( $args = array() ) {
 						foreach ( $persons as $person_id ) {
 							
 							// Assemble the array of styling parameters
-							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format ); // wip
+							$arr_styling = array( 'item_type' => 'post', 'display_format' => $display_format, 'show_excerpts' => $show_excerpts ); // wip
 							
 							$item_title = get_the_title( $person_id ).", ".$group_title;
 							$item = array( 'post_id' => $person_id, 'item_title' => $item_title );
