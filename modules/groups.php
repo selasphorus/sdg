@@ -82,8 +82,7 @@ function display_group_personnel ( $args = array() ) {
 				if ( $title_term ) { 
 				
 					$group_title = $title_term->name;
-					// TODO: instead of the following, show the title as part of the personnel record
-					$group_title = '<span class="group_title">'.$group_title.'</span>';	
+					$group_title = '<span class="group_title">'.$group_title.'</span>'; // WIP/TBD
 					
 					// Get all persons matching this group_id and title_id which are current
 					//...
@@ -153,7 +152,7 @@ function display_group_personnel ( $args = array() ) {
 			}
 			
 			if ( !empty($subgroup_info) ) {
-				$info .= $subgroup_name."<br />";
+				//$info .= $subgroup_name."<br />"; // TBD
 				$info .= $subgroup_info;
 			}
 		}
