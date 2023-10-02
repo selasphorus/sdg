@@ -986,7 +986,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     $tune_name = get_post_meta( $post_id, 'tune_name', true );
     // Consider getting all post_meta at once as array? -- $post_metas = get_post_meta(get_the_ID());
 
-    if ( $title_clean != "" ) { $title = $title_clean; } else { $title = $post_title; }
+    if ( $title_clean != "" ) { $title = $title_clean; } else { $title = $post_title; $title_clean = $title; }
     
     // Hymn nums, where relevant
     if ( has_term( 'hymns', 'repertoire_category', $post_id) && $catalog_number != "" ) {
@@ -1065,7 +1065,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     // Display authorship info
     if ( $show_authorship == true ) { // && $is_single_work == false
         
-        $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title ); // $title_clean
+        $authorship_arr = array( 'post_id' => $post_id, 'rep_title' => $title );
         $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title );
         $arr_authorship_info = get_authorship_info ( $authorship_args );
         $authorship_info = $arr_authorship_info['info'];
@@ -1087,7 +1087,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     } else if ( $is_single_work == true ) {
         $ts_info .= "<!-- test -->";
     } else {
-        $info = make_link( get_the_permalink( $post_id ), $info, $title, 'subtle', '_blank' );
+        $info = make_link( get_the_permalink( $post_id ), $info, $title_clean, 'subtle', '_blank' );
     }
 	
 	$arr_info['info'] = $info;
