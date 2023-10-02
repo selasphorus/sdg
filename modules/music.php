@@ -2469,6 +2469,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     //$info .= "<br />+++++++++++<br />";
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>";
+    $limit = 100; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
     if ( count($rep_ids) > $limit ) {
     	$info .= "<p>To keep page load times under control, only the first ".$limit." results are displayed.<br />You might want to try narrowing your search by adding additional terms or filters.</p>";
     }
@@ -2482,7 +2483,6 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= '<th>Musical Work</th><th>Editions</th>';
     $info .= '</tr>';
     
-    $limit = 100; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
     $i = 0;
     foreach ( $rep_ids as $rep_id ) {
         
