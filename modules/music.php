@@ -2470,7 +2470,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>";
     if ( count($rep_ids) > $limit ) {
-    	$info .= "<p>To keep page load times under control, only the first $limit results are displayed. You might want to try narrowing your search by adding additional terms or filters.<br />";
+    	$info .= "<p>To keep page load times under control, only the first ".$limit." results are displayed.<br />You might want to try narrowing your search by adding additional terms or filters.</p>";
     }
     
     $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
