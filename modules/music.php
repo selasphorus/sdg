@@ -1263,10 +1263,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
     //
     $mq_components_primary = array(); // meta_query components
     $tq_components_primary = array(); // tax_query components
-    $mq_components_related = array(); // meta_query components
-    $tq_components_related = array(); // tax_query components
-    //$mq_components = array(); // meta_query components
-    //$tq_components = array(); // tax_query components
+    $mq_components_related = array(); // meta_query components -- related post_type
+    $tq_components_related = array(); // tax_query components -- related post_type
     
     // Get related post type(s), if any
     if ( $post_type == "repertoire" ) {
@@ -1393,6 +1391,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 $pick_custom = null; // ?pods?
                 $field = null;
                 $field_value = null;
+                $mq_component = null;
+                $mq_alt_component = null;
+                $mq_subquery = null;
+                $tq_component = null;
                 
                 // First, deal w/ title field -- special case
                 if ( $field_name == "post_title" ) {
@@ -1475,7 +1477,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             //$field_info .= "Could not determine field_type for field_name: $field_name<br />";
                         }
                     }
-                }                
+                }
                 
                 if ( $field ) {
                     
@@ -1561,10 +1563,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         $match_value = $field_value;
                         
                         // WIP: figure out how to ignore punctuation in meta_value -- e.g. veni, redemptor...
-                        if ( $field_name == "title_clean" && strpos($match_value," ") ) {
-                        	$match_value = str_replace(" ","XXX",$match_value);
-                        }
-                        
+                        if ( $field_name == "title_clean" && strpos($match_value," ") ) { $match_value = str_replace(" ","XXX",$match_value); }                        
                         
                         // TODO: figure out how to determine whether to match exact or not for particular fields
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
@@ -1578,7 +1577,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         // If querying title_clean, then also query tune_name
                         if ( $field_name == "title_clean" ) {
-                        	$query_component = array(
+                        	$mq_component = array(
 								'relation' => 'OR',
 								array(
 									'key'   => 'title_clean',
@@ -1592,24 +1591,12 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 								)
 							);
                         } else {
-                        	$query_component = array(
+                        	$mq_component = array(
 								'key'   => $field_name,
 								'value' => $match_value,
 								'compare'=> 'LIKE'
 							);
                         }
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_component ) {
-                        	$default_query = false;
-                        	if ( $query_assignment == "primary" ) {
-								$mq_components_primary[] = $query_component;
-							} else {
-								$mq_components_related[] = $query_component;
-							}
-                        }
-                        
-                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
                     } else if ( $field_type == "select" && !empty($field_value) ) {
                         
@@ -1621,45 +1608,22 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         }
                         
                         $match_value = $field_value;
-                        $query_component = array(
+                        $mq_component = array(
                             'key'   => $field_name,
                             'value' => $match_value,
                             'compare'=> $compare
                         );
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_component ) {
-                        	$default_query = false;
-							if ( $query_assignment == "primary" ) {
-								$mq_components_primary[] = $query_component;
-							} else {
-								$mq_components_related[] = $query_component;
-							}
-						}
-                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
-
+						
                     } else if ( $field_type == "checkbox" && !empty($field_value) ) {
                         
                         $compare = 'LIKE';
                         
                         $match_value = $field_value;
-                        $query_component = array(
+                        $mq_component = array(
                             'key'   => $field_name,
                             'value' => $match_value,
                             'compare'=> $compare
                         );
-                        
-                        // Add query component to the appropriate components array
-                        if ( $query_component ) {
-                        	$default_query = false;
-							if ( $query_assignment == "primary" ) {
-								$mq_components_primary[] = $query_component;
-							} else {
-								$mq_components_related[] = $query_component;
-							}
-						}
-                        
-                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
                     } else if ( $field_type == "relationship" ) {
                     
@@ -1675,7 +1639,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 } else {
                                     $key = $field_name;
                                 }
-                                $query_component = array(
+                                $mq_component = array(
                                     'key'   => $key, 
                                     //'value' => $match_value,
                                     // TODO: FIX -- value as follows doesn't work w/ liturgical dates because it's trying to match string, not id... need to get id!
@@ -1683,39 +1647,19 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     'compare'=> 'LIKE', 
                                 );
                                 
-                                $field_info .= "query_component: ".print_r($query_component,true)."<br />";
-                                
-                                // Add query component to the appropriate components array
-                                if ( $query_component ) {
-                                	$default_query = false;
-									if ( $query_assignment == "primary" ) {
-										$mq_components_primary[] = $query_component;
-									} else {
-										$mq_components_related[] = $query_component;
-									}
-								}
+                                $field_info .= "mq_component: ".print_r($mq_component,true)."<br />";
                                 
                                 if ( $alt_field_name ) {
                                     
                                     $meta_query['relation'] = 'OR';
                                     
-                                    $query_component = array(
+                                    $mq_alt_component = array(
                                         'key'   => $alt_field_name,
                                         //'value' => $field_value,
                                         // TODO: FIX -- value as follows doesn't work w/ liturgical dates because it's trying to match string, not id... need to get id!
                                         'value' => '"' . $field_value . '"',
                                         'compare'=> 'LIKE'
                                     );
-                                    
-                                    // Add query component to the appropriate components array
-                                    if ( $query_component ) {
-										$default_query = false;
-										if ( $query_assignment == "primary" ) {
-											$mq_components_primary[] = $query_component;
-										} else {
-											$mq_components_related[] = $query_component;
-										}
-                                    }
                                 }
                                 
                             } else {
@@ -1738,39 +1682,28 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     // ... it's not possible to search efficiently for an array of values
                                     // TODO: figure out if there's some way to for ACF to store the meta_values in separate rows?
                                     
-                                    $sub_query = array();
+                                    $mq_subquery = array();
                                     
                                     if ( count($field_value_posts) > 1 ) {
-                                        $sub_query['relation'] = 'OR';
+                                        $mq_subquery['relation'] = 'OR';
                                     }
                                     
                                     // TODO: make this a subquery to better control relation
                                     foreach ( $field_value_posts as $fvp_id ) {
-                                        $sub_query[] = [
+                                        $mq_subquery[] = [
                                             'key'   => $arr_field, // can't use field_name because of "publisher" issue
                                             //'key'   => $field_name,
                                             'value' => '"' . $fvp_id . '"',
                                             'compare' => 'LIKE',
                                         ];
-                                        $field_info .= "sub_query: ".print_r($sub_query,true)."<br />";
+                                        $field_info .= "mq_subquery: ".print_r($mq_subquery,true)."<br />";
                                     }
                                     
-                                    // Add query component to the appropriate components array
-                                    if ( $query_component ) {
-										$default_query = false;
-										if ( $query_assignment == "primary" ) {
-											$mq_components_primary[] = $sub_query;
-										} else {
-											$mq_components_related[] = $sub_query;
-										}
-									}
-                                    //$mq_components_primary[] = $sub_query;
                                 } else {
                                 	// No matches found!
                                 	$field_info .= "count(field_value_posts) not > 0<br />";
-                                	$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
-                                	$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
-                                	//
+                                	//$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
+                                	//$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
                                 }
                                 
                             }
@@ -1799,21 +1732,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             
                         $field_info .= ">> WIP: field_type: taxonomy; field_name: $field_name; post_type: $post_type; terms: $field_value<br />"; // tft
 
-						$query_component = array (
+						$tq_component = array (
 							'taxonomy' => $field_name,
 							//'field'    => 'slug',
 							'terms'    => $field_value,
 						);
 					
 						// Add query component to the appropriate components array
-						if ( $query_component ) {
-                            $default_query = false;
-							if ( $query_assignment == "primary" ) {
-								$tq_components_primary[] = $query_component;
-							} else {
-								$tq_components_related[] = $query_component;
-							}
-						}
+						
                         if ( $post_type == "repertoire" ) {
 
                             // Since rep & editions share numerous taxonomies in common, check both -- WIP                             
@@ -1832,9 +1758,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                             
                             // Add query component to the appropriate components array
                             if ( $query_assignment == "primary" ) {
-                                $tq_components_primary[] = $query_component;
+                                $tq_components_primary[] = $tq_component;
                             } else {
-                                $tq_components_related[] = $query_component;
+                                $tq_components_related[] = $tq_component;
                             }
                             */
 
@@ -1844,6 +1770,29 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 
                     }
                     
+					// Add query components to the appropriate components arrays
+					// Meta query
+					if ( $mq_component ) {
+						$default_query = false;
+						$field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
+						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_component; } else { $mq_components_related[] = $mq_component; }
+					}
+					// Meta query alt
+					if ( $mq_alt_component ) {
+						$default_query = false;
+						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_alt_component; } else { $mq_components_related[] = $mq_alt_component; }
+					}
+					// Meta subquery
+					if ( $mq_subquery ) {
+						$default_query = false;
+						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_subquery; } else { $mq_components_related[] = $mq_subquery; }
+					}
+                    // Tax query
+					if ( $tq_component ) {
+						$default_query = false;
+						if ( $query_assignment == "primary" ) { $tq_components_primary[] = $tq_component; } else { $tq_components_related[] = $tq_component; }
+					}
+					
                     //$field_info .= "-----<br />";
                     
                 } else {
