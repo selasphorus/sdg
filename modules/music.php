@@ -415,6 +415,7 @@ function is_anon( $post_id = null ) {
     
     // Init vars
 	if ($post_id === null) { $post_id = get_the_ID(); }
+	if ( empty($post_id) ) { return null; }
     $info = "";
     $composers_str = "";
     $anon = false;
@@ -423,10 +424,11 @@ function is_anon( $post_id = null ) {
     if ( $post_id === null || get_post_type( $post_id ) != 'repertoire' ) { return null; }
     
     $composers = get_field('composer', $post_id, false);
-
-    foreach ( $composers as $composer ) {
-        if ( $composer ) { $composers_str .= get_the_title($composer); }
-    }
+    if ( $composers ) {
+    	foreach ( $composers as $composer ) {
+			if ( $composer ) { $composers_str .= get_the_title($composer); }
+		}
+    }    
     
     if ( $composers_str == '[Unknown]' || $composers_str == 'Unknown' || $composers_str == 'Anonymous' || $composers_str == 'Plainsong' ) {
         $anon = true;
