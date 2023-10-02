@@ -1745,6 +1745,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                         $mq_components_related[] = $sub_query;
                                     }
                                     //$mq_components_primary[] = $sub_query;
+                                } else {
+                                	$field_info .= "count(field_value_posts) not > 0<br />";
+                                	$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
                                 }
                                 
                             }
