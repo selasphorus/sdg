@@ -1711,7 +1711,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 
                                 // Get id(s) of any matching $field_post_type records with post_title like $field_value
                                 $field_value_args = array('post_type' => $field_post_type, 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids', '_search_title' => $field_value, 'suppress_filters' => FALSE );
-                                $field_value_posts = get_posts( $field_value_args );
+                                //$field_value_posts = get_posts( $field_value_args );
+                                $field_value_query = new WP_Query( $field_value_args ) );
+                                $field_value_posts = $field_value_query->posts;
+                                //
                                 if ( count($field_value_posts) > 0 ) {
 
                                     $field_info .= count($field_value_posts)." field_value_posts found<br />";
@@ -1748,6 +1751,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 } else {
                                 	$field_info .= "count(field_value_posts) not > 0<br />";
                                 	$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
+                                	$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
+                                	//
                                 }
                                 
                             }
