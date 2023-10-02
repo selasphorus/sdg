@@ -2426,7 +2426,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     //$posts = $posts->posts; // Retrieves an array of WP_Post Objects
     $rep_ids = array();
-    $limit = 20; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
+    $limit = 100; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
     $i = 0;
     foreach ( $post_ids as $post_id ) {
             
@@ -2473,6 +2473,9 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     //$info .= "<br />+++++++++++<br />";
     
     $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>";
+    if ( count($rep_ids) > $limit ) {
+    	$info .= "<p>To keep page load times under control, only the first $limit results are displayed. You might want to try narrowing your search by adding additional terms or filters.<br />";
+    }
     
     $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
     //$info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">'; // This works fine, but ids are lost on refresh of merge page. Pass them via GET instead for more flexibility.
