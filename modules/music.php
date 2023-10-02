@@ -1650,9 +1650,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
-                    } else if ( $field_type == "relationship" ) {// && !empty($field_value)
-
-                        if ( !empty($field_value) ) {
+                    } else if ( $field_type == "relationship" ) {
+                    
+                    	if ( !empty($field_value) ) {
                             
                             $field_value_converted = ""; // init var for storing ids of posts matching field_value
                             
@@ -1671,7 +1671,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     'value' => '"' . $field_value . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
                                     'compare'=> 'LIKE', 
                                 );
-
+                                
+                                $field_info .= "query_component: ".print_r($query_component,true)."<br />";
+                                
                                 // Add query component to the appropriate components array
                                 if ( $query_assignment == "primary" ) {
                                     $mq_components_primary[] = $query_component;
@@ -1731,6 +1733,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                             'value' => '"' . $fvp_id . '"',
                                             'compare' => 'LIKE',
                                         ];
+                                        $field_info .= "sub_query: ".print_r($sub_query,true)."<br />";
                                     }
                                     
                                     // Add query component to the appropriate components array
