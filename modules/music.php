@@ -2426,8 +2426,6 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     //$posts = $posts->posts; // Retrieves an array of WP_Post Objects
     $rep_ids = array();
-    $limit = 100; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
-    $i = 0;
     foreach ( $post_ids as $post_id ) {
             
         //$info .= '<pre>'.print_r($post, true).'</pre>';
@@ -2463,8 +2461,6 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         } else if ( $post_type == "repertoire" ) {
             $rep_ids[] = $post_id;
         }
-        $i++;
-        if ( $i >= $limit ) { break; }
     }
     
     //$info .= 'rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
@@ -2486,8 +2482,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= '<th>Musical Work</th><th>Editions</th>';
     $info .= '</tr>';
     
+    $limit = 100; // tft -- limit num of posts to display, lest search is broken and it tried to display thousands of records at once...
     $i = 0;
-    
     foreach ( $rep_ids as $rep_id ) {
         
         $post_id = $rep_id;
@@ -2810,6 +2806,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         $info .= '</tr>';
         
         $i++;
+        if ( $i >= $limit ) { break; }
         
     } // END foreach ( $posts as $post )
     
