@@ -1254,6 +1254,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
     */
     
     //
+    $default_query = true; // i.e. only searching by default params -- no actual search values specified
     $meta_query = array();
     $meta_query_related = array();
     $tax_query = array();
@@ -1599,10 +1600,13 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         }
                         
                         // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $mq_components_primary[] = $query_component;
-                        } else {
-                            $mq_components_related[] = $query_component;
+                        if ( $query_component ) {
+                        	$default_query = false;
+                        	if ( $query_assignment == "primary" ) {
+								$mq_components_primary[] = $query_component;
+							} else {
+								$mq_components_related[] = $query_component;
+							}
                         }
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
@@ -1624,12 +1628,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         );
                         
                         // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $mq_components_primary[] = $query_component;
-                        } else {
-                            $mq_components_related[] = $query_component;
-                        }                        
-                        
+                        if ( $query_component ) {
+                        	$default_query = false;
+							if ( $query_assignment == "primary" ) {
+								$mq_components_primary[] = $query_component;
+							} else {
+								$mq_components_related[] = $query_component;
+							}
+						}
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
                     } else if ( $field_type == "checkbox" && !empty($field_value) ) {
@@ -1644,11 +1650,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                         );
                         
                         // Add query component to the appropriate components array
-                        if ( $query_assignment == "primary" ) {
-                            $mq_components_primary[] = $query_component;
-                        } else {
-                            $mq_components_related[] = $query_component;
-                        }                        
+                        if ( $query_component ) {
+                        	$default_query = false;
+							if ( $query_assignment == "primary" ) {
+								$mq_components_primary[] = $query_component;
+							} else {
+								$mq_components_related[] = $query_component;
+							}
+						}
                         
                         $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
 
@@ -1677,11 +1686,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 $field_info .= "query_component: ".print_r($query_component,true)."<br />";
                                 
                                 // Add query component to the appropriate components array
-                                if ( $query_assignment == "primary" ) {
-                                    $mq_components_primary[] = $query_component;
-                                } else {
-                                    $mq_components_related[] = $query_component;
-                                }
+                                if ( $query_component ) {
+                                	$default_query = false;
+									if ( $query_assignment == "primary" ) {
+										$mq_components_primary[] = $query_component;
+									} else {
+										$mq_components_related[] = $query_component;
+									}
+								}
                                 
                                 if ( $alt_field_name ) {
                                     
@@ -1696,12 +1708,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     );
                                     
                                     // Add query component to the appropriate components array
-                                    if ( $query_assignment == "primary" ) {
-                                        $mq_components_primary[] = $query_component;
-                                    } else {
-                                        $mq_components_related[] = $query_component;
+                                    if ( $query_component ) {
+										$default_query = false;
+										if ( $query_assignment == "primary" ) {
+											$mq_components_primary[] = $query_component;
+										} else {
+											$mq_components_related[] = $query_component;
+										}
                                     }
-                                    
                                 }
                                 
                             } else {
@@ -1712,7 +1726,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                 // Get id(s) of any matching $field_post_type records with post_title like $field_value
                                 $field_value_args = array('post_type' => $field_post_type, 'post_status' => 'publish', 'numberposts' => -1, 'fields' => 'ids', '_search_title' => $field_value, 'suppress_filters' => FALSE );
                                 //$field_value_posts = get_posts( $field_value_args );
-                                $field_value_query = new WP_Query( $field_value_args ) );
+                                $field_value_query = new WP_Query( $field_value_args );
                                 $field_value_posts = $field_value_query->posts;
                                 //
                                 if ( count($field_value_posts) > 0 ) {
@@ -1742,13 +1756,17 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                                     }
                                     
                                     // Add query component to the appropriate components array
-                                    if ( $query_assignment == "primary" ) {
-                                        $mq_components_primary[] = $sub_query;
-                                    } else {
-                                        $mq_components_related[] = $sub_query;
-                                    }
+                                    if ( $query_component ) {
+										$default_query = false;
+										if ( $query_assignment == "primary" ) {
+											$mq_components_primary[] = $sub_query;
+										} else {
+											$mq_components_related[] = $sub_query;
+										}
+									}
                                     //$mq_components_primary[] = $sub_query;
                                 } else {
+                                	// No matches found!
                                 	$field_info .= "count(field_value_posts) not > 0<br />";
                                 	$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
                                 	$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
@@ -1788,12 +1806,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 						);
 					
 						// Add query component to the appropriate components array
-						if ( $query_assignment == "primary" ) {
-							$tq_components_primary[] = $query_component;
-						} else {
-							$tq_components_related[] = $query_component;
+						if ( $query_component ) {
+                            $default_query = false;
+							if ( $query_assignment == "primary" ) {
+								$tq_components_primary[] = $query_component;
+							} else {
+								$tq_components_related[] = $query_component;
+							}
 						}
-							
                         if ( $post_type == "repertoire" ) {
 
                             // Since rep & editions share numerous taxonomies in common, check both -- WIP                             
@@ -2198,7 +2218,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 								//'include_children' => true,
 							),
 						);
-						$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
+						if ( $component ) {
+							$default_query = false;
+							$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
+						}
 					}
 				}
 				$tax_query[] = $component;
@@ -2258,30 +2281,32 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			
 				// Get posts matching the assembled args
 				/* ===================================== */
-				if ( $form_type == "advanced_search" ) {
-					//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
-					$posts_info = birdhive_get_posts( $args );
-				} else {
-					$posts_info = birdhive_get_posts( $args );
-				}
-			
-				if ( isset($posts_info['arr_posts']) ) {
+				if ( $default_query == false ) {
+					if ( $form_type == "advanced_search" ) {
+						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
+						$posts_info = birdhive_get_posts( $args );
+					} else {
+						$posts_info = birdhive_get_posts( $args );
+					}
+					
+					if ( isset($posts_info['arr_posts']) ) {
 				
-					$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
-					$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-					//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+						$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
+						$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
+						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
 				
-					$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
+						$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
 				
-					// Print last SQL query string
-					//global $wpdb;
-					//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-					//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+						// Print last SQL query string
+						//global $wpdb;
+						//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
+						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
 				
-				}
+					}
+				}				
 			}
             
-            if ( $search_related_post_type == true && $args_related ) {
+            if ( $search_related_post_type == true && $args_related && $default_query == false ) {
                 
                 $ts_info .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
                 
