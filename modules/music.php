@@ -2167,10 +2167,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 								//'include_children' => true,
 							),
 						);
-						if ( $component ) {
-							$default_query = false;
-							$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
-						}
+						$default_query = false;
+						$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
 					}
 				}
 				$tax_query[] = $component;
@@ -2230,7 +2228,9 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			
 				// Get posts matching the assembled args
 				/* ===================================== */
-				if ( $default_query == false ) {
+				if ( $default_query === true ) {
+					$ts_info .= "Default query -- no need to run a search<br />";
+				} else {
 					if ( $form_type == "advanced_search" ) {
 						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
 						$posts_info = birdhive_get_posts( $args );
@@ -2252,7 +2252,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
 				
 					}
-				}				
+				}			
 			}
             
             if ( $search_related_post_type == true && $args_related && $default_query == false ) {
