@@ -2450,11 +2450,11 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     foreach ( $post_ids as $post_id ) {
             
-        //$info .= '<pre>'.print_r($post, true).'</pre>'; // tft
-        //$info .= '<div class="troubleshooting">post: <pre>'.print_r($post, true).'</pre></div>'; // tft
+        //$info .= '<pre>'.print_r($post, true).'</pre>';
+        //$info .= '<div class="troubleshooting">post: <pre>'.print_r($post, true).'</pre></div>';
         $post_type = get_post_type($post_id);
-        $ts_info .= 'post_id: '.$post_id."<br />"; // tft
-        $ts_info .= 'post_type: '.$post_type."<br />"; // tft
+        //$ts_info .= 'post_id: '.$post_id."<br />";
+        //$ts_info .= 'post_type: '.$post_type."<br />";
         if ( $post_type == "edition" ) {
             // Get the related repertoire record(s)
             if ( $repertoire_editions = get_field( 'repertoire_editions', $post_id ) ) { //  && !empty($repertoire_editions)
@@ -2490,7 +2490,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     //$info .= 'array_unique rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
     //$info .= "<br />+++++++++++<br />";
     
-    $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>"; // tft
+    $info .= "<p>Num matching posts found: [".count($rep_ids)."]</p>";
     
     $info .= '<form id="cp_merge" method="get" action="/merge-records/" target="_blank">';
     //$info .= '<form id="cp_merge" method="post" action="/merge-records/" target="_blank">'; // This works fine, but ids are lost on refresh of merge page. Pass them via GET instead for more flexibility.
