@@ -425,7 +425,7 @@ function is_anon( $post_id = null ) {
     $composers = get_field('composer', $post_id, false);
 
     foreach ( $composers as $composer ) {
-        $composers_str .= get_the_title($composer);
+        if ( $composer ) { $composers_str .= get_the_title($composer); }
     }
     
     if ( $composers_str == '[Unknown]' || $composers_str == 'Unknown' || $composers_str == 'Anonymous' || $composers_str == 'Plainsong' ) {
