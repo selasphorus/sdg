@@ -634,6 +634,7 @@ jQuery(document).ready(function($) {
             height: modalheight,
             width: modalwidth,
             closeOnEscape: true,
+            closeText: "x",
             position: { my: "center top", at: modal_at, of: window }
             //position: { my: "center top", at: "center top+25%", of: window }
         });
