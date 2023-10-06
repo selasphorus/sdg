@@ -2380,7 +2380,8 @@ function widget_logic_tmp () {
 
 	$info = "";
 	$xml = "&lt;options&gt;<br />";
-	$xml .= "<br />";
+	//$xml .= "<br />";
+	$i = 0;
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $widget => $conditions ) {
 		$xml .= "&lt;option&gt;<br />";
@@ -2411,11 +2412,13 @@ function widget_logic_tmp () {
 		}
 		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;<br />";
-		$xml .= "<br />";		
-	}
+		$xml .= "<br />";
+		$i++;
+		if ( $i > 1 ) { break; } // tft
+	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
-	//$info = "<pre>".print_r($xml,true)."<pre>";
-	$info = "<pre>".print_r($logic_options,true)."<pre>";
+	$info = "<pre>".print_r($xml,true)."<pre>";
+	$info = "<pre>".print_r($logic_options[0],true)."<pre>";
 	return $info;	
 }
 
