@@ -2384,23 +2384,23 @@ function widget_logic_tmp () {
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $key => $arr_option ) {
 		$xml .= "&lt;option&gt;<br />";
-		$xml .= "<strong>";
-		$xml .= "&lt;widget&gt;".$key."&lt;/widget&gt;<br />";
+		$option_xml = "<strong>";
+		$option_xml .= "&lt;widget&gt;".$key."&lt;/widget&gt;<br />";
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
-			$xml .= "&lt;".$option."&gt;";
+			$option_xml .= "&lt;".$option."&gt;";
 			if ( is_array($value) ) {
 				if ( count($value) == 1 ) {
-					$xml .= "<br />";
+					$option_xml .= "<br />";
 					foreach ( $value as $k => $v ) {
 						if ( $v ) {
-							$xml .= "&#9;"; // tab
+							$option_xml .= "&#9;"; // tab
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
+							$option_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
 						}
 					}
 				} else {
-					$xml .= $value;
+					$option_xml .= $value;
 				}
 				/*if ( count($value) == 1 ) {
 					$xml .= $value[0];
@@ -2408,9 +2408,10 @@ function widget_logic_tmp () {
 					$xml .= print_r($value,true); //$xml .= $value;
 				}*/
 			} else {
-				$xml .= $value;
+				$option_xml .= $value;
 			}
-			$xml .= "</strong>";
+			$option_xml .= "</strong>";
+			$xml .= "&#9;".$option_xml;
 			$xml .= "&lt;/".$option."&gt;<br />";
 		}
 		//$xml .= print_r($option,true);
