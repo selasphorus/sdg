@@ -2388,8 +2388,8 @@ function widget_logic_tmp () {
 			$xml .= "&lt;".$option."&gt;";
 			if ( is_array($value) ) {
 				foreach ( $value as $k => $v ) {
-					$xml .= "k: ".$k." => v: ".$v."<br />";
-					//$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k"&gt;<br />";
+					//$xml .= "k: ".$k." => v: ".$v."<br />";
+					$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k"&gt;<br />";
 				}
 				/*if ( count($value) == 1 ) {
 					$xml .= $value[0];
