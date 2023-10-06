@@ -2393,9 +2393,11 @@ function widget_logic_tmp () {
 				if ( count($value) == 1 ) {
 					$xml .= "<br />";
 					foreach ( $value as $k => $v ) {
-						$xml .= "&#9;"; // tab
-						//$xml .= "k: ".$k." => v: ".$v."<br />";
-						$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
+						if ( $v ) {
+							$xml .= "&#9;"; // tab
+							//$xml .= "k: ".$k." => v: ".$v."<br />";
+							$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
+						}
 					}
 				} else {
 					$xml .= $value;
