@@ -2382,13 +2382,15 @@ function widget_logic_tmp () {
 	$xml = "&lt;options&gt;<br />";
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $key => $arr_option ) {
-		$xml .= "&lt;option&gt;";
-		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;";
+		$xml .= "&lt;option&gt;<br />";
+		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
-			$xml .= "&lt;".$option."&gt;".$value."&lt;/".$option."&gt;";
+			$xml .= "&lt;".$option."&gt;";
+			$xml .= print_r($value,true); //$xml .= $value;
+			$xml .= "&lt;/".$option."&gt;<br />";
 		}
 		//$xml .= print_r($option,true);
-		$xml .= "&lt;/option&gt;";		
+		$xml .= "&lt;/option&gt;<br />";		
 	}
 	$xml .= "&lt;/options&gt;<br />";
 	$info = "<pre>".print_r($xml,true)."<pre>";
