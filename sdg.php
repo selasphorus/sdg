@@ -2373,6 +2373,14 @@ function sdg_post_type_access_limiter(){
     }
 }
 
+/*** MISC ***/
+
+add_shortcode('widget_logic', 'widget_logic_tmp');
+function widget_logic_tmp () {	
+	$option = get_option('widget_logic_options');
+	$info = "<pre>".print_r($option,true)."<pre>";
+	return $info;	
+}
 
 function surprise() {
 
