@@ -2380,10 +2380,12 @@ function widget_logic_tmp () {
 
 	$info = "";
 	$xml = "&lt;options&gt;<br />";
+	$xml .= "<br />";
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $key => $arr_option ) {
 		$xml .= "&lt;option&gt;<br />";
-		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
+		$xml .= "&lt;widget&gt;".$key."&lt;/widget&gt;<br />";
+		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
 			$xml .= "&lt;".$option."&gt;<br />";
 			if ( is_array($value) ) {
@@ -2404,7 +2406,8 @@ function widget_logic_tmp () {
 			$xml .= "&lt;/".$option."&gt;<br />";
 		}
 		//$xml .= print_r($option,true);
-		$xml .= "&lt;/option&gt;<br />";		
+		$xml .= "&lt;/option&gt;<br />";
+		$xml .= "<br />";		
 	}
 	$xml .= "&lt;/options&gt;<br />";
 	$info = "<pre>".print_r($xml,true)."<pre>";
