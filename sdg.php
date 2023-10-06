@@ -2386,7 +2386,11 @@ function widget_logic_tmp () {
 		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
 			$xml .= "&lt;".$option."&gt;";
-			$xml .= print_r($value,true); //$xml .= $value;
+			if ( count($value) == 1 ) {
+				$xml .= $value[0];
+			} else {
+				$xml .= print_r($value,true); //$xml .= $value;
+			}			
 			$xml .= "&lt;/".$option."&gt;<br />";
 		}
 		//$xml .= print_r($option,true);
