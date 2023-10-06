@@ -2384,6 +2384,7 @@ function widget_logic_tmp () {
 	$i = 0;
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $widget => $conditions ) {
+		$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."<pre>"; // tft
 		$xml .= "&lt;option&gt;<br />";
 		$xml .= "&#9;"."<strong>"."&lt;widget&gt;".$widget."&lt;/widget&gt;"."</strong><br />";
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
@@ -2417,8 +2418,7 @@ function widget_logic_tmp () {
 		if ( $i > 1 ) { break; } // tft
 	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
-	$info = "<pre>".print_r($xml,true)."<pre>";
-	$info = "<pre>".print_r($logic_options[0],true)."<pre>";
+	$info .= "<pre>".print_r($xml,true)."<pre>";	
 	return $info;	
 }
 
