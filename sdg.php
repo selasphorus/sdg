@@ -2415,7 +2415,7 @@ function widget_logic_tmp () {
 		$xml .= "&lt;/option&gt;<br />";
 		$xml .= "<br />";
 		$i++;
-		if ( $i > 1 ) { break; } // tft
+		if ( $i >= 1 ) { break; } // tft
 	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
 	//$info .= "<pre>".print_r($xml,true)."<pre>";	
