@@ -157,6 +157,50 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 	add_action( 'init', 'register_post_type_data_table' );
 }
 
+if ( in_array('snippets', $sdg_modules ) ) {
+	// Snippet
+	function register_post_type_snippet() {
+
+		if ( custom_caps() ) { $caps = "snippet"; } else { $caps = "post"; }
+		
+		$labels = array(
+			'name' => __( 'Snippets', 'sdg' ),
+			'singular_name' => __( 'Snippet', 'sdg' ),
+			'add_new' => __( 'New Snippet', 'sdg' ),
+			'add_new_item' => __( 'Add New Snippet', 'sdg' ),
+			'edit_item' => __( 'Edit Snippet', 'sdg' ),
+			'new_item' => __( 'New Snippet', 'sdg' ),
+			'view_item' => __( 'View Snippet', 'sdg' ),
+			'search_items' => __( 'Search Snippets', 'sdg' ),
+			'not_found' =>  __( 'No Snippets Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Snippets found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable'=> true,
+			'show_ui' 			=> true,
+			'show_in_menu'     	=> true,
+			'query_var'        	=> true,
+			'rewrite' 			=> array( 'slug' => 'snippets' ), // permalink structure slug
+			'capability_type' 	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'   		=> 'dashicons-groups',
+			'menu_position'     => null,
+			'supports'			=> array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'page-attributes' ), // , 'excerpt', 'custom-fields'
+			'taxonomies' 		=> array( 'category', 'tag', 'admin_tag' ),
+			'show_in_rest'		=> true,    
+		);
+
+		register_post_type( 'snippet', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_snippet' );
+}
+
 /*** PEOPLE & ENSEMBLES ***/
 
 // TODO: change "person" to "individual", to better include plants and animals? w/ ACF field groups based on category/species
