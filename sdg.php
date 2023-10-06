@@ -2384,10 +2384,7 @@ function widget_logic_tmp () {
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $widget => $conditions ) {
 		$xml .= "&lt;option&gt;<br />";
-		$xml .= "&#9;";
-		$xml .= "<strong>";
-		$xml .= "&lt;widget&gt;".$widget."&lt;/widget&gt;<br />";
-		$xml .= "</strong>";
+		$xml .= "&#9;"."<strong>"."&lt;widget&gt;".$widget."&lt;/widget&gt;"."</strong><br />";
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $conditions as $condition => $value ) {
 			$condition_xml = "";
@@ -2410,7 +2407,7 @@ function widget_logic_tmp () {
 			}
 			$condition_xml .= "&#9;"."&lt;/".$condition."&gt;<br />";
 			//
-			$xml .= "&#9;".$condition_xml;
+			$xml .= $condition_xml;
 		}
 		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;<br />";
