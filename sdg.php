@@ -2379,15 +2379,15 @@ add_shortcode('widget_logic', 'widget_logic_tmp');
 function widget_logic_tmp () {	
 
 	$info = "";
-	$info .= "<options>";
+	$xml = "<options>";
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $option ) {
-		$info .= "<option>";
-		$info .= print_r($option,true);
-		$info .= "</option>";
+		$xml .= "<option>";
+		$xml .= print_r($option,true);
+		$xml .= "</option>";		
 	}
-	$info .= "</options>";
-	//$info = "<pre>".print_r($option,true)."<pre>";
+	$xml .= "</options>";
+	$info = "<pre>".print_r($xml,true)."<pre>";
 	return $info;	
 }
 
