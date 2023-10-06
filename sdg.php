@@ -2385,9 +2385,10 @@ function widget_logic_tmp () {
 		$xml .= "&lt;option&gt;<br />";
 		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
-			$xml .= "&lt;".$option."&gt;";
+			$xml .= "&lt;".$option."&gt;<br />";
 			if ( is_array($value) ) {
 				foreach ( $value as $k => $v ) {
+					$xml .= "&#9;"; // tab
 					//$xml .= "k: ".$k." => v: ".$v."<br />";
 					$xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
 				}
