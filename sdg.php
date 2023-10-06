@@ -2391,7 +2391,7 @@ function widget_logic_tmp () {
 		foreach ( $conditions as $condition => $value ) {
 			$condition_xml = "";
 			$condition_xml .= "&#9;"."&lt;".$condition."&gt;";
-			/*if ( is_array($value) ) {
+			if ( is_array($value) ) {
 				if ( count($value) == 1 ) {
 					$condition_xml .= "<br />";
 					foreach ( $value as $k => $v ) {
@@ -2406,7 +2406,7 @@ function widget_logic_tmp () {
 				}
 			} else {
 				//$condition_xml .= $value;
-			}*/
+			}
 			$condition_xml .= "&#9;"."&lt;/".$condition."&gt;<br />";
 			//
 			$xml .= "&#9;".$condition_xml;
