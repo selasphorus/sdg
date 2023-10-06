@@ -2389,8 +2389,7 @@ function widget_logic_tmp () {
 		$option_xml .= "</strong>";
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
 		foreach ( $arr_option as $option => $value ) {
-			$option_xml .= "&#9;";
-			$option_xml .= "&lt;".$option."&gt;";
+			$option_xml .= "&#9;"."&lt;".$option."&gt;";
 			if ( is_array($value) ) {
 				if ( count($value) == 1 ) {
 					$option_xml .= "<br />";
@@ -2402,18 +2401,13 @@ function widget_logic_tmp () {
 						}
 					}
 				} else {
-					$option_xml .= $value;
+					$//option_xml .= $value;
 				}
-				/*if ( count($value) == 1 ) {
-					$xml .= $value[0];
-				} else {
-					$xml .= print_r($value,true); //$xml .= $value;
-				}*/
 			} else {
-				$option_xml .= $value;
+				//$option_xml .= $value;
 			}
 			$xml .= "&#9;".$option_xml;
-			$xml .= "&lt;/".$option."&gt;<br />";
+			$xml .= "&#9;"."&lt;/".$option."&gt;<br />";
 		}
 		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;<br />";
