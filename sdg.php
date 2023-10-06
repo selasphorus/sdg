@@ -2379,14 +2379,18 @@ add_shortcode('widget_logic', 'widget_logic_tmp');
 function widget_logic_tmp () {	
 
 	$info = "";
-	$xml = "&lt;options&gt;";
+	$xml = "&lt;options&gt;<br />";
 	$logic_options = get_option('widget_logic_options');
-	foreach ( $logic_options as $option ) {
+	foreach ( $logic_options as $key => $arr_option ) {
 		$xml .= "&lt;option&gt;";
-		$xml .= print_r($option,true);
+		$xml .= "&lt;index&gt;".$key."&lt;/index&gt;";
+		foreach ( $arr_option as $option => $value ) {
+			$xml .= "&lt;".$option."&gt;".$value."&lt;/".$option."&gt;";
+		}
+		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;";		
 	}
-	$xml .= "&lt;/options&gt;";
+	$xml .= "&lt;/options&gt;<br />";
 	$info = "<pre>".print_r($xml,true)."<pre>";
 	return $info;	
 }
