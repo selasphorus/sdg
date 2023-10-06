@@ -2414,7 +2414,8 @@ function widget_logic_tmp () {
 		$xml .= "<br />";		
 	}
 	$xml .= "&lt;/options&gt;<br />";
-	$info = "<pre>".print_r($xml,true)."<pre>";
+	//$info = "<pre>".print_r($xml,true)."<pre>";
+	$info = "<pre>".print_r($logic_options,true)."<pre>";
 	return $info;	
 }
 
