@@ -2382,32 +2382,34 @@ function widget_logic_tmp () {
 	$xml = "&lt;options&gt;<br />";
 	$xml .= "<br />";
 	$logic_options = get_option('widget_logic_options');
-	foreach ( $logic_options as $key => $arr_option ) {
+	foreach ( $logic_options as $widget => $conditions ) {
 		$xml .= "&lt;option&gt;<br />";
-		$option_xml = "<strong>";
-		$option_xml .= "&lt;widget&gt;".$key."&lt;/widget&gt;<br />";
-		$option_xml .= "</strong>";
+		$xml = "<strong>";
+		$xml .= "&lt;widget&gt;".$widget."&lt;/widget&gt;<br />";
+		$xml .= "</strong>";
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
-		foreach ( $arr_option as $option => $value ) {
-			$option_xml .= "&#9;"."&lt;".$option."&gt;";
-			if ( is_array($value) ) {
+		foreach ( $conditions as $condition => $value ) {
+			$condition_xml = "";
+			$condition_xml .= "&#9;"."&lt;".$condition."&gt;";
+			/*if ( is_array($value) ) {
 				if ( count($value) == 1 ) {
-					$option_xml .= "<br />";
+					$condition_xml .= "<br />";
 					foreach ( $value as $k => $v ) {
 						if ( $v ) {
-							$option_xml .= "&#9;&#9;"; // tab
+							$condition_xml .= "&#9;&#9;"; // tab
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$option_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
+							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
 						}
 					}
 				} else {
-					$//option_xml .= $value;
+					//$condition_xml .= $value;
 				}
 			} else {
-				//$option_xml .= $value;
-			}
-			$xml .= "&#9;".$option_xml;
-			$xml .= "&#9;"."&lt;/".$option."&gt;<br />";
+				//$condition_xml .= $value;
+			}*/
+			$condition_xml .= "&#9;"."&lt;/".$condition."&gt;<br />";
+			//
+			$xml .= "&#9;".$condition_xml;
 		}
 		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;<br />";
