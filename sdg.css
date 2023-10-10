@@ -76,6 +76,16 @@ a.action {
     font-family: var(--global--font-monospace);
 }
 
+span.t1 {
+	display: block;
+	padding-left: 1rem;
+}
+
+span.t2 {
+	display: block;
+	padding-left: 2rem;
+}
+
 /* msg_bar styles */
 
 .site.has_msg_bar {

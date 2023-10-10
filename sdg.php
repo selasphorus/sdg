@@ -2386,28 +2386,27 @@ function widget_logic_tmp () {
 	foreach ( $logic_options as $widget => $conditions ) {
 		//$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
 		$xml .= "&lt;option&gt;<br />";
-		$xml .= "&#9;"."<strong>"."&lt;widget&gt;".$widget."&lt;/widget&gt;"."</strong><br />";
+		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
-		foreach ( $conditions as $condition => $value ) {
+		foreach ( $conditions as $condition => $subconditions ) {
 			$condition_xml = "";
-			$condition_xml .= "&#9;"."&lt;".$condition."&gt;";
-			if ( is_array($value) ) {
-				if ( count($value) == 1 ) {
+			$condition_xml .= '<span class="t1 condition">'."&lt;".$condition."&gt;".'</span>';
+			if ( is_array($subconditions) ) {
+				//if ( count($subconditions) == 1 ) {
 					$condition_xml .= "<br />";
-					foreach ( $value as $k => $v ) {
-						if ( $v ) {
-							$condition_xml .= "&#9;"; // tab
+					foreach ( $subconditions as $k => $v ) {
+						//if ( $v ) {
+							$condition_xml .= '<span class="t2 subcondition">'; //$condition_xml .= "&#9;"; // tab
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
 							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
-						}
+							$condition_xml .= '</span>';
+						//}
 					}
-				} else {
-					//$condition_xml .= $value;
-				}
+				//}
 			} else {
-				//$condition_xml .= $value;
+				$condition_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
 			}
-			$condition_xml .= "&#9;"."&lt;/".$condition."&gt;<br />";
+			$condition_xml .= '<span class="t2">'."&lt;/".$condition."&gt;".'</span>';
 			//
 			$xml .= $condition_xml;
 		}
