@@ -2409,7 +2409,6 @@ function widget_logic_tmp ( $atts = [] ) {
 			$condition_xml .= '<span class="t1 condition">'."&lt;".$condition."&gt;".'</span>';
 			if ( is_array($subconditions) ) {
 				//if ( count($subconditions) == 1 ) {
-					$condition_xml .= "<br />";
 					foreach ( $subconditions as $k => $v ) {
 						if ( $v || $show_empties == "yes" ) {
 							$spanclass = "t2 subcondition";
@@ -2424,7 +2423,7 @@ function widget_logic_tmp ( $atts = [] ) {
 			} else {
 				$condition_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
 			}
-			$condition_xml .= '<span class="t2">'."&lt;/".$condition."&gt;".'</span>';
+			$condition_xml .= '<span class="t1 condition">'."&lt;/".$condition."&gt;".'</span>';
 			//
 			$xml .= $condition_xml;
 		}
