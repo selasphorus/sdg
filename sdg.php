@@ -2404,30 +2404,37 @@ function widget_logic_tmp ( $atts = [] ) {
 		$xml .= "&lt;option&gt;<br />";
 		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
+		$subs_empty = true; // init
 		foreach ( $conditions as $condition => $subconditions ) {
 			$condition_xml = "";
-			$condition_xml .= '<span class="t1 condition">'."&lt;".$condition."&gt;".'</span>';
+			$subs_xml = "";
+			$con_class = "t1 condition";
 			if ( is_array($subconditions) ) {
 				//if ( count($subconditions) == 1 ) {
 					foreach ( $subconditions as $k => $v ) {
 						if ( $v || $show_empties == "yes" ) {
-							$spanclass = "t2 subcondition";
-							if ( empty($v) ) { $spanclass .= " empty"; }
-							$condition_xml .= '<span class="'.$spanclass.'">';
+							$subs_class = "t2 subcondition";
+							if ( empty($v) ) { $subs_class .= " empty"; } else { $subs_empty = false; }
+							$subs_xml .= '<span class="'.$subs_class.'">';
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$condition_xml .= "&lt;".$k."&gt;";
-							if ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) { $condition_xml .= "<pre>"; }
-							$condition_xml .= $v;
-							if ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) { $condition_xml .= "</pre>"; }
-							$condition_xml .= "&lt;/".$k."&gt;";
-							$condition_xml .= '</span>';
+							$subs_xml .= "&lt;".$k."&gt;";
+							if ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) { $subs_xml .= "<pre>"; }
+							$subs_xml .= $v;
+							if ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) { $subs_xml .= "</pre>"; }
+							$subs_xml .= "&lt;/".$k."&gt;";
+							$subs_xml .= '</span>';
 						}
 					}
 				//}
 			} else {
-				$condition_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
+				$subs_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
 			}
-			$condition_xml .= '<span class="t1 condition">'."&lt;/".$condition."&gt;".'</span>';
+			if ( $subs_xml || $show_empties == "yes" ) {
+				if ( empty($subs_xml) ) { $con_class .= " empty"; }
+				$condition_xml .= '<span class="'.$con_class.'">'."&lt;".$condition."&gt;".'</span>';
+				$condition_xml .= $subs_xml;
+				$condition_xml .= '<span class="t1 condition">'."&lt;/".$condition."&gt;".'</span>';
+			}
 			//
 			$xml .= $condition_xml;
 		}
