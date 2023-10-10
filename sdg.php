@@ -2403,11 +2403,11 @@ function widget_logic_tmp ( $atts = [] ) {
 		//$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
 		$xml .= "&lt;option&gt;<br />";
 		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
-		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";
-		$subs_empty = true; // init
+		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";		
 		foreach ( $conditions as $condition => $subconditions ) {
 			$condition_xml = "";
 			$subs_xml = "";
+			$subs_empty = true; // init
 			$con_class = "t1 condition";
 			if ( is_array($subconditions) ) {
 				//if ( count($subconditions) == 1 ) {
