@@ -86,6 +86,10 @@ span.t2 {
 	padding-left: 2rem;
 }
 
+.empty {
+	opacity: 0.5;
+}
+
 /* msg_bar styles */
 
 .site.has_msg_bar {

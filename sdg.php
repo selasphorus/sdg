@@ -2376,9 +2376,25 @@ function sdg_post_type_access_limiter(){
 /*** MISC ***/
 
 add_shortcode('widget_logic', 'widget_logic_tmp');
-function widget_logic_tmp () {	
+function widget_logic_tmp ( $atts = [] ) {	
 
-	$info = "";
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: run_title_updates", $do_log );
+    
+    $info = "";
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+        'show_empties'  => 'yes',
+        
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
 	$xml = "&lt;options&gt;<br />";
 	//$xml .= "<br />";
 	$i = 0;
@@ -2395,12 +2411,14 @@ function widget_logic_tmp () {
 				//if ( count($subconditions) == 1 ) {
 					$condition_xml .= "<br />";
 					foreach ( $subconditions as $k => $v ) {
-						//if ( $v ) {
-							$condition_xml .= '<span class="t2 subcondition">'; //$condition_xml .= "&#9;"; // tab
+						if ( $v || $show_empties == "yes" ) {
+							$spanclass = "t2 subcondition";
+							if ( empty($v) ) { $spanclass .= " empty"; }
+							$condition_xml .= '<span class="'.$spanclass.'">';
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
 							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;";
 							$condition_xml .= '</span>';
-						//}
+						}
 					}
 				//}
 			} else {
