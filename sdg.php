@@ -2415,7 +2415,11 @@ function widget_logic_tmp ( $atts = [] ) {
 							if ( empty($v) ) { $spanclass .= " empty"; }
 							$condition_xml .= '<span class="'.$spanclass.'">';
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;";
+							$condition_xml .= "&lt;".$k."&gt;";
+							$condition_xml .= "<pre>";
+							$condition_xml .= $v;
+							$condition_xml .= "</pre>";
+							$condition_xml .= "&lt;/".$k."&gt;";
 							$condition_xml .= '</span>';
 						}
 					}
