@@ -90,6 +90,10 @@ span.t2 {
 	opacity: 0.5;
 }
 
+.code {
+	font-family: monospace;
+}
+
 /* msg_bar styles */
 
 .site.has_msg_bar {

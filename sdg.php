@@ -2439,6 +2439,7 @@ function widget_logic_tmp ( $atts = [] ) {
 	$info .= $xml; //$info .= "<pre>".$xml."</pre>";	//$info .= $xml;
 	//
 	//$info .= "<pre>".print_r($xml,true)."</pre>";
+	$info .= '<div class="code">'.$info.'</div>';
 	return $info;	
 }
 
