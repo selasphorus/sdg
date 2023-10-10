@@ -2398,7 +2398,7 @@ function widget_logic_tmp () {
 						//if ( $v ) {
 							$condition_xml .= '<span class="t2 subcondition">'; //$condition_xml .= "&#9;"; // tab
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;<br />";
+							$condition_xml .= "&lt;".$k."&gt;".$v."&lt;/".$k."&gt;";
 							$condition_xml .= '</span>';
 						//}
 					}
