@@ -2416,9 +2416,9 @@ function widget_logic_tmp ( $atts = [] ) {
 							$condition_xml .= '<span class="'.$spanclass.'">';
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
 							$condition_xml .= "&lt;".$k."&gt;";
-							$condition_xml .= "<pre>";
+							if ( strpos($k, "url") || strpos($k, "taxonomy") ) { $condition_xml .= "<pre>"; }
 							$condition_xml .= $v;
-							$condition_xml .= "</pre>";
+							if ( strpos($k, "url") || strpos($k, "taxonomy") ) { $condition_xml .= "</pre>"; }
 							$condition_xml .= "&lt;/".$k."&gt;";
 							$condition_xml .= '</span>';
 						}
