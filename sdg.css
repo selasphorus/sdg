@@ -76,6 +76,7 @@ a.action {
     font-family: var(--global--font-monospace);
 }
 
+/** START WIP ***/
 span.t1 {
 	display: block;
 	padding-left: 1rem;
@@ -93,6 +94,12 @@ span.t2 {
 .code {
 	font-family: monospace;
 }
+
+.bold {
+	font-weight: 700;
+}
+
+/** END WIP ***/
 
 /* msg_bar styles */
 
