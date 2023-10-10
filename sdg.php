@@ -2419,9 +2419,9 @@ function widget_logic_tmp () {
 	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
 	//
-	$info .= $xml;
+	$info .= "<pre>".$xml."<pre>";	//$info .= $xml;
 	//
-	//$info .= "<pre>".print_r($xml,true)."<pre>";	
+	//$info .= "<pre>".print_r($xml,true)."<pre>";
 	return $info;	
 }
 
