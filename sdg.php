@@ -2433,7 +2433,7 @@ function widget_logic_tmp ( $atts = [] ) {
 				if ( empty($subs_xml) ) { $con_class .= " empty"; }
 				$condition_xml .= '<span class="'.$con_class.'">'."&lt;".$condition."&gt;".'</span>';
 				$condition_xml .= $subs_xml;
-				$condition_xml .= '<span class="t1 condition">'."&lt;/".$condition."&gt;".'</span>';
+				$condition_xml .= '<span class="'.$con_class.'">'."&lt;/".$condition."&gt;".'</span>';
 			}
 			//
 			$xml .= $condition_xml;
