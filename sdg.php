@@ -2420,7 +2420,7 @@ function widget_logic_tmp ( $atts = [] ) {
 							$subs_xml .= "&lt;".$k."&gt;";
 							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
 								$subs_xml .= "<pre>";
-								$v = preg_replace('/theology/', '/frogs/', $v);
+								$v = preg_replace('/theology/', 'frogs', $v);
 							}
 							$subs_xml .= $v;
 							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
