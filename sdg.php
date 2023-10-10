@@ -2431,7 +2431,7 @@ function widget_logic_tmp ( $atts = [] ) {
 		$xml .= "&lt;/option&gt;<br />";
 		$xml .= "<br />";
 		$i++;
-		if ( $i >= 1 ) { break; } // tft
+		if ( $i >= $limit ) { break; } // tft
 	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
 	//
