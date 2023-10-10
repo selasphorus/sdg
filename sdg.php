@@ -2435,10 +2435,9 @@ function widget_logic_tmp ( $atts = [] ) {
 	} // end foreach
 	$xml .= "&lt;/options&gt;<br />";
 	//
-	$info .= $xml; //$info .= "<pre>".$xml."</pre>";	//$info .= $xml;
+	$info .= $xml; //$info .= "<pre>".$xml."</pre>"; //$info .= $xml;
 	//
-	//$info .= "<pre>".print_r($xml,true)."</pre>";
-	$info .= '<div class="code">'.$info.'</div>';
+	$info = '<div class="code">'.$info.'</div>';
 	return $info;	
 }
 
