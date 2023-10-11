@@ -2527,7 +2527,7 @@ function show_snippets ( $post_id = null ) {
 
 	if ( $post_id === null ) { $post_id = get_the_ID(); }
 	$post_type = get_post_type( $post_id );
-	$limit = 5; // tft
+	$limit = 15; // tft
 	
 	// Set up basic query args
     $wp_args = array(
@@ -2574,7 +2574,8 @@ function show_snippets ( $post_id = null ) {
 	// Compile info for the matching snippets for display
 	foreach ( $snippets as $post_id ) {
 		$title = get_the_title( $post_id );
-		$info .= '<div class="snippet">'.$title.'</div>';
+		$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
+		$info .= '<div class="snippet">'.$title.' ['.$widget_uid.']'.'</div>';
 	}
 	
 	// 
