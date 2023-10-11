@@ -2556,8 +2556,8 @@ function show_snippets ( $post_id = null ) {
 	
 	$arr_posts = new WP_Query( $wp_args );
 	$posts = $arr_posts->posts;
-    $ts_info .= "WP_Query run as follows:";
-    $ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$ts_info .= "WP_Query run as follows:";
+    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
 	
 	foreach ( $posts as $post_id ) {
