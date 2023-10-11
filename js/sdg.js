@@ -559,7 +559,9 @@ jQuery(document).ready(function($) {
     /**** Modal PopUp Windows ***/
 
     function getModalDimensions() {
-
+    
+    	console.log('about to getModalDimensions'); // tft
+    	
 		// TODO: build in option to set dimensions based on content?
 		
         var winwidth = $(window).width();
@@ -602,13 +604,15 @@ jQuery(document).ready(function($) {
             modalheight = winheight * 0.8;
             modal_at = "center top+10%";
         }
-
+        console.log('winheight: '+winheight);
+        console.log('modal_at: '+modal_at);
+        
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
         modalheight = Math.round(modalheight);
 
         if ( modalheight > 500 ) { modalheight = 500; }
-        //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")"); // tft
+        //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")");
         //console.log('modalwidth: '+modalwidth+'; modalheight: '+modalheight);
 
         var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
@@ -619,7 +623,7 @@ jQuery(document).ready(function($) {
 
     function prepDialog( dialog_id ) {
 
-		//console.log('about to prepDialog for dialog_id: '+dialog_id); // tft
+		//console.log('about to prepDialog for dialog_id: '+dialog_id);
 		
         var modalDimensions = getModalDimensions();
         var modalwidth = modalDimensions["width"];
