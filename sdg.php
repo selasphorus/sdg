@@ -2567,7 +2567,10 @@ function show_snippets ( $post_id = null ) {
 		if ( $snippet_display == "show" ) {
 			$snippets[] = $post_id;
 		} else {
-			//
+			$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+			$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
+			$target_by_url = get_post_meta( $post_id, 'target_by_url', true );
+			$exclude_by_url = get_post_meta( $post_id, 'exclude_by_url', true );
 		}
     }
 	
@@ -2575,26 +2578,30 @@ function show_snippets ( $post_id = null ) {
 	foreach ( $snippets as $post_id ) {
 		$title = get_the_title( $post_id );
 		$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
-		$info .= '<div class="snippet">'.$title.' ['.$widget_uid.']'.'</div>';
+		$info .= '<div class="snippet">';
+		$info .= $title.' ['.$widget_uid.']';
+		$info .= update_snippet_logic ( $post_id );
+		$info .= '</div>';
 	}
 	
 	// 
 	// target_by_post
-	// target_by_url
 	// exclude_by_post
+	// target_by_url
 	// exclude_by_url
 	// target_by_taxonomy
 	// target_by_post_type
 	// target_by_location
 	// 
-	
+	$info .= "<hr />";
 	$info .= $ts_info;
 	
 	return $info;
 	
 }
 
-function update_snippet_posts ( $snippet_id = null ) {
+// WIP!
+function update_snippet_logic ( $snippet_id = null ) {
 
 	// TS/logging setup
     $do_ts = false; 
@@ -2612,7 +2619,7 @@ function update_snippet_posts ( $snippet_id = null ) {
 	$info .= "snippet_id: $snippet_id<br />";
 	
 	// Get snippet logic
-	$meta = get_post_meta( $snippet_id );	
+	$meta = get_post_meta( $snippet_id );
 	foreach ( $meta as $key => $value ) {
 		
 		$info .= "<code>$key => ".print_r($value, true)."</code><br />";
@@ -2626,6 +2633,8 @@ function update_snippet_posts ( $snippet_id = null ) {
 	// Find posts that match
 	
 	// Update snippet_posts field with IDs of matching posts
+	
+	return $info;
 	
 }
 
