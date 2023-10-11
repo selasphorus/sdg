@@ -1347,19 +1347,35 @@ function sdg_add_meta_boxes() {
 	$post_type = get_post_type( $post );
 	
     // Add metabox for troubleshooting
+    $screen = get_current_screen();
     if ($post_type == 'event-recurring') {
-        $screen = get_current_screen();
         // CPT Object Info Editor Sidebar Meta Box
         add_meta_box(
             'post_obj_info', // $id
             __( 'Info for Troubleshooting: Post Object Info', 'sdg' ), // $title
             'sdg_postobj_info_meta_box_callback', // $callback
-            array('post', $screen),
+            null, //array('post', $screen),
             'normal', // $context
             'high' // $priority -- default
         );
+    } else if ($post_type == 'snippet') {
+        add_meta_box( 
+        	'troubleshooting_meta_box', 
+        	__( 'Info for Troubleshooting', 'sdg' ), 
+        	'sdg_troubleshooting_display_callback', 
+        	null,
+        	'side', 
+        	'high' 
+    	);
     } else {
-        add_meta_box( 'troubleshooting_meta_box', __( 'Info for Troubleshooting', 'sdg' ), 'sdg_troubleshooting_display_callback', 'post', 'side', 'high' );
+        add_meta_box( 
+        	'troubleshooting_meta_box', 
+        	__( 'Info for Troubleshooting', 'sdg' ), 
+        	'sdg_troubleshooting_display_callback', 
+        	null, //array('post', $screen),
+        	'side', 
+        	'high' 
+    	);
     }
     
 }
@@ -2510,8 +2526,52 @@ function show_snippets ( $post_id = null ) {
 	
 	// Meta query
 	// 
+	// snippet_display -- values to match: 'show' or 'selected'
+	// target_by_post
+	// target_by_url
+	// exclude_by_post
+	// exclude_by_url
+	// target_by_taxonomy
+	// target_by_post_type
+	// target_by_location
+	// 
 	
 	return $info;
+	
+}
+
+function update_snippet_posts ( $snippet_id = null ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
+	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
+	$snippet = get_post ( $snippet_id );
+	//
+	$info .= '<div class="code">';
+	$info .= "snippet_id: $snippet_id<br />";
+	
+	// Get snippet logic
+	$meta = get_post_meta( $snippet_id );	
+	foreach ( $meta as $key => $value ) {
+		
+		$info .= "<code>$key => ".print_r($value, true)."</code><br />";
+		
+		if ( $value ) {
+			//
+		}
+		
+	}
+	
+	// Find posts that match
+	
+	// Update snippet_posts field with IDs of matching posts
 	
 }
 
