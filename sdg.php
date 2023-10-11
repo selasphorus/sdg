@@ -2624,7 +2624,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	$meta = get_post_meta( $snippet_id );
 	foreach ( $meta as $key => $value ) {
 		
-		if ( substr( $key, 0, 1 ) != "_" && substr( $value, 0,5 ) != "field" ) {
+		if ( substr( $key, 0, 1 ) != "_" ) { // && substr( $value, 0,5 ) != "field"
 			$info .= "<code>$key => ".print_r($value, true)."</code><br />";
 			if ( $value ) {
 				//
