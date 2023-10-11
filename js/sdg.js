@@ -623,7 +623,7 @@ jQuery(document).ready(function($) {
 
     function prepDialog( dialog_id ) {
 
-		//console.log('about to prepDialog for dialog_id: '+dialog_id);
+		console.log('about to prepDialog for dialog_id: '+dialog_id);
 		
         var modalDimensions = getModalDimensions();
         var modalwidth = modalDimensions["width"];
