@@ -589,7 +589,7 @@ jQuery(document).ready(function($) {
         }
         
 		// Determine positioning for modal window
-		var modal_at_default = "center top+100px";
+		var modal_at_default = "center top+200px";
         if ( winheight > 1200) {
             modalheight = winheight * 0.7;
             //modal_at = "center top+25%";
