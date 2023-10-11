@@ -2527,7 +2527,7 @@ function show_snippets ( $post_id = null ) {
 
 	if ( $post_id === null ) { $post_id = get_the_ID(); }
 	$post_type = get_post_type( $post_id );
-	$limit = 15; // tft
+	$limit = -1; // tft
 	
 	// Set up basic query args
     $wp_args = array(
