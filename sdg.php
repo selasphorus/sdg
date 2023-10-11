@@ -2422,7 +2422,8 @@ function widget_logic_tmp ( $atts = [] ) {
 							if ( $condition == "word_count" ) {
 								if ( $k == "check_wordcount" && !empty($v) ) {
 									$check_wordcount = true;
-								} else if ( $check_wordcount ) {
+									$subs_empty = false;
+								} else if ( $check_wordcount && !empty($v) ) {
 									//
 								} else {
 									$subs_class .= " empty";
@@ -2458,7 +2459,7 @@ function widget_logic_tmp ( $atts = [] ) {
 			} else {
 				$subs_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
 			}
-			if ( $subs_xml || $show_empties == "yes" ) {
+			if ( !$subs_empty || $show_empties == "yes" ) {
 				if ( $subs_empty ) { $con_class .= " empty"; }
 				$condition_xml .= '<span class="'.$con_class.'">'."&lt;".$condition."&gt;".'</span>';
 				$condition_xml .= $subs_xml;
