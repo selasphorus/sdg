@@ -278,6 +278,7 @@ function sdg_modules_field_cb( $args ) {
 		'press' => __( 'Press' ), 
 		//'recordings' => __( 'Recordings' ),
 		'links' => __( 'Links' ),
+		'snippets' => __( 'Snippets' ), 
 		'newsletters' => __( 'Newsletters' ),
 		//'sources' => __( 'Sources' ),
 		//
@@ -1393,6 +1394,10 @@ function sdg_snippet_posts_display_callback( $post ) {
     $info = "";
     $info .= "This snippet is set to appear on the following posts:<br />";
     $info .= "coming soon... posts array";
+    
+    $meta = get_post_meta( $post );
+    //
+    
     echo $info;
 }
  
@@ -1504,7 +1509,7 @@ function sdg_pre_get_posts( $query ) {
                 $query->set('meta_key', 'last_name');
                 $query->set('order', 'ASC');
             } else if ($post_type === 'newsletter') {
-                $meta_query =  array(
+                $meta_query = array(
 					'relation' => 'AND',
 					'volume' => array(
 						'key' => 'volume_num',
@@ -2518,6 +2523,7 @@ function show_snippets ( $post_id = null ) {
     // Init vars
     $info = "";
 	$ts_info = "";
+	$snippets = array();
 
 	if ( $post_id === null ) { $post_id = get_the_ID(); }
 	$post_type = get_post_type( $post_id );
@@ -2528,12 +2534,50 @@ function show_snippets ( $post_id = null ) {
 		'post_type'       => 'snippet',
 		'post_status'     => 'publish',
 		'posts_per_page'  => $limit,
-        //'fields'          => $return_fields,
+        'fields'          => 'ids',
+        //'orderby'   => 'date',
+		//'order'     => 'DESC',
 	);
 	
 	// Meta query
+	$meta_query = array(
+		//'relation' => 'AND',
+		'snippet_display' => array(
+			'key' => 'snippet_display',
+			'value' => array('show', 'selected'),
+			'compare' => 'IN',
+		),/*
+		'number' => array(
+			'key' => 'newsletter_num',
+			'type' => 'NUMERIC',
+		),*/
+	);
+	$wp_args['meta_query'] = $meta_query;
+	
+	$arr_posts = new WP_Query( $wp_args );
+	$posts = $arr_posts->posts;
+    //$ts_info .= "WP_Query run as follows:";
+    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
+	
+	foreach ( $posts as $post_id ) {
+	
+		$snippet_display = get_post_meta( $post_id, 'snippet_display', true );
+		
+		if ( $snippet_display == "show" ) {
+			$snippets[] = $post_id;
+		} else {
+			//
+		}
+    }
+	
+	// Compile info for the matching snippets for display
+	foreach ( $snippets as $post_id ) {
+		$title = get_the_title( $post_id );
+		$info .= '<div class="snippet">'.$title.'</div>';
+	}
+	
 	// 
-	// snippet_display -- values to match: 'show' or 'selected'
 	// target_by_post
 	// target_by_url
 	// exclude_by_post
