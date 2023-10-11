@@ -1361,8 +1361,8 @@ function sdg_add_meta_boxes() {
     } else if ($post_type == 'snippet') {
         add_meta_box( 
         	'troubleshooting_meta_box', 
-        	__( 'Info for Troubleshooting', 'sdg' ), 
-        	'sdg_troubleshooting_display_callback', 
+        	__( 'Snippet Posts', 'sdg' ), 
+        	'sdg_snippet_posts_display_callback', 
         	null,
         	'side', 
         	'high' 
@@ -1387,6 +1387,10 @@ function sdg_add_meta_boxes() {
  */
 function sdg_troubleshooting_display_callback( $post ) {
     echo "test";
+}
+
+function sdg_snippet_posts_display_callback( $post ) {
+    echo "coming soon... posts array";
 }
  
 /**
