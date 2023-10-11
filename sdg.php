@@ -1390,7 +1390,10 @@ function sdg_troubleshooting_display_callback( $post ) {
 }
 
 function sdg_snippet_posts_display_callback( $post ) {
-    echo "coming soon... posts array";
+    $info = "";
+    $info .= "This snippet is set to appear on the following posts:<br />";
+    $info .= "coming soon... posts array";
+    echo $info;
 }
  
 /**
