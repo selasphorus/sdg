@@ -2401,6 +2401,9 @@ function widget_logic_tmp ( $atts = [] ) {
 	$logic_options = get_option('widget_logic_options');
 	foreach ( $logic_options as $widget => $conditions ) {
 		//$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
+		// Skip this widget for now if it's not a custom_html or text widget
+		if ( ! ( strpos($widget, "custom_html-") !== false || strpos($widget, "text-") !== false ) ) { continue; }
+		//
 		$xml .= "&lt;option&gt;<br />";
 		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
 		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";		
