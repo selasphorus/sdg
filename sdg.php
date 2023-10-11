@@ -2444,14 +2444,14 @@ function widget_logic_tmp ( $atts = [] ) {
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
 							$subs_xml .= "&lt;".$k."&gt;";
 							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
-								$subs_xml .= "<pre>";
-								$subs_xml .= "<![CDATA[";
+								//$subs_xml .= "<pre>";
+								$subs_xml .= "&lt;![CDATA[";
 								$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
 							}
 							$subs_xml .= $v;
 							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
-								$subs_xml .= "]]>";
-								$subs_xml .= "</pre>";
+								$subs_xml .= "]]&gt;";
+								//$subs_xml .= "</pre>";
 							}
 							$subs_xml .= "&lt;/".$k."&gt;";
 							$subs_xml .= '</span>';
