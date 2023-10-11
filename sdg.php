@@ -2410,14 +2410,35 @@ function widget_logic_tmp ( $atts = [] ) {
 		foreach ( $conditions as $condition => $subconditions ) {
 			$condition_xml = "";
 			$subs_xml = "";
-			$subs_empty = true; // init
+			$subs_empty = true;
+			$check_wordcount = false;
 			$con_class = "t1 condition";
 			if ( is_array($subconditions) ) {
 				//if ( count($subconditions) == 1 ) {
 					foreach ( $subconditions as $k => $v ) {
 						if ( $v || $show_empties == "yes" ) {
 							$subs_class = "t2 subcondition";
-							if ( empty($v) ) { $subs_class .= " empty"; } else { $subs_empty = false; }
+							// Special case: word_count
+							if ( $condition == "word_count" ) {
+								if ( $k == "check_wordcount" && !empty($v) ) {
+									$check_wordcount = true;
+								} else if ( $check_wordcount ) {
+									//
+								} else {
+									$subs_class .= " empty";
+								}
+								/*
+								<word_count>
+								<check_wordcount>0</check_wordcount>
+								<check_wordcount_type>less</check_wordcount_type>
+								<word_count></word_count>
+								</word_count>
+								*/
+							} else if ( empty($v) ) { 
+								$subs_class .= " empty";
+							} else {
+								$subs_empty = false;
+							}
 							$subs_xml .= '<span class="'.$subs_class.'">';
 							//$xml .= "k: ".$k." => v: ".$v."<br />";
 							$subs_xml .= "&lt;".$k."&gt;";
