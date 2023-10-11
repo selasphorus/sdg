@@ -2571,6 +2571,9 @@ function show_snippets ( $post_id = null ) {
 			$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
 			$target_by_url = get_post_meta( $post_id, 'target_by_url', true );
 			$exclude_by_url = get_post_meta( $post_id, 'exclude_by_url', true );
+			$target_by_taxonomy = get_post_meta( $post_id, 'target_by_taxonomy', true );
+			$target_by_post_type = get_post_meta( $post_id, 'target_by_post_type', true );
+			$target_by_location = get_post_meta( $post_id, 'target_by_location', true );
 		}
     }
 	
@@ -2583,15 +2586,6 @@ function show_snippets ( $post_id = null ) {
 		$info .= update_snippet_logic ( $post_id );
 		$info .= '</div>';
 	}
-	
-	// 
-	// target_by_post
-	// exclude_by_post
-	// target_by_url
-	// exclude_by_url
-	// target_by_taxonomy
-	// target_by_post_type
-	// target_by_location
 	// 
 	$info .= "<hr />";
 	$info .= $ts_info;
@@ -2619,20 +2613,29 @@ function update_snippet_logic ( $snippet_id = null ) {
 	$info .= "snippet_id: $snippet_id<br />";
 	
 	// Get snippet logic
+	/*$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	
+	foreach ( $meta_keys as $key ) {
+		$$key = get_post_meta( $post_id, $key, true );
+	}*/
+	
+	//
+	
 	$meta = get_post_meta( $snippet_id );
 	foreach ( $meta as $key => $value ) {
 		
-		$info .= "<code>$key => ".print_r($value, true)."</code><br />";
-		
-		if ( $value ) {
-			//
+		if ( substr( $key, 0, 1 ) != "_" && substr( $value, 0,5 ) != "field" ) {
+			$info .= "<code>$key => ".print_r($value, true)."</code><br />";
+			if ( $value ) {
+				//
+			}		
 		}
 		
 	}
 	
 	// Find posts that match
 	
-	// Update snippet_posts field with IDs of matching posts
+	$info .= '</div>';
 	
 	return $info;
 	
