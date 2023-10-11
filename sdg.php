@@ -2484,6 +2484,37 @@ function widget_logic_tmp ( $atts = [] ) {
 	return $info;	
 }
 
+add_shortcode('snippets', 'show_snippets');
+function show_snippets ( $post_id = null ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+
+	if ( $post_id === null ) { $post_id = get_the_ID(); }
+	$post_type = get_post_type( $post_id );
+	$limit = 5; // tft
+	
+	// Set up basic query args
+    $wp_args = array(
+		'post_type'       => 'snippet',
+		'post_status'     => 'publish',
+		'posts_per_page'  => $limit,
+        //'fields'          => $return_fields,
+	);
+	
+	// Meta query
+	// 
+	
+	return $info;
+	
+}
+
 function surprise() {
 
 	// Set up an array of fun words and things...
