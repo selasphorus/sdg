@@ -99,11 +99,7 @@ jQuery(document).ready(function($) {
     
     // Webcasts
     
-    if ( $("article.type-event.event-categories-webcasts")[0] 
-        || $("article.type-sermon")[0] 
-        || $("article.type-post.category-webcasts")[0]   
-        || $("article.type-page.page_tag-webcasts")[0]        
-       ) {
+    if ( $("article.type-event.event-categories-webcasts")[0] || $("article.type-sermon")[0] || $("article.type-post.category-webcasts")[0] || $("article.type-page.page_tag-webcasts")[0] ) {
         
         //console.log('found webcast event'); // tft
         
@@ -591,15 +587,17 @@ jQuery(document).ready(function($) {
         }
         
 		// Determine positioning for modal window
+		var modal_at_default = "center top+15%";
         if ( winheight > 1200) {
             modalheight = winheight * 0.7;
-            modal_at = "center top+25%";
+            //modal_at = "center top+25%";
+            modal_at = modal_at_default;
         } else if ( winheight > 800) {
             modalheight = winheight * 0.75;
-            modal_at = "center top+25%";
+            modal_at = modal_at_default;
         } else if ( winheight > 400) {
             modalheight = winheight * 0.75;
-            modal_at = "center top+25%";
+            modal_at = modal_at_default;
         } else {
             modalheight = winheight * 0.8;
             modal_at = "center top+10%";
