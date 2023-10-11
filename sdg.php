@@ -2472,7 +2472,7 @@ function widget_logic_tmp ( $atts = [] ) {
 		}
 		//$xml .= print_r($option,true);
 		$xml .= "&lt;/option&gt;<br />";
-		$xml .= "<br />";
+		//$xml .= "<br />";
 		$i++;
 		if ( $i >= $limit ) { break; } // tft
 	} // end foreach
