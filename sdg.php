@@ -2590,7 +2590,17 @@ function show_snippets ( $post_id = null ) {
 					$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
 					if ( $key == 'target_by_url' ) {
 						$urls = explode(" | ",$$key);
-						if ( is_array($urls)) { $info .= count($urls)." urls<br />"; }
+						if ( is_array($urls)) { 
+							$info .= count($urls)." urls<br />";
+							foreach ( $urls as $url ) {
+								// Extract slug from path
+								$url_bits = explode("/",$url); // The last bit is slug
+								$slug = end($url_bits);
+								$info .= "slug: $slug<br />";
+								// Look for matching post
+								//
+							}
+						}
 					}
 				}
 			}
