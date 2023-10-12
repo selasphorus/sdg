@@ -2639,7 +2639,7 @@ function show_snippets ( $post_id = null ) {
 									// Save the array of matched posts to the target_by_post field
 									$update_value = $matched_posts;									
 								} else {
-									$update_value = array_merge($target_by_post, $matched_posts);
+									$update_value = array_unique(array_merge($target_by_post, $matched_posts));
 								}
 								update_field( 'target_by_post', $update_value, $post_id ); //update_field($selector, $value, $post_id);
 							} else if ( $key == 'exclude_by_url' ) {
