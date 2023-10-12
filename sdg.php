@@ -2588,7 +2588,7 @@ function show_snippets ( $post_id = null ) {
 				//$info .= "key: $key => ".$$key."<br />";
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 					$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
-					if ( $key == 'target_by_url' ) {
+					if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 						$urls = explode(" | ",$$key);
 						if ( is_array($urls)) {
 							$info .= count($urls)." urls<br />";
@@ -2608,11 +2608,17 @@ function show_snippets ( $post_id = null ) {
 									$matched_posts[] = $matched_post_id;
 								}
 							}
-							// Save the posts to the snippet field: target_by_post
-							$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
-							if ( empty($target_by_post) ) {
-								// Save the array of matched posts to the target_by_post field
-								// WIP 231011
+							// Save the posts to the snippet field
+							// target_by_post
+							if ( $key == 'target_by_url' ) {
+								$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+								if ( empty($target_by_post) ) {
+									// Save the array of matched posts to the target_by_post field
+									// WIP 231011
+								}
+							} else if ( $key == 'exclude_by_url' ) {
+								// OR: do we make one combined field -- target_by_post to include array e.g. (46, 48, -49...)
+								$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
 							}
 						}
 					}
@@ -2657,7 +2663,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
 	//$snippet = get_post ( $snippet_id );
-	$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
+	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 	
 	//
 	$info .= '<div class="code">';
