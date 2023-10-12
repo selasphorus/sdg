@@ -2401,16 +2401,338 @@ function sdg_post_type_access_limiter(){
     }
 }
 
-/*** MISC ***/
 
-add_shortcode('widget_logic', 'widget_logic_tmp');
-function widget_logic_tmp ( $atts = [] ) {	
+/*** WIDGETS >> SNIPPETS ***/
+
+add_shortcode('snippets', 'show_snippets');
+function show_snippets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    sdg_log( "function called: run_title_updates", $do_log );
+    sdg_log( "function called: show_snippets", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	$snippets = array();
+    
+    $args = shortcode_atts( array(
+    	'post_id' => get_the_ID(),
+		'limit'   => -1,
+        'run_updates'  => false,
+        
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+    
+    //
+	if ( $post_id === null ) { return false; }
+	$post_type = get_post_type( $post_id );
+	
+	// Set up basic query args
+    $wp_args = array(
+		'post_type'       => 'snippet',
+		'post_status'     => 'publish',
+		'posts_per_page'  => $limit,
+        'fields'          => 'ids',
+        //'orderby'   => 'date',
+		//'order'     => 'DESC',
+	);
+	
+	// Meta query
+	$meta_query = array(
+		//'relation' => 'AND',
+		'snippet_display' => array(
+			'key' => 'snippet_display',
+			'value' => array('show', 'selected'),
+			'compare' => 'IN',
+		),/*
+		'number' => array(
+			'key' => 'newsletter_num',
+			'type' => 'NUMERIC',
+		),*/
+	);
+	$wp_args['meta_query'] = $meta_query;
+	
+	$arr_posts = new WP_Query( $wp_args );
+	$snippets = $arr_posts->posts;
+    //$ts_info .= "WP_Query run as follows:";
+    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
+	
+	foreach ( $snippets as $snippet_id ) {
+	
+		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
+		$snippet_info = "";
+		
+		if ( $snippet_display == "show" ) {
+			$snippets[] = $snippet_id;
+		} else {
+			// Conditional dislpay -- determine whether the given post should display this widget
+			//
+			$title = get_the_title( $snippet_id );
+			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+			$snippet_info .= '<div class="snippet">';
+			$snippet_info .= $title.' ['.$widget_uid.']<br //>';
+			// There's got to be a more efficient way to do this...
+			/*
+			$target_by_taxonomy = get_post_meta( $snippet_id, 'target_by_taxonomy', true );
+			*/
+			//
+			$snippet_info .= '<div class="code">';
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+			foreach ( $meta_keys as $key ) {
+				$$key = get_post_meta( $snippet_id, $key, true );
+				//$snippet_info .= "key: $key => ".$$key."<br />";
+				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
+					$snippet_info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
+					if ( $key == 'target_by_post_type' ) {
+						// Is the given post of the matching type?
+						// WIP
+						$target_type = get_field($key, $snippet_id, false);
+						if ( $post_type == $target_type ) {
+							$snippet_info .= "this post matches target post_type<br />";
+						}
+					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
+						// Is the given post targetted or excluded?
+						// WIP
+						//$target_posts = get_field($key, $snippet_id, false);
+					} else if ( $key == 'target_by_taxonomy' ) {
+						// WIP -- copy fcns from Widget Context customizations
+						//$target_taxonomies = get_field($key, $snippet_id, false);
+					} else if ( $key == 'target_by_location' ) {
+						// Is the given post in the right site location?
+						// WIP
+					} /*else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+						// Legacy fields => ignore or translate >> moved to update_snippet_logic fcn
+						$urls = explode(" | ",$$key);
+						if ( is_array($urls)) {
+							$snippet_info .= count($urls)." urls<br />";
+							$matched_posts = array();
+							foreach ( $urls as $url ) {
+								$slug = null;
+								$post_type = null;
+								$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
+									$post_type = "event";
+								} else if ( preg_match($date_validation_regex, $url) ) {
+									$post_type = "post";
+								}
+								//
+								if ( $post_type ) {
+									// Extract slug from path
+									// First, trim trailing slash, if any
+									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
+									$url_bits = explode("/",$url); // The last bit is slug
+									$slug = end($url_bits);
+									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+									$snippet_info .= "$post_type slug: $slug<br />";
+								} else {
+									$snippet_info .= "url: $url<br />";
+									
+								}
+								// Look for matching post
+								if ( $slug && $post_type ) {
+									$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+								} else {
+									$matched_post = get_page_by_path($url);
+								}
+								//
+								if ($matched_post) {
+									$matched_post_id = $matched_post->ID;
+									$matched_posts[] = $matched_post_id;
+									$snippet_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+								} else {
+									$snippet_info .= "&rarr; NO matching post found<br />";
+								}
+							}
+							// Save the posts to the snippet field
+							if ( $key == 'target_by_url' ) {
+								$target_key = 'target_by_post';
+							} else if ( $key == 'exclude_by_url' ) {
+								$target_key = 'exclude_by_post';
+							}
+							$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
+							$arr_new = null;
+							if ( empty($arr_old) ) {
+								// Save the array of matched posts to the target_by_post field
+								$arr_new = $matched_posts;									
+							} else if ( is_array($arr_old) ) {
+								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+							}
+							if ( $arr_new ) { 
+								$snippet_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+								update_field( $target_key, $arr_new, $snippet_id ); //update_field($selector, $value, $post_id);
+							} else {
+								$snippet_info .= "arr_new is empty<br />";
+								$snippet_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
+								$snippet_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
+							}
+							
+						}
+					}*/
+					$snippet_info .= "<br />";
+				}
+			}
+			$snippet_info .= '</div>'; // <div class="code">
+			$snippet_info .= '</div>'; // <div class="snippet">
+		} // END $snippet_display == "selected"
+		$info .= $snippet_info;
+    }
+    
+    $info .= "<hr /></hr />";
+	
+	// Compile info for the matching snippets for display
+	foreach ( $snippets as $snippet_id ) {
+		$title = get_the_title( $snippet_id );
+		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+		$info .= '<div class="snippet">';
+		$info .= $title.' ['.$widget_uid.']';
+		$info .= update_snippet_logic ( $snippet_id ); // TODO: make this conditional (run_updates)?
+		$info .= '</div>';
+	}
+	// 
+	$info .= "<hr />";
+	$info .= $ts_info;
+	
+	return $info;
+	
+}
+
+// WIP!
+function update_snippet_logic ( $snippet_id = null ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
+	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
+	//$snippet = get_post ( $snippet_id );
+	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+	
+	//
+	$info .= '<div class="code">';
+	$info .= "snippet_id: $snippet_id<br />";
+	//$info .= "widget_uid: $widget_uid<br />";
+	
+	// Get snippet logic
+	/*$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	
+	foreach ( $meta_keys as $key ) {
+		$$key = get_post_meta( $snippet_id, $key, true );
+	}*/
+	
+	//
+	
+	$meta = get_post_meta( $snippet_id );
+	foreach ( $meta as $key => $value ) {
+		
+		if ( substr( $key, 0, 1 ) != "_" ) { // && substr( $value, 0,5 ) != "field"
+			//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
+			if ( !empty($value) ) {
+				if ( is_array($value) && count($value) == 1 && empty($value[0]) ) {
+					//$info .= "empty!";
+				} else {
+					$info .= "$key => ".print_r($value, true)."<br />";
+					//$info .= "<code>$key => ".print_r($value, true)."</code><br />";					
+					/*if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+						// Legacy fields => ignore or translate
+						$urls = explode(" | ",$$key);
+						if ( is_array($urls)) {
+							$snippet_info .= count($urls)." urls<br />";
+							$matched_posts = array();
+							foreach ( $urls as $url ) {
+								$slug = null;
+								$post_type = null;
+								$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
+									$post_type = "event";
+								} else if ( preg_match($date_validation_regex, $url) ) {
+									$post_type = "post";
+								}
+								//
+								if ( $post_type ) {
+									// Extract slug from path
+									// First, trim trailing slash, if any
+									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
+									$url_bits = explode("/",$url); // The last bit is slug
+									$slug = end($url_bits);
+									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+									$snippet_info .= "$post_type slug: $slug<br />";
+								} else {
+									$snippet_info .= "url: $url<br />";
+									
+								}
+								// Look for matching post
+								if ( $slug && $post_type ) {
+									$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+								} else {
+									$matched_post = get_page_by_path($url);
+								}
+								//
+								if ($matched_post) {
+									$matched_post_id = $matched_post->ID;
+									$matched_posts[] = $matched_post_id;
+									$snippet_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+								} else {
+									$snippet_info .= "&rarr; NO matching post found<br />";
+								}
+							}
+							// Save the posts to the snippet field
+							if ( $key == 'target_by_url' ) {
+								$target_key = 'target_by_post';
+							} else if ( $key == 'exclude_by_url' ) {
+								$target_key = 'exclude_by_post';
+							}
+							$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
+							$arr_new = null;
+							if ( empty($arr_old) ) {
+								// Save the array of matched posts to the target_by_post field
+								$arr_new = $matched_posts;									
+							} else if ( is_array($arr_old) ) {
+								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+							}
+							if ( $arr_new ) { 
+								$snippet_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+								update_field( $target_key, $arr_new, $snippet_id ); //update_field($selector, $value, $post_id);
+							} else {
+								$snippet_info .= "arr_new is empty<br />";
+								$snippet_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
+								$snippet_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
+							}
+							
+						}
+					}*/
+				}				
+			}		
+		}
+		
+	}
+	
+	// Find posts that match
+	
+	$info .= '</div>';
+	
+	return $info;
+	
+}
+
+add_shortcode('widget_logic', 'widget_logic_tmp');
+function widget_logic_tmp ( $atts = [] ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: widget_logic_tmp", $do_log );
     
     $info = "";
     
@@ -2512,231 +2834,7 @@ function widget_logic_tmp ( $atts = [] ) {
 	return $info;	
 }
 
-add_shortcode('snippets', 'show_snippets');
-function show_snippets ( $post_id = null ) {
-
-	// TS/logging setup
-    $do_ts = false; 
-    $do_log = false;
-    sdg_log( "divline2", $do_log );
-    
-    // Init vars
-    $info = "";
-	$ts_info = "";
-	$snippets = array();
-
-	if ( $post_id === null ) { $post_id = get_the_ID(); }
-	$post_type = get_post_type( $post_id );
-	$limit = -1; // tft
-	
-	// Set up basic query args
-    $wp_args = array(
-		'post_type'       => 'snippet',
-		'post_status'     => 'publish',
-		'posts_per_page'  => $limit,
-        'fields'          => 'ids',
-        //'orderby'   => 'date',
-		//'order'     => 'DESC',
-	);
-	
-	// Meta query
-	$meta_query = array(
-		//'relation' => 'AND',
-		'snippet_display' => array(
-			'key' => 'snippet_display',
-			'value' => array('show', 'selected'),
-			'compare' => 'IN',
-		),/*
-		'number' => array(
-			'key' => 'newsletter_num',
-			'type' => 'NUMERIC',
-		),*/
-	);
-	$wp_args['meta_query'] = $meta_query;
-	
-	$arr_posts = new WP_Query( $wp_args );
-	$posts = $arr_posts->posts;
-    //$ts_info .= "WP_Query run as follows:";
-    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
-    $ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
-	
-	foreach ( $posts as $post_id ) {
-	
-		$snippet_display = get_post_meta( $post_id, 'snippet_display', true );
-		
-		if ( $snippet_display == "show" ) {
-			$snippets[] = $post_id;
-		} else {
-			$info .= '<div class="snippet">';
-			$title = get_the_title( $post_id );
-			$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
-			$info .= $title.' ['.$widget_uid.']<br //>';
-			// There's got to be a more efficient way to do this...
-			/*$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
-			$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
-			$target_by_url = get_post_meta( $post_id, 'target_by_url', true );
-			$exclude_by_url = get_post_meta( $post_id, 'exclude_by_url', true );
-			$target_by_taxonomy = get_post_meta( $post_id, 'target_by_taxonomy', true );
-			$target_by_post_type = get_post_meta( $post_id, 'target_by_post_type', true );
-			$target_by_location = get_post_meta( $post_id, 'target_by_location', true );
-			*/
-			//
-			$info .= '<div class="code">';
-			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
-			foreach ( $meta_keys as $key ) {
-				$$key = get_post_meta( $post_id, $key, true );
-				//$info .= "key: $key => ".$$key."<br />";
-				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-					$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
-					if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
-						$urls = explode(" | ",$$key);
-						if ( is_array($urls)) {
-							$info .= count($urls)." urls<br />";
-							$matched_posts = array();
-							foreach ( $urls as $url ) {
-								$slug = null;
-								$post_type = null;
-								$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
-								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
-									$post_type = "event";
-								} else if ( preg_match($date_validation_regex, $url) ) {
-									$post_type = "post";
-								}
-								//
-								if ( $post_type ) {
-									// Extract slug from path
-									// First, trim trailing slash, if any
-									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
-									$url_bits = explode("/",$url); // The last bit is slug
-									$slug = end($url_bits);
-									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-									$info .= "$post_type slug: $slug<br />";
-								} else {
-									$info .= "url: $url<br />";
-									
-								}
-								// Look for matching post
-								if ( $slug && $post_type ) {
-									$matched_post = get_page_by_path($slug, OBJECT, $post_type);
-								} else {
-									$matched_post = get_page_by_path($url);
-								}
-								//
-								if ($matched_post) {
-									$matched_post_id = $matched_post->ID;
-									$matched_posts[] = $matched_post_id;
-									$info .= "&rarr; matching post found with id: $matched_post_id<br />";
-								} else {
-									$info .= "&rarr; NO matching post found<br />";
-								}
-							}
-							// Save the posts to the snippet field
-							if ( $key == 'target_by_url' ) {
-								$target_key = 'target_by_post';
-							} else if ( $key == 'exclude_by_url' ) {
-								$target_key = 'exclude_by_post';
-							}
-							$arr_old = get_field( $target_key, $post_id, false ); //get_field($selector, $post_id, $format_value);
-							$arr_new = null;
-							if ( empty($arr_old) ) {
-								// Save the array of matched posts to the target_by_post field
-								$arr_new = $matched_posts;									
-							} else if ( is_array($arr_old) ) {
-								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							}
-							if ( $arr_new ) { 
-								$info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
-								update_field( $target_key, $arr_new, $post_id ); //update_field($selector, $value, $post_id);
-							} else {
-								$info .= "arr_new is empty<br />";
-								$info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
-								$info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
-								
-							}
-							
-						}
-					}
-					$info .= "<br />";
-				}
-			}
-			$info .= '</div>';
-			$info .= '</div>';
-		}
-    }
-    
-    $info .= "<hr /></hr />";
-	
-	// Compile info for the matching snippets for display
-	foreach ( $snippets as $post_id ) {
-		$title = get_the_title( $post_id );
-		$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
-		$info .= '<div class="snippet">';
-		$info .= $title.' ['.$widget_uid.']';
-		$info .= update_snippet_logic ( $post_id );
-		$info .= '</div>';
-	}
-	// 
-	$info .= "<hr />";
-	$info .= $ts_info;
-	
-	return $info;
-	
-}
-
-// WIP!
-function update_snippet_logic ( $snippet_id = null ) {
-
-	// TS/logging setup
-    $do_ts = false; 
-    $do_log = false;
-    sdg_log( "divline2", $do_log );
-    
-    // Init vars
-    $info = "";
-	$ts_info = "";
-	
-	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
-	//$snippet = get_post ( $snippet_id );
-	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
-	
-	//
-	$info .= '<div class="code">';
-	$info .= "snippet_id: $snippet_id<br />";
-	//$info .= "widget_uid: $widget_uid<br />";
-	
-	// Get snippet logic
-	/*$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
-	
-	foreach ( $meta_keys as $key ) {
-		$$key = get_post_meta( $post_id, $key, true );
-	}*/
-	
-	//
-	
-	$meta = get_post_meta( $snippet_id );
-	foreach ( $meta as $key => $value ) {
-		
-		if ( substr( $key, 0, 1 ) != "_" ) { // && substr( $value, 0,5 ) != "field"
-			//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
-			if ( !empty($value) ) {
-				if ( is_array($value) && count($value) == 1 && empty($value[0]) ) {
-					//$info .= "empty!";
-				} else {
-					$info .= "$key => ".print_r($value, true)."<br />";
-					//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
-				}				
-			}		
-		}
-		
-	}
-	
-	// Find posts that match
-	
-	$info .= '</div>';
-	
-	return $info;
-	
-}
+/*** MISC ***/
 
 function surprise() {
 
