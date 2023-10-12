@@ -2580,8 +2580,9 @@ function show_snippets ( $post_id = null ) {
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 				$$key = get_post_meta( $post_id, $key, true );
+				$info .= "key: $key => $$key<br />";
 				if ( !empty($$key) && is_array($$key) && count($$key) == 1 && !empty($$key[0]) ) {
-					$info .= "key: $key => $$key<br />";
+					//$info .= "key: $key => $$key<br />";
 					if ( $key == 'target_by_post' ) {
 					
 					}
@@ -2644,7 +2645,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
 			if ( !empty($value) ) {
 				if ( is_array($value) && count($value) == 1 && empty($value[0]) ) {
-					$info .= "empty!";
+					//$info .= "empty!";
 				} else {
 					$info .= "$key => ".print_r($value, true)."<br />";
 					//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
