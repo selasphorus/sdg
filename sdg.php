@@ -2570,7 +2570,7 @@ function show_snippets ( $post_id = null ) {
 			$info .= '<div class="snippet">';
 			$title = get_the_title( $post_id );
 			$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
-			$info .= $title.' ['.$widget_uid.']';
+			$info .= $title.' ['.$widget_uid.']<br //>';
 			// There's got to be a more efficient way to do this...
 			/*$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
 			$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
@@ -2595,6 +2595,8 @@ function show_snippets ( $post_id = null ) {
 			$info .= '</div>';
 		}
     }
+    
+    $info .= "<hr /></hr />";
 	
 	// Compile info for the matching snippets for display
 	foreach ( $snippets as $post_id ) {
