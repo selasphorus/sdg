@@ -2585,9 +2585,9 @@ function show_snippets ( $post_id = null ) {
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 				$$key = get_post_meta( $post_id, $key, true );
-				$info .= "key: $key => ".$$key."<br />";
+				//$info .= "key: $key => ".$$key."<br />";
 				if ( !empty($$key) && is_array($$key) && count($$key) == 1 && !empty($$key[0]) ) {
-					//$info .= "key: $key => $$key<br />";
+					$info .= "key: $key => ".$$key."<br />";
 					if ( $key == 'target_by_post' ) {
 					
 					}
