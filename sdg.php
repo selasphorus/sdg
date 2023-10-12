@@ -2588,8 +2588,9 @@ function show_snippets ( $post_id = null ) {
 				//$info .= "key: $key => ".$$key."<br />";
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 					$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
-					if ( $key == 'target_by_post' ) {
-					
+					if ( $key == 'target_by_url' ) {
+						$urls = explode(" | ",$$key);
+						$info .= count($$key)." urls<br />";
 					}
 				}
 			}
