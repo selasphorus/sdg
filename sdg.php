@@ -2600,8 +2600,8 @@ function show_snippets ( $post_id = null ) {
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 									$url_bits = explode("/",$url); // The last bit is slug
 									$slug = end($url_bits);
-									$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-									$info .= "slug: $slug<br />";
+									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+									$info .= "event slug: $slug<br />";
 									// Look for matching post
 									$matched_post = get_page_by_path($slug, OBJECT, 'event');
 								} else {
