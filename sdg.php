@@ -2504,7 +2504,7 @@ function show_snippets ( $atts = [] ) {
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( in_array($post_id, $target_posts) ) {
-							$snippet_info .= "This post is in the target_posts array<.br />";
+							$snippet_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' ) { $snippets[] = $snippet_id; }
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
@@ -2592,7 +2592,7 @@ function show_snippets ( $atts = [] ) {
 			$snippet_info .= '</div>'; // <div class="code">
 			$snippet_info .= '</div>'; // <div class="snippet">
 		} // END $snippet_display == "selected"
-		$info .= "<hr />";
+		//$info .= "<hr />";
 		$info .= $snippet_info;
     }
     
@@ -2632,7 +2632,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 	
 	//
-	$info .= "<hr />";
 	$info .= ">> update_snippet_logic for snippet_id: $snippet_id<br />";
 	//$info .= "widget_uid: $widget_uid<br />";
 	
