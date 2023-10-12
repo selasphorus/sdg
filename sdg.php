@@ -2594,19 +2594,31 @@ function show_snippets ( $post_id = null ) {
 							$info .= count($urls)." urls<br />";
 							$matched_posts = array();
 							foreach ( $urls as $url ) {
-								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) { 
+								$slug = null;
+								$post_type = null;
+								$date_validation_regex = "\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}"; 
+								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
+									$post_type = "event";
+								} else if ( preg_match($date_validation_regex, $url) ) {
+									$post_type = "post";
+								}
+								//
+								if ( $post_type ) {
 									// Extract slug from path
 									// First, trim trailing slash, if any
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 									$url_bits = explode("/",$url); // The last bit is slug
 									$slug = end($url_bits);
 									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-									$info .= "event slug: $slug<br />";
-									// Look for matching post
-									$matched_post = get_page_by_path($slug, OBJECT, 'event');
+									$info .= "slug: $slug<br />";
 								} else {
 									$info .= "url: $url<br />";
-									// Look for matching post
+									
+								}
+								// Look for matching post
+								if ( $slug && $post_type ) {
+									$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+								} else {
 									$matched_post = get_page_by_path($url);
 								}
 								//
