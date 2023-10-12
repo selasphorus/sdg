@@ -2581,6 +2581,7 @@ function show_snippets ( $post_id = null ) {
 			$target_by_location = get_post_meta( $post_id, 'target_by_location', true );
 			*/
 			//
+			$info .= '<div class="code">';
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 				$$key = get_post_meta( $post_id, $key, true );
@@ -2592,6 +2593,7 @@ function show_snippets ( $post_id = null ) {
 					}
 				}
 			}
+			$info .= '</div>';
 			$info .= '</div>';
 		}
     }
