@@ -2703,7 +2703,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
 						update_field( $target_key, $arr_new, $snippet_id ); //update_field($selector, $value, $post_id);
 					} else {
-						$v .= "arr_new is empty<br />";
+						$info .= "arr_new is empty<br />";
 						$info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
 						$info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 					}
