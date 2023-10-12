@@ -2631,15 +2631,15 @@ function show_snippets ( $post_id = null ) {
 								}
 							}
 							// Save the posts to the snippet field
-							$update_field = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value);
-							$update_value = null;
-							if ( empty($update_field) ) {
+							$arr_old = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value);
+							$arr_new = null;
+							if ( empty($arr_old) ) {
 								// Save the array of matched posts to the target_by_post field
-								$update_value = $matched_posts;									
-							} else if ( is_array($update_field) ) {
-								$update_value = array_unique(array_merge($update_field, $matched_posts));
+								$arr_new = $matched_posts;									
+							} else if ( is_array($arr_old) ) {
+								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
 							}
-							if ( $update_value ) { update_field( $update_field, $update_value, $post_id ); } //update_field($selector, $value, $post_id);
+							if ( $arr_new ) { update_field( $key, $arr_new, $post_id ); } //update_field($selector, $value, $post_id);
 							
 						}
 					}
