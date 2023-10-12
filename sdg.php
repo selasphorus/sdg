@@ -2631,7 +2631,12 @@ function show_snippets ( $post_id = null ) {
 								}
 							}
 							// Save the posts to the snippet field
-							$arr_old = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value);
+							if ( $key == 'target_by_url' ) {
+								$target_key = 'target_by_post';
+							} else if ( $key == 'exclude_by_url' ) {
+								$target_key = 'exclude_by_post';
+							}
+							$arr_old = get_field( $target_key, $post_id, false ); //get_field($selector, $post_id, $format_value);
 							$arr_new = null;
 							if ( empty($arr_old) ) {
 								// Save the array of matched posts to the target_by_post field
@@ -2640,8 +2645,8 @@ function show_snippets ( $post_id = null ) {
 								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
 							}
 							if ( $arr_new ) { 
-								$info .= "about to update field '$key' with value(s): ".print_r($arr_new, true)."<br />";
-								update_field( $key, $arr_new, $post_id ); //update_field($selector, $value, $post_id);
+								$info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+								update_field( $target_key, $arr_new, $post_id ); //update_field($selector, $value, $post_id);
 							} else {
 								$info .= "arr_new is empty<br />";
 								$info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
