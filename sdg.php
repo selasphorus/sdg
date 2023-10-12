@@ -2594,10 +2594,12 @@ function show_snippets ( $post_id = null ) {
 							$info .= count($urls)." urls<br />";
 							foreach ( $urls as $url ) {
 								// Extract slug from path
+								// First, trim trailing slash, if any
+								if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 								$url_bits = explode("/",$url); // The last bit is slug
 								$slug = end($url_bits);
-								$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-								//$info .= "slug: $slug<br />";
+								//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+								$info .= "slug: $slug<br />";
 								// Look for matching post
 								//
 							}
