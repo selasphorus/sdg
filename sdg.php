@@ -2590,8 +2590,9 @@ function show_snippets ( $post_id = null ) {
 					$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
 					if ( $key == 'target_by_url' ) {
 						$urls = explode(" | ",$$key);
-						if ( is_array($urls)) { 
+						if ( is_array($urls)) {
 							$info .= count($urls)." urls<br />";
+							$matched_posts = array();
 							foreach ( $urls as $url ) {
 								// Extract slug from path
 								// First, trim trailing slash, if any
@@ -2601,10 +2602,21 @@ function show_snippets ( $post_id = null ) {
 								//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
 								$info .= "slug: $slug<br />";
 								// Look for matching post
-								//
+								$matched_post = get_page_by_path($slug);
+								if ($matched_post) {
+									$matched_post_id = $matched_post->ID;
+									$matched_posts[] = $matched_post_id;
+								}
+							}
+							// Save the posts to the snippet field: target_by_post
+							$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+							if ( empty($target_by_post) ) {
+								// Save the array of matched posts to the target_by_post field
+								// WIP 231011
 							}
 						}
 					}
+					$info .= "<br />";
 				}
 			}
 			$info .= '</div>';
