@@ -2596,7 +2596,7 @@ function show_snippets ( $post_id = null ) {
 							foreach ( $urls as $url ) {
 								$slug = null;
 								$post_type = null;
-								$date_validation_regex = "\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}"; 
+								$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
 								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
 									$post_type = "event";
 								} else if ( preg_match($date_validation_regex, $url) ) {
