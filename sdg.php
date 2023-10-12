@@ -2610,7 +2610,7 @@ function show_snippets ( $post_id = null ) {
 									$url_bits = explode("/",$url); // The last bit is slug
 									$slug = end($url_bits);
 									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-									$info .= "slug: $slug<br />";
+									$info .= "$post_type slug: $slug<br />";
 								} else {
 									$info .= "url: $url<br />";
 									
