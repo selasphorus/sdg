@@ -2465,24 +2465,26 @@ function show_snippets ( $atts = [] ) {
 	
 	foreach ( $snippets as $snippet_id ) {
 	
-		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$snippet_info = "";
+		//
+		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
+		$any_all = get_post_meta( $snippet_id, 'any_all', true );
+		// Run updates?
 		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
 		$info .= "<hr />";
 		
 		if ( $snippet_display == "show" ) {
+		
 			$snippets[] = $snippet_id;
+			
 		} else {
+		
 			// Conditional dislpay -- determine whether the given post should display this widget
-			//
+			$snippet_info .= "Analysing display conditions...<br />";
 			$title = get_the_title( $snippet_id );
 			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 			$snippet_info .= '<div class="snippet">';
 			$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br //>';
-			// There's got to be a more efficient way to do this...
-			/*
-			$target_by_taxonomy = get_post_meta( $snippet_id, 'target_by_taxonomy', true );
-			*/
 			//
 			$snippet_info .= '<div class="code">';
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
@@ -2496,22 +2498,23 @@ function show_snippets ( $atts = [] ) {
 						// WIP
 						$target_type = get_field($key, $snippet_id, false);
 						if ( $post_type == $target_type ) {
-							$snippet_info .= "this post matches target post_type<br />";
+							$snippet_info .= "This post matches target post_type.<br />";
 						}
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
-						// WIP
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( in_array($post_id, $target_posts) ) {
-							$snippet_info .= "this post is in the target_posts array<br />";
-							$snippets[] = $snippet_id;
-							break; // wip 231012
+							$snippet_info .= "This post is in the target_posts array<.br />";
+							// If it's for inclusion, add it to the array
+							if ( $key == 'target_by_post' ) { $snippets[] = $snippet_id; }
+							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
+							break;
 						} else {
-							$snippet_info .= "this post is NOT in the target_posts array<br />";
+							$snippet_info .= "This post is NOT in the target_posts array. Continue.<br />";
 						}
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
-						//$target_taxonomies = get_field($key, $snippet_id, false);
+						$target_taxonomies = get_field($key, $snippet_id, false);
 					} else if ( $key == 'target_by_location' ) {
 						// Is the given post in the right site location?
 						// WIP
@@ -2630,21 +2633,18 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	//
 	$info .= "<hr />";
-	$info .= ">> update_snippet_logic<br />";
-	$info .= '<div class="code">';
-	$info .= "snippet_id: $snippet_id<br />";
+	$info .= ">> update_snippet_logic for snippet_id: $snippet_id<br />";
 	//$info .= "widget_uid: $widget_uid<br />";
 	
 	// Get snippet logic
-	$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 			$info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
-			if ( $key == 'target_by_post_type' ) {
-				//
-			} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				// Legacy fields => ignore or translate
 				$urls = explode(" | ",$$key);
 				if ( is_array($urls)) {
@@ -2711,6 +2711,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					
 				}
+			} else if ( $key == 'target_by_post_type' ) {
+				//
 			} else if ( $key == 'target_by_taxonomy' ) {
 				// 
 				$conditions = explode(" | ",$$key);
@@ -2726,8 +2728,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 			}
 		}
 	}
-	
-	$info .= '</div>';
 	
 	return $info;
 	
