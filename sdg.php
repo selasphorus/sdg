@@ -2607,6 +2607,8 @@ function show_snippets ( $post_id = null ) {
 									$matched_post_id = $matched_post->ID;
 									$matched_posts[] = $matched_post_id;
 									$info .= "matching post found with id: $matched_post_id<br />";
+								} else {
+									$info .= "NO matching post found<br />";
 								}
 							}
 							// Save the posts to the snippet field
