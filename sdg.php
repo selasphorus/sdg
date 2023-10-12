@@ -2469,9 +2469,15 @@ function show_snippets ( $atts = [] ) {
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
+		//
+		$title = get_the_title( $snippet_id );
+		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+		//
+		$snippet_info .= '<div class="snippet">';
+		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
+		
 		// Run updates?
-		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
-		$info .= "<hr />";
+		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div><hr />'; }
 		
 		if ( $snippet_display == "show" ) {
 		
@@ -2480,10 +2486,6 @@ function show_snippets ( $atts = [] ) {
 		} else {
 		
 			// Conditional dislpay -- determine whether the given post should display this widget
-			$title = get_the_title( $snippet_id );
-			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
-			$snippet_info .= '<div class="snippet">';
-			$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
 			$snippet_info .= "Analysing display conditions...<br />";
 			//
 			$snippet_info .= '<div class="code">';
