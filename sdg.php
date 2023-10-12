@@ -2594,7 +2594,7 @@ function show_snippets ( $post_id = null ) {
 							$info .= count($urls)." urls<br />";
 							$matched_posts = array();
 							foreach ( $urls as $url ) {
-								if ( substr($url, 5) == "event" ) { 
+								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) { 
 									// Extract slug from path
 									// First, trim trailing slash, if any
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
