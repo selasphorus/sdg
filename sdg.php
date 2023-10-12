@@ -2500,7 +2500,7 @@ function show_snippets ( $atts = [] ) {
 						// Is the given post targetted or excluded?
 						// WIP
 						$target_posts = get_field($key, $snippet_id, false);
-						if ( in_array($target_posts) ) {
+						if ( in_array($post_id, $target_posts) ) {
 							$snippet_info .= "this post is in the target_posts array<br />";
 						} else {
 							$snippet_info .= "this post is NOT in the target_posts array<br />";
