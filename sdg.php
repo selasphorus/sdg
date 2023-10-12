@@ -2643,7 +2643,10 @@ function show_snippets ( $post_id = null ) {
 								$info .= "about to update field '$key' with value(s): ".print_r($arr_new, true)."<br />";
 								update_field( $key, $arr_new, $post_id ); //update_field($selector, $value, $post_id);
 							} else {
-								//
+								$info .= "arr_new is empty<br />";
+								$info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
+								$info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
+								
 							}
 							
 						}
