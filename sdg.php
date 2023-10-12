@@ -2467,7 +2467,7 @@ function show_snippets ( $atts = [] ) {
 	
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$snippet_info = "";
-		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</code>'; }
+		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
 		$info .= "<hr />";
 		
 		if ( $snippet_display == "show" ) {
