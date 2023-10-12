@@ -2629,6 +2629,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 	
 	//
+	$info .= "<hr />";
+	$info .= "update_snippet_logic<br />";
 	$info .= '<div class="code">';
 	$info .= "snippet_id: $snippet_id<br />";
 	//$info .= "widget_uid: $widget_uid<br />";
