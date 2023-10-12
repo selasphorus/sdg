@@ -2587,7 +2587,7 @@ function show_snippets ( $post_id = null ) {
 				$$key = get_post_meta( $post_id, $key, true );
 				//$info .= "key: $key => ".$$key."<br />";
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-					$info .= "key: $key => ".$$key." [count: ".count($$key)."]<br />";
+					$info .= "key: $key => ".print_r($$key, true)." [count: ".count($$key)."]<br />";
 					if ( $key == 'target_by_post' ) {
 					
 					}
