@@ -2680,9 +2680,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ($matched_post) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
-							$snippet_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+							$info .= "&rarr; matching post found with id: $matched_post_id<br />";
 						} else {
-							$snippet_info .= "&rarr; NO matching post found<br />";
+							$info .= "&rarr; NO matching post found<br />";
 						}
 					}
 					// Save the posts to the snippet field
