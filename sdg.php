@@ -2596,7 +2596,8 @@ function show_snippets ( $post_id = null ) {
 								// Extract slug from path
 								$url_bits = explode("/",$url); // The last bit is slug
 								$slug = end($url_bits);
-								$info .= "slug: $slug<br />";
+								$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+								//$info .= "slug: $slug<br />";
 								// Look for matching post
 								//
 							}
