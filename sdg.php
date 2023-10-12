@@ -2567,13 +2567,26 @@ function show_snippets ( $post_id = null ) {
 		if ( $snippet_display == "show" ) {
 			$snippets[] = $post_id;
 		} else {
-			$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+			// There's got to be a more efficient way to do this...
+			/*$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
 			$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
 			$target_by_url = get_post_meta( $post_id, 'target_by_url', true );
 			$exclude_by_url = get_post_meta( $post_id, 'exclude_by_url', true );
 			$target_by_taxonomy = get_post_meta( $post_id, 'target_by_taxonomy', true );
 			$target_by_post_type = get_post_meta( $post_id, 'target_by_post_type', true );
 			$target_by_location = get_post_meta( $post_id, 'target_by_location', true );
+			*/
+			//
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+			foreach ( $meta_keys as $key ) {
+				$$key = get_post_meta( $post_id, $key, true );
+				if ( !empty($$key) && is_array($$key) && count($$key) == 1 && !empty($$key[0]) ) {
+					$info .= "key: $key => $$key<br />";
+					if ( $key == 'target_by_post' ) {
+					
+					}
+				}
+			}
 		}
     }
 	
@@ -2607,10 +2620,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 	$ts_info = "";
 	
 	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
-	$snippet = get_post ( $snippet_id );
+	//$snippet = get_post ( $snippet_id );
+	$widget_uid = get_post_meta( $post_id, 'widget_uid', true );
+	
 	//
 	$info .= '<div class="code">';
 	$info .= "snippet_id: $snippet_id<br />";
+	//$info .= "widget_uid: $widget_uid<br />";
 	
 	// Get snippet logic
 	/*$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
@@ -2628,10 +2644,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
 			if ( !empty($value) ) {
 				if ( is_array($value) && count($value) == 1 && empty($value[0]) ) {
-				
+					$info .= "empty!";
 				} else {
-					if ( empty($value[0]) ) { $info .= "empty!"; }
-					$info .= "<code>$key => ".print_r($value, true)."</code><br />";
+					$info .= "$key => ".print_r($value, true)."<br />";
+					//$info .= "<code>$key => ".print_r($value, true)."</code><br />";
 				}				
 			}		
 		}
