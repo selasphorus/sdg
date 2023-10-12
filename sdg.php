@@ -2639,7 +2639,12 @@ function show_snippets ( $post_id = null ) {
 							} else if ( is_array($arr_old) ) {
 								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
 							}
-							if ( $arr_new ) { update_field( $key, $arr_new, $post_id ); } //update_field($selector, $value, $post_id);
+							if ( $arr_new ) { 
+								$info .= "about to update field '$key' with value(s): ".print_r($arr_new, true)."<br />";
+								update_field( $key, $arr_new, $post_id ); //update_field($selector, $value, $post_id);
+							} else {
+								//
+							}
 							
 						}
 					}
