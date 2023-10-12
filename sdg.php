@@ -2478,7 +2478,7 @@ function show_snippets ( $atts = [] ) {
 			$title = get_the_title( $snippet_id );
 			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 			$snippet_info .= '<div class="snippet">';
-			$snippet_info .= $title.' ['.$widget_uid.']<br //>';
+			$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br //>';
 			// There's got to be a more efficient way to do this...
 			/*
 			$target_by_taxonomy = get_post_meta( $snippet_id, 'target_by_taxonomy', true );
@@ -2589,6 +2589,7 @@ function show_snippets ( $atts = [] ) {
 			$snippet_info .= '</div>'; // <div class="code">
 			$snippet_info .= '</div>'; // <div class="snippet">
 		} // END $snippet_display == "selected"
+		$info .= "<hr />";
 		$info .= $snippet_info;
     }
     
