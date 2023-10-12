@@ -2499,7 +2499,12 @@ function show_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
 						// WIP
-						//$target_posts = get_field($key, $snippet_id, false);
+						$target_posts = get_field($key, $snippet_id, false);
+						if ( in_array($target_posts) ) {
+							$snippet_info .= "this post is in the target_posts array<br />";
+						} else {
+							$snippet_info .= "this post is NOT in the target_posts array<br />";
+						}
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						//$target_taxonomies = get_field($key, $snippet_id, false);
