@@ -2621,11 +2621,15 @@ function show_snippets ( $post_id = null ) {
 							// Save the posts to the snippet field
 							// target_by_post
 							if ( $key == 'target_by_url' ) {
-								$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+								//$target_by_post = get_post_meta( $post_id, 'target_by_post', true );
+								$target_by_post = get_field( 'target_by_post', $post_id, false ); //get_field($selector, $post_id, $format_value);
 								if ( empty($target_by_post) ) {
 									// Save the array of matched posts to the target_by_post field
-									// WIP 231011
+									$update_value = $matched_posts;									
+								} else {
+									$update_value = array_merge($target_by_post, $matched_posts);
 								}
+								update_field( 'target_by_post', $update_value, $post_id ); //update_field($selector, $value, $post_id);
 							} else if ( $key == 'exclude_by_url' ) {
 								// OR: do we make one combined field -- target_by_post to include array e.g. (46, 48, -49...)
 								$exclude_by_post = get_post_meta( $post_id, 'exclude_by_post', true );
