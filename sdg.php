@@ -2630,6 +2630,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( is_array($value) && count($value) == 1 && empty($value[0]) ) {
 				
 				} else {
+					if ( empty($value[0]) ) { $info .= "empty!"; }
 					$info .= "<code>$key => ".print_r($value, true)."</code><br />";
 				}				
 			}		
