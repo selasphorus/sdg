@@ -2884,12 +2884,15 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$arr_logic = get_option('widget_logic_options');
 	foreach ( $arr_option as $id => $arr_widget ) {
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
-		$info .= "widget: ".$option_name."-".$id."<br />";
+		$uid = $option_name."-".$id;
+		$info .= "widget: ".$uid."<br />";
 		$info .= "title: ".$arr_widget['title']."<br />";
 		$info .= "text: <pre>".$arr_widget['text']."</pre><br />";
 		//title, text, filter, visual, csb_visibility, csb_clone
 		// Get widget logic
-		
+		if ( $arr_logic[$uid] ) {
+			$info .= "logic: <pre>".$arr_logic[$uid]."</pre><br />";
+		}
 		/*
 		//
 		$xml .= "&lt;option&gt;<br />";
