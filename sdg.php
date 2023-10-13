@@ -2477,7 +2477,7 @@ function show_snippets ( $atts = [] ) {
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
 		
 		// Run updates?
-		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div><hr />'; }
+		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
 		
 		if ( $snippet_display == "show" ) {
 		
