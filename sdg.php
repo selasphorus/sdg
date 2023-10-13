@@ -2747,7 +2747,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//
 			} else if ( $key == 'target_by_taxonomy' ) {
 				// 
-				$conditions = explode("\n",$$key);
+				$conditions = explode(" | ",$$key);
+				//
+				$$key = str_replace(" | ","\n",$$key);
+				update_field( $key, $$key, $snippet_id );
 				if ( is_array($conditions)) {
 					$info .= count($conditions)." conditions<br />";
 					$matched_posts = array();
