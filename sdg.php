@@ -2427,6 +2427,9 @@ function show_snippets ( $atts = [] ) {
     
     // Extract
 	extract( $args );
+	
+	//
+	if ( $dev ) { $info .= '<h2>Snippets -- WIP</h2>'; }
     
     //
 	if ( $post_id === null ) { return false; }
@@ -2783,6 +2786,8 @@ function widget_logic_tmp ( $atts = [] ) {
     
     // Extract
 	extract( $args );
+	//
+	$info .= '<h2>Widget Logic -- WIP</h2>';
 	
 	$arr_logic = get_option('widget_logic_options');
 	//
