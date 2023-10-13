@@ -2852,6 +2852,107 @@ function widget_logic_tmp ( $atts = [] ) {
 	return $info;	
 }
 
+add_shortcode('widgets_to_snippets', 'convert_widgets_to_snippets');
+function convert_widgets_to_snippets ( $atts = [] ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: convert_widgets_to_snippets", $do_log );
+    
+    $info = "";
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+        'option_name'  => 'widget_text', // widget_custom_html        
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	$xml = "&lt;options&gt;<br />";
+	//$xml .= "<br />";
+	$i = 0;
+	$option_arr = get_option($option_name);
+	foreach ( $option_arr as $widget => $conditions ) {
+		$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
+		/*
+		//
+		$xml .= "&lt;option&gt;<br />";
+		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
+		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";		
+		foreach ( $conditions as $condition => $subconditions ) {
+			$condition_xml = "";
+			$subs_xml = "";
+			$subs_empty = true;
+			$check_wordcount = false;
+			$con_class = "t1 condition";
+			if ( is_array($subconditions) ) {
+				//if ( count($subconditions) == 1 ) {
+					foreach ( $subconditions as $k => $v ) {
+						if ( $v || $show_empties == "yes" ) {
+							$subs_class = "t2 subcondition";
+							// Special case: word_count
+							if ( $condition == "word_count" ) {
+								if ( $k == "check_wordcount" && !empty($v) ) {
+									$check_wordcount = true;
+									$subs_empty = false;
+								} else if ( $check_wordcount && !empty($v) ) {
+									//
+								} else {
+									$subs_class .= " empty";
+								}
+							} else if ( empty($v) ) { 
+								$subs_class .= " empty";
+							} else {
+								$subs_empty = false;
+							}
+							$subs_xml .= '<span class="'.$subs_class.'">';
+							//$xml .= "k: ".$k." => v: ".$v."<br />";
+							$subs_xml .= "&lt;".$k."&gt;";
+							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
+								//$subs_xml .= "<pre>";
+								$subs_xml .= "&lt;![CDATA[";
+								$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
+							}
+							$subs_xml .= $v;
+							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
+								$subs_xml .= "]]&gt;";
+								//$subs_xml .= "</pre>";
+							}
+							$subs_xml .= "&lt;/".$k."&gt;";
+							$subs_xml .= '</span>';
+						}
+					}
+				//}
+			} else {
+				$subs_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
+			}
+			if ( !$subs_empty || $show_empties == "yes" ) {
+				if ( $subs_empty ) { $con_class .= " empty"; }
+				$condition_xml .= '<span class="'.$con_class.'">'."&lt;".$condition."&gt;".'</span>';
+				$condition_xml .= $subs_xml;
+				$condition_xml .= '<span class="'.$con_class.'">'."&lt;/".$condition."&gt;".'</span>';
+			}
+			//
+			$xml .= $condition_xml;
+		}
+		//$xml .= print_r($option,true);
+		$xml .= "&lt;/option&gt;<br />";
+		//$xml .= "<br />";
+		$i++;
+		if ( $i >= $limit ) { break; } // tft
+		*/
+	} // end foreach
+	$xml .= "&lt;/options&gt;<br />";
+	//
+	//$info .= $xml; //$info .= "<pre>".$xml."</pre>"; //$info .= $xml;
+	//
+	$info = '<div class="code">'.$info.'</div>';
+	return $info;	
+}
+
 /*** MISC ***/
 
 function surprise() {
