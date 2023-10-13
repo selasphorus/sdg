@@ -2649,7 +2649,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// Legacy fields => ignore or translate
 				$urls = explode(" | ",$$key);
 				//
-				$$key = str_replace(" | ",'\n',$$key);
+				$$key = str_replace(" | ","\n",$$key);
 				update_field( $key, $$key, $snippet_id );
 				//
 				if ( is_array($urls)) {
