@@ -207,6 +207,7 @@ body.admin-bar .msg_bar_close {
 .stcdev .devinfo,
 .stcdev .dev-only {
 	display: block;
+	margin: 0.5rem 0;
 }
 
 .troubleshooting.inline {
