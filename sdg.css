@@ -93,6 +93,9 @@ span.t2 {
 
 .code {
 	font-family: monospace;
+	padding: 0.5rem;
+    margin: 0.5rem 0;
+    border: 1px solid var(--ltgrey);
 }
 
 .bold {
