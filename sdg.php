@@ -2882,9 +2882,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$i = 0;
 	$arr_option = get_option($option_name);
 	$arr_logic = get_option('widget_logic_options');
+	$widget_type = str_replace('widget_','',$option_name);
 	foreach ( $arr_option as $id => $arr_widget ) {
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
-		$uid = $option_name."-".$id;
+		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
 		$info .= "title: ".$arr_widget['title']."<br />";
 		$info .= "text: <pre>".$arr_widget['text']."</pre><br />";
