@@ -2874,9 +2874,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$xml = "&lt;options&gt;<br />";
 	//$xml .= "<br />";
 	$i = 0;
-	$option_arr = get_option($option_name);
-	foreach ( $option_arr as $widget => $conditions ) {
-		$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
+	$arr_option = get_option($option_name);
+	foreach ( $arr_option as $id => $arr_widget ) {
+		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
+		$info .= "widget: ".$option_name."-".$id."<br />";
+		$info .= "title: ".$arr_widget['title']."<br />";
+		$info .= "text: <pre>".$arr_widget['text']."</pre><br />";
+		//title, text, filter, visual, csb_visibility, csb_clone
 		/*
 		//
 		$xml .= "&lt;option&gt;<br />";
