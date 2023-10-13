@@ -2529,7 +2529,7 @@ function show_snippets ( $atts = [] ) {
 								$tax_term = substr($term_pair,strpos($term_pair,":")+1,strlen($term_pair));
 								$snippet_info .= "taxonomy: ".$taxonomy."<br />";
 								$snippet_info .= "tax_term: ".$tax_term."<br />";
-								if (has_term( $tax_term, $taxonomy, $post_id ) {
+								if ( has_term( $tax_term, $taxonomy, $post_id ) ) {
 									$snippet_info .= "This post has the $taxonomy term '$tax_term'<br />";
 								}
 							}
