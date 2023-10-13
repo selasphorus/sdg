@@ -2930,7 +2930,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$info .= "subconditions: <br />";
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
-					$info .= "k: ".$k." => v: ".$v."<br />";
+					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
 					/*if ( $v ) {
 						// Special case: word_count
