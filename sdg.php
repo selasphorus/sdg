@@ -2885,6 +2885,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$conditions = array();
 	//
 	foreach ( $arr_option as $id => $arr_widget ) {
+		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
@@ -2943,13 +2944,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			*/
 		} // END foreach ( $conditions as $condition => $subconditions )
 		
+		$info .= '</div>';
 		$i++;
 		if ( $i >= $limit ) { break; } 
 		
 	} // end foreach
-	//
-	//
-	$info = '<div class="code">'.$info.'</div>';
+	
 	return $info;	
 }
 
