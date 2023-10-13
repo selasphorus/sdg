@@ -1609,9 +1609,9 @@ function get_post_resources ( $post_id = null ) {
             $attachment_title = get_the_title( $attachment_id );
             
             // TODO: get/set via options? -- these are STC-specific naming adjustments
-            if ( strpos($attachment_title, 'Leaflet' ) !== false && $post_type == 'event' ) {
+            if ( strpos($attachment_title, 'Leaflet') !== false && $post_type == 'event' ) {
                 $attachment_title = 'Leaflet';
-            } else if ( strpos($attachment_title, 'Program' ) !== false && $post_type == 'event' ) {
+            } else if ( strpos($attachment_title, 'Program') !== false && $post_type == 'event' ) {
                 $attachment_title = 'Program';
             }
             
@@ -2523,8 +2523,12 @@ function show_snippets ( $atts = [] ) {
 						$terms = explode("\n",$$key);
 						if ( is_array($terms)) {
 							$snippet_info .= count($terms)." terms<br />";
-							foreach ( $terms as $term ) {
-								$snippet_info .= "term: ".print_r($term, true)."<br />";
+							foreach ( $terms as $term_pair ) {
+								$snippet_info .= "term_pair: ".print_r($term_pair, true)."<br />";
+								$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
+								$tax_term = substr($term_pair,strpos($term_pair,":"),strlen($term_pair));
+								$snippet_info .= "taxonomy: ".$taxonomy."<br />";
+								$snippet_info .= "tax_term: ".$tax_term."<br />";
 								/*if (has_term( 'webcasts', 'event-categories', $post_id ) {
 							
 								}*/
