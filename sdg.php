@@ -2416,7 +2416,7 @@ function show_snippets ( $atts = [] ) {
     // Init vars
     $info = "";
 	$ts_info = "";
-	$post_snippets = array();
+	$post_snippets = array(); // this array will containing snippets matched for display on the given post
     
     $args = shortcode_atts( array(
     	'post_id' => get_the_ID(),
@@ -2520,11 +2520,15 @@ function show_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
-						foreach ( $target_taxonomies as $term ) {
-							$snippet_info .= "term: ".print_r($term, true)."<br />";
-							/*if (has_term( 'webcasts', 'event-categories', $post_id ) {
+						$terms = explode("\n",$$key);
+						if ( is_array($terms)) {
+							$snippet_info .= count($terms)." terms<br />";
+							foreach ( $terms as $term ) {
+								$snippet_info .= "term: ".print_r($term, true)."<br />";
+								/*if (has_term( 'webcasts', 'event-categories', $post_id ) {
 							
-							}*/
+								}*/
+							}
 						}
 						//
 						
@@ -2739,7 +2743,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//
 			} else if ( $key == 'target_by_taxonomy' ) {
 				// 
-				$conditions = explode(" | ",$$key);
+				$conditions = explode("\n",$$key);
 				if ( is_array($conditions)) {
 					$info .= count($conditions)." conditions<br />";
 					$matched_posts = array();
