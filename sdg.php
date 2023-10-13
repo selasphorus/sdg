@@ -2699,8 +2699,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($arr_old) ) {
 						// Save the array of matched posts to the target_by_post field
 						$arr_new = $matched_posts;									
-					} else if ( is_array($arr_old) && $arr_old !== $matched_posts ) {
-						$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+					} else if ( is_array($arr_old) ) {
+						if ( $arr_old == $matched_posts ) {
+							$info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
+						} else {
+							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+						}
+						
 					}
 					if ( $arr_new ) { 
 						$info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
