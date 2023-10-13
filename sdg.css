@@ -91,7 +91,8 @@ span.t2 {
 	opacity: 0.5;
 }
 
-.code {
+.code,
+div.code {
 	font-family: monospace;
 	padding: 0.5rem;
     margin: 0.5rem 0;
