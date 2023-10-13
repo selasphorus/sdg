@@ -2897,6 +2897,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		// Get widget logic -- WIP
 		if ( isset($arr_logic[$uid]) ) {
+			$info .= "... found widget logic...<br />";
 			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
 			$conditions = $arr_logic[$uid];
 		}
@@ -2907,6 +2908,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$subs_info = "";
 			$subs_empty = true;
 			$check_wordcount = false;
+			//
+			$info .= "condition: ".$condition."<br />";
 			/*
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
