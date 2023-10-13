@@ -2895,7 +2895,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		
 		// Get widget logic -- WIP
-		if ( $arr_logic[$uid] ) {
+		if ( isset($arr_logic[$uid]) ) {
 			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
 			$conditions = $arr_logic[$uid];
 		}
