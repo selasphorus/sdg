@@ -2402,7 +2402,7 @@ function sdg_post_type_access_limiter(){
 }
 
 
-/*** WIDGETS >> SNIPPETS ***/
+/*** WIDGETS >> SNIPPETS -- WIP! ***/
 
 add_shortcode('snippets', 'show_snippets');
 function show_snippets ( $atts = [] ) {
@@ -2635,7 +2635,6 @@ function show_snippets ( $atts = [] ) {
 	
 }
 
-// WIP!
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
 function update_snippet_logic ( $snippet_id = null ) {
 
@@ -2906,6 +2905,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$widget_type = str_replace('widget_','',$option_name);
 	$conditions = array();
 	//
+	$info .= '<h2>Convert Widgets to Snippets -- WIP</h2>';
+	//
 	foreach ( $arr_option as $id => $arr_widget ) {
 		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
@@ -2981,6 +2982,31 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	} // end foreach
 	
 	return $info;	
+}
+
+function convert_cs_sidebars () {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: convert_widgets_to_snippets", $do_log );
+    
+    $info = "";
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	$info = "";
+	$i = 0;
+	$arr_option = get_option('cs_sidebars');
+	
+	//....
+	
 }
 
 /*** MISC ***/
