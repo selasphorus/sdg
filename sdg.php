@@ -2473,7 +2473,7 @@ function show_snippets ( $atts = [] ) {
 		$title = get_the_title( $snippet_id );
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		//
-		$snippet_info .= '<div class="dev">';
+		$snippet_info .= '<div class="troubleshooting">';
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
 		
 		// Run updates?
