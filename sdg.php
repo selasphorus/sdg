@@ -2888,11 +2888,11 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
 		$info .= "title: ".$arr_widget['title']."<br />";
-		$info .= "text: <pre>".$arr_widget['text']."</pre><br />";
+		$info .= "text:".'<div class="">'.$arr_widget['text']."</div><br />";
 		//title, text, filter, visual, csb_visibility, csb_clone
 		// Get widget logic
 		if ( $arr_logic[$uid] ) {
-			$info .= "logic: <pre>".$arr_logic[$uid]."</pre><br />";
+			$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
 		}
 		/*
 		//
