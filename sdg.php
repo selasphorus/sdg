@@ -2699,7 +2699,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($arr_old) ) {
 						// Save the array of matched posts to the target_by_post field
 						$arr_new = $matched_posts;									
-					} else if ( is_array($arr_old) ) {
+					} else if ( is_array($arr_old) && $arr_old !== $matched_posts ) {
 						$arr_new = array_unique(array_merge($arr_old, $matched_posts));
 					}
 					if ( $arr_new ) { 
