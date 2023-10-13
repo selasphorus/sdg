@@ -2500,6 +2500,7 @@ function show_snippets ( $atts = [] ) {
 						$target_type = get_field($key, $snippet_id, false);
 						if ( $post_type == $target_type ) {
 							$snippet_info .= "This post matches target post_type.<br />";
+							if ( $any_all == "any" ) { $snippets[] = $snippet_id; break; }
 						}
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
@@ -2507,7 +2508,10 @@ function show_snippets ( $atts = [] ) {
 						if ( in_array($post_id, $target_posts) ) {
 							$snippet_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
-							if ( $key == 'target_by_post' ) { $snippets[] = $snippet_id; }
+							if ( $key == 'target_by_post' ) {
+								if ( $any_all == "any" ) { $snippets[] = $snippet_id; break; }
+								// ?
+							}
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
 							break;
 						} else {
@@ -2516,9 +2520,19 @@ function show_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
+						foreach ( $target_taxonomies as $term ) {
+							$snippet_info .= "term: ".print_r($term, true)."<br />";
+							/*if (has_term( 'webcasts', 'event-categories', $post_id ) {
+							
+							}*/
+						}
+						//
+						
 					} else if ( $key == 'target_by_location' ) {
 						// Is the given post in the right site location?
+						$target_locations = get_field($key, $snippet_id, false);
 						// WIP
+						$snippet_info .= "target_locations: ".print_r($target_locations, true)."<br />";
 					} /*else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 						// Legacy fields => ignore or translate >> moved to update_snippet_logic fcn
 						$urls = explode(" | ",$$key);
@@ -2894,6 +2908,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
 		// TODO: check if fields are same for e.g. custom_html
 		
+		// TODO: check to see if snippet already exists with matching uid
+		// If no match, create new snippet post record with title and text as above
+		// If match, check for changes?
 		
 		// Get widget logic -- WIP
 		if ( isset($arr_logic[$uid]) ) {
@@ -2914,6 +2931,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
 					$info .= "k: ".$k." => v: ".$v."<br />";
+					// WIP 231012 -- next step: extract and save data
 					/*if ( $v ) {
 						// Special case: word_count
 						if ( $condition == "word_count" ) {
