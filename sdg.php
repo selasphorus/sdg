@@ -2416,7 +2416,7 @@ function show_snippets ( $atts = [] ) {
     // Init vars
     $info = "";
 	$ts_info = "";
-	$snippets = array();
+	$post_snippets = array();
     
     $args = shortcode_atts( array(
     	'post_id' => get_the_ID(),
@@ -2481,7 +2481,7 @@ function show_snippets ( $atts = [] ) {
 		
 		if ( $snippet_display == "show" ) {
 		
-			$snippets[] = $snippet_id;
+			$post_snippets[] = $snippet_id;
 			
 		} else {
 		
@@ -2500,7 +2500,7 @@ function show_snippets ( $atts = [] ) {
 						$target_type = get_field($key, $snippet_id, false);
 						if ( $post_type == $target_type ) {
 							$snippet_info .= "This post matches target post_type.<br />";
-							if ( $any_all == "any" ) { $snippets[] = $snippet_id; break; }
+							if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
 						}
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
@@ -2509,7 +2509,7 @@ function show_snippets ( $atts = [] ) {
 							$snippet_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' ) {
-								if ( $any_all == "any" ) { $snippets[] = $snippet_id; break; }
+								if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
 								// ?
 							}
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
@@ -2615,7 +2615,7 @@ function show_snippets ( $atts = [] ) {
     $info .= "<hr /></hr />";
 	
 	// Compile info for the matching snippets for display
-	foreach ( $snippets as $snippet_id ) {
+	foreach ( $post_snippets as $snippet_id ) {
 		$title = get_the_title( $snippet_id );
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$info .= '<div class="snippet">';
