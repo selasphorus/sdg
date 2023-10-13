@@ -2877,94 +2877,77 @@ function convert_widgets_to_snippets ( $atts = [] ) {
     // Extract
 	extract( $args );
 	
-	$xml = "&lt;options&gt;<br />";
-	//$xml .= "<br />";
+	$info = "";
 	$i = 0;
 	$arr_option = get_option($option_name);
 	$arr_logic = get_option('widget_logic_options');
 	$widget_type = str_replace('widget_','',$option_name);
+	$conditions = array();
+	//
 	foreach ( $arr_option as $id => $arr_widget ) {
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
 		$info .= "title: ".$arr_widget['title']."<br />";
 		$info .= "text:".'<div class="">'.$arr_widget['text']."</div><br />";
-		//title, text, filter, visual, csb_visibility, csb_clone
-		// Get widget logic
+		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
+		// TODO: check if fields are same for e.g. custom_html
+		
+		
+		// Get widget logic -- WIP
 		if ( $arr_logic[$uid] ) {
-			$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
+			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
+			$conditions = $arr_logic[$uid];
 		}
-		/*
-		//
-		$xml .= "&lt;option&gt;<br />";
-		$xml .= '<span class="t1 widget_uid bold">'."&lt;widget&gt;".$widget."&lt;/widget&gt;".'</span>';
-		//$xml .= "&lt;index&gt;".$key."&lt;/index&gt;<br />";		
+		// Loop through the conditions and save them to the snippet ACF fields, as applicable
+		
 		foreach ( $conditions as $condition => $subconditions ) {
-			$condition_xml = "";
-			$subs_xml = "";
+			$condition_info = "";
+			$subs_info = "";
 			$subs_empty = true;
 			$check_wordcount = false;
-			$con_class = "t1 condition";
+			/*
 			if ( is_array($subconditions) ) {
-				//if ( count($subconditions) == 1 ) {
-					foreach ( $subconditions as $k => $v ) {
-						if ( $v || $show_empties == "yes" ) {
-							$subs_class = "t2 subcondition";
-							// Special case: word_count
-							if ( $condition == "word_count" ) {
-								if ( $k == "check_wordcount" && !empty($v) ) {
-									$check_wordcount = true;
-									$subs_empty = false;
-								} else if ( $check_wordcount && !empty($v) ) {
-									//
-								} else {
-									$subs_class .= " empty";
-								}
-							} else if ( empty($v) ) { 
-								$subs_class .= " empty";
-							} else {
+				foreach ( $subconditions as $k => $v ) {
+					if ( $v ) {
+						// Special case: word_count
+						if ( $condition == "word_count" ) {
+							if ( $k == "check_wordcount" && !empty($v) ) {
+								$check_wordcount = true;
 								$subs_empty = false;
+							} else if ( $check_wordcount && !empty($v) ) {
+								//
 							}
-							$subs_xml .= '<span class="'.$subs_class.'">';
-							//$xml .= "k: ".$k." => v: ".$v."<br />";
-							$subs_xml .= "&lt;".$k."&gt;";
-							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
-								//$subs_xml .= "<pre>";
-								$subs_xml .= "&lt;![CDATA[";
-								$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
-							}
-							$subs_xml .= $v;
-							if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
-								$subs_xml .= "]]&gt;";
-								//$subs_xml .= "</pre>";
-							}
-							$subs_xml .= "&lt;/".$k."&gt;";
-							$subs_xml .= '</span>';
+						} else if ( empty($v) ) { 
+							//
+						} else {
+							$subs_empty = false;
 						}
+						//$info .= "k: ".$k." => v: ".$v."<br />";
+						
+						if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
+							//$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
+						}
+						$subs_info .= $v;
 					}
-				//}
+				}
 			} else {
-				$subs_xml .= '<span class="t2 subcondition">'.$subconditions.'</span>';
+				//$subs_info .= '<span class="t2 subcondition">'.$subconditions.'</span>';
 			}
-			if ( !$subs_empty || $show_empties == "yes" ) {
-				if ( $subs_empty ) { $con_class .= " empty"; }
-				$condition_xml .= '<span class="'.$con_class.'">'."&lt;".$condition."&gt;".'</span>';
-				$condition_xml .= $subs_xml;
-				$condition_xml .= '<span class="'.$con_class.'">'."&lt;/".$condition."&gt;".'</span>';
+			if ( !$subs_empty ) {
+				$condition_info .= $subs_info;
+				$condition_info .= $condition;
 			}
 			//
-			$xml .= $condition_xml;
-		}
-		//$xml .= print_r($option,true);
-		$xml .= "&lt;/option&gt;<br />";
-		//$xml .= "<br />";
+			$info .= $condition_info;
+			*/
+		} // END foreach ( $conditions as $condition => $subconditions )
+		
 		$i++;
-		if ( $i >= $limit ) { break; } // tft
-		*/
+		if ( $i >= $limit ) { break; } 
+		
 	} // end foreach
-	$xml .= "&lt;/options&gt;<br />";
 	//
-	//$info .= $xml; //$info .= "<pre>".$xml."</pre>"; //$info .= $xml;
 	//
 	$info = '<div class="code">'.$info.'</div>';
 	return $info;	
