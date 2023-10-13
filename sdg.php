@@ -2910,10 +2910,11 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$check_wordcount = false;
 			//
 			$info .= "condition: ".$condition."<br />";
-			/*
+			$info .= "subconditions: <br />";
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
-					if ( $v ) {
+					$info .= "k: ".$k." => v: ".$v."<br />";
+					/*if ( $v ) {
 						// Special case: word_count
 						if ( $condition == "word_count" ) {
 							if ( $k == "check_wordcount" && !empty($v) ) {
@@ -2927,16 +2928,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						} else {
 							$subs_empty = false;
 						}
-						//$info .= "k: ".$k." => v: ".$v."<br />";
+						//
 						
 						if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
 							//$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
 						}
 						$subs_info .= $v;
-					}
+					}*/
 				}
 			} else {
-				//$subs_info .= '<span class="t2 subcondition">'.$subconditions.'</span>';
+				$info .= $subconditions."<br />";
 			}
 			if ( !$subs_empty ) {
 				$condition_info .= $subs_info;
@@ -2944,7 +2945,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			}
 			//
 			$info .= $condition_info;
-			*/
+			
 		} // END foreach ( $conditions as $condition => $subconditions )
 		
 		$info .= '</div>';
