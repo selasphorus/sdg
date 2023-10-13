@@ -2888,8 +2888,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
-		if ( $arr_widget['title'] ) { $info .= "title: ".$arr_widget['title']."<br />"; }
-		if ( $arr_widget['text'] ) { $info .= "text:".'<div class="">'.$arr_widget['text']."</div><br />"; }
+		if ( isset($arr_widget['title']) ) { $info .= "title: ".$arr_widget['title']."<br />"; }
+		if ( isset($arr_widget['text']) ) { $info .= "text:".'<div class="">'.$arr_widget['text']."</div><br />"; }
 		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
 		// TODO: check if fields are same for e.g. custom_html
 		
