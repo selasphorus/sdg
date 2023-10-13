@@ -2927,7 +2927,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$check_wordcount = false;
 			//
 			$info .= "condition: ".$condition."<br />";
-			$info .= "subconditions: <br />";
+			//$info .= "subconditions: <br />";
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
