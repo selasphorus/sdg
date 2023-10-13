@@ -2526,12 +2526,12 @@ function show_snippets ( $atts = [] ) {
 							foreach ( $terms as $term_pair ) {
 								$snippet_info .= "term_pair: ".print_r($term_pair, true)."<br />";
 								$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
-								$tax_term = substr($term_pair,strpos($term_pair,":"),strlen($term_pair));
+								$tax_term = substr($term_pair,strpos($term_pair,":")+1,strlen($term_pair));
 								$snippet_info .= "taxonomy: ".$taxonomy."<br />";
 								$snippet_info .= "tax_term: ".$tax_term."<br />";
-								/*if (has_term( 'webcasts', 'event-categories', $post_id ) {
-							
-								}*/
+								if (has_term( $tax_term, $taxonomy, $post_id ) {
+									$snippet_info .= "This post has the $taxonomy term '$tax_term'<br />";
+								}
 							}
 						}
 						//
