@@ -2447,7 +2447,7 @@ function show_snippets ( $atts = [] ) {
 		//'relation' => 'AND',
 		'snippet_display' => array(
 			'key' => 'snippet_display',
-			'value' => array('show', 'selected'),
+			'value' => array('show', 'selected', 'notselected'),
 			'compare' => 'IN',
 		),/*
 		'number' => array(
@@ -2474,7 +2474,7 @@ function show_snippets ( $atts = [] ) {
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		//
 		$snippet_info .= '<div class="troubleshooting">';
-		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
+		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display.']<br />';
 		
 		// Run updates?
 		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
