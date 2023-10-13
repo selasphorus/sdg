@@ -2477,7 +2477,7 @@ function show_snippets ( $atts = [] ) {
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.']<br />';
 		
 		// Run updates?
-		if ( $run_updates ) { $info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div><hr />'; }
+		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div><hr />'; }
 		
 		if ( $snippet_display == "show" ) {
 		
@@ -2591,8 +2591,9 @@ function show_snippets ( $atts = [] ) {
 				}
 			}
 			$snippet_info .= '</div>'; // <div class="code">
-			$snippet_info .= '</div>'; // <div class="snippet">
 		} // END $snippet_display == "selected"
+		//
+		$snippet_info .= '</div>'; // <div class="snippet">
 		//$info .= "<hr />";
 		$info .= $snippet_info;
     }
