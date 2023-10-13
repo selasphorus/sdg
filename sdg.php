@@ -2422,7 +2422,7 @@ function show_snippets ( $atts = [] ) {
     	'post_id' => get_the_ID(),
 		'limit'   => -1,
         'run_updates'  => false,
-        
+        'dev' => false,
     ), $atts );
     
     // Extract
@@ -2615,12 +2615,10 @@ function show_snippets ( $atts = [] ) {
 			$snippet_info .= '</div>'; // <div class="code">
 		} // END $snippet_display == "selected"
 		//
-		$snippet_info .= '</div>'; // <div class="snippet">
+		$snippet_info .= '</div>'; // <div class="troubleshooting">
 		//$info .= "<hr />";
-		$info .= $snippet_info;
+		if ( $dev ) { $info .= $snippet_info; } // ."<hr /></hr />"
     }
-    
-    $info .= "<hr /></hr />";
 	
 	// Compile info for the matching snippets for display
 	foreach ( $post_snippets as $snippet_id ) {
@@ -2631,8 +2629,7 @@ function show_snippets ( $atts = [] ) {
 		$info .= '</div>';
 	}
 	// 
-	$info .= "<hr />";
-	$info .= $ts_info;
+	if ( $dev ) { $info .= "<hr />".$ts_info; }
 	
 	return $info;
 	
