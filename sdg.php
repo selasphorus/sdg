@@ -2628,7 +2628,7 @@ function update_snippet_logic ( $snippet_id = null ) {
     $info = "";
 	$ts_info = "";
 	
-	if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
+	//if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
 	//$snippet = get_post ( $snippet_id );
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 	
