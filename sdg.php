@@ -2648,6 +2648,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				// Legacy fields => ignore or translate
 				$urls = explode(" | ",$$key);
+				//
+				$$key = str_replace(" | ",'\n',$$key);
+				update_field( $key, $$key, $snippet_id );
+				//
 				if ( is_array($urls)) {
 					$info .= count($urls)." urls<br />";
 					$matched_posts = array();
