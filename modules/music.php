@@ -625,7 +625,6 @@ function get_authorship_info ( $args = array() ) {
                 $rep_title = get_the_title( $post_id );
             }
         }
-        if ( empty($rep_title) || $rep_title == "Responses" ) { $show_title = false; }
         
         $is_anon = is_anon($post_id);
         ///if ( $format == 'display' && $is_anon == true ) { $ts_info .= "<!-- anon: true -->"; } else { $ts_info .= "<!-- anon: false -->"; }
@@ -690,6 +689,7 @@ function get_authorship_info ( $args = array() ) {
         $arr_of = 'ids';
         
     }
+    if ( empty($rep_title) || $rep_title == "Responses" ) { $show_title = false; }
     
     sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
     //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
