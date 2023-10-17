@@ -625,6 +625,7 @@ function get_authorship_info ( $args = array() ) {
                 $rep_title = get_the_title( $post_id );
             }
         }
+        if ( empty($rep_title) ) { $show_title = false; }
         
         $is_anon = is_anon($post_id);
         ///if ( $format == 'display' && $is_anon == true ) { $ts_info .= "<!-- anon: true -->"; } else { $ts_info .= "<!-- anon: false -->"; }
