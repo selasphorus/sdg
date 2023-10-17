@@ -1071,7 +1071,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
         $authorship_args = array( 'data' => $authorship_arr, 'format' => $format, 'abbr' => false, 'is_single_work' => $is_single_work, 'show_title' => $show_title );
         $arr_authorship_info = get_authorship_info ( $authorship_args );
         $authorship_info = $arr_authorship_info['info'];
-        //if ( $title == "" && substr($authorship_info, 0, 2) == ", " ) { $authorship_info = substr($authorship_info, 2); } // trim leading comma and space
+        if ( $title == "" && substr($authorship_info, 0, 2) == ", " ) { $authorship_info = substr($authorship_info, 2); } // trim leading comma and space
     
         $ts_info .= $arr_authorship_info['ts_info'];
         
