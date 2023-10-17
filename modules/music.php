@@ -1011,7 +1011,9 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     // Psalms: Anglican Chant
     // TODO: If title starts w/ number and includes words 'Anglican Chant' and has category 'Anglican Chant' and/or 'Psalms', then fix the post_title by prepending 'Psalm'
     
-    if ( $show_title == false ) { //|| has_term( 'responses', 'repertoire_category', $post_id )
+    if (  $show_title == false || // ACF field option per program row
+        ( $format == 'display' && ( $title == "Responses" ) ) // Responses -- don't display title in event programs, &c. -- front end display
+       ){ //|| has_term( 'responses', 'repertoire_category', $post_id )
         $title = "";
     }
     
