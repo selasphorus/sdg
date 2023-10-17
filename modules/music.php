@@ -1020,6 +1020,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
         ( $format == 'display' && $title == "Responses" ) // Responses -- don't display title in event programs, &c. -- front end display
        ){ //|| has_term( 'responses', 'repertoire_category', $post_id )
         $title = "";
+        $show_title = false;
     }
     
     if ( $is_single_work == true && $title != "") {
