@@ -557,7 +557,7 @@ function str_from_persons_array ( $args = array() ) {
 function get_authorship_info ( $args = array() ) {
 
 	// TS/logging setup
-	$do_ts = false; 
+	$do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log ); 
     sdg_log( "function called: get_authorship_info", $do_log );
