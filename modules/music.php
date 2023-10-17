@@ -957,7 +957,7 @@ function get_excerpted_from( $post_id = null ) {
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
 	
 	// TS/logging setup
-	$do_ts = false; 
+	$do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_rep_info", $do_log );
