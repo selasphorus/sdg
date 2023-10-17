@@ -618,6 +618,7 @@ function get_authorship_info ( $args = array() ) {
         
         if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
             $rep_title = $data['rep_title'];
+            $ts_info .= "<!-- [authorship_info] rep_title from data['rep_title'] -->";
         } else {
             $title_clean = get_post_meta( $post_id, 'title_clean' );
             if ( $title_clean != "" ) {
@@ -1016,7 +1017,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     // TODO: If title starts w/ number and includes words 'Anglican Chant' and has category 'Anglican Chant' and/or 'Psalms', then fix the post_title by prepending 'Psalm'
     
     if (  $show_title == false || // ACF field option per program row
-        ( $format == 'display' && ( $title == "Responses" ) ) // Responses -- don't display title in event programs, &c. -- front end display
+        ( $format == 'display' && $title == "Responses" ) // Responses -- don't display title in event programs, &c. -- front end display
        ){ //|| has_term( 'responses', 'repertoire_category', $post_id )
         $title = "";
     }
