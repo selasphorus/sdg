@@ -689,8 +689,8 @@ function get_authorship_info ( $args = array() ) {
         $arr_of = 'ids';
         
     }
-    if ( $rep_title == "" || $rep_title == "Responses" ) { $show_title = false; }
-    $ts_info .= "<!-- [authorship_info] rep_title: ".$rep_title." -->";
+    if ( $rep_title == "" || empty($rep_title) || $rep_title == "Responses" ) { $show_title = false; }
+    $ts_info .= "<!-- [authorship_info] rep_title: ".print_r($rep_title,true)." -->";
     
     sdg_log( "[authorship_info] anon_info: ".$anon_info, $do_log );
     //sdg_log( "[authorship_info] rep_title: ".print_r($rep_title, true), $do_log );
