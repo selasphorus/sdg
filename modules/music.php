@@ -1072,7 +1072,6 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
         $arr_authorship_info = get_authorship_info ( $authorship_args );
         $authorship_info = $arr_authorship_info['info'];
         //if ( $title == "" && substr($authorship_info, 0, 2) == ", " ) { $authorship_info = substr($authorship_info, 2); } // trim leading comma and space
-    }
     
         $ts_info .= $arr_authorship_info['ts_info'];
         
