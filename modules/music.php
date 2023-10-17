@@ -616,10 +616,11 @@ function get_authorship_info ( $args = array() ) {
         $post_id = $data['post_id'];
         ///$ts_info .= "<!-- [authorship_info] post_id: ".$post_id." -->";
         
-        if ( isset($data['rep_title']) && $data['rep_title'] != "" ) { 
-            $rep_title = $data['rep_title'];
+        if ( isset($data['rep_title']) && $data['rep_title'] != "" ) {
             $ts_info .= "<!-- [authorship_info] rep_title from data['rep_title'] -->";
+            $rep_title = $data['rep_title'];
         } else {
+       		$ts_info .= "<!-- [authorship_info] rep_title from post_id -->";
             $title_clean = get_post_meta( $post_id, 'title_clean' );
             if ( $title_clean != "" ) {
                 $rep_title = $title_clean;
