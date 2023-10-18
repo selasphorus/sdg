@@ -3135,7 +3135,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				if ( !is_wp_error($snippet_id) ) {				
 					$info .= "Success! -- snippet record ".$action."<br />";				
 					// Update snippet logic
-					$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+					//$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 				} else {
 					$info .= $snippet_id->get_error_message();
 					//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
