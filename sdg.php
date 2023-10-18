@@ -2995,7 +2995,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				//
 			} else if ( is_array($subconditions) && !empty($subconditions) ) {
 				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-				if ( count($subconditions) == 1 ) { $info .= "single subcondition<br />"; }
+				if ( count($subconditions) == 1 ) { $info .= "single subcondition<br />"; } else { $info .= count($subconditions)." subconditions<br />"; }
 				/*foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
