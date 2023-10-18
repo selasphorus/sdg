@@ -2913,12 +2913,23 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$info .= '<h2>Convert Widgets to Snippets -- WIP</h2>';
 	//
 	foreach ( $arr_option as $id => $arr_widget ) {
+	
 		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
-		if ( isset($arr_widget['title']) ) { $info .= "title: ".$arr_widget['title']."<br />"; }
-		if ( isset($arr_widget['text']) ) { $info .= "text:".'<div class="">'.$arr_widget['text']."</div><br />"; }
+		if ( isset($arr_widget['title']) ) {
+			$snippet_title = $arr_widget['title'];
+		} else {
+			$snippet_title = $uid;
+		}
+		$info .= "snippet_title: ".$snippet_title."<br />";
+		if ( isset($arr_widget['text']) ) {
+			$snippet_content = $arr_widget['text'];
+		} else {
+			$snippet_content = null; // ???
+		}
+		$info .= "snippet_content:".'<div class="">'.$snippet_content."</div><br />";
 		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
 		// TODO: check if fields are same for e.g. custom_html
 		
@@ -2927,6 +2938,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		// If match, check for changes?
 		
 		// Get widget logic -- WIP
+		$meta_input = array();
 		if ( isset($arr_logic[$uid]) ) {
 			$info .= "... found widget logic...<br />";
 			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
@@ -2946,7 +2958,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
-					/*if ( $v ) {
+					if ( $v ) {
+					
 						// Special case: word_count
 						if ( $condition == "word_count" ) {
 							if ( $k == "check_wordcount" && !empty($v) ) {
@@ -2958,6 +2971,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						} else if ( empty($v) ) { 
 							//
 						} else {
+							$meta_input[$k] = $v;
 							$subs_empty = false;
 						}
 						//
@@ -2965,26 +2979,64 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
 							//$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
 						}
-						$subs_info .= $v;
-					}*/
+						//$subs_info .= $v;
+					}
 				}
 			} else {
-				$info .= $subconditions."<br />";
+				//$info .= $subconditions."<br />";
+				$meta_input[$condition] = $subconditions;
 			}
 			if ( !$subs_empty ) {
-				$condition_info .= $subs_info;
-				$condition_info .= $condition;
+				//$condition_info .= $subs_info;
+				//$condition_info .= $condition;
 			}
 			//
-			$info .= $condition_info;
+			//$info .= $condition_info;
 			
 		} // END foreach ( $conditions as $condition => $subconditions )
 		
 		$info .= '</div>';
+		
+		// WIP
+		if ( $snippet_title ) {
+				
+			// Create new snippet post
+			$postarr = array(
+				'post_title'    => wp_strip_all_tags( $snippet_title ),
+				'post_content'	=> $snippet_content,
+				'post_type'   	=> 'snippet',
+				'post_status'   => 'publish',
+				'post_author'   => 1, // get_current_user_id()
+				// Array of post meta values keyed by their post meta key:
+				'meta_input'	=> $meta_input,
+				/*'meta_input'   => array(
+					'book' => $book_id,
+					'chapterverses' => $chapterverses,
+				),*/
+				//'tax_input'
+				//'post_category'
+			);
+
+			$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+			/*
+			// Insert the post into the database
+			$post_id = wp_insert_post($postarr);
+			if ( !is_wp_error($post_id) ) {
+				// the post is valid
+				$info .= "Success! new reading record created<br />";
+				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				$scripture_citations[] = $post_id;
+				$updates = true;
+			} else {
+				$info .= $post_id->get_error_message();
+			}
+			*/
+		}
+		
 		$i++;
 		if ( $i >= $limit ) { break; } 
 		
-	} // end foreach
+	} // end foreach $arr_option
 	
 	return $info;	
 }
