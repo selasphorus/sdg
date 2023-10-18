@@ -3060,7 +3060,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			
 		} // END foreach ( $conditions as $condition => $subconditions )
 		
-		
 		// WIP
 		if ( $snippet_title && $snippet_content ) {
 		
@@ -3092,7 +3091,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				$info .= "Success! new snippet record created<br />";
 				// Run updates?
 				//if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
-				//$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+				$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			} else {
 				$info .= $snippet_id->get_error_message();
