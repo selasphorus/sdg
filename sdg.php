@@ -2073,7 +2073,7 @@ function meta_value_exists( $post_type, $post_id, $meta_key, $meta_value ) { //,
     
     $matching_posts = get_posts($wp_args);
     
-    if( count($matching_posts) > 0 ) {
+    if ( count($matching_posts) > 0 ) {
         return count($matching_posts);
     } else {
         return false;
@@ -2650,6 +2650,8 @@ function update_snippet_logic ( $snippet_id = null ) {
     $info = "";
 	$ts_info = "";
 	
+	if ( $snippet_id === null ) { return false; }
+	
 	//if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
 	//$snippet = get_post ( $snippet_id );
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
@@ -3086,6 +3088,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 
 			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			
+			$action = null;
+			
 			// Does a snippet already exist based on this widget?
 			$wp_args = array(
 				'post_type'   => 'snippet',
@@ -3097,22 +3101,36 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			);	
 			$existing_snippets = get_posts($wp_args);
 			if ( $existing_snippets ) {
-				// Update existing widget
-				$snippet_id = wp_update_post($postarr);
-				$action ="updated";
+				// get existing post id
+				if ( count($existing_snippets) == 1 ) {
+					$existing_id = $existing_snippets[0];
+				} else if ( count($existing_snippets) > 1 ) {
+					$existing_id = null; // tft
+				}
+				if ( $existing_id ) {
+					$postarr['ID'] = $existing_id;
+					$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+					// Update existing widget
+					$snippet_id = wp_update_post($postarr);
+					$action = "updated";
+				}				
 			} else {
 				// Insert the post into the database
 				$snippet_id = wp_insert_post($postarr);
 				$action ="inserted";
 			}
 			//
-			if ( !is_wp_error($snippet_id) ) {				
-				$info .= "Success! new snippet record ".$action."<br />";				
-				// Update snippet logic
-				$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+			if ( $action ) {
+				if ( !is_wp_error($snippet_id) ) {				
+					$info .= "Success! -- snippet record ".$action."<br />";				
+					// Update snippet logic
+					$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+				} else {
+					$info .= $snippet_id->get_error_message();
+					//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				}
 			} else {
-				$info .= $snippet_id->get_error_message();
-				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				$info .= "No action<br />";
 			}
 			
 		}
