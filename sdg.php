@@ -2954,7 +2954,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			//
 			$info .= "condition: ".$condition."<br />";
 			//$info .= "subconditions: <br />";
-			if ( is_array($subconditions) ) {
+			if ( $condition == 'incexc' ) {
+				$meta_input[$condition] = $subconditions[0];
+			} else if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
