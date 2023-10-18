@@ -2667,11 +2667,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-			$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
-				// Legacy fields => ignore or translate
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
+				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				// Legacy fields => ignore or translate
 				$divider = "\n"; // $divider = " | ";
 				//$info .= "divider: <pre>$divider</pre>";
 				$urls = explode($divider,$$key);
@@ -2750,8 +2750,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 				}
 			} else if ( $key == 'target_by_post_type' ) {
+				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				//
 			} else if ( $key == 'target_by_taxonomy' ) {
+				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// 
 				$conditions = explode(" | ",$$key);
 				//
