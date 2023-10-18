@@ -806,7 +806,7 @@ function update_sermon_citations( $sermon_id = null ) {
 				if ( $book_id && $chapterverses ) {
 				
 					// Create new reading post
-					$args = array(
+					$postarr = array(
 						'post_title'    => wp_strip_all_tags( $txt ),
 						'post_type'   	=> 'reading',
 						'post_status'   => 'publish',
@@ -818,11 +818,11 @@ function update_sermon_citations( $sermon_id = null ) {
 					);
 
 					// Insert the post into the database
-					$post_id = wp_insert_post($args);
+					$post_id = wp_insert_post($postarr);
 					if ( !is_wp_error($post_id) ) {
 						// the post is valid
 						$info .= "Success! new reading record created<br />";
-						$info .= "reading args: <pre>".print_r($args,true)."</pre>";
+						$info .= "reading postarr: <pre>".print_r($postarr,true)."</pre>";
 						$scripture_citations[] = $post_id;
 						$updates = true;
 					} else {
