@@ -2990,9 +2990,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$meta_input['exclude_by_url'] = $condition['urls_invert'];
 				}
 			} else if ( $condition == "location" ) {
-				//
+				// WIP >> widget_logic_location
+				$meta_input['widget_logic_location'] = $subconditions;
+				// location => array (is_front_page, is_home, etc) --> target_by_location
 			} else if ( $condition == "custom_post_types_taxonomies" ) {
-				//
+				// WIP >> widget_logic_custom_post_types_taxonomies
+				$meta_input['widget_logic_custom_post_types_taxonomies'] = $subconditions;
+				// array of post types and custom taxonomy archives etc to target (or exclude)
 			} else if ( is_array($subconditions) && !empty($subconditions) ) {
 				if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
 					//$info .= "single empty subcondition<br />";
@@ -3012,11 +3016,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								$subs_empty = false;
 							} else if ( $check_wordcount && !empty($v) ) {
 								//
-							}
-						//} else if ( $condition == "custom_post_types_taxonomies" ) {
-							//
-						// custom_post_types_taxonomies => array
-						// location => array (is_front_page, is_home, etc) --> target_by_location
+							}						
 						} else if ( empty($v) ) { 
 							//
 						} else {
