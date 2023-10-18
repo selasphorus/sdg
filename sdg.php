@@ -2505,6 +2505,8 @@ function show_snippets ( $atts = [] ) {
 						if ( $post_type == $target_type ) {
 							$snippet_info .= "This post matches target post_type.<br />";
 							if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
+						} else {
+							$snippet_info .= "This post does NOT match the target post_type.<br />";
 						}
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
@@ -2535,6 +2537,8 @@ function show_snippets ( $atts = [] ) {
 								$snippet_info .= "tax_term: ".$tax_term."<br />";
 								if ( has_term( $tax_term, $taxonomy, $post_id ) ) {
 									$snippet_info .= "This post has the $taxonomy term '$tax_term'<br />";
+								} else {
+									$snippet_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
 								}
 							}
 						}
@@ -2545,74 +2549,9 @@ function show_snippets ( $atts = [] ) {
 						$target_locations = get_field($key, $snippet_id, false);
 						// WIP
 						$snippet_info .= "target_locations: ".print_r($target_locations, true)."<br />";
-					} /*else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
-						// Legacy fields => ignore or translate >> moved to update_snippet_logic fcn
-						$urls = explode(" | ",$$key);
-						if ( is_array($urls)) {
-							$snippet_info .= count($urls)." urls<br />";
-							$matched_posts = array();
-							foreach ( $urls as $url ) {
-								$slug = null;
-								$post_type = null;
-								$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
-								if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
-									$post_type = "event";
-								} else if ( preg_match($date_validation_regex, $url) ) {
-									$post_type = "post";
-								}
-								//
-								if ( $post_type ) {
-									// Extract slug from path
-									// First, trim trailing slash, if any
-									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
-									$url_bits = explode("/",$url); // The last bit is slug
-									$slug = end($url_bits);
-									//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
-									$snippet_info .= "$post_type slug: $slug<br />";
-								} else {
-									$snippet_info .= "url: $url<br />";
-									
-								}
-								// Look for matching post
-								if ( $slug && $post_type ) {
-									$matched_post = get_page_by_path($slug, OBJECT, $post_type);
-								} else {
-									$matched_post = get_page_by_path($url);
-								}
-								//
-								if ($matched_post) {
-									$matched_post_id = $matched_post->ID;
-									$matched_posts[] = $matched_post_id;
-									$snippet_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-								} else {
-									$snippet_info .= "&rarr; NO matching post found<br />";
-								}
-							}
-							// Save the posts to the snippet field
-							if ( $key == 'target_by_url' ) {
-								$target_key = 'target_by_post';
-							} else if ( $key == 'exclude_by_url' ) {
-								$target_key = 'exclude_by_post';
-							}
-							$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-							$arr_new = null;
-							if ( empty($arr_old) ) {
-								// Save the array of matched posts to the target_by_post field
-								$arr_new = $matched_posts;									
-							} else if ( is_array($arr_old) ) {
-								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							}
-							if ( $arr_new ) { 
-								$snippet_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
-								update_field( $target_key, $arr_new, $snippet_id ); //update_field($selector, $value, $post_id);
-							} else {
-								$snippet_info .= "arr_new is empty<br />";
-								$snippet_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
-								$snippet_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
-							}
-							
-						}
-					}*/
+					} else {
+						$snippet_info .= "unmatched key: ".$key."<br />";
+					}
 					$snippet_info .= "<br />";
 				}
 			}
