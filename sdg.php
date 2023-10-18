@@ -3111,8 +3111,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$postarr['ID'] = $existing_id;
 					$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 					// Update existing widget
-					$snippet_id = wp_update_post($postarr);
-					$action = "updated";
+					//$snippet_id = wp_update_post($postarr);
+					//$action = "updated";
 				}				
 			} else {
 				// Insert the post into the database
