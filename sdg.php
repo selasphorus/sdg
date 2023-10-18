@@ -2907,6 +2907,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$i = 0;
 	$arr_option = get_option($option_name);
 	$arr_logic = get_option('widget_logic_options');
+	$arr_cs_sidebars = get_option('cs_sidebars');
+	//
 	$widget_type = str_replace('widget_','',$option_name);
 	$conditions = array();
 	//
@@ -2932,6 +2934,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$info .= "snippet_content:".'<div class="">'.$snippet_content."</div><br />";
 		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
 		// TODO: check if fields are same for e.g. custom_html
+		
+		// WIP: find if widget is included in a custom sidebar --> get cs_id
+		if ( isset($arr_cs_sidebars[$uid]) ) {
+			$info .= "... found cs_sidebars info...<br />";
+			$info .= "logic: <pre>".print_r($arr_cs_sidebars[$uid],true)."</pre><br />";
+			//$conditions = $arr_logic[$uid];
+		}
 		
 		// TODO: check to see if snippet already exists with matching uid
 		// If no match, create new snippet post record with title and text as above
@@ -2972,10 +2981,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							}
 						//} else if ( $condition == "custom_post_types_taxonomies" ) {
 							//
-						// custom_post_types_taxonomies => arrau=y
-						// location => array (is_front_page, is_home, etc)
-						// url => urls (array)
-						// urls_invert => urls_invert (array)
+						// custom_post_types_taxonomies => array
+						// location => array (is_front_page, is_home, etc) --> target_by_location
+						// url => urls (array) --> target_by_url/target_by_post
+						// urls_invert => urls_invert (array) --> exclude_by_url/exclude_by_post
 						} else if ( empty($v) ) { 
 							//
 						} else {
@@ -3007,6 +3016,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		// WIP
 		if ( $snippet_title && $snippet_content ) {
+		
+			$meta_input['widget_type'] = $widget_type;
+			$meta_input['widget_id'] = $id;
+			$meta_input['widget_uid'] = $uid;
+			$meta_input['cs_id'] = $cs_id;
+			$meta_input['widget_logic'] = $conditions;
 				
 			// Create new snippet post
 			$postarr = array(
