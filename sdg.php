@@ -2472,6 +2472,7 @@ function show_snippets ( $atts = [] ) {
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
+		if ( empty($any_all) ) { $any_all = "any;" } // TODO: update_post_meta
 		//
 		$title = get_the_title( $snippet_id );
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
@@ -2677,6 +2678,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$urls = explode($divider,$$key);
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
+				// TODO: move this to later so as to also process removal of matched urls
 				update_field( $key, $$key, $snippet_id );
 				//
 				if ( is_array($urls)) {
@@ -2716,6 +2718,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
 							$info .= "&rarr; matching post found with id: $matched_post_id<br />";
+							// TODO: remove this url from the array to be stored in the updated target_by_url/exclude_by_url text field
+							//str_replace? $url/$$key
 						} else {
 							$info .= "&rarr; NO matching post found<br />";
 						}
