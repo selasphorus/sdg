@@ -2984,10 +2984,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {
 					$meta_input['target_by_url'] = $subconditions['urls'];
+					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup
 				}			
 			} else if ( $condition == "urls_invert" ) {
 				if ( isset($condition['urls_invert']) && !empty($condition['urls_invert']) ) {
 					$meta_input['exclude_by_url'] = $condition['urls_invert'];
+					$meta_input['widget_logic_exclude_by_url'] = $condition['urls_invert']; // backup
 				}
 			} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
 				
