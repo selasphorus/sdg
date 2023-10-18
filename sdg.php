@@ -2472,7 +2472,7 @@ function show_snippets ( $atts = [] ) {
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
-		if ( empty($any_all) ) { $any_all = "any;" } // TODO: update_post_meta
+		if ( empty($any_all) ) { $any_all = "any"; } // TODO: update_post_meta
 		//
 		$title = get_the_title( $snippet_id );
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
