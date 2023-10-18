@@ -2929,7 +2929,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		}
 		$info .= "title: ".$snippet_title."<br />";
 		// Don't finish processing if we're looking for a specific widget and this isn't it
-		if ( $widget_id && $id != $widget_id ) { continue; }
+		if ( $widget_id && $id != $widget_id ) { $info .= '</div>'; continue; }
 		//
 		if ( isset($arr_widget['text']) ) {
 			$snippet_content = $arr_widget['text'];
@@ -3032,7 +3032,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			
 		} // END foreach ( $conditions as $condition => $subconditions )
 		
-		$info .= '</div>';
 		
 		// WIP
 		if ( $snippet_title && $snippet_content ) {
@@ -3072,6 +3071,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			}
 			*/
 		}
+		
+		$info .= '</div>';
 		
 		$i++;
 		if ( $i >= $limit ) { break; } 
