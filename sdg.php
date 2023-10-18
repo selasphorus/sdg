@@ -3086,18 +3086,35 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 
 			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			
-			// Insert the post into the database
-			$snippet_id = wp_insert_post($postarr);
-			if ( !is_wp_error($snippet_id) ) {
-				// the post is valid
-				$info .= "Success! new snippet record created<br />";
-				// Run updates?
-				//if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
+			// Does a snippet already exist based on this widget?
+			$wp_args = array(
+				'post_type'   => 'snippet',
+				'post_status' => 'publish',
+				//'numberposts' => $num_posts,
+				'meta_key'    => 'widget_uid',
+				'meta_value'  => $uid,
+				'fields'      => 'ids'
+			);	
+			$existing_snippets = get_posts($wp_args);
+			if ( $existing_snippets ) {
+				// Update existing widget
+				$snippet_id = wp_update_post($postarr);
+				$action ="updated";
+			} else {
+				// Insert the post into the database
+				$snippet_id = wp_insert_post($postarr);
+				$action ="inserted";
+			}
+			//
+			if ( !is_wp_error($snippet_id) ) {				
+				$info .= "Success! new snippet record ".$action."<br />";				
+				// Update snippet logic
 				$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
-				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			} else {
 				$info .= $snippet_id->get_error_message();
+				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			}
+			
 		}
 		
 		$info .= '</div>';
