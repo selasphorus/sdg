@@ -3017,7 +3017,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				// Add the value(s) to the meta_input array
 				if ( !empty($values) ) { $meta_input[$meta_key] = $values; }
-				
+			
+			} else if ( $condition == "word_count" ) {
+			
+				// WIP
+				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+			
 			} else if ( is_array($subconditions) && !empty($subconditions) ) {
 				if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
 					//$info .= "single empty subcondition<br />";
@@ -3027,31 +3032,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				}
 				/*foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
-					// WIP 231012 -- next step: extract and save data
-					if ( $v ) {
-					
-						// Special case: word_count
-						if ( $condition == "word_count" ) {
-							if ( $k == "check_wordcount" && !empty($v) ) {
-								$check_wordcount = true;
-								$subs_empty = false;
-							} else if ( $check_wordcount && !empty($v) ) {
-								//
-							}						
-						} else if ( empty($v) ) { 
-							//
-						} else {
-							$info .= "k: ".$k." => v: ".$v."<br />";
-							//$meta_input[$k] = $v;							
-							$subs_empty = false;
-						}
-						//
-						
-						if ( $v && ( strpos($k, "urls") !== false || strpos($k, "taxonomies") !== false ) ) {
-							//$v = preg_replace('/[\s\n\r]+/i', ' | ', $v);
-						}
-						//$subs_info .= $v;
-					}
 				}*/
 			} else {
 				$info .= $subconditions." [not an array]<br />";
