@@ -2670,11 +2670,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 			$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				// Legacy fields => ignore or translate
-				$divider = '/ /'; // $divider = " | ";
+				$divider = "\n"; // $divider = " | ";
 				//$info .= "divider: <pre>$divider</pre>";
 				$urls = explode($divider,$$key);
 				//
-				$$key = str_replace("/ /","/\n/",$$key);
+				//$$key = str_replace(" | ","/\n/",$$key);
 				update_field( $key, $$key, $snippet_id );
 				//
 				if ( is_array($urls)) {
