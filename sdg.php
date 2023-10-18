@@ -2941,7 +2941,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$meta_input = array();
 		if ( isset($arr_logic[$uid]) ) {
 			$info .= "... found widget logic...<br />";
-			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
+			$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
 			$conditions = $arr_logic[$uid];
 		}
 		// Loop through the conditions and save them to the snippet ACF fields, as applicable
@@ -2956,7 +2956,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			//$info .= "subconditions: <br />";
 			if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
-					$info .= "k: ".$k." => v: ".$v."<br />";
+					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
 					if ( $v ) {
 					
