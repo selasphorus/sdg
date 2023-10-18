@@ -2955,7 +2955,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$info .= "condition: ".$condition."<br />";
 			//$info .= "subconditions: <br />";
 			if ( $condition == 'incexc' ) {
-				$meta_input[$condition] = $subconditions[0];
+				$meta_input['snippet_display'] = $subconditions['condition'];
 			} else if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
@@ -2970,6 +2970,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							} else if ( $check_wordcount && !empty($v) ) {
 								//
 							}
+						//} else if ( $condition == "custom_post_types_taxonomies" ) {
+							//
+						// custom_post_types_taxonomies => arrau=y
+						// location => array (is_front_page, is_home, etc)
+						// url => urls (array)
+						// urls_invert => urls_invert (array)
 						} else if ( empty($v) ) { 
 							//
 						} else {
