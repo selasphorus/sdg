@@ -2907,8 +2907,11 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$i = 0;
 	$arr_option = get_option($option_name);
 	$arr_logic = get_option('widget_logic_options');
-	$arr_cs_sidebars = get_option('cs_sidebars');
-	$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
+	$arr_sidebars_widgets = get_option('sidebars_widgets');
+	$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	//
+	//$arr_cs_sidebars = get_option('cs_sidebars');
+	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
 	//
 	$widget_type = str_replace('widget_','',$option_name);
 	$conditions = array();
