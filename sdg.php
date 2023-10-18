@@ -3010,7 +3010,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				if ( $condition == "location" ) { $meta_key = 'widget_logic_location'; } else { $meta_key = 'widget_logic_custom_post_types_taxonomies'; }
 				
 				// Add the value(s) to the meta_input array
-				$meta_input[$meta_key] = $values;
+				if ( !empty($values) ) { $meta_input[$meta_key] = $values; }
 				
 			} else if ( is_array($subconditions) && !empty($subconditions) ) {
 				if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
