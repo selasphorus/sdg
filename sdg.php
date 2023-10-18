@@ -3083,21 +3083,20 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				//'post_category'
 			);
 
-			$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
-			/*
+			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+			
 			// Insert the post into the database
 			$snippet_id = wp_insert_post($postarr);
 			if ( !is_wp_error($snippet_id) ) {
 				// the post is valid
-				$info .= "Success! new reading record created<br />";
+				$info .= "Success! new snippet record created<br />";
 				// Run updates?
 				//if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
-				$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+				//$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			} else {
 				$info .= $snippet_id->get_error_message();
 			}
-			*/
 		}
 		
 		$info .= '</div>';
