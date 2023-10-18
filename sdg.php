@@ -2521,8 +2521,24 @@ function show_snippets ( $atts = [] ) {
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
 							break;
 						} else {
-							$snippet_info .= "This post is NOT in the target_posts array. Continue.<br />";
+							$snippet_info .= "This post is NOT in the target_posts array.<br />";
 						}
+					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+						// Is the given post targetted or excluded?
+						$target_posts = get_field($key, $snippet_id, false);
+						// TODO: explode list... TODO: make this field a repeater field? .... search for url/path
+						/*if ( in_array($post_id, $target_posts) ) {
+							$snippet_info .= "This post is in the target_posts array<br />";
+							// If it's for inclusion, add it to the array
+							if ( $key == 'target_by_post' ) {
+								if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
+								// ?
+							}
+							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
+							break;
+						} else {
+							$snippet_info .= "This post is NOT in the target_posts array.<br />";
+						}*/
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
@@ -2601,6 +2617,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$info .= "widget_uid: $widget_uid<br />";
 	
 	// Get snippet logic
+	//target_by_url_txt, exclude_by_url_txt -- WIP
 	$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
@@ -2618,7 +2635,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
 				// TODO: move this to later so as to also process removal of matched urls
-				update_field( $key, $$key, $snippet_id );
+				//update_field( $key, $$key, $snippet_id );
 				//
 				if ( is_array($urls)) {
 					$info .= count($urls)." urls<br />";
@@ -2933,18 +2950,46 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			//$info .= "condition: ".$condition."<br />";
 			//$info .= "subconditions: <br />";
 			if ( $condition == 'incexc' ) {
+			
 				$meta_input['snippet_display'] = $subconditions['condition'];
+				
 			} else if ( $condition == "url" ) {
+			
 				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {
-					$meta_input['target_by_url'] = $subconditions['urls'];
-					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup
-				}			
+				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {				
+					
+					$meta_input['target_by_url_txt'] = $subconditions['urls'];
+					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup					
+					
+					// Update the repeater field
+					$existing = get_field( 'target_by_url' );
+					if ( ! is_array($existing) ) $existing = array();
+					$additions = $subconditions['urls'];
+					$updated = $existing + $additions;
+					if ( update_field( 'target_by_url', $updated ) ) {
+						$info .= "updated repeater field: target_by_url<br />";
+					}					
+									
+				}		
+					
 			} else if ( $condition == "urls_invert" ) {
-				if ( isset($condition['urls_invert']) && !empty($condition['urls_invert']) ) {
-					$meta_input['exclude_by_url'] = $condition['urls_invert'];
-					$meta_input['widget_logic_exclude_by_url'] = $condition['urls_invert']; // backup
+			
+				if ( isset($subconditions['urls_invert']) && !empty($subconditions['urls_invert']) ) {
+					
+					$meta_input['exclude_by_url_txt'] = $subconditions['urls_invert'];
+					$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup
+					
+					// Update the repeater field
+					$existing = get_field( 'exclude_by_url' );
+					if ( ! is_array($existing) ) $existing = array();
+					$additions = $subconditions['urls_invert'];
+					$updated = $existing + $additions;
+					if ( update_field( 'exclude_by_url', $updated ) ) {
+						$info .= "updated repeater field: exclude_by_url<br />";
+					}
+					
 				}
+				
 			} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
 				
 				// Init values array
