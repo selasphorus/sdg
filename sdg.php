@@ -2974,7 +2974,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			if ( $condition == 'incexc' ) {
 				$meta_input['snippet_display'] = $subconditions['condition'];
 			} else if ( $condition == "url" ) {
-				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {
 					$meta_input['target_by_url'] = $subconditions['urls'];
 				}			
@@ -2983,7 +2983,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$meta_input['exclude_by_url'] = $condition['urls_invert'];
 				}			
 			} else if ( is_array($subconditions) ) {
-				foreach ( $subconditions as $k => $v ) {
+				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+				/*foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 					// WIP 231012 -- next step: extract and save data
 					if ( $v ) {
@@ -3003,9 +3004,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						} else if ( empty($v) ) { 
 							//
 						} else {
-							
-							$meta_input[$k] = $v;
-							
+							$info .= "k: ".$k." => v: ".$v."<br />";
+							//$meta_input[$k] = $v;							
 							$subs_empty = false;
 						}
 						//
@@ -3015,7 +3015,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						}
 						//$subs_info .= $v;
 					}
-				}
+				}*/
 			} else {
 				//$info .= $subconditions."<br />";
 				$meta_input[$condition] = $subconditions;
