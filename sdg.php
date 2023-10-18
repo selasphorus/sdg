@@ -2913,13 +2913,14 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$conditions = array();
 	//
 	$info .= '<h2>Convert Widgets to Snippets -- WIP</h2>';
+	$info .= "<pre>args: ".print_r($args,true)."</pre><hr /><hr />";
 	//
 	foreach ( $arr_option as $id => $arr_widget ) {
 	
 		if ( $widget_id && $id != $widget_id ) { continue; }
 		
 		$info .= '<div class="code">';
-		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
+		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />";
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
 		if ( isset($arr_widget['title']) ) {
