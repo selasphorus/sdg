@@ -3068,7 +3068,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$meta_input['widget_id'] = $id;
 			$meta_input['widget_uid'] = $uid;
 			//$meta_input['cs_id'] = $cs_id;
-			$meta_input['widget_logic'] = $conditions;
+			$meta_input['widget_logic'] = "<pre>".$conditions."</pre>";
 				
 			// Create new snippet post
 			$postarr = array(
