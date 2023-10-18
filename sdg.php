@@ -3119,10 +3119,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			);*/
 			
 			if ( isset($postarr['ID']) ) {
-				$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 				// Update existing snippet
-				//$snippet_id = wp_update_post($postarr);
-				//$action = "updated";			
+				$snippet_id = wp_update_post($postarr);
+				$action = "updated";			
 			} else {
 				// Insert the post into the database
 				$snippet_id = wp_insert_post($postarr);
