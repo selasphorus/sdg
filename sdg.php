@@ -2927,7 +2927,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$uid = $widget_type."-".$id;
 		$info .= "widget_uid: ".$uid."<br />";
 		//
-		if ( isset($arr_widget['title']) ) {
+		if ( isset($arr_widget['title']) && !empty($arr_widget['title']) ) {
 			$snippet_title = $arr_widget['title'];
 		} else {
 			$snippet_title = $uid;
