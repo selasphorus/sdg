@@ -2918,7 +2918,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	foreach ( $arr_option as $id => $arr_widget ) {
 	
 		// Don't finish processing if we're looking for a specific widget and this isn't it
-		if ( $widget_id && $id != $widget_id ) { continue; }
+		if ( $widget_id && $id !== $widget_id ) { continue; }
 		
 		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />";
