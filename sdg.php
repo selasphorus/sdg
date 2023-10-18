@@ -2962,7 +2962,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$existing = get_field( 'target_by_url' );
 					if ( ! is_array($existing) ) { $existing = array(); }
 					$str_additions = $subconditions['urls'];
-					$str_additions = preg_replace("/[\r\n]+/", "\n", $additions);
+					$str_additions = preg_replace("/[\r\n]+/", "\n", $str_additions);
 					$additions = explode("\n",$str_additions);
 					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'target_by_url', $updated ) ) {
@@ -2982,7 +2982,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$existing = get_field( 'exclude_by_url' );
 					if ( ! is_array($existing) ) { $existing = array(); }
 					$str_additions = $subconditions['urls_invert'];
-					$str_additions = preg_replace("/[\r\n]+/", "\n", $additions);
+					$str_additions = preg_replace("/[\r\n]+/", "\n", $str_additions);
 					$additions = explode("\n",$str_additions);
 					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'exclude_by_url', $updated ) ) {
