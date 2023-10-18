@@ -2930,12 +2930,19 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$info .= "snippet_title: ".$snippet_title."<br />";
 		if ( isset($arr_widget['text']) ) {
 			$snippet_content = $arr_widget['text'];
+		} else if ( isset($arr_widget['content']) ) {
+			$snippet_content = $arr_widget['content'];
 		} else {
 			$snippet_content = null; // ???
 		}
 		$info .= "snippet_content:".'<div class="">'.$snippet_content."</div><br />";
-		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone
+		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
 		// TODO: check if fields are same for e.g. custom_html
+		
+		// TODO: deal w/ csb_visibility; conditions
+		if ( isset($arr_widget['conditions']) ) {
+			// ???
+		}
 		
 		// WIP: find if widget is included in a custom sidebar --> get cs_id
 		$cs_id = get_cs_id($uid);
