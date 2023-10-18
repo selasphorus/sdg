@@ -2918,7 +2918,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	
 		if ( $widget_id && $id != $widget_id ) { continue; }
 		$info .= '<div class="code">';
-		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
+		$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
 		$info .= "widget: ".$uid."<br />";
 		if ( isset($arr_widget['title']) ) {
