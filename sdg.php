@@ -2964,7 +2964,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		// If match, check for changes?
 		
 		// Get widget logic -- WIP
+		$postarr = array();
 		$meta_input = array();
+		//
 		if ( isset($arr_logic[$uid]) ) {
 			$info .= "... found widget logic...<br />";
 			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
@@ -3072,21 +3074,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$meta_input['widget_uid'] = $uid;
 			//$meta_input['cs_id'] = $cs_id;
 			$meta_input['widget_logic'] = print_r($conditions, true);
-				
-			// Create new snippet post
-			$postarr = array(
-				'post_title'    => wp_strip_all_tags( $snippet_title ),
-				'post_content'	=> $snippet_content,
-				'post_type'   	=> 'snippet',
-				'post_status'   => 'publish',
-				'post_author'   => 1, // get_current_user_id()
-				// Array of post meta values keyed by their post meta key:
-				'meta_input'	=> $meta_input,
-				//'tax_input'
-				//'post_category'
-			);
-
-			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			
 			$action = null;
 			
@@ -3109,16 +3096,40 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				}
 				if ( $existing_id ) {
 					$postarr['ID'] = $existing_id;
-					$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
-					// Update existing widget
-					//$snippet_id = wp_update_post($postarr);
-					//$action = "updated";
-				}				
+				}
+			}
+			
+			// Finish setting up the post array for update/insert
+			$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
+			$postarr['post_content'] = $snippet_content;
+			$postarr['post_type'] = 'snippet';
+			$postarr['post_status'] = 'publish';
+			$postarr['post_author'] = 1; // get_current_user_id()
+			$postarr['meta_input'] = $meta_input;
+			/*$postarr = array(
+				'post_title'    => wp_strip_all_tags( $snippet_title ),
+				'post_content'	=> $snippet_content,
+				'post_type'   	=> 'snippet',
+				'post_status'   => 'publish',
+				'post_author'   => 1, // get_current_user_id()
+				// Array of post meta values keyed by their post meta key:
+				'meta_input'	=> $meta_input,
+				//'tax_input'
+				//'post_category'
+			);*/
+			
+			if ( isset($postarr['ID']) ) {
+				$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				// Update existing snippet
+				//$snippet_id = wp_update_post($postarr);
+				//$action = "updated";			
 			} else {
 				// Insert the post into the database
 				$snippet_id = wp_insert_post($postarr);
 				$action ="inserted";
 			}
+			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+			
 			//
 			if ( $action ) {
 				if ( !is_wp_error($snippet_id) ) {				
