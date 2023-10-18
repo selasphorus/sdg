@@ -3008,7 +3008,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 					if ( $v == 1 ) {
 						$info .= "k: ".$k." => v: ".$v."<br />";
-						$values[] = $v;
+						$values[$k] = $v;
 					}
 				}
 				
