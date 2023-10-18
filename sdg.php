@@ -2984,8 +2984,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			} else if ( $condition == "urls_invert" ) {
 				if ( isset($condition['urls_invert']) && !empty($condition['urls_invert']) ) {
 					$meta_input['exclude_by_url'] = $condition['urls_invert'];
-				}			
-			} else if ( is_array($subconditions) ) {
+				}
+			} else if ( $condition == "location" ) {
+				//
+			} else if ( $condition == "custom_post_types_taxonomies" ) {
+				//
+			} else if ( is_array($subconditions) && !empty($subconditions) ) {
 				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 				/*foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
