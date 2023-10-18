@@ -3017,8 +3017,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					}
 				}*/
 			} else {
-				//$info .= $subconditions."<br />";
-				$meta_input[$condition] = $subconditions;
+				$info .= $subconditions." [not an array]<br />";
+				//$meta_input[$condition] = $subconditions;
 			}
 			if ( !$subs_empty ) {
 				//$condition_info .= $subs_info;
