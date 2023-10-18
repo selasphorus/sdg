@@ -2670,6 +2670,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 			$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				// Legacy fields => ignore or translate
+				// Replace multiple (one ore more) line breaks with a single one.
+				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				$divider = "\n"; // $divider = " | ";
 				//$info .= "divider: <pre>$divider</pre>";
 				$urls = explode($divider,$$key);
@@ -2681,6 +2683,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$info .= count($urls)." urls<br />";
 					$matched_posts = array();
 					foreach ( $urls as $url ) {
+						if ( empty($url) ) { continue; }
 						$slug = null;
 						$post_type = null;
 						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
