@@ -2617,21 +2617,18 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$info .= "widget_uid: $widget_uid<br />";
 	
 	// Get snippet logic
-	//target_by_url_txt, exclude_by_url_txt -- WIP
-	$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	// -- WIP
+	$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url', 
 	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+			if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
-				// Legacy fields => ignore or translate
-				$divider = "\n"; // $divider = " | ";
-				//$info .= "divider: <pre>$divider</pre>";
-				$urls = explode($divider,$$key);
+				$urls = explode("\n",$$key);
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
 				// TODO: move this to later so as to also process removal of matched urls
@@ -2674,7 +2671,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
 							$info .= "&rarr; matching post found with id: $matched_post_id<br />";
-							// TODO: remove this url from the array to be stored in the updated target_by_url/exclude_by_url text field
+							// TODO: remove this url from the array to be stored in the updated target_by_url_txt/exclude_by_url_txt text field -- and: repeaters?
 							//str_replace? $url/$$key
 						} else {
 							$info .= "&rarr; NO matching post found<br />";
@@ -2963,8 +2960,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 					// Update the repeater field
 					$existing = get_field( 'target_by_url' );
-					if ( ! is_array($existing) ) $existing = array();
-					$additions = $subconditions['urls'];
+					if ( ! is_array($existing) ) { $existing = array(); }
+					$str_additions = $subconditions['urls'];
+					$str_additions = preg_replace("/[\r\n]+/", "\n", $additions);
+					$additions = explode("\n",$str_additions);
 					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'target_by_url', $updated ) ) {
 						$info .= "updated repeater field: target_by_url<br />";
@@ -2981,8 +2980,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 					// Update the repeater field
 					$existing = get_field( 'exclude_by_url' );
-					if ( ! is_array($existing) ) $existing = array();
-					$additions = $subconditions['urls_invert'];
+					if ( ! is_array($existing) ) { $existing = array(); }
+					$str_additions = $subconditions['urls_invert'];
+					$str_additions = preg_replace("/[\r\n]+/", "\n", $additions);
+					$additions = explode("\n",$str_additions);
 					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'exclude_by_url', $updated ) ) {
 						$info .= "updated repeater field: exclude_by_url<br />";
