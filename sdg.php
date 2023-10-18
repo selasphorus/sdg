@@ -2897,7 +2897,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
 		'limit'   => 1,
-        'option_name'  => 'widget_text', // widget_custom_html        
+        'option_name'  => 'widget_text', // widget_custom_html  
+        'widget_id'	=> null,      
     ), $atts );
     
     // Extract
@@ -2915,6 +2916,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	//
 	foreach ( $arr_option as $id => $arr_widget ) {
 	
+		if ( $widget_id && $id != $widget_id ) { continue; }
 		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />"; // tft
 		$uid = $widget_type."-".$id;
