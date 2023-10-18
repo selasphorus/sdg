@@ -2488,7 +2488,7 @@ function show_snippets ( $atts = [] ) {
 			
 		} else {
 		
-			// Conditional dislpay -- determine whether the given post should display this widget
+			// Conditional display -- determine whether the given post should display this widget
 			$snippet_info .= '<div class="code">';
 			$snippet_info .= "Analysing display conditions...<br />";
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
@@ -2907,11 +2907,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$i = 0;
 	$arr_option = get_option($option_name);
 	$arr_logic = get_option('widget_logic_options');
-	$arr_sidebars_widgets = get_option('sidebars_widgets');
-	$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
-	//
-	//$arr_cs_sidebars = get_option('cs_sidebars');
-	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
 	//
 	$widget_type = str_replace('widget_','',$option_name);
 	$conditions = array();
@@ -2940,10 +2935,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		// TODO: check if fields are same for e.g. custom_html
 		
 		// WIP: find if widget is included in a custom sidebar --> get cs_id
-		if ( isset($arr_cs_sidebars[$uid]) ) {
-			$info .= "... found cs_sidebars info...<br />";
-			$info .= "logic: <pre>".print_r($arr_cs_sidebars[$uid],true)."</pre><br />";
-			//$conditions = $arr_logic[$uid];
+		$cs_id = get_cs_id($uid);
+		if ( $cs_id ) {
+			//
 		}
 		
 		// TODO: check to see if snippet already exists with matching uid
@@ -2969,6 +2963,14 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			//$info .= "subconditions: <br />";
 			if ( $condition == 'incexc' ) {
 				$meta_input['snippet_display'] = $subconditions['condition'];
+			} else if ( $condition == "url" ) {
+				if ( isset($condition['urls']) && !empty($condition['urls']) ) {
+					$meta_input['target_by_url'] = $condition['urls'];
+				}			
+			} else if ( $condition == "urls_invert" ) {
+				if ( isset($condition['urls_invert']) && !empty($condition['urls_invert']) ) {
+					$meta_input['exclude_by_url'] = $condition['urls_invert'];
+				}			
 			} else if ( is_array($subconditions) ) {
 				foreach ( $subconditions as $k => $v ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
@@ -2987,12 +2989,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							//
 						// custom_post_types_taxonomies => array
 						// location => array (is_front_page, is_home, etc) --> target_by_location
-						// url => urls (array) --> target_by_url/target_by_post
-						// urls_invert => urls_invert (array) --> exclude_by_url/exclude_by_post
 						} else if ( empty($v) ) { 
 							//
 						} else {
+							
 							$meta_input[$k] = $v;
+							
 							$subs_empty = false;
 						}
 						//
@@ -3024,7 +3026,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$meta_input['widget_type'] = $widget_type;
 			$meta_input['widget_id'] = $id;
 			$meta_input['widget_uid'] = $uid;
-			$meta_input['cs_id'] = $cs_id;
+			//$meta_input['cs_id'] = $cs_id;
 			$meta_input['widget_logic'] = $conditions;
 				
 			// Create new snippet post
@@ -3036,10 +3038,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				'post_author'   => 1, // get_current_user_id()
 				// Array of post meta values keyed by their post meta key:
 				'meta_input'	=> $meta_input,
-				/*'meta_input'   => array(
-					'book' => $book_id,
-					'chapterverses' => $chapterverses,
-				),*/
 				//'tax_input'
 				//'post_category'
 			);
@@ -3047,15 +3045,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			/*
 			// Insert the post into the database
-			$post_id = wp_insert_post($postarr);
-			if ( !is_wp_error($post_id) ) {
+			$snippet_id = wp_insert_post($postarr);
+			if ( !is_wp_error($snippet_id) ) {
 				// the post is valid
 				$info .= "Success! new reading record created<br />";
+				// Run updates?
+				//if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
+				$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
-				$scripture_citations[] = $post_id;
-				$updates = true;
 			} else {
-				$info .= $post_id->get_error_message();
+				$info .= $snippet_id->get_error_message();
 			}
 			*/
 		}
@@ -3068,6 +3067,15 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	return $info;	
 }
 
+// WIP
+function get_cs_id( $widget_uid = null) {
+
+	//
+	return null;
+
+}
+
+// WIP
 function convert_cs_sidebars () {
 
 	// TS/logging setup
@@ -3088,6 +3096,10 @@ function convert_cs_sidebars () {
 	$info = "";
 	$i = 0;
 	$arr_option = get_option('cs_sidebars');
+	$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
+	$arr_sidebars_widgets = get_option('sidebars_widgets');
+	$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	//
 	
 	//....
 	
