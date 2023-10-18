@@ -3113,7 +3113,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			//
 			if ( $action ) {
 				if ( !is_wp_error($snippet_id) ) {				
-					$info .= "Success! -- snippet record ".$action."<br />";				
+					$info .= "Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 					// Update snippet logic
 					//$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 				} else {
