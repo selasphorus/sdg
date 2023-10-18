@@ -2965,7 +2965,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$existing = get_field( 'target_by_url' );
 					if ( ! is_array($existing) ) $existing = array();
 					$additions = $subconditions['urls'];
-					$updated = $existing + $additions;
+					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'target_by_url', $updated ) ) {
 						$info .= "updated repeater field: target_by_url<br />";
 					}					
@@ -2983,7 +2983,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$existing = get_field( 'exclude_by_url' );
 					if ( ! is_array($existing) ) $existing = array();
 					$additions = $subconditions['urls_invert'];
-					$updated = $existing + $additions;
+					$updated = array_unique(array_merge($existing, $additions));
 					if ( update_field( 'exclude_by_url', $updated ) ) {
 						$info .= "updated repeater field: exclude_by_url<br />";
 					}
