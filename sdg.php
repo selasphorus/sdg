@@ -2975,8 +2975,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				$meta_input['snippet_display'] = $subconditions['condition'];
 			} else if ( $condition == "url" ) {
 				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-				if ( isset($condition['urls']) && !empty($condition['urls']) ) {
-					$meta_input['target_by_url'] = $condition['urls'];
+				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {
+					$meta_input['target_by_url'] = $subconditions['urls'];
 				}			
 			} else if ( $condition == "urls_invert" ) {
 				if ( isset($condition['urls_invert']) && !empty($condition['urls_invert']) ) {
