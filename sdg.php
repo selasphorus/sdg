@@ -2972,6 +2972,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$updated = array_unique(array_merge($existing, $additions));
 						if ( update_field( 'target_by_url', $updated ) ) {
 							$info .= "updated repeater field: target_by_url<br />";
+						} else {
+							$info .= "updated FAILED for repeater field: target_by_url<br />";
+							$info .= "arr updated: ".print_r($updated, true)."<br />";
 						}
 					}
 									
@@ -2998,6 +3001,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$updated = array_unique(array_merge($existing, $additions));
 						if ( update_field( 'exclude_by_url', $updated ) ) {
 							$info .= "updated repeater field: exclude_by_url<br />";
+						} else {
+							$info .= "updated FAILED for repeater field: exclude_by_url<br />";
+							$info .= "arr updated: ".print_r($updated, true)."<br />";
 						}
 					}
 					
