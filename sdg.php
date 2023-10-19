@@ -2722,7 +2722,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$updated = array_unique(array_merge($existing, $additions));
 						$info .= "existing: ".print_r($existing, true)."<br />";
 						$info .= "additions: ".print_r($additions, true)."<br />";
-						$info .= "arr updated: ".print_r($updated, true)."<br />";
+						$info .= "updated: ".print_r($updated, true)."<br />";
+						// WIP 10/18/23 -- updates not working -- see stcdev page
 						if ( update_field( $repeater_key, $updated, $snippet_id ) ) {
 							$info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
