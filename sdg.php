@@ -3178,6 +3178,8 @@ function convert_cs_sidebars () {
 		if ( isset($arr_sidebars_widgets[$id]) ) {
 			$widgets = $arr_sidebars_widgets[$id]);
 			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		} else {
+			$info .= "No widgets found.<br />";
 		}
 		// Get all posts/pages using this sidebar
 		//...
