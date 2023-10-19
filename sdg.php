@@ -2717,16 +2717,16 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$repeater_urls = preg_replace("/[\r\n]+/", "\n", $repeater_urls);
 						$repeater_urls = explode("\n",$repeater_urls);
 					}*/
-					//$info .= "existing: ".print_r($existing, true)."<br />";
-					//$info .= "additions: ".print_r($additions, true)."<br />";
 					if ( !empty($repeater_urls) ) {
 						$additions = $repeater_urls;
 						$updated = array_unique(array_merge($existing, $additions));
+						$info .= "existing: ".print_r($existing, true)."<br />";
+						$info .= "additions: ".print_r($additions, true)."<br />";
+						$info .= "arr updated: ".print_r($updated, true)."<br />";
 						if ( update_field( $repeater_key, $updated, $snippet_id ) ) {
-							$info .= "updated repeater field: ".$repeater_key."<br />";
+							$info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
-							$info .= "updated FAILED for repeater field: ".$repeater_key."<br />";
-							$info .= "arr updated: ".print_r($updated, true)."<br />";
+							$info .= "updated FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						}
 					}
 					
