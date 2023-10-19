@@ -3198,6 +3198,8 @@ function convert_cs_sidebars () {
 						// Update snippet record with cs_id
 						if ( update_post_meta( $snippet_id, 'cs_id', $id ) ) {
 							$info .= "post_meta field cs_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						} else {
+							$info .= "post_meta field cs_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
 						}
 					}
 				} else {
