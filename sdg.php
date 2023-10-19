@@ -3166,19 +3166,25 @@ function convert_cs_sidebars () {
 	$i = 0;
 	//
 	$arr_cs_sidebars = get_option('cs_sidebars');
+	$arr_sidebars_widgets = get_option('sidebars_widgets');
+	//
 	$info .= "<h2>Custom Sidebars</h2>";
 	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
 	foreach ( $arr_cs_sidebars as $cs_sidebar ) {
 		$id = $cs_sidebar['id'];
 		$info .= '<div class="code">';
 		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description']."<br />";
+		// Get sidebar widgets
+		if ( isset($arr_sidebars_widgets[$id]) ) {
+			$widgets = $arr_sidebars_widgets[$id]);
+			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		}
 		// Get all posts/pages using this sidebar
 		//...
 		$info .= '</div>';
 	}
-	
+	//
 	$info .= "<h2>Sidebars/Widgets</h2>";
-	$arr_sidebars_widgets = get_option('sidebars_widgets');
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
 		if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
