@@ -3198,7 +3198,9 @@ function convert_cs_sidebars () {
 							$info .= "post_meta field cs_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
 						}
 					}
-				}				
+				} else {
+					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
+				}			
 			}
 		} else {
 			$info .= "No widgets found.<br />";
