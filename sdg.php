@@ -2618,40 +2618,19 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 
+	$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url', 
 	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 		
-			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {			
-					
-					// Update the repeater field
-					$existing = get_field( $key );
-					if ( ! is_array($existing) ) { $existing = array(); }
-					$additions = $subconditions['urls'];
-					if ( !is_array($additions) ) {
-						$additions = preg_replace("/[\r\n]+/", "\n", $additions);
-						$additions = explode("\n",$additions);
-					}
-					//$info .= "existing: ".print_r($existing, true)."<br />";
-					//$info .= "additions: ".print_r($additions, true)."<br />";
-					if ( !empty($additions) ) {
-						$updated = array_unique(array_merge($existing, $additions));
-						if ( update_field( $key, $updated, $snippet_id ) ) {
-							$info .= "updated repeater field: ".$key."<br />";
-						} else {
-							$info .= "updated FAILED for repeater field: ".$key."<br />";
-							$info .= "arr updated: ".print_r($updated, true)."<br />";
-						}
-					}
-					
-			} else if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
+			if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
-				$urls = explode("\n",$$key);
+				$urls = explode("\n",$$key);				
+				$repeater_urls = array();
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
 				// TODO: move this to later so as to also process removal of matched urls
@@ -2697,14 +2676,17 @@ function update_snippet_logic ( $snippet_id = null ) {
 							// TODO: remove this url from the array to be stored in the updated target_by_url_txt/exclude_by_url_txt text field -- and: repeaters?
 							//str_replace? $url/$$key
 						} else {
+							$repeater_urls[] = $url;
 							$info .= "&rarr; NO matching post found<br />";
 						}
 					}
 					// Save the posts to the snippet field
-					if ( $key == 'target_by_url' ) {
+					if ( $key == 'target_by_url_txt' ) {
 						$target_key = 'target_by_post';
-					} else if ( $key == 'exclude_by_url' ) {
+						$repeater_key = 'target_by_url';
+					} else if ( $key == 'exclude_by_url_txt' ) {
 						$target_key = 'exclude_by_post';
+						$repeater_key = 'exclude_by_url';
 					}
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$arr_new = null;
@@ -2726,6 +2708,26 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$info .= "arr_new is empty<br />";
 						$info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
 						$info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
+					}
+					
+					// Update the associated repeater field with the values not matched by posts
+					$existing = get_field( $repeater_key );
+					if ( ! is_array($existing) ) { $existing = array(); }
+					/*if ( !is_array($repeater_urls) ) {
+						$repeater_urls = preg_replace("/[\r\n]+/", "\n", $repeater_urls);
+						$repeater_urls = explode("\n",$repeater_urls);
+					}*/
+					//$info .= "existing: ".print_r($existing, true)."<br />";
+					//$info .= "additions: ".print_r($additions, true)."<br />";
+					if ( !empty($repeater_urls) ) {
+						$additions = $repeater_urls;
+						$updated = array_unique(array_merge($existing, $additions));
+						if ( update_field( $repeater_key, $updated, $snippet_id ) ) {
+							$info .= "updated repeater field: ".$repeater_key."<br />";
+						} else {
+							$info .= "updated FAILED for repeater field: ".$repeater_key."<br />";
+							$info .= "arr updated: ".print_r($updated, true)."<br />";
+						}
 					}
 					
 				}
