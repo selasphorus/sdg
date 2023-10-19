@@ -3194,7 +3194,9 @@ function convert_cs_sidebars () {
 					}
 					if ( $snippet_id ) {
 						// Update snippet record with cs_id
-						update_post_meta( $snippet_id, 'cs_id', $id );
+						if ( update_post_meta( $snippet_id, 'cs_id', $id ) ) {
+							$info .= "post_meta field cs_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						}
 					}
 				}				
 			}
