@@ -2618,13 +2618,36 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url', 
+	$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 
 	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-			if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
+		
+			if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {			
+					
+					// Update the repeater field
+					$existing = get_field( $key );
+					if ( ! is_array($existing) ) { $existing = array(); }
+					$additions = $subconditions['urls'];
+					if ( !is_array($additions) ) {
+						$additions = preg_replace("/[\r\n]+/", "\n", $additions);
+						$additions = explode("\n",$additions);
+					}
+					//$info .= "existing: ".print_r($existing, true)."<br />";
+					//$info .= "additions: ".print_r($additions, true)."<br />";
+					if ( !empty($additions) ) {
+						$updated = array_unique(array_merge($existing, $additions));
+						if ( update_field( $key, $updated, $snippet_id ) ) {
+							$info .= "updated repeater field: ".$key."<br />";
+						} else {
+							$info .= "updated FAILED for repeater field: ".$key."<br />";
+							$info .= "arr updated: ".print_r($updated, true)."<br />";
+						}
+					}
+					
+			} else if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
@@ -2956,27 +2979,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {				
 					
 					$meta_input['target_by_url_txt'] = $subconditions['urls'];
-					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup					
-					
-					// Update the repeater field
-					$existing = get_field( 'target_by_url' );
-					if ( ! is_array($existing) ) { $existing = array(); }
-					$additions = $subconditions['urls'];
-					if ( !is_array($additions) ) {
-						$additions = preg_replace("/[\r\n]+/", "\n", $additions);
-						$additions = explode("\n",$additions);
-					}
-					//$info .= "existing: ".print_r($existing, true)."<br />";
-					//$info .= "additions: ".print_r($additions, true)."<br />";
-					if ( !empty($additions) ) {
-						$updated = array_unique(array_merge($existing, $additions));
-						if ( update_field( 'target_by_url', $updated ) ) {
-							$info .= "updated repeater field: target_by_url<br />";
-						} else {
-							$info .= "updated FAILED for repeater field: target_by_url<br />";
-							$info .= "arr updated: ".print_r($updated, true)."<br />";
-						}
-					}
+					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup	
 									
 				}		
 					
@@ -2986,26 +2989,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 					$meta_input['exclude_by_url_txt'] = $subconditions['urls_invert'];
 					$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup
-					
-					// Update the repeater field
-					$existing = get_field( 'exclude_by_url' );
-					if ( ! is_array($existing) ) { $existing = array(); }
-					$additions = $subconditions['urls_invert'];
-					if ( !is_array($additions) ) {
-						$additions = preg_replace("/[\r\n]+/", "\n", $additions);
-						$additions = explode("\n",$additions);
-					}
-					//$info .= "existing: ".print_r($existing, true)."<br />";
-					//$info .= "additions: ".print_r($additions, true)."<br />";
-					if ( !empty($additions) ) {
-						$updated = array_unique(array_merge($existing, $additions));
-						if ( update_field( 'exclude_by_url', $updated ) ) {
-							$info .= "updated repeater field: exclude_by_url<br />";
-						} else {
-							$info .= "updated FAILED for repeater field: exclude_by_url<br />";
-							$info .= "arr updated: ".print_r($updated, true)."<br />";
-						}
-					}
 					
 				}
 				
