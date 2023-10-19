@@ -772,7 +772,6 @@ function sdg_autocomplete_search() {
 		);
     }
     
-    
 	$suggestions = []; // init results array
     
 	// Run the search
@@ -3176,6 +3175,29 @@ function convert_cs_sidebars () {
 		if ( isset($arr_sidebars_widgets[$id]) ) {
 			$widgets = $arr_sidebars_widgets[$id];
 			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+			foreach ( $widgets as $i => $widget_uid ) {
+				// Does a snippet already exist based on this widget?
+				$wp_args = array(
+					'post_type'   => 'snippet',
+					'post_status' => 'publish',
+					'meta_key'    => 'widget_uid',
+					'meta_value'  => $widget_uid,
+					'fields'      => 'ids'
+				);	
+				$snippets = get_posts($wp_args);
+				if ( $snippets ) {
+					// get existing post id
+					if ( count($snippets) == 1 ) {
+						$snippet_id = $snippets[0];
+					} else if ( count($snippets) > 1 ) {
+						$snippet_id = null; // tft
+					}
+					if ( $snippet_id ) {
+						// Update snippet record with cs_id
+						update_post_meta( $snippet_id, 'cs_id', $id );
+					}
+				}				
+			}
 		} else {
 			$info .= "No widgets found.<br />";
 		}
