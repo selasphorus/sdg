@@ -3172,6 +3172,8 @@ function convert_cs_sidebars () {
 	
 	//....
 	
+	return $info;
+	
 }
 
 /*** MISC ***/
