@@ -3186,7 +3186,7 @@ function convert_cs_sidebars () {
 				);	
 				$snippets = get_posts($wp_args);
 				if ( $snippets ) {
-					$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 					// get existing post id
 					if ( count($snippets) == 1 ) {
 						$snippet_id = $snippets[0];
@@ -3194,6 +3194,7 @@ function convert_cs_sidebars () {
 						$snippet_id = null; // tft
 					}
 					if ( $snippet_id ) {
+						$info .= "snippet_id: ".$snippet_id."<br />";
 						// Update snippet record with cs_id
 						if ( update_post_meta( $snippet_id, 'cs_id', $id ) ) {
 							$info .= "post_meta field cs_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
