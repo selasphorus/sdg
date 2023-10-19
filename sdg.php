@@ -2711,16 +2711,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					
 					// Update the associated repeater field with the values not matched by posts
-					$existing = get_field( $repeater_key );
+					$existing = get_field( $repeater_key, $snippet_id );
+					if ( empty($existing) ) { $existing = array(); }
 					$info .= "existing: ".print_r($existing, true)."<br />";
-					//if ( empty($existing) || !is_array($existing) ) { $existing = array(); }
-					/*if ( !is_array($repeater_urls) ) {
-						$repeater_urls = preg_replace("/[\r\n]+/", "\n", $repeater_urls);
-						$repeater_urls = explode("\n",$repeater_urls);
-					}*/
 					if ( !empty($repeater_urls) ) {
 						$additions = $repeater_urls;
-						if ( !empty($existing) ) { $updated = array_unique(array_merge($existing, $additions)); } else { $updated = $additions; }
+						$updated = array_unique(array_merge($existing, $additions));
 						$info .= "repeater_key: ".$repeater_key."<br />";
 						$info .= "existing: ".print_r($existing, true)."<br />";
 						$info .= "additions: ".print_r($additions, true)."<br />";
