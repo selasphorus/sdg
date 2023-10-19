@@ -3176,7 +3176,7 @@ function convert_cs_sidebars () {
 		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description']."<br />";
 		// Get sidebar widgets
 		if ( isset($arr_sidebars_widgets[$id]) ) {
-			$widgets = $arr_sidebars_widgets[$id]);
+			$widgets = $arr_sidebars_widgets[$id];
 			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		} else {
 			$info .= "No widgets found.<br />";
