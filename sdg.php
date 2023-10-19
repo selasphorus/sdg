@@ -3163,7 +3163,6 @@ function convert_cs_sidebars () {
     // Extract
 	extract( $args );
 	
-	$info = "";
 	$i = 0;
 	//
 	$arr_cs_sidebars = get_option('cs_sidebars');
@@ -3171,9 +3170,11 @@ function convert_cs_sidebars () {
 	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
 	foreach ( $arr_cs_sidebars as $cs_sidebar ) {
 		$id = $cs_sidebar['id'];
-		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description'];
+		$info .= '<div class="code">';
+		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description']."<br />";
 		// Get all posts/pages using this sidebar
 		//...
+		$info .= '</div>';
 	}
 	
 	$info .= "<h2>Sidebars/Widgets</h2>";
