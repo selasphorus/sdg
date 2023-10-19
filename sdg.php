@@ -3217,7 +3217,11 @@ function convert_cs_sidebars () {
 		if ( count($arr_ids) > 0 ) {
 			$info .= "posts using this sidebar:<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
 			foreach ( $arr_ids as $obj ) {
-				$info .= $obj->post_id."; ";
+				$post_id = $obj->post_id;
+				$post = get_post($post_id);
+				$info .= $post_id;
+				$info .= "(".$post->post_status.")";
+				$info .= "; ";
 				//$info .= print_r($obj,true)."<br />";
 			}
 		}
