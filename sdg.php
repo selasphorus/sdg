@@ -2435,7 +2435,11 @@ function show_snippets ( $atts = [] ) {
 	if ( $post_id === null ) { return false; }
 	$post_type = get_post_type( $post_id );
 	
-	// Set up basic query args
+	// Check for custom sidebars 
+	$cs = get_post_meta( $post_id, '_cs_replacements', true );
+	$ts_info .= "cs: <pre>".print_r($cs, true)."</pre>";
+	
+	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'       => 'snippet',
 		'post_status'     => 'publish',
@@ -3182,17 +3186,18 @@ function convert_cs_sidebars () {
 			$info .= "No widgets found.<br />";
 		}
 		// Get all posts/pages using this sidebar
+		//$data = get_post_meta( $post_id, '_cs_replacements', true );
 		//...
 		$info .= '</div>';
 	}
-	//
+	/*
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
 		if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
 		$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 	}
-	//
+	*/
 	
 	//....
 	
