@@ -2626,19 +2626,30 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url', 
-	//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url',
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		//$info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 		
-			if ( $key == 'target_by_url_txt' || $key == 'exclude_by_url_txt' ) {
+			if ( $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' ) {
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				$info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
-				$urls = explode("\n",$$key);				
-				$repeater_urls = array();
+				$urls = explode("\n",$$key);
+				
+				// wip 231019
+				if ( $key == 'widget_logic_target_by_url' ) {
+					$target_key = 'target_by_post';
+					$repeater_key = 'target_by_url';
+				} else if ( $key == 'widget_logic_exclude_by_url' ) {
+					$target_key = 'exclude_by_post';
+					$repeater_key = 'exclude_by_url';
+				}
+				$repeater_urls = get_field( $repeater_key, $snippet_id );
+				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
+				//$info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
 				// TODO: move this to later so as to also process removal of matched urls
@@ -2681,7 +2692,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
 							$info .= "&rarr; matching post found with id: $matched_post_id<br />";
-							// TODO: remove this url from the array to be stored in the updated target_by_url_txt/exclude_by_url_txt text field -- and: repeaters?
+							// TODO: remove this url from the repeater_urls array
+							$repeater_urls = array_diff( $repeater_urls, array('url' => $url) );
 							//str_replace? $url/$$key
 						} else {
 							$repeater_urls[] = array('url' => $url);
@@ -2689,13 +2701,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 						}
 					}
 					// Save the posts to the snippet field
-					if ( $key == 'target_by_url_txt' ) {
-						$target_key = 'target_by_post';
-						$repeater_key = 'target_by_url';
-					} else if ( $key == 'exclude_by_url_txt' ) {
-						$target_key = 'exclude_by_post';
-						$repeater_key = 'exclude_by_url';
-					}
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$arr_new = null;
 					if ( empty($arr_old) ) {
@@ -2706,8 +2711,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
 						} else {
 							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-						}
-						
+						}						
 					}
 					if ( $arr_new ) { 
 						$info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
@@ -2719,20 +2723,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					
 					// Update the associated repeater field with the values not matched by posts
-					$existing = get_field( $repeater_key, $snippet_id );
-					if ( empty($existing) ) { $existing = array(); }
-					//$info .= "existing: ".print_r($existing, true)."<br />";
 					if ( !empty($repeater_urls) ) {
-						$additions = $repeater_urls;
-						$updated = array_merge($existing, $additions);
-						$updated = array_unique($updated, SORT_REGULAR);
-						//$updated = array_unique(array_merge($existing, $additions));
+						$arr_updated = array_unique($repeater_urls, SORT_REGULAR);
 						$info .= "repeater_key: ".$repeater_key."<br />";
-						$info .= "existing: ".print_r($existing, true)."<br />";
-						$info .= "additions: ".print_r($additions, true)."<br />";
-						$info .= "updated: ".print_r($updated, true)."<br />";
+						$info .= "arr_updated: ".print_r($arr_updated, true)."<br />";
 						// WIP 10/18/23 -- updates not working -- see stcdev page
-						if ( update_field( $repeater_key, $updated, $snippet_id ) ) {
+						if ( update_field( $repeater_key, $arr_updated, $snippet_id ) ) {
 							$info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$info .= "updated FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
@@ -2987,20 +2983,14 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			} else if ( $condition == "url" ) {
 			
 				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {				
-					
-					$meta_input['target_by_url_txt'] = $subconditions['urls'];
-					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup	
-									
+				if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {					
+					$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup/transitional field
 				}		
 					
 			} else if ( $condition == "urls_invert" ) {
 			
 				if ( isset($subconditions['urls_invert']) && !empty($subconditions['urls_invert']) ) {
-					
-					$meta_input['exclude_by_url_txt'] = $subconditions['urls_invert'];
-					$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup
-					
+					$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup/transitional field					
 				}
 				
 			} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
@@ -3220,7 +3210,7 @@ function convert_cs_sidebars () {
 				$post_id = $obj->post_id;
 				$post = get_post($post_id);
 				$info .= $post_id;
-				if ( $post->post_status != "publish" ) { $info .= "(".$post->post_status.")"; }
+				if ( $post->post_status != "publish" ) { $info .= " (".$post->post_status.")"; }
 				$info .= "; ";
 				//$info .= print_r($obj,true)."<br />";
 			}
