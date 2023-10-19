@@ -2676,7 +2676,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							// TODO: remove this url from the array to be stored in the updated target_by_url_txt/exclude_by_url_txt text field -- and: repeaters?
 							//str_replace? $url/$$key
 						} else {
-							$repeater_urls[] = $url;
+							$repeater_urls[] = array('url' => $url);
 							$info .= "&rarr; NO matching post found<br />";
 						}
 					}
