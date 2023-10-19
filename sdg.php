@@ -3145,6 +3145,7 @@ function get_cs_id( $widget_uid = null) {
 }
 
 // WIP
+add_shortcode('convert_cs_sidebars', 'convert_cs_sidebars');
 function convert_cs_sidebars () {
 
 	// TS/logging setup
