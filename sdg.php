@@ -3214,7 +3214,13 @@ function convert_cs_sidebars () {
 				AND `post_type`='event'";*/
 
 		$arr_ids = $wpdb->get_results($sql);
-		$info .= "posts using this sidebar: <pre>".print_r($arr_ids,true)."</pre><hr />";
+		if ( count($arr_ids) > 0 ) {
+			$info .= "posts using this sidebar:<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
+			foreach ( $arr_ids as $obj ) {
+				$info .= $obj['post_id']."<br />";
+			}
+		}
+		
 		//...
 		$info .= '</div>';
 	}
