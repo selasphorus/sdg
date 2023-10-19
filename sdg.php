@@ -2429,7 +2429,10 @@ function show_snippets ( $atts = [] ) {
 	extract( $args );
 	
 	//
-	if ( $dev ) { $info .= '<h2>Snippets -- WIP</h2>'; }
+	if ( $dev ) { 
+		$info .= '<h2>Snippets -- WIP</h2>';
+		$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
+	}
     
     //
 	if ( $post_id === null ) { return false; }
