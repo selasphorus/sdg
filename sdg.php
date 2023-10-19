@@ -3186,6 +3186,7 @@ function convert_cs_sidebars () {
 				);	
 				$snippets = get_posts($wp_args);
 				if ( $snippets ) {
+					$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 					// get existing post id
 					if ( count($snippets) == 1 ) {
 						$snippet_id = $snippets[0];
