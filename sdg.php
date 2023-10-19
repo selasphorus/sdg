@@ -2431,8 +2431,8 @@ function show_snippets ( $atts = [] ) {
 	//
 	if ( $dev ) { 
 		$info .= '<h2>Snippets -- WIP</h2>';
-		$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
 	}
+	$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
     
     //
 	if ( $post_id === null ) { return false; }
