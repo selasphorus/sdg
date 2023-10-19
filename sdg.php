@@ -2713,10 +2713,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Update the associated repeater field with the values not matched by posts
 					$existing = get_field( $repeater_key, $snippet_id );
 					if ( empty($existing) ) { $existing = array(); }
-					$info .= "existing: ".print_r($existing, true)."<br />";
+					//$info .= "existing: ".print_r($existing, true)."<br />";
 					if ( !empty($repeater_urls) ) {
 						$additions = $repeater_urls;
-						$updated = array_unique(array_merge($existing, $additions));
+						$updated = array_merge($existing, $additions);
+						//$updated = $existing + $additions; //$updated = array_unique(array_merge($existing, $additions));
 						$info .= "repeater_key: ".$repeater_key."<br />";
 						$info .= "existing: ".print_r($existing, true)."<br />";
 						$info .= "additions: ".print_r($additions, true)."<br />";
