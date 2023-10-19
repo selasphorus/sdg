@@ -2441,6 +2441,7 @@ function show_snippets ( $atts = [] ) {
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
 	$ts_info .= "cs: <pre>".print_r($cs, true)."</pre>";
+	//e.g. Array( [sidebar-1] => cs-17 )
 	
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
@@ -3190,6 +3191,30 @@ function convert_cs_sidebars () {
 		}
 		// Get all posts/pages using this sidebar
 		//$data = get_post_meta( $post_id, '_cs_replacements', true );
+		// Go straight to the DB and get ONLY the post IDs of relevant related event posts...
+		global $wpdb;
+	
+		$sql = "SELECT `post_id` 
+				FROM $wpdb->postmeta
+				WHERE `meta_key` = '_cs_replacements'
+				AND `meta_value` LIKE '%".'"'.$id.'"'."%'";
+	
+		/*$sql = "SELECT `post_id` 
+				FROM $wpdb->postmeta, $wpdb->posts
+				WHERE $wpdb->postmeta.`meta_key` LIKE 'program_items_%_program_item'
+				AND $wpdb->postmeta.`meta_value` LIKE '%".'"'.$post_id.'"'."%'
+				AND $wpdb->postmeta.`post_id`=$wpdb->posts.`ID`
+				AND $wpdb->posts.`post_type`='event'";*/
+	
+		/*$sql = "SELECT `post_id` 
+				FROM $wpdb->postmeta, $wpdb->posts
+				WHERE `meta_key` LIKE 'program_items_%_program_item'
+				AND `meta_value` LIKE '%".'"'.$post_id.'"'."%'
+				AND `post_id`=`ID`
+				AND `post_type`='event'";*/
+
+		$arr_ids = $wpdb->get_results($sql);
+		$info .= "posts using this sidebar: <pre>".print_r($arr_ids,true)."</pre><hr />";
 		//...
 		$info .= '</div>';
 	}
