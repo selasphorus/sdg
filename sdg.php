@@ -3220,7 +3220,7 @@ function convert_cs_sidebars () {
 				$post_id = $obj->post_id;
 				$post = get_post($post_id);
 				$info .= $post_id;
-				$info .= "(".$post->post_status.")";
+				if ( $post->post_status != "publish" ) { $info .= "(".$post->post_status.")"; }
 				$info .= "; ";
 				//$info .= print_r($obj,true)."<br />";
 			}
