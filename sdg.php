@@ -3167,11 +3167,16 @@ function convert_cs_sidebars () {
 	$i = 0;
 	//
 	$arr_cs_sidebars = get_option('cs_sidebars');
-	$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
+	$info .= "<h2>Custom Sidebars</h2>";
+	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
 	foreach ( $arr_cs_sidebars as $cs_sidebar ) {
-		//
+		$id = $cs_sidebar['id'];
+		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description'];
+		// Get all posts/pages using this sidebar
+		//...
 	}
-	//
+	
+	$info .= "<h2>Sidebars/Widgets</h2>";
 	$arr_sidebars_widgets = get_option('sidebars_widgets');
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
