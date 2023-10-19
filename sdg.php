@@ -2717,7 +2717,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( !empty($repeater_urls) ) {
 						$additions = $repeater_urls;
 						$updated = array_merge($existing, $additions);
-						//$updated = $existing + $additions; //$updated = array_unique(array_merge($existing, $additions));
+						$updated = array_unique($updated, SORT_REGULAR);
+						//$updated = array_unique(array_merge($existing, $additions));
 						$info .= "repeater_key: ".$repeater_key."<br />";
 						$info .= "existing: ".print_r($existing, true)."<br />";
 						$info .= "additions: ".print_r($additions, true)."<br />";
