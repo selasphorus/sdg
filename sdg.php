@@ -2727,9 +2727,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
 							$ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-							$ts_info .= "&rarr; remove url from repeater_urls array: $url<br />";
+							$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
+							$ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />";
+							$repeater_removals = array('url' => $url);
+							$ts_info .= "repeater_removals: ".print_r($repeater_removals, true)."<br />";
 							// TODO: remove this url from the repeater_urls array
-							$repeater_urls = array_diff( $repeater_urls, array('url' => $url) );
+							$repeater_urls = array_diff( $repeater_urls, $repeater_removals ); //$repeater_urls = array_diff( $repeater_urls, array('url' => $url) );
 							//str_replace? $url/$$key
 						} else {
 							$repeater_urls[] = array('url' => $url);
