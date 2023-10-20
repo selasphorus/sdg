@@ -2519,6 +2519,7 @@ function show_snippets ( $atts = [] ) {
 							if ( $any_all == "any" ) {
 								$post_snippets[] = $snippet_id;
 								$snippet_status = "active";
+								$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								break;
 							}
 						} else {
@@ -2534,6 +2535,7 @@ function show_snippets ( $atts = [] ) {
 								if ( $any_all == "any" ) { 
 									$post_snippets[] = $snippet_id;
 									$snippet_status = "active";
+									$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 									break;
 								}
 								// ?
