@@ -2761,7 +2761,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						} else {
 							$ts_info .= "Merge arr_old with matched_posts<br />";
 							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
+							$ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
 						}						
 					}
 					if ( !empty($arr_new) ) { 
