@@ -2669,6 +2669,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url',
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
+		$key_ts_info = "";
 		//$ts_info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 		
@@ -2677,7 +2678,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
 				update_field( $key, $$key, $snippet_id );
-				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 				// Turn the urls text into an array of urls
 				$urls = explode("\n",$$key);
 				
@@ -2694,10 +2695,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
 				$repeater_additions = array();
 				$repeater_removals = array();
-				$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
+				$key_ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				if ( is_array($urls)) {
-					$ts_info .= count($urls)." urls<br />";
+					$key_ts_info .= count($urls)." urls<br />";
 					$matched_posts = array();
 					foreach ( $urls as $url ) {
 						if ( empty($url) ) { continue; }
@@ -2717,9 +2718,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$url_bits = explode("/",$url); // The last bit is slug
 							$slug = end($url_bits);
 							//$ts_info .= "url_bits: ".print_r($url_bits, true)."<br />";
-							$ts_info .= "$post_type slug: $slug<br />";
+							$key_ts_info .= "$post_type slug: $slug<br />";
 						} else {
-							$ts_info .= "url: $url<br />";
+							$key_ts_info .= "url: $url<br />";
 							
 						}
 						// Look for matching post
@@ -2732,58 +2733,58 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ($matched_post) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
-							$ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+							$key_ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
 							//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
-							$ts_info .= "&rarr; NO matching post found<br />";
+							$key_ts_info .= "&rarr; NO matching post found<br />";
 							$tmp_urls = array_column($repeater_urls, 'url');
 							$match_key = array_search($url, $tmp_urls); //$match_key = array_search($url, array_column($repeater_urls, 'url')); // not working -- why not?!?
 							if ( $match_key ) {
-								$ts_info .= "&rarr; The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
+								$key_ts_info .= "&rarr; The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
 								$repeater_additions[] = $url;
-								$ts_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_urls array<br />";
+								$key_ts_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_urls array<br />";
 							}
 						}
 					} // END foreach $urls
-					$ts_info .= "<hr />";
+					$key_ts_info .= "<hr />";
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-					$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
+					$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
 					if ( !empty($matched_posts) ) {
-						$ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
+						$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
 						if ( empty($arr_old) ) {
 							// Save the array of matched posts to the target_by_post field
 							$arr_new = $matched_posts;									
 						} else if ( is_array($arr_old) ) {
 							if ( $arr_old == $matched_posts ) {
-								$ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
+								$key_ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
 							} else {
-								$ts_info .= "Merge arr_old with matched_posts<br />";
+								$key_ts_info .= "Merge arr_old with matched_posts<br />";
 								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-								$ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
+								$key_ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
 							}						
 						}
 					} else {
-						$ts_info .= "matched_posts is empty; no update needed<br />";
+						$key_ts_info .= "matched_posts is empty; no update needed<br />";
 					}
 					if ( !empty($arr_new) ) {
 						if ( $arr_old == $arr_new ) {
-							$ts_info .= "No changes necessary -- arr_old == arr_new<br />";
+							$key_ts_info .= "No changes necessary -- arr_old == arr_new<br />";
 						} else {
-							$ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+							$key_ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
 							if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
-								$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
+								$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 							} else {
-								$ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
+								$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
 							}
 						}						
 					} else {
-						$ts_info .= "arr_new is empty<br />";
-						$ts_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
-						$ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
+						$key_ts_info .= "arr_new is empty<br />";
+						$key_ts_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
+						$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 					}
 					
 					// Update the associated repeater field as needed
@@ -2792,16 +2793,16 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$arr_new = array();
 					if ( !empty($repeater_urls) ) {
 					
-						$ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
+						$key_ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
 						
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
-							$ts_info .= "About to clean up repeater_urls by removing repeater_removals...<br />";
-							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+							$key_ts_info .= "About to clean up repeater_urls by removing repeater_removals...<br />";
+							$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 							foreach ( $repeater_urls as $k => $v ) {
 								$repeater_url = $v['url'];
 								if ( in_array($repeater_url, $repeater_removals) ) {
-									$ts_info .= "removing url: $repeater_url<br />";
+									$key_ts_info .= "removing url: $repeater_url<br />";
 									//unset($repeater_urls[$k]);
 								} else {
 									$arr_new[$k] = $repeater_urls[$k];
@@ -2812,8 +2813,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// Second, add repeater_additions, making sure they're not duplicates...
 					if ( !empty($repeater_additions) ) {
-						$ts_info .= "About to add repeater_additions to repeater_urls...<br />";
-						$ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
+						$key_ts_info .= "About to add repeater_additions to repeater_urls...<br />";
+						$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 						foreach ( $repeater_additions as $url ) {
 							// TODO: make sure url isn't a duplicate of an existing array item
 							$arr_new[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
@@ -2824,46 +2825,49 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( !empty($arr_new) ) {
 						
 						// Remove duplicates
-						$ts_info .= "About to remove duplicate repeater_urls...<br />";
+						$key_ts_info .= "About to remove duplicate repeater_urls...<br />";
 						$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
-						$ts_info .= "Unique arr_new (repeater_urls): ".print_r($arr_new, true)."<br />";
-						$ts_info .= "repeater_key: ".$repeater_key."<br />";
+						$key_ts_info .= "Unique arr_new (repeater_urls): ".print_r($arr_new, true)."<br />";
+						$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 						//
 						if ( $arr_new == $repeater_urls ) {
-							$ts_info .= "No changes necessary -- arr_new == repeater_urls<br />";
+							$key_ts_info .= "No changes necessary -- arr_new == repeater_urls<br />";
 						} else {
 							if ( update_field( $repeater_key, $arr_new, $snippet_id ) ) {
-								$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+								$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 							} else {
-								$ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+								$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 							}
 						}
 					}
 					
 				} // END
-				$ts_info = ""; // reset -- tmp -- done with TS for target/exclude by url but wanting to leave TS on for post_type, taxonomy, location
+				//$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_post_type' ) {
-				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
+				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_taxonomy' ) {
-				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$conditions = explode(" | ",$$key);
 				//
 				$$key = str_replace(" | ","\n",$$key);
 				update_field( $key, $$key, $snippet_id );
 				if ( is_array($conditions)) {
-					$ts_info .= count($conditions)." conditions<br />";
+					$key_ts_info .= count($conditions)." conditions<br />";
 					$matched_posts = array();
 					foreach ( $conditions as $condition ) {
-						$ts_info .= "condition: $condition<br />";
+						$key_ts_info .= "condition: $condition<br />";
 					}
 				}
 				// WIP -- copy fcns from Widget Context customizations
 				//$target_taxonomies = get_field($key, $snippet_id, false);
+				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_location' ) {
-				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
+				$ts_info .= $key_ts_info;
 			}
 		}
 	}
