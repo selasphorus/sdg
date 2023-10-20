@@ -2684,6 +2684,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				$repeater_urls = get_field( $repeater_key, $snippet_id );
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
+				$repeater_removals = array(); // init
 				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
@@ -2728,7 +2729,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_posts[] = $matched_post_id;
 							$ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
 							$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
-							$repeater_removals = array('url' => $url);
+							$repeater_removals[] = array('url' => $url);
 							$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 							// TODO: remove this url from the repeater_urls array
