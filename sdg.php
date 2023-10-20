@@ -2476,6 +2476,7 @@ function show_snippets ( $atts = [] ) {
 	foreach ( $snippets as $snippet_id ) {
 	
 		$snippet_info = "";
+		$snippet_logic_info = "";
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
@@ -2494,13 +2495,13 @@ function show_snippets ( $atts = [] ) {
 		if ( $snippet_display == "show" ) {
 		
 			$post_snippets[] = $snippet_id;
-			$snippet_status = "show";
+			$snippet_status = "active";
 			
 		} else {
 		
 			// Conditional display -- determine whether the given post should display this widget
 			
-			$snippet_info .= "Analysing display conditions...<br />";
+			$snippet_logic_info .= "Analysing display conditions...<br />";
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 				$$key = get_post_meta( $snippet_id, $key, true );
@@ -2512,21 +2513,25 @@ function show_snippets ( $atts = [] ) {
 						// WIP
 						$target_type = get_field($key, $snippet_id, false);
 						if ( $post_type == $target_type ) {
-							$snippet_info .= "This post matches target post_type.<br />";
-							if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
+							$snippet_logic_info .= "This post matches target post_type.<br />";
+							if ( $any_all == "any" ) {
+								$post_snippets[] = $snippet_id;
+								$snippet_status = "active";
+								break;
+							}
 						} else {
-							$snippet_info .= "This post does NOT match the target post_type.<br />";
+							$snippet_logic_info .= "This post does NOT match the target post_type.<br />";
 						}
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( in_array($post_id, $target_posts) ) {
-							$snippet_info .= "This post is in the target_posts array<br />";
+							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' ) {
 								if ( $any_all == "any" ) { 
 									$post_snippets[] = $snippet_id;
-									$snippet_status = "show";
+									$snippet_status = "active";
 									break;
 								}
 								// ?
@@ -2534,13 +2539,13 @@ function show_snippets ( $atts = [] ) {
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
 							break;
 						} else {
-							$snippet_info .= "This post is NOT in the target_posts array.<br />";
-							$snippet_status = "hide";
+							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
+							$snippet_status = "inactive";
 						}
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
-						$snippet_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
 						// Look for match in repeater field results array
 						//$snippet_status = "show";
 						/*if ( in_array($post_id, $target_posts) ) {
@@ -2562,17 +2567,17 @@ function show_snippets ( $atts = [] ) {
 						if ( is_array($terms)) {
 							$snippet_info .= count($terms)." terms<br />";
 							foreach ( $terms as $term_pair ) {
-								$snippet_info .= "term_pair: ".print_r($term_pair, true)."<br />";
+								$snippet_logic_info .= "term_pair: ".print_r($term_pair, true)."<br />";
 								$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
 								$tax_term = substr($term_pair,strpos($term_pair,":")+1,strlen($term_pair));
-								$snippet_info .= "taxonomy: ".$taxonomy."<br />";
-								$snippet_info .= "tax_term: ".$tax_term."<br />";
+								$snippet_logic_info .= "taxonomy: ".$taxonomy."<br />";
+								$snippet_logic_info .= "tax_term: ".$tax_term."<br />";
 								if ( has_term( $tax_term, $taxonomy, $post_id ) ) {
-									$snippet_info .= "This post has the $taxonomy term '$tax_term'<br />";
-									$snippet_status = "show";
+									$snippet_logic_info .= "This post has the $taxonomy term '$tax_term'<br />";
+									$snippet_status = "active";
 								} else {
-									$snippet_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
-									$snippet_status = "hide";
+									$snippet_logic_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
+									$snippet_status = "inactive";
 								}
 							}
 						}
@@ -2582,15 +2587,15 @@ function show_snippets ( $atts = [] ) {
 						// Is the given post in the right site location?
 						$target_locations = get_field($key, $snippet_id, false);
 						// WIP
-						$snippet_info .= "target_locations: ".print_r($target_locations, true)."<br />";
+						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
 						//
 					} else {
-						$snippet_info .= "unmatched key: ".$key."<br />";
+						$snippet_logic_info .= "unmatched key: ".$key."<br />";
 					}
-					$snippet_info .= "<br />";
+					$snippet_logic_info .= "<br />";
 				}
 			}
-			$snippet_info = '<div class="code '.$snippet_status.'">'.$snippet_info.'</div>';
+			$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		} // END $snippet_display == "selected"
 		//
 		$snippet_info .= '</div>'; // <div class="troubleshooting">
