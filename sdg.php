@@ -2674,7 +2674,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 		
 			if ( $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' ) {
-				// Replace multiple (one ore more) line breaks with a single one.
+				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
 				update_field( $key, $$key, $snippet_id );
@@ -2850,15 +2850,25 @@ function update_snippet_logic ( $snippet_id = null ) {
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
-				$conditions = explode(" | ",$$key);
+				if ( !is_array($$key) ) {
+					// Replace multiple (one or more) line breaks with a single one.
+					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
+					// Update the legacy field with the cleaned-up version
+					update_field( $key, $$key, $snippet_id );
+					// Turn the text into an array of conditions
+					$conditions = explode("\n",$$key);
+				} else {
+					$conditions = $$key;
+				}
 				//
-				$$key = str_replace(" | ","\n",$$key);
-				update_field( $key, $$key, $snippet_id );
+				$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 				if ( is_array($conditions)) {
-					$key_ts_info .= count($conditions)." conditions<br />";
+					$key_ts_info .= count($conditions)." condition(s)<br />";
 					$matched_posts = array();
 					foreach ( $conditions as $condition ) {
 						$key_ts_info .= "condition: $condition<br />";
+						// WIP
+						
 					}
 				}
 				// WIP -- copy fcns from Widget Context customizations
