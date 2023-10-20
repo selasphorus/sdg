@@ -2760,10 +2760,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 						} else {
 							$ts_info .= "Merge arr_old with matched_posts<br />";
 							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+							$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 						}						
 					}
 					if ( !empty($arr_new) ) { 
-						$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+						$ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
 						if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
 							$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 						} else {
