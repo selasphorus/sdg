@@ -3079,7 +3079,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$meta_input = array();
 		//
 		if ( isset($arr_logic[$uid]) ) {
-			$info .= "... found widget logic...<br />";
+			$info .= "... found widget logic ...<br />";
 			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
 			$conditions = $arr_logic[$uid];
 		}
@@ -3091,7 +3091,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$subs_empty = true;
 			$check_wordcount = false;
 			//
-			//$info .= "condition: ".$condition."<br />";
+			$info .= "condition: ".$condition."<br />";
 			//$info .= "subconditions: <br />";
 			if ( $condition == 'incexc' ) {
 			
