@@ -2545,7 +2545,12 @@ function show_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						$snippet_logic_info .= $key." target_urls: <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						// Get current page path and/or slug -- ??
+						foreach ( $target_urls as $k => $v ) {
+							$url = $v['url'];
+							$snippet_logic_info .= $url."<br />";
+						}
 						// Look for match in repeater field results array
 						//$snippet_status = "show";
 						/*if ( in_array($post_id, $target_posts) ) {
