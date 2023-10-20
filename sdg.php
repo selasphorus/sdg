@@ -2694,7 +2694,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
 				$repeater_additions = array();
 				$repeater_removals = array();
-				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
+				$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				if ( is_array($urls)) {
 					$ts_info .= count($urls)." urls<br />";
