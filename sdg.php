@@ -2641,7 +2641,7 @@ function show_snippets ( $atts = [] ) {
 function update_snippet_logic ( $snippet_id = null ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
