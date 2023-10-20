@@ -3055,7 +3055,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		} else {
 			$snippet_content = null; // ???
 		}
-		$info .= "snippet_content:".'<div class="">'.$snippet_content."</div><br />";
+		//$info .= "snippet_content:".'<div class="">'.$snippet_content."</div><br />";
 		// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
 		// TODO: check if fields are same for e.g. custom_html
 		
