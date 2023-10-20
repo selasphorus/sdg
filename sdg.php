@@ -2514,6 +2514,8 @@ function show_snippets ( $atts = [] ) {
 						$target_type = get_field($key, $snippet_id, false);
 						if ( $post_type == $target_type ) {
 							$snippet_logic_info .= "This post matches target post_type.<br />";
+							// TODO: figure out whether to do the any/all check now, or 
+							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $any_all == "any" ) {
 								$post_snippets[] = $snippet_id;
 								$snippet_status = "active";
@@ -2535,6 +2537,10 @@ function show_snippets ( $atts = [] ) {
 									break;
 								}
 								// ?
+							} else {
+								// exclude_by_post? Snippet is inactive
+								// TODO: remove from post_snippets array, if it was previously added...
+								$snippet_status = "inactive";
 							}
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
 							break;
@@ -2545,11 +2551,13 @@ function show_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= $key." target_urls: <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
 						// Get current page path and/or slug -- ??
 						foreach ( $target_urls as $k => $v ) {
 							$url = $v['url'];
 							$snippet_logic_info .= $url."<br />";
+							// compare url to current post path/slug
+							//...
 						}
 						// Look for match in repeater field results array
 						//$snippet_status = "show";
