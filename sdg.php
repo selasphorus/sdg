@@ -3144,7 +3144,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				if ( $condition == "location" ) { $meta_key = 'widget_logic_location'; } else { $meta_key = 'widget_logic_custom_post_types_taxonomies'; }
 				
 				// Add the value(s) to the meta_input array
-				if ( !empty($values) ) { $meta_input[$meta_key] = print_r($values,true); }
+				if ( !empty($values) ) { $meta_input[$meta_key] = serialize($values); }
 			
 			} else if ( $condition == "word_count" ) {
 			
