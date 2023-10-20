@@ -2792,6 +2792,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Second, add repeater_additions, making sure they're not duplicates...
 					if ( !empty($repeater_additions) ) {
 						$ts_info .= "About to add repeater_additions to repeater_urls...<br />";
+						$ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 						foreach ( $repeater_additions as $url ) {
 							// TODO: make sure url isn't a duplicate of an existing array item
 							$repeater_urls[] = array('url' => $url);
