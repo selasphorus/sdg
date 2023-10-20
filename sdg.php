@@ -2769,13 +2769,17 @@ function update_snippet_logic ( $snippet_id = null ) {
 					} else {
 						$ts_info .= "matched_posts is empty; no update needed<br />";
 					}
-					if ( !empty($arr_new) ) { 
-						$ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
-						if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
-							$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
+					if ( !empty($arr_new) ) {
+						if ( $arr_old == $arr_new ) {
+							$ts_info .= "No changes necessary -- arr_old == arr_new<br />";
 						} else {
-							$ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
-						}
+							$ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
+							if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
+								$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
+							} else {
+								$ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
+							}
+						}						
 					} else {
 						$ts_info .= "arr_new is empty<br />";
 						$ts_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
