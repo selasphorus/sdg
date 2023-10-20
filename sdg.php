@@ -2561,9 +2561,9 @@ function show_snippets ( $atts = [] ) {
 						// Get current page path and/or slug -- ??
 						if ( is_array($target_urls) && !empty($target_urls) ) {
 							foreach ( $target_urls as $k => $v ) {
-								$url = $v['url'];
-								$snippet_logic_info .= $url."<br />";
-								//$snippet_logic_info .= "k: $k => v: ".print_r($v, true)."<br />";
+								//$url = $v['url'];
+								//$snippet_logic_info .= $url."<br />";
+								$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 								// compare url to current post path/slug
 								//...
 							}
