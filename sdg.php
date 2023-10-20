@@ -2850,6 +2850,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
+				$$key = unserialize($$key);
 				if ( !is_array($$key) ) {
 					// Replace multiple (one or more) line breaks with a single one.
 					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
@@ -2875,6 +2876,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//$target_taxonomies = get_field($key, $snippet_id, false);
 				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
+				$$key = unserialize($$key);
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$ts_info .= $key_ts_info;
