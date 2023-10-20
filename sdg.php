@@ -2736,9 +2736,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 							//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
-							// TODO: check to see if this URL is already in the array before adding it
-							$repeater_additions[] = $url; //$repeater_urls[] = array('url' => $url);
 							$ts_info .= "&rarr; NO matching post found<br />";
+							if ( !array_search($url, $repeater_urls) ) {
+								$repeater_additions[] = $url; //$repeater_urls[] = array('url' => $url);
+							}
 						}
 					} // END foreach $urls
 					// Save the posts to the snippet field
