@@ -2747,6 +2747,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							}
 						}
 					} // END foreach $urls
+					$ts_info .= "<hr />";
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
