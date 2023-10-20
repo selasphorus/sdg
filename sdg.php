@@ -2739,10 +2739,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$ts_info .= "&rarr; NO matching post found<br />";
 							$match_key = array_search($url, array_column($repeater_urls, 'url'));
 							if ( $match_key ) {
-								$ts_info .= "The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
+								$ts_info .= "&rarr; The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
 								$repeater_additions[] = $url;
-								$ts_info .= "Added url '".$url."' to repeater_urls array<br />";
+								$ts_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_urls array<br />";
 							}
 						}
 					} // END foreach $urls
