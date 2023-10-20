@@ -2789,6 +2789,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Update the associated repeater field as needed
 					//...
 					// First, remove duplicates and repeater_removals
+					$arr_new = array();
 					if ( !empty($repeater_urls) ) {
 					
 						$ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
@@ -2801,7 +2802,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$repeater_url = $v['url'];
 								if ( in_array($repeater_url, $repeater_removals) ) {
 									$ts_info .= "removing url: $repeater_url<br />";
-									unset($repeater_urls[$k]);
+									//unset($repeater_urls[$k]);
+								} else {
+									$arr_new[$k] = $repeater_urls[$k];
 								}
 							}
 						}
@@ -2813,25 +2816,27 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 						foreach ( $repeater_additions as $url ) {
 							// TODO: make sure url isn't a duplicate of an existing array item
-							$repeater_urls[] = array('url' => $url);
+							$arr_new[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
 						}
 					}
 					
 					// Update the field with the revised array
-					if ( !empty($repeater_urls) ) {
+					if ( !empty($arr_new) ) {
 						
 						// Remove duplicates
 						$ts_info .= "About to remove duplicate repeater_urls...<br />";
-						$repeater_urls = array_unique($repeater_urls, SORT_REGULAR); // not working!
-						$ts_info .= "Unique repeater_urls: ".print_r($repeater_urls, true)."<br />";
-						
-						$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
+						$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
+						$ts_info .= "Unique arr_new (repeater_urls): ".print_r($arr_new, true)."<br />";
 						$ts_info .= "repeater_key: ".$repeater_key."<br />";
-						// WIP
-						if ( update_field( $repeater_key, $repeater_urls, $snippet_id ) ) {
-							$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+						//
+						if ( $arr_new == $repeater_urls ) {
+							$ts_info .= "No changes necessary -- arr_new == repeater_urls<br />";
 						} else {
-							$ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+							if ( update_field( $repeater_key, $arr_new, $snippet_id ) ) {
+								$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+							} else {
+								$ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+							}
 						}
 					}
 					
