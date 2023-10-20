@@ -2771,7 +2771,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 							foreach ( $repeater_urls as $k => $v ) {
 								$repeater_url = $v['url'];
-								if ( in_array($repeater_url, $repeater_removals) ) { unset($repeater_urls[$k]); }
+								if ( in_array($repeater_url, $repeater_removals) ) {
+									$ts_info .= "removing url: $repeater_url<br />";
+									unset($repeater_urls[$k]);
+								}
 							}
 							$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						}
