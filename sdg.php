@@ -2840,13 +2840,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 						}
 					}
 					
-				} // END 
+				} // END
+				$ts_info = ""; // reset -- tmp -- done with TS for target/exclude by url but wanting to leave TS on for post_type, taxonomy, location
 			} else if ( $key == 'target_by_post_type' ) {
 				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
-				//
+				// WIP
 			} else if ( $key == 'target_by_taxonomy' ) {
 				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
-				// 
+				// WIP
 				$conditions = explode(" | ",$$key);
 				//
 				$$key = str_replace(" | ","\n",$$key);
@@ -2860,6 +2861,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				// WIP -- copy fcns from Widget Context customizations
 				//$target_taxonomies = get_field($key, $snippet_id, false);
+			} else if ( $key == 'target_by_location' ) {
+				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				// WIP
 			}
 		}
 	}
