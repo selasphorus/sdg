@@ -2733,7 +2733,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_posts[] = $matched_post_id;
 							$ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
 							//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
-							$repeater_removals[] = array('url' => $url);	
+							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
 							$repeater_urls[] = array('url' => $url);
 							$ts_info .= "&rarr; NO matching post found<br />";
@@ -2766,10 +2766,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 						
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
-							$ts_info .= "About to run array_diff...<br />";
-							$ts_info .= "repeater_urls [".gettype($repeater_urls)."]: <pre>".print_r($repeater_urls, true)."</pre>";
-							$ts_info .= "repeater_removals [".gettype($repeater_removals)."]: <pre>".print_r($repeater_removals, true)."</pre>";
-							$repeater_urls = array_diff( $repeater_urls, $repeater_removals );
+							$ts_info .= "About to clean up repeater_urls by removing repeater_removals...<br />";
+							$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
+							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+							foreach ( $repeater_urls as $k => $v ) {
+								$repeater_url = $v['url'];
+								if ( in_array($repeater_url, $repeater_removals) ) { unset($repeater_urls[$k]); }
+							}
+							$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						}
 					
 						$arr_updated = array_unique($repeater_urls, SORT_REGULAR);
