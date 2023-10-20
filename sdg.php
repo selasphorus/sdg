@@ -2479,6 +2479,7 @@ function show_snippets ( $atts = [] ) {
 		$snippet_logic_info = "";
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
+		$cs_id = get_post_meta( $snippet_id, 'cs_id', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
 		if ( empty($any_all) ) { $any_all = "any"; } // TODO: update_post_meta
 		//
@@ -2487,7 +2488,7 @@ function show_snippets ( $atts = [] ) {
 		//
 		$snippet_status = "unknown"; // init
 		$snippet_info .= '<div class="troubleshooting">';
-		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display.']<br />';
+		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display.'/'.$cs_id.']<br />';
 		
 		// Run updates?
 		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
