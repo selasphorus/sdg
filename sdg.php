@@ -2684,10 +2684,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				$repeater_urls = get_field( $repeater_key, $snippet_id );
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
-				if ( !is_array($repeater_urls) ) { 
+				/*if ( !is_array($repeater_urls) ) { 
 					$ts_info .= "Uh-oh! repeater_urls is not an array... It's a <em>".gettype($repeater_urls)."</em><br />";
 					//$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
-				}
+				}*/
 				$repeater_removals = array(); // init
 				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
@@ -2732,18 +2732,15 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$matched_post_id = $matched_post->ID;
 							$matched_posts[] = $matched_post_id;
 							$ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-							$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
+							//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
 							$repeater_removals[] = array('url' => $url);
-							$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
-							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
-							// TODO: remove this url from the repeater_urls array
-							$repeater_urls = array_diff( $repeater_urls, $repeater_removals ); //$repeater_urls = array_diff( $repeater_urls, array('url' => $url) );
-							//str_replace? $url/$$key
+							//$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
+							//$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";							
 						} else {
 							$repeater_urls[] = array('url' => $url);
 							$ts_info .= "&rarr; NO matching post found<br />";
 						}
-					}
+					} // END foreach $urls
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$arr_new = null;
@@ -2768,6 +2765,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// Update the associated repeater field with the values not matched by posts
 					if ( !empty($repeater_urls) ) {
+						
+						// Update repeater_urls array by removing removals
+						if ( !empty($repeater_removals) ) { $repeater_urls = array_diff( $repeater_urls, $repeater_removals ); }
+					
 						$arr_updated = array_unique($repeater_urls, SORT_REGULAR);
 						$ts_info .= "repeater_key: ".$repeater_key."<br />";
 						$ts_info .= "arr_updated: ".print_r($arr_updated, true)."<br />";
@@ -2779,7 +2780,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						}
 					}
 					
-				}
+				} // END 
 			} else if ( $key == 'target_by_post_type' ) {
 				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				//
