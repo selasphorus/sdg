@@ -2737,7 +2737,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
 							$ts_info .= "&rarr; NO matching post found<br />";
-							$match_key = array_search($url, array_column($repeater_urls, 'url')); // not working -- why not?!?
+							$tmp_urls = array_column($repeater_urls, 'url');
+							$match_key = array_search($url, $tmp_urls); //$match_key = array_search($url, array_column($repeater_urls, 'url')); // not working -- why not?!?
 							if ( $match_key ) {
 								$ts_info .= "&rarr; The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
@@ -2764,7 +2765,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
 							$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 						} else {
-							$ts_info .= "updated FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
+							$ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
 						}
 					} else {
 						$ts_info .= "arr_new is empty<br />";
@@ -2817,7 +2818,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ( update_field( $repeater_key, $repeater_urls, $snippet_id ) ) {
 							$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
-							$ts_info .= "updated FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+							$ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						}
 					}
 					
