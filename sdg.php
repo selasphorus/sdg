@@ -3112,6 +3112,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 			} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
 				
+				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+				
 				// Init values array
 				$values = array();
 				
