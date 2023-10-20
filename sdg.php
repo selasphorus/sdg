@@ -2752,17 +2752,21 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
-					if ( empty($arr_old) ) {
-						// Save the array of matched posts to the target_by_post field
-						$arr_new = $matched_posts;									
-					} else if ( is_array($arr_old) ) {
-						if ( $arr_old == $matched_posts ) {
-							$ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
-						} else {
-							$ts_info .= "Merge arr_old with matched_posts<br />";
-							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							$ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
-						}						
+					if ( !empty($matched_posts) ) {
+						if ( empty($arr_old) ) {
+							// Save the array of matched posts to the target_by_post field
+							$arr_new = $matched_posts;									
+						} else if ( is_array($arr_old) ) {
+							if ( $arr_old == $matched_posts ) {
+								$ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
+							} else {
+								$ts_info .= "Merge arr_old with matched_posts<br />";
+								$arr_new = array_unique(array_merge($arr_old, $matched_posts));
+								$ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
+							}						
+						}
+					} else {
+						$ts_info .= "matched_posts is empty; no update needed<br />";
 					}
 					if ( !empty($arr_new) ) { 
 						$ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
