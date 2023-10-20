@@ -2737,7 +2737,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
 							$ts_info .= "&rarr; NO matching post found<br />";
-							if ( $match_key = array_search($url, $repeater_urls) ) {
+							$match_key = array_search($url, array_column($repeater_urls, 'url')); 
+							if ( $match_key ) {
 								$ts_info .= "The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
 								$repeater_additions[] = $url;
