@@ -2683,6 +2683,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$repeater_key = 'exclude_by_url';
 				}
 				$repeater_urls = get_field( $repeater_key, $snippet_id );
+				if ( !is_array($repeater_urls) ) { 
+					$ts_info .= "Uh-oh! repeater_urls is not an array... It's a <em>".gettype($repeater_urls)."</em><br />";
+					//$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
+				}
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
 				$repeater_removals = array(); // init
 				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
