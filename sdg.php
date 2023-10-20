@@ -2559,12 +2559,15 @@ function show_snippets ( $atts = [] ) {
 						$target_urls = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
 						// Get current page path and/or slug -- ??
-						foreach ( $target_urls as $k => $v ) {
-							$url = $v['url'];
-							$snippet_logic_info .= $url."<br />";
-							// compare url to current post path/slug
-							//...
+						if ( is_array($target_urls) ) {
+							foreach ( $target_urls as $k => $v ) {
+								$url = $v['url'];
+								$snippet_logic_info .= $url."<br />";
+								// compare url to current post path/slug
+								//...
+							}
 						}
+						
 						// Look for match in repeater field results array
 						//$snippet_status = "show";
 						/*if ( in_array($post_id, $target_posts) ) {
