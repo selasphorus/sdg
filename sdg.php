@@ -2671,7 +2671,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			if ( $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' ) {
 				// Replace multiple (one ore more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
+				// Update the legacy field with the cleaned-up version
+				update_field( $key, $$key, $snippet_id );
 				$ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				// Turn the urls text into an array of urls
 				$urls = explode("\n",$$key);
 				
 				// wip 231019
@@ -2688,10 +2691,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$repeater_additions = array();
 				$repeater_removals = array();
 				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
-				//
-				//$$key = str_replace(" | ","/\n/",$$key);
-				// TODO: move this to later so as to also process removal of matched urls
-				//update_field( $key, $$key, $snippet_id );
 				//
 				if ( is_array($urls)) {
 					$ts_info .= count($urls)." urls<br />";
