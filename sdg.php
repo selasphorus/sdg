@@ -3091,7 +3091,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$subs_empty = true;
 			$check_wordcount = false;
 			//
-			$info .= "condition: ".$condition."<br />";
+			//$info .= "condition: ".$condition."<br />";
 			//$info .= "subconditions: <br />";
 			if ( $condition == 'incexc' ) {
 			
@@ -3112,6 +3112,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 			} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
 				
+				$info .= "condition: ".$condition."<br />";
 				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 				
 				// Init values array
