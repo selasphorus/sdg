@@ -2511,7 +2511,7 @@ function show_snippets ( $atts = [] ) {
 				$$key = get_post_meta( $snippet_id, $key, true );
 				//$snippet_info .= "key: $key => ".$$key."<br />";
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-					$snippet_logic_info .= "key: $key => ".print_r($$key, true)."<br />"; // ." [count: ".count($$key)."]"
+					$snippet_logic_info .= "key: $key => [[".print_r($$key, true)."]]<br />"; // ." [count: ".count($$key)."]"
 					if ( $key == 'target_by_post_type' ) {
 						// Is the given post of the matching type?
 						// WIP
