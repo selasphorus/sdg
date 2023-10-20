@@ -2749,7 +2749,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					} // END foreach $urls
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-					$arr_new = null;
+					$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
+					$arr_new = array();
 					if ( empty($arr_old) ) {
 						// Save the array of matched posts to the target_by_post field
 						$arr_new = $matched_posts;									
@@ -2757,10 +2758,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ( $arr_old == $matched_posts ) {
 							$ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
 						} else {
+							$ts_info .= "Merge arr_old with matched_posts<br />";
 							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
 						}						
 					}
-					if ( $arr_new ) { 
+					if ( !empty($arr_new) ) { 
 						$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
 						if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
 							$ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
