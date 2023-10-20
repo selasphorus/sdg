@@ -2767,8 +2767,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
 							$ts_info .= "About to run array_diff...<br />";
-							$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
-							$ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+							$ts_info .= "repeater_urls [".gettype($repeater_urls)."]: <pre>".print_r($repeater_urls, true)."</pre>";
+							$ts_info .= "repeater_removals [".gettype($repeater_removals)."]: <pre>".print_r($repeater_removals, true)."</pre>";
 							$repeater_urls = array_diff( $repeater_urls, $repeater_removals );
 						}
 					
