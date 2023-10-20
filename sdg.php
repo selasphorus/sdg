@@ -2549,7 +2549,7 @@ function show_snippets ( $atts = [] ) {
 						// Look for match in repeater field results array
 						//$snippet_status = "show";
 						/*if ( in_array($post_id, $target_posts) ) {
-							$snippet_info .= "This post is in the target_posts array<br />";
+							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' ) {
 								if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
@@ -2558,14 +2558,14 @@ function show_snippets ( $atts = [] ) {
 							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
 							break;
 						} else {
-							$snippet_info .= "This post is NOT in the target_posts array.<br />";
+							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 						}*/
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$terms = explode("\n",$$key);
 						if ( is_array($terms)) {
-							$snippet_info .= count($terms)." terms<br />";
+							$snippet_logic_info .= count($terms)." terms<br />";
 							foreach ( $terms as $term_pair ) {
 								$snippet_logic_info .= "term_pair: ".print_r($term_pair, true)."<br />";
 								$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
