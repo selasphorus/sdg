@@ -2737,7 +2737,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
 							$ts_info .= "&rarr; NO matching post found<br />";
-							$match_key = array_search($url, array_column($repeater_urls, 'url')); 
+							$match_key = array_search($url, array_column($repeater_urls, 'url'));
 							if ( $match_key ) {
 								$ts_info .= "The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
@@ -2775,11 +2775,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 						$ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
 						
-						// Remove duplicates
-						$ts_info .= "About to remove duplicate repeater_urls...<br />";
-						$repeater_urls = array_unique($repeater_urls, SORT_REGULAR); // not working!
-						$ts_info .= "Unique repeater_urls: ".print_r($repeater_urls, true)."<br />";
-						
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
 							$ts_info .= "About to clean up repeater_urls by removing repeater_removals...<br />";
@@ -2805,6 +2800,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// Update the field with the revised array
 					if ( !empty($repeater_urls) ) {
+						
+						// Remove duplicates
+						$ts_info .= "About to remove duplicate repeater_urls...<br />";
+						$repeater_urls = array_unique($repeater_urls, SORT_REGULAR); // not working!
+						$ts_info .= "Unique repeater_urls: ".print_r($repeater_urls, true)."<br />";
+						
 						$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						$ts_info .= "repeater_key: ".$repeater_key."<br />";
 						// WIP
