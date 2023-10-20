@@ -2683,12 +2683,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$repeater_key = 'exclude_by_url';
 				}
 				$repeater_urls = get_field( $repeater_key, $snippet_id );
+				// init
 				if ( empty($repeater_urls) ) { $repeater_urls = array(); }
-				/*if ( !is_array($repeater_urls) ) { 
-					$ts_info .= "Uh-oh! repeater_urls is not an array... It's a <em>".gettype($repeater_urls)."</em><br />";
-					//$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
-				}*/
-				$repeater_removals = array(); // init
+				$repeater_additions = array();
+				$repeater_removals = array();
 				//$ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				//$$key = str_replace(" | ","/\n/",$$key);
@@ -2735,7 +2733,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
-							$repeater_urls[] = array('url' => $url);
+							// TODO: check to see if this URL is already in the array before adding it
+							$repeater_additions[] = $url; //$repeater_urls[] = array('url' => $url);
 							$ts_info .= "&rarr; NO matching post found<br />";
 						}
 					} // END foreach $urls
@@ -2761,14 +2760,17 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 					}
 					
-					// Update the associated repeater field with the values not matched by posts
+					// Update the associated repeater field as needed
+					//...
+					// First, remove duplicates and repeater_removals
 					if ( !empty($repeater_urls) ) {
 					
 						$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						
 						// Remove duplicates
 						$ts_info .= "About to remove duplicate repeater_urls...<br />";
-						$arr_updated = array_unique($repeater_urls, SORT_REGULAR);
+						$arr_updated = array_unique($repeater_urls, SORT_REGULAR); // not working!
+						$ts_info .= "arr_updated: ".print_r($arr_updated, true)."<br />";
 						
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
@@ -2782,10 +2784,21 @@ function update_snippet_logic ( $snippet_id = null ) {
 								}
 							}
 						}
+					}
+					
+					// Second, add repeater_additions, making sure they're not duplicates...
+					if ( !empty($repeater_additions) ) {
+						foreach ( $repeater_additions as $url ) {
+							// TODO: make sure url isn't a duplicate of an existing array item
+							$repeater_urls[] = array('url' => $url);
+						}
+					}
+					
+					// Update the field with the revised array
+					if ( !empty($repeater_urls) ) {
 						$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						$ts_info .= "repeater_key: ".$repeater_key."<br />";
-						$ts_info .= "arr_updated: ".print_r($arr_updated, true)."<br />";
-						// WIP 10/18/23 -- updates not working -- see stcdev page
+						// WIP
 						if ( update_field( $repeater_key, $arr_updated, $snippet_id ) ) {
 							$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
