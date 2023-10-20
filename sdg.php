@@ -2488,7 +2488,9 @@ function show_snippets ( $atts = [] ) {
 		//
 		$snippet_status = "unknown"; // init
 		$snippet_info .= '<div class="troubleshooting">';
-		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display.'/'.$cs_id.']<br />';
+		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display;
+		if ( $cs_id ) { $snippet_info .= '/'.$cs_id; }
+		$snippet_info .= ']<br />';
 		
 		// Run updates?
 		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
