@@ -2768,8 +2768,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						
 						// Remove duplicates
 						$ts_info .= "About to remove duplicate repeater_urls...<br />";
-						$arr_updated = array_unique($repeater_urls, SORT_REGULAR); // not working!
-						$ts_info .= "arr_updated: ".print_r($arr_updated, true)."<br />";
+						$repeater_urls = array_unique($repeater_urls, SORT_REGULAR); // not working!
+						$ts_info .= "Unique repeater_urls: ".print_r($repeater_urls, true)."<br />";
 						
 						// Update repeater_urls array by removing removals
 						if ( !empty($repeater_removals) ) {
@@ -2799,7 +2799,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$ts_info .= "REVISED repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
 						$ts_info .= "repeater_key: ".$repeater_key."<br />";
 						// WIP
-						if ( update_field( $repeater_key, $arr_updated, $snippet_id ) ) {
+						if ( update_field( $repeater_key, $repeater_urls, $snippet_id ) ) {
 							$ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$ts_info .= "updated FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
