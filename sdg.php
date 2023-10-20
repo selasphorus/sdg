@@ -2665,7 +2665,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'widget_logic_custom_post_types_taxonomies', 'widget_logic_location', 'target_by_post_type', 'target_by_taxonomy', 'target_by_location' );
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url',
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
@@ -2847,7 +2847,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$ts_info .= $key_ts_info;
-			} else if ( $key == 'target_by_taxonomy' ) {
+			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$conditions = explode(" | ",$$key);
@@ -2864,11 +2864,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// WIP -- copy fcns from Widget Context customizations
 				//$target_taxonomies = get_field($key, $snippet_id, false);
 				$ts_info .= $key_ts_info;
-			} else if ( $key == 'target_by_location' ) {
+			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$ts_info .= $key_ts_info;
 			}
+		} else {
+			$ts_info .= "No meta data found for key: $key<br />";
 		}
 	}
 	
