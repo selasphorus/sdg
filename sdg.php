@@ -2645,7 +2645,7 @@ function show_snippets ( $atts = [] ) {
 function update_snippet_logic ( $snippet_id = null ) {
 
 	// TS/logging setup
-    $do_ts = true; 
+    $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -2737,7 +2737,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
 						} else {
 							$ts_info .= "&rarr; NO matching post found<br />";
-							$match_key = array_search($url, array_column($repeater_urls, 'url'));
+							$match_key = array_search($url, array_column($repeater_urls, 'url')); // not working -- why not?!?
 							if ( $match_key ) {
 								$ts_info .= "&rarr; The url '".$url."' is already in repeater_urls array at position ".$match_key."<br />";
 							} else {
