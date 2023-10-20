@@ -3138,10 +3138,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			
 			} else if ( $condition == "word_count" ) {
 			
+				$info .= "condition: ".$condition."<br />";
 				// WIP
 				//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 			
 			} else if ( is_array($subconditions) && !empty($subconditions) ) {
+				$info .= "condition: ".$condition."<br />";
 				if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
 					//$info .= "single empty subcondition<br />";
 				} else {
@@ -3152,6 +3154,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					//$info .= "k: ".$k." => v: ".$v."<br />";
 				}*/
 			} else {
+				$info .= "condition: ".$condition."<br />";
 				$info .= $subconditions." [not an array]<br />";
 				//$meta_input[$condition] = $subconditions;
 			}
