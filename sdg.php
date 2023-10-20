@@ -2430,6 +2430,7 @@ function show_snippets ( $atts = [] ) {
 	//
 	if ( $dev ) { 
 		$info .= '<h2>Snippets -- WIP</h2>';
+		$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 	}
 	$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
     
