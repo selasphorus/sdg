@@ -2769,7 +2769,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// First, remove duplicates and repeater_removals
 					if ( !empty($repeater_urls) ) {
 					
-						$ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";
+						$ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
 						
 						// Remove duplicates
 						$ts_info .= "About to remove duplicate repeater_urls...<br />";
