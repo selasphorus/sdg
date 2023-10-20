@@ -2848,7 +2848,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// WIP
 				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
-				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$$key = unserialize($$key);
 				if ( !is_array($$key) ) {
@@ -2866,8 +2866,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( is_array($conditions)) {
 					$key_ts_info .= count($conditions)." condition(s)<br />";
 					$matched_posts = array();
-					foreach ( $conditions as $condition ) {
-						$key_ts_info .= "condition: $condition<br />";
+					foreach ( $conditions as $condition => $value ) {
+						$key_ts_info .= "condition: $condition => $value<br />";
 						// WIP
 						
 					}
