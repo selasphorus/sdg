@@ -2753,6 +2753,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
 					if ( !empty($matched_posts) ) {
+						$ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
 						if ( empty($arr_old) ) {
 							// Save the array of matched posts to the target_by_post field
 							$arr_new = $matched_posts;									
