@@ -99,6 +99,10 @@ div.code {
     border: 1px solid var(--ltgrey);
 }
 
+.code.active {
+	border: 2px solid;
+}
+
 .bold {
 	font-weight: 700;
 }
