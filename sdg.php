@@ -2751,7 +2751,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "<hr />";
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-					$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
+					$key_values = array_column($arr_new, 'url');
+					array_multisort($key_values, SORT_ASC, $arr_old);
+					$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
 					if ( !empty($matched_posts) ) {
 						$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
@@ -2771,6 +2773,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "matched_posts is empty; no update needed<br />";
 					}
 					if ( !empty($arr_new) ) {
+						$key_values = array_column($arr_new, 'url');
+						array_multisort($key_values, SORT_ASC, $arr_new);
 						if ( $arr_old == $arr_new ) {
 							$key_ts_info .= "No changes necessary -- arr_old == arr_new<br />";
 						} else {
@@ -2849,7 +2853,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// WIP
 				$ts_info .= $key_ts_info;
 				
-			} else if ( $key == 'widget_logic_taxonomy' ) {
+			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
 				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
@@ -2859,10 +2863,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// Turn the text into an array of taxonomy:tax_term pairs
 				$tax_pairs = explode("\n",$$key);
 				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>";				
-				//....
+				//.... WIP 102023
 				$ts_info .= $key_ts_info;
 			
-			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
+			} else if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$$key = unserialize($$key);
