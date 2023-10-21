@@ -3153,6 +3153,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				$info .= "condition: ".$condition."<br />";
 				if ( isset($condition['taxonomies']) ) { 
 					$taxonomies = $condition['taxonomies'];
+					$info .= "taxonomies: ".$taxonomies."<br />";
 					$meta_key = 'widget_logic_taxonomy';
 					$meta_input[$meta_key] = $taxonomies;
 				}
