@@ -2665,7 +2665,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'widget_logic_custom_post_types_taxonomies', 'widget_logic_location', 'target_by_post_type', 'target_by_taxonomy', 'target_by_location' );
+	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'widget_logic_custom_post_types_taxonomies', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_post_type', 'target_by_taxonomy', 'target_by_location' );
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url',
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
@@ -3147,6 +3147,15 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				// Add the value(s) to the meta_input array
 				if ( !empty($values) ) { $meta_input[$meta_key] = serialize($values); }
+			
+			} else if ( $condition == "taxonomy" ) {
+				
+				$info .= "condition: ".$condition."<br />";
+				if ( isset($condition['taxonomies']) ) { 
+					$taxonomies = $condition['taxonomies'];
+					$meta_key = 'widget_logic_taxonomy';
+					$meta_input[$meta_key] = $taxonomies;
+				}
 			
 			} else if ( $condition == "word_count" ) {
 			
