@@ -2753,8 +2753,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					if ( is_array($arr_old) && !empty($arr_old) ) {
-						$key_values = array_column($arr_old, 'url');
-						$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
+						//$key_values = array_column($arr_old, 'url');
+						//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
 						//array_multisort($key_values, SORT_ASC, $arr_old);
 					}
 					//$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
@@ -2777,8 +2777,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "matched_posts is empty; no update needed<br />";
 					}
 					if ( !empty($arr_new) ) {
-						$key_values = array_column($arr_new, 'url');
-						$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
+						//$key_values = array_column($arr_new, 'url');
+						//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
 						//array_multisort($key_values, SORT_ASC, $arr_new);
 						if ( $arr_old == $arr_new ) {
 							$key_ts_info .= "No changes necessary -- arr_old == arr_new<br />";
@@ -2838,6 +2838,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
 						$key_ts_info .= "Unique arr_new (repeater_urls): ".print_r($arr_new, true)."<br />";
 						$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+						//
+						$key_values = array_column($repeater_urls, 'url');
+						$key_ts_info .= "repeater_urls key_values: ".print_r($repeater_urls, true)."<br />";
+						array_multisort($key_values, SORT_ASC, $repeater_urls);
+						//
+						$key_values = array_column($arr_new, 'url');
+						$key_ts_info .= "arr_new key_values: ".print_r($key_values, true)."<br />";
+						array_multisort($key_values, SORT_ASC, $arr_new);
 						//
 						if ( $arr_new == $repeater_urls ) {
 							$key_ts_info .= "No changes necessary -- arr_new == repeater_urls<br />";
