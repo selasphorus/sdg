@@ -2751,7 +2751,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "<hr />";
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-					if ( is_array($arr_old) ) {
+					if ( is_array($arr_old) && !empty($arr_old) ) {
 						$key_values = array_column($arr_old, 'url');
 						array_multisort($key_values, SORT_ASC, $arr_old);
 					}
