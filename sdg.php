@@ -3151,6 +3151,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			} else if ( $condition == "taxonomy" ) {
 				
 				$info .= "condition: ".$condition."<br />";
+				$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+				
 				if ( isset($condition['taxonomies']) ) { 
 					$taxonomies = $condition['taxonomies'];
 					$info .= "taxonomies: ".$taxonomies."<br />";
