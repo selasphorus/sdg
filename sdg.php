@@ -2778,7 +2778,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					if ( !empty($arr_new) ) {
 						$key_values = array_column($arr_new, 'url');
-						array_multisort($key_values, SORT_ASC, $arr_new);
+						//array_multisort($key_values, SORT_ASC, $arr_new);
 						if ( $arr_old == $arr_new ) {
 							$key_ts_info .= "No changes necessary -- arr_old == arr_new<br />";
 						} else {
