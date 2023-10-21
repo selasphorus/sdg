@@ -2761,9 +2761,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 					$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					if ( is_array($arr_old) && !empty($arr_old) ) {
-						//$key_values = array_column($arr_old, 'url');
+						// Sort the existing matched_posts and save the sorted array
+						//$key_values = array_column($arr_old, 'XX'); // need to get post_title to sort by, not ID...
 						//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
 						//array_multisort($key_values, SORT_ASC, $arr_old);
+						//update_field( $target_key, $arr_old, $snippet_id );
 					}
 					//$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
@@ -2785,7 +2787,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "matched_posts is empty; no update needed<br />";
 					}
 					if ( !empty($arr_new) ) {
-						//$key_values = array_column($arr_new, 'url');
+						//$key_values = array_column($arr_new, '???'); // need to get post_title to sort by, not ID...
 						//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
 						//array_multisort($key_values, SORT_ASC, $arr_new);
 						if ( $arr_old == $arr_new ) {
@@ -2863,7 +2865,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					
 				} // END
-				$ts_info .= $key_ts_info;
+				//$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_post_type' ) {
 			
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
