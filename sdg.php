@@ -2851,7 +2851,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					
 				} // END
-				//$ts_info .= $key_ts_info;
+				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_post_type' ) {
 			
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
