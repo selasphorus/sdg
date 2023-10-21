@@ -2682,7 +2682,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// Turn the urls text into an array of urls
 				$urls = explode("\n",$$key);
 				
-				// wip 231019
+				// 
 				if ( $key == 'widget_logic_target_by_url' ) {
 					$target_key = 'target_by_post';
 					$repeater_key = 'target_by_url';
@@ -2844,9 +2844,24 @@ function update_snippet_logic ( $snippet_id = null ) {
 				} // END
 				//$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_post_type' ) {
+			
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$ts_info .= $key_ts_info;
+				
+			} else if ( $key == 'widget_logic_taxonomy' ) {
+			
+				// Replace multiple (one or more) line breaks with a single one.
+				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
+				// Update the legacy field with the cleaned-up version
+				update_field( $key, $$key, $snippet_id );
+				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				// Turn the text into an array of taxonomy:tax_term pairs
+				$tax_pairs = explode("\n",$$key);
+				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>";				
+				//....
+				
+			
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
