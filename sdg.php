@@ -2751,11 +2751,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "<hr />";
 					// Save the posts to the snippet field
 					$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
+					$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
 					if ( is_array($arr_old) && !empty($arr_old) ) {
 						$key_values = array_column($arr_old, 'url');
-						array_multisort($key_values, SORT_ASC, $arr_old);
+						$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
+						//array_multisort($key_values, SORT_ASC, $arr_old);
 					}
-					$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
+					//$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
 					$arr_new = array();
 					if ( !empty($matched_posts) ) {
 						$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
