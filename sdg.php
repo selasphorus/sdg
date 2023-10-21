@@ -2860,7 +2860,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$tax_pairs = explode("\n",$$key);
 				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>";				
 				//....
-				
+				$ts_info .= $key_ts_info;
 			
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
