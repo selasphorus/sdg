@@ -3359,7 +3359,7 @@ function convert_sidebars () {
 	$arr_cs_sidebars = get_option('cs_sidebars');
 	//
 	$info .= "<h2>Sidebars/Widgets</h2>";
-	info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	/*foreach ( $arr_sidebars_widgets as $sidebar ) {
 		$id = $sidebar['id'];
 		$info .= '<div class="code">';
@@ -3590,20 +3590,6 @@ function convert_cs_sidebars () {
 				FROM $wpdb->postmeta
 				WHERE `meta_key` = '_cs_replacements'
 				AND `meta_value` LIKE '%".'"'.$id.'"'."%'";
-	
-		/*$sql = "SELECT `post_id` 
-				FROM $wpdb->postmeta, $wpdb->posts
-				WHERE $wpdb->postmeta.`meta_key` LIKE 'program_items_%_program_item'
-				AND $wpdb->postmeta.`meta_value` LIKE '%".'"'.$post_id.'"'."%'
-				AND $wpdb->postmeta.`post_id`=$wpdb->posts.`ID`
-				AND $wpdb->posts.`post_type`='event'";*/
-	
-		/*$sql = "SELECT `post_id` 
-				FROM $wpdb->postmeta, $wpdb->posts
-				WHERE `meta_key` LIKE 'program_items_%_program_item'
-				AND `meta_value` LIKE '%".'"'.$post_id.'"'."%'
-				AND `post_id`=`ID`
-				AND `post_type`='event'";*/
 
 		$arr_ids = $wpdb->get_results($sql);
 		if ( count($arr_ids) > 0 ) {
