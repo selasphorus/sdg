@@ -3392,7 +3392,7 @@ function convert_sidebars ( $atts = [] ) {
 						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
 						if ( empty($sidebars) ) {
 							$sidebars = $sidebar;
-						} else if ( substr($sidebars,0,2) == "; "; ) {
+						} else if ( substr($sidebars,0,2) == "; " ) {
 							$sidebars = substr($sidebars,2)."; ".$sidebar;
 						} else {
 							$sidebars .= "; ".$sidebar;
