@@ -3404,6 +3404,12 @@ function convert_sidebars ( $atts = [] ) {
 							} else {
 								$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
 							}
+							if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
+								$info .= "post_meta field sidebar_sortnum updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							} else {
+								$info .= "post_meta field sidebar_sortnum update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							}
+							//
 						}
 					}
 				} else {
