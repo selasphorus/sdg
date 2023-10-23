@@ -2480,7 +2480,7 @@ function show_snippets ( $atts = [] ) {
 		$snippet_logic_info = "";
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
-		$cs_id = get_post_meta( $snippet_id, 'cs_id', true );
+		$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
 		if ( empty($any_all) ) { $any_all = "any"; } // TODO: update_post_meta
 		//
@@ -2490,7 +2490,7 @@ function show_snippets ( $atts = [] ) {
 		$snippet_status = "unknown"; // init
 		$snippet_info .= '<div class="troubleshooting">';
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display;
-		if ( $cs_id ) { $snippet_info .= '/'.$cs_id; }
+		if ( $sidebar_id ) { $snippet_info .= '/'.$sidebar_id; }
 		$snippet_info .= ']<br />';
 		
 		// Run updates?
@@ -3121,9 +3121,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			// ???
 		}
 		
-		// WIP: find if widget is included in a custom sidebar --> get cs_id
-		$cs_id = get_cs_id($uid);
-		if ( $cs_id ) {
+		// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
+		$sidebar_id = get_sidebar_id($uid);
+		if ( $sidebar_id ) {
 			//
 		}
 		
@@ -3242,7 +3242,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$meta_input['widget_type'] = $widget_type;
 			$meta_input['widget_id'] = $id;
 			$meta_input['widget_uid'] = $uid;
-			//$meta_input['cs_id'] = $cs_id;
+			//$meta_input['sidebar_id'] = $sidebar_id;
 			$meta_input['widget_logic'] = print_r($conditions, true);
 			
 			$action = null;
@@ -3327,7 +3327,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 }
 
 // WIP
-function get_cs_id( $widget_uid = null) {
+function get_sidebar_id( $widget_uid = null) {
 
 	//
 	return null;
@@ -3335,6 +3335,185 @@ function get_cs_id( $widget_uid = null) {
 }
 
 // WIP
+add_shortcode('convert_sidebars', 'convert_sidebars');
+function convert_sidebars () {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: convert_sidebars", $do_log );
+    
+    $info = "";
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	$i = 0;
+	//
+	$arr_sidebars_widgets = get_option('sidebars_widgets');
+	$arr_cs_sidebars = get_option('cs_sidebars');
+	//
+	$info .= "<h2>Sidebars/Widgets</h2>";
+	info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	/*foreach ( $arr_sidebars_widgets as $sidebar ) {
+		$id = $sidebar['id'];
+		$info .= '<div class="code">';
+		$info .= $id."/".$sidebar['name']."/".$sidebar['description']."<br />";
+		// Get sidebar widgets
+		if ( isset($arr_sidebars_widgets[$id]) ) {
+			$widgets = $arr_sidebars_widgets[$id];
+			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+			foreach ( $widgets as $i => $widget_uid ) {
+				// Does a snippet already exist based on this widget?
+				$wp_args = array(
+					'post_type'   => 'snippet',
+					'post_status' => 'publish',
+					'meta_key'    => 'widget_uid',
+					'meta_value'  => $widget_uid,
+					'fields'      => 'ids'
+				);	
+				$snippets = get_posts($wp_args);
+				if ( $snippets ) {
+					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+					// get existing post id
+					if ( count($snippets) == 1 ) {
+						$snippet_id = $snippets[0];
+					} else if ( count($snippets) > 1 ) {
+						$snippet_id = null; // tft
+					}
+					if ( $snippet_id ) {
+						$info .= "snippet_id: ".$snippet_id."<br />";
+						// Update snippet record with sidebar_id
+						if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
+							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						} else {
+							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						}
+					}
+				} else {
+					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
+				}			
+			}
+		} else {
+			$info .= "No widgets found.<br />";
+		}
+		// Get all posts/pages using this sidebar
+		//$data = get_post_meta( $post_id, '_cs_replacements', true );
+		// Go straight to the DB and get ONLY the post IDs of relevant related event posts...
+		global $wpdb;
+	
+		$sql = "SELECT `post_id` 
+				FROM $wpdb->postmeta
+				WHERE `meta_key` = '_cs_replacements'
+				AND `meta_value` LIKE '%".'"'.$id.'"'."%'";
+
+		$arr_ids = $wpdb->get_results($sql);
+		if ( count($arr_ids) > 0 ) {
+			$info .= "posts using this sidebar:<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
+			foreach ( $arr_ids as $obj ) {
+				$post_id = $obj->post_id;
+				$post = get_post($post_id);
+				$info .= $post_id;
+				if ( $post->post_status != "publish" ) { $info .= " (".$post->post_status.")"; }
+				$info .= "; ";
+				//$info .= print_r($obj,true)."<br />";
+			}
+		}
+		
+		//...
+		$info .= '</div>';
+	}*/
+	//
+	//$info .= "<h2>Custom Sidebars</h2>";
+	//$info .= "<pre>arr_cs_sidebars: ".print_r($arr_cs_sidebars,true)."</pre><hr /><hr />";
+	/*foreach ( $arr_cs_sidebars as $cs_sidebar ) {
+		$id = $cs_sidebar['id'];
+		$info .= '<div class="code">';
+		$info .= $id."/".$cs_sidebar['name']."/".$cs_sidebar['description']."<br />";
+		// Get sidebar widgets
+		if ( isset($arr_sidebars_widgets[$id]) ) {
+			$widgets = $arr_sidebars_widgets[$id];
+			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+			foreach ( $widgets as $i => $widget_uid ) {
+				// Does a snippet already exist based on this widget?
+				$wp_args = array(
+					'post_type'   => 'snippet',
+					'post_status' => 'publish',
+					'meta_key'    => 'widget_uid',
+					'meta_value'  => $widget_uid,
+					'fields'      => 'ids'
+				);	
+				$snippets = get_posts($wp_args);
+				if ( $snippets ) {
+					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+					// get existing post id
+					if ( count($snippets) == 1 ) {
+						$snippet_id = $snippets[0];
+					} else if ( count($snippets) > 1 ) {
+						$snippet_id = null; // tft
+					}
+					if ( $snippet_id ) {
+						$info .= "snippet_id: ".$snippet_id."<br />";
+						// Update snippet record with sidebar_id
+						if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
+							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						} else {
+							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						}
+					}
+				} else {
+					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
+				}			
+			}
+		} else {
+			$info .= "No widgets found.<br />";
+		}
+		// Get all posts/pages using this sidebar
+		//$data = get_post_meta( $post_id, '_cs_replacements', true );
+		// Go straight to the DB and get ONLY the post IDs of relevant related event posts...
+		global $wpdb;
+	
+		$sql = "SELECT `post_id` 
+				FROM $wpdb->postmeta
+				WHERE `meta_key` = '_cs_replacements'
+				AND `meta_value` LIKE '%".'"'.$id.'"'."%'";
+
+		$arr_ids = $wpdb->get_results($sql);
+		if ( count($arr_ids) > 0 ) {
+			$info .= "posts using this sidebar:<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
+			foreach ( $arr_ids as $obj ) {
+				$post_id = $obj->post_id;
+				$post = get_post($post_id);
+				$info .= $post_id;
+				if ( $post->post_status != "publish" ) { $info .= " (".$post->post_status.")"; }
+				$info .= "; ";
+				//$info .= print_r($obj,true)."<br />";
+			}
+		}
+		
+		//...
+		$info .= '</div>';
+	}*/
+	/*
+	$info .= "<h2>Sidebars/Widgets</h2>";
+	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
+		if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
+		$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+	}
+	*/
+	
+	//....
+	
+	return $info;
+	
+}
+
 add_shortcode('convert_cs_sidebars', 'convert_cs_sidebars');
 function convert_cs_sidebars () {
 
@@ -3388,11 +3567,11 @@ function convert_cs_sidebars () {
 					}
 					if ( $snippet_id ) {
 						$info .= "snippet_id: ".$snippet_id."<br />";
-						// Update snippet record with cs_id
-						if ( update_post_meta( $snippet_id, 'cs_id', $id ) ) {
-							$info .= "post_meta field cs_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+						// Update snippet record with sidebar_id
+						if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
+							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
 						} else {
-							$info .= "post_meta field cs_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
+							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
 						}
 					}
 				} else {
