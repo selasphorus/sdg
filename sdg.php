@@ -3361,8 +3361,8 @@ function convert_sidebars ( $atts = [] ) {
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
-		$info .= '<div class="code">';
 		$info .= "<h3>sidebar: ".$sidebar."</h3>";
+		$info .= '<div class="code">';
 		// Get sidebar widgets
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		foreach ( $widgets as $i => $widget_uid ) {
