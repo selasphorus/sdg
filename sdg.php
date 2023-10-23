@@ -3390,7 +3390,13 @@ function convert_sidebars ( $atts = [] ) {
 						$info .= "snippet_id: ".$snippet_id."<br />";
 						// Get existing value for sidebar_id field, if any
 						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
-						$sidebars .= "; ".$sidebar;
+						if ( empty($sidebars) ) {
+							$sidebars = $sidebar;
+						} else if ( substr($sidebars,0,2) == "; "; ) {
+							$sidebars = substr($sidebars,2)."; ".$sidebar;
+						} else {
+							$sidebars .= "; ".$sidebar;
+						}
 						// Update snippet record with sidebar_id
 						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars ) ) {
 							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars."<br />";
