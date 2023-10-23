@@ -3397,6 +3397,7 @@ function convert_sidebars ( $atts = [] ) {
 						} else {
 							$sidebars .= "; ".$sidebar;
 						}
+						$sidebars = $sidebar; //tmp
 						// Update snippet record with sidebar_id
 						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars ) ) {
 							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars."<br />";
