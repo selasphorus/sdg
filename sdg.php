@@ -3390,18 +3390,20 @@ function convert_sidebars ( $atts = [] ) {
 						$info .= "snippet_id: ".$snippet_id."<br />";
 						// Get existing value for sidebar_id field, if any
 						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
+						$sidebars_revised = "";
 						if ( empty($sidebars) ) {
-							$sidebars = $sidebar;
-						} else if ( substr($sidebars,0,2) == "; " ) {
-							$sidebars = substr($sidebars,2)."; ".$sidebar;
-						} else {
-							$sidebars .= "; ".$sidebar;
+							$sidebars_revised = $sidebar;
+						} else if ( $sidebars != $sidebar ) {
+							$sidebars_revised = $sidebars."; ".$sidebar;
 						}
-						// Update snippet record with sidebar_id
-						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars ) ) {
-							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars."<br />";
-						} else {
-							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars."<br />";
+						$sidebars_revised = $sidebar; //tmp
+						if ( $sidebars_revised ) {
+							// Update snippet record with sidebar_id
+							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
+								$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							} else {
+								$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							}
 						}
 					}
 				} else {
