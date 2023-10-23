@@ -2566,9 +2566,11 @@ function show_snippets ( $atts = [] ) {
 								//$field_key = $field['key'];
 								$field_key = 'field_6530630a97804'; //WIP get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
-								$url = $v[$field_key];
-								//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
-								$snippet_logic_info .= "target_url: ".$url."<br />";
+								if ( isset($v[$field_key]) ) {
+									$url = $v[$field_key];
+									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
+									$snippet_logic_info .= "target_url: ".$url."<br />";
+								}
 								// compare url to current post path/slug
 								//...
 							}
