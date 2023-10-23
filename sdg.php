@@ -3396,7 +3396,7 @@ function convert_sidebars ( $atts = [] ) {
 						} else if ( $sidebars != $sidebar ) {
 							$sidebars_revised = $sidebars."; ".$sidebar;
 						}
-						//$sidebars_revised = $sidebar; //tmp
+						$sidebars_revised = $sidebar; //tmp
 						if ( $sidebars_revised ) {
 							// Update snippet record with sidebar_id
 							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
