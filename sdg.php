@@ -3403,7 +3403,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	}
 	$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
 	$sidebars_widgets = array( $sidebar_id => $widgets );
-	$sidebars_widgets = apply_filters( 'sidebars_widgets', $sidebars_widgets );
+	$filtered_widgets = apply_filters( 'sidebars_widgets', $sidebars_widgets );
 	//
 	/*
 	foreach ( $sidebars_widgets as $widget_area => $widget_list ) {
