@@ -2511,8 +2511,8 @@ function get_snippets ( $atts = [] ) {
 			
 			// TMP during transition?
 			// TODO: add snippet status field?
-			if ( $sidebar_id == "" ) {
-				$snippet_status = "wp_inactive_widgets";
+			if ( $sidebar_id == "wp_inactive_widgets" ) {
+				$snippet_status = "inactive";
 				$snippet_logic_info .= "Snippet belongs to wp_inactive_widgets, i.e. status is inactive<br />";
 				// TODO: remove from post_snippets array, if it was previously added...
 				next;
