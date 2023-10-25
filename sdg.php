@@ -3469,7 +3469,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 			$info .= "[".$pos."] => ".$widget_uid;
 			$info .= " => snippet_id: ".$snippet_id;
 			$info .= " => ".get_the_title($snippet_id);
-			$info .= "[".$widget_sidebar_id."]";
+			$info .= " [".$widget_sidebar_id."]";
 			$info .= "<br />";
 		}
 		//$info .= "</pre>";
