@@ -3419,6 +3419,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	//$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
 	$info .= '<div class="code float-left">';
 	$info .= "filtered_widgets:";
+	$info .= "<pre>";
 	foreach ( $filtered_widgets as $pos => $widget_uid ) {
 		$info .= "[".$pos."] => ".$widget_uid;
 		// If this is a text or html widget, get more info from the corresponding snippet records
@@ -3430,6 +3431,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//." => ".$widget_title
 		$info .= "<br />";
 	}
+	$info .= "</pre>";
 	$info .= "</div>";
 	
 	// Get snippets
@@ -3444,6 +3446,8 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	}
 	
 	$info .= "</div>";
+	
+	$info .= '<hr class="clear" />';
 	
 	return $info;
 	
