@@ -3401,7 +3401,27 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$widgets = $arr_cs_sidebars[$sidebar_id];
 	}
 	$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
+	$sidebars_widgets = array( $sidebar_id => $widgets );
 	//
+	/*
+	foreach ( $sidebars_widgets as $widget_area => $widget_list ) {
+
+		if ( 'wp_inactive_widgets' === $widget_area || empty( $widget_list ) ) {
+			continue;
+		}
+
+		foreach ( $widget_list as $pos => $widget_id ) {
+
+			if ( ! $this->check_widget_visibility( $widget_id ) ) {
+				unset( $sidebars_widgets[ $widget_area ][ $pos ] );
+			}
+		}
+	}
+	*/
+	$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
+	$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
+	
+	//dynamic_sidebar( 'sidebar-1' );
 	
 	/*
 	$wp_args = array(
