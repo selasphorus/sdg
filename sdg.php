@@ -3374,7 +3374,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$sidebar_id  = "sidebar-1";
 	
 	// Check for custom sidebars 
-	$cs_replacement = get_post_meta( $post_id, '_cs_replacements', true );
+	$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
 	if ( $cs_replacements ) { 
 		$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
 		$first_key = array_key_first($cs_replacements);
