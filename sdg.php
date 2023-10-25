@@ -3453,7 +3453,8 @@ function show_widgets_and_snippets ( $atts = [] ) {
 
 function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
-	$snippets = array();
+	$snippet_id = null;
+	$info = "";
 	
 	if ( $widget_uid ) {
 		$wp_args = array(
@@ -3467,20 +3468,18 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 	}
 	
 	if ( $snippets ) {
-					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-					// get existing post id
-					if ( count($snippets) == 1 ) {
-						$snippet_id = $snippets[0];
-					} else if ( count($snippets) > 1 ) {
-						$snippet_id = null; // tft
-						$info .= "More than one matching snippet!<br />";
-						$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-					}
-					if ( $snippet_id ) {
-						$info .= "snippet_id: ".$snippet_id."<br />";
-						}
+		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		// get existing post id
+		if ( count($snippets) == 1 ) {
+			$snippet_id = $snippets[0];
+		} else if ( count($snippets) > 1 ) {
+			//$info .= "More than one matching snippet!<br />";
+			//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		}
+		//$info .= "snippet_id: ".$snippet_id."<br />";
+	}
 	
-	return $snippets;
+	return $snippet_id;
 
 }
 
