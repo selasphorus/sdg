@@ -2515,7 +2515,7 @@ function get_snippets ( $atts = [] ) {
 				$snippet_status = "inactive";
 				$snippet_logic_info .= "Snippet belongs to wp_inactive_widgets, i.e. status is inactive<br />";
 				// TODO: remove from post_snippets array, if it was previously added...
-				next;
+				continue;
 			}
 			
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
