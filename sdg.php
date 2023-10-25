@@ -2508,6 +2508,14 @@ function get_snippets ( $atts = [] ) {
 			// Conditional display -- determine whether the given post should display this widget
 			
 			$snippet_logic_info .= "Analysing display conditions...<br />";
+			
+			// TMP during transition?
+			// TODO: add snippet status field?
+			if ( $sidebar_id == "" ) {
+				$snippet_status = "wp_inactive_widgets";
+				next;
+			}
+			
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 				$$key = get_post_meta( $snippet_id, $key, true );
