@@ -3424,7 +3424,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	//$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
 	$info .= '<div class="code float-left" style="width: 49%;">';
 	$info .= "filtered_widgets:";
-	$info .= "<pre>";
+	//$info .= "<pre>";
 	foreach ( $filtered_widgets as $pos => $widget_uid ) {
 		$info .= "[".$pos."] => ".$widget_uid;
 		// If this is a text or html widget, get more info from the corresponding snippet records
@@ -3436,7 +3436,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//." => ".$widget_title
 		$info .= "<br />";
 	}
-	$info .= "</pre>";
+	//$info .= "</pre>";
 	$info .= "</div>";
 	
 	// Get snippets
@@ -3447,7 +3447,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$info .= '<div class="code float-left" style="width: 49%;">';
 		$info .= "snippets: ";
 		//$info .= "<pre>".print_r($snippets, true)."</pre>";
-		$info .= "<pre>";
+		//$info .= "<pre>";
 		foreach ( $snippets as $pos => $snippet_id ) {
 			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 			$info .= "[".$pos."] => ".$widget_uid;
@@ -3455,7 +3455,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 			$info .= " => ".get_the_title($snippet_id);
 			$info .= "<br />";
 		}
-		$info .= "</pre>";
+		//$info .= "</pre>";
 		$info .= '</div>';
 	}
 	
