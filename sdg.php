@@ -3421,7 +3421,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	}
 	*/
 	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
-	$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
+	$info .= "filtered_widgets: <pre>".print_r($filtered_widgets[$sidebar_id], true)."</pre>";
 	
 	//dynamic_sidebar( 'sidebar-1' );
 	
