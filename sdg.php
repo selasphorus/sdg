@@ -3371,14 +3371,20 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
 	
 	// Check for custom sidebars 
-	$cs = get_post_meta( $post_id, '_cs_replacements', true );
-	if ( $cs ) { 
-		$info .= "cs: ".print_r($cs, true)."<br />";
+	$cs_replacement = get_post_meta( $post_id, '_cs_replacements', true );
+	if ( $cs_replacement ) { 
+		$info .= "cs_replacement: ".print_r($cs_replacement, true)."<br />";
+		$sidebar_id = $cs_replacement[0];
+		$info .= "sidebar_id: ".$sidebar_id."<br />";
 	} else {
 		// Get page template? i.e. make sure this post uses a sidebar at all...
 		//...
+		$sidebar_id  = "sidebar-1";
 		$info .= "This post uses the default sidebar.<br />";
 	}
+	
+	$sidebar = wp_list_widget_controls($sidebar_id);
+	$info .= "sidebar: ".print_r($sidebar, true)."<br />";
 	
 	
 	/*
