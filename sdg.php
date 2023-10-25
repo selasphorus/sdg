@@ -2403,8 +2403,8 @@ function sdg_post_type_access_limiter(){
 
 /*** WIDGETS >> SNIPPETS -- WIP! ***/
 
-add_shortcode('snippets', 'show_snippets');
-function show_snippets ( $atts = [] ) {
+add_shortcode('snippets', 'get_snippets');
+function get_snippets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
@@ -3311,8 +3311,17 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 }
 
 // WIP
-function get_sidebar_id( $widget_uid = null) {
+/*
+https://developer.wordpress.org/reference/functions/wp_find_widgets_sidebar/
+wp_find_widgets_sidebar( string $widget_id ): string|null
+Finds the sidebar that a given widget belongs to.
+$widget_id string Required
+The widget ID to look for.
 
+Return
+string|null The found sidebar's ID, or null if it was not found.
+*/
+function get_sidebar_id( $widget_uid = null) {
 	//
 	return null;
 
@@ -3377,13 +3386,15 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$info .= '=> "'.$sidebar['name'].'"<br />';
 	
 	// Get widgets
+	// -------
 	$widgets = array(); // init
 	if ( isset($arr_sidebars_widgets[$sidebar_id]) ) {
 		$widgets = $arr_sidebars_widgets[$sidebar_id];
 	} else if ( isset($arr_cs_sidebars[$sidebar_id]) ) {
 		$widgets = $arr_cs_sidebars[$sidebar_id];
 	}
-	$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
+	//$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
+	
 	// This is a little convoluted, but seems to work...?
 	$sidebars_widgets = array( $sidebar_id => $widgets );
 	$sidebars_widgets_filtered = apply_filters( 'sidebars_widgets', $sidebars_widgets );
@@ -3418,36 +3429,13 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//." => ".$widget_title
 		$info .= "<br />";
 	}
-	//dynamic_sidebar( 'sidebar-1' );
 	
-	/*
-	$wp_args = array(
-		'post_type'   => 'any',
-		'post_status' => 'publish',
-		'posts_per_page'  => $limit,
-		'p'    => 'post_id',
-		//'post__in' => array(),
-		'fields'      => 'ids'
-	);	
-	$snippets = get_posts($wp_args);
+	// Get snippets
+	// -------
+	$snippets = get_snippets (array('post_id' => $post_id) );
+	
 	if ( $snippets ) {
-		//
-	}
-	*/
-	
-	
-	// Get sidebar 
-	// Snippets
-	$wp_args = array(
-		'post_type'   => 'snippet',
-		'post_status' => 'publish',
-		'posts_per_page'  => $limit,
-		//'meta_key'    => 'post_id',
-		'fields'      => 'ids'
-	);	
-	$snippets = get_posts($wp_args);
-	if ( $snippets ) {
-		//
+		$info .= "snippets: <pre>".print_r($snippets, true)."</pre>";
 	}
 	
 	$info .= '</div>';
