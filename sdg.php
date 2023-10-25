@@ -3449,7 +3449,9 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//$info .= "<pre>".print_r($snippets, true)."</pre>";
 		$info .= "<pre>";
 		foreach ( $snippets as $pos => $snippet_id ) {
-			$info .= "[".$pos."] => snippet_id: ".$snippet_id;
+			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+			$info .= "[".$pos."] => ".$widget_uid;
+			$info .= " => snippet_id: ".$snippet_id;
 			$info .= " => ".get_the_title($snippet_id);
 			$info .= "<br />";
 		}
