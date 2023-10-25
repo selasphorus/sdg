@@ -2422,6 +2422,7 @@ function get_snippets ( $atts = [] ) {
 		'limit'   => -1,
         'run_updates'  => false,
         'dev' => false,
+        'return' => 'info',
     ), $atts );
     
     // Extract
@@ -2473,7 +2474,8 @@ function get_snippets ( $atts = [] ) {
     //$ts_info .= "WP_Query run as follows:";
     //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
-	
+    
+    // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
 	
 		$snippet_info = "";
@@ -2632,6 +2634,9 @@ function get_snippets ( $atts = [] ) {
 		//$info .= "<hr />";
 		if ( $dev ) { $info .= $snippet_info; } // ."<hr /></hr />"
     }
+	
+	// If returning array of IDs, finish here
+	if ( $return == "ids") { return $post_snippets; }
 	
 	// Compile info for the matching snippets for display
 	foreach ( $post_snippets as $snippet_id ) {
