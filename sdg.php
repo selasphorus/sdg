@@ -3373,7 +3373,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
 	if ( $cs ) { 
-		$info .= "cs: <pre>".print_r($cs, true)."</pre>";
+		$info .= "cs: ".print_r($cs, true)."<br />";
 	} else {
 		// Get page template? i.e. make sure this post uses a sidebar at all...
 		//...
