@@ -3335,6 +3335,88 @@ function get_sidebar_id( $widget_uid = null) {
 }
 
 // WIP
+
+add_shortcode('widget_and_snippets', 'show_widgets_and_snippets');
+function show_widgets_and_snippets ( $atts = [] ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: show_widgets_and_snippets", $do_log );
+    
+    $info = "";
+    $ts_info = "";
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+		'post_id' => null,
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	// Get widgets and snippets set to display per post
+	
+	// If no post_id has been specified, get random post ids according to $limit
+	// TODO
+	
+	if ( $post_id === null ) { return "No post_id; "; } // tft
+	//
+	$arr_sidebars_widgets = get_option('sidebars_widgets');
+	$arr_cs_sidebars = get_option('cs_sidebars');
+	//
+	$info .= '<div class="code">';
+	
+	$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
+	
+	// Check for custom sidebars 
+	$cs = get_post_meta( $post_id, '_cs_replacements', true );
+	if ( $cs ) { 
+		$info .= "cs: <pre>".print_r($cs, true)."</pre>";
+	} else {
+		// Get page template? i.e. make sure this post uses a sidebar at all...
+		//...
+		$info .= "This post uses the default sidebar.<br />";
+	}
+	
+	
+	/*
+	$wp_args = array(
+		'post_type'   => 'any',
+		'post_status' => 'publish',
+		'posts_per_page'  => $limit,
+		'p'    => 'post_id',
+		//'post__in' => array(),
+		'fields'      => 'ids'
+	);	
+	$snippets = get_posts($wp_args);
+	if ( $snippets ) {
+		//
+	}
+	*/
+	
+	
+	// Get sidebar 
+	// Snippets
+	$wp_args = array(
+		'post_type'   => 'snippet',
+		'post_status' => 'publish',
+		'posts_per_page'  => $limit,
+		//'meta_key'    => 'post_id',
+		'fields'      => 'ids'
+	);	
+	$snippets = get_posts($wp_args);
+	if ( $snippets ) {
+		//
+	}
+	
+	$info .= '</div>';
+	
+	return $info;
+	
+}
+
 add_shortcode('convert_sidebars', 'convert_sidebars');
 function convert_sidebars ( $atts = [] ) {
 
@@ -3413,7 +3495,7 @@ function convert_sidebars ( $atts = [] ) {
 						}
 					}
 				} else {
-					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
+					$info .= "No corresponding snippets found<br />"; //$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
 				}			
 		}
 		//...
