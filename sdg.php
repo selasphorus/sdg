@@ -3370,18 +3370,23 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
 	
+	// Defaullt sidebar_id
+	$sidebar_id  = "sidebar-1";
+	
 	// Check for custom sidebars 
 	$cs_replacement = get_post_meta( $post_id, '_cs_replacements', true );
-	if ( $cs_replacement ) { 
-		$info .= "cs_replacement: ".print_r($cs_replacement, true)."<br />";
-		$sidebar_id = $cs_replacement[0];
-		$info .= "sidebar_id: ".$sidebar_id."<br />";
+	if ( $cs_replacements ) { 
+		$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
+		$first_key = array_key_first($cs_replacements);
+		if ($first_key !== null) {
+			$sidebar_id = $cs_replacements[$first_key];
+		}
 	} else {
 		// Get page template? i.e. make sure this post uses a sidebar at all...
 		//...
-		$sidebar_id  = "sidebar-1";
 		$info .= "This post uses the default sidebar.<br />";
 	}
+	$info .= "sidebar_id: ".$sidebar_id."<br />";
 	
 	//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
 	$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID.
