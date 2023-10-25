@@ -3411,6 +3411,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$info .= "[".$pos."] => ".$widget_uid;
 		// If this is a text or html widget, get more info from the corresponding snippet records
 		$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+		$info .= " => snippet_id: ".$snippet_id;
 		//." => ".$widget_title
 		$info .= "<br />";
 	}
