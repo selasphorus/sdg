@@ -2636,7 +2636,7 @@ function get_snippets ( $atts = [] ) {
     }
 	
 	// If returning array of IDs, finish here
-	if ( $return == "ids") { return $post_snippets; }
+	if ( $return == "ids" ) { return $post_snippets; }
 	
 	// Compile info for the matching snippets for display
 	foreach ( $post_snippets as $snippet_id ) {
@@ -3441,7 +3441,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	// Get snippets
 	// -------
-	$snippets = get_snippets (array('post_id' => $post_id) );
+	$snippets = get_snippets ( array('post_id' => $post_id) );
 	
 	if ( $snippets ) {
 		$info .= '<div class="code float-left">';
