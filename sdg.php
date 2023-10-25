@@ -3383,9 +3383,11 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$info .= "This post uses the default sidebar.<br />";
 	}
 	
-	$sidebar = wp_list_widget_controls($sidebar_id);
+	//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
+	$sidebar = wp_get_sidebar( string $id ) // Retrieves the registered sidebar with the given ID.
 	$info .= "sidebar: ".print_r($sidebar, true)."<br />";
 	
+	//
 	
 	/*
 	$wp_args = array(
