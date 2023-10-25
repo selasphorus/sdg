@@ -3092,13 +3092,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		$info .= '<div class="code">';
 		//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />";
-		$uid = $widget_type."-".$id;
-		$info .= "widget_uid: ".$uid."<br />";
+		$widget_uid = $widget_type."-".$id;
+		$info .= "widget_uid: ".$widget_uid."<br />";
 		//
 		if ( isset($arr_widget['title']) && !empty($arr_widget['title']) ) {
 			$snippet_title = $arr_widget['title'];
 		} else {
-			$snippet_title = $uid;
+			$snippet_title = $widget_uid;
 		}
 		$info .= "title: ".$snippet_title."<br />";
 		
@@ -3122,7 +3122,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		}
 		
 		// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
-		$sidebar_id = get_sidebar_id($uid);
+		$sidebar_id = get_sidebar_id($widget_uid);
 		if ( $sidebar_id ) {
 			//
 		}
@@ -3135,10 +3135,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$postarr = array();
 		$meta_input = array();
 		//
-		if ( isset($arr_logic[$uid]) ) {
+		if ( isset($arr_logic[$widget_uid]) ) {
 			$info .= "... found widget logic ...<br />";
-			//$info .= "logic: <pre>".print_r($arr_logic[$uid],true)."</pre><br />";
-			$conditions = $arr_logic[$uid];
+			//$info .= "logic: <pre>".print_r($arr_logic[$widget_uid],true)."</pre><br />";
+			$conditions = $arr_logic[$widget_uid];
 		}
 		// Loop through the conditions and save them to the snippet ACF fields, as applicable
 		
@@ -3241,32 +3241,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 			$meta_input['widget_type'] = $widget_type;
 			$meta_input['widget_id'] = $id;
-			$meta_input['widget_uid'] = $uid;
+			$meta_input['widget_uid'] = $widget_uid;
 			//$meta_input['sidebar_id'] = $sidebar_id;
 			$meta_input['widget_logic'] = print_r($conditions, true);
 			
 			$action = null;
 			
 			// Does a snippet already exist based on this widget?
-			$wp_args = array(
-				'post_type'   => 'snippet',
-				'post_status' => 'publish',
-				//'numberposts' => $num_posts,
-				'meta_key'    => 'widget_uid',
-				'meta_value'  => $uid,
-				'fields'      => 'ids'
-			);	
-			$existing_snippets = get_posts($wp_args);
-			if ( $existing_snippets ) {
-				// get existing post id
-				if ( count($existing_snippets) == 1 ) {
-					$existing_id = $existing_snippets[0];
-				} else if ( count($existing_snippets) > 1 ) {
-					$existing_id = null; // tft
-				}
-				if ( $existing_id ) {
-					$postarr['ID'] = $existing_id;
-				}
+			$existing_id = get_snippet_by_widget_uid ( $widget_uid );
+			if ( $existing_id ) {
+				$postarr['ID'] = $existing_id;
 			}
 			
 			// Finish setting up the post array for update/insert
@@ -3335,8 +3319,6 @@ function get_sidebar_id( $widget_uid = null) {
 }
 
 // WIP
-// The following is WIP and may be more trouble than it's worth, because
-// can't figure out how to call Widget Context plugin functions...
 add_shortcode('widget_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = [] ) {
 
@@ -3402,8 +3384,10 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$widgets = $arr_cs_sidebars[$sidebar_id];
 	}
 	$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
+	// This is a little convoluted, but seems to work...?
 	$sidebars_widgets = array( $sidebar_id => $widgets );
-	$filtered_widgets = apply_filters( 'sidebars_widgets', $sidebars_widgets );
+	$sidebars_widgets_filtered = apply_filters( 'sidebars_widgets', $sidebars_widgets );
+	$filtered_widgets = $sidebars_widgets_filtered[$sidebar_id];
 	//
 	/*
 	foreach ( $sidebars_widgets as $widget_area => $widget_list ) {
@@ -3422,7 +3406,13 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	*/
 	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
 	$info .= "filtered_widgets: <pre>".print_r($filtered_widgets[$sidebar_id], true)."</pre>";
-	
+	foreach ( $filtered_widgets as $pos => $widget_uid ) {
+		$info .= "[".$pos."] => ".$widget_uid;
+		// If this is a text or html widget, get more info from the corresponding snippet records
+		$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+		//." => ".$widget_title
+		$info .= "<br />";
+	}
 	//dynamic_sidebar( 'sidebar-1' );
 	
 	/*
@@ -3461,6 +3451,39 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 }
 
+function get_snippet_by_widget_uid ( $widget_uid = null ) {
+
+	$snippets = array();
+	
+	if ( $widget_uid ) {
+		$wp_args = array(
+			'post_type'   => 'snippet',
+			'post_status' => 'publish',
+			'meta_key'    => 'widget_uid',
+			'meta_value'  => $widget_uid,
+			'fields'      => 'ids'
+		);	
+		$snippets = get_posts($wp_args);
+	}
+	
+	if ( $snippets ) {
+					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+					// get existing post id
+					if ( count($snippets) == 1 ) {
+						$snippet_id = $snippets[0];
+					} else if ( count($snippets) > 1 ) {
+						$snippet_id = null; // tft
+						$info .= "More than one matching snippet!<br />";
+						$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+					}
+					if ( $snippet_id ) {
+						$info .= "snippet_id: ".$snippet_id."<br />";
+						}
+	
+	return $snippets;
+
+}
+
 add_shortcode('convert_sidebars', 'convert_sidebars');
 function convert_sidebars ( $atts = [] ) {
 
@@ -3495,53 +3518,35 @@ function convert_sidebars ( $atts = [] ) {
 			foreach ( $widgets as $i => $widget_uid ) {
 				$info .= $i.": ".$widget_uid."<br />";
 				// Does a corresponding snippet exist?
-				$wp_args = array(
-					'post_type'   => 'snippet',
-					'post_status' => 'publish',
-					'meta_key'    => 'widget_uid',
-					'meta_value'  => $widget_uid,
-					'fields'      => 'ids'
-				);	
-				$snippets = get_posts($wp_args);
-				if ( $snippets ) {
-					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-					// get existing post id
-					if ( count($snippets) == 1 ) {
-						$snippet_id = $snippets[0];
-					} else if ( count($snippets) > 1 ) {
-						$snippet_id = null; // tft
-						$info .= "More than one matching snippet!<br />";
-						$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+				if ( $snippet_id ) {
+					$info .= "snippet_id: ".$snippet_id."<br />";
+					// Get existing value for sidebar_id field, if any
+					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
+					$sidebars_revised = "";
+					if ( empty($sidebars) ) {
+						$sidebars_revised = $sidebar;
+					} else if ( $sidebars != $sidebar ) {
+						$sidebars_revised = $sidebars."; ".$sidebar;
 					}
-					if ( $snippet_id ) {
-						$info .= "snippet_id: ".$snippet_id."<br />";
-						// Get existing value for sidebar_id field, if any
-						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
-						$sidebars_revised = "";
-						if ( empty($sidebars) ) {
-							$sidebars_revised = $sidebar;
-						} else if ( $sidebars != $sidebar ) {
-							$sidebars_revised = $sidebars."; ".$sidebar;
+					//$sidebars_revised = $sidebar; //tmp
+					if ( $sidebars_revised ) {
+						// Update snippet record with sidebar_id
+						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
+							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+						} else {
+							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
 						}
-						//$sidebars_revised = $sidebar; //tmp
-						if ( $sidebars_revised ) {
-							// Update snippet record with sidebar_id
-							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
-								$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
-							} else {
-								$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
-							}
-							if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
-								$info .= "post_meta field sidebar_sortnum updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
-							} else {
-								$info .= "post_meta field sidebar_sortnum update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
-							}
-							//
+						if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
+							$info .= "post_meta field sidebar_sortnum updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
+						} else {
+							$info .= "post_meta field sidebar_sortnum update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
 						}
+						//
 					}
 				} else {
-					$info .= "No corresponding snippets found<br />"; //$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
-				}			
+					$info .= "No corresponding snippets found<br />";
+				}
 			} // foreach ( $widgets...
 		}
 		
@@ -3561,34 +3566,18 @@ function convert_sidebars ( $atts = [] ) {
 			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 			foreach ( $widgets as $i => $widget_uid ) {
 				// Does a snippet already exist based on this widget?
-				$wp_args = array(
-					'post_type'   => 'snippet',
-					'post_status' => 'publish',
-					'meta_key'    => 'widget_uid',
-					'meta_value'  => $widget_uid,
-					'fields'      => 'ids'
-				);	
-				$snippets = get_posts($wp_args);
-				if ( $snippets ) {
-					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-					// get existing post id
-					if ( count($snippets) == 1 ) {
-						$snippet_id = $snippets[0];
-					} else if ( count($snippets) > 1 ) {
-						$snippet_id = null; // tft
-					}
-					if ( $snippet_id ) {
-						$info .= "snippet_id: ".$snippet_id."<br />";
-						// Update snippet record with sidebar_id
-						if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
-							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
-						} else {
-							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
-						}
+				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );			
+				if ( $snippet_id ) {
+					$info .= "snippet_id: ".$snippet_id."<br />";
+					// Update snippet record with sidebar_id
+					if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
+						$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+					} else {
+						$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
 					}
 				} else {
 					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
-				}			
+				}
 			}
 		} else {
 			$info .= "No widgets found.<br />";
@@ -3669,30 +3658,14 @@ function convert_cs_sidebars () {
 			$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 			foreach ( $widgets as $i => $widget_uid ) {
 				// Does a snippet already exist based on this widget?
-				$wp_args = array(
-					'post_type'   => 'snippet',
-					'post_status' => 'publish',
-					'meta_key'    => 'widget_uid',
-					'meta_value'  => $widget_uid,
-					'fields'      => 'ids'
-				);	
-				$snippets = get_posts($wp_args);
-				if ( $snippets ) {
-					//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-					// get existing post id
-					if ( count($snippets) == 1 ) {
-						$snippet_id = $snippets[0];
-					} else if ( count($snippets) > 1 ) {
-						$snippet_id = null; // tft
-					}
-					if ( $snippet_id ) {
-						$info .= "snippet_id: ".$snippet_id."<br />";
-						// Update snippet record with sidebar_id
-						if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
-							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
-						} else {
-							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
-						}
+				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+				if ( $snippet_id ) {
+					$info .= "snippet_id: ".$snippet_id."<br />";
+					// Update snippet record with sidebar_id
+					if ( update_post_meta( $snippet_id, 'sidebar_id', $id ) ) {
+						$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$id."<br />";
+					} else {
+						$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$id."<br />";
 					}
 				} else {
 					$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
