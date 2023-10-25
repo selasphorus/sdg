@@ -3447,9 +3447,10 @@ function convert_sidebars ( $atts = [] ) {
 		$info .= '<div class="code">';
 		// Get sidebar widgets
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
-		foreach ( $widgets as $i => $widget_uid ) {
-			$info .= $i.": ".$widget_uid."<br />";
-			// Does a corresponding snippet exist?
+		if ( is_array($widgets) ) {
+			foreach ( $widgets as $i => $widget_uid ) {
+				$info .= $i.": ".$widget_uid."<br />";
+				// Does a corresponding snippet exist?
 				$wp_args = array(
 					'post_type'   => 'snippet',
 					'post_status' => 'publish',
@@ -3497,7 +3498,9 @@ function convert_sidebars ( $atts = [] ) {
 				} else {
 					$info .= "No corresponding snippets found<br />"; //$info .= "No snippets found for args: <pre>".print_r($wp_args,true)."</pre><hr />";
 				}			
+			} // foreach ( $widgets...
 		}
+		
 		//...
 		$info .= '</div>';
 	}
