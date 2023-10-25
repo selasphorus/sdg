@@ -3335,7 +3335,8 @@ function get_sidebar_id( $widget_uid = null) {
 }
 
 // WIP
-
+// The following is WIP and may be more trouble than it's worth, because
+// can't figure out how to call Widget Context plugin functions...
 add_shortcode('widget_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = [] ) {
 
@@ -3402,6 +3403,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	}
 	$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
 	$sidebars_widgets = array( $sidebar_id => $widgets );
+	$sidebars_widgets = apply_filters( 'sidebars_widgets', $sidebars_widgets );
 	//
 	/*
 	foreach ( $sidebars_widgets as $widget_area => $widget_list ) {
@@ -3418,7 +3420,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		}
 	}
 	*/
-	$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
+	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
 	$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
 	
 	//dynamic_sidebar( 'sidebar-1' );
