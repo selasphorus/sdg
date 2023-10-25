@@ -3441,7 +3441,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	// Get snippets
 	// -------
-	$snippets = get_snippets ( array('post_id' => $post_id) );
+	$snippets = get_snippets ( array('post_id' => $post_id, 'return' => 'ids') );
 	
 	if ( $snippets ) {
 		$info .= '<div class="code float-left">';
