@@ -3441,7 +3441,13 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	if ( $snippets ) {
 		$info .= '<div class="code float-left">';
 		$info .= "snippets: ";
-		$info .= "<pre>".print_r($snippets, true)."</pre>";
+		//$info .= "<pre>".print_r($snippets, true)."</pre>";
+		$info .= "<pre>";
+		foreach ( $snippets as $pos => $snippet ) {
+			$info .= "[".$pos."] => ".$snippet;
+			$info .= "<br />";
+		}
+		$info .= "</pre>";
 		$info .= '</div>';
 	}
 	
