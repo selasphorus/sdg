@@ -3417,7 +3417,8 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	*/
 	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
 	//$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
-	$info .= "filtered_widgets: <br />";
+	$info .= '<div class="code floatleft">';
+	$info .= "filtered_widgets:";
 	foreach ( $filtered_widgets as $pos => $widget_uid ) {
 		$info .= "[".$pos."] => ".$widget_uid;
 		// If this is a text or html widget, get more info from the corresponding snippet records
@@ -3429,16 +3430,20 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//." => ".$widget_title
 		$info .= "<br />";
 	}
+	$info .= "</div>";
 	
 	// Get snippets
 	// -------
 	$snippets = get_snippets (array('post_id' => $post_id) );
 	
 	if ( $snippets ) {
-		$info .= "snippets: <pre>".print_r($snippets, true)."</pre>";
+		$info .= '<div class="code floatleft">';
+		$info .= "snippets: ";
+		$info .= "<pre>".print_r($snippets, true)."</pre>";
+		$info .= '</div>';
 	}
 	
-	$info .= '</div>';
+	$info .= "</div>";
 	
 	return $info;
 	
