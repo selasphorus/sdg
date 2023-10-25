@@ -2502,6 +2502,9 @@ function get_snippets ( $atts = [] ) {
 		
 			$post_snippets[] = $snippet_id;
 			$snippet_status = "active";
+			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
+			$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
+			$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 			continue;
 			
 		}
@@ -2539,6 +2542,7 @@ function get_snippets ( $atts = [] ) {
 						if ( $any_all == "any" ) {
 							$post_snippets[] = $snippet_id;
 							$snippet_status = "active";
+							$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
 							//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 							break;
 						}
@@ -2555,6 +2559,7 @@ function get_snippets ( $atts = [] ) {
 							if ( $any_all == "any" ) { 
 								$post_snippets[] = $snippet_id;
 								$snippet_status = "active";
+								$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								break;
 							}
