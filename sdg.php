@@ -3417,7 +3417,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	*/
 	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
 	//$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
-	$info .= '<div class="code floatleft">';
+	$info .= '<div class="code float-left">';
 	$info .= "filtered_widgets:";
 	foreach ( $filtered_widgets as $pos => $widget_uid ) {
 		$info .= "[".$pos."] => ".$widget_uid;
@@ -3437,7 +3437,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$snippets = get_snippets (array('post_id' => $post_id) );
 	
 	if ( $snippets ) {
-		$info .= '<div class="code floatleft">';
+		$info .= '<div class="code float-left">';
 		$info .= "snippets: ";
 		$info .= "<pre>".print_r($snippets, true)."</pre>";
 		$info .= '</div>';
