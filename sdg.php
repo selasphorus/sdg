@@ -3450,9 +3450,11 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		//$info .= "<pre>";
 		foreach ( $snippets as $pos => $snippet_id ) {
 			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+			$widget_sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
 			$info .= "[".$pos."] => ".$widget_uid;
 			$info .= " => snippet_id: ".$snippet_id;
 			$info .= " => ".get_the_title($snippet_id);
+			$info .= "[".$widget_sidebar_id."]";
 			$info .= "<br />";
 		}
 		//$info .= "</pre>";
