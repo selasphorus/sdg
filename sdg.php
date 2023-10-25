@@ -3389,8 +3389,9 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$info .= "sidebar_id: ".$sidebar_id."<br />";
 	
 	//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
-	$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID.
-	$info .= "sidebar: ".print_r($sidebar, true)."<br />";
+	$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
+	//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
+	$info .= "=> ".$sidebar['name']."<br />";
 	
 	//
 	
