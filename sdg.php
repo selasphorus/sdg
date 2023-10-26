@@ -2423,6 +2423,7 @@ function get_snippets ( $atts = [] ) {
         'run_updates'  => false,
         'dev' => false,
         'return' => 'info',
+        'sidebar_id' => 'sidebar-1', // default
     ), $atts );
     
     // Extract
@@ -2456,16 +2457,16 @@ function get_snippets ( $atts = [] ) {
 	
 	// Meta query
 	$meta_query = array(
-		//'relation' => 'AND',
+		'relation' => 'AND',
 		'snippet_display' => array(
 			'key' => 'snippet_display',
 			'value' => array('show', 'selected', 'notselected'),
 			'compare' => 'IN',
-		),/*
-		'number' => array(
-			'key' => 'newsletter_num',
-			'type' => 'NUMERIC',
-		),*/
+		),
+		'sidebar_id' => array(
+			'key' => 'sidebar_id',
+			'value' => $sidebar_id,
+		),
 	);
 	$wp_args['meta_query'] = $meta_query;
 	
@@ -3458,7 +3459,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	// Get snippets
 	// -------
-	$snippets = get_snippets ( array('post_id' => $post_id, 'return' => 'ids') );
+	$snippets = get_snippets ( array('post_id' => $post_id, 'return' => 'ids', 'sidebar_id' => $sidebar_id ) );
 	
 	if ( $snippets ) {
 		$info .= '<div class="code float-left" style="width: 49%;">';
