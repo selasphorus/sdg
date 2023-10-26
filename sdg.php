@@ -2447,12 +2447,13 @@ function get_snippets ( $atts = [] ) {
 	
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
-		'post_type'       => 'snippet',
-		'post_status'     => 'publish',
-		'posts_per_page'  => $limit,
-        'fields'          => 'ids',
-        //'orderby'   => 'date',
-		//'order'     => 'DESC',
+		'post_type'		=> 'snippet',
+		'post_status'	=> 'publish',
+		'posts_per_page'=> $limit,
+        'fields'		=> 'ids',
+        'orderby'		=> 'meta_value',
+		'order'			=> 'ASC',
+        'meta_key'		=> 'sidebar_sortnum',
 	);
 	
 	// Meta query
@@ -3422,7 +3423,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	// This is a little convoluted, but seems to work...?
 	$sidebars_widgets = array( $sidebar_id => $widgets );
 	$sidebars_widgets_filtered = apply_filters( 'sidebars_widgets', $sidebars_widgets );
-	$filtered_widgets = $sidebars_widgets_filtered[$sidebar_id];
+	$filtered_widgets = $sidebars_widgets_filtered[$sidebar_id]; // TODO: fix this -- not working because it's not filtering according to post_id passed to fcn, but rather according to current URL
 	//
 	/*
 	foreach ( $sidebars_widgets as $widget_area => $widget_list ) {
@@ -3442,7 +3443,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	//$filtered_widgets = maybe_unset_widgets_by_context( $sidebars_widgets );
 	//$info .= "filtered_widgets: <pre>".print_r($filtered_widgets, true)."</pre>";
 	$info .= '<div class="code float-left" style="width: 49%;">';
-	$info .= "filtered_widgets:<br />";
+	$info .= "filtered_widgets [WIP]:<br />";
 	//$info .= "<pre>";
 	foreach ( $filtered_widgets as $pos => $widget_uid ) {
 		$info .= "[".$pos."] => ".$widget_uid;
@@ -3460,7 +3461,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	// Get snippets
 	// -------
-	$snippets = get_snippets ( array('post_id' => $post_id, 'return' => 'ids', 'sidebar_id' => $sidebar_id ) );
+	$snippets = get_snippets ( array( 'post_id' => $post_id, 'return' => 'ids', 'sidebar_id' => $sidebar_id ) );
 	
 	if ( $snippets ) {
 		$info .= '<div class="code float-left" style="width: 49%;">';
