@@ -2498,154 +2498,151 @@ function get_snippets ( $atts = [] ) {
 		// Run updates?
 		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
 		
-		if ( $snippet_display == "show" ) {
-		
-			$post_snippets[] = $snippet_id;
-			$snippet_status = "active";
-			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
-			$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
-			$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-			continue;
-			
-		}
-		
 		// TMP during transition?
 		// TODO: add snippet status field?
 		if ( $sidebar_id == "wp_inactive_widgets" ) {
 		
 			$snippet_status = "inactive";
 			$snippet_logic_info .= "Snippet belongs to wp_inactive_widgets, i.e. status is inactive<br />";
-			$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 			// TODO: remove from post_snippets array, if it was previously added...
-			continue;
 			
-		}
+		} else if ( $snippet_display == "show" ) {
 		
-		// Conditional display -- determine whether the given post should display this widget
+			$post_snippets[] = $snippet_id;
+			$snippet_status = "active";
+			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
+			$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
+			
+		} else {
 		
-		$snippet_logic_info .= "Analysing display conditions...<br />";
+			// Conditional display -- determine whether the given post should display this widget		
+			$snippet_logic_info .= "Analysing display conditions...<br />";
 		
-		$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
-		foreach ( $meta_keys as $key ) {
-			$$key = get_post_meta( $snippet_id, $key, true );
-			//$snippet_info .= "key: $key => ".$$key."<br />";
-			if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-				$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
-				if ( $key == 'target_by_post_type' ) {
-					// Is the given post of the matching type?
-					// WIP
-					$target_type = get_field($key, $snippet_id, false);
-					if ( $post_type == $target_type ) {
-						$snippet_logic_info .= "This post matches target post_type.<br />";
-						// TODO: figure out whether to do the any/all check now, or 
-						// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
-						if ( $any_all == "any" ) {
-							$post_snippets[] = $snippet_id;
-							$snippet_status = "active";
-							$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
-							//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-							break;
-						}
-					} else {
-						$snippet_logic_info .= "This post does NOT match the target post_type.<br />";
-					}
-				} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
-					// Is the given post targetted or excluded?
-					$target_posts = get_field($key, $snippet_id, false);
-					if ( in_array($post_id, $target_posts) ) {
-						$snippet_logic_info .= "This post is in the target_posts array<br />";
-						// If it's for inclusion, add it to the array
-						if ( $key == 'target_by_post' ) {
-							if ( $any_all == "any" ) { 
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+			foreach ( $meta_keys as $key ) {
+				$$key = get_post_meta( $snippet_id, $key, true );
+				//$snippet_info .= "key: $key => ".$$key."<br />";
+				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
+					$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
+					if ( $key == 'target_by_post_type' ) {
+						// Is the given post of the matching type?
+						// WIP
+						$target_type = get_field($key, $snippet_id, false);
+						if ( $post_type == $target_type ) {
+							$snippet_logic_info .= "This post matches target post_type.<br />";
+							// TODO: figure out whether to do the any/all check now, or 
+							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
+							if ( $any_all == "any" ) {
 								$post_snippets[] = $snippet_id;
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								break;
 							}
-							// ?
 						} else {
-							// exclude_by_post? Snippet is inactive
-							// TODO: remove from post_snippets array, if it was previously added...
-							$snippet_status = "inactive";
+							$snippet_logic_info .= "This post does NOT match the target post_type.<br />";
 						}
-						// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
-						break;
-					} else {
-						$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-						$snippet_status = "inactive";
-					}
-				} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
-					// Is the given post targetted or excluded?
-					$target_urls = get_field($key, $snippet_id, false);
-					$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
-					// Get current page path and/or slug -- ??
-					if ( is_array($target_urls) && !empty($target_urls) ) {
-						foreach ( $target_urls as $k => $v ) {
-							//$url = $v['url'];
-							//$field = get_field_object('my_field');
-							//$field_key = $field['key'];
-							$field_key = 'field_6530630a97804'; //WIP get field key from key name?
-							//$field_key = acf_maybe_get_field( 'field_name', false, false );
-							if ( isset($v[$field_key]) ) {
-								$url = $v[$field_key];
-								//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
-								$snippet_logic_info .= "target_url: ".$url."<br />";
-							}
-							// compare url to current post path/slug
-							//...
-						}
-					}
-					
-					// Look for match in repeater field results array
-					//$snippet_status = "show";
-					/*if ( in_array($post_id, $target_posts) ) {
-						$snippet_logic_info .= "This post is in the target_posts array<br />";
-						// If it's for inclusion, add it to the array
-						if ( $key == 'target_by_post' ) {
-							if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
-							// ?
-						}
-						// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
-						break;
-					} else {
-						$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-					}*/
-				} else if ( $key == 'target_by_taxonomy' ) {
-					// WIP -- copy fcns from Widget Context customizations
-					$target_taxonomies = get_field($key, $snippet_id, false);
-					$terms = explode("\n",$$key);
-					if ( is_array($terms)) {
-						$snippet_logic_info .= count($terms)." terms<br />";
-						foreach ( $terms as $term_pair ) {
-							$snippet_logic_info .= "term_pair: ".print_r($term_pair, true)."<br />";
-							$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
-							$tax_term = substr($term_pair,strpos($term_pair,":")+1,strlen($term_pair));
-							$snippet_logic_info .= "taxonomy: ".$taxonomy."<br />";
-							$snippet_logic_info .= "tax_term: ".$tax_term."<br />";
-							if ( has_term( $tax_term, $taxonomy, $post_id ) ) {
-								$snippet_logic_info .= "This post has the $taxonomy term '$tax_term'<br />";
-								$snippet_status = "active";
+					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
+						// Is the given post targetted or excluded?
+						$target_posts = get_field($key, $snippet_id, false);
+						if ( in_array($post_id, $target_posts) ) {
+							$snippet_logic_info .= "This post is in the target_posts array<br />";
+							// If it's for inclusion, add it to the array
+							if ( $key == 'target_by_post' ) {
+								if ( $any_all == "any" ) { 
+									$post_snippets[] = $snippet_id;
+									$snippet_status = "active";
+									$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
+									//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+									break;
+								}
+								// ?
 							} else {
-								$snippet_logic_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
+								// exclude_by_post? Snippet is inactive
+								// TODO: remove from post_snippets array, if it was previously added...
 								$snippet_status = "inactive";
 							}
+							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
+							break;
+						} else {
+							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
+							$snippet_status = "inactive";
 						}
-					}
-					//
+					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+						// Is the given post targetted or excluded?
+						$target_urls = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						// Get current page path and/or slug -- ??
+						if ( is_array($target_urls) && !empty($target_urls) ) {
+							foreach ( $target_urls as $k => $v ) {
+								//$url = $v['url'];
+								//$field = get_field_object('my_field');
+								//$field_key = $field['key'];
+								$field_key = 'field_6530630a97804'; //WIP get field key from key name?
+								//$field_key = acf_maybe_get_field( 'field_name', false, false );
+								if ( isset($v[$field_key]) ) {
+									$url = $v[$field_key];
+									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
+									$snippet_logic_info .= "target_url: ".$url."<br />";
+								}
+								// compare url to current post path/slug
+								//...
+							}
+						}
 					
-				} else if ( $key == 'target_by_location' ) {
-					// Is the given post in the right site location?
-					$target_locations = get_field($key, $snippet_id, false);
-					// WIP
-					$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
-					//
-				} else {
-					$snippet_logic_info .= "unmatched key: ".$key."<br />";
+						// Look for match in repeater field results array
+						//$snippet_status = "show";
+						/*if ( in_array($post_id, $target_posts) ) {
+							$snippet_logic_info .= "This post is in the target_posts array<br />";
+							// If it's for inclusion, add it to the array
+							if ( $key == 'target_by_post' ) {
+								if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
+								// ?
+							}
+							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
+							break;
+						} else {
+							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
+						}*/
+					} else if ( $key == 'target_by_taxonomy' ) {
+						// WIP -- copy fcns from Widget Context customizations
+						$target_taxonomies = get_field($key, $snippet_id, false);
+						$terms = explode("\n",$$key);
+						if ( is_array($terms)) {
+							$snippet_logic_info .= count($terms)." terms<br />";
+							foreach ( $terms as $term_pair ) {
+								$snippet_logic_info .= "term_pair: ".print_r($term_pair, true)."<br />";
+								$taxonomy = substr($term_pair,0,strpos($term_pair,":"));
+								$tax_term = substr($term_pair,strpos($term_pair,":")+1,strlen($term_pair));
+								$snippet_logic_info .= "taxonomy: ".$taxonomy."<br />";
+								$snippet_logic_info .= "tax_term: ".$tax_term."<br />";
+								if ( has_term( $tax_term, $taxonomy, $post_id ) ) {
+									$snippet_logic_info .= "This post has the $taxonomy term '$tax_term'<br />";
+									$snippet_status = "active";
+								} else {
+									$snippet_logic_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
+									$snippet_status = "inactive";
+								}
+							}
+						}
+						//
+					
+					} else if ( $key == 'target_by_location' ) {
+						// Is the given post in the right site location?
+						$target_locations = get_field($key, $snippet_id, false);
+						// WIP
+						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
+						//
+					} else {
+						$snippet_logic_info .= "unmatched key: ".$key."<br />";
+					}
+					$snippet_logic_info .= "<br />";
 				}
-				$snippet_logic_info .= "<br />";
 			}
+		
 		}
+		
+		
 		
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		
