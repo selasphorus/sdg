@@ -2567,6 +2567,7 @@ function get_snippets ( $atts = [] ) {
 							break;
 						} else {
 							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
+							$snippet_logic_info .= "post_id: $post_id/target_posts: ".print_r($target_posts, true)."<br />";
 							$snippet_status = "inactive";
 						}
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
