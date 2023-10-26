@@ -2485,6 +2485,7 @@ function get_snippets ( $atts = [] ) {
 		//
 		$snippet_display = get_post_meta( $snippet_id, 'snippet_display', true );
 		$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
+		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
 		$any_all = get_post_meta( $snippet_id, 'any_all', true );
 		if ( empty($any_all) ) { $any_all = "any"; } // TODO: update_post_meta
 		//
@@ -2664,6 +2665,7 @@ function get_snippets ( $atts = [] ) {
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$info .= '<div class="snippet">';
 		$info .= $title.' ['.$widget_uid.']';
+		if ( $sidebar_sortnum ) { $info .= '[pos-'.$sidebar_sortnum.']'; }
 		$info .= '</div>';
 	}
 	// 
