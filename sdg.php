@@ -3127,7 +3127,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		$conditions = array();
 		//
 		$info .= '<h3>Convert Widgets to Snippets -- WIP</h3>';
-		$info .= "<pre>args: ".print_r($args,true)."</pre><hr /><hr />";
+		//$info .= "<pre>args: ".print_r($args,true)."</pre><hr /><hr />";
 		//
 		foreach ( $arr_option as $id => $arr_widget ) {
 	
