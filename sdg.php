@@ -3548,6 +3548,7 @@ function convert_sidebars ( $atts = [] ) {
 	extract( $args );
 	
 	$i = 0;
+	$arr_ids = array(); // for custom sidebars, we'll get the ids of posts using that sidebar and add those to the target_by_post field for the snippet
 	//
 	$arr_sidebars_widgets = get_option('sidebars_widgets');
 	$arr_cs_sidebars = get_option('cs_sidebars');
@@ -3575,14 +3576,12 @@ function convert_sidebars ( $atts = [] ) {
 			$arr_objs = $wpdb->get_results($sql);
 			$arr_ids = array_column($arr_objs, 'post_id');
 			if ( count($arr_ids) > 0 ) {
-				$info .= "posts using this sidebar:".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
-				/*foreach ( $arr_ids as $obj ) {
-					$post_id = $obj->post_id;
+				$info .= "posts using this sidebar: ".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
+				/*foreach ( $arr_ids as $post_id ) {
 					$post = get_post($post_id);
 					$info .= $post_id;
 					if ( $post->post_status != "publish" ) { $info .= " (".$post->post_status.")"; }
 					$info .= "; ";
-					//$info .= print_r($obj,true)."<br />";
 				}*/
 			}
 		} // END special handling for custom sidebars
@@ -3595,7 +3594,9 @@ function convert_sidebars ( $atts = [] ) {
 				// Does a corresponding snippet exist?
 				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
 				if ( $snippet_id ) {
+					
 					$info .= "snippet_id: ".$snippet_id."<br />";
+					
 					// Get existing value for sidebar_id field, if any
 					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
 					$sidebars_revised = "";
@@ -3608,17 +3609,39 @@ function convert_sidebars ( $atts = [] ) {
 					if ( $sidebars_revised ) {
 						// Update snippet record with sidebar_id
 						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
-							$info .= "post_meta field sidebar_id updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							$info .= "post_meta field `sidebar_id` updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
 						} else {
-							$info .= "post_meta field sidebar_id update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							$info .= "post_meta field `sidebar_id` update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
 						}
 						if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
-							$info .= "post_meta field sidebar_sortnum updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							$info .= "post_meta field `sidebar_sortnum` updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
 						} else {
-							$info .= "post_meta field sidebar_sortnum update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							$info .= "post_meta field `sidebar_sortnum` update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
 						}
 						//
 					}
+					
+					// Get existing targeted posts, if any
+					$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
+					$target_posts_revised = array();
+					if ( empty($target_posts) ) {
+						$target_posts_revised = $arr_ids;
+					} else if ( $arr_ids != $target_posts ) {
+						// Merge old and new arrays
+						$info .= "Merge target_posts with arr_ids<br />";
+						$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
+						$info .= "target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
+					}
+					//$target_posts_revised = $sidebar; //tmp
+					/*if ( $target_posts_revised ) {
+						// Update snippet record
+						if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
+							$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
+						} else {
+							$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
+						}
+					}*/
+					
 				} else {
 					$info .= "No corresponding snippets found<br />";
 				}
