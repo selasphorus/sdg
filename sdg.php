@@ -3578,6 +3578,9 @@ function convert_sidebars ( $atts = [] ) {
 			$arr_ids = array_column($arr_objs, 'post_id');
 			if ( count($arr_ids) > 0 ) {
 				$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
+				foreach ( $arr_ids as $x => $id ) {
+					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
+				}
 				// As a backup, save this array to cs_posts field
 				if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
 					$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
