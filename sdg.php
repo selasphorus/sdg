@@ -3207,13 +3207,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		foreach ( $arr_option as $id => $arr_widget ) {
 	
 			// Early abort -- Don't finish processing if we're looking for a specific widget and this isn't it
-			//if ( $widget_id && $id !== $widget_id ) { continue; }
+			if ( $widget_id && $widget_uid != $widget_id ) { continue; }
 		
 			$info .= '<div class="code">';
 			//$info .= "<pre>widget: ".$option_name."-".$id." ==> ".print_r($arr_widget,true)."</pre><hr /><hr />";
 			$widget_uid = $widget_type."-".$id;
 			$info .= "widget_uid: ".$widget_uid."<br />";
-			$info .= "(widget_id: ".$widget_id.")<br />";
+			//$info .= "(widget_id: ".$widget_id.")<br />";
 			//
 			if ( isset($arr_widget['title']) && !empty($arr_widget['title']) ) {
 				$snippet_title = $arr_widget['title'];
@@ -3223,7 +3223,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			$info .= "title: ".$snippet_title."<br />";
 		
 			// Don't finish processing if we're looking for a specific widget and this isn't it
-			if ( $widget_id && $widget_uid != $widget_id ) { $info .= '</div>'; continue; }
+			//if ( $widget_id && $widget_uid != $widget_id ) { $info .= '</div>'; continue; }
 		
 			if ( isset($arr_widget['text']) ) {
 				$snippet_content = $arr_widget['text'];
