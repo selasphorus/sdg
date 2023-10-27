@@ -3621,26 +3621,28 @@ function convert_sidebars ( $atts = [] ) {
 						//
 					}
 					
-					// Get existing targeted posts, if any
-					$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
-					$target_posts_revised = array();
-					if ( empty($target_posts) ) {
-						$target_posts_revised = $arr_ids;
-					} else if ( $arr_ids != $target_posts ) {
-						// Merge old and new arrays
-						$info .= "Merge target_posts with arr_ids<br />";
-						$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
-						$info .= "target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
-					}
-					//$target_posts_revised = $sidebar; //tmp
-					/*if ( $target_posts_revised ) {
-						// Update snippet record
-						if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
-							$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
-						} else {
-							$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
+					if ( count($arr_ids) > 0 ) {
+						// Get existing targeted posts, if any
+						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
+						$target_posts_revised = array();
+						if ( empty($target_posts) ) {
+							$target_posts_revised = $arr_ids;
+						} else if ( $arr_ids != $target_posts ) {
+							// Merge old and new arrays
+							$info .= "Merge target_posts with arr_ids<br />";
+							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
+							$info .= "target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 						}
-					}*/
+						//$target_posts_revised = $sidebar; //tmp
+						/*if ( $target_posts_revised ) {
+							// Update snippet record
+							if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
+								$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
+							} else {
+								$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
+							}
+						}*/
+					}
 					
 				} else {
 					$info .= "No corresponding snippets found<br />";
