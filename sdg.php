@@ -2940,16 +2940,37 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// If this is the widget_logic version of the field, update our new target_by_post_type field
 					if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
+					
+						$wlcptt_conditions = array();
 						$updated_conditions = array();
+						
+						foreach ( $conditions as $condition => $value ) {
+							//$key_ts_info .= "condition: $condition => $value<br />";
+							$wlcptt_conditions[] = $condition;
+							// WIP -- TODO: translate widget_logic conditions to post_type conditions(?)
+							/*
+							widget_logic e.g:
+							is_singular-location => 1
+							is_singular-product => 1
+							is_singular-sermon => 1
+							is_archive-product => 1
+							is_archive-event => 1 == i.e. Archive of "Events" posts
+							is_singular-person => 1
+							is_tax-event-categories => 1 == i.e. All "Event Categories" taxonomy archives
+							is_tax-product_cat => 1
+							is_tax-product_tag => 1
+							*/					
+						}
+						
 						$existing_conditions = get_field( 'target_by_post_type', $snippet_id );
 						if ( empty($existing_conditions) ) {
 							$key_ts_info .= "No existing conditions => update `target_by_post_type` with widget_logic conditions<br />";
-							$updated_conditions = $conditions;
-						} else if ( $existing_conditions == $conditions ) {
+							$updated_conditions = $wlcptt_conditions;
+						} else if ( $existing_conditions == $wlcptt_conditions ) {
 							$key_ts_info .= "existing_conditions in `target_by_post_type` field same as widget_logic conditions => no update needed<br />";
 						} else {
 							// Merge the arrays
-							$updated_conditions = array_unique(array_merge($existing_conditions, $conditions));
+							$updated_conditions = array_unique(array_merge($existing_conditions, $wlcptt_conditions));
 						}
 						//
 						if ( $updated_conditions ) {							
@@ -2960,23 +2981,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$key_ts_info .= "update FAILED for field `target_by_post_type` for snippet_id: $snippet_id<br />";
 							}
 						}
-					}
-					
-					foreach ( $conditions as $condition => $value ) {
-						//$key_ts_info .= "condition: $condition => $value<br />";
-						// WIP -- TODO: translate widget_logic conditions to post_type conditions(?)
-						/*
-						widget_logic e.g:
-						is_singular-location => 1
-						is_singular-product => 1
-						is_singular-sermon => 1
-						is_archive-product => 1
-						is_archive-event => 1 == i.e. Archive of "Events" posts
-						is_singular-person => 1
-						is_tax-event-categories => 1 == i.e. All "Event Categories" taxonomy archives
-						is_tax-product_cat => 1
-						is_tax-product_tag => 1
-						*/					
 					}
 				}
 				// WIP -- TODO: copy fcns from Widget Context customizations
