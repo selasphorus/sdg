@@ -3584,12 +3584,27 @@ function convert_sidebars ( $atts = [] ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 				}
 				//$arr_ids = array(); // tft
-				// As a backup, save this array to cs_posts field
-				/*if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
-					$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
+				$cs_posts = get_post_meta( $snippet_id, 'cs_posts', true );
+				$cs_posts_revised = array();
+				if ( empty($cs_posts) ) {
+					$info .= "cs_posts field is empty<br />";
+					$cs_posts_revised = $arr_ids;
+				} else if ( $arr_ids == $cs_posts ) {
+					$info .= "arr_ids same as cs_posts => no update needed<br />";
 				} else {
-					$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
-				}*/
+					// Merge old and new arrays
+					$info .= "Merge cs_posts with arr_ids<br />";
+					$cs_posts_revised = array_unique(array_merge($cs_posts, $arr_ids));
+					$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
+				}
+				if ( $cs_posts_revised ) {
+					// As a backup, save this array to cs_posts field
+					if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
+						$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$cs_posts_revised."<br />";
+					} else {
+						$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".$cs_posts_revised."<br />";
+					}
+				}
 				// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
 				// WIP...
 			}
@@ -3639,7 +3654,7 @@ function convert_sidebars ( $atts = [] ) {
 							$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 						}
 						$target_posts_revised = array();
-						/*if ( empty($target_posts) ) {
+						if ( empty($target_posts) ) {
 							$info .= "target_by_post field is empty<br />";
 							$target_posts_revised = $arr_ids;
 						} else if ( $arr_ids == $target_posts ) {
@@ -3649,7 +3664,7 @@ function convert_sidebars ( $atts = [] ) {
 							$info .= "Merge target_posts with arr_ids<br />";
 							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
 							$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
-						}*/
+						}
 						//$target_posts_revised = $sidebar; //tmp
 						if ( $target_posts_revised ) {
 							// Update snippet record
