@@ -3581,6 +3581,7 @@ function convert_sidebars ( $atts = [] ) {
 				foreach ( $arr_ids as $x => $id ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 				}
+				$arr_ids = array(); // tft
 				// As a backup, save this array to cs_posts field
 				if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
 					$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
@@ -3630,19 +3631,22 @@ function convert_sidebars ( $atts = [] ) {
 					if ( count($arr_ids) > 0 ) {
 						// Get existing targeted posts, if any
 						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
+						$info .= count($target_posts)." target_posts<br />";
+						foreach ( $target_posts as $x => $id ) {
+							$info .= $x.".) ".get_the_title($id)." [$id]<br />";
+						}
 						$target_posts_revised = array();
-						if ( empty($target_posts) ) {
+						/*if ( empty($target_posts) ) {
 							$info .= "target_by_post field is empty<br />";
 							$target_posts_revised = $arr_ids;
 						} else if ( $arr_ids == $target_posts ) {
 							$info .= "arr_ids same as target_posts => no update needed<br />";
 						} else {
 							// Merge old and new arrays
-							$info .= count($target_posts)." target_posts<br />";
 							$info .= "Merge target_posts with arr_ids<br />";
 							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
 							$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
-						}
+						}*/
 						//$target_posts_revised = $sidebar; //tmp
 						if ( $target_posts_revised ) {
 							// Update snippet record
