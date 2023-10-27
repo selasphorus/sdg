@@ -3576,7 +3576,7 @@ function convert_sidebars ( $atts = [] ) {
 			$arr_objs = $wpdb->get_results($sql);
 			$arr_ids = array_column($arr_objs, 'post_id');
 			if ( count($arr_ids) > 0 ) {
-				$info .= "posts using this sidebar: ".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
+				$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
 				/*foreach ( $arr_ids as $post_id ) {
 					$post = get_post($post_id);
 					$info .= $post_id;
@@ -3629,9 +3629,10 @@ function convert_sidebars ( $atts = [] ) {
 							$target_posts_revised = $arr_ids;
 						} else if ( $arr_ids != $target_posts ) {
 							// Merge old and new arrays
+							$info .= count($target_posts)." target_posts<br />";
 							$info .= "Merge target_posts with arr_ids<br />";
 							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
-							$info .= "target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
+							$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 						}
 						//$target_posts_revised = $sidebar; //tmp
 						/*if ( $target_posts_revised ) {
