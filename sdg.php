@@ -3576,13 +3576,13 @@ function convert_sidebars ( $atts = [] ) {
 			$arr_objs = $wpdb->get_results($sql);
 			$arr_ids = array_column($arr_objs, 'post_id');
 			if ( count($arr_ids) > 0 ) {
-				$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
-				/*foreach ( $arr_ids as $post_id ) {
-					$post = get_post($post_id);
-					$info .= $post_id;
-					if ( $post->post_status != "publish" ) { $info .= " (".$post->post_status.")"; }
-					$info .= "; ";
-				}*/
+				$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
+				// As a backup, save this array to cs_posts field
+				if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
+					$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
+				} else {
+					$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
+				}
 			}
 		} // END special handling for custom sidebars
 		
