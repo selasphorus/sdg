@@ -2916,7 +2916,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			} else if ( $key == 'target_by_post_type' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 			
 				$key_ts_info .= "<strong>key: $key</strong><br />";
-				$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
+				//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 
 				//
 				if ( !is_array($$key) ) {
