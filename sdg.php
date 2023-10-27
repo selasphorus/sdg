@@ -3118,12 +3118,15 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	//
 	$arr_logic = get_option('widget_logic_options');
 	foreach ( $options as $option_name ) {
+	
+		$info .= '<h2>Option: '.$option_name.'</h2>';
+		
 		$arr_option = get_option($option_name);
 		//
 		$widget_type = str_replace('widget_','',$option_name);
 		$conditions = array();
 		//
-		$info .= '<h2>Convert Widgets to Snippets -- WIP</h2>';
+		$info .= '<h3>Convert Widgets to Snippets -- WIP</h3>';
 		$info .= "<pre>args: ".print_r($args,true)."</pre><hr /><hr />";
 		//
 		foreach ( $arr_option as $id => $arr_widget ) {
