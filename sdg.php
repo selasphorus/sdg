@@ -2918,7 +2918,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "<strong>key: $key</strong><br />";
 				$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 
-				$$key = unserialize($$key);
+				//$$key = unserialize($$key);
 				if ( !is_array($$key) ) {
 					// Replace multiple (one or more) line breaks with a single one.
 					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
