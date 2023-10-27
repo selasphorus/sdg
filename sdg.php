@@ -3663,17 +3663,24 @@ function convert_sidebars ( $atts = [] ) {
 						if ( empty($target_posts) ) {
 							$info .= "target_by_post field is empty<br />";
 							$target_posts_revised = $arr_ids;
-						} else if ( $arr_ids == $target_posts ) {
-							$info .= "arr_ids same as target_posts => no update needed<br />";
 						} else {
+							if ( $arr_ids == $target_posts ) {
+								$info .= "arr_ids same as target_posts => no update needed<br />";
+							} else {
 							// Merge old and new arrays
 							$info .= "Merge target_posts with arr_ids<br />";
-							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
-							sort($target_posts_revised); // Sort the array -- TODO: sort instead by post title
-							$info .= count($target_posts_revised)." target_posts_revised<br />"; //$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
+							$merged = array_unique(array_merge($target_posts, $arr_ids));
+							sort($merged); // Sort the array -- TODO: sort instead by post title
+							if ( $merged == $target_posts ) {
+								$info .= "Merged array same as saved value for target_posts<br />";
+							} else {
+								$target_posts_revised = $merged;
+								$info .= count($target_posts_revised)." target_posts_revised<br />"; //$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
+							}
 						}
 						//$target_posts_revised = $sidebar; //tmp
 						if ( $target_posts_revised ) {
+							
 							// Update snippet record
 							if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
 								$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
