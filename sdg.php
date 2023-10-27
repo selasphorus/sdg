@@ -3573,7 +3573,7 @@ function convert_sidebars ( $atts = [] ) {
 					AND `meta_value` LIKE '%".'"'.$sidebar.'"'."%'";
 
 			$arr_objs = $wpdb->get_results($sql);
-			$arr_ids = array_column($arr_objs, 'post_id')
+			$arr_ids = array_column($arr_objs, 'post_id');
 			if ( count($arr_ids) > 0 ) {
 				$info .= "posts using this sidebar:".print_r($arr_ids,true)."<br />"; //  <pre>".print_r($arr_ids,true)."</pre><hr />"
 				/*foreach ( $arr_ids as $obj ) {
