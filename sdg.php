@@ -2909,8 +2909,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 			} else if ( $key == 'target_by_post_type' ) {
 			
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
-				// WIP
-				$ts_info .= $key_ts_info;
+				// WIP -- TODO: sort by post title and update
+				// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
+				//$ts_info .= $key_ts_info;
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
@@ -2923,9 +2924,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$tax_pairs = explode("\n",$$key);
 				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>";				
 				//.... WIP 102023
-				$ts_info .= $key_ts_info;
+				//$ts_info .= $key_ts_info;
 			
 			} else if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
+				$key_ts_info .= "key: $key<br />";
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$$key = unserialize($$key);
@@ -2946,17 +2948,16 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$matched_posts = array();
 					foreach ( $conditions as $condition => $value ) {
 						$key_ts_info .= "condition: $condition => $value<br />";
-						// WIP
-						
+						// WIP -- TODO: ??						
 					}
 				}
-				// WIP -- copy fcns from Widget Context customizations
+				// WIP -- TODO: copy fcns from Widget Context customizations
 				//$target_taxonomies = get_field($key, $snippet_id, false);
 				$ts_info .= $key_ts_info;
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
 				$$key = unserialize($$key);
 				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
-				// WIP
+				// WIP -- TODO: translate widget_logic_location to target_by_location options
 				$ts_info .= $key_ts_info;
 			}
 		} else {
