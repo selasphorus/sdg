@@ -3670,7 +3670,7 @@ function convert_sidebars ( $atts = [] ) {
 							$info .= "Merge target_posts with arr_ids<br />";
 							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
 							sort($target_posts_revised); // Sort the array -- TODO: sort instead by post title
-							//$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
+							$info .= count($target_posts_revised)." target_posts_revised<br />"; //$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 						}
 						//$target_posts_revised = $sidebar; //tmp
 						if ( $target_posts_revised ) {
