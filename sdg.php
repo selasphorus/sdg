@@ -2927,6 +2927,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//$ts_info .= $key_ts_info;
 			
 			} else if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
+			
 				$key_ts_info .= "key: $key<br />";
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
@@ -2942,9 +2943,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$conditions = $$key;
 				}
 				//
-				$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
+				//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 				if ( is_array($conditions)) {
-					$key_ts_info .= count($conditions)." condition(s)<br />";
+					$key_ts_info .= count($conditions)." condition(s):<br />";
 					$matched_posts = array();
 					foreach ( $conditions as $condition => $value ) {
 						$key_ts_info .= "condition: $condition => $value<br />";
@@ -2954,12 +2955,39 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// WIP -- TODO: copy fcns from Widget Context customizations
 				//$target_taxonomies = get_field($key, $snippet_id, false);
 				$ts_info .= $key_ts_info;
+				
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
+				
+				$key_ts_info .= "key: $key<br />";
+				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				// WIP
 				$$key = unserialize($$key);
-				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				if ( !is_array($$key) ) {
+					// Replace multiple (one or more) line breaks with a single one.
+					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
+					// Update the legacy field with the cleaned-up version
+					update_field( $key, $$key, $snippet_id );
+					// Turn the text into an array of conditions
+					$conditions = explode("\n",$$key);
+				} else {
+					$conditions = $$key;
+				}
+				//
+				//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
+				if ( is_array($conditions)) {
+					$key_ts_info .= count($conditions)." condition(s):<br />";
+					$matched_posts = array();
+					foreach ( $conditions as $condition => $value ) {
+						$key_ts_info .= "condition: $condition => $value<br />";
+						// WIP -- TODO: ??						
+					}
+				}
+				
 				// WIP -- TODO: translate widget_logic_location to target_by_location options
 				$ts_info .= $key_ts_info;
+				
 			}
+			
 		} else {
 			//$ts_info .= "No meta data found for key: $key<br />";
 		}
