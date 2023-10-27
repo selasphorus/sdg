@@ -3582,13 +3582,13 @@ function convert_sidebars ( $atts = [] ) {
 				foreach ( $arr_ids as $x => $id ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 				}
-				$arr_ids = array(); // tft
+				//$arr_ids = array(); // tft
 				// As a backup, save this array to cs_posts field
-				if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
+				/*if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
 					$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
 				} else {
 					$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
-				}
+				}*/
 				// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
 				// WIP...
 			}
