@@ -3565,6 +3565,7 @@ function convert_sidebars ( $atts = [] ) {
 		$info .= '<div class="code">';
 		// Is this a Custom Sidebar?
 		if ( strpos($sidebar, 'cs-') !== false ) {
+			// NB/WIP only CS with sidebar location rules appears to be Sermons Sidebar => display on all individual sermon posts and sermon post archives
 			// Get array of ids for posts using this custom sidebar
 			global $wpdb;
 	
@@ -3583,6 +3584,8 @@ function convert_sidebars ( $atts = [] ) {
 				} else {
 					$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".$arr_ids."<br />";
 				}
+				// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
+				// WIP...
 			}
 		} // END special handling for custom sidebars
 		
