@@ -3576,7 +3576,7 @@ function convert_sidebars ( $atts = [] ) {
 
 			$arr_objs = $wpdb->get_results($sql);
 			$arr_ids = array_column($arr_objs, 'post_id');
-			sort($arr_ids); // Sort the array
+			sort($arr_ids); // Sort the array -- TODO: sort instead by post title
 			if ( count($arr_ids) > 0 ) {
 				$info .= count($arr_ids)." posts using this sidebar:<br />";
 				//$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
@@ -3633,7 +3633,7 @@ function convert_sidebars ( $atts = [] ) {
 					if ( count($arr_ids) > 0 ) {
 						// Get existing targeted posts, if any
 						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
-						sort($target_posts); // Sort the array
+						sort($target_posts); // Sort the array -- TODO: sort instead by post title
 						$info .= count($target_posts)." target_posts:<br />";
 						foreach ( $target_posts as $x => $id ) {
 							$info .= $x.".) ".get_the_title($id)." [$id]<br />";
