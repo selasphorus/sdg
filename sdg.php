@@ -2956,7 +2956,19 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$matched_posts = array();
 					foreach ( $conditions as $condition => $value ) {
 						$key_ts_info .= "condition: $condition => $value<br />";
-						// WIP -- TODO: ??						
+						// WIP -- TODO: translate widget_logic conditions to post_type conditions(?)
+						/*
+						widget_logic e.g:
+						is_singular-location => 1
+						is_singular-product => 1
+						is_singular-sermon => 1
+						is_archive-product => 1
+						is_archive-event => 1 == i.e. Archive of "Events" posts
+						is_singular-person => 1
+						is_tax-event-categories => 1 == i.e. All "Event Categories" taxonomy archives
+						is_tax-product_cat => 1
+						is_tax-product_tag => 1
+						*/					
 					}
 				}
 				// WIP -- TODO: copy fcns from Widget Context customizations
@@ -2991,6 +3003,33 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				
 				// WIP -- TODO: translate widget_logic_location to target_by_location options
+				/*
+				widget_logic e.g.:
+				is_front_page
+				is_home
+				is_singular == All posts, pages and custom post types
+				is_single
+				is_page
+				is_attachment => 1
+				is_search
+				is_404
+				is_archive
+				is_category == All category archives
+				
+				// Related WP functions
+				is_archive(): bool == Archive pages include category, tag, author, date, custom post type, and custom taxonomy based archives.
+				See also
+				is_category()
+				is_tag()
+				is_author()
+				is_date()
+				is_post_type_archive()
+				is_tax()
+				//
+				is_singular( string|string[] $post_types = '' ): bool == Determines whether the query is for an existing single post of any post type (post, attachment, page, custom post types).
+				
+				*/
+				
 				$ts_info .= $key_ts_info;
 				
 			}
