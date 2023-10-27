@@ -3596,6 +3596,7 @@ function convert_sidebars ( $atts = [] ) {
 					// Merge old and new arrays
 					$info .= "Merge cs_posts with arr_ids<br />";
 					$cs_posts_revised = array_unique(array_merge($cs_posts, $arr_ids));
+					sort($cs_posts_revised); // Sort the array -- TODO: sort instead by post title
 					//$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
 				}
 				if ( $cs_posts_revised ) {
@@ -3615,6 +3616,7 @@ function convert_sidebars ( $atts = [] ) {
 		// Get sidebar widgets
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		if ( is_array($widgets) ) {
+			$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {
 				$info .= $i.": ".$widget_uid."<br />";
 				// Does a corresponding snippet exist?
@@ -3667,6 +3669,7 @@ function convert_sidebars ( $atts = [] ) {
 							// Merge old and new arrays
 							$info .= "Merge target_posts with arr_ids<br />";
 							$target_posts_revised = array_unique(array_merge($target_posts, $arr_ids));
+							sort($target_posts_revised); // Sort the array -- TODO: sort instead by post title
 							//$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 						}
 						//$target_posts_revised = $sidebar; //tmp
