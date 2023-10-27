@@ -3629,8 +3629,11 @@ function convert_sidebars ( $atts = [] ) {
 						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
 						$target_posts_revised = array();
 						if ( empty($target_posts) ) {
+							$info .= "target_by_post field is empty<br />";
 							$target_posts_revised = $arr_ids;
-						} else if ( $arr_ids != $target_posts ) {
+						} else if ( $arr_ids == $target_posts ) {
+							$info .= "arr_ids same as target_posts => no update needed<br />";
+						} else {
 							// Merge old and new arrays
 							$info .= count($target_posts)." target_posts<br />";
 							$info .= "Merge target_posts with arr_ids<br />";
