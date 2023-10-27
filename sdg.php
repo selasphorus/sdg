@@ -3638,14 +3638,14 @@ function convert_sidebars ( $atts = [] ) {
 							$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 						}
 						//$target_posts_revised = $sidebar; //tmp
-						/*if ( $target_posts_revised ) {
+						if ( $target_posts_revised ) {
 							// Update snippet record
 							if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
 								$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
 							} else {
 								$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".$target_posts_revised."<br />";
 							}
-						}*/
+						}
 					}
 					
 				} else {
