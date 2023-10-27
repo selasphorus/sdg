@@ -3622,6 +3622,7 @@ function convert_sidebars ( $atts = [] ) {
 				if ( $snippet_id ) {
 					
 					$info .= "snippet_id: ".$snippet_id."<br />";
+					$info .= "<hr />";
 					
 					// Get existing value for sidebar_id field, if any
 					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
