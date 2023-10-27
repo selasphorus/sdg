@@ -3663,10 +3663,9 @@ function convert_sidebars ( $atts = [] ) {
 						if ( empty($target_posts) ) {
 							$info .= "target_by_post field is empty<br />";
 							$target_posts_revised = $arr_ids;
+						} else if ( $arr_ids == $target_posts ) {
+							$info .= "arr_ids same as target_posts => no update needed<br />";
 						} else {
-							if ( $arr_ids == $target_posts ) {
-								$info .= "arr_ids same as target_posts => no update needed<br />";
-							} else {
 							// Merge old and new arrays
 							$info .= "Merge target_posts with arr_ids<br />";
 							$merged = array_unique(array_merge($target_posts, $arr_ids));
