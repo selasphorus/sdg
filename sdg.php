@@ -2950,6 +2950,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 						} else {
 							// Merge the arrays
 							$updated_conditions = array_unique(array_merge($existing_conditions, $conditions));
+						}
+						//
+						if ( $updated_conditions ) {							
 							$key_ts_info .= "updated_conditions: ".print_r($updated_conditions, true)."<br />";
 							if ( update_field( 'target_by_post_type', $updated_conditions, $snippet_id ) ) {
 								$key_ts_info .= "updated field `target_by_post_type` for snippet_id: $snippet_id<br />";
