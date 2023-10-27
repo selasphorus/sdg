@@ -2917,7 +2917,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 				// WIP -- TODO: sort by post title and update
 				// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
-				//$ts_info .= $key_ts_info;
+				$ts_info .= $key_ts_info;
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
