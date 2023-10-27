@@ -2710,15 +2710,19 @@ function update_snippet_logic ( $snippet_id = null ) {
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
 		$key_ts_info = "";
+		//$ts_info .= "<strong>key: $key</strong><br />";
 		//$ts_info .= "key: $key => ".$$key."<br />";
 		if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
 		
 			if ( $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' ) {
+				
 				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
 				update_field( $key, $$key, $snippet_id );
-				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				
+				$key_ts_info .= "<strong>key: $key</strong><br />";
+				$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 				// Turn the urls text into an array of urls
 				$urls = explode("\n",$$key);
 				
@@ -2906,20 +2910,23 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 				} // END
 				//$ts_info .= $key_ts_info;
+				
 			} else if ( $key == 'target_by_post_type' ) {
 			
-				$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				$key_ts_info .= "<strong>key: $key</strong><br />";
+				$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 				// WIP -- TODO: sort by post title and update
 				// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
 				//$ts_info .= $key_ts_info;
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
+				$key_ts_info .= "<strong>key: $key</strong><br />";
 				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
 				update_field( $key, $$key, $snippet_id );
-				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+				//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 				// Turn the text into an array of taxonomy:tax_term pairs
 				$tax_pairs = explode("\n",$$key);
 				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>";				
@@ -2928,8 +2935,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 			
 			} else if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 			
-				$key_ts_info .= "key: $key<br />";
-				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
+				$key_ts_info .= "<strong>key: $key</strong><br />";
+				//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$$key = unserialize($$key);
 				if ( !is_array($$key) ) {
@@ -2958,7 +2965,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
 				
-				$key_ts_info .= "key: $key<br />";
+				$key_ts_info .= "<strong>key: $key</strong><br />";
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
 				// WIP
 				$$key = unserialize($$key);
