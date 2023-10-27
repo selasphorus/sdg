@@ -2705,7 +2705,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'widget_logic_custom_post_types_taxonomies', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_post_type', 'target_by_taxonomy', 'target_by_location' );
+	$meta_keys = array( 'widget_logic_target_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); // 'target_by_url', 'exclude_by_url',
 	foreach ( $meta_keys as $key ) {
 		$$key = get_post_meta( $snippet_id, $key, true );
