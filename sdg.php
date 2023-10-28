@@ -2913,7 +2913,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				} // END
 				//$ts_info .= $key_ts_info;
 				
-			} else if ( $key == 'target_by_post_type' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
+			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 			
 				$key_ts_info .= "<strong>key: $key</strong><br />";
 				//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
@@ -2936,41 +2936,35 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 				if ( is_array($conditions) ) {
 					
-					$key_ts_info .= count($conditions)." condition(s):<br />";
+					$key_ts_info .= count($conditions)." condition(s)<br />";
 					
 					// If this is the widget_logic version of the field, update our new target_by_post_type field
 					if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 					
-						$wlcptt_conditions = array();
-						$updated_conditions = array();
+						$cpt_conditions = array();
+						$tax_conditions = array();
+						$updated_cpt_conditions = array();
+						$updated_tax_conditions = array();
 						
 						foreach ( $conditions as $condition => $value ) {
 							//$key_ts_info .= "condition: $condition => $value<br />";
-							$wlcptt_conditions[] = $condition;
-							// WIP -- TODO: translate widget_logic conditions to post_type conditions(?)
-							/*
-							widget_logic e.g:
-							is_singular-location => 1
-							is_singular-product => 1
-							is_singular-sermon => 1
-							is_archive-product => 1
-							is_archive-event => 1 == i.e. Archive of "Events" posts
-							is_singular-person => 1
-							is_tax-event-categories => 1 == i.e. All "Event Categories" taxonomy archives
-							is_tax-product_cat => 1
-							is_tax-product_tag => 1
-							*/					
+							if ( strpos($condition, 'is_tax') !== false ) {
+								$tax_conditions[] = $condition;
+							} else {
+								$cpt_conditions[] = $condition;
+							}				
 						}
 						
-						$existing_conditions = get_field( 'target_by_post_type', $snippet_id );
-						if ( empty($existing_conditions) ) {
-							$key_ts_info .= "No existing conditions => update `target_by_post_type` with widget_logic conditions<br />";
-							$updated_conditions = $wlcptt_conditions;
-						} else if ( $existing_conditions == $wlcptt_conditions ) {
-							$key_ts_info .= "existing_conditions in `target_by_post_type` field same as widget_logic conditions => no update needed<br />";
+						// CPT conditions
+						$existing_cpt_conditions = get_field( 'target_by_post_type', $snippet_id );
+						if ( empty($existing_cpt_conditions) ) {
+							$key_ts_info .= "No existing_cpt_conditions => update `target_by_post_type` with widget_logic cpt_conditions<br />";
+							$updated_cpt_conditions = $cpt_conditions;
+						} else if ( $existing_cpt_conditions == $cpt_conditions ) {
+							$key_ts_info .= "existing_cpt_conditions in `target_by_post_type` field same as widget_logic cpt_conditions => no update needed<br />";
 						} else {
 							// Merge the arrays
-							$updated_conditions = array_unique(array_merge($existing_conditions, $wlcptt_conditions));
+							$updated_cpt_conditions = array_unique(array_merge($existing_cpt_conditions, $cpt_conditions));
 						}
 						//
 						if ( $updated_conditions ) {							
@@ -2979,6 +2973,27 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$key_ts_info .= "updated field `target_by_post_type` for snippet_id: $snippet_id<br />";
 							} else {
 								$key_ts_info .= "update FAILED for field `target_by_post_type` for snippet_id: $snippet_id<br />";
+							}
+						}
+						
+						// Taxonomy Archive Conditions
+						$existing_tax_conditions = get_field( 'target_by_taxonomy_archive', $snippet_id );
+						if ( empty($existing_tax_conditions) ) {
+							$key_ts_info .= "No existing_tax_conditions => update `target_by_post_type` with widget_logic conditions<br />";
+							$updated_tax_conditions = $tax_conditions;
+						} else if ( $existing_tax_conditions == $tax_conditions ) {
+							$key_ts_info .= "existing_tax_conditions in `target_by_post_type` field same as widget_logic conditions => no update needed<br />";
+						} else {
+							// Merge the arrays
+							$updated_tax_conditions = array_unique(array_merge($existing_tax_conditions, $tax_conditions));
+						}
+						//
+						if ( $updated_tax_conditions ) {							
+							$key_ts_info .= "updated_tax_conditions: ".print_r($updated_tax_conditions, true)."<br />";
+							if ( update_field( 'target_by_taxonomy_archive', $updated_tax_conditions, $snippet_id ) ) {
+								$key_ts_info .= "updated field `target_by_taxonomy_archive` for snippet_id: $snippet_id<br />";
+							} else {
+								$key_ts_info .= "update FAILED for field `target_by_taxonomy_archive` for snippet_id: $snippet_id<br />";
 							}
 						}
 					}
@@ -3020,7 +3035,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//
 				//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 				if ( is_array($conditions)) {
-					$key_ts_info .= count($conditions)." condition(s):<br />";
+					$key_ts_info .= count($conditions)." condition(s)<br />";
 					$matched_posts = array();
 					foreach ( $conditions as $condition => $value ) {
 						$key_ts_info .= "condition: $condition => $value<br />";
