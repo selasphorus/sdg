@@ -2967,9 +2967,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$updated_cpt_conditions = array_unique(array_merge($existing_cpt_conditions, $cpt_conditions));
 						}
 						//
-						if ( $updated_conditions ) {							
-							$key_ts_info .= "updated_conditions: ".print_r($updated_conditions, true)."<br />";
-							if ( update_field( 'target_by_post_type', $updated_conditions, $snippet_id ) ) {
+						if ( $updated_cpt_conditions ) {							
+							$key_ts_info .= "updated_cpt_conditions: ".print_r($updated_cpt_conditions, true)."<br />";
+							if ( update_field( 'target_by_post_type', $updated_cpt_conditions, $snippet_id ) ) {
 								$key_ts_info .= "updated field `target_by_post_type` for snippet_id: $snippet_id<br />";
 							} else {
 								$key_ts_info .= "update FAILED for field `target_by_post_type` for snippet_id: $snippet_id<br />";
