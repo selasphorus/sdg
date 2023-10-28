@@ -2918,10 +2918,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "<strong>key: $key</strong><br />";
 				//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 
+				if ( !is_array($$key) ) { $$key = unserialize($$key); }
 				//
-				if ( !is_array($$key) ) {
-					$$key = unserialize($$key);
-				}
 				if ( !is_array($$key) ) {
 					// Replace multiple (one or more) line breaks with a single one.
 					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
@@ -3020,8 +3018,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 				$key_ts_info .= "<strong>key: $key</strong><br />";
 				//$key_ts_info .= "key: $key => <pre>".print_r($$key, true)."</pre>";
-				// WIP
-				$$key = unserialize($$key);
+				
+				if ( !is_array($$key) ) { $$key = unserialize($$key); }
+				//
 				if ( !is_array($$key) ) {
 					// Replace multiple (one or more) line breaks with a single one.
 					$$key = preg_replace("/[\r\n]+/", "\n", $$key);
@@ -3034,12 +3033,39 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				//
 				//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
-				if ( is_array($conditions)) {
+				if ( is_array($conditions) ) {
+					
 					$key_ts_info .= count($conditions)." condition(s)<br />";
-					$matched_posts = array();
-					foreach ( $conditions as $condition => $value ) {
-						$key_ts_info .= "condition: $condition => $value<br />";
-						// WIP -- TODO: ??						
+					
+					// If this is the widget_logic version of the field, update our new target_by_post_type field
+					if ( $key == 'widget_logic_location' ) {
+					
+						$wll_conditions = array();
+						$updated_conditions = array();
+						
+						foreach ( $conditions as $condition => $value ) {
+							$wll_conditions[] = $condition;
+						}
+						
+						$existing_conditions = get_field( 'target_by_location', $snippet_id );
+						if ( empty($existing_conditions) ) {
+							$key_ts_info .= "No existing_conditions => update `target_by_location` with widget_logic cpt_conditions<br />";
+							$updated_conditions = $wll_conditions;
+						} else if ( $existing_conditions == $wll_conditions ) {
+							$key_ts_info .= "existing_conditions in `target_by_location` field same as widget_logic wll_conditions => no update needed<br />";
+						} else {
+							$updated_conditions = array_unique(array_merge($existing_conditions, $wll_conditions)); // Merge the arrays
+						}
+						//
+						if ( $updated_conditions ) {							
+							$key_ts_info .= "updated_cpt_conditions: ".print_r($updated_conditions, true)."<br />";
+							if ( update_field( 'target_by_location', $updated_conditions, $snippet_id ) ) {
+								$key_ts_info .= "updated field `target_by_location` for snippet_id: $snippet_id<br />";
+							} else {
+								$key_ts_info .= "update FAILED for field `target_by_location` for snippet_id: $snippet_id<br />";
+							}
+						}
+						
 					}
 				}
 				
