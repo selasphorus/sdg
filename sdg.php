@@ -2651,8 +2651,7 @@ function get_snippets ( $atts = [] ) {
 		
 		}
 		
-		
-		
+		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		
 		//
@@ -3596,14 +3595,21 @@ function show_widgets_and_snippets ( $atts = [] ) {
 		$info .= "snippets:<br />";
 		//$info .= "<pre>".print_r($snippets, true)."</pre>";
 		//$info .= "<pre>";
+		$details = "";
 		foreach ( $snippets as $pos => $snippet_id ) {
+			$snippet_info = "";
 			$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 			$widget_sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
-			$info .= "[".$pos."] => ".$widget_uid;
-			$info .= " => snippet_id: ".$snippet_id;
-			$info .= " => ".get_the_title($snippet_id);
-			$info .= " [".$widget_sidebar_id."]";
-			$info .= "<br />";
+			$snippet_info .= "[".$pos."] => ".$widget_uid;
+			$snippet_info .= " => snippet_id: ".$snippet_id;
+			$snippet_info .= " => ".get_the_title($snippet_id);
+			$snippet_info .= " [".$widget_sidebar_id."]";
+			$snippet_info .= "<br />";
+			//
+			$info .= $snippet_info;
+			$details .= $snippet_info;
+			// Check/update widget/snippet logic
+			//$details .= 
 		}
 		//$info .= "</pre>";
 		$info .= '</div>';
