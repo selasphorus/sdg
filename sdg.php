@@ -2525,10 +2525,15 @@ function get_snippets ( $atts = [] ) {
 		
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
+			
 				$$key = get_post_meta( $snippet_id, $key, true );
 				//$snippet_info .= "key: $key => ".$$key."<br />";
+				
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-					$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
+				
+					$snippet_logic_info .= "key: $key =><br />";//$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
+					//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
+					
 					if ( $key == 'target_by_post_type' ) {
 						// Is the given post of the matching type?
 						// WIP
@@ -2571,7 +2576,7 @@ function get_snippets ( $atts = [] ) {
 							break;
 						} else {
 							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-							$snippet_logic_info .= "post_id: $post_id/target_posts: ".print_r($target_posts, true)."<br />";
+							$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
 							$snippet_status = "inactive";
 						}
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
