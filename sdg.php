@@ -2560,27 +2560,22 @@ function get_snippets ( $atts = [] ) {
 							// Post is in the target array
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
-							if ( $key == 'target_by_post' ) {
-								if ( $any_all == "any" && $snippet_display == "selected" ) { 
-									$post_snippets[] = $snippet_id;
-									$snippet_status = "active";
-									$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_post/selected)<br />";
-									//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-									break;
-								}
-								// ?
-							} else {
-								// exclude_by_post
-								if ( $snippet_display == "notselected" ) { //$any_all == "any" && 
-									$post_snippets[] = $snippet_id;
-									$snippet_status = "active";
-									$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
-									//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-									break;
-								}
+							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" && 
+								$post_snippets[] = $snippet_id;
+								$snippet_status = "active";
+								$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_post/selected)<br />";
+								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+								break;
+							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
+								$post_snippets[] = $snippet_id;
+								$snippet_status = "active";
+								$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
+								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+								break;
 							}
 							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
 							// TODO: remove from post_snippets array, if it was previously added...
+							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />"
 							$snippet_status = "inactive";
 							break;
 						} else {
