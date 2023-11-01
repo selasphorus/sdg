@@ -2537,7 +2537,12 @@ function get_snippets ( $atts = [] ) {
 					if ( $key == 'target_by_post_type' ) {
 						// Is the given post of the matching type?
 						// WIP
+						$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
+						//
 						$target_type = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_type: [".print_r($target_type, true)."]<br />";
+						
+						//
 						if ( $target_type && $post_type == $target_type ) {
 							$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
