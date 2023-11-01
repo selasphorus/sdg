@@ -2691,7 +2691,7 @@ function get_snippets ( $atts = [] ) {
 		//
 		if ( $title == "Snippets" ) { continue; }
 		//
-		$info .= '<section id="snippet-'.$snippet_id.'" class="widget widget_text widget_custom_html">';
+		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
 		$info .= '<h2 class="widget-title">'.$title.'</h2>';
 		$info .= '<div class="textwidget custom-html-widget">';
 		$info .= $snippet_content;
