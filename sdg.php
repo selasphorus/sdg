@@ -2635,6 +2635,7 @@ function get_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_taxonomy' ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						$terms = explode("\n",$$key);
 						if ( is_array($terms)) {
 							$snippet_logic_info .= count($terms)." terms<br />";
