@@ -2578,11 +2578,11 @@ function get_snippets ( $atts = [] ) {
 									//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 									break;
 								}
-								// Snippet is inactive
-								// TODO: remove from post_snippets array, if it was previously added...
-								$snippet_status = "inactive";
-								break;
 							}
+							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
+							// TODO: remove from post_snippets array, if it was previously added...
+							$snippet_status = "inactive";
+							break;
 						} else {
 							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 							$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
