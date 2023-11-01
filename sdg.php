@@ -2694,7 +2694,7 @@ function get_snippets ( $atts = [] ) {
 		$info .= '<section id="snippet-'.$snippet_id.'" class="widget widget_text widget_custom_html">';
 		$info .= '<h2 class="widget-title">'.$title.'</h2>';
 		$info .= '<div class="textwidget custom-html-widget">';
-		$info .= $content;
+		$info .= wpautop($content);
 		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
 		$info .= '</div>';
 		$info .= '</section>';
