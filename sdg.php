@@ -2539,11 +2539,10 @@ function get_snippets ( $atts = [] ) {
 						// WIP
 						$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
 						//
-						$target_type = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_type: [".print_r($target_type, true)."]<br />";
-						
+						$snippet_logic_info .= "post_type: [".$post_type."]<br />";
 						//
-						if ( $target_type && $post_type == $target_type ) {
+						//if ( $target_type && $post_type == $target_type ) {
+						if ( is_array($$key) && !empty($$key) && in_array($post_type, $$key) ) {
 							$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
@@ -2556,10 +2555,10 @@ function get_snippets ( $atts = [] ) {
 								break;
 							}
 						} else {
-							if ( empty($target_posts) ) {
-								$snippet_logic_info .= "The target_type is empty.<br />";
+							if ( empty($$key) ) {
+								$snippet_logic_info .= "The array is empty.<br />";
 							} else {
-								$snippet_logic_info .= "This post does NOT match the target post_type [$target_type].<br />";
+								$snippet_logic_info .= "This post does NOT match any of the array values.<br />";
 							}
 							$snippet_logic_info .= "=> continue<br />";
 						}
