@@ -2575,7 +2575,7 @@ function get_snippets ( $atts = [] ) {
 							}
 							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
 							// TODO: remove from post_snippets array, if it was previously added...
-							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />"
+							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
 							$snippet_status = "inactive";
 							break;
 						} else {
