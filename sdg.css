@@ -107,8 +107,9 @@ div.code {
 	font-weight: 700;
 }
 
-.snippet {
-	border: 1px solid violetblue;
+.sidebar .snippet,
+.sidebar .snippet.widget {
+	border: 1px solid #5000CE;
 }
 
 /** END WIP ***/
