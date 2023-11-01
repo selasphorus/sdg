@@ -2551,7 +2551,11 @@ function get_snippets ( $atts = [] ) {
 								break;
 							}
 						} else {
-							$snippet_logic_info .= "This post does NOT match the target post_type [$target_type].<br />";
+							if ( empty($target_posts) ) {
+								$snippet_logic_info .= "The target_type is empty.<br />";
+							} else {
+								$snippet_logic_info .= "This post does NOT match the target post_type [$target_type].<br />";
+							}
 							$snippet_logic_info .= "=> continue<br />";
 						}
 						
@@ -2559,7 +2563,8 @@ function get_snippets ( $atts = [] ) {
 					
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
-						if ( in_array($post_id, $target_posts) ) {
+						if ( is_array($target_posts) && !empty($target_posts) && in_array($post_id, $target_posts) ) {
+						
 							// Post is in the target array
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
@@ -2583,10 +2588,18 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
 							$snippet_status = "inactive";
 							break;
+							
 						} else {
-							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-							$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
-							$snippet_status = "inactive";
+						
+							if ( empty($target_posts) ) {
+								$snippet_logic_info .= "The target_posts array is empty.<br />";
+							} else {
+								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
+								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
+								$snippet_status = "inactive";
+							}
+							$snippet_logic_info .= "=> continue<br />";
+							
 							/*if ( $snippet_display == "selected" ) {
 								$snippet_status = "inactive";
 							} else if ( $snippet_display == "notselected" ) {
@@ -2599,6 +2612,7 @@ function get_snippets ( $atts = [] ) {
 						}
 						
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+					
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
