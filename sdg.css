@@ -107,6 +107,10 @@ div.code {
 	font-weight: 700;
 }
 
+.snippet {
+	border: 1px solid violetblue;
+}
+
 /** END WIP ***/
 
 /* msg_bar styles */
