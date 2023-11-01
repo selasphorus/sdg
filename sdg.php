@@ -2685,12 +2685,16 @@ function get_snippets ( $atts = [] ) {
 	// Compile info for the matching snippets for display
 	foreach ( $post_snippets as $snippet_id ) {
 		$title = get_the_title( $snippet_id );
+		$content = get_the_content( $snippet_id );
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
+		//
+		if ( $title == "Snippets" ) { continue; }
 		//
 		$info .= '<section id="snippet-'.$snippet_id.'" class="widget widget_text widget_custom_html">';
 		$info .= '<h2 class="widget-title">'.$title.'</h2>';
 		$info .= '<div class="textwidget custom-html-widget">';
+		$info .= $content;
 		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
 		$info .= '</div>';
 		$info .= '</section>';
