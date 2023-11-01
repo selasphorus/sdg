@@ -2557,6 +2557,7 @@ function get_snippets ( $atts = [] ) {
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( in_array($post_id, $target_posts) ) {
+							// Post is in the target array
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' ) {
@@ -2580,12 +2581,12 @@ function get_snippets ( $atts = [] ) {
 								// Snippet is inactive
 								// TODO: remove from post_snippets array, if it was previously added...
 								$snippet_status = "inactive";
+								break;
 							}
-							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
-							break;
 						} else {
 							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 							$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
+							$snippet_status = "inactive";
 							/*if ( $snippet_display == "selected" ) {
 								$snippet_status = "inactive";
 							} else if ( $snippet_display == "notselected" ) {
