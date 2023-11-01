@@ -2521,7 +2521,7 @@ function get_snippets ( $atts = [] ) {
 		} else {
 		
 			// Conditional display -- determine whether the given post should display this widget		
-			$snippet_logic_info .= "Analysing display conditions...<br />";
+			$snippet_logic_info .= "<h3>Analysing display conditions...</h3>";
 		
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'widget_logic_taxonomy', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
@@ -2633,6 +2633,7 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 						}*/
 					} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) { // TODO: simplify to single field
+						
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
