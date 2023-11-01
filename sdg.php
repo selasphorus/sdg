@@ -2538,8 +2538,8 @@ function get_snippets ( $atts = [] ) {
 						// Is the given post of the matching type?
 						// WIP
 						$target_type = get_field($key, $snippet_id, false);
-						if ( $post_type == $target_type ) {
-							$snippet_logic_info .= "This post matches target post_type.<br />";
+						if ( $target_type && $post_type == $target_type ) {
+							$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $any_all == "any" ) {
@@ -2547,11 +2547,14 @@ function get_snippets ( $atts = [] ) {
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							}
 						} else {
-							$snippet_logic_info .= "This post does NOT match the target post_type.<br />";
+							$snippet_logic_info .= "This post does NOT match the target post_type [$target_type].<br />";
+							$snippet_logic_info .= "=> continue<br />";
 						}
+						
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 					
 						// Is the given post targetted or excluded?
@@ -2565,12 +2568,14 @@ function get_snippets ( $atts = [] ) {
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_post/selected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
 								$post_snippets[] = $snippet_id;
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							}
 							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
