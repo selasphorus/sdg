@@ -3404,11 +3404,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					if ( isset($subconditions['taxonomies']) ) { 
 						$taxonomies = $subconditions['taxonomies'];
 						$info .= "taxonomies: ".$taxonomies."<br />";
-						$meta_key = 'widget_logic_taxonomy';
-						$meta_input[$meta_key] = $taxonomies;
-						//
-						$meta_key = 'target_by_taxonomy';
-						$meta_input[$meta_key] = $taxonomies;
+						$meta_input['widget_logic_taxonomy'] = $taxonomies;
+						$meta_input['target_by_taxonomy'] = $taxonomies;
 						//
 					}
 			
