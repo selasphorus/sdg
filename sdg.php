@@ -3485,7 +3485,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$snippet_id = wp_insert_post($postarr);
 					$action ="inserted";
 				}
-				$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			
 				//
 				if ( $action && $snippet_id ) {
