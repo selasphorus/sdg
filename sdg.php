@@ -3115,6 +3115,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			}
 			
 			$ts_info .= $key_ts_info;
+			$ts_info .= "<hr />";
 			
 		} else {
 			//$ts_info .= "No meta data found for key: $key<br />";
