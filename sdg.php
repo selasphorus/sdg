@@ -2776,10 +2776,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 			$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-			if ( !is_array($$key) ) { $$key = unserialize($$key); }
+			//if ( !is_array($$key) ) { $$key = unserialize($$key); }
 			
 			// Clean up legacy field values
 			if ( !is_array($$key) && strpos($key, 'widget_logic_') !== false ) {
+				$key_ts_info .= "widget_logic field; not array => clean up, update, and explode<br />";
 				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
@@ -3048,6 +3049,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
+				
 				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>"; // tax_pairs => conditions			
 				//.... WIP 102023
 			
