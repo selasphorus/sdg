@@ -3399,13 +3399,17 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				} else if ( $condition == "taxonomy" ) {
 				
 					$info .= "condition: ".$condition."<br />";
-					//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+					$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 				
 					if ( isset($subconditions['taxonomies']) ) { 
 						$taxonomies = $subconditions['taxonomies'];
 						$info .= "taxonomies: ".$taxonomies."<br />";
 						$meta_key = 'widget_logic_taxonomy';
 						$meta_input[$meta_key] = $taxonomies;
+						//
+						$meta_key = 'target_by_taxonomy';
+						$meta_input[$meta_key] = $taxonomies;
+						//
 					}
 			
 				} else if ( $condition == "word_count" ) {
