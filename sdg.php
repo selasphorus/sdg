@@ -3406,7 +3406,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$info .= "taxonomies: ".$taxonomies."<br />";
 						$meta_input['widget_logic_taxonomy'] = $taxonomies;
 						$meta_input['target_by_taxonomy'] = $taxonomies;
-						//
 					}
 			
 				} else if ( $condition == "word_count" ) {
@@ -3486,7 +3485,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					$snippet_id = wp_insert_post($postarr);
 					$action ="inserted";
 				}
-				//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+				$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 			
 				//
 				if ( $action && $snippet_id ) {
