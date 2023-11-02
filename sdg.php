@@ -3404,7 +3404,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					if ( isset($subconditions['taxonomies']) ) { 
 						$taxonomies = $subconditions['taxonomies'];
 						$info .= "taxonomies: ".$taxonomies."<br />";
-						$meta_input['widget_logic_taxonomy'] = $taxonomies;
+						$meta_input['widget_logic_taxonomy'] = $taxonomies; // TODO: figure out why this isn't working
 						$meta_input['target_by_taxonomy'] = $taxonomies;
 					}
 			
