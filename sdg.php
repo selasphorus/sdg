@@ -3049,8 +3049,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
-				
-				$key_ts_info .= "tax_pairs => <pre>".print_r($tax_pairs, true)."</pre>"; // tax_pairs => conditions			
+				//
+				$key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; // tax_pairs => conditions			
 				//.... WIP 102023
 			
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
