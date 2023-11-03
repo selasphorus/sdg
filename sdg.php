@@ -3017,7 +3017,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// Second, add repeater_additions, making sure they're not duplicates...
 				if ( !empty($repeater_additions) ) {
 					$key_ts_info .= "<h4>About to add repeater_additions to repeater_rows...</h4>";
-					$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
+					//$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 					foreach ( $repeater_additions as $url ) {
 						// TODO: make sure url isn't a duplicate of an existing array item
 						if ( in_array($url, $repeater_values) ) {
