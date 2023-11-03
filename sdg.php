@@ -3028,12 +3028,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( $arr_urls_revised == $repeater_urls ) {
 						$key_ts_info .= "No changes necessary -- arr_urls_revised == repeater_urls<br />";
 					} else {
-						$key_ts_info .= "updates tmp disabled<br />";
-						/*if ( update_field( $repeater_key, $arr_urls_revised, $snippet_id ) ) {
+						//$key_ts_info .= "updates tmp disabled<br />";
+						if ( update_field( $repeater_key, $arr_urls_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-						}*/
+						}
 					}
 					
 				}
