@@ -2994,7 +2994,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( !empty($arr_new) ) {
 					
 					// Remove duplicates
-					$key_ts_info .= "About to remove duplicate repeater_urls...<br />";
+					$key_ts_info .= "About to remove duplicate repeater_urls...TMP_DISABLED<br />";
+					/*
 					$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
 					$key_ts_info .= "Unique arr_new (repeater_urls): <pre>".print_r($arr_new, true)."</pre><br />";
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
@@ -3012,6 +3013,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						}
 					}
+					*/
 				}
 				
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
