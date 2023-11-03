@@ -2995,11 +2995,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Remove duplicates
 					$key_ts_info .= "About to remove duplicate repeater_urls...<br />";
 					$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
-					$key_ts_info .= "Unique arr_new (repeater_urls): ".print_r($arr_new, true)."<br />";
+					$key_ts_info .= "Unique arr_new (repeater_urls): <pre>".print_r($arr_new, true)."</pre><br />";
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//
 					$key_values = array_column($arr_new, 'url');
-					$key_ts_info .= "arr_new key_values: ".print_r($key_values, true)."<br />";
+					$key_ts_info .= "arr_new key_values: <pre>".print_r($key_values, true)."</pre><br />";
 					array_multisort($key_values, SORT_ASC, $arr_new);
 					//
 					if ( $arr_new == $repeater_urls ) {
