@@ -2782,7 +2782,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 		if ( !empty($$key) ) {
 		
 			$key_ts_info .= "<strong>key: $key</strong><br />";
-			$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
+			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
 			//if ( !is_array($$key) ) { $$key = unserialize($$key); }
@@ -2852,6 +2852,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ( preg_match("/stc|saint/", $hostname) ) {
 							$url = $path.$querystring;
 							$key_ts_info .= "&rarr; revised url: $url<br />";
+							$key_ts_info .= "&rarr; remove old: $url_bk<br />";
 							$repeater_removals[] = $url_bk; // Remove the absolute URL
 						}
 					}
