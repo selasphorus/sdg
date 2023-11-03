@@ -2917,7 +2917,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
 				$arr_new = array();
 				if ( !empty($matched_posts) ) {
-					$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";
+					$key_ts_info .= "matched_posts: <pre>".print_r($matched_posts, true)."</pre>";
 					// WIP -- TODO: sort by post title and update
 					// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
 					if ( empty($arr_old) ) {
@@ -2929,7 +2929,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						} else {
 							$key_ts_info .= "Merge arr_old with matched_posts<br />";
 							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							$key_ts_info .= "arr_new: ".print_r($arr_new, true)."<br />";
+							$key_ts_info .= "arr_new: <pre>".print_r($arr_new, true)."</pre>";
 						}						
 					}
 				} else {
@@ -2965,7 +2965,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// Update repeater_urls array by removing removals
 					if ( !empty($repeater_removals) ) {
-						$key_ts_info .= "About to clean up repeater_urls by removing repeater_removals...<br />";
+						$key_ts_info .= "<h4>About to clean up repeater_urls by removing repeater_removals...</h4>";
 						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_urls as $k => $v ) {
 							$repeater_url = $v['url'];
@@ -2973,7 +2973,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$key_ts_info .= "removing url: $repeater_url<br />";
 								//unset($repeater_urls[$k]);
 							} else {
-								$arr_new[$k] = $repeater_urls[$k];
+								$key_ts_info .= "Adding url not in repeater_removals array: $repeater_url<br />";
+								$arr_new[] = $repeater_url; //$arr_new[$k] = $repeater_urls[$k];
 							}
 						}
 					}
