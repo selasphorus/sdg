@@ -2840,6 +2840,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
 					$post_type = null;
+					$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+					continue;
+					//
 					$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
 					$hostname = parse_url($url, PHP_URL_HOST);
 					$key_ts_info .= "&rarr; hostname: $hostname<br />";
@@ -2906,7 +2909,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "---<br />";
 				} // END foreach $urls
 				$key_ts_info .= "<hr />";
-				
+				/*
 				// Save the posts to the snippet field
 				$arr_posts_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 				$key_ts_info .= count($arr_posts_old)." arr_posts_old<br />"; //$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
@@ -2958,11 +2961,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "arr_posts_old for '$key': ".print_r($arr_posts_old, true)."<br />";
 					$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 				}
-				
+				*/
 				// Update the associated repeater field as needed
 				//...
 				// First, remove duplicates and repeater_removals
 				$arr_urls_revised = array();
+				/*
 				if ( !empty($repeater_urls) ) {
 				
 					$key_ts_info .= count($repeater_urls)." repeater_urls<br />"; //$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
@@ -2995,7 +2999,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$arr_urls_revised[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
 					}
 				}
-				
+				*/
 				// Update the field with the revised array
 				if ( !empty($arr_urls_revised) ) {
 					
