@@ -2972,7 +2972,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						foreach ( $repeater_urls as $k => $v ) {
 							$repeater_url = $v['url'];
 							if ( in_array($repeater_url, $repeater_removals) ) {
-								$key_ts_info .= "The url: $repeater_url will NOT be added to the revised array<br />";
+								$key_ts_info .= "The url: $repeater_url will NOT be added to the arr_urls_revised array<br />";
 								//$key_ts_info .= "removing url: $repeater_url<br />";
 								//unset($repeater_urls[$k]);
 							} else {
