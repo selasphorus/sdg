@@ -2808,7 +2808,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			if ( is_array($conditions) ) { sort($conditions); }
 			
 			//$key_ts_info .= count($conditions)." condition(s)<br />";
-			$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
+			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 			
 			// TODO: streamline! get rid of code redundancy -- WIP 231027
 			if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
@@ -3000,13 +3000,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_rows as $k => $v ) {
 							$repeater_url = $v['url'];
-							$key_ts_info .= "k: $k / repeater_url (v): $repeater_url<br />";
+							//$key_ts_info .= "k: $k / repeater_url (v): $repeater_url<br />";
 							if ( in_array($repeater_url, $repeater_removals) ) {
 								$key_ts_info .= "The url: $repeater_url will NOT be added to the repeater_rows_revised array<br />";
 								//$key_ts_info .= "removing url: $repeater_url<br />";
 								//unset($repeater_rows[$k]);
 							} else {
-								$key_ts_info .= "Adding url to repeater_rows_revised -- not in repeater_removals array: $repeater_url<br />";
+								//$key_ts_info .= "Adding url to repeater_rows_revised -- not in repeater_removals array: $repeater_url<br />";
 								$repeater_rows_revised[] = array('url' => $repeater_url); //$repeater_rows_revised[$k] = $repeater_rows[$k];
 							}
 						}
