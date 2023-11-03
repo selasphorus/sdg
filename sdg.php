@@ -2837,6 +2837,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
 					$post_type = null;
+					// Is this an STC absolute URL? If so, remove the first bit
+					if ( substr($url, 4) == "http" ) {
+						//$url_bits = parse_url($url);
+						$url = parse_url($url, PHP_URL_PATH); // remove everything except the path
+					}
+					//
 					$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
 					if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
 						$post_type = "event";
