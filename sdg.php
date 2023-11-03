@@ -2776,8 +2776,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 		$$key = get_field( $key, $snippet_id );
 		//$$key = get_post_meta( $snippet_id, $key, true );
 		$key_ts_info = "";
-		$ts_info .= "<strong>key: $key</strong><br />";
-		//$ts_info .= "key: $key => ".$$key."<br />";
+		$key_ts_info .= "<strong>key: $key</strong><br />";
+		//$key_ts_info .= "key: $key => ".$$key."<br />";
+		$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 		
 		// If the key has a corresponding value, then proceed to process that value
 		if ( !empty($$key) ) {
@@ -3150,7 +3151,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 				is_tax()
 				//
 				is_singular( string|string[] $post_types = '' ): bool == Determines whether the query is for an existing single post of any post type (post, attachment, page, custom post types).
-				
 				*/
 				
 			}
