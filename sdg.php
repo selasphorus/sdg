@@ -2840,6 +2840,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$repeater_additions = array();
 				$repeater_removals = array();
 				//
+				$key_ts_info .= "-----------<br />";
 				foreach ( $conditions as $url ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
