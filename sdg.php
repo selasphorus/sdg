@@ -2862,7 +2862,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$post_type = "post";
 					}
 					//
-					if ( $post_type ) {
+					if ( $post_type && empty($hostname) ) {
 						// Extract slug from path
 						// First, trim trailing slash, if any
 						if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
@@ -2871,7 +2871,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						//$ts_info .= "url_bits: ".print_r($url_bits, true)."<br />";
 						$key_ts_info .= "$post_type slug: $slug<br />";
 					} else {
-						$key_ts_info .= "url: $url<br />";
+						//$key_ts_info .= "url: $url<br />";
 						
 					}
 					// Look for matching post
