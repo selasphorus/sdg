@@ -2822,13 +2822,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 				} else {
 					// Sort the existing repeater_urls and save the sorted array
 					$key_values = array_column($repeater_urls, 'url');
-					$key_ts_info .= "repeater_urls key_values: ".print_r($repeater_urls, true)."<br />";
+					//$key_ts_info .= "repeater_urls key_values: ".print_r($repeater_urls, true)."<br />";
 					array_multisort($key_values, SORT_ASC, $repeater_urls);
 					update_field( $repeater_key, $repeater_urls, $snippet_id );
 				}
 				$repeater_additions = array();
 				$repeater_removals = array();
-				$key_ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
+				//$key_ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				// TODO: (re-)check repeater_urls to see if updates are needed from target_by_url => target_by_post
 				// WIP 231027
