@@ -2961,7 +2961,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$arr_new = array();
 				if ( !empty($repeater_urls) ) {
 				
-					$key_ts_info .= "repeater_urls: ".print_r($repeater_urls, true)."<br />"; //<pre></pre>
+					$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
 					
 					// Update repeater_urls array by removing removals
 					if ( !empty($repeater_removals) ) {
