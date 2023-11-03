@@ -3035,7 +3035,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Remove duplicates
 					$key_ts_info .= "About to update repeater_rows...<br />";
 					//
-					//$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
+					$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
 					$key_ts_info .= "repeater_rows_revised (repeater_rows): <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//
