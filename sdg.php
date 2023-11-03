@@ -2892,15 +2892,16 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$post_type = "post";
 					}
 					//
-					if ( $post_type && empty($hostname) ) {
+					if ( $post_type ) {
 						// Extract slug from path
 						// First, trim trailing slash, if any
-						if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
-						$url_bits = explode("/",$url); // The last bit is slug
+						if ( substr($path, -1) == "/" ) { $path = substr($path, 0, -1); }
+						$url_bits = explode("/",$path); // The last bit is slug
 						$slug = end($url_bits);
 						//$ts_info .= "url_bits: ".print_r($url_bits, true)."<br />";
 						$key_ts_info .= "$post_type slug: $slug<br />";
 					} else {
+						$key_ts_info .= "path: $path<br />";
 						//$key_ts_info .= "url: $url<br />";
 						
 					}
@@ -2908,7 +2909,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( $slug && $post_type ) {
 						$matched_post = get_page_by_path($slug, OBJECT, $post_type);
 					} else {
-						$matched_post = get_page_by_path($url);
+						$matched_post = get_page_by_path($path);
 					}
 					//
 					if ($matched_post) {
