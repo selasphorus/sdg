@@ -2997,7 +2997,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Update repeater_rows array by removing removals
 					if ( !empty($repeater_removals) ) {
 						sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+						//$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_rows as $k => $v ) {
 							$repeater_url = $v['url'];
 							//$key_ts_info .= "k: $k / repeater_url (v): $repeater_url<br />";
