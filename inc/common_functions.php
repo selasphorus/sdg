@@ -201,6 +201,21 @@ function sdg_post_title ( $args = array() ) {
 	
 }
 
+function sort_post_ids_by_title ( $arr_ids = array() ) {
+	
+	$wp_args = array(
+		'post__in' => $arr_ids,
+		'orderby'   => 'title',
+		'order'     => 'ASC',
+		'fields'	=> 'ids',
+	);
+	
+	$query = new WP_Query( $wp_args );
+	$post_ids = $query->posts;
+	
+	return $post_ids;
+	
+}
 
 /************** IMAGE FUNCTIONS ***************/
 
