@@ -2773,7 +2773,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 	
-		$$key = get_post_meta( $snippet_id, $key, true );
+		$$key = get_field( $key, $snippet_id );
+		//$$key = get_post_meta( $snippet_id, $key, true );
 		$key_ts_info = "";
 		$ts_info .= "<strong>key: $key</strong><br />";
 		//$ts_info .= "key: $key => ".$$key."<br />";
