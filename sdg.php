@@ -2907,7 +2907,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 				// Save the posts to the snippet field
 				$arr_posts_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-				$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
+				$key_ts_info .= count($arr_posts_old)." arr_posts_old<br />"; //$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
 				if ( is_array($arr_posts_old) && !empty($arr_posts_old) ) {
 					// Sort the existing matched_posts and save the sorted array
 					//$key_values = array_column($arr_posts_old, 'XX'); // need to get post_title to sort by, not ID...
@@ -2963,13 +2963,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$arr_urls_revised = array();
 				if ( !empty($repeater_urls) ) {
 				
-					$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
+					$key_ts_info .= count($repeater_urls)." repeater_urls<br />"; //$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
 					
 					// Update repeater_urls array by removing removals
 					if ( !empty($repeater_removals) ) {
 						$key_ts_info .= "<h4>About to clean up repeater_urls by removing repeater_removals...</h4>";
 						sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-						//$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_urls as $k => $v ) {
 							$repeater_url = $v['url'];
 							if ( in_array($repeater_url, $repeater_removals) ) {
