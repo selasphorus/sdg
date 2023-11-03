@@ -2801,9 +2801,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 			}
 			
 			//
-			if ( !is_array($conditions) ) { continue; }
-			$key_ts_info .= count($conditions)." condition(s)<br />";
-			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
+			//if ( !is_array($conditions) ) { continue; }
+			//$key_ts_info .= count($conditions)." condition(s)<br />";
+			$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 			
 			// TODO: streamline! get rid of code redundancy -- WIP 231027
 			if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
