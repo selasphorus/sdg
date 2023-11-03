@@ -3000,6 +3000,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_rows as $k => $v ) {
 							$repeater_url = $v['url'];
+							$key_ts_info .= "k: $k / repeater_url (v): $repeater_url<br />";
 							if ( in_array($repeater_url, $repeater_removals) ) {
 								$key_ts_info .= "The url: $repeater_url will NOT be added to the repeater_rows_revised array<br />";
 								//$key_ts_info .= "removing url: $repeater_url<br />";
