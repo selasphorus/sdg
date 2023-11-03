@@ -3005,7 +3005,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 								//$key_ts_info .= "removing url: $repeater_url<br />";
 								//unset($repeater_rows[$k]);
 							} else {
-								$key_ts_info .= "Adding url to repeater_rows_revised -- not in repeater_removals array: $repeater_url<br />";
+								//$key_ts_info .= "Adding url to repeater_rows_revised -- not in repeater_removals array: $repeater_url<br />";
 								$repeater_rows_revised[] = array('url' => $repeater_url); //$repeater_rows_revised[$k] = $repeater_rows[$k];
 							}
 						}
