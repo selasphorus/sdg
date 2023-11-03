@@ -2980,9 +2980,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 					$key_ts_info .= count($repeater_urls)." repeater_urls<br />"; //$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
 					
+					$key_ts_info .= "<h4>About to clean up repeater_urls by removing repeater_removals...</h4>";
 					// Update repeater_urls array by removing removals
 					if ( !empty($repeater_removals) ) {
-						$key_ts_info .= "<h4>About to clean up repeater_urls by removing repeater_removals...</h4>";
 						sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
 						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_urls as $k => $v ) {
@@ -2996,6 +2996,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$arr_urls_revised[] = array('url' => $repeater_url); //$arr_urls_revised[$k] = $repeater_urls[$k];
 							}
 						}
+					} else {
+						$key_ts_info .= "repeater_removals array is empty<br />";
 					}
 				}
 				
