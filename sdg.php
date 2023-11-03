@@ -3035,13 +3035,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Remove duplicates
 					$key_ts_info .= "About to update repeater_rows...<br />";
 					//
-					$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
-					$key_ts_info .= "repeater_rows_revised (repeater_rows): <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
-					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+					//$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
 					//
-					//$repeater_values = array_column($repeater_rows_revised, 'url');
+					$repeater_values = array_column($repeater_rows_revised, 'url');
 					//$key_ts_info .= "repeater_rows_revised repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
-					//array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
+					array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
+					//
+					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+					$key_ts_info .= "repeater_rows_revised (repeater_rows): <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
 					//
 					if ( $repeater_rows_revised == $repeater_rows ) {
 						$key_ts_info .= "No changes necessary -- repeater_rows_revised == repeater_rows<br />";
