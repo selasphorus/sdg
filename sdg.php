@@ -2661,7 +2661,7 @@ function get_snippets ( $atts = [] ) {
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
-						if ( ! empty( $target_taxonomies ) && $this->match_terms( $target_taxonomies ) ) {
+						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
 							$snippet_status = "active";
 						} else {
@@ -3141,9 +3141,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 }
 
 /*** Copied from mods to WidgetContext ***/
-function match_terms( $rules ) {
+function match_terms( $rules, $post_id ) {
         
-	$post_id = get_the_ID();
+	if ($post_id == null) { $post_id = get_the_ID(); }
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("divline2");
@@ -3185,7 +3185,7 @@ function match_terms( $rules ) {
 	//$arr_rules = array_map('process_tax_pair', $pairs); // why doesn't this work???
 	$arr_rules = array();
 	foreach ( $pairs as $pair ) {
-		$arr_rules[] = $this->process_tax_pair($pair); //$this->match_terms( $terms )
+		$arr_rules[] = process_tax_pair($pair);
 	}
 	
 	if ( function_exists('sdg_log') ) { 
@@ -3247,7 +3247,7 @@ function match_terms( $rules ) {
 					return false; // post has term but single rule requires posts withOUT that term, therefore no match
 				}
 				
-			} else if ( $match_type == 'any' && has_term( $term, $taxonomy ) && $exclusion == 'no' ) { 
+			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) { 
 				
 				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
 				return true; // Match any => match found (no need to check remaining rules, if any)
@@ -3390,7 +3390,7 @@ function process_tax_pair($rule) {
 	
 }
 
-public function make_terms_array($x) {
+function make_terms_array($x) {
 	$arr = array(trim(substr($x,0,stripos($x,":"))),trim(substr($x,stripos($x,":")+1)));
 	return $arr;
 }
