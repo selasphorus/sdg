@@ -2837,6 +2837,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
 					$post_type = null;
+					$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
 					// Is this an STC absolute URL? If so, remove the first bit
 					if ( substr($url, 0, 4) == "http" ) {
 						$key_ts_info .= "** Absolute url => relativize it<br />";
@@ -2879,7 +2880,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$matched_posts[] = $matched_post_id;
 						$key_ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
 						//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
-						$repeater_removals[] = $url; //$repeater_removals = array('url' => $url);
+						$repeater_removals[] = $url_bk; //$repeater_removals = array('url' => $url);
 					} else {
 						$key_ts_info .= "&rarr; NO matching post found<br />";
 						$tmp_urls = array_column($repeater_urls, 'url');
