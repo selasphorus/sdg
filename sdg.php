@@ -2844,9 +2844,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 						//$url_bits = parse_url($url);
 						$hostname = parse_url($url, PHP_URL_HOST);
 						$key_ts_info .= "&rarr; hostname: $hostname<br />";
+						$path = parse_url($url, PHP_URL_PATH);
+						$key_ts_info .= "&rarr; path: $path<br />";
+						$querystring = parse_url($url, PHP_URL_QUERY);
+						$key_ts_info .= "&rarr; querystring: $querystring<br />";
 						// If this is an STC url, remove everything except the path
 						if ( preg_match("/stc|saint/", $hostname) ) {
-							$url = parse_url($url, PHP_URL_PATH);
+							$url = $path.$querystring;
 							$key_ts_info .= "&rarr; revised url: $url<br />";
 						}
 					}
