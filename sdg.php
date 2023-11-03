@@ -2843,14 +2843,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( is_array($url) ) {
 						if ( isset($url['url']) ) {
 							$url = $url['url'];
-							$key_ts_info .= "url: ".$url."<br />";
+							//$key_ts_info .= "url: ".$url."<br />";
 						} else {
 							$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+							continue;
 						}						
 					} else {
-						$key_ts_info .= "url: ".$url."<br />";
-					}
-					continue;
+						//$key_ts_info .= "url: ".$url."<br />";
+					}					
 					//
 					$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
 					$hostname = parse_url($url, PHP_URL_HOST);
