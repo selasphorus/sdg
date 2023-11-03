@@ -2778,7 +2778,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 		$key_ts_info = "";
 		$key_ts_info .= "<strong>key: $key</strong><br />";
 		//$key_ts_info .= "key: $key => ".$$key."<br />";
-		$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
+		//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 		
 		// If the key has a corresponding value, then proceed to process that value
 		if ( !empty($$key) ) {
