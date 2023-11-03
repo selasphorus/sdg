@@ -2852,6 +2852,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						if ( preg_match("/stc|saint/", $hostname) ) {
 							$url = $path.$querystring;
 							$key_ts_info .= "&rarr; revised url: $url<br />";
+							$repeater_removals[] = $url_bk; // Remove the absolute URL
 						}
 					}
 					//
@@ -2885,11 +2886,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$matched_post_id = $matched_post->ID;
 						$matched_posts[] = $matched_post_id;
 						$key_ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-						$key_ts_info .= "&rarr; remove from repeater_urls array: $url_bk<br />";
-						$repeater_removals[] = $url_bk;
-					} else if ( $url != $url_bk ) {
-						// Leave the relative, remove the absolute URL
-						$repeater_removals[] = $url_bk;
+						$key_ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
+						$repeater_removals[] = $url;
 					} else {
 						$key_ts_info .= "&rarr; NO matching post found<br />";
 						$tmp_urls = array_column($repeater_urls, 'url');
