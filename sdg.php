@@ -2838,7 +2838,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$slug = null;
 					$post_type = null;
 					// Is this an STC absolute URL? If so, remove the first bit
-					if ( substr($url, 4) == "http" ) {
+					if ( substr($url, 0, 4) == "http" ) {
 						$key_ts_info .= "** Absolute url => relativize it<br />";
 						//$url_bits = parse_url($url);
 						$hostname = parse_url($url, PHP_URL_HOST);
