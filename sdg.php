@@ -3043,7 +3043,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
 					//
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
-					$key_ts_info .= "repeater_rows_revised (repeater_rows): <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
+					//$key_ts_info .= "repeater_rows_revised: <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
 					//
 					if ( $repeater_rows_revised == $repeater_rows ) {
 						$key_ts_info .= "No changes necessary -- repeater_rows_revised == repeater_rows<br />";
