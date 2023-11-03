@@ -2868,7 +2868,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$querystring = parse_url($url, PHP_URL_QUERY);
 					if ( !empty($querystring) ) {
 						$querystring = "?".$querystring;
-						$key_ts_info .= "&rarr; path: $path<br />";
 						$key_ts_info .= "&rarr; querystring: $querystring<br />";
 					}
 					
