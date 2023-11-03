@@ -2826,13 +2826,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 					array_multisort($key_values, SORT_ASC, $repeater_urls);
 					update_field( $repeater_key, $repeater_urls, $snippet_id );
 				}
-				$repeater_additions = array();
-				$repeater_removals = array();
 				//$key_ts_info .= "existing repeater_urls: ".print_r($repeater_urls, true)."<br />";
 				//
 				// TODO: (re-)check repeater_urls to see if updates are needed from target_by_url => target_by_post
-				// WIP 231027
+				// Init arrays
 				$matched_posts = array();
+				$repeater_additions = array();
+				$repeater_removals = array();
+				//
 				foreach ( $conditions as $url ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
@@ -2905,60 +2906,61 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "<hr />";
 				
 				// Save the posts to the snippet field
-				$arr_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-				$key_ts_info .= "arr_old: ".print_r($arr_old, true)."<br />";
-				if ( is_array($arr_old) && !empty($arr_old) ) {
+				$arr_posts_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
+				$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
+				if ( is_array($arr_posts_old) && !empty($arr_posts_old) ) {
 					// Sort the existing matched_posts and save the sorted array
-					//$key_values = array_column($arr_old, 'XX'); // need to get post_title to sort by, not ID...
+					//$key_values = array_column($arr_posts_old, 'XX'); // need to get post_title to sort by, not ID...
 					//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
-					//array_multisort($key_values, SORT_ASC, $arr_old);
-					//update_field( $target_key, $arr_old, $snippet_id );
+					//array_multisort($key_values, SORT_ASC, $arr_posts_old);
+					//update_field( $target_key, $arr_posts_old, $snippet_id );
 				}
-				//$key_ts_info .= "arr_old (sorted): ".print_r($arr_old, true)."<br />";
-				$arr_new = array();
+				//$key_ts_info .= "arr_posts_old (sorted): ".print_r($arr_posts_old, true)."<br />";
+				$arr_posts_revised = array();
 				if ( !empty($matched_posts) ) {
-					$key_ts_info .= "matched_posts: <pre>".print_r($matched_posts, true)."</pre>";
+					$key_ts_info .= count($matched_posts)." matched_posts<br />";
+					//$key_ts_info .= "matched_posts: <pre>".print_r($matched_posts, true)."</pre>";
 					// WIP -- TODO: sort by post title and update
 					// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
-					if ( empty($arr_old) ) {
+					if ( empty($arr_posts_old) ) {
 						// Save the array of matched posts to the target_by_post field
-						$arr_new = $matched_posts;									
-					} else if ( is_array($arr_old) ) {
-						if ( $arr_old == $matched_posts ) {
+						$arr_posts_revised = $matched_posts;									
+					} else if ( is_array($arr_posts_old) ) {
+						if ( $arr_posts_old == $matched_posts ) {
 							$key_ts_info .= "No changes necessary -- matched_posts == ".$target_key." stored value(s)<br />";
 						} else {
-							$key_ts_info .= "Merge arr_old with matched_posts<br />";
-							$arr_new = array_unique(array_merge($arr_old, $matched_posts));
-							$key_ts_info .= "arr_new: <pre>".print_r($arr_new, true)."</pre>";
+							$key_ts_info .= "Merge arr_posts_old with matched_posts<br />";
+							$arr_posts_revised = array_unique(array_merge($arr_posts_old, $matched_posts));
+							$key_ts_info .= count($arr_posts_revised)." posts in arr_posts_revised<br />"; //$key_ts_info .= "arr_posts_revised: <pre>".print_r($arr_posts_revised, true)."</pre>";
 						}						
 					}
 				} else {
 					$key_ts_info .= "matched_posts is empty; no update needed<br />";
 				}
-				if ( !empty($arr_new) ) {
-					//$key_values = array_column($arr_new, '???'); // need to get post_title to sort by, not ID...
+				if ( !empty($arr_posts_revised) ) {
+					//$key_values = array_column($arr_posts_revised, '???'); // need to get post_title to sort by, not ID...
 					//$key_ts_info .= "key_values: ".print_r($key_values, true)."<br />";
-					//array_multisort($key_values, SORT_ASC, $arr_new);
-					if ( $arr_old == $arr_new ) {
-						$key_ts_info .= "No changes necessary -- arr_old == arr_new<br />";
+					//array_multisort($key_values, SORT_ASC, $arr_posts_revised);
+					if ( $arr_posts_old == $arr_posts_revised ) {
+						$key_ts_info .= "No changes necessary -- arr_posts_old == arr_posts_revised<br />";
 					} else {
-						$key_ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_new, true)."<br />";
-						if ( update_field( $target_key, $arr_new, $snippet_id ) ) {
+						$key_ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_posts_revised, true)."<br />";
+						if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
 						}
 					}						
 				} else {
-					$key_ts_info .= "arr_new is empty<br />";
-					$key_ts_info .= "arr_old for '$key': ".print_r($arr_old, true)."<br />";
+					$key_ts_info .= "arr_posts_revised is empty<br />";
+					$key_ts_info .= "arr_posts_old for '$key': ".print_r($arr_posts_old, true)."<br />";
 					$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 				}
 				
 				// Update the associated repeater field as needed
 				//...
 				// First, remove duplicates and repeater_removals
-				$arr_new = array();
+				$arr_urls_revised = array();
 				if ( !empty($repeater_urls) ) {
 				
 					$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
@@ -2970,11 +2972,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 						foreach ( $repeater_urls as $k => $v ) {
 							$repeater_url = $v['url'];
 							if ( in_array($repeater_url, $repeater_removals) ) {
-								$key_ts_info .= "removing url: $repeater_url<br />";
+								$key_ts_info .= "The url: $repeater_url will NOT be added to the revised array<br />";
+								//$key_ts_info .= "removing url: $repeater_url<br />";
 								//unset($repeater_urls[$k]);
 							} else {
-								$key_ts_info .= "Adding url not in repeater_removals array: $repeater_url<br />";
-								$arr_new[] = $repeater_url; //$arr_new[$k] = $repeater_urls[$k];
+								$key_ts_info .= "Adding url to arr_urls_revised -- not in repeater_removals array: $repeater_url<br />";
+								$arr_urls_revised[] = array('url' => $repeater_url); //$arr_urls_revised[$k] = $repeater_urls[$k];
 							}
 						}
 					}
@@ -2986,28 +2989,28 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 					foreach ( $repeater_additions as $url ) {
 						// TODO: make sure url isn't a duplicate of an existing array item
-						$arr_new[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
+						$arr_urls_revised[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
 					}
 				}
 				
 				// Update the field with the revised array
-				if ( !empty($arr_new) ) {
+				if ( !empty($arr_urls_revised) ) {
 					
 					// Remove duplicates
-					$key_ts_info .= "About to remove duplicate repeater_urls...TMP_DISABLED<br />";
-					/*
-					$arr_new = array_unique($arr_new, SORT_REGULAR); // not working!
-					$key_ts_info .= "Unique arr_new (repeater_urls): <pre>".print_r($arr_new, true)."</pre><br />";
-					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+					$key_ts_info .= "About to update repeater_urls...<br />";
 					//
-					$key_values = array_column($arr_new, 'url');
-					$key_ts_info .= "arr_new key_values: <pre>".print_r($key_values, true)."</pre><br />";
-					array_multisort($key_values, SORT_ASC, $arr_new);
+					$arr_urls_revised = array_unique($arr_urls_revised, SORT_REGULAR); // not working!
+					$key_ts_info .= "Unique arr_urls_revised (repeater_urls): <pre>".print_r($arr_urls_revised, true)."</pre><br />";
+					/*$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//
-					if ( $arr_new == $repeater_urls ) {
-						$key_ts_info .= "No changes necessary -- arr_new == repeater_urls<br />";
+					$key_values = array_column($arr_urls_revised, 'url');
+					$key_ts_info .= "arr_urls_revised key_values: <pre>".print_r($key_values, true)."</pre><br />";
+					array_multisort($key_values, SORT_ASC, $arr_urls_revised);
+					//
+					if ( $arr_urls_revised == $repeater_urls ) {
+						$key_ts_info .= "No changes necessary -- arr_urls_revised == repeater_urls<br />";
 					} else {
-						if ( update_field( $repeater_key, $arr_new, $snippet_id ) ) {
+						if ( update_field( $repeater_key, $arr_urls_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
