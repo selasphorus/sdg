@@ -2841,7 +2841,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$slug = null;
 					$post_type = null;
 					if ( is_array($url) ) {
-						$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+						if ( isset($url['url']) ) {
+							$url = $url['url'];
+							$key_ts_info .= "url: ".$url."<br />";
+						} else {
+							$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+						}						
 					} else {
 						$key_ts_info .= "url: ".$url."<br />";
 					}
