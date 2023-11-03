@@ -2969,7 +2969,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( !empty($repeater_removals) ) {
 						$key_ts_info .= "<h4>About to clean up repeater_urls by removing repeater_removals...</h4>";
 						sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-						$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+						//$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 						foreach ( $repeater_urls as $k => $v ) {
 							$repeater_url = $v['url'];
 							if ( in_array($repeater_url, $repeater_removals) ) {
