@@ -2974,11 +2974,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "No changes necessary -- arr_posts_old == arr_posts_revised<br />";
 					} else {
 						$key_ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_posts_revised, true)."<br />";
-						/*if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
+						if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
-						}*/
+						}
 					}						
 				} else {
 					$key_ts_info .= "arr_posts_revised is empty<br />";
