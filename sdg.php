@@ -3017,13 +3017,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Remove duplicates
 					$key_ts_info .= "About to update repeater_urls...<br />";
 					//
-					$arr_urls_revised = array_unique($arr_urls_revised, SORT_REGULAR); // not working!
-					$key_ts_info .= "Unique arr_urls_revised (repeater_urls): <pre>".print_r($arr_urls_revised, true)."</pre><br />";
+					//$arr_urls_revised = array_unique($arr_urls_revised, SORT_REGULAR); // not working!
+					$key_ts_info .= "arr_urls_revised (repeater_urls): <pre>".print_r($arr_urls_revised, true)."</pre><br />";
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//
-					$key_values = array_column($arr_urls_revised, 'url');
-					$key_ts_info .= "arr_urls_revised key_values: <pre>".print_r($key_values, true)."</pre><br />";
-					array_multisort($key_values, SORT_ASC, $arr_urls_revised);
+					//$key_values = array_column($arr_urls_revised, 'url');
+					//$key_ts_info .= "arr_urls_revised key_values: <pre>".print_r($key_values, true)."</pre><br />";
+					//array_multisort($key_values, SORT_ASC, $arr_urls_revised);
 					//
 					if ( $arr_urls_revised == $repeater_urls ) {
 						$key_ts_info .= "No changes necessary -- arr_urls_revised == repeater_urls<br />";
