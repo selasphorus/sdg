@@ -2860,14 +2860,15 @@ function update_snippet_logic ( $snippet_id = null ) {
 					
 					// Parse the url
 					$hostname = parse_url($url, PHP_URL_HOST);
-					if ( !empty($querystring) ) {
+					if ( !empty($hostname) ) {
 						$key_ts_info .= "&rarr; hostname: $hostname<br />";
 					}
 					$path = parse_url($url, PHP_URL_PATH);
-					$key_ts_info .= "&rarr; path: $path<br />";
+					//$key_ts_info .= "&rarr; path: $path<br />";
 					$querystring = parse_url($url, PHP_URL_QUERY);
 					if ( !empty($querystring) ) {
 						$querystring = "?".$querystring;
+						$key_ts_info .= "&rarr; path: $path<br />";
 						$key_ts_info .= "&rarr; querystring: $querystring<br />";
 					}
 					
