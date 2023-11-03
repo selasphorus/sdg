@@ -2627,6 +2627,7 @@ function get_snippets ( $atts = [] ) {
 							global $wp;
 							$current_url = home_url( add_query_arg( array(), $wp->request ) );
 							$snippet_logic_info .= "current_url: ".$current_url."<br />";
+							$current_path = parse_url($current_url, PHP_URL_PATH);
 							foreach ( $target_urls as $k => $v ) {
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
@@ -2638,8 +2639,8 @@ function get_snippets ( $atts = [] ) {
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
-									if ( $url == $current_url ) {
-										$snippet_logic_info .= "url matches current_url<br />";
+									if ( $url == $current_path ) {
+										$snippet_logic_info .= "url matches current_path<br />";
 									}
 								}
 								//...
