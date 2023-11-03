@@ -2624,9 +2624,11 @@ function get_snippets ( $atts = [] ) {
 						//$post_id
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
+							$permalink = get_the_permalink($post_id);
+							$snippet_logic_info .= "permalink: ".$permalink."<br />";
 							global $wp;
 							$current_url = home_url( add_query_arg( array(), $wp->request ) );
-							//$snippet_logic_info .= "current_url: ".$current_url."<br />";
+							$snippet_logic_info .= "current_url: ".$current_url."<br />";
 							$current_path = parse_url($current_url, PHP_URL_PATH);
 							$snippet_logic_info .= "current_path: ".$current_path."<br />";
 							foreach ( $target_urls as $k => $v ) {
