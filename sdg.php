@@ -2936,17 +2936,20 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 				// Save the posts to the snippet field
 				$arr_posts_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
-				$key_ts_info .= count($arr_posts_old)." arr_posts_old<br />"; //$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
+				//if ( $arr_posts_old ) { $key_ts_info .= count($arr_posts_old)." arr_posts_old<br />"; } //$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
 				if ( is_array($arr_posts_old) && !empty($arr_posts_old) ) {
+					$key_ts_info .= count($arr_posts_old)." arr_posts_old<br />";
 					// Sort the existing matched_posts and save the sorted array
-					// TODO: figure out how to efficiently sort array of IDs by corresponding post_title values...
-					// Maybe: loop through IDs, get titles, save as md array, sort...
+					$arr_posts_old = sort_post_ids_by_title($arr_posts_old); // WIP
+					$key_ts_info .= "arr_posts_old (sorted): ".print_r($arr_posts_old, true)."<br />";
 					//$repeater_values = array_column($arr_posts_old, 'XX'); // need to get post_title to sort by, not ID...
 					//$key_ts_info .= "repeater_values: ".print_r($repeater_values, true)."<br />";
 					//array_multisort($repeater_values, SORT_ASC, $arr_posts_old);
 					//update_field( $target_key, $arr_posts_old, $snippet_id );
+				} else {
+					$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
 				}
-				//$key_ts_info .= "arr_posts_old (sorted): ".print_r($arr_posts_old, true)."<br />";
+				//
 				$arr_posts_revised = array();
 				if ( !empty($matched_posts) ) {
 					$key_ts_info .= count($matched_posts)." matched_posts<br />";
