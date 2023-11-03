@@ -2879,7 +2879,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$matched_post_id = $matched_post->ID;
 						$matched_posts[] = $matched_post_id;
 						$key_ts_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-						//$ts_info .= "&rarr; remove from repeater_urls array: $url<br />";
+						$key_ts_info .= "&rarr; remove from repeater_urls array: $url_bk<br />";
 						$repeater_removals[] = $url_bk; //$repeater_removals = array('url' => $url);
 					} else {
 						$key_ts_info .= "&rarr; NO matching post found<br />";
