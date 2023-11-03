@@ -2918,7 +2918,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "---<br />";
 				} // END foreach $urls
 				$key_ts_info .= "<hr />";
-				/*
+				
 				// Save the posts to the snippet field
 				$arr_posts_old = get_field( $target_key, $snippet_id, false ); //get_field($selector, $post_id, $format_value);
 				$key_ts_info .= count($arr_posts_old)." arr_posts_old<br />"; //$key_ts_info .= "arr_posts_old: ".print_r($arr_posts_old, true)."<br />";
@@ -2959,23 +2959,23 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= "No changes necessary -- arr_posts_old == arr_posts_revised<br />";
 					} else {
 						$key_ts_info .= "about to update field '$target_key'<br />";//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_posts_revised, true)."<br />";
-						if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
+						/*if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
-						}
+						}*/
 					}						
 				} else {
 					$key_ts_info .= "arr_posts_revised is empty<br />";
 					$key_ts_info .= "arr_posts_old for '$key': ".print_r($arr_posts_old, true)."<br />";
 					$key_ts_info .= "matched_posts: ".print_r($matched_posts, true)."<br />";								
 				}
-				*/
+				
 				// Update the associated repeater field as needed
 				//...
 				// First, remove duplicates and repeater_removals
 				$arr_urls_revised = array();
-				/*
+				//
 				if ( !empty($repeater_urls) ) {
 				
 					$key_ts_info .= count($repeater_urls)." repeater_urls<br />"; //$key_ts_info .= "repeater_urls: <pre>".print_r($repeater_urls, true)."</pre>";//"<br />"; //<pre></pre>
@@ -3008,7 +3008,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$arr_urls_revised[] = array('url' => $url); //$repeater_urls[] = array('url' => $url);
 					}
 				}
-				*/
+				
 				// Update the field with the revised array
 				if ( !empty($arr_urls_revised) ) {
 					
@@ -3017,7 +3017,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					//
 					$arr_urls_revised = array_unique($arr_urls_revised, SORT_REGULAR); // not working!
 					$key_ts_info .= "Unique arr_urls_revised (repeater_urls): <pre>".print_r($arr_urls_revised, true)."</pre><br />";
-					/*$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//
 					$key_values = array_column($arr_urls_revised, 'url');
 					$key_ts_info .= "arr_urls_revised key_values: <pre>".print_r($key_values, true)."</pre><br />";
@@ -3026,13 +3026,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( $arr_urls_revised == $repeater_urls ) {
 						$key_ts_info .= "No changes necessary -- arr_urls_revised == repeater_urls<br />";
 					} else {
-						if ( update_field( $repeater_key, $arr_urls_revised, $snippet_id ) ) {
+						$key_ts_info .= "updates tmp disabled<br />";
+						/*if ( update_field( $repeater_key, $arr_urls_revised, $snippet_id ) ) {
 							$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-						}
+						}*/
 					}
-					*/
+					
 				}
 				
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
@@ -3088,6 +3089,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					//
 					if ( $updated_tax_conditions ) {							
 						$key_ts_info .= "updated_tax_conditions: ".print_r($updated_tax_conditions, true)."<br />";
+						//$key_ts_info .= "updates tmp disabled<br />";
 						if ( update_field( 'target_by_taxonomy_archive', $updated_tax_conditions, $snippet_id ) ) {
 							$key_ts_info .= "updated field `target_by_taxonomy_archive` for snippet_id: $snippet_id<br />";
 						} else {
