@@ -2840,7 +2840,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 					// Is this an STC absolute URL? If so, remove the first bit
 					if ( substr($url, 4) == "http" ) {
 						//$url_bits = parse_url($url);
-						$url = parse_url($url, PHP_URL_PATH); // remove everything except the path
+						$hostname = parse_url($url, PHP_URL_HOST);
+						// If this is an STC url, remove everything except the path
+						if ( preg_match("/stc|saint/", $hostname) ) {
+							$url = parse_url($url, PHP_URL_PATH);
+						}
 					}
 					//
 					$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
