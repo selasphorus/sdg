@@ -2840,7 +2840,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( empty($url) ) { continue; }
 					$slug = null;
 					$post_type = null;
-					$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+					if ( is_array($url) ) {
+						$key_ts_info .= "url: <pre>".print_r($url, true)."</pre>";
+					} else {
+						$key_ts_info .= "url: ".$url."<br />";
+					}
 					continue;
 					//
 					$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
