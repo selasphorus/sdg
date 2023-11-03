@@ -1216,7 +1216,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         foreach ( $taxonomies as $taxonomy ) {
         	$arr_term = term_exists( $term_slug, $taxonomy );
         	if ( $arr_term ) {
-        		if ( has_term( $term_slug, $taxonomy ) ) {
+        		if ( has_term( $term_slug, $taxonomy, $post_id ) ) {
 					$ts_info .= "[sdg_add_post_term] post $post_id already has $taxonomy: '$term_slug'. No changes made.<br />";
 					//$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
 					//return '<div class="troubleshooting">'.$ts_info.'</div>';
@@ -2660,7 +2660,16 @@ function get_snippets ( $atts = [] ) {
 						// WIP -- copy fcns from Widget Context customizations
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
-						$terms = explode("\n",$$key);
+						
+						if ( ! empty( $target_taxonomies ) && $this->match_terms( $target_taxonomies ) ) {
+							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
+							$snippet_status = "active";
+						} else {
+							$snippet_logic_info .= "This post does NOT match the taxonomy terms<br />";
+							$snippet_status = "inactive";
+						}
+				
+						/*$terms = explode("\n",$$key);
 						if ( is_array($terms)) {
 							$snippet_logic_info .= count($terms)." terms<br />";
 							foreach ( $terms as $term_pair ) {
@@ -2678,7 +2687,7 @@ function get_snippets ( $atts = [] ) {
 								}
 							}
 						}
-						//
+						*/
 					
 					} else if ( $key == 'target_by_location' ) {
 						// Is the given post in the right site location?
@@ -3043,15 +3052,16 @@ function update_snippet_logic ( $snippet_id = null ) {
 						}
 					}
 				}
-					
-				// WIP -- TODO: copy fcns from Widget Context customizations
-				//$target_taxonomies = get_field($key, $snippet_id, false);
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
 				//
 				$key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; // tax_pairs => conditions			
-				//.... WIP 102023
+				//.... WIP 231101
+					
+				// WIP -- TODO: use fcns copied from WidgetContext customizations to split pairs into array and compare/merge etc
+				//$target_taxonomies = get_field($key, $snippet_id, false);
+				
 			
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
 			
@@ -3129,6 +3139,263 @@ function update_snippet_logic ( $snippet_id = null ) {
 	return $info;
 	
 }
+
+/*** Copied from mods to WidgetContext ***/
+function match_terms( $rules ) {
+        
+	$post_id = get_the_ID();
+	
+	if ( function_exists('sdg_log') ) { 
+		//sdg_log("divline2");
+		//sdg_log("function called: match_terms");
+		//sdg_log("post_id: ".$post_id);
+	}
+	
+	// init/defaults
+	//$match = false;
+	//$arr_tterms = array(); // Multidimensional array of taxonomies & terms
+	
+	// Determine the match_type
+	if ( (strpos($rules, '||') !== false && strpos($rules, '&&') !== false )  // String includes both 'and' AND 'or' operators
+		|| preg_match("/\s*\:\s*-\s*/", $rules) != 0 // has_exclusions
+		//|| preg_match("/(\\()*(\\))/", $x) !== false // String contains something (enclosed within parens)
+		) { 
+		$match_type = 'complex';
+		$matches_found = 0;
+	} else if ( 
+		strpos($rules, '&&') !== false // If string contains "and" but no or operator, and no parens
+		|| preg_match("/match_type\s*\:\s*all/", $rules) != 0 // Match if string contains "match_type:all" (with or without whitespace around colon)
+		|| preg_match("/\s*\:\s*-\s*/", $rules) != 0 // has_exclusions
+		) {
+		$match_type = 'all';
+	} else {
+		$match_type = 'any'; // Default: match any of the given terms
+	}
+	
+	if ( function_exists('sdg_log') ) { 
+		//sdg_log("rules (str): '".$rules."'");
+		//sdg_log("match_type: ".$match_type); // ."; has_exclusions: ".$has_exclusions
+	}
+	
+	// Explode the rules string into an array, items separated by line breaks
+	$pairs = explode( "\n", $rules );
+	//if ( function_exists('sdg_log') ) { sdg_log("pairs: ".print_r($pairs,true)); }
+	
+	// Build an associative array of the given rules
+	//$arr_rules = array_map('process_tax_pair', $pairs); // why doesn't this work???
+	$arr_rules = array();
+	foreach ( $pairs as $pair ) {
+		$arr_rules[] = $this->process_tax_pair($pair); //$this->match_terms( $terms )
+	}
+	
+	if ( function_exists('sdg_log') ) { 
+		if ( !empty($arr_rules) ) {
+			//sdg_log"arr_rules: ".print_r($arr_rules,true));
+		} else {
+			//sdg_log"arr_rules is empty.");
+		}
+	}
+			
+	/*
+	// TODO: deal w/ possibility of combinations of terms -- allow e.g. has term AND term (+); has term OR term; has term NOT term (-)?
+
+	e.g. 
+	match_type:complex
+	(event-categories:worship-services
+	|| event-categories:video-webcasts)
+	&&
+	sermon_topic:abraham
+	
+	e.g.
+	(event-categories:worship-services && category:music) 
+	|| sermon_topic:abraham 
+	
+	*/
+	
+	$num_rules = count($arr_rules);
+	
+	if ( $arr_rules ) {
+		foreach ( $arr_rules as $rule ) {
+			
+			if ( empty($rule) ) { continue; }
+			
+			$taxonomy = $rule['taxonomy'];
+			$term = $rule['term'];
+			if ( isset($rule['operator']) ) { $operator = $rule['operator']; } else { $operator = null; }
+			$exclusion = $rule['exclusion'];
+			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
+			
+			if ( $taxonomy == 'match_type' || empty($taxonomy) ) {
+				//if ( function_exists('sdg_log') ) { sdg_log("match_type or empty >> continue"); }
+				continue; // This is not actually a taxonomy rule; move on to the next.
+			}
+			
+			// Handle the matching based on the number and complexity of the rules
+			
+			if ( $num_rules == 1 ) {
+				
+				if ( has_term( $term, $taxonomy, $post_id ) ) {
+					if ( $exclusion == 'no' ) {
+						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion false) >> return true"); }
+						return true; // post has term for single rule AND term is not negated, therefore it is a match
+					} else {
+						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion TRUE) >> return false"); }
+						return false;
+					}                        
+				} else if ($exclusion == 'no') {
+					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (single rule; NOT has_term; exclusion false) >> return false"); }
+					return false; // post has term but single rule requires posts withOUT that term, therefore no match
+				}
+				
+			} else if ( $match_type == 'any' && has_term( $term, $taxonomy ) && $exclusion == 'no' ) { 
+				
+				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
+				return true; // Match any => match found (no need to check remaining rules, if any)
+				
+			} else if ( $match_type == 'all' ) {
+				
+				if ( has_term( $term, $taxonomy, $post_id ) ) {
+					if ( $exclusion == 'yes' ) {
+						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'all'; has_term; exclusion TRUE) >> return false"); }
+						return false; // post has the term but rules say it must NOT have this term
+					} else {
+						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
+					}
+				} else if ( $exclusion == 'no' ){
+					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false"); }
+					return false; // post does not have the term and rules require it must match all
+				}
+				
+			} else if ( $match_type == 'complex' ) {
+				
+				if ( has_term( $term, $taxonomy, $post_id ) ) {
+					if ( $exclusion == 'yes' ) {
+						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false"); }
+						return false; // post has the term but rules say it must NOT have this term
+					} else {
+						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue"); }
+						$matches_found++;
+					}
+				} else if ( $exclusion == 'no' ){
+					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false"); }
+					//return false; // post does not have the term and rules require it must match all
+				}
+				
+			}
+			
+			/*
+			// Store terms in tterms array for match_type = all and complex matching once the loop is finished
+			if ( $exclusion == true ) {
+				$term = "-".$term;
+			}
+			if ($arr_tterms[$taxonomy]) {
+				array_push($arr_tterms[$taxonomy],$term);
+			} else {
+				$arr_tterms[$taxonomy] = array($term);
+			}
+			*/
+			
+		} // end foreach $arr_rules
+		
+		// If we got through the entire list of rules and the post matched all the rules, return true
+		if ( $match_type == 'all' ) {
+			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'all') >> return true"); }
+			return true;
+		} else if ( $match_type == 'complex' && $matches_found > 0 ) {
+			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
+			return true;
+		}
+		
+		// Now all that's left is to deal with complex queries...
+		
+		//if ( !empty($operator) )
+		
+		/*if ( $arr_tterms ) {
+			
+			foreach ( $arr_tterms as $taxonomy => $arr_terms ) {
+				sdg_log("taxonomy: ".$taxonomy."; arr_terms: ".print_r($arr_terms, true));
+				
+				$post_terms = get_the_terms( $post_id, $taxonomy );
+				
+				if ( has_term( $term, $taxonomy, $post_id ) ) {
+					if ( $match_type == 'all' ) { // If a match has been found and this is a simple query, go ahead and return match/true
+						return true;
+					} else if ( $match_type == 'complex' ) {
+						//
+					}
+				}
+			}
+		}*/
+		
+	}
+
+	//if ( function_exists('sdg_log') ) { sdg_log("End of the line. Returning null."); }
+	return null;
+	//return $match;
+	
+}
+
+function process_tax_pair($rule) {
+	
+	if ( function_exists('sdg_log') ) { 
+		sdg_log("function called: process_tax_pair");
+		sdg_log("rule: ".$rule); 
+	}
+	
+	$arr = array();
+
+	// If this is an empty line, i.e. doesn't actually contain a pair, then return false
+	if (strpos($rule, ':') === false) {
+		return $arr;
+	}
+	
+	// Remove all whitespace
+	$x = preg_replace('/\s+/', '', $rule);
+	
+	// Check for operator
+	if (strpos($x, '||') !== false) {
+		$arr['operator'] = 'OR';
+		$x = str_replace('||','',$x);
+	} elseif (strpos($x, '&&') !== false) {
+		$arr['operator'] = 'AND';
+		$x = str_replace('&&','',$x);
+	}
+	
+	// Check for minus sign to indicate EXclusion
+	if (strpos($x, ':-') !== false) {
+		$arr['exclusion'] = 'yes';
+	} else {
+		$arr['exclusion'] = 'no';
+	}
+	
+	$arr['taxonomy'] = trim(substr($x,0,stripos($x,":")));
+	//$arr['term'] = trim(substr($x,stripos($x,":")+1));
+	$term = trim(substr($x,stripos($x,":")+1));
+	$term = ltrim($term,"-");
+	$arr['term'] = $term;
+
+	/*
+	$taxonomy = trim(substr($x,0,stripos($x,":")));
+	$arr['taxonomy'] = $taxonomy;
+	$arr['term'] = $term;
+
+	if ($arr_tterms[$taxonomy]) {
+		array_push($arr_tterms[$taxonomy],$term);
+	} else {
+		$arr_tterms[$taxonomy] = array($term);
+	}
+	*/
+
+	return $arr;
+	
+}
+
+public function make_terms_array($x) {
+	$arr = array(trim(substr($x,0,stripos($x,":"))),trim(substr($x,stripos($x,":")+1)));
+	return $arr;
+}
+
+/*** END copied from WidgetContext ***/
 
 add_shortcode('widget_logic', 'widget_logic_tmp');
 function widget_logic_tmp ( $atts = [] ) {
