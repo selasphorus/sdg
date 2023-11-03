@@ -2775,13 +2775,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 	
 		$$key = get_post_meta( $snippet_id, $key, true );
 		$key_ts_info = "";
-		//$ts_info .= "<strong>key: $key</strong><br />";
+		$ts_info .= "<strong>key: $key</strong><br />";
 		//$ts_info .= "key: $key => ".$$key."<br />";
 		
 		// If the key has a corresponding value, then proceed to process that value
 		if ( !empty($$key) ) {
 		
-			$key_ts_info .= "<strong>key: $key</strong><br />";
+			//$key_ts_info .= "<strong>key: $key</strong><br />";
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
@@ -2986,7 +2986,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 				// Second, add repeater_additions, making sure they're not duplicates...
 				if ( !empty($repeater_additions) ) {
-					$key_ts_info .= "About to add repeater_additions to repeater_urls...<br />";
+					$key_ts_info .= "<h4>About to add repeater_additions to repeater_urls...</h4>";
 					$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
 					foreach ( $repeater_additions as $url ) {
 						// TODO: make sure url isn't a duplicate of an existing array item
@@ -3158,7 +3158,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			$ts_info .= "<hr />";
 			
 		} else {
-			//$ts_info .= "No meta data found for key: $key<br />";
+			$ts_info .= "No meta data found for key: $key<br />";
 		}
 	}
 	
