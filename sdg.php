@@ -2619,26 +2619,27 @@ function get_snippets ( $atts = [] ) {
 					
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
-						
-						// Get current page path and/or slug
-						global $wp;
-						$current_url = home_url( add_query_arg( array(), $wp->request ) );
-						//$snippet_logic_info .= "current_url: ".$current_url."<br />";
-						$permalink = get_the_permalink($post_id);
-						//$snippet_logic_info .= "permalink: ".$permalink."<br />";
-						//if ( $permalink != $current_url ) { $current_url = $permalink; }
-						$current_path = parse_url($current_url, PHP_URL_PATH);
-						$snippet_logic_info .= "current_path: ".$current_path."<br />";
 						
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
+						
+							$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+						
+							// Get current page path and/or slug
+							global $wp;
+							$current_url = home_url( add_query_arg( array(), $wp->request ) );
+							//$snippet_logic_info .= "current_url: ".$current_url."<br />";
+							$permalink = get_the_permalink($post_id);
+							//$snippet_logic_info .= "permalink: ".$permalink."<br />";
+							//if ( $permalink != $current_url ) { $current_url = $permalink; }
+							$current_path = parse_url($current_url, PHP_URL_PATH);
+							$snippet_logic_info .= "current_path: ".$current_path."<br />";
 							
 							foreach ( $target_urls as $k => $v ) {
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
 								//$field_key = $field['key'];
-								$field_key = 'field_6530630a97804'; //WIP get field key from key name?
+								$field_key = 'field_6530630a97804'; // WIP get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
 								if ( isset($v[$field_key]) ) {
 									$url = $v[$field_key];
@@ -2646,7 +2647,7 @@ function get_snippets ( $atts = [] ) {
 									$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
 									if ( $url == $current_path ) {
-										$snippet_logic_info .= "url matches current_path<br />";										
+										$snippet_logic_info .= "url matches current_path<br />";
 										if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
 											$post_snippets[] = $snippet_id;
 											$snippet_status = "active";
@@ -2666,8 +2667,10 @@ function get_snippets ( $atts = [] ) {
 										// TODO: remove from post_snippets array, if it was previously added...
 										$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
 										$snippet_status = "inactive";
-										break;								
-									} // END if ( $url == $current_path ) {
+										break;
+									} else {
+										$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
+									}
 								}
 							}
 						}
