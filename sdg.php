@@ -2643,6 +2643,8 @@ function get_snippets ( $atts = [] ) {
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
 								if ( isset($v[$field_key]) ) {
 									$url = $v[$field_key];
+									// Trim trailing slash if any
+									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
