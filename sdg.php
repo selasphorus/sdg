@@ -2671,6 +2671,8 @@ function get_snippets ( $atts = [] ) {
 									} else {
 										$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
 									}
+								} else {
+									$snippet_logic_info .= "v: ".print_r($v, true)."<br />"; 
 								}
 							} // foreach ( $target_urls as $k => $v ) {
 							/**/
