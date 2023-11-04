@@ -2672,7 +2672,7 @@ function get_snippets ( $atts = [] ) {
 										$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
 									}
 								}
-							}
+							} // foreach ( $target_urls as $k => $v ) {
 						}
 						
 					} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) { // TODO: simplify to single field
