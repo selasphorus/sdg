@@ -2622,12 +2622,12 @@ function get_snippets ( $atts = [] ) {
 						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
 						
 						// Get current page path and/or slug
-						$permalink = get_the_permalink($post_id);
-						$snippet_logic_info .= "permalink: ".$permalink."<br />";
 						global $wp;
 						$current_url = home_url( add_query_arg( array(), $wp->request ) );
-						$snippet_logic_info .= "current_url: ".$current_url."<br />";
-						//
+						//$snippet_logic_info .= "current_url: ".$current_url."<br />";
+						$permalink = get_the_permalink($post_id);
+						//$snippet_logic_info .= "permalink: ".$permalink."<br />";
+						//if ( $permalink != $current_url ) { $current_url = $permalink; }
 						$current_path = parse_url($current_url, PHP_URL_PATH);
 						$snippet_logic_info .= "current_path: ".$current_path."<br />";
 						
