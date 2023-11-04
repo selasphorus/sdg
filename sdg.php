@@ -2445,7 +2445,7 @@ function get_snippets ( $atts = [] ) {
 	
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
-	$ts_info .= "cs: <pre>".print_r($cs, true)."</pre>";
+	if ( $cs ) { $ts_info .= "cs: <pre>".print_r($cs, true)."</pre>"; }
 	//e.g. Array( [sidebar-1] => cs-17 )
 	
 	// Set up basic query args for snippets retrieval
@@ -2478,7 +2478,7 @@ function get_snippets ( $atts = [] ) {
 	$snippets = $arr_posts->posts;
     //$ts_info .= "WP_Query run as follows:";
     //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
-    $ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
+    $ts_info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
@@ -2722,8 +2722,7 @@ function get_snippets ( $atts = [] ) {
 		
 		//
 		$snippet_info .= '</div>'; // <div class="troubleshooting">
-		//$info .= "<hr />";
-		if ( $dev ) { $info .= $snippet_info; } // ."<hr /></hr />"
+		$ts_info .= $snippet_info;
     }
 	
 	// If returning array of IDs, finish here
