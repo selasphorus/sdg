@@ -2657,21 +2657,21 @@ function get_snippets ( $atts = [] ) {
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
 											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-											//$snippet_logic_info .= "=> BREAK<br />";
-											//break;
+											$snippet_logic_info .= "=> BREAK<br />";
+											break;
 										} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
 											$post_snippets[] = $snippet_id;
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
 											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-											//$snippet_logic_info .= "=> BREAK<br />";
-											//break;
+											$snippet_logic_info .= "=> BREAK<br />";
+											break;
 										}
 										// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
 										// TODO: remove from post_snippets array, if it was previously added...
 										$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
 										$snippet_status = "inactive";
-										//break;
+										break;
 									} else {
 										$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
 									}
