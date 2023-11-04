@@ -2768,6 +2768,8 @@ function get_snippets ( $atts = [] ) {
 	foreach ( $post_snippets as $snippet_id ) {
 		$title = get_the_title( $snippet_id );
 		$snippet_content = get_the_content( null, false, $snippet_id );
+		$snippet_content = wpautop($snippet_content);
+		$snippet_content = do_shortcode($snippet_content);		
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
 		//
@@ -2776,8 +2778,7 @@ function get_snippets ( $atts = [] ) {
 		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
 		$info .= '<h2 class="widget-title">'.$title.'</h2>';
 		$info .= '<div class="textwidget custom-html-widget">';
-		$info .= $snippet_content;
-		//$info .= wpautop($content);
+		$info .= $snippet_content;		
 		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
 		$info .= '</div>';
 		$info .= '</section>';
