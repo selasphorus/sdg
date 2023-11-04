@@ -2641,8 +2641,13 @@ function get_snippets ( $atts = [] ) {
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
 								//$field_key = $field['key'];
-								$field_key = 'field_6530630a97804'; // WIP get field key from key name?
+								// WIP/TODO: get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
+								if ( $key == 'target_by_url' ) {
+									$field_key = 'field_6530630a97804';
+								} else {
+									$field_key = 'field_65306bc897806';
+								}
 								if ( isset($v[$field_key]) ) {
 									$url = $v[$field_key];
 									// Trim trailing slash if any
