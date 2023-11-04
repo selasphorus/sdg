@@ -2648,10 +2648,10 @@ function get_snippets ( $atts = [] ) {
 									// Trim trailing slash if any
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
-									$snippet_logic_info .= "target_url: ".$url."<br />";
+									//$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
 									if ( $url == $current_path ) {
-										$snippet_logic_info .= "url matches current_path<br />";
+										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
 										if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
 											$post_snippets[] = $snippet_id;
 											$snippet_status = "active";
