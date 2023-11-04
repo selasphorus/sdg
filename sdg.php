@@ -2673,7 +2673,7 @@ function get_snippets ( $atts = [] ) {
 										$snippet_status = "inactive";
 										break;
 									} else {
-										$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
+										//$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
 									}
 								} else {
 									$snippet_logic_info .= "v: ".print_r($v, true)."<br />"; 
