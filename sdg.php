@@ -2634,7 +2634,7 @@ function get_snippets ( $atts = [] ) {
 							//if ( $permalink != $current_url ) { $current_url = $permalink; }
 							$current_path = parse_url($current_url, PHP_URL_PATH);
 							$snippet_logic_info .= "current_path: ".$current_path."<br />";
-							
+							/*
 							foreach ( $target_urls as $k => $v ) {
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
@@ -2673,7 +2673,8 @@ function get_snippets ( $atts = [] ) {
 									}
 								}
 							} // foreach ( $target_urls as $k => $v ) {
-						}
+							*/
+						} // if ( is_array($target_urls) && !empty($target_urls) ) {
 						
 					} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) { // TODO: simplify to single field
 						
