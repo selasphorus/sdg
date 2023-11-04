@@ -2689,13 +2689,16 @@ function get_snippets ( $atts = [] ) {
 						
 					} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) { // TODO: simplify to single field
 						
-						// WIP -- copy fcns from Widget Context customizations
+						// WIP
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
 						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
-							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
+							$post_snippets[] = $snippet_id;
 							$snippet_status = "active";
+							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
+							$snippet_logic_info .= "=> BREAK<br />";
+							break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the taxonomy terms<br />";
 							$snippet_status = "inactive";
@@ -2726,6 +2729,17 @@ function get_snippets ( $atts = [] ) {
 						$target_locations = get_field($key, $snippet_id, false);
 						// WIP
 						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
+						//
+						/*if ( ! empty( $target_locations ) && match_locations( $target_locations, $post_id ) ) {
+							$post_snippets[] = $snippet_id;
+							$snippet_status = "active";
+							$snippet_logic_info .= "This post matches the target_locations<br />";
+							$snippet_logic_info .= "=> BREAK<br />";
+							break;
+						} else {
+							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
+							$snippet_status = "inactive";
+						}*/
 						//
 					} else {
 						$snippet_logic_info .= "unmatched key: ".$key."<br />";
