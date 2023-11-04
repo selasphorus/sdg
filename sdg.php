@@ -2620,17 +2620,20 @@ function get_snippets ( $atts = [] ) {
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
-						// Get current page path and/or slug -- ??
-						//$post_id
+						
+						// Get current page path and/or slug
+						$permalink = get_the_permalink($post_id);
+						$snippet_logic_info .= "permalink: ".$permalink."<br />";
+						global $wp;
+						$current_url = home_url( add_query_arg( array(), $wp->request ) );
+						$snippet_logic_info .= "current_url: ".$current_url."<br />";
+						//
+						$current_path = parse_url($current_url, PHP_URL_PATH);
+						$snippet_logic_info .= "current_path: ".$current_path."<br />";
+						
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
-							$permalink = get_the_permalink($post_id);
-							$snippet_logic_info .= "permalink: ".$permalink."<br />";
-							global $wp;
-							$current_url = home_url( add_query_arg( array(), $wp->request ) );
-							$snippet_logic_info .= "current_url: ".$current_url."<br />";
-							$current_path = parse_url($current_url, PHP_URL_PATH);
-							$snippet_logic_info .= "current_path: ".$current_path."<br />";
+							
 							foreach ( $target_urls as $k => $v ) {
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
@@ -2643,27 +2646,32 @@ function get_snippets ( $atts = [] ) {
 									$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
 									if ( $url == $current_path ) {
-										$snippet_logic_info .= "url matches current_path<br />";
-									}
+										$snippet_logic_info .= "url matches current_path<br />";										
+										if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
+											$post_snippets[] = $snippet_id;
+											$snippet_status = "active";
+											$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
+											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+											$snippet_logic_info .= "=> BREAK<br />";
+											break;
+										} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
+											$post_snippets[] = $snippet_id;
+											$snippet_status = "active";
+											$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
+											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+											$snippet_logic_info .= "=> BREAK<br />";
+											break;
+										}
+										// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
+										// TODO: remove from post_snippets array, if it was previously added...
+										$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+										$snippet_status = "inactive";
+										break;								
+									} // END if ( $url == $current_path ) {
 								}
-								//...
 							}
 						}
-					
-						// Look for match in repeater field results array
-						//$snippet_status = "show";
-						/*if ( in_array($post_id, $target_posts) ) {
-							$snippet_logic_info .= "This post is in the target_posts array<br />";
-							// If it's for inclusion, add it to the array
-							if ( $key == 'target_by_post' ) {
-								if ( $any_all == "any" ) { $post_snippets[] = $snippet_id; break; }
-								// ?
-							}
-							// Whether by inclusion or exclusion, this condition is a deal-breaker, regardless of any/all, therefore break
-							break;
-						} else {
-							$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-						}*/
+						
 					} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) { // TODO: simplify to single field
 						
 						// WIP -- copy fcns from Widget Context customizations
@@ -2719,7 +2727,6 @@ function get_snippets ( $atts = [] ) {
 		
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-		
 		//
 		$snippet_info .= '</div>'; // <div class="troubleshooting">
 		$ts_info .= $snippet_info;
