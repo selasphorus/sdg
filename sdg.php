@@ -582,7 +582,9 @@ function sdg_selectively_dequeue_admin_scripts_and_styles() {
 }
 
 // Enable shortcodes in sidebar widgets
-add_filter( 'widget_text', 'shortcode_unautop' );
+if ( function_exists('is_dev_site') && !is_dev_site() ) {
+	add_filter( 'widget_text', 'shortcode_unautop' );
+}
 add_filter( 'widget_text', 'do_shortcode' );
 
 // ACF
@@ -1551,7 +1553,7 @@ function get_post_sidebar_widget ( $post_id = null ) {
     if ( empty($widget_title) ) { $widget_title = "More Resources"; }
     
     $widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
-    $widget_content = wpautop($widget_content);
+    //$widget_content = wpautop($widget_content);
     
     //$info .= "<!-- ACF post_sidebar_widget_content for post_id $post_id: ".print_r($sidebar_content,true)."-->";
 
