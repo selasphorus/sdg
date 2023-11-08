@@ -2689,7 +2689,7 @@ function get_snippets ( $atts = [] ) {
 						
 					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
 						
-						// WIP
+						// 
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
@@ -3274,7 +3274,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 /*** Copied from mods to WidgetContext ***/
 function match_terms( $rules, $post_id ) {
         
-	if ($post_id == null) { $post_id = get_the_ID(); }
+	if ($post_id == null) { 
+		$post_id = get_the_ID();
+		$post_type = get_post_type( $post_id );
+	}
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("divline2");
@@ -3361,8 +3364,13 @@ function match_terms( $rules, $post_id ) {
 				continue; // This is not actually a taxonomy rule; move on to the next.
 			}
 			
-			// Handle the matching based on the number and complexity of the rules
+			// Check to see if taxonomy even APPLIES to the given post before worrying about whether it matches a specific term in that taxonomy
+			$arr_taxonomies = get_post_taxonomies(); // get_post_taxonomies( $post_id );
+			if ( !in_array( $taxonomy, $arr_taxonomies ) ) {
+				continue;
+			}
 			
+			// Handle the matching based on the number and complexity of the rules
 			if ( $num_rules == 1 ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
