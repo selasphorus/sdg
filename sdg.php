@@ -2692,6 +2692,8 @@ function get_snippets ( $atts = [] ) {
 						// 
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						$arr_post_taxonomies = get_post_taxonomies();
+						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
 						
 						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
