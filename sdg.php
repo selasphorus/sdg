@@ -2694,14 +2694,28 @@ function get_snippets ( $atts = [] ) {
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
 						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
-							$post_snippets[] = $snippet_id;
-							$snippet_status = "active";
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
+							if ( $snippet_display == "selected" ) {
+								$post_snippets[] = $snippet_id;
+								$snippet_status = "active";
+							} else {
+								$snippet_status = "inactive";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+							}
 							$snippet_logic_info .= "=> BREAK<br />";
 							break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the taxonomy terms<br />";
-							$snippet_status = "inactive";
+							if ( $snippet_display == "selected" ) {
+								$snippet_status = "inactive";
+								$snippet_logic_info .= "=> BREAK<br />";
+								break;
+							} else {
+								$post_snippets[] = $snippet_id;
+								$snippet_status = "active";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
+							}
+							// break?							
 						}
 				
 						/*$terms = explode("\n",$$key);
