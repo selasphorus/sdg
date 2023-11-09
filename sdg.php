@@ -2420,7 +2420,7 @@ function get_snippets ( $atts = [] ) {
 	$post_snippets = array(); // this array will containing snippets matched for display on the given post
     
     $args = shortcode_atts( array(
-    	'post_id' => get_the_ID(),
+    	'post_id' => null,
 		'limit'   => -1,
         'run_updates'  => false,
         'dev' => false,
@@ -2439,15 +2439,20 @@ function get_snippets ( $atts = [] ) {
 	$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
-    // Get current page path and/or slug -- ??
-	// if is_single/is_singular/
-	//if ( $post_id === null ) { return false; } // ???
-	
+    
 	// Get post_type, if applicable
-	if ( $post_id ) {
+	if ( is_singular() ) { // is_single
+		$ts_info .= "is_singular<br />";
+		if ( $post_id === null ) { $post_id = get_the_ID(); }
 		$post_type = get_post_type( $post_id );
 	} else {
-		$post_type = "N/A";
+		$ts_info .= "NOT is_singular<br />";
+		$post_type = get_post_type( get_queried_object_id() );
+		//$post_type = "N/A";
+		if ( is_archive() ) {
+			// what kind of archive?
+			// WIP
+		}
 	}
 	$ts_info .= "post_type: $post_type<br />";
 		
