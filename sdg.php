@@ -2440,11 +2440,17 @@ function get_snippets ( $atts = [] ) {
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
     // Get current page path and/or slug -- ??
-	//$post_id
 	// if is_single/is_singular/
-	if ( $post_id === null ) { return false; } // ???
-	$post_type = get_post_type( $post_id );
+	//if ( $post_id === null ) { return false; } // ???
 	
+	// Get post_type, if applicable
+	if ( $post_id ) {
+		$post_type = get_post_type( $post_id );
+	} else {
+		$post_type = "N/A";
+	}
+	$ts_info .= "post_type: $post_type<br />";
+		
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
 	if ( $cs ) { $ts_info .= "cs: <pre>".print_r($cs, true)."</pre>"; }
@@ -2538,12 +2544,16 @@ function get_snippets ( $atts = [] ) {
 					
 					if ( $key == 'target_by_post_type' ) {
 						
-						// Is the given post of the matching type?
 						// WIP
-						// Is the current page singular, or some kind of archive?
-						if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
-						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
-						if ( is_singular() ) { $snippet_logic_info .= "current page is_singular<br />"; }
+						// This condition applies to singular posts only
+						// Is the current page singular?
+						if ( is_singular() ) {
+							$snippet_logic_info .= "current page is_singular<br />";
+						} else {
+							$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br />";
+							continue;
+						}
+						// Is the given post of the matching type?
 						//
 						$snippet_logic_info .= "post_type: [".$post_type."]<br />";
 						//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
@@ -2575,6 +2585,19 @@ function get_snippets ( $atts = [] ) {
 							}
 							$snippet_logic_info .= "=> continue<br />";
 						}
+					
+					} else if ( $key == 'target_by_post_type_archive' ) {
+					
+						// WIP
+						// This condition applies to archives only
+						// Is the current page some kind of archive?
+						if ( is_archive() ) {
+							$snippet_logic_info .= "current page is_archive<br />";
+						} else {
+							$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br />";
+							continue;
+						}
+						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
 						
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 					
