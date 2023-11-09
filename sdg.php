@@ -2452,12 +2452,10 @@ function get_snippets ( $atts = [] ) {
 		//post_type_archive_title();
 		if ( is_archive() ) {
 			// what kind of archive?
-			$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
-			$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
+			$ts_info .= "get_queried_object: ".get_queried_object()."<br />";
+			//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
+			//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			// WIP
-		} else if ( is_tax() ) {
-			$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
-			//get_the_archive_title
 		}
 	}
 	$ts_info .= "post_type: $post_type<br />";
