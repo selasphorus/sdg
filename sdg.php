@@ -2452,7 +2452,7 @@ function get_snippets ( $atts = [] ) {
 		//post_type_archive_title();
 		if ( is_archive() ) {
 			// what kind of archive?
-			$ts_info .= "get_queried_object: ".get_queried_object()."<br />";
+			$ts_info .= "get_queried_object: ".print_r(get_queried_object(),true)."<br />";
 			//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 			//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			// WIP
