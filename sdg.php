@@ -2537,11 +2537,22 @@ function get_snippets ( $atts = [] ) {
 					//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
 					
 					if ( $key == 'target_by_post_type' ) {
+						
 						// Is the given post of the matching type?
 						// WIP
-						$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
+						// Is the current page singular, or some kind of archive?
+						if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
+						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
+						if ( is_singular() ) { $snippet_logic_info .= "current page is_singular<br />"; }
 						//
 						$snippet_logic_info .= "post_type: [".$post_type."]<br />";
+						//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
+						$target_post_types = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_post_types: <pre>".print_r($target_post_types, true)."</pre><br />";
+						//
+						//
+						// WIP: stored values are not bare post types, but rather e.g. [Array ( [0] => is_archive-event [1] => is_singular-person [2] => is_singular-product ) ]
+						// => parse accordingly
 						//
 						//if ( $target_type && $post_type == $target_type ) {
 						if ( is_array($$key) && !empty($$key) && in_array($post_type, $$key) ) {
