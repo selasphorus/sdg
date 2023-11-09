@@ -2447,8 +2447,10 @@ function get_snippets ( $atts = [] ) {
 		$post_type = get_post_type( $post_id );
 	} else {
 		$ts_info .= "NOT is_singular<br />";
-		$post_type = get_post_type( get_queried_object_id() );
-		//$post_type = "N/A";
+		//$post_type = get_post_type( get_queried_object_id() );
+		$post_type = "N/A";
+		$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
+		//post_type_archive_title();
 		if ( is_archive() ) {
 			// what kind of archive?
 			// WIP
