@@ -2525,7 +2525,7 @@ function get_snippets ( $atts = [] ) {
 			// Conditional display -- determine whether the given post should display this widget		
 			$snippet_logic_info .= "<h3>Analysing display conditions...</h3>";
 		
-			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
 			foreach ( $meta_keys as $key ) {
 			
 				$$key = get_post_meta( $snippet_id, $key, true );
@@ -2689,7 +2689,6 @@ function get_snippets ( $atts = [] ) {
 						
 					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
 						
-						// 
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						$arr_post_taxonomies = get_post_taxonomies();
@@ -2738,6 +2737,40 @@ function get_snippets ( $atts = [] ) {
 								}
 							}
 						}
+						*/
+					
+					} else if ( $key == 'target_by_taxonomy_archive' ) {
+					
+						$target_taxonomies = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						
+						if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
+						if ( is_category() ) { $snippet_logic_info .= "current page is_category<br />"; }
+						if ( is_tag() ) { $snippet_logic_info .= "current page is_tag<br />"; }
+						if ( is_tax() ) { $snippet_logic_info .= "current page is_tax<br />"; }
+						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
+						//if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
+						// WIP -- to be processed by url/is_archive etc -- not by post id
+						/*
+						widget_logic e.g.:
+						is_front_page
+						is_home
+						is_singular == All posts, pages and custom post types
+						is_single
+						is_page
+						is_attachment => 1
+						is_search
+						is_404
+						is_archive
+						is_category == All category archives
+				
+						// Related WP functions
+						is_archive(): bool == Archive pages include category, tag, author, date, custom post type, and custom taxonomy based archives.
+						See also
+						is_author()
+						is_date()
+						//
+						is_singular( string|string[] $post_types = '' ): bool == Determines whether the query is for an existing single post of any post type (post, attachment, page, custom post types).
 						*/
 					
 					} else if ( $key == 'target_by_location' ) {
@@ -3276,10 +3309,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 /*** Copied from mods to WidgetContext ***/
 function match_terms( $rules, $post_id ) {
         
-	if ($post_id == null) { 
+    $ts_info = "";
+    
+	if ( $post_id == null ) { 
 		$post_id = get_the_ID();
-		$post_type = get_post_type( $post_id );
+		//$post_type = get_post_type( $post_id );
 	}
+	$ts_info .= "post_id: ".$post_id."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("divline2");
@@ -3307,6 +3343,8 @@ function match_terms( $rules, $post_id ) {
 	} else {
 		$match_type = 'any'; // Default: match any of the given terms
 	}
+	$ts_info .= "match_type: ".$match_type."<br />";
+	$ts_info .= "rules (str): ".$rules."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("rules (str): '".$rules."'");
@@ -3360,6 +3398,7 @@ function match_terms( $rules, $post_id ) {
 			if ( isset($rule['operator']) ) { $operator = $rule['operator']; } else { $operator = null; }
 			$exclusion = $rule['exclusion'];
 			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
+			$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion."<br />";
 			
 			if ( $taxonomy == 'match_type' || empty($taxonomy) ) {
 				//if ( function_exists('sdg_log') ) { sdg_log("match_type or empty >> continue"); }
@@ -3369,6 +3408,7 @@ function match_terms( $rules, $post_id ) {
 			// Check to see if taxonomy even APPLIES to the given post before worrying about whether it matches a specific term in that taxonomy
 			$arr_taxonomies = get_post_taxonomies(); // get_post_taxonomies( $post_id );
 			if ( !in_array( $taxonomy, $arr_taxonomies ) ) {
+				$ts_info .= "taxonomy '$taxonomy' does not apply => arr_taxonomies: ".print_r($arr_taxonomies,true)."<br />";
 				continue;
 			}
 			
@@ -3377,19 +3417,24 @@ function match_terms( $rules, $post_id ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'no' ) {
+						$ts_info .= "Match found (single rule; has_term; exclusion false) >> return true<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion false) >> return true"); }
-						return true; // post has term for single rule AND term is not negated, therefore it is a match
+						// WIP 231108
+						return $ts_info; //return true; // post has term for single rule AND term is not negated, therefore it is a match
 					} else {
+						$ts_info .= "Match found (single rule; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion TRUE) >> return false"); }
 						return false;
 					}                        
 				} else if ($exclusion == 'no') {
+					$ts_info .= "NO match found (single rule; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (single rule; NOT has_term; exclusion false) >> return false"); }
 					return false; // post has term but single rule requires posts withOUT that term, therefore no match
 				}
 				
 			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) { 
 				
+				$ts_info .= "Match found (match_type 'any'; has_term; exclusion false) >> return true<br />";
 				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
 				return true; // Match any => match found (no need to check remaining rules, if any)
 				
@@ -3397,12 +3442,15 @@ function match_terms( $rules, $post_id ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
+						$ts_info .= "Match found (match_type 'all'; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'all'; has_term; exclusion TRUE) >> return false"); }
 						return false; // post has the term but rules say it must NOT have this term
 					} else {
+						$ts_info .= "Ok so far! (match_type 'all'; has_term; exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
 					}
-				} else if ( $exclusion == 'no' ){
+				} else if ( $exclusion == 'no' ) {
+					$ts_info .= "NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false"); }
 					return false; // post does not have the term and rules require it must match all
 				}
@@ -3411,13 +3459,16 @@ function match_terms( $rules, $post_id ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
+						$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false"); }
 						return false; // post has the term but rules say it must NOT have this term
 					} else {
+						$ts_info .= "Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue"); }
 						$matches_found++;
 					}
-				} else if ( $exclusion == 'no' ){
+				} else if ( $exclusion == 'no' ) {
+					$ts_info .= "NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false (?)<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false"); }
 					//return false; // post does not have the term and rules require it must match all
 				}
