@@ -2457,6 +2457,9 @@ function get_snippets ( $atts = [] ) {
 			if ( is_tax() ) {
 				$tax = $object->taxonomy;
 				$ts_info .= "tax: ".$tax."<br />";
+				$tax_obj = get_taxonomy($tax);
+				$tax_post_types = $tax_obj->object_type;
+				$ts_info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
 			}
 			//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 			//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
