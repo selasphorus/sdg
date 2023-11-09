@@ -2694,6 +2694,7 @@ function get_snippets ( $atts = [] ) {
 						$arr_post_taxonomies = get_post_taxonomies();
 						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
 						
+						// TODO: simplify this logic
 						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
@@ -2744,14 +2745,34 @@ function get_snippets ( $atts = [] ) {
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
+						if ( is_tax() ) {
+							// If this is a taxonomy archive AND target_taxonomies are set, check for a match
+							$snippet_logic_info .= "current page is_tax<br />";
+							if ( !empty($target_taxonomies) ) {
+								foreach ( $target_taxonomies as $taxonomy ) {
+									if ( is_tax($taxonomy) ) {
+										$snippet_logic_info .= "This post is_tax archive for taxonomy: $taxonomy<br />";
+										if ( $snippet_display == "selected" ) {
+											$snippet_status = "active";
+											$snippet_logic_info .= "=> BREAK<br />";
+											break;
+										} else {
+											$post_snippets[] = $snippet_id;
+											$snippet_status = "inactive";
+											$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
+										}
+									}
+								}
+							}
+						}
+						/*
 						if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
 						if ( is_category() ) { $snippet_logic_info .= "current page is_category<br />"; }
 						if ( is_tag() ) { $snippet_logic_info .= "current page is_tag<br />"; }
-						if ( is_tax() ) { $snippet_logic_info .= "current page is_tax<br />"; }
 						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
 						//if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
 						// WIP -- to be processed by url/is_archive etc -- not by post id
-						/*
+						
 						widget_logic e.g.:
 						is_front_page
 						is_home
@@ -3171,6 +3192,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					foreach ( $conditions as $condition => $value ) {
 						//$key_ts_info .= "condition: $condition => $value<br />";
 						if ( strpos($condition, 'is_tax') !== false ) {
+							// get rid of the is_tax- prefix before saving
+							$condition = substr($condition,strlen('is_tax-'));
 							$tax_conditions[] = $condition;
 						} else {
 							$cpt_conditions[] = $condition;
