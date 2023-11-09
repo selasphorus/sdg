@@ -2453,6 +2453,7 @@ function get_snippets ( $atts = [] ) {
 		if ( is_archive() ) {
 			// what kind of archive?
 			$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
+			$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 			// WIP
 		} else if ( is_tax() ) {
 			$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
