@@ -2753,7 +2753,7 @@ function get_snippets ( $atts = [] ) {
 						//$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
 						
 						// TODO: simplify this logic
-						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
+						if ( match_terms( $target_taxonomies, $post_id ) ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
 								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
@@ -2850,7 +2850,7 @@ function get_snippets ( $atts = [] ) {
 					$snippet_logic_info .= "<br />";
 					
 				} else {
-					$snippet_logic_info .= "key: $key => [empty]<br />";
+					$snippet_logic_info .= "key: $key => [empty]<br /><br />";
 				}
 			}
 		
