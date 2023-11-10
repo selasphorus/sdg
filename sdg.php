@@ -3358,7 +3358,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
 			
 				//
-				$key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; // tax_pairs => conditions			
+				if ( $conditions ) { $key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; } // tax_pairs => conditions			
 				//.... WIP 231101
 					
 				// WIP -- TODO: use fcns copied from WidgetContext customizations to split pairs into array and compare/merge etc
