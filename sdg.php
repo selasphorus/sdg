@@ -2754,7 +2754,7 @@ function get_snippets ( $atts = [] ) {
 						
 						// TODO: simplify this logic
 						if ( match_terms( $target_taxonomies, $post_id ) ) { // ! empty( $target_taxonomies ) && 
-							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
+							$snippet_logic_info .= "This post matches the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
 								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
@@ -2766,7 +2766,7 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "=> BREAK<br />";
 							break;
 						} else {
-							$snippet_logic_info .= "This post does NOT match the taxonomy terms<br />";
+							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
 								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
@@ -2785,14 +2785,14 @@ function get_snippets ( $atts = [] ) {
 					} else if ( $key == 'target_by_taxonomy_archive' ) {
 					
 						$target_taxonomies = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						//$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						
 						if ( is_tax() ) {
 							// If this is a taxonomy archive AND target_taxonomies are set, check for a match
 							$snippet_logic_info .= "current page is_tax<br />";
 							foreach ( $target_taxonomies as $taxonomy ) {
 								if ( is_tax($taxonomy) ) {
-									$snippet_logic_info .= "This post is_tax archive for taxonomy: $taxonomy<br />";
+									$snippet_logic_info .= "This post is_tax archive for target taxonomy: $taxonomy<br />";
 									if ( $snippet_display == "selected" ) {
 										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 										$snippet_status = "active";
