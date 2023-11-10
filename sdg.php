@@ -3254,8 +3254,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 							// get rid of the is_singular- prefix before saving
 							$condition = substr($condition,strlen('is_singular-'));
 							$cpt_conditions[] = $condition;
-						}				
+						} else {
+							$key_ts_info .= "uncategorized condition: $condition<br />";
+						}			
 					}
+					$key_ts_info .= "tax_conditions: ".print_r($tax_conditions, true)."<br />";
+					$key_ts_info .= "cpt_archive_conditions: ".print_r($cpt_archive_conditions, true)."<br />";
+					$key_ts_info .= "cpt_conditions: ".print_r($cpt_conditions, true)."<br />";
 					
 					// CPT conditions
 					$existing_cpt_conditions = get_field( 'target_by_post_type', $snippet_id );
