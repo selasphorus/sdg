@@ -2675,7 +2675,7 @@ function get_snippets ( $atts = [] ) {
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
 						
-							$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
+							//$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br />";
 						
 							// Get current page path and/or slug
 							global $wp;
@@ -2734,6 +2734,7 @@ function get_snippets ( $atts = [] ) {
 									$snippet_logic_info .= "v: ".print_r($v, true)."<br />"; 
 								}
 							} // foreach ( $target_urls as $k => $v ) {
+							$snippet_logic_info .= "current_path not targeted<br />";
 							
 						} // if ( is_array($target_urls) && !empty($target_urls) ) {
 						
