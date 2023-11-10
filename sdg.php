@@ -3241,7 +3241,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$updated_tax_conditions = array();
 					
 					foreach ( $conditions as $condition => $value ) {
-						//$key_ts_info .= "condition: $condition => $value<br />";
+						$key_ts_info .= "condition: $condition => $value<br />";
 						if ( strpos($condition, 'is_tax') !== false ) {
 							// get rid of the is_tax- prefix before saving
 							$condition = substr($condition,strlen('is_tax-'));
@@ -3255,7 +3255,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$condition = substr($condition,strlen('is_singular-'));
 							$cpt_conditions[] = $condition;
 						} else {
-							$key_ts_info .= "uncategorized condition: $condition<br />";
+							$key_ts_info .= "uncategorized condition: $condition [$value]<br />";
 						}			
 					}
 					$key_ts_info .= "tax_conditions: ".print_r($tax_conditions, true)."<br />";
