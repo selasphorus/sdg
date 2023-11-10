@@ -2594,7 +2594,7 @@ function get_snippets ( $atts = [] ) {
 						//
 						//if ( $target_type && $post_type == $target_type ) {
 						if ( is_array($target_post_types) && !empty($target_post_types) && in_array($post_type, $target_post_types) ) {
-							$snippet_logic_info .= "Current post_type [$post_type] is in target post_types array.<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
+							$snippet_logic_info .= "Current post_type [$post_type] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $snippet_display == "selected" && $any_all == "any" ) {
@@ -2605,7 +2605,9 @@ function get_snippets ( $atts = [] ) {
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $snippet_display == "notselected" ) {
-							
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$snippet_status = "inactive";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
 							}
 						} else {
 							if ( empty($$key) ) {
