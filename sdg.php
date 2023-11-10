@@ -2768,8 +2768,10 @@ function get_snippets ( $atts = [] ) {
 							if ( $snippet_display == "selected" ) {
 								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= "=> BREAK<br />";
-								break;
+								if ( $any_all == "all" ) {
+									$snippet_logic_info .= "=> BREAK<br />";
+									break;								
+								}
 							} else {
 								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
