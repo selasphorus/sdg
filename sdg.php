@@ -2453,7 +2453,9 @@ function get_snippets ( $atts = [] ) {
 		if ( is_archive() ) {
 			// what kind of archive?
 			$object = get_queried_object();
-			$ts_info .= "get_queried_object: ".print_r($object,true)."<br />";
+			$object_class = get_class($object);
+			//$ts_info .= "get_queried_object: ".print_r($object,true)."<br />";
+			$ts_info .= "get_queried_object class: ".$object_class."<br />";
 			if ( is_tax() ) {
 				$tax = $object->taxonomy;
 				$ts_info .= "tax: ".$tax."<br />";
@@ -2461,6 +2463,8 @@ function get_snippets ( $atts = [] ) {
 				$tax_post_types = $tax_obj->object_type;
 				$ts_info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
 				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
+			} else if ( is_archive() ) {
+				$ts_info .= "is_archive<br />";
 			} else {
 				//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 				//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
