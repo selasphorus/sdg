@@ -2863,9 +2863,16 @@ function get_snippets ( $atts = [] ) {
 							$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 							$snippet_status = "active";
 							$snippet_logic_info .= "This post matches the target_locations<br />";
-							// selected/notselected
-							$snippet_logic_info .= "=> BREAK<br />";
-							break;
+							if ( $snippet_display == "selected" ) {
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$snippet_status = "active";
+								$snippet_logic_info .= "=> BREAK<br />";
+								break;
+							} else {
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$snippet_status = "inactive";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
+							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
 							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
