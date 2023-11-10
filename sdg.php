@@ -2841,7 +2841,7 @@ function get_snippets ( $atts = [] ) {
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
 							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-							$snippet_status = "inactive";
+							if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; }
 						}
 						//
 					} else {
