@@ -2654,7 +2654,7 @@ function get_snippets ( $atts = [] ) {
 								break;
 							}
 							// Snippet is inactive -- is in array, and either selected/excluded or notselected/targeted
-							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
 							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
 							$snippet_status = "inactive"; // ???
@@ -2667,9 +2667,11 @@ function get_snippets ( $atts = [] ) {
 							} else {
 								//???
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
-								//$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-								if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; }
+								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; 
+								if ( $snippet_display == "selected" ) {
+									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+									$snippet_status = "inactive";
+								}
 							}
 							$snippet_logic_info .= "=> continue<br />";
 						}
@@ -2774,10 +2776,11 @@ function get_snippets ( $atts = [] ) {
 									$snippet_logic_info .= "=> BREAK<br />";
 									break;								
 								}
-							} else {
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
-								$snippet_status = "active";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
+							} else if ( $snippet_display == "notselected" ) {
+								// WIP
+								//$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								//$snippet_status = "active";
+								//$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
 							}
 							// break?							
 						}
