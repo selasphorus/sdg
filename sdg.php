@@ -2471,6 +2471,7 @@ function get_snippets ( $atts = [] ) {
 			} else if ( is_post_type_archive() ) {
 				$ts_info .= "is_post_type_archive: ";
 				$ts_info .= post_type_archive_title("",false)."<br />";
+				// WIP
 			} else {
 				//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 				//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
@@ -2568,7 +2569,7 @@ function get_snippets ( $atts = [] ) {
 				$snippet_status = "active";
 			}
 		
-			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_post_type_archive, ''target_by_location' );
 			foreach ( $meta_keys as $key ) {
 			
 				$$key = get_post_meta( $snippet_id, $key, true );
