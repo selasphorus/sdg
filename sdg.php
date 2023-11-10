@@ -2962,7 +2962,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-			if ( !is_array($$key) ) {
+			if ( !is_array($$key) && strpos($key, '{') !== false ) {
 				$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
