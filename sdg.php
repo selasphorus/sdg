@@ -2465,7 +2465,8 @@ function get_snippets ( $atts = [] ) {
 				$ts_info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
 				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
 			} else if ( is_post_type_archive() ) {
-				$ts_info .= "is_post_type_archive<br />";
+				$ts_info .= "is_post_type_archive: ";
+				$ts_info .= post_type_archive_title("",false)."<br />";
 			} else {
 				//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
 				//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
