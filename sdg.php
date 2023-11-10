@@ -2874,8 +2874,7 @@ function get_snippets ( $atts = [] ) {
 					$snippet_logic_info .= "<br />";
 					
 				} else {
-					$snippet_logic_info .= "key: $key =><br />";//$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
-					$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
+					$snippet_logic_info .= "key: $key => [empty]<br />";
 				}
 			}
 		
