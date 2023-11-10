@@ -2956,7 +2956,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
-				$key_ts_info .= "unserialized key: $key => ".$$key."<br />";
+				$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
 			}	
 				
 			// Clean up legacy field values
