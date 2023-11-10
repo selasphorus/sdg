@@ -2608,7 +2608,7 @@ function get_snippets ( $atts = [] ) {
 						
 						// Is the given post of the matching type?
 						$target_post_types = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_post_types: <pre>".print_r($target_post_types, true)."</pre><br />";
+						//$snippet_logic_info .= "target_post_types: <pre>".print_r($target_post_types, true)."</pre><br />";
 						//
 						//
 						// WIP: stored values are not bare post types, but rather e.g. [Array ( [0] => is_archive-event [1] => is_singular-person [2] => is_singular-product ) ]
@@ -2616,7 +2616,7 @@ function get_snippets ( $atts = [] ) {
 						//
 						//if ( $target_type && $post_type == $target_type ) {
 						if ( is_array($target_post_types) && in_array($post_type, $target_post_types) ) {
-							$snippet_logic_info .= "Current post_type [$post_type] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
+							$snippet_logic_info .= "current post_type [$post_type] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $snippet_display == "selected" && $any_all == "any" ) {
