@@ -2849,12 +2849,14 @@ function get_snippets ( $atts = [] ) {
 						$current_locations = array();
 						foreach ( $locations as $location ) {
 							if ( $location() ) {
-								$snippet_logic_info .= "current page/post ".$location."<br />";
+								//$snippet_logic_info .= "current page/post ".$location."<br />";
 								$current_locations[] = $location;
 							}
 						}
 						// WIP 231110
 						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
+						$snippet_logic_info .= "current_locations: ".print_r($current_locations, true)."<br />";
+						if ( count($current_locations) == 1 ) { $current_location = $current_locations[0]; } else { $current_location = "multiple"; } // wip
 						//
 						if ( in_array($current_location, $target_locations) ) {
 						//if ( match_locations( $target_locations, $post_id ) ) {
