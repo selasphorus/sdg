@@ -2957,6 +2957,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
 				$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
+				// WIP 231109
 			}	
 				
 			// Clean up legacy field values
@@ -2972,7 +2973,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$conditions = explode("\n",$$key);
 						
 			} else {
+			
 				$conditions = $$key;
+				
 			}
 			
 			//
@@ -3241,6 +3244,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// If this is the widget_logic version of the field, update our new target_by_post_type field
 				if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				
+					// WIP 231109
+					$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
+					//
 					$cpt_conditions = array();
 					$cpt_archive_conditions = array();
 					$tax_conditions = array();
