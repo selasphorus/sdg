@@ -2951,9 +2951,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "<strong>key: $key</strong><br />";
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
-			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-			if ( !is_array($$key) ) { $$key = unserialize($$key); }	
-				
 			// Clean up legacy field values
 			if ( !is_array($$key) && strpos($key, 'widget_logic_') !== false ) {
 			
@@ -3236,6 +3233,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// If this is the widget_logic version of the field, update our new target_by_post_type field
 				if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				
+					// Unserialize as needed
+					if ( !is_array($conditions) ) { $conditions = unserialize($conditions); }	
+			
 					$cpt_conditions = array();
 					$cpt_archive_conditions = array();
 					$tax_conditions = array();
