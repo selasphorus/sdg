@@ -2951,7 +2951,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "<strong>key: $key</strong><br />";
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
-			
+			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
+			if ( !is_array($$key) ) { $$key = unserialize($$key); }	
+				
 			// Clean up legacy field values
 			if ( !is_array($$key) && strpos($key, 'widget_logic_') !== false ) {
 			
@@ -2962,10 +2964,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				update_field( $key, $$key, $snippet_id );
 			
 				// Turn the text into an array of conditions
-				$conditions = explode("\n",$$key);	
-				
-				// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-				if ( !is_array($$key) ) { $$key = unserialize($$key); }	
+				$conditions = explode("\n",$$key);
 						
 			} else {
 				$conditions = $$key;
