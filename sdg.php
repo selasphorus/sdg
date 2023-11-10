@@ -2953,8 +2953,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
 			if ( !is_array($$key) ) {
+				$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
+				$key_ts_info .= "unserialized key: $key => ".$$key."<br />";
 			}	
 				
 			// Clean up legacy field values
