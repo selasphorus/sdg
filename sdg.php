@@ -2463,7 +2463,7 @@ function get_snippets ( $atts = [] ) {
 				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
 			} else {
 				$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
-				$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
+				//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			}
 			// WIP
 		}
@@ -2528,7 +2528,7 @@ function get_snippets ( $atts = [] ) {
 		$snippet_info .= ']<br />';
 		
 		// Run updates?
-		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>'; }
+		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic( $snippet_id ).'</div>'; }
 		
 		// TMP during transition?
 		// TODO: add snippet status field?
