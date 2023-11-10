@@ -2555,6 +2555,7 @@ function get_snippets ( $atts = [] ) {
 				$snippet_status = "inactive";
 			} else if ( $snippet_display == "notselected" ) {
 				$snippet_status = "active";
+				$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 			}
 		
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
@@ -2893,7 +2894,7 @@ function get_snippets ( $atts = [] ) {
 			}
 		
 		}
-		
+		$snippet_logic_info .= "<hr />";
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		//
