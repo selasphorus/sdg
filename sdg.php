@@ -2594,7 +2594,7 @@ function get_snippets ( $atts = [] ) {
 						} else {
 							// This condition applies to archives only
 							// Is the current page some kind of archive?
-							if ( !is_archive() ) {
+							if ( is_archive() ) {
 								$snippet_logic_info .= "current page is_archive<br />";
 							} else {
 								$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br /><br />";
