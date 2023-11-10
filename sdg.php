@@ -2802,11 +2802,11 @@ function get_snippets ( $atts = [] ) {
 									if ( is_tax($taxonomy) ) {
 										$snippet_logic_info .= "This post is_tax archive for taxonomy: $taxonomy<br />";
 										if ( $snippet_display == "selected" ) {
+											$post_snippets[] = $snippet_id;
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> BREAK<br />";
 											break;
 										} else {
-											$post_snippets[] = $snippet_id;
 											$snippet_status = "inactive";
 											$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
 										}
@@ -2879,6 +2879,9 @@ function get_snippets ( $atts = [] ) {
 		$snippet_info .= '</div>'; // <div class="troubleshooting">
 		$ts_info .= $snippet_info;
     }
+    
+    // Make sure there are no duplicates in the post_snippets array
+    $post_snippets = array_unique($post_snippets); // SORT_REGULAR
 	
 	// If returning array of IDs, finish here
 	if ( $return == "ids" ) { return $post_snippets; }
@@ -2981,6 +2984,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//
 			//if ( !is_array($conditions) ) { continue; }
 			// TODO: fine-tune sorting in case of multidimensional or associative arrays(?)
+			// TODO: run the following ONLY for one-dimensional non-associative arrays 
 			//if ( is_array($conditions) ) { sort($conditions); }
 			
 			//$key_ts_info .= count($conditions)." condition(s)<br />";
