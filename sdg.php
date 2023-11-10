@@ -2540,7 +2540,7 @@ function get_snippets ( $atts = [] ) {
 			
 		} else if ( $snippet_display == "show" ) {
 		
-			$post_snippets[] = $snippet_id;
+			$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 			$snippet_status = "active";
 			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
 			$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
@@ -2598,7 +2598,7 @@ function get_snippets ( $atts = [] ) {
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $any_all == "any" ) {
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
@@ -2624,14 +2624,14 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" && 
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_post/selected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
@@ -2639,8 +2639,8 @@ function get_snippets ( $atts = [] ) {
 								break;
 							}
 							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
-							// TODO: remove from post_snippets array, if it was previously added...
 							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 							$snippet_status = "inactive";
 							break;
 							
@@ -2649,16 +2649,19 @@ function get_snippets ( $atts = [] ) {
 							if ( empty($target_posts) ) {
 								$snippet_logic_info .= "The target_posts array is empty.<br />";
 							} else {
+								//???
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
+								//$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
 							}
 							$snippet_logic_info .= "=> continue<br />";
 							
 							/*if ( $snippet_display == "selected" ) {
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
 							} else if ( $snippet_display == "notselected" ) {
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
@@ -2707,14 +2710,14 @@ function get_snippets ( $atts = [] ) {
 									if ( $url == $current_path ) {
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
 										if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
-											$post_snippets[] = $snippet_id;
+											$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
 											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 											$snippet_logic_info .= "=> BREAK<br />";
 											break;
 										} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
-											$post_snippets[] = $snippet_id;
+											$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
 											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
@@ -2722,8 +2725,8 @@ function get_snippets ( $atts = [] ) {
 											break;
 										}
 										// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
-										// TODO: remove from post_snippets array, if it was previously added...
 										$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+										$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 										$snippet_status = "inactive";
 										break;
 									} else {
@@ -2747,9 +2750,10 @@ function get_snippets ( $atts = [] ) {
 						if ( ! empty( $target_taxonomies ) && match_terms( $target_taxonomies, $post_id ) ) {
 							$snippet_logic_info .= "This post matches the taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 							} else {
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
 							}
@@ -2758,11 +2762,12 @@ function get_snippets ( $atts = [] ) {
 						} else {
 							$snippet_logic_info .= "This post does NOT match the taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else {
-								$post_snippets[] = $snippet_id;
+								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
 							}
@@ -2783,6 +2788,7 @@ function get_snippets ( $atts = [] ) {
 									$snippet_status = "active";
 								} else {
 									$snippet_logic_info .= "This post does NOT have the $taxonomy term '$tax_term'<br />";
+									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 									$snippet_status = "inactive";
 								}
 							}
@@ -2802,11 +2808,12 @@ function get_snippets ( $atts = [] ) {
 									if ( is_tax($taxonomy) ) {
 										$snippet_logic_info .= "This post is_tax archive for taxonomy: $taxonomy<br />";
 										if ( $snippet_display == "selected" ) {
-											$post_snippets[] = $snippet_id;
+											$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 											$snippet_status = "active";
 											$snippet_logic_info .= "=> BREAK<br />";
 											break;
 										} else {
+											$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 											$snippet_status = "inactive";
 											$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
 										}
@@ -2850,13 +2857,14 @@ function get_snippets ( $atts = [] ) {
 						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
 						//
 						/*if ( ! empty( $target_locations ) && match_locations( $target_locations, $post_id ) ) {
-							$post_snippets[] = $snippet_id;
+							$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 							$snippet_status = "active";
 							$snippet_logic_info .= "This post matches the target_locations<br />";
 							$snippet_logic_info .= "=> BREAK<br />";
 							break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
+							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 							$snippet_status = "inactive";
 						}*/
 						//
