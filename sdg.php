@@ -2549,6 +2549,13 @@ function get_snippets ( $atts = [] ) {
 		
 			// Conditional display -- determine whether the given post should display this widget		
 			$snippet_logic_info .= "<h3>Analysing display conditions...</h3>";
+			
+			// Set default snippet status for show on selected vs hide on selected
+			if ( $snippet_display == "selected" ) {
+				$snippet_status = "inactive";
+			} else if ( $snippet_display == "notselected" ) {
+				$snippet_status = "active";
+			}
 		
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
 			foreach ( $meta_keys as $key ) {
@@ -2642,10 +2649,11 @@ function get_snippets ( $atts = [] ) {
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							}
-							// Snippet is inactive -- in array, and either selected/excluded or notselected/targeted
+							// Snippet is inactive -- is in array, and either selected/excluded or notselected/targeted
 							$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
 							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-							$snippet_status = "inactive";
+							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
+							$snippet_status = "inactive"; // ???
 							break;
 							
 						} else {
@@ -2657,7 +2665,7 @@ function get_snippets ( $atts = [] ) {
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; // <br />
 								//$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-								$snippet_status = "inactive";
+								if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; }
 							}
 							$snippet_logic_info .= "=> continue<br />";
 							
