@@ -2577,7 +2577,7 @@ function get_snippets ( $atts = [] ) {
 							if ( is_singular() ) {
 								$snippet_logic_info .= "current page is_singular<br />";
 							} else {
-								$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br />";
+								$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br /><br />";
 								continue;
 							}						
 						} else {
@@ -2586,7 +2586,7 @@ function get_snippets ( $atts = [] ) {
 							if ( !is_archive() ) {
 								$snippet_logic_info .= "current page is_archive<br />";
 							} else {
-								$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br />";
+								$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br /><br />";
 								continue;
 							}
 							if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
@@ -2627,7 +2627,7 @@ function get_snippets ( $atts = [] ) {
 						if ( is_singular() ) {
 							$snippet_logic_info .= "current page is_singular<br />";
 						} else {
-							$snippet_logic_info .= "current page NOT is_singular >> $key does not apply<br />";
+							$snippet_logic_info .= "current page NOT is_singular >> $key does not apply<br /><br />";
 							continue;
 						}
 							
