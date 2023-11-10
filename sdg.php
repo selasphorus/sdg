@@ -2460,9 +2460,11 @@ function get_snippets ( $atts = [] ) {
 				$tax_obj = get_taxonomy($tax);
 				$tax_post_types = $tax_obj->object_type;
 				$ts_info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
+				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
+			} else {
+				$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
+				$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			}
-			//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
-			//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			// WIP
 		}
 	}
@@ -2559,21 +2561,30 @@ function get_snippets ( $atts = [] ) {
 					$snippet_logic_info .= "key: $key =><br />";//$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
 					//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
 					
-					if ( $key == 'target_by_post_type' ) {
+					if ( ( $key == 'target_by_post_type' && $post_type != "N/A" ) || $key == 'target_by_post_type_archive') {
 						
-						// WIP
-						// This condition applies to singular posts only
-						// Is the current page singular?
-						if ( is_singular() ) {
-							$snippet_logic_info .= "current page is_singular<br />";
+						if ( $key == 'target_by_post_type' ) {
+							// This condition applies to singular posts only
+							// Is the current page singular?
+							if ( is_singular() ) {
+								$snippet_logic_info .= "current page is_singular<br />";
+							} else {
+								$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br />";
+								continue;
+							}						
 						} else {
-							$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br />";
-							continue;
+							// This condition applies to archives only
+							// Is the current page some kind of archive?
+							if ( !is_archive() ) {
+								$snippet_logic_info .= "current page is_archive<br />";
+							} else {
+								$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br />";
+								continue;
+							}
+							if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
 						}
+						
 						// Is the given post of the matching type?
-						//
-						$snippet_logic_info .= "post_type: [".$post_type."]<br />";
-						//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
 						$target_post_types = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_post_types: <pre>".print_r($target_post_types, true)."</pre><br />";
 						//
@@ -2582,7 +2593,7 @@ function get_snippets ( $atts = [] ) {
 						// => parse accordingly
 						//
 						//if ( $target_type && $post_type == $target_type ) {
-						if ( is_array($$key) && !empty($$key) && in_array($post_type, $$key) ) {
+						if ( is_array($target_post_types) && !empty($target_post_types) && in_array($post_type, $target_post_types) ) {
 							$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
@@ -2603,19 +2614,6 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "=> continue<br />";
 						}
 					
-					} else if ( $key == 'target_by_post_type_archive' ) {
-					
-						// WIP
-						// This condition applies to archives only
-						// Is the current page some kind of archive?
-						if ( is_archive() ) {
-							$snippet_logic_info .= "current page is_archive<br />";
-						} else {
-							$snippet_logic_info .= "current page NOT is_archive >> target_by_post_type_archive does not apply<br />";
-							continue;
-						}
-						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
-						
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 					
 						// Is the given post targetted or excluded?
@@ -3236,8 +3234,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				
 					$cpt_conditions = array();
+					$cpt_archive_conditions = array();
 					$tax_conditions = array();
 					$updated_cpt_conditions = array();
+					$updated_cpt_archive_conditions = array();
 					$updated_tax_conditions = array();
 					
 					foreach ( $conditions as $condition => $value ) {
@@ -3246,7 +3246,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 							// get rid of the is_tax- prefix before saving
 							$condition = substr($condition,strlen('is_tax-'));
 							$tax_conditions[] = $condition;
-						} else {
+						} else if ( strpos($condition, 'is_archive') !== false ) {
+							// get rid of the is_archive- prefix before saving
+							$condition = substr($condition,strlen('is_archive-'));
+							$cpt_archive_conditions[] = $condition;
+						} else if ( strpos($condition, 'is_singular') !== false ) {
+							// get rid of the is_singular- prefix before saving
+							$condition = substr($condition,strlen('is_singular-'));
 							$cpt_conditions[] = $condition;
 						}				
 					}
@@ -3269,6 +3275,27 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$key_ts_info .= "updated field `target_by_post_type` for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field `target_by_post_type` for snippet_id: $snippet_id<br />";
+						}
+					}
+					
+					// CPT Archive conditions
+					$existing_cpt_archive_conditions = get_field( 'target_by_post_type_archive', $snippet_id );
+					if ( empty($existing_cpt_archive_conditions) ) {
+						$key_ts_info .= "No existing_cpt_archive_conditions => update `target_by_post_type_archive` with widget_logic cpt_archive_conditions<br />";
+						$updated_cpt_archive_conditions = $cpt_archive_conditions;
+					} else if ( $existing_cpt_archive_conditions == $cpt_archive_conditions ) {
+						$key_ts_info .= "existing_cpt_archive_conditions in `target_by_post_type_archive` field same as widget_logic cpt_archive_conditions => no update needed<br />";
+					} else {
+						// Merge the arrays
+						$updated_cpt_archive_conditions = array_unique(array_merge($existing_cpt_archive_conditions, $cpt_archive_conditions));
+					}
+					//
+					if ( $updated_cpt_archive_conditions ) {							
+						$key_ts_info .= "updated_cpt_archive_conditions: ".print_r($updated_cpt_archive_conditions, true)."<br />";
+						if ( update_field( 'target_by_post_type_archive', $updated_cpt_archive_conditions, $snippet_id ) ) {
+							$key_ts_info .= "updated field `target_by_post_type_archive` for snippet_id: $snippet_id<br />";
+						} else {
+							$key_ts_info .= "update FAILED for field `target_by_post_type_archive` for snippet_id: $snippet_id<br />";
 						}
 					}
 					
