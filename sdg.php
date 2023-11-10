@@ -2981,7 +2981,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//
 			//if ( !is_array($conditions) ) { continue; }
 			// TODO: fine-tune sorting in case of multidimensional or associative arrays(?)
-			if ( is_array($conditions) ) { sort($conditions); }
+			//if ( is_array($conditions) ) { sort($conditions); }
 			
 			//$key_ts_info .= count($conditions)." condition(s)<br />";
 			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
