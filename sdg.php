@@ -2952,7 +2952,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-			$$key = unserialize($$key); //if ( !is_array($$key) ) { $$key = unserialize($$key); }	
+			if ( !is_array($$key) ) {
+				$key_ts_info .= "unserialize...<br >";
+				$$key = unserialize($$key);
+			}	
 				
 			// Clean up legacy field values
 			if ( !is_array($$key) && strpos($key, 'widget_logic_') !== false ) {
