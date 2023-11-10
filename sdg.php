@@ -2837,51 +2837,38 @@ function get_snippets ( $atts = [] ) {
 							}
 						}
 						/*
-						if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
 						if ( is_category() ) { $snippet_logic_info .= "current page is_category<br />"; }
 						if ( is_tag() ) { $snippet_logic_info .= "current page is_tag<br />"; }
 						if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
-						//if ( is_archive() ) { $snippet_logic_info .= "current page is_archive<br />"; }
-						// WIP -- to be processed by url/is_archive etc -- not by post id
-						
-						widget_logic e.g.:
-						is_front_page
-						is_home
-						is_singular == All posts, pages and custom post types
-						is_single
-						is_page
-						is_attachment => 1
-						is_search
-						is_404
-						is_archive
-						is_category == All category archives
-				
-						// Related WP functions
-						is_archive(): bool == Archive pages include category, tag, author, date, custom post type, and custom taxonomy based archives.
-						See also
-						is_author()
-						is_date()
-						//
-						is_singular( string|string[] $post_types = '' ): bool == Determines whether the query is for an existing single post of any post type (post, attachment, page, custom post types).
 						*/
 					
 					} else if ( $key == 'target_by_location' ) {
-						// Is the given post in the right site location?
+						// Is the given post/page in the right site location?
 						$target_locations = get_field($key, $snippet_id, false);
-						// WIP
+						$locations = array( 'is_home', 'is_single', 'is_page', 'is_archive', 'is_search', 'is_attachment', 'is_category', 'is_tag' ); // is_singular
+						$current_locations = array();
+						foreach ( $locations as $location ) {
+							if ( $location() ) {
+								$snippet_logic_info .= "current page/post ".$location."<br />";
+								$current_locations[] = $location;
+							}
+						}
+						// WIP 231110
 						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
 						//
-						/*if ( ! empty( $target_locations ) && match_locations( $target_locations, $post_id ) ) {
+						if ( in_array($current_location, $target_locations) ) {
+						//if ( match_locations( $target_locations, $post_id ) ) {
 							$post_snippets[] = $snippet_id; // add the item to the post_snippets array
 							$snippet_status = "active";
 							$snippet_logic_info .= "This post matches the target_locations<br />";
+							// selected/notselected
 							$snippet_logic_info .= "=> BREAK<br />";
 							break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
 							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 							$snippet_status = "inactive";
-						}*/
+						}
 						//
 					} else {
 						$snippet_logic_info .= "unmatched key: ".$key."<br />";
