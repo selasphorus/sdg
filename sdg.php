@@ -2455,8 +2455,12 @@ function get_snippets ( $atts = [] ) {
 			// what kind of archive?
 			$object = get_queried_object();
 			$object_class = get_class($object);
-			$ts_info .= "get_queried_object class: ".$object_class."<br />";
-			$ts_info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
+			$ts_info .= "object_class: ".$object_class."<br />";
+			if ( $object->name ) {
+				$object_name = $object->name;
+				$ts_info .= "object_name: ".$object_name."<br />";
+			}
+			//$ts_info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
 			if ( is_tax() ) {
 				$tax = $object->taxonomy;
 				$ts_info .= "tax: ".$tax."<br />";
