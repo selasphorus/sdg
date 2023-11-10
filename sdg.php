@@ -2624,6 +2624,13 @@ function get_snippets ( $atts = [] ) {
 					
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 					
+						if ( is_singular() ) {
+							$snippet_logic_info .= "current page is_singular<br />";
+						} else {
+							$snippet_logic_info .= "current page NOT is_singular >> $key does not apply<br />";
+							continue;
+						}
+							
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( is_array($target_posts) && !empty($target_posts) && in_array($post_id, $target_posts) ) {
