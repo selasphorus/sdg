@@ -2554,8 +2554,8 @@ function get_snippets ( $atts = [] ) {
 			if ( $snippet_display == "selected" ) {
 				$snippet_status = "inactive";
 			} else if ( $snippet_display == "notselected" ) {
-				$snippet_status = "active";
 				$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+				$snippet_status = "active";
 			}
 		
 			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_location' ); //, 'widget_logic_taxonomy'
@@ -2840,8 +2840,10 @@ function get_snippets ( $atts = [] ) {
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
-							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-							if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; }
+							if ( $snippet_display == "selected" ) {
+								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$snippet_status = "inactive";
+							}
 						}
 						//
 					} else {
