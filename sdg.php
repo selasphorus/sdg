@@ -3987,7 +3987,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					}
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
-					$widget_sidebar_id = get_sidebar_id($widget_uid);
+					//$widget_sidebar_id = get_sidebar_id($widget_uid);
 					
 					// TODO: check to see if snippet already exists with matching uid
 					// If no match, create new snippet post record with title and text as above
@@ -4110,10 +4110,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 						// WIP
 	
-						$meta_input['widget_type'] = $widget_type;
-						$meta_input['widget_id'] = $id;
+						$meta_input['widget_type'] = $wtype;
+						$meta_input['widget_id'] = $wid;
 						$meta_input['widget_uid'] = $widget_uid;
-						if ( $sidebar_id ) { $meta_input['sidebar_id'] = $sidebar_id; }
+						if ( $sidebar_id ) { $meta_input['sidebar'] = $sidebar; }
 						$meta_input['widget_logic'] = print_r($conditions, true);
 						
 						// Init action var
