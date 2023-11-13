@@ -4352,6 +4352,10 @@ function get_sidebars_info ( $atts = [] ) {
 		
 		// If we're handling a specific sidebar and this isn't it, move on to the next
 		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
+		
+		// Skip wp_inactive_widgets, for now
+		if ( $sidebar == 'wp_inactive_widgets' ) { continue; }
+		
 		// Get the registered sidebar info -- name, id, description, before_widget, etc.
 		$sidebar_info = wp_get_sidebar( $sidebar );
 		
