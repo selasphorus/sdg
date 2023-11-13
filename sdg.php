@@ -3941,6 +3941,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				$existing_id = get_snippet_by_widget_uid ( $widget_uid );
 				if ( $existing_id ) {
 					$postarr['ID'] = $existing_id;
+					$info .= "<h5>&rarr; snippet_id: ".$existing_id."/".get_the_title($existing_id)."</h5>";
 				}
 
 				// Separate type and id from widget_uid
@@ -4151,21 +4152,23 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				}
 				
-				/*
 				if ( $snippet_id ) {
-					
+				
 					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
 					
 					// Get existing value for sidebar_id field, if any
 					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
+					$info .= "snippet sidebars: ".$sidebars."<br />";
 					$sidebars_revised = "";
 					if ( empty($sidebars) ) {
 						$sidebars_revised = $sidebar;
 					} else if ( $sidebars != $sidebar ) {
 						$sidebars_revised = $sidebars."; ".$sidebar;
 					}
+					$info .= "snippet sidebars_revised: ".$sidebars_revised."<br />";
+					
 					//$sidebars_revised = $sidebar; //tmp
-					if ( $sidebars_revised ) {
+					/*if ( $sidebars_revised ) {
 						if ( $run_updates ) {
 							// Update snippet record with sidebar_id
 							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
@@ -4182,8 +4185,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							$info .= "sidebars_revised: ".$sidebars_revised."<br />";
 						}
 						//
-					}
+					}*/
 					
+					/*
 					$info .= "<strong>&rarr; Snippet Display Logic</strong><br />";
 					if ( count($arr_ids) > 0 ) {
 					
@@ -4232,11 +4236,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							}
 						}
 					}
+					*/
 					
 				} else {
-					$info .= "No corresponding snippet(s) found<br />";
+					//$info .= "No corresponding snippet(s) found<br />";
 				}
-				*/
+				
 				
 				$info .= "<hr />";
 			} // foreach ( $widgets...
