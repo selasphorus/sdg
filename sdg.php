@@ -4364,7 +4364,7 @@ function convert_sidebars ( $atts = [] ) {
 					if ( $recurrence_id ) {
 						$info .= 'RID: <span class="nb">'.$recurrence_id.'</span><br />';
 					} else {
-						$info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+						//$info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 					}
 					// If so, don't add the individual instance id, but rather -- ?? 231113...
 				}
