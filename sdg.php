@@ -2425,7 +2425,7 @@ function get_snippets ( $atts = [] ) {
         'run_updates'  => false,
         'dev' => false,
         'return' => 'info',
-        'sidebar_id' => 'sidebar-1', // default
+        //'sidebar_id' => 'sidebar-1', // default
     ), $atts );
     
     // Extract
@@ -2509,8 +2509,17 @@ function get_snippets ( $atts = [] ) {
 			'compare' => 'IN',
 		),
 		'sidebar_id' => array(
-			'key' => 'sidebar_id',
-			'value' => $sidebar_id,
+			'relation' => 'OR',
+			array(
+				'key' => 'sidebar_id',
+				'value' => $sidebar_id,
+				'compare' => '=',
+			),
+			array(
+				'key' => 'sidebar_id',
+				'value' => 'cs-',
+				'compare' => 'LIKE',
+			),
 		),
 	);
 	$wp_args['meta_query'] = $meta_query;
@@ -2518,7 +2527,7 @@ function get_snippets ( $atts = [] ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$ts_info .= "WP_Query run as follows:";
-    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $ts_info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
@@ -4161,7 +4170,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	
 	$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
 	
-	// Defaullt sidebar_id
+	// Default sidebar_id
 	$sidebar_id  = "sidebar-1";
 	
 	// Check for custom sidebars 
