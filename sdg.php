@@ -4447,7 +4447,7 @@ function convert_sidebars ( $atts = [] ) {
 						//
 					}
 					
-					$info .= "<strong>&rarr; Snippet Display Logic</strong>";
+					$info .= "<strong>&rarr; Snippet Display Logic</strong><br />";
 					if ( count($arr_ids) > 0 ) {
 					
 						// Field: target_by_post
