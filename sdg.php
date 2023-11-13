@@ -3883,14 +3883,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
 	$arr_widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
-	$arr_cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
+	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
+	$text_widgets = get_option('widget_text');
+	$html_widgets = get_option('widget_custom_html');
 	
 	// Which widget types are we processing?
-	if ( $widget_types == "all" ) {
+	/*if ( $widget_types == "all" ) {
 		$widget_types = array( 'widget_text', 'widget_custom_html' ); // TODO: and? e.g. widget_media_image, widget_122185_text....
 	} else {
 		$widget_types = explode( ',', $widget_types );
-	}
+	}*/
 	////////
 	
 	// Loop through sidebars and convert widgets to snippets
@@ -3915,7 +3917,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		$info .= "<h3>sidebar: ";
 		$info .= $sidebar;
-		if ( $sidebar_name ) { $info .= '=> "'.$sidebar_name; }
+		if ( $sidebar_name ) { $info .= '=> "'.$sidebar_name.'""'; }
 		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
 		$info .= "</h3>";
 		
@@ -3937,6 +3939,17 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				// If no snippet exists yet for this widget, create one
 				if ( !$snippet_id ) {
+					// Widget type?
+					if ( strpos($widget_uid, 'text-') !== false && isset($text_widgets[$widget_uid]) ) {
+						$widget = $text_widgets[$widget_uid];
+						$info .= "Matching text widget found.<br />";
+					} else if ( strpos($widget_uid, 'custom_html-') !== false && isset($html_widgets[$widget_uid]) ) {
+						$widget = $html_widgets[$widget_uid];
+						$info .= "Matching custom_html widget found.<br />";
+					} else {
+						$widget = null; // tft
+						$info .= "This is not a standard WP text/custom_html widget<br />";
+					}
 				
 				}
 				
@@ -4151,7 +4164,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	if ( $post_id === null ) { return "No post_id; "; } // tft
 	//
 	$arr_sidebars_widgets = get_option('sidebars_widgets');
-	$arr_cs_sidebars = get_option('cs_sidebars');
+	$cs_sidebars = get_option('cs_sidebars');
 	//
 	$info .= '<div class="code">';
 	
@@ -4185,8 +4198,8 @@ function show_widgets_and_snippets ( $atts = [] ) {
 	$widgets = array(); // init
 	if ( isset($arr_sidebars_widgets[$sidebar_id]) ) {
 		$widgets = $arr_sidebars_widgets[$sidebar_id];
-	} else if ( isset($arr_cs_sidebars[$sidebar_id]) ) {
-		$widgets = $arr_cs_sidebars[$sidebar_id];
+	} else if ( isset($cs_sidebars[$sidebar_id]) ) {
+		$widgets = $cs_sidebars[$sidebar_id];
 	}
 	//$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
 	
@@ -4325,7 +4338,7 @@ function get_sidebars_info ( $atts = [] ) {
 	$arr_ids = array(); // for custom sidebars, we'll get the ids of posts using that sidebar and add those to the target_by_post field for the snippet
 	//
 	$arr_sidebars_widgets = get_option('sidebars_widgets');
-	$arr_cs_sidebars = get_option('cs_sidebars');
+	$cs_sidebars = get_option('cs_sidebars');
 	//
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
