@@ -3144,7 +3144,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= count($matched_posts)." matched_posts<br />";
 					//$key_ts_info .= "matched_posts: <pre>".print_r($matched_posts, true)."</pre>";
 					// WIP -- TODO: sort by post title and update
-					// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of repeating events)
+					// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of recurring events)
 					if ( empty($arr_posts_old) ) {
 						// Save the array of matched posts to the target_by_post field
 						$arr_posts_revised = $matched_posts;									
@@ -4359,7 +4359,9 @@ function convert_sidebars ( $atts = [] ) {
 				//$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
 				foreach ( $arr_ids as $x => $id ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
-					// Is this an attached instance of a repeater event?
+					// Is this an attached instance of a recurring event?
+					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
+					if ( $recurrence_id ) { $info .= 'RID: <span class="nb">'.$recurrence_id.'</span>; '; }					
 					// If so, don't add the individual instance id, but rather -- ?? 231113...
 				}
 				$info .= "<hr />";
@@ -4437,7 +4439,10 @@ function convert_sidebars ( $atts = [] ) {
 						//
 					}
 					
+					$info .= "<h5>Display Logic</h5>";
 					if ( count($arr_ids) > 0 ) {
+					
+						// Field: target_by_post
 						// Get existing targeted posts, if any
 						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
 						sort($target_posts); // Sort the array -- TODO: sort instead by post title
@@ -4478,6 +4483,9 @@ function convert_sidebars ( $atts = [] ) {
 							}
 						}
 					}
+					
+						// Field: ???
+						//
 					
 				} else {
 					$info .= "No corresponding snippets found<br />";
