@@ -3887,8 +3887,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$text_widgets = get_option('widget_text');
 	$html_widgets = get_option('widget_custom_html');
 	//
-	$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
-	$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
+	//$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
+	//$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
 	
 	// Which widget types are we processing?
 	/*if ( $widget_types == "all" ) {
@@ -3942,6 +3942,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				// If no snippet exists yet for this widget, create one
 				if ( !$snippet_id ) {
+					// Separate type and id from widget_uid
+					$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
+					$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
+					$info .= "wtype: ".$wtype." / "."wid: ".$wid."<br />";
 					// Widget type?
 					if ( strpos($widget_uid, 'text-') !== false && isset($text_widgets[$widget_uid]) ) {
 						$widget = $text_widgets[$widget_uid];
