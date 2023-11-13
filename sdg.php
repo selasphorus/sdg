@@ -4478,8 +4478,12 @@ function get_sidebars_info ( $atts = [] ) {
 						// Field: target_by_post
 						// Get existing targeted posts, if any
 						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
-						sort($target_posts); // Sort the array -- TODO: sort instead by post title
-						$info .= count($target_posts)." target_posts:<br />";
+						if ( is_array($target_posts) ) {
+							sort($target_posts); // Sort the array -- TODO: sort instead by post title
+							$info .= count($target_posts)." target_posts:<br />";
+						} else {
+							$target_posts = array();
+						}
 						foreach ( $target_posts as $x => $id ) {
 							$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 						}
