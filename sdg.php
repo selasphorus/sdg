@@ -3917,7 +3917,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 		$info .= "<h3>sidebar: ";
 		$info .= $sidebar;
-		if ( $sidebar_name ) { $info .= '=> "'.$sidebar_name.'""'; }
+		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'""'; }
 		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
 		$info .= "</h3>";
 		
