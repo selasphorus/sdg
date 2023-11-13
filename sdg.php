@@ -4432,7 +4432,7 @@ function convert_sidebars ( $atts = [] ) {
 				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
 				if ( $snippet_id ) {
 					
-					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."</h5>";
+					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
 					
 					// Get existing value for sidebar_id field, if any
 					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
