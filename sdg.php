@@ -4129,17 +4129,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 							// Update existing snippet
-							/*$snippet_id = wp_update_post($postarr);
-							if ( !is_wp_error($snippet_id) ) {
-								$action = "updated";
-							}*/
+							$snippet_id = wp_update_post($postarr);
+							if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
 						} else {
 							$info .= "&rarr; About to create a new snippet<br />";
 							// Insert the post into the database
-							/*$snippet_id = wp_insert_post($postarr);
-							if ( !is_wp_error($snippet_id) ) {
-								$action = "inserted";
-							}*/
+							$snippet_id = wp_insert_post($postarr);
+							if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
 						}
 						// Handle errors
 						if ( is_wp_error($snippet_id) ) {
