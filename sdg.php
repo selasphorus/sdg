@@ -2486,7 +2486,7 @@ function get_snippets ( $atts = [] ) {
 		
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
-	if ( $cs ) { $ts_info .= "cs: <pre>".print_r($cs, true)."</pre>"; }
+	if ( $cs ) { $ts_info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
 	//e.g. Array( [sidebar-1] => cs-17 )
 	
 	// Set up basic query args for snippets retrieval
@@ -2835,7 +2835,7 @@ function get_snippets ( $atts = [] ) {
 								$current_locations[] = $location;
 							}
 						}
-						// WIP 231110
+						//
 						$snippet_logic_info .= "target_locations: ".print_r($target_locations, true)."<br />";
 						$snippet_logic_info .= "current_locations: ".print_r($current_locations, true)."<br />";
 						if ( count($current_locations) == 1 ) { $current_location = $current_locations[0]; } else { $current_location = "multiple"; } // wip
@@ -2966,7 +2966,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
 				$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
-				// WIP 231109
 			}	
 				
 			// Clean up legacy field values
@@ -3258,7 +3257,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// If this is the widget_logic version of the field, update our new target_by_post_type field
 				if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
 				
-					// WIP 231109
 					$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 					//
 					$cpt_conditions = array();
@@ -3358,7 +3356,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			
 				//
 				if ( $conditions ) { $key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; } // tax_pairs => conditions			
-				//.... WIP 231101
+				// ... WIP ...
 					
 				// WIP -- TODO: use fcns copied from WidgetContext customizations to split pairs into array and compare/merge etc
 				//$target_taxonomies = get_field($key, $snippet_id, false);
@@ -3553,8 +3551,8 @@ function match_terms( $rules, $post_id ) {
 					if ( $exclusion == 'no' ) {
 						$ts_info .= "Match found (single rule; has_term; exclusion false) >> return true<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion false) >> return true"); }
-						// WIP 231108
-						return $ts_info; //return true; // post has term for single rule AND term is not negated, therefore it is a match
+						//return $ts_info; //
+						return true; // post has term for single rule AND term is not negated, therefore it is a match
 					} else {
 						$ts_info .= "Match found (single rule; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion TRUE) >> return false"); }
@@ -4320,6 +4318,7 @@ function convert_sidebars ( $atts = [] ) {
     
     $args = shortcode_atts( array(
 		'limit'   => 1,
+		'run_updates' => false,
     ), $atts );
     
     // Extract
@@ -4360,6 +4359,8 @@ function convert_sidebars ( $atts = [] ) {
 				//$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
 				foreach ( $arr_ids as $x => $id ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
+					// Is this an attached instance of a repeater event?
+					// If so, don't add the individual instance id, but rather -- ?? 231113...
 				}
 				$info .= "<hr />";
 				//$arr_ids = array(); // tft
@@ -4378,11 +4379,15 @@ function convert_sidebars ( $atts = [] ) {
 					//$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
 				}
 				if ( $cs_posts_revised ) {
-					// As a backup, save this array to cs_posts field
-					if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
-						$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".print_r($cs_posts_revised,true)."<br />";
+					if ( $run_updates ) {
+						// As a backup, save this array to cs_posts field
+						if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
+							$info .= "post_meta field `cs_posts` updated for snippet_id: ".$snippet_id." with value ".print_r($cs_posts_revised,true)."<br />";
+						} else {
+							$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($cs_posts_revised,true)."<br />";
+						}
 					} else {
-						$info .= "post_meta field `cs_posts` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($cs_posts_revised,true)."<br />";
+						$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
 					}
 				}
 				// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
@@ -4414,16 +4419,20 @@ function convert_sidebars ( $atts = [] ) {
 					}
 					//$sidebars_revised = $sidebar; //tmp
 					if ( $sidebars_revised ) {
-						// Update snippet record with sidebar_id
-						if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
-							$info .= "post_meta field `sidebar_id` updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+						if ( $run_updates ) {
+							// Update snippet record with sidebar_id
+							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
+								$info .= "post_meta field `sidebar_id` updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							} else {
+								$info .= "post_meta field `sidebar_id` update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
+							}
+							if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
+								$info .= "post_meta field `sidebar_sortnum` updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							} else {
+								$info .= "post_meta field `sidebar_sortnum` update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							}
 						} else {
-							$info .= "post_meta field `sidebar_id` update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
-						}
-						if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
-							$info .= "post_meta field `sidebar_sortnum` updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
-						} else {
-							$info .= "post_meta field `sidebar_sortnum` update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
+							$info .= "sidebars_revised: ".$sidebars_revised."<br />";
 						}
 						//
 					}
@@ -4457,12 +4466,15 @@ function convert_sidebars ( $atts = [] ) {
 						}
 						//$target_posts_revised = $sidebar; //tmp
 						if ( $target_posts_revised ) {
-							
-							// Update snippet record
-							if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
-								$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
-							} else {
-								$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
+							if ( $run_updates ) {
+								// Update snippet record
+								if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
+									$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
+								} else {
+									$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
+								}
+							 else {
+								$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 							}
 						}
 					}
