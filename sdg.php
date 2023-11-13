@@ -4000,6 +4000,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 						$postarr = array();
 						$meta_input = array();
+						$conditions = array();
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
