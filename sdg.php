@@ -4328,11 +4328,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					//$info .= "No corresponding snippet(s) found<br />";
 				}
 				
+				if ( $i > $limit ) { break; }
 				
 				$info .= "<hr />";
 			} // foreach ( $widgets...
-			
-			if ( $i > $limit ) { break; }
 			
 		}
 		
