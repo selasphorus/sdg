@@ -4227,15 +4227,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								// Get post status -- we're only interested published posts
 								$post_status = get_post_status( $id );
 								if ( $post_status != "publish" ) { $info .= " <em>***".$post_status."***</em>"; }
-								$info .= "<br />";
+								//$info .= "<br />";
 								
 								// Is this an attached instance of a recurring event?
 								$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
 								if ( $recurrence_id ) {
-									//$info .= 'RID: <span class="nb">'.$recurrence_id.'</span><br />';
+									$info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
 								} else {
 									//$info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 								}
+								$info .= "<br />";
 								// If so, don't add the individual instance id, but rather -- ?? 231113...
 							}
 							$info .= "<hr />";
