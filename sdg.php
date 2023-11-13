@@ -4319,6 +4319,7 @@ function convert_sidebars ( $atts = [] ) {
     $args = shortcode_atts( array(
 		'limit'   => 1,
 		'run_updates' => false,
+		'sidebar_id' => null,
     ), $atts );
     
     // Extract
@@ -4333,6 +4334,10 @@ function convert_sidebars ( $atts = [] ) {
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
+		
+		// If we're handling a specific sidebar and this isn't it, move on to the next
+		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
+		
 		$info .= "<h3>sidebar: ".$sidebar."</h3>";
 		//if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
 		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
