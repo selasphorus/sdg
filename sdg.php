@@ -4478,7 +4478,7 @@ function convert_sidebars ( $atts = [] ) {
 								} else {
 									$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
 								}
-							 else {
+							} else {
 								$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
 							}
 						}
