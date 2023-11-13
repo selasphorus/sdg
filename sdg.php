@@ -4124,21 +4124,21 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						// Finish setting up the post array for update/insert							
 						$postarr['meta_input'] = $meta_input;
 						
-						//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
-						if ( isset($postarr['ID']) ) {
+						$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 							// Update existing snippet
-							$snippet_id = wp_update_post($postarr);
+							/*$snippet_id = wp_update_post($postarr);
 							if ( !is_wp_error($snippet_id) ) {
 								$action = "updated";
-							}
+							}*/
 						} else {
 							$info .= "&rarr; About to create a new snippet<br />";
 							// Insert the post into the database
-							$snippet_id = wp_insert_post($postarr);
+							/*$snippet_id = wp_insert_post($postarr);
 							if ( !is_wp_error($snippet_id) ) {
 								$action = "inserted";
-							}
+							}*/
 						}
 						// Handle errors
 						if ( is_wp_error($snippet_id) ) {
@@ -4205,7 +4205,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
 						
 						// NB/WIP only CS with sidebar location rules appears to be Sermons Sidebar => display on all individual sermon posts and sermon post archives
-			
+
 						// Get array of ids for posts using this custom sidebar
 						global $wpdb;
 	
