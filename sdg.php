@@ -4221,7 +4221,14 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							$info .= count($arr_ids)." posts using this sidebar:<br />";
 							//$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
 							foreach ( $arr_ids as $x => $id ) {
-								//$info .= $x.".) ".get_the_title($id)." [$id]<br />";
+							
+								$info .= $x.".) ".get_the_title($id)." [$id]";
+								
+								// Get post status -- we're only interested published posts
+								$post_status = get_post_status( $id );
+								if ( $post_status != "publish" ) { $info .= "<em>".$post_status."</em>"; }
+								$info .= "<br />";
+								
 								// Is this an attached instance of a recurring event?
 								$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
 								if ( $recurrence_id ) {
@@ -4247,7 +4254,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								sort($cs_posts_revised); // Sort the array -- TODO: sort instead by post title
 							}
 							if ( $cs_posts_revised ) {
-								$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
+								//$info .= count($cs_posts_revised)." cs_posts_revised: ".print_r($cs_posts_revised, true)."<br />";
 								/*if ( $run_updates ) {
 									// As a backup, save this array to cs_posts field
 									if ( update_post_meta( $snippet_id, 'cs_posts', $arr_ids ) ) {
