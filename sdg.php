@@ -4331,9 +4331,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				$info .= "<hr />";
 			} // foreach ( $widgets...
+			
+			if ( $i > $limit ) { break; }
+			
 		}
-		
-		
 		
 		//...
 		$info .= '</div>';
