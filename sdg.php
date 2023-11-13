@@ -4226,7 +4226,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								
 								// Get post status -- we're only interested published posts
 								$post_status = get_post_status( $id );
-								if ( $post_status != "publish" ) { $info .= " <em>***".$post_status."***</em>"; }
+								if ( $post_status != "publish" ) { $info .= " <em>*** ".$post_status." ***</em>"; }
 								//$info .= "<br />";
 								
 								// Is this an attached instance of a recurring event?
