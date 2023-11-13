@@ -3886,6 +3886,9 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	$text_widgets = get_option('widget_text');
 	$html_widgets = get_option('widget_custom_html');
+	//
+	$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
+	$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
 	
 	// Which widget types are we processing?
 	/*if ( $widget_types == "all" ) {
