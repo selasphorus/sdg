@@ -4320,14 +4320,14 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
 }
 
-add_shortcode('convert_sidebars', 'convert_sidebars');
-function convert_sidebars ( $atts = [] ) {
+add_shortcode('sidebars_info', 'get_sidebars_info');
+function get_sidebars_info ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    sdg_log( "function called: convert_sidebars", $do_log );
+    sdg_log( "function called: get_sidebars_info", $do_log );
     
     $info = "";
     
