@@ -3945,13 +3945,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					// Separate type and id from widget_uid
 					$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
 					$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
-					$info .= "wtype: ".$wtype." / "."wid: ".$wid."<br />";
+					$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
 					// Widget type?
-					if ( strpos($widget_uid, 'text-') !== false && isset($text_widgets[$widget_uid]) ) {
-						$widget = $text_widgets[$widget_uid];
+					if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
+						$widget = $text_widgets[$wid];
 						$info .= "Matching text widget found.<br />";
-					} else if ( strpos($widget_uid, 'custom_html-') !== false && isset($html_widgets[$widget_uid]) ) {
-						$widget = $html_widgets[$widget_uid];
+					} else if ( $wtype == "custom_html" && isset($html_widgets[$wid]) ) {
+						$widget = $html_widgets[$wid];
 						$info .= "Matching custom_html widget found.<br />";
 					} else {
 						$widget = null; // tft
