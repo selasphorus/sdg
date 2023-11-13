@@ -3939,15 +3939,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			foreach ( $widgets as $i => $widget_uid ) {
 			
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
-				
-				// Does a snippet already exist based on this widget?
-				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
-				if ( $snippet_id ) {
-					$postarr['ID'] = $snippet_id;
-					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
-				} else {
-					$info .= "No existing snippet found for widget_uid: ".$widget_uid."<br />";
-				}
 
 				// Separate type and id from widget_uid
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
@@ -3967,6 +3958,19 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 				// If a widget was found, gather the info needed to create/update the corresponding snippet
 				if ( $widget ) {
+					
+					$postarr = array();
+					$meta_input = array();
+					$conditions = array();
+				
+					// Does a snippet already exist based on this widget?
+					$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+					if ( $snippet_id ) {
+						$postarr['ID'] = $snippet_id;
+						$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
+					} else {
+						$info .= "No existing snippet found for widget_uid: ".$widget_uid."<br />";
+					}
 				
 					// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
 					// TODO: check if fields are same for e.g. custom_html
@@ -3997,10 +4001,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 					// If title and content are set, then prep to save widget as snippet
 					if ( $snippet_title && $snippet_content ) {
-					
-						$postarr = array();
-						$meta_input = array();
-						$conditions = array();
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
@@ -4129,13 +4129,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 							// Update existing snippet
-							$snippet_id = wp_update_post($postarr);
-							if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
+							//$snippet_id = wp_update_post($postarr);
+							//if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
 						} else {
 							$info .= "&rarr; About to create a new snippet<br />";
 							// Insert the post into the database
-							$snippet_id = wp_insert_post($postarr);
-							if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
+							//$snippet_id = wp_insert_post($postarr);
+							//if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
 						}
 						// Handle errors
 						if ( is_wp_error($snippet_id) ) {
