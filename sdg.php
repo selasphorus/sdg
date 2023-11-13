@@ -4361,7 +4361,11 @@ function convert_sidebars ( $atts = [] ) {
 					$info .= $x.".) ".get_the_title($id)." [$id]<br />";
 					// Is this an attached instance of a recurring event?
 					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
-					if ( $recurrence_id ) { $info .= 'RID: <span class="nb">'.$recurrence_id.'</span>; '; }					
+					if ( $recurrence_id ) {
+						$info .= 'RID: <span class="nb">'.$recurrence_id.'</span><br />';
+					} else {
+						$info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+					}
 					// If so, don't add the individual instance id, but rather -- ?? 231113...
 				}
 				$info .= "<hr />";
