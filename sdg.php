@@ -4352,8 +4352,12 @@ function convert_sidebars ( $atts = [] ) {
 		
 		// If we're handling a specific sidebar and this isn't it, move on to the next
 		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
+		$sidebar_info = wp_get_sidebar( $sidebar ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
 		
-		$info .= "<h3>sidebar: ".$sidebar."</h3>";
+		$info .= "<h3>sidebar: ";
+		$info .= $sidebar;
+		$info .= '=> "'.$sidebar_info['name'];
+		$info .= "</h3>";
 		//if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
 		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		/*
