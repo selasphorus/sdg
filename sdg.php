@@ -4198,11 +4198,11 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						//
 					}*/
 					
-					
 					// Is this a Custom Sidebar?
 					if ( strpos($sidebar, 'cs-') !== false ) {
 					
 						$info .= "This widget belongs to a custom sidebar<br />";
+						if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
 						
 						// NB/WIP only CS with sidebar location rules appears to be Sermons Sidebar => display on all individual sermon posts and sermon post archives
 			
@@ -4218,6 +4218,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$arr_ids = array_column($arr_objs, 'post_id');
 						sort($arr_ids); // Sort the array -- TODO: sort instead by post title
 						if ( count($arr_ids) > 0 ) {
+						
 							$info .= count($arr_ids)." posts using this sidebar:<br />";
 							//$info .= count($arr_ids)." posts using this sidebar: ".print_r($arr_ids,true)."<br />";
 							foreach ( $arr_ids as $x => $id ) {
