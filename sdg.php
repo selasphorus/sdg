@@ -3941,10 +3941,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
 				
 				// Does a snippet already exist based on this widget?
-				$existing_id = get_snippet_by_widget_uid ( $widget_uid );
-				if ( $existing_id ) {
-					$postarr['ID'] = $existing_id;
-					$info .= "<h5>&rarr; snippet_id: ".$existing_id."/".get_the_title($existing_id)."</h5>";
+				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+				if ( $snippet_id ) {
+					$postarr['ID'] = $snippet_id;
+					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
+				} else {
+					$info .= "No existing snippet found for widget_uid: ".$widget_uid."<br />";
 				}
 
 				// Separate type and id from widget_uid
@@ -4124,7 +4126,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						
 						//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 						if ( isset($postarr['ID']) ) {
-							$info .= "&rarr; About to update existing snippet<br />";
+							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 							// Update existing snippet
 							$snippet_id = wp_update_post($postarr);
 							if ( !is_wp_error($snippet_id) ) {
