@@ -4116,7 +4116,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$meta_input['widget_type'] = $wtype;
 						$meta_input['widget_id'] = $wid;
 						$meta_input['widget_uid'] = $widget_uid;
-						if ( $sidebar ) { $meta_input['sidebar_id'] = $sidebar; }
+						if ( $sidebar ) {
+							$meta_input['sidebar_id'] = $sidebar;
+							$meta_input['sidebar_sortnum'] = $i;
+						}
 						$meta_input['widget_logic'] = print_r($conditions, true);
 						
 						// Init action var
