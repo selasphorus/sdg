@@ -3758,13 +3758,13 @@ function widget_logic_tmp ( $atts = [] ) {
 	//
 	$info .= '<h2>Widget Logic -- WIP</h2>';
 	
-	$arr_widget_logic = get_option('widget_logic_options');
+	$widget_logic = get_option('widget_logic_options');
 	//
 	if ( $format == "xml" ) {
 		$xml = "&lt;options&gt;<br />";
 		//$xml .= "<br />";
 		$i = 0;
-		foreach ( $arr_widget_logic as $widget => $conditions ) {
+		foreach ( $widget_logic as $widget => $conditions ) {
 			//$info .= "<pre>widget: ".$widget." ==> ".print_r($conditions,true)."</pre><hr /><hr />"; // tft
 			// Skip this widget for now if it's not a custom_html or text widget
 			if ( ! ( strpos($widget, "custom_html-") !== false || strpos($widget, "text-") !== false ) ) { continue; }
@@ -3845,7 +3845,7 @@ function widget_logic_tmp ( $atts = [] ) {
 		//
 		$info .= $xml; //$info .= "<pre>".$xml."</pre>"; //$info .= $xml;
 	} else {
-		$info .= "<pre>".print_r($arr_widget_logic, true)."</pre>";
+		$info .= "<pre>".print_r($widget_logic, true)."</pre>";
 	}
 	
 	//
@@ -3882,7 +3882,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
-	$arr_widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
+	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	$text_widgets = get_option('widget_text');
 	$html_widgets = get_option('widget_custom_html');
@@ -3937,29 +3937,221 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 			
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
 				
-				// Does a corresponding snippet exist?
-				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
+				// Does a snippet already exist based on this widget?
+				$existing_id = get_snippet_by_widget_uid ( $widget_uid );
+				if ( $existing_id ) {
+					$postarr['ID'] = $existing_id;
+				}
+
+				// Separate type and id from widget_uid
+				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
+				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
+				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
+				// Widget type?
+				if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
+					$widget = $text_widgets[$wid];
+					$info .= "Matching text widget found.<br />";
+				} else if ( $wtype == "custom_html" && isset($html_widgets[$wid]) ) {
+					$widget = $html_widgets[$wid];
+					$info .= "Matching custom_html widget found.<br />";
+				} else {
+					$widget = null; // tft
+					$info .= "This is not a standard WP text/custom_html widget<br />";
+				}
+					
+				// If a widget was found, gather the info needed to create/update the corresponding snippet
+				if ( $widget ) {
 				
-				// If no snippet exists yet for this widget, create one
-				if ( !$snippet_id ) {
-					// Separate type and id from widget_uid
-					$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
-					$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
-					$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
-					// Widget type?
-					if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
-						$widget = $text_widgets[$wid];
-						$info .= "Matching text widget found.<br />";
-					} else if ( $wtype == "custom_html" && isset($html_widgets[$wid]) ) {
-						$widget = $html_widgets[$wid];
-						$info .= "Matching custom_html widget found.<br />";
+					// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
+					// TODO: check if fields are same for e.g. custom_html
+		
+					// Title
+					if ( isset($widget['title']) && !empty($widget['title']) ) {
+						$snippet_title = $widget['title'];
 					} else {
-						$widget = null; // tft
-						$info .= "This is not a standard WP text/custom_html widget<br />";
+						$snippet_title = $widget_uid;
+					}
+					$info .= "title: ".$snippet_title."<br />";
+					
+					// Content
+					if ( isset($widget['text']) ) {
+						$snippet_content = $widget['text'];
+					} else if ( isset($widget['content']) ) {
+						$snippet_content = $widget['content'];
+					} else {
+						$snippet_content = null; // ???
+					}
+					
+					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
+					$widget_sidebar_id = get_sidebar_id($widget_uid);
+					
+					// TODO: check to see if snippet already exists with matching uid
+					// If no match, create new snippet post record with title and text as above
+					// If match, check for changes?
+					
+					// If title and content are set, then prep to save widget as snippet
+					if ( $snippet_title && $snippet_content ) {
+					
+						$postarr = array();
+						$meta_input = array();
+						//
+						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
+						$postarr['post_content'] = $snippet_content;
+						$postarr['post_type'] = 'snippet';
+						$postarr['post_status'] = 'publish';
+						$postarr['post_author'] = 1; // get_current_user_id()
+						
+						// Get widget logic -- WIP
+						if ( isset($widget_logic[$widget_uid]) ) {
+							$info .= "... found widget logic ...<br />";
+							//$info .= "logic: <pre>".print_r($widget_logic[$widget_uid],true)."</pre><br />";
+							$conditions = $widget_logic[$widget_uid];
+						}
+					
+						// Loop through the conditions and prepare to save them to the snippet ACF fields, as applicable
+						foreach ( $conditions as $condition => $subconditions ) {
+					
+							$condition_info = "";
+							$subs_info = "";
+							$subs_empty = true;
+							$check_wordcount = false;
+							//
+							//$info .= "condition: ".$condition."<br />";
+							//$info .= "subconditions: <br />";
+							if ( $condition == 'incexc' ) {
+		
+								$meta_input['snippet_display'] = $subconditions['condition'];
+			
+							} else if ( $condition == "url" ) {
+		
+								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+								if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {					
+									$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup/transitional field
+								}		
+				
+							} else if ( $condition == "urls_invert" ) {
+		
+								if ( isset($subconditions['urls_invert']) && !empty($subconditions['urls_invert']) ) {
+									$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup/transitional field					
+								}
+			
+							} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
+			
+								$info .= "condition: ".$condition."<br />";
+								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+			
+								// Init values array
+								$values = array();
+			
+								// location => array (is_front_page, is_home, etc) --> target_by_location
+								// custom_post_types_taxonomies => array of post types and custom taxonomy archives etc to target (or exclude)
+			
+								// Save only array elements where $v == 1
+								foreach ( $subconditions as $k => $v ) {
+									//$info .= "k: ".$k." => v: ".$v."<br />";
+									if ( $v == 1 ) {
+										$info .= "k: ".$k." => v: ".$v."<br />";
+										$values[$k] = $v;
+									}
+								}
+			
+								// Determine the appropriate meta_key
+								if ( $condition == "location" ) { $meta_key = 'widget_logic_location'; } else { $meta_key = 'widget_logic_custom_post_types_taxonomies'; }
+			
+								// Add the value(s) to the meta_input array
+								if ( !empty($values) ) { $meta_input[$meta_key] = serialize($values); }
+		
+							} else if ( $condition == "taxonomy" ) {
+			
+								$info .= "condition: ".$condition."<br />";
+								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+			
+								if ( isset($subconditions['taxonomies']) ) { 
+									$taxonomies = $subconditions['taxonomies'];
+									$info .= "taxonomies: ".$taxonomies."<br />";
+									$meta_input['widget_logic_taxonomy'] = $taxonomies; // TODO: figure out why this isn't working
+									$meta_input['target_by_taxonomy'] = $taxonomies;
+								}
+		
+							} else if ( $condition == "word_count" ) {
+		
+								$info .= "condition: ".$condition."<br />";
+								// WIP
+								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+		
+							} else if ( is_array($subconditions) && !empty($subconditions) ) {
+								$info .= "condition: ".$condition."<br />";
+								if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
+									//$info .= "single empty subcondition<br />";
+								} else {
+									$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+									//$info .= count($subconditions)." subconditions<br />";
+								}
+								/*foreach ( $subconditions as $k => $v ) {
+									//$info .= "k: ".$k." => v: ".$v."<br />";
+								}*/
+							} else {
+								$info .= "condition: ".$condition."<br />";
+								$info .= $subconditions." [not an array]<br />";
+								//$meta_input[$condition] = $subconditions;
+							}
+							if ( !$subs_empty ) {
+								//$condition_info .= $subs_info;
+								//$condition_info .= $condition;
+							}
+							//
+							//$info .= $condition_info;
+		
+						} // END foreach ( $conditions as $condition => $subconditions )
+		
+						// WIP
+	
+						$meta_input['widget_type'] = $widget_type;
+						$meta_input['widget_id'] = $id;
+						$meta_input['widget_uid'] = $widget_uid;
+						if ( $sidebar_id ) { $meta_input['sidebar_id'] = $sidebar_id; }
+						$meta_input['widget_logic'] = print_r($conditions, true);
+						
+						// Init action var
+						$action = null;
+						
+						// Finish setting up the post array for update/insert							
+						$postarr['meta_input'] = $meta_input;
+						
+						//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+						if ( isset($postarr['ID']) ) {
+							$info .= "&rarr; About to update existing snippet<br />";
+							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+							// Update existing snippet
+							//$snippet_id = wp_update_post($postarr);
+							//$action = "updated";			
+						} else {
+							$info .= "&rarr; About to create a new snippet<br />";
+							// Insert the post into the database
+							//$snippet_id = wp_insert_post($postarr);
+							//$action ="inserted";
+						}
+		
+						//
+						if ( $action && $snippet_id ) {
+							if ( !is_wp_error($snippet_id) ) {				
+								$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
+								// Update snippet logic
+								$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+							} else {
+								$info .= $snippet_id->get_error_message();
+								//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+							}
+						} else {
+							$info .= "&rarr;&rarr; No action<br />";
+							$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+						}
+		
 					}
 				
 				}
 				
+				/*
 				if ( $snippet_id ) {
 					
 					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
@@ -4044,6 +4236,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				} else {
 					$info .= "No corresponding snippet(s) found<br />";
 				}
+				*/
 				
 				$info .= "<hr />";
 			} // foreach ( $widgets...
