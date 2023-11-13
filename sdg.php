@@ -2508,6 +2508,12 @@ function get_snippets ( $atts = [] ) {
 			'value' => array('show', 'selected', 'notselected'),
 			'compare' => 'IN',
 		),
+		/*'sidebar_id' => array(
+			'key' => 'sidebar_id',
+			'value' => $sidebar_id,
+			'compare' => '=',
+		),*/
+		// The sidebar clause ensures that we don't get widgets from bottom-widgets, wp_inactive_widgets, etc.
 		'sidebar_id' => array(
 			'relation' => 'OR',
 			array(
@@ -2527,7 +2533,7 @@ function get_snippets ( $atts = [] ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$ts_info .= "WP_Query run as follows:";
-    $ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $ts_info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
