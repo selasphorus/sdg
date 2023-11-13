@@ -4412,13 +4412,12 @@ function convert_sidebars ( $atts = [] ) {
 		if ( is_array($widgets) ) {
 			$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {
-				$info .= $i.": ".$widget_uid."<br />";
+				$info .= "widget ".$i.": ".$widget_uid."<br />";
 				// Does a corresponding snippet exist?
 				$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
 				if ( $snippet_id ) {
 					
 					$info .= "snippet_id: ".$snippet_id."<br />";
-					$info .= "<hr />";
 					
 					// Get existing value for sidebar_id field, if any
 					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
@@ -4448,7 +4447,7 @@ function convert_sidebars ( $atts = [] ) {
 						//
 					}
 					
-					$info .= "<h5>Display Logic</h5>";
+					$info .= "<h5>Snippet Display Logic</h5>";
 					if ( count($arr_ids) > 0 ) {
 					
 						// Field: target_by_post
@@ -4493,12 +4492,11 @@ function convert_sidebars ( $atts = [] ) {
 						}
 					}
 					
-						// Field: ???
-						//
-					
 				} else {
 					$info .= "No corresponding snippets found<br />";
 				}
+				
+				$info .= "<hr />";
 			} // foreach ( $widgets...
 		}
 		
