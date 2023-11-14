@@ -2486,7 +2486,7 @@ function get_snippets ( $atts = [] ) {
 		
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
-	if ( $cs ) { $ts_info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
+	//if ( $cs ) { $ts_info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
 	//e.g. Array( [sidebar-1] => cs-17 )
 	
 	// Set up basic query args for snippets retrieval
