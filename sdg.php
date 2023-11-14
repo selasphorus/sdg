@@ -3902,6 +3902,19 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						
 						// Proceed to processing widget display logic
 						
+						/*
+						// Get existing value for sidebar_id field, if any
+						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
+						$info .= "snippet sidebars: ".$sidebars."<br />";
+						$sidebars_revised = "";
+						if ( empty($sidebars) ) {
+							$sidebars_revised = $sidebar;
+						} else if ( $sidebars != $sidebar ) {
+							$sidebars_revised = $sidebars."; ".$sidebar;
+						}
+						$info .= "snippet sidebars_revised: ".$sidebars_revised."<br />";
+						*/
+						
 						// Is this a Custom Sidebar?
 						if ( $custom_sidebar ) {
 						
@@ -3953,7 +3966,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 									$cs_post_ids_revised = array();
 								}
 								if ( empty($snippet_cs_post_ids) ) {
-									$info .= "cs_posts field is empty<br />";
+									$info .= "cs_post_ids field is empty<br />";
 									$cs_post_ids_revised = $cs_post_ids;
 								} else if ( $cs_post_ids == $snippet_cs_post_ids ) {
 									$info .= "cs_post_ids same as snippet_cs_post_ids => no update needed<br />";
@@ -4113,7 +4126,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $action && $snippet_id ) {
 							$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 							// Update snippet logic
-							//$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+							$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 						} else {
 							$info .= "&rarr;&rarr; No action<br />";
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
@@ -4121,96 +4134,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		
 					}
 				
-				}
-				
-				if ( $snippet_id ) {
-				
-					$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
-					
-					// Get existing value for sidebar_id field, if any
-					$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
-					$info .= "snippet sidebars: ".$sidebars."<br />";
-					$sidebars_revised = "";
-					if ( empty($sidebars) ) {
-						$sidebars_revised = $sidebar;
-					} else if ( $sidebars != $sidebar ) {
-						$sidebars_revised = $sidebars."; ".$sidebar;
-					}
-					$info .= "snippet sidebars_revised: ".$sidebars_revised."<br />";
-					
-					//$sidebars_revised = $sidebar; //tmp
-					/*if ( $sidebars_revised ) {
-						if ( $run_updates ) {
-							// Update snippet record with sidebar_id
-							if ( update_post_meta( $snippet_id, 'sidebar_id', $sidebars_revised ) ) {
-								$info .= "post_meta field `sidebar_id` updated for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
-							} else {
-								$info .= "post_meta field `sidebar_id` update FAILED for snippet_id: ".$snippet_id." with value ".$sidebars_revised."<br />";
-							}
-							if ( update_post_meta( $snippet_id, 'sidebar_sortnum', $i ) ) {
-								$info .= "post_meta field `sidebar_sortnum` updated for snippet_id: ".$snippet_id." with value ".$i."<br />";
-							} else {
-								$info .= "post_meta field `sidebar_sortnum` update FAILED for snippet_id: ".$snippet_id." with value ".$i."<br />";
-							}
-						} else {
-							$info .= "sidebars_revised: ".$sidebars_revised."<br />";
-						}
-						//
-					}*/
-					
-					/*
-					$info .= "<strong>&rarr; Snippet Display Logic</strong><br />";
-					if ( count($cs_post_ids) > 0 ) {
-					
-						// Field: target_by_post
-						// Get existing targeted posts, if any
-						$target_posts = get_post_meta( $snippet_id, 'target_by_post', true );
-						if ( is_array($target_posts) ) {
-							sort($target_posts); // Sort the array -- TODO: sort instead by post title
-							$info .= count($target_posts)." target_posts:<br />";
-						} else {
-							$target_posts = array();
-						}
-						foreach ( $target_posts as $x => $id ) {
-							$info .= $x.".) ".get_the_title($id)." [$id]<br />";
-						}
-						$info .= "<hr />";
-						$target_posts_revised = array();
-						if ( empty($target_posts) ) {
-							$info .= "target_by_post field is empty<br />";
-							$target_posts_revised = $cs_post_ids;
-						} else if ( $cs_post_ids == $target_posts ) {
-							$info .= "cs_post_ids same as target_posts => no update needed<br />";
-						} else {
-							// Merge old and new arrays
-							$info .= "Merge target_posts with cs_post_ids<br />";
-							$merged = array_unique(array_merge($target_posts, $cs_post_ids));
-							sort($merged); // Sort the array -- TODO: sort instead by post title
-							if ( $merged == $target_posts ) {
-								$info .= "Merged array same as saved value for target_posts<br />";
-							} else {
-								$target_posts_revised = $merged;
-								$info .= count($target_posts_revised)." target_posts_revised<br />"; //$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
-							}
-						}
-						//$target_posts_revised = $sidebar; //tmp
-						if ( $target_posts_revised ) {
-							if ( $run_updates ) {
-								// Update snippet record
-								if ( update_post_meta( $snippet_id, 'target_by_post', $target_posts_revised ) ) {
-									$info .= "post_meta field `target_by_post` updated for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
-								} else {
-									$info .= "post_meta field `target_by_post` update FAILED for snippet_id: ".$snippet_id." with value ".print_r($target_posts_revised,true)."<br />";
-								}
-							} else {
-								$info .= count($target_posts_revised)." target_posts_revised: ".print_r($target_posts_revised, true)."<br />";
-							}
-						}
-					}
-					*/
-					
-				} else {
-					//$info .= "No corresponding snippet(s) found<br />";
 				}
 				
 				if ( $i > $limit ) { break; }
