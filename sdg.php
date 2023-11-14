@@ -2973,10 +2973,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
 			if ( !is_array($$key) && strpos($$key, '{') !== false ) {
-				$key_ts_info .= "key: $key => ".$$key."<br />";
+				$key_ts_info .= "key: $key => ";//$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
-				$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
+				//$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
 			}	
 				
 			// Clean up legacy field values
@@ -3010,23 +3010,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 			if ( $key == 'cs_post_ids' ) {
 				
 				// WIP 231113
-				/*
-				// Do we need to use an acf function to update this relationship field?
-				$cs_post_ids = get_field( $key, $snippet_id, false );
-				$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
-				// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-				if ( !is_array($cs_post_ids) && strpos($cs_post_ids, '{') !== false ) {
-					$key_ts_info .= "key: $key => ".$$key."<br />";
-					$key_ts_info .= "unserialize...<br >";
-					$$key = unserialize($$key);
-					$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
-				}
-				if ( !is_array($cs_post_ids) ) {
-					$key_ts_info .= "cs_post_ids var is of type: ".gettype($cs_post_ids)."<br />";
-					//$cs_post_ids = json_decode($cs_post_ids); // Make the array saved as text into an actual array
-				}
-				*/
-				//
 				if ( is_array($$key) ) {
 					$key_ts_info .= count($$key)." cs_post_ids<br />";
 				} else {
@@ -3034,7 +3017,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				}
 				// For each cs_post_id, make sure that post actually exists,
 				// ... then add it to the target_by_post field
-				// ... and/or the cs_posts field...									
+				// ... and/or the cs_posts field...?								
 				
 			} else if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
 				
