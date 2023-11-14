@@ -2972,7 +2972,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
 			
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
-			if ( !is_array($$key) && strpos($key, '{') !== false ) {
+			if ( !is_array($$key) && strpos($$key, '{') !== false ) {
 				$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
@@ -3010,19 +3010,27 @@ function update_snippet_logic ( $snippet_id = null ) {
 			if ( $key == 'cs_post_ids' ) {
 				
 				// WIP 231113
+				/*
 				// Do we need to use an acf function to update this relationship field?
 				$cs_post_ids = get_field( $key, $snippet_id, false );
 				$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
+				// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
+				if ( !is_array($cs_post_ids) && strpos($cs_post_ids, '{') !== false ) {
+					$key_ts_info .= "key: $key => ".$$key."<br />";
+					$key_ts_info .= "unserialize...<br >";
+					$$key = unserialize($$key);
+					$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
+				}
 				if ( !is_array($cs_post_ids) ) {
 					$key_ts_info .= "cs_post_ids var is of type: ".gettype($cs_post_ids)."<br />";
 					//$cs_post_ids = json_decode($cs_post_ids); // Make the array saved as text into an actual array
 				}
-				
+				*/
 				//
-				if ( is_array($cs_post_ids) ) {
-					$key_ts_info .= count($cs_post_ids)." cs_post_ids<br />";
+				if ( is_array($$key) ) {
+					$key_ts_info .= count($$key)." cs_post_ids<br />";
 				} else {
-					//$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
+					$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
 				}
 				// For each cs_post_id, make sure that post actually exists,
 				// ... then add it to the target_by_post field
@@ -3995,7 +4003,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								//
 								if ( $cs_post_ids_revised ) {
 									//$info .= count($cs_post_ids_revised)." cs_post_ids_revised: ".print_r($cs_post_ids_revised, true)."<br />";
-									$meta_input['cs_post_ids'] = print_r($cs_post_ids_revised, true);
+									$meta_input['cs_post_ids'] = serialize($cs_post_ids_revised);
 								}
 								// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
 								// WIP...
