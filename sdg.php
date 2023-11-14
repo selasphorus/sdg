@@ -3007,27 +3007,6 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 			
 			// TODO: streamline! get rid of code redundancy -- WIP 231027
-			/*if ( $key == 'cs_post_ids' ) {
-				
-				// WIP 231113
-				if ( is_array($$key) ) {
-					$key_ts_info .= count($$key)." cs_post_ids<br />";
-				} else {
-					$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
-					continue; // can't do much with a non-array... wip
-				}
-				// For each cs_post_id, make sure that post actually exists,
-				// ... then add it to the target_by_post field
-				// ... and the cs_posts field...?
-				$matched_posts = array();
-				foreach ( $$key as $post_id ) {
-					// Make sure the post exists
-					//
-					$matched_posts = $post_id;
-				}
-				
-				
-			} else */
 			if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
 				
 				// Init arrays
@@ -3037,21 +3016,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 				
 				//
 				if ( $key == 'cs_post_ids' ) {
-				
-					// WIP 231113
 					if ( is_array($$key) ) {
 						$key_ts_info .= count($$key)." cs_post_ids<br />";
 					} else {
 						$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
 						continue; // can't do much with a non-array... wip
-					}
-					// For each cs_post_id, make sure that post actually exists,
-					// ... then add it to the target_by_post field
-					// ... and the cs_posts field...?
-					foreach ( $$key as $post_id ) {
-						// Make sure the post exists
-						//...
-						//$matched_posts = $post_id;
 					}
 				}
 				
@@ -3798,6 +3767,52 @@ function make_terms_array($x) {
 
 /*** END copied from WidgetContext ***/
 
+function get_revised_field_value ( $post_id = null, $key = null, $new_value = null, $type = 'array' ) {
+
+	// init
+	$arr = array();
+	$info = "";
+	//
+	if ( $type == 'array' ) {
+		$revised_value = array();
+	} else {
+		$revised_value = null;
+	}
+	
+	// Get existing field value, if any
+	if ( $post_id ) {
+		$old_value = get_post_meta( $post_id, $key, true ); // TBD: would it be better to use get_field?
+	} else {
+		$old_value = null;
+	}
+	
+	if ( $type == 'array' ) {
+		// Make the array saved as text into an actual array, if needed
+		if ( !is_array($old_value) && !empty($old_value) ) { $old_value = json_decode($old_value); }
+		// Determine whether an update is needed
+		if ( empty($old_value) ) {
+			$info .= $key." field is empty (old_value)<br />";
+			$revised_value = $new_value;
+		} else if ( $new_value == $old_value ) {
+			$info .= "new_value same as old_value => no update needed<br />";
+		} else {
+			// Merge old and new arrays
+			$info .= "Merge old_value with new_value<br />";
+			$revised_value = array_unique(array_merge($old_value, $new_value));
+			sort($revised_value); // Sort the array -- TODO: sort instead by post title
+		}
+	} else {
+		// WIP
+	}
+	
+	$arr['info'] = $info;
+	$arr['value'] = $revised_value;
+	
+	//return $revised_value;
+	return $arr;
+	
+}
+
 add_shortcode('widgets_to_snippets', 'convert_widgets_to_snippets');
 function convert_widgets_to_snippets ( $atts = [] ) {
 
@@ -4017,6 +4032,12 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								$info .= "<hr />";
 								//$cs_post_ids = array(); // tft
 								//
+								// WIP generalized fcn to determine revised value
+								// WIP 231113 -- TODO: make sure this is working and then implement it everywhere we're doing a similar update procedure
+								$arr_cs_post_ids_revised = get_revised_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ) // post_id, key, new_value, type
+								$info .= $arr_cs_post_ids_revised['info'];
+								$cs_post_ids_revised = $arr_cs_post_ids_revised['value'];
+								/*
 								if ( $snippet_id ) {
 									$snippet_cs_post_ids = get_post_meta( $snippet_id, 'cs_post_ids', true );
 								} else {
@@ -4037,13 +4058,52 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 									$cs_post_ids_revised = array_unique(array_merge($snippet_cs_post_ids, $cs_post_ids));
 									sort($cs_post_ids_revised); // Sort the array -- TODO: sort instead by post title
 								}
-								//
+								*/
 								if ( $cs_post_ids_revised ) {
 									//$info .= count($cs_post_ids_revised)." cs_post_ids_revised: ".print_r($cs_post_ids_revised, true)."<br />";
 									$meta_input['cs_post_ids'] = serialize($cs_post_ids_revised);
 								}
-								// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
-								// WIP...
+								
+								//
+								// WIP: ALSO add cs_posts_ids to widgets that are set to snippet_display == notselected
+								// ... otherwise sidebar-1 widgets like News, Events will be displayed
+								// WIP 231113
+								// 1. get snippets where snippet_display == notselected AND sidebar_id NOT cs-
+								// 2. update the 'cs_post_ids' for those snippets as well as the current one
+								$wp_args = array(
+									'post_type'   => 'snippet',
+									'post_status' => 'publish',
+									'fields'      => 'ids'
+								);								
+								$meta_query = array(
+									'relation' => 'AND',
+									'snippet_display' => array(
+										'key' => 'snippet_display',
+										'value' => 'notselected',
+									),
+									'sidebar_id' => array(
+										'relation' => 'OR',
+										array(
+											'key' => 'sidebar_id',
+											'value' => 'sidebar-1',
+											'compare' => '=',
+										),
+										array(
+											'key' => 'sidebar_id',
+											'value' => 'cs-',
+											'compare' => 'LIKE',
+										),
+									),
+								);
+								$wp_args['meta_query'] = $meta_query;
+								$matching_snippets = get_posts($wp_args);
+								if ( $matching_snippets ) {
+									foreach ( $matching_snippets as $msnip ) {
+									
+									}
+								}
+								
+								
 							} else {
 								$info .= "There are no posts using this custom sidebar<br />";
 								$meta_input['snippet_display'] = "hide";
