@@ -2909,7 +2909,7 @@ function get_snippets ( $atts = [] ) {
 		$snippet_content = get_the_content( null, false, $snippet_id );
 		//$snippet_content = apply_filters('the_content', $snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
 		//$snippet_content = do_shortcode($snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
-		//$snippet_content = wpautop($snippet_content);
+		$snippet_content = wpautop($snippet_content);
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
 		//
