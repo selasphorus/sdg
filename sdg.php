@@ -3092,7 +3092,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					if ( is_array($condition) ) {
 						if ( isset($condition['url']) ) {
 							$url = $condition['url'];
-							//$condition_info .= "url: ".$url."<br />";
+							$condition_info .= "url: ".$url."<br />";
 						} else if ( is_int($condition) ) {
 							$p_id = $condition;
 							$condition_info .= "p_id: ".$p_id."<br />";
@@ -3106,7 +3106,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							continue;
 						}						
 					} else {
-						//$condition_info .= "condition: ".$condition."<br />";
+						$condition_info .= "condition: ".$condition."[".gettype($condition)."]<br />";
 					}					
 					//
 					if ( $url ) {
@@ -3194,6 +3194,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						}
 					}
 					$condition_info .= "---<br />";
+					//
 					$key_ts_info .= $condition_info;
 					
 				} // END foreach $conditions
