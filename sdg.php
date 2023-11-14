@@ -3772,6 +3772,7 @@ function get_revised_field_value ( $post_id = null, $key = null, $new_value = nu
 	// init
 	$arr = array();
 	$info = "";
+	$info .= ">> get_revised_field_value <<<br />";
 	//
 	if ( $type == 'array' ) {
 		$revised_value = array();
@@ -4034,7 +4035,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								//
 								// WIP generalized fcn to determine revised value
 								// WIP 231113 -- TODO: make sure this is working and then implement it everywhere we're doing a similar update procedure
-								$arr_cs_post_ids_revised = get_revised_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ) // post_id, key, new_value, type
+								$arr_cs_post_ids_revised = get_revised_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ); // post_id, key, new_value, type
 								$info .= $arr_cs_post_ids_revised['info'];
 								$cs_post_ids_revised = $arr_cs_post_ids_revised['value'];
 								/*
@@ -4060,6 +4061,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								}
 								*/
 								if ( $cs_post_ids_revised ) {
+									$info .= count($cs_post_ids_revised)." cs_post_ids_revised<br />";
 									//$info .= count($cs_post_ids_revised)." cs_post_ids_revised: ".print_r($cs_post_ids_revised, true)."<br />";
 									$meta_input['cs_post_ids'] = serialize($cs_post_ids_revised);
 								}
