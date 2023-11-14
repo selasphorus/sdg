@@ -3014,7 +3014,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$cs_post_ids = get_field( $key, $snippet_id, false );
 				$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
 				if ( !is_array($cs_post_ids) ) {
-					$cs_post_ids = json_decode($cs_post_ids); // Make the array saved as text into an actual array
+					$key_ts_info .= "cs_post_ids var is of type: ".gettype($cs_post_ids)."<br />";
+					//$cs_post_ids = json_decode($cs_post_ids); // Make the array saved as text into an actual array
 				}
 				
 				//
