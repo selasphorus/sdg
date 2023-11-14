@@ -3195,7 +3195,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 					}
 					$condition_info .= "---<br />";
 					//
-					$key_ts_info .= $condition_info;
+					//$key_ts_info .= $condition_info;
 					
 				} // END foreach $conditions
 				$key_ts_info .= "<hr />";
