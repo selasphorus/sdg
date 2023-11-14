@@ -3007,21 +3007,56 @@ function update_snippet_logic ( $snippet_id = null ) {
 			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 			
 			// TODO: streamline! get rid of code redundancy -- WIP 231027
-			if ( $key == 'cs_post_ids' ) {
+			/*if ( $key == 'cs_post_ids' ) {
 				
 				// WIP 231113
 				if ( is_array($$key) ) {
 					$key_ts_info .= count($$key)." cs_post_ids<br />";
 				} else {
 					$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
+					continue; // can't do much with a non-array... wip
 				}
 				// For each cs_post_id, make sure that post actually exists,
 				// ... then add it to the target_by_post field
-				// ... and/or the cs_posts field...?								
+				// ... and the cs_posts field...?
+				$matched_posts = array();
+				foreach ( $$key as $post_id ) {
+					// Make sure the post exists
+					//
+					$matched_posts = $post_id;
+				}
 				
-			} else if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
 				
-				if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' ) {
+			} else */
+			if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
+				
+				// Init arrays
+				$matched_posts = array();
+				$repeater_additions = array();
+				$repeater_removals = array();
+				
+				//
+				if ( $key == 'cs_post_ids' ) {
+				
+					// WIP 231113
+					if ( is_array($$key) ) {
+						$key_ts_info .= count($$key)." cs_post_ids<br />";
+					} else {
+						$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
+						continue; // can't do much with a non-array... wip
+					}
+					// For each cs_post_id, make sure that post actually exists,
+					// ... then add it to the target_by_post field
+					// ... and the cs_posts field...?
+					foreach ( $$key as $post_id ) {
+						// Make sure the post exists
+						//...
+						//$matched_posts = $post_id;
+					}
+				}
+				
+				//
+				if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'target_by_url' ) {
 					$target_key = 'target_by_post';
 					$repeater_key = 'target_by_url';
 				} else if ( $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
@@ -3043,107 +3078,125 @@ function update_snippet_logic ( $snippet_id = null ) {
 				//$key_ts_info .= "existing repeater_rows: ".print_r($repeater_rows, true)."<br />";
 				//
 				// TODO: (re-)check repeater_rows to see if updates are needed from target_by_url => target_by_post
-				// Init arrays
-				$matched_posts = array();
-				$repeater_additions = array();
-				$repeater_removals = array();
 				//
 				$key_ts_info .= "-----------<br />";
-				foreach ( $conditions as $url ) {
+				foreach ( $conditions as $condition ) {
 					//
-					if ( empty($url) ) { continue; }
+					if ( empty($condition) ) { continue; }
+					$condition_info = "";
+					$url = null;
 					$slug = null;
 					$post_type = null;
-					$url_info = "";
+					$matched_post_id = null;
 					//
-					if ( is_array($url) ) {
-						if ( isset($url['url']) ) {
-							$url = $url['url'];
-							//$key_ts_info .= "url: ".$url."<br />";
+					if ( is_array($condition) ) {
+						if ( isset($condition['url']) ) {
+							$url = $condition['url'];
+							//$condition_info .= "url: ".$url."<br />";
+						} else if ( is_int($condition) ) {
+							$p_id = $condition;
+							$condition_info .= "p_id: ".$p_id."<br />";
+							// Check to see if p_id is a valid post id
+							$post = get_post( $p_id );
+							if ( $post ) {
+								$matched_post_id = $p_id;
+							}							
 						} else {
-							$url_info .= "url: <pre>".print_r($url, true)."</pre>";
+							$condition_info .= "condition: <pre>".print_r($condition, true)."</pre>";
 							continue;
 						}						
 					} else {
-						//$url_info .= "url: ".$url."<br />";
+						//$condition_info .= "condition: ".$condition."<br />";
 					}					
 					//
-					$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
+					if ( $url ) {
 					
-					// Parse the url
-					$hostname = parse_url($url, PHP_URL_HOST);
-					if ( !empty($hostname) ) {
-						$url_info .= "&rarr; hostname: $hostname<br />";
-					}
-					$path = parse_url($url, PHP_URL_PATH);
-					//$key_ts_info .= "&rarr; path: $path<br />";
-					$querystring = parse_url($url, PHP_URL_QUERY);
-					if ( !empty($querystring) ) {
-						$querystring = "?".$querystring;
-						$url_info .= "&rarr; querystring: $querystring<br />";
-					}
-					
-					// Is this an STC absolute URL? If so, remove the first bit
-					if ( substr($url, 0, 4) == "http" ) {
-						$url_info .= "** Absolute url => relativize it [$url]<br />";
-						//$url_bits = parse_url($url);
-						// If this is an STC url, remove everything except the path
-						if ( preg_match("/stc|saint/", $hostname) ) {
-							$url = $path.$querystring;
-							$url_info .= "&rarr; revised url: $url<br />";
-							$url_info .= "&rarr; remove old: $url_bk<br />";
-							$repeater_removals[] = $url_bk; // Remove the absolute URL
-						}
-					}
-					//
-					$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
-					if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
-						$post_type = "event";
-					} else if ( preg_match($date_validation_regex, $url) ) {
-						$post_type = "post";
-					}
-					//
-					if ( $post_type ) {
-						// Extract slug from path
-						// First, trim trailing slash, if any
-						if ( substr($path, -1) == "/" ) { $path = substr($path, 0, -1); }
-						$url_bits = explode("/",$path); // The last bit is slug
-						$slug = end($url_bits);
-						//$url_info .= "url_bits: ".print_r($url_bits, true)."<br />";
-						$url_info .= "$post_type slug: $slug<br />";
-					} else {
-						$url_info .= "path: $path<br />";
-						//$url_info .= "url: $url<br />";
+						$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
 						
-					}
-					// Look for matching post
-					if ( $slug && $post_type ) {
-						$matched_post = get_page_by_path($slug, OBJECT, $post_type);
-					} else {
-						$matched_post = get_page_by_path($path);
-					}
-					//
-					if ($matched_post) {
-						$matched_post_id = $matched_post->ID;
-						$matched_posts[] = $matched_post_id;
-						$url_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-						$url_info .= "&rarr; remove from repeater_rows array: $url<br />";
-						$repeater_removals[] = $url;
-					} else {
-						$url_info .= "&rarr; NO matching post found<br />";
-						$tmp_urls = array_column($repeater_rows, 'url');
-						$match_key = array_search($url, $tmp_urls); //$match_key = array_search($url, array_column($repeater_rows, 'url')); // not working -- why not?!?
-						if ( $match_key ) {
-							$url_info .= "&rarr; The url '".$url."' is already in repeater_rows array at position ".$match_key."<br />";
+						// Parse the url
+						$hostname = parse_url($url, PHP_URL_HOST);
+						if ( !empty($hostname) ) {
+							$condition_info .= "&rarr; hostname: $hostname<br />";
+						}
+						$path = parse_url($url, PHP_URL_PATH);
+						//$key_ts_info .= "&rarr; path: $path<br />";
+						$querystring = parse_url($url, PHP_URL_QUERY);
+						if ( !empty($querystring) ) {
+							$querystring = "?".$querystring;
+							$condition_info .= "&rarr; querystring: $querystring<br />";
+						}
+					
+						// Is this an STC absolute URL? If so, remove the first bit
+						if ( substr($url, 0, 4) == "http" ) {
+							$condition_info .= "** Absolute url => relativize it [$url]<br />";
+							//$url_bits = parse_url($url);
+							// If this is an STC url, remove everything except the path
+							if ( preg_match("/stc|saint/", $hostname) ) {
+								$url = $path.$querystring;
+								$condition_info .= "&rarr; revised url: $url<br />";
+								$condition_info .= "&rarr; remove old: $url_bk<br />";
+								$repeater_removals[] = $url_bk; // Remove the absolute URL
+							}
+						}
+						//
+						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+						if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
+							$post_type = "event";
+						} else if ( preg_match($date_validation_regex, $url) ) {
+							$post_type = "post";
+						}
+						//
+						if ( $post_type ) {
+							// Extract slug from path
+							// First, trim trailing slash, if any
+							if ( substr($path, -1) == "/" ) { $path = substr($path, 0, -1); }
+							$url_bits = explode("/",$path); // The last bit is slug
+							$slug = end($url_bits);
+							//$condition_info .= "url_bits: ".print_r($url_bits, true)."<br />";
+							$condition_info .= "$post_type slug: $slug<br />";
 						} else {
-							// TODO: check to see if the url is already in the array!
-							$repeater_additions[] = $url;
-							$url_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_additions array<br />";
+							$condition_info .= "path: $path<br />";
+							//$condition_info .= "url: $url<br />";
+						
+						}
+						// Look for matching post
+						if ( $slug && $post_type ) {
+							$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+						} else {
+							$matched_post = get_page_by_path($path);
+						}
+						
+						if ( $matched_post ) {
+							$matched_post_id = $matched_post->ID;
 						}
 					}
-					$url_info .= "---<br />";
-					//$key_ts_info .= $url_info;
-				} // END foreach $urls
+					
+					//
+					if ( $matched_post_id ) {
+						$matched_posts[] = $matched_post_id;
+						$condition_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+						if ( $url ) {
+							$condition_info .= "&rarr; remove from repeater_rows array: $url<br />";
+							$repeater_removals[] = $url;
+						}						
+					} else {
+						$condition_info .= "&rarr; NO matching post found<br />";
+						if ( $url ) {
+							$tmp_urls = array_column($repeater_rows, 'url');
+							$match_key = array_search($url, $tmp_urls); //$match_key = array_search($url, array_column($repeater_rows, 'url')); // not working -- why not?!?
+							if ( $match_key ) {
+								$condition_info .= "&rarr; The url '".$url."' is already in repeater_rows array at position ".$match_key."<br />";
+							} else {
+								// TODO: check to see if the url is already in the array!
+								$repeater_additions[] = $url;
+								$condition_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_additions array<br />";
+							}
+						}
+					}
+					$condition_info .= "---<br />";
+					$key_ts_info .= $condition_info;
+					
+				} // END foreach $conditions
 				$key_ts_info .= "<hr />";
 				
 				// Save the posts to the snippet field
