@@ -4046,6 +4046,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								// WIP...
 							} else {
 								$info .= "There are no posts using this custom sidebar<br />";
+								$meta_input['snippet_display'] = "hide";
 							}
 							$info .= "<hr />";
 							
