@@ -2425,7 +2425,7 @@ function get_snippets ( $atts = [] ) {
         'run_updates'  => false,
         'dev' => false,
         'return' => 'info',
-        //'sidebar_id' => 'sidebar-1', // default
+        'sidebar_id' => 'sidebar-1', // default
     ), $atts );
     
     // Extract
