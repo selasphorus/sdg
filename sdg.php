@@ -4198,7 +4198,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 				}
 				
-				//if ( $i > $limit ) { break; }
+				//if ( $i > $limit ) { break; } // tft
 				
 				$info .= "<hr />";
 			} // foreach ( $widgets...
