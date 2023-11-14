@@ -4044,6 +4044,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								}
 								// ALSO! check snippet_display value... If it's set to show ("show everywhere"), then change it to selected (???) ("show on selected"")
 								// WIP...
+							} else {
+								$info .= "There are no posts using this custom sidebar<br />";
 							}
 							$info .= "<hr />";
 							
