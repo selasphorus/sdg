@@ -3012,6 +3012,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// WIP 231113
 				// Do we need to use an acf function to update this relationship field?
 				$cs_post_ids = get_field( $key, $snippet_id, false );
+				$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
 				if ( !is_array($cs_post_ids) ) {
 					$cs_post_ids = json_decode($cs_post_ids); // Make the array saved as text into an actual array
 				}
@@ -3020,7 +3021,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				if ( is_array($cs_post_ids) ) {
 					$key_ts_info .= count($cs_post_ids)." cs_post_ids<br />";
 				} else {
-					$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
+					//$key_ts_info .= "cs_post_ids => ".print_r($cs_post_ids,true)."<br />";
 				}
 				// For each cs_post_id, make sure that post actually exists,
 				// ... then add it to the target_by_post field
