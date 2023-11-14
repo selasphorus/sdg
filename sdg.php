@@ -2924,7 +2924,7 @@ function get_snippets ( $atts = [] ) {
 		$info .= '</section>';
 	}
 	// 
-	if ( $dev ) { $info .= "<hr />".$ts_info; }
+	if ( $dev ) { $info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>';}
 	
 	return $info;
 	
