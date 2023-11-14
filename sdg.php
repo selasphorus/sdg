@@ -3967,6 +3967,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								} else {
 									$cs_post_ids_revised = array();
 								}
+								if ( !is_array($snippet_cs_post_ids) ) {
+									// Make it into an array
+									$snippet_cs_post_ids = json_decode($snippet_cs_post_ids);
+								}
 								//
 								if ( empty($snippet_cs_post_ids) ) {
 									$info .= "cs_post_ids field is empty<br />";
