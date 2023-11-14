@@ -3941,30 +3941,33 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								//$info .= count($cs_post_ids)." posts using this sidebar: ".print_r($cs_post_ids,true)."<br />";
 								foreach ( $cs_post_ids as $x => $id ) {
 							
-									$info .= $x.".) ".get_the_title($id)." [$id]";
+									$post_info = $x.".) ".get_the_title($id)." [$id]";
 								
 									// Get post status -- we're only interested published posts
 									$post_status = get_post_status( $id );
-									if ( $post_status != "publish" ) { $info .= " <em>*** ".$post_status." ***</em>"; }
-									//$info .= "<br />";
+									if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
+									//$post_info .= "<br />";
 								
 									// Is this an attached instance of a recurring event?
 									$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
 									if ( $recurrence_id ) {
-										$info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
+										$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
 										// Remove individual instance id from ids array and save parent id instead? or.... WIP
 									} else {
-										//$info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+										//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 									}
-									$info .= "<br />";
+									$post_info .= "<br />";
+									//$info .= $post_info;
 								}
 								$info .= "<hr />";
 								//$cs_post_ids = array(); // tft
+								//
 								if ( $snippet_id ) {
 									$snippet_cs_post_ids = get_post_meta( $snippet_id, 'cs_post_ids', true );
 								} else {
 									$cs_post_ids_revised = array();
 								}
+								//
 								if ( empty($snippet_cs_post_ids) ) {
 									$info .= "cs_post_ids field is empty<br />";
 									$cs_post_ids_revised = $cs_post_ids;
@@ -3976,6 +3979,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 									$cs_post_ids_revised = array_unique(array_merge($snippet_cs_post_ids, $cs_post_ids));
 									sort($cs_post_ids_revised); // Sort the array -- TODO: sort instead by post title
 								}
+								//
 								if ( $cs_post_ids_revised ) {
 									//$info .= count($cs_post_ids_revised)." cs_post_ids_revised: ".print_r($cs_post_ids_revised, true)."<br />";
 									$meta_input['cs_post_ids'] = print_r($cs_post_ids_revised, true);
