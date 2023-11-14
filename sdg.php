@@ -4034,7 +4034,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 								//$cs_post_ids = array(); // tft
 								//
 								// WIP generalized fcn to determine revised value
-								// WIP 231113 -- TODO: make sure this is working and then implement it everywhere we're doing a similar update procedure
+								// WIP 231113 -- TODO: test some additional sidebars/widgets to make sure this is working and then implement it everywhere we're doing a similar update procedure
 								$arr_cs_post_ids_revised = get_revised_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ); // post_id, key, new_value, type
 								$info .= $arr_cs_post_ids_revised['info'];
 								$cs_post_ids_revised = $arr_cs_post_ids_revised['value'];
