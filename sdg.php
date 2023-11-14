@@ -4069,8 +4069,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							//$info .= "condition: ".$condition."<br />";
 							//$info .= "subconditions: <br />";
 							if ( $condition == 'incexc' ) {
-		
-								$meta_input['snippet_display'] = $subconditions['condition'];
+								
+								if ( !$custom_sidebar || $subconditions['condition'] != "show" ) {
+									$meta_input['snippet_display'] = $subconditions['condition'];
+								}
 			
 							} else if ( $condition == "url" ) {
 		
