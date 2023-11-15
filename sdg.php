@@ -2462,7 +2462,15 @@ function cs_sidebars_xfer ( $atts = [] ) {
 			}
 		}
 		//$info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>";
-		$info .= "revised sidebar_id: ".$sidebar_id."<br />";
+		$info .= "revised sidebar_id: ".$sidebar_id."<br /><br />";
+		
+		// Update postmeta with revised sidebar_id value
+		$update_key = 'sidebar_id';
+		if ( update_field( $update_key, $sidebar_id, $post_id ) ) {
+			$key_ts_info .= "updated field: ".$update_key." for post_id: $post_id<br />";
+		} else {
+			$key_ts_info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
+		}
 		
 	}
 	
