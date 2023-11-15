@@ -2405,6 +2405,61 @@ function sdg_post_type_access_limiter(){
 
 /*** WIDGETS >> SNIPPETS -- WIP! ***/
 
+add_shortcode('cs_sidebars_xfer', 'cs_sidebars_xfer');
+function cs_sidebars_xfer ( $atts = [] ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: cs_sidebars_xfer", $do_log );
+    
+    // Init vars
+    $info = "";
+	
+	// Set up basic query args for snippets retrieval
+    $wp_args = array(
+		'post_type'		=> 'any',
+		'post_status'	=> 'publish',
+		'posts_per_page'=> $limit,
+        'fields'		=> 'ids',
+        'orderby'		=> 'meta_value',
+		'order'			=> 'ASC',
+        'meta_key'		=> '_cs_replacements',
+	);
+	
+	// Meta query
+	$meta_query = array(
+		'_cs_replacements' => array(
+			'key' => '_cs_replacements',
+			'compare' => '!=',
+			'value' => '',
+		),
+	);
+	$wp_args['meta_query'] = $meta_query;
+	
+	$arr_posts = new WP_Query( $wp_args );
+	$posts = $arr_posts->posts;
+    //$info .= "WP_Query run as follows:";
+    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $info .= "[".count($posts)."] posts found.<br />";
+    
+    // Determine which snippets should be displayed for the post in question
+	foreach ( $posts as $post_id ) {
+		
+		$info .= "post_id: ".$post_id."<br />";
+		
+		$cs = get_post_meta( $post_id, '_cs_replacements', true );
+		$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
+		
+		$info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>";
+		$info .= "sidebar_id: <pre>".print_r($sidebar_id, true)."</pre>";
+	}
+	
+	return $info;
+
+}
+
 //
 add_shortcode('snippets', 'get_snippets');
 function get_snippets ( $atts = [] ) {
@@ -3558,6 +3613,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 					// Update other snippets to prevent display of these cs_post_ids
 					// Update matching snippets with arr_ids...
+					
+					// TODO: figure out how to edit widget logic for remaining widgets (not snippets) to add cs- posts to list of exclusions
+					// 
 	
 					// WIP 231113
 					$key_ts_info .= "<br /><strong>Preparing for tertiary snippet updates...</strong><br /><br />";
