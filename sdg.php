@@ -3676,7 +3676,17 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$querystring = "?".$querystring;
 							$condition_info .= "&rarr; querystring: $querystring<br />";
 						}
-					
+						
+						// Does the URL contain a wildcard character? i.e. asterisk?
+						// e.g. /shop*, events/*
+						if ( strpos($sidebar, '*') !== false ) {
+							$wildcard = true;
+							$condition_info .= "** Wildcard url => add to repeaters; can't be matched<br />";
+							$repeater_additions[] = $url;
+						} else {
+							$wildcard = false;
+						}
+						
 						// Is this an STC absolute URL? If so, remove the first bit
 						if ( substr($url, 0, 4) == "http" ) {
 							$condition_info .= "** Absolute url => relativize it [$url]<br />";
@@ -3711,13 +3721,15 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						
 						}
 						// Look for matching post
-						if ( $slug && $post_type ) {
-							$matched_post = get_page_by_path($slug, OBJECT, $post_type);
-						} else {
-							$matched_post = get_page_by_path($path);
+						if ( $wildcard == false ) {
+							if ( $slug && $post_type ) {
+								$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+							} else {
+								$matched_post = get_page_by_path($path);
+							}
+							if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
 						}
 						
-						if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
 					}
 					
 					//
