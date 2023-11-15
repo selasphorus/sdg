@@ -2739,10 +2739,8 @@ function get_snippets ( $atts = [] ) {
 								}
 								if ( isset($v[$field_key]) ) {
 								
-									$url = $v[$field_key];
-									
-									// Trim trailing slash if any
-									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
+									$url = $v[$field_key];									
+									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); } // Trim trailing slash, if any
 									
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
@@ -2755,10 +2753,16 @@ function get_snippets ( $atts = [] ) {
 									} else if ( strpos($url, '*') !== false ) {
 										// Check for wildcard match
 										$snippet_logic_info .= "** Wildcard url<br />";
-										$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
+										$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />"; //$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
+										// Remove the asterisk to get the url_base
 										$url_base = substr($url, 0, strpos($url, '*'));
+										// clean up the bases so that the /s don't get in the way -- TODO: do this more efficiently, maybe with a custom trim fcn?
+										if ( substr($url_base, 0, 1) == "/" ) { $url_base = substr($url_base, 1); } // Trim leading slash, if any
+										if ( substr($url_base, -1) == "/" ) { $url_base = substr($url_base, 0, -1); } // Trim trailing slash, if any
 										$snippet_logic_info .= "url_base: $url_base<br />";
-										if ( substr($current_path, 0, 1) == "/" ) { $current_path_base = substr($current_path, 1); } else { $current_path_base = $current_path; }
+										$current_path_base = $current_path;
+										if ( substr($current_path_base, 0, 1) == "/" ) { $current_path_base = substr($current_path_base, 1); } // Trim leading slash, if any
+										if ( substr($current_path_base, -1) == "/" ) { $current_path_base = substr($current_path_base, 0, -1); } // Trim trailing slash, if any
 										$snippet_logic_info .= "current_path_base: $current_path_base<br />";
 										// match to $current_path? true if current_path begins with url_base
 										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
