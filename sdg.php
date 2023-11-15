@@ -2747,30 +2747,13 @@ function get_snippets ( $atts = [] ) {
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
+									$url_match = false;
 									if ( $url == $current_path ) {
+										// URL matches current path
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
-										if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
-											$post_snippets[] = $snippet_id; // add the item to the post_snippets array
-											$snippet_status = "active";
-											$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
-											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-											$snippet_logic_info .= "=> BREAK<br />";
-											break;
-										} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
-											$post_snippets[] = $snippet_id; // add the item to the post_snippets array
-											$snippet_status = "active";
-											$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
-											//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-											$snippet_logic_info .= "=> BREAK<br />";
-											break;
-										}
-										// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
-										$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
-										$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
-										$snippet_status = "inactive";
-										break;
+										$url_match = true;										
 									} else if ( strpos($url, '*') !== false ) {
-										// Wildcard? WIP 231114
+										// Check for wildcard match
 										$snippet_logic_info .= "** Wildcard url<br />";
 										$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 										$url_base = substr($url, 0, strpos($url, '*'));
@@ -2779,16 +2762,34 @@ function get_snippets ( $atts = [] ) {
 										$snippet_logic_info .= "current_path_base: $current_path_base<br />";
 										// match to $current_path? true if current_path begins with url_base
 										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
-											$wildcard_match = true;
+											$url_match = true;
 											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
-										} else {
-											$wildcard_match = false;
 										}
 									} else {
 										//$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
 									}
-								} else {
-									$snippet_logic_info .= "v: ".print_r($v, true)."<br />"; 
+								}
+								if ( $url_match ) {
+									if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
+										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+										$snippet_status = "active";
+										$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
+										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+										$snippet_logic_info .= "=> BREAK<br />";
+										break;
+									} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
+										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+										$snippet_status = "active";
+										$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
+										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
+										$snippet_logic_info .= "=> BREAK<br />";
+										break;
+									}
+									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
+									$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+									$snippet_status = "inactive";
+									break;
 								}
 							} // foreach ( $target_urls as $k => $v ) {
 							$snippet_logic_info .= "current_path not targeted<br />";
