@@ -2786,7 +2786,7 @@ function get_snippets ( $atts = [] ) {
 										break;
 									}
 									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
-									$snippet_logic_info .= "=> snippet inactive due to key:".$key."/".$snippet_display."<br />";
+									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
 									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
 									$snippet_status = "inactive";
 									break;
