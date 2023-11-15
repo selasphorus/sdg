@@ -2775,10 +2775,11 @@ function get_snippets ( $atts = [] ) {
 										$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 										$url_base = substr($url, 0, strpos($url, '*'));
 										$snippet_logic_info .= "url_base: $url_base<br />";
+										if ( substr($current_path, 1) == "/" ) { $current_path_base = substr($current_path, 1); } else { $current_path_base = $current_path; }
 										// match to $current_path? true if current_path begins with url_base
-										if ( substr($current_path, 0, strlen($url_base)) == $url_base ) {
+										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
 											$wildcard_match = true;
-											$snippet_logic_info .= "current_path begins with wildcard url_base: $url_base<br />";
+											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
 										} else {
 											$wildcard_match = false;
 										}
