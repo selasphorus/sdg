@@ -221,8 +221,8 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 	$query = new WP_Query( $wp_args );
 	$post_ids = $query->posts;
 	$info .= count($post_ids)." posts found and sorted<br />";
-	global $wpdb;
-	$info .= "last_query:<pre>".$wpdb->last_query."</pre>"; // tft
+	//global $wpdb;
+	//$info .= "last_query:<pre>".$wpdb->last_query."</pre>"; // tft
 	// errors?
 	
 	$arr_info['post_ids'] = $post_ids;
