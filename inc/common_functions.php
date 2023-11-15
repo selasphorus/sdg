@@ -209,6 +209,8 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 	$info .= "arr_ids to be sorted by title => ".print_r($arr_ids,true)."<br />";
 	
 	$wp_args = array(
+		'post_type'   => 'any',
+		'post_status' => array( 'private', 'draft', 'publish' ),
 		'post__in' => $arr_ids,
 		'orderby'   => 'title',
 		'order'     => 'ASC',
