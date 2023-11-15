@@ -3498,7 +3498,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "-----------<br />";
 				foreach ( $conditions as $condition ) {				
 					$p_id = intval($condition);
-					$key_ts_info .= "p_id: ".$p_id."<br />";
+					//$key_ts_info .= "p_id: ".$p_id."<br />";
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					if ( $post ) {
