@@ -3525,8 +3525,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$wp_args['meta_query'] = $meta_query;
 				$snippets = get_posts($wp_args);
 				if ( $snippets ) {
-					$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
-					$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
+					$key_ts_info .= "Found ".count($snippets)." snippets eligible for secondary updates based on CS data<br />";
+					//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
+					//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
 					foreach ( $snippets as $i => $snip_id ) {
 						$snippet_display = get_field('snippet_display', $snip_id, false);
 						$sidebar_id = get_field('sidebar_id', $snip_id, false);
@@ -3536,7 +3537,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$target_key = 'cs_post_ids';
 						}
 						$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/target_key: ".$target_key."]<br />";
-						/*
+						
 						$secondary_updates = get_updated_field_value( $snip_id, $target_key, $updated_field_value, 'array' ); // post_id, key, new_value, type
 						$key_ts_info .= $secondary_updates['info'];
 						$secondary_updated_field_value = $secondary_updates['updated_value'];
@@ -3547,13 +3548,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
 							//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
 							//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-							if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
+							/*if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
 								$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snip_id<br />";
 							} else {
 								$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snip_id<br />";
-							}
+							}*/
 						}
-						*/
+						
 					}
 				}
 				
