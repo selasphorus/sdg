@@ -2755,7 +2755,7 @@ function get_snippets ( $atts = [] ) {
 										$snippet_logic_info .= "** Wildcard url<br />";
 										$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />"; //$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 										// Remove the asterisk to get the url_base
-										$url_base = substr($url, 0, strpos($url, '*'));
+										$url_base = trim( substr($url, 0, strpos($url, '*')) );
 										// clean up the bases so that the /s don't get in the way -- TODO: do this more efficiently, maybe with a custom trim fcn?
 										if ( substr($url_base, 0, 1) == "/" ) { $url_base = substr($url_base, 1); } // Trim leading slash, if any
 										if ( substr($url_base, -1) == "/" ) { $url_base = substr($url_base, 0, -1); } // Trim trailing slash, if any
