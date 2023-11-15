@@ -4022,9 +4022,13 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 			$info .= count($old_value)." items in old_value array<br />";
 			$info .= "=> <pre>".print_r($old_value, true)."</pre>";
 			// TODO: what about if this isn't an array of post ids? generalize... tbd
-			$old_value = sort_post_ids_by_title($old_value); // WIP
-			$info .= "old_value (sorted): <pre>".print_r($old_value, true)."</pre>";
-			// re-encode?
+			$old_value_sorted = sort_post_ids_by_title($old_value); // WIP
+			if ( $old_value_sorted ) {
+				$info .= $old_value_sorted['info'];
+				$old_value = $old_value_sorted['post_ids'];
+				$info .= "old_value (sorted): <pre>".print_r($old_value, true)."</pre>";
+			}			
+			// re-serialize?
 			//update_field( $target_key, $old_value, $snippet_id );
 		} else {
 			$info .= "old_value: ".print_r($old_value, true)."<br />";
