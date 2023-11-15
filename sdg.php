@@ -2751,7 +2751,7 @@ function get_snippets ( $atts = [] ) {
 										$url_base = substr($url, 0, strpos($url, '*'));
 										$condition_info .= "url_base: $url_base<br />";
 										// match to $current_path? true if current_path begins with url_base
-										if ( substr($current_path, 0, strlen($url_base) == $url_base ) {
+										if ( substr($current_path, 0, strlen($url_base)) == $url_base ) {
 											$wildcard_match = true;
 											$condition_info .= "current_path begins with wildcard url_base: $url_base<br />";
 										}								
