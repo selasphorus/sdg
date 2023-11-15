@@ -3395,6 +3395,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 	
 	//
+	$info .= '<div class="code">';
 	$info .= ">> update_snippet_logic for snippet_id: $snippet_id<br />";
 	//$info .= "widget_uid: $widget_uid<br />";
 	
@@ -4057,6 +4058,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	}
 	
 	if ( $do_ts ) { $info .= $ts_info; }
+	
+	$info .= '</div>';
 	
 	return $info;
 	
