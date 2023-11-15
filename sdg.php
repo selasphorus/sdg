@@ -3267,27 +3267,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							
 								$info .= count($cs_post_ids)." posts using this sidebar:<br />";
 								//$info .= count($cs_post_ids)." posts using this sidebar: ".print_r($cs_post_ids,true)."<br />";
-								foreach ( $cs_post_ids as $x => $id ) {
-							
-									$post_info = $x.".) ".get_the_title($id)." [$id]";
 								
-									// Get post status -- we're only interested published posts
-									$post_status = get_post_status( $id );
-									if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
-									//$post_info .= "<br />";
-								
-									// Is this an attached instance of a recurring event?
-									$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
-									if ( $recurrence_id ) {
-										$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
-										// Remove individual instance id from ids array and save parent id instead? or.... WIP
-									} else {
-										//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
-									}
-									$post_info .= "<br />";
-									//$info .= $post_info;
-								}
-								$info .= "<hr />";
 								//
 								// WIP generalized fcn to determine revised value
 								$updates = get_updated_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ); // post_id, key, new_value, type
@@ -3583,9 +3563,41 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$post = get_post( $p_id );
 					if ( $post ) {
 						$matched_posts[] = $p_id;
+						$recurrence_id = get_post_meta( $p_id, '_recurrence_id', true );
+						if ( $recurrence_id ) {
+							$key_ts_info .= "p_id: ".$p_id."<br />";
+							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
+							// Remove individual instance id from ids array and save parent id instead? or.... WIP
+						} else {
+							//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+						}
 					}				
 				}
 				$info .= count($matched_posts)." matched_posts<br />";
+				
+				/*
+				foreach ( $cs_post_ids as $x => $id ) {
+							
+					$post_info = $x.".) ".get_the_title($id)." [$id]";
+				
+					// Get post status -- we're only interested published posts
+					$post_status = get_post_status( $id );
+					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
+					//$post_info .= "<br />";
+				
+					// Is this an attached instance of a recurring event?
+					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
+					if ( $recurrence_id ) {
+						$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
+						// Remove individual instance id from ids array and save parent id instead? or.... WIP
+					} else {
+						//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+					}
+					$post_info .= "<br />";
+					$info .= $post_info;
+				}
+				$info .= "<hr />";
+				*/
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
 				$update_key = $key;
