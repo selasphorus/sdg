@@ -2462,7 +2462,7 @@ function cs_sidebars_xfer ( $atts = [] ) {
 			}
 		}
 		//$info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>";
-		$info .= "revised sidebar_id: ".$sidebar_id."<br /><br />";
+		$info .= "revised sidebar_id: ".$sidebar_id."<br />";
 		
 		// Update postmeta with revised sidebar_id value
 		$update_key = 'sidebar_id';
@@ -2471,6 +2471,8 @@ function cs_sidebars_xfer ( $atts = [] ) {
 		} else {
 			$info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
 		}
+		
+		$info .= "<br />";
 		
 	}
 	
