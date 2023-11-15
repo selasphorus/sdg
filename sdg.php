@@ -3540,7 +3540,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$secondary_updates = get_updated_field_value( $snip_id, $target_key, $updated_field_value, 'array' ); // post_id, key, new_value, type
 						$key_ts_info .= $secondary_updates['info'];
 						$secondary_updated_field_value = $secondary_updates['updated_value'];
-						if ( $secondary_updates ) {
+						if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
 							if ( $target_key == 'cs_post_ids' ) { serialize($secondary_updated_field_value); } // text field, not relationship => save as string
 							//
 							$key_ts_info .= "about to update field '$target_key' for snip_id: $snip_id<br />";
@@ -3708,7 +3708,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$updates = get_updated_field_value( $snippet_id, $target_key, $matched_posts, 'array' ); // post_id, key, new_value, type
 				$key_ts_info .= $updates['info'];
 				$updated_field_value = $updates['updated_value'];
-				if ( $updates ) {
+				if ( $updates && count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$target_key'<br />";
 					$info .= count($updated_field_value)." items in updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
@@ -3964,6 +3964,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$wll_conditions[] = $condition;
 					}
 					
+					// TODO: update to use new get_updated_field_value fcn
 					$existing_conditions = get_field( 'target_by_location', $snippet_id );
 					if ( empty($existing_conditions) ) {
 						$key_ts_info .= "No existing_conditions => update `target_by_location` with widget_logic cpt_conditions<br />";
