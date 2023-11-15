@@ -2420,7 +2420,7 @@ function cs_sidebars_xfer ( $atts = [] ) {
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'any',
-		'post_status'	=> 'publish',
+		'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
 		'posts_per_page'=> -1,
         'fields'		=> 'ids',
         'orderby'		=> 'meta_value',
