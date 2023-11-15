@@ -2467,9 +2467,9 @@ function cs_sidebars_xfer ( $atts = [] ) {
 		// Update postmeta with revised sidebar_id value
 		$update_key = 'sidebar_id';
 		if ( update_field( $update_key, $sidebar_id, $post_id ) ) {
-			$key_ts_info .= "updated field: ".$update_key." for post_id: $post_id<br />";
+			$info .= "updated field: ".$update_key." for post_id: $post_id<br />";
 		} else {
-			$key_ts_info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
+			$info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
 		}
 		
 	}
