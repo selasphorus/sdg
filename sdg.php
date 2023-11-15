@@ -2974,8 +2974,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: convert_widgets_to_snippets", $do_log );
     
-    $info = "";
-    
     $args = shortcode_atts( array(
 		'limit'   => 1,
         'sidebar_id' => null,
@@ -3371,13 +3369,21 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 } // END function convert_widgets_to_snippets
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
-function update_snippet_logic ( $snippet_id = null ) {
+add_shortcode('update_snippet_logic', 'update_snippet_logic');
+function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic ( $snippet_id = null ) {
 
 	// TS/logging setup
     $do_ts = true; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
+    $args = shortcode_atts( array(
+        'snippet_id' => null,
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
     // Init vars
     $info = "";
 	$ts_info = "";
