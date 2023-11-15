@@ -2745,13 +2745,17 @@ function get_snippets ( $atts = [] ) {
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
 									
 									// Wildcard? WIP 231114
-									/*if ( strpos($url, '*') !== false ) {
-										$wildcard = true;
-										$condition_info .= "** Wildcard url => add to repeaters; can't be matched<br />";
-										$repeater_additions[] = $url;
-									} else {
-										$wildcard = false;
-									}*/
+									$wildcard_match = false;
+									if ( strpos($url, '*') !== false ) {
+										$condition_info .= "** Wildcard url<br />";
+										$url_base = substr($url, 0, strpos($url, '*'));
+										$condition_info .= "url_base: $url_base<br />";
+										// match to $current_path? true if current_path begins with url_base
+										if ( substr($current_path, 0, strlen($url_base) == $url_base ) {
+											$wildcard_match = true;
+											$condition_info .= "current_path begins with wildcard url_base: $url_base<br />";
+										}								
+									}
 						
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
