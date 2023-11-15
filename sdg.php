@@ -3605,19 +3605,21 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				*/
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
-				$update_key = $key;
-				$update_value = $matched_posts;
-				$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
-				$key_ts_info .= $updates['info'];
-				$updated_field_value = $updates['updated_value'];
-				if ( $updates && count($updated_field_value) > 0 ) {
+				//$update_key = $key;
+				//$update_value = $matched_posts;
+				//$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+				//$key_ts_info .= $updates['info'];
+				//$updated_field_value = $updates['updated_value'];
+				//if ( $updates && count($updated_field_value) > 0 ) {
+				if ( count($matched_posts) > 0 ) {
 					$key_ts_info .= "about to update field '$update_key'<br />";
-					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
+					$key_ts_info .= count($matched_posts)." items in matched_posts array<br />";
+					//$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
 					//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 					//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
 					$key_ts_info .= "[[Updates only for 50 records or fewer]]<br />";
-					if ( count($updated_field_value) < 50 ) { // TMP limit
-						if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
+					if ( count($matched_posts) < 50 ) { // TMP limit
+						if ( update_field( $key, $matched_posts, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
