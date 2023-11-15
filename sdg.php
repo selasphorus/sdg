@@ -3547,9 +3547,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 			if ( $key == 'cs_post_ids' ) {
 			
 				if ( is_array($$key) ) {
-					$key_ts_info .= count($$key)." cs_post_ids<br />";
+					$$key = array_unique($$key);
+					$key_ts_info .= count($$key)." $key<br />";
 				} else {
-					$key_ts_info .= "cs_post_ids => ".print_r($$key,true)."<br />";
+					$key_ts_info .= "$key => ".print_r($$key,true)."<br />";
 					continue; // can't do much with a non-array... wip
 				}
 				
