@@ -210,7 +210,7 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 	
 	$wp_args = array(
 		'post_type'   => 'any',
-		'post_status' => array( 'private', 'draft', 'publish' ),
+		'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
 		'posts_per_page' => -1,
 		'post__in' => $arr_ids,
 		'orderby'   => 'title',
