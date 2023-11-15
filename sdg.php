@@ -3773,10 +3773,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$updated_field_value = $updates['updated_value'];
 				if ( $updates && count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$target_key'<br />";
-					$info .= count($updated_field_value)." items in updated_field_value array<br />";
-					$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
+					//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 					//$key_ts_info .= "about to update field '$target_key' with value(s): ".print_r($updated_field_value, true)."<br />";
-					if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
+					if ( update_field( $target_key, $updated_field_value, $snippet_id ) ) {
 						$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 					} else {
 						$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
