@@ -3541,7 +3541,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							//
 							if ( $target_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
 								serialize($secondary_updated_field_value);
-								$key_ts_info .= "serialized secondary_updated_field_value: ".$secondary_updated_field_value."<br />";
+								$key_ts_info .= "serialized secondary_updated_field_value: ".print_r($secondary_updated_field_value,true)."<br />";
 							}
 							//
 							//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
