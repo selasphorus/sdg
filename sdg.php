@@ -3542,11 +3542,11 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
 							//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
 							//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-							/*if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
+							if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
 								$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snip_id<br />";
 							} else {
 								$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snip_id<br />";
-							}*/
+							}
 						}
 						$key_ts_info .= "<br />";
 					}
