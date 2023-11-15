@@ -3098,9 +3098,13 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					
 					// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
 					// e.g. <a href="https://stcnyclive.wpengine.com/theology/">Gain understanding by attending classes</a>
-					//$info = str_replace($search,$replace,$info);
-					//$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
-					$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
+					if ( strpos($snippet_content, 'http') !== false ) {
+						$info .= "** Absolute urls in snippet_content => relativize them<br />";
+						//$info = str_replace($search,$replace,$info);
+						//$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
+						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
+					}
+					
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
 					//$widget_sidebar_id = get_sidebar_id($widget_uid);
