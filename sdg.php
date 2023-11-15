@@ -3621,11 +3621,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
 					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-					/*if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
-						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-					} else {
-						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-					}*/
+					if ( count($secondary_updated_field_value) < 10 ) { // TMP limit
+						if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
+							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+						} else {
+							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+						}
+					}
 				}
 				
 				//
