@@ -3498,7 +3498,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$wp_args = array(
 					'post_type'   => 'snippet',
 					'post_status' => 'publish',
-					'fields'      => 'ids'
+					'posts_per_page' => -1,
+					'fields'      => 'ids',
 				);								
 				$meta_query = array(
 					'relation' => 'AND',
