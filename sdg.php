@@ -3598,11 +3598,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$info .= count($updated_field_value)." items in updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
-					/*if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
-						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-					} else {
-						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-					}*/
+					if ( count($updated_field_value) < 10 ) { // TMP limit
+						if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
+							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+						} else {
+							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+						}
+					}
 				} else {
 					$updated_field_value  = $matched_posts; // for purposes of secondary and tertiary updates
 				}
