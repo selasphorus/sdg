@@ -3572,7 +3572,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$matched_posts[] = $p_id;
 							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
-					}				
+					} else {
+						$key_ts_info .= "NO POST FOUND for p_id: ".$p_id."";
+					}		
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
