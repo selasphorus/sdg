@@ -3551,6 +3551,10 @@ function update_snippet_logic ( $snippet_id = null ) {
 							} else {
 								$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snip_id<br />";
 							}
+							if ( $target_key == 'cs_post_ids' ) {
+								// Now update_snippet_logic so that cs_post_ids get properly converted to target_by_post field values
+								$key_ts_info .= '<div class="code">'.update_snippet_logic( $snip_id ).'</div>';
+							}
 						}
 						$key_ts_info .= "<br />";
 					}
