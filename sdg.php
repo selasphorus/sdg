@@ -3739,8 +3739,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					
 					//
 					if ( $matched_post_id ) {
-						$matched_posts[] = $matched_post_id;
 						$condition_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+						$matched_posts[] = $matched_post_id;
 						if ( $url ) {
 							$condition_info .= "&rarr; remove from repeater_rows array: $url<br />";
 							$repeater_removals[] = $url;
@@ -3774,8 +3774,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				if ( $updates && count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$target_key'<br />";
 					$info .= count($updated_field_value)." items in updated_field_value array<br />";
-					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-					//$ts_info .= "about to update field '$target_key' with value(s): ".print_r($arr_posts_revised, true)."<br />";
+					$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+					//$key_ts_info .= "about to update field '$target_key' with value(s): ".print_r($updated_field_value, true)."<br />";
 					if ( update_field( $target_key, $arr_posts_revised, $snippet_id ) ) {
 						$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
 					} else {
