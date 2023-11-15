@@ -3562,13 +3562,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					if ( $post ) {
-						$matched_posts[] = $p_id;
 						$recurrence_id = get_post_meta( $p_id, '_recurrence_id', true );
 						if ( $recurrence_id ) {
 							$key_ts_info .= "p_id: ".$p_id."";
 							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
-							// Remove individual instance id from ids array and save parent id instead? or.... WIP
+							$matched_posts[] = $recurrence_id; // WIP
 						} else {
+							$matched_posts[] = $p_id;
 							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
 					}				
