@@ -4020,10 +4020,10 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 		// Sort the existing values and save the sorted array
 		if ( is_array($old_value) && !empty($old_value) ) {
 			$info .= count($old_value)." items in old_value array<br />";
-			$info .= "=> ".print_r($old_value, true)."<br />";
+			$info .= "=> <pre>".print_r($old_value, true)."</pre>";
 			// TODO: what about if this isn't an array of post ids? generalize... tbd
 			$old_value = sort_post_ids_by_title($old_value); // WIP
-			$info .= "old_value (sorted): ".print_r($old_value, true)."<br />";
+			$info .= "old_value (sorted): <pre>".print_r($old_value, true)."</pre>";
 			// re-encode?
 			//update_field( $target_key, $old_value, $snippet_id );
 		} else {
