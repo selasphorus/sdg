@@ -3573,6 +3573,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						}
 					}				
 				}
+				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				
 				/*
