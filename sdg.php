@@ -2558,7 +2558,7 @@ function get_snippets ( $atts = [] ) {
 		$snippet_info .= ']<br />';
 		
 		// Run updates?
-		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic( $snippet_id ).'</div>'; }
+		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ).'</div>'; }
 		
 		// TMP during transition?
 		// TODO: add snippet status field?
@@ -3341,7 +3341,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						if ( $action && $snippet_id ) {
 							$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 							// Update snippet logic
-							$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+							$info .= "&rarr;&rarr; update_snippet_logic<br />";
+							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 						} else {
 							$info .= "&rarr;&rarr; No action<br />";
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
