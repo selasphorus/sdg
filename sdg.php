@@ -3477,24 +3477,46 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				}
 				$info .= count($matched_posts)." matched_posts<br />";
 				
-				// Save the matched posts to the snippet field
-				$updates = get_updated_field_value( $snippet_id, $key, $matched_posts, 'array' ); // post_id, key, new_value, type
+				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
+				$update_key = $key;
+				$update_value = $matched_posts;
+				$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
 				$key_ts_info .= $updates['info'];
 				$updated_field_value = $updates['updated_value'];
 				if ( $updates && count($updated_field_value) > 0 ) {
-					$key_ts_info .= "about to update field '$key'<br />";
+					$key_ts_info .= "about to update field '$update_key'<br />";
 					$info .= count($updated_field_value)." items in updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-					//$ts_info .= "about to update field '$key' with value(s): ".print_r($updated_field_value, true)."<br />";
+					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
 					if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
-						$key_ts_info .= "updated field: ".$key." for snippet_id: $snippet_id<br />";
+						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 					} else {
-						$key_ts_info .= "update FAILED for field: ".$key." for snippet_id: $snippet_id<br />";
+						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 					}
 				} else {
-					$updated_field_value  = $matched_posts; // for purposes of secondary updates
+					$updated_field_value  = $matched_posts; // for purposes of secondary and tertiary updates
 				}
 				
+				// Also save those same matched_posts/updated_field_value to the target_by_post field -- this field determines actual snippet display
+				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
+				$update_key = 'target_by_post';
+				$update_value = $updated_field_value;
+				$secondary_updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+				$key_ts_info .= $secondary_updates['info'];
+				$secondary_updated_field_value = $secondary_updates['updated_value'];
+				if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
+					$key_ts_info .= "about to update field '$update_key'<br />";
+					$info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
+					//$info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
+					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
+					if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
+						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+					} else {
+						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+					}
+				}
+				
+				//
 				$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
 				// Is this a Custom Sidebar? If so, update other snippets accordingly
 				if ( strpos($sidebar_id, 'cs-') !== false ) {
@@ -3503,7 +3525,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					// Update matching snippets with arr_ids...
 	
 					// WIP 231113
-					$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
+					$key_ts_info .= "<br /><strong>Preparing for tertiary snippet updates...</strong><br /><br />";
 					// add cs_posts_ids to widgets that are set to snippet_display == notselected
 					// ... otherwise sidebar-1 widgets like News, Events will be displayed
 					// ... AND add/merge into exclude_by_post field for snippet_display == selected
@@ -3529,37 +3551,38 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$wp_args['meta_query'] = $meta_query;
 					$snippets = get_posts($wp_args);
 					if ( $snippets ) {
-						$key_ts_info .= "Found ".count($snippets)." snippets eligible for secondary updates based on CS data<br /><hr /><br />";
+						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
 						foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
 							$sidebar_id = get_field('sidebar_id', $snip_id, false);
 							if ( $snippet_display == "selected" ) {
-								$target_key = 'exclude_by_post';
+								$update_key = 'exclude_by_post';
 							} else {
-								$target_key = 'cs_post_ids';
+								$update_key = 'cs_post_ids';
 							}
-							$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/target_key: ".$target_key."]<br />";
-						
-							$secondary_updates = get_updated_field_value( $snip_id, $target_key, $updated_field_value, 'array' ); // post_id, key, new_value, type
-							$key_ts_info .= $secondary_updates['info'];
-							$secondary_updated_field_value = $secondary_updates['updated_value'];
-							if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
-								$key_ts_info .= "about to update field '$target_key' for snip_id: $snip_id<br />";
-								$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
+							$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
+							//
+							$update_value = $updated_field_value;
+							$tertiary_updates = get_updated_field_value( $snip_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+							$key_ts_info .= $tertiary_updates['info'];
+							$tertiary_updated_field_value = $tertiary_updates['updated_value'];
+							if ( $tertiary_updates && count($tertiary_updated_field_value) > 0 ) {
+								$key_ts_info .= "about to update field '$update_key' for snip_id: $snip_id<br />";
+								$key_ts_info .= count($tertiary_updated_field_value)." items in tertiary_updated_field_value array<br />";
 								//
-								if ( $target_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
-									$secondary_updated_field_value = serialize($secondary_updated_field_value);
-									//$key_ts_info .= "serialized secondary_updated_field_value: ".print_r($secondary_updated_field_value,true)."<br />";
+								if ( $update_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
+									$tertiary_updated_field_value = serialize($tertiary_updated_field_value);
+									//$key_ts_info .= "serialized tertiary_updated_field_value: ".print_r($tertiary_updated_field_value,true)."<br />";
 								}
 								//
-								//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
-								//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-								if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
-									$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snip_id<br />";
+								//$key_ts_info .= "=> <pre>".print_r($tertiary_updated_field_value, true)."</pre>";
+								//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($tertiary_updated_field_value, true)."<br />";
+								if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
+									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snip_id<br />";
 								} else {
-									$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snip_id<br />";
+									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snip_id<br />";
 								}
 							}
 							$key_ts_info .= "<br />";
