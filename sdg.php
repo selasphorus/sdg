@@ -2738,9 +2738,21 @@ function get_snippets ( $atts = [] ) {
 									$field_key = 'field_65306bc897806';
 								}
 								if ( isset($v[$field_key]) ) {
+								
 									$url = $v[$field_key];
+									
 									// Trim trailing slash if any
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); }
+									
+									// Wildcard? WIP 231114
+									/*if ( strpos($url, '*') !== false ) {
+										$wildcard = true;
+										$condition_info .= "** Wildcard url => add to repeaters; can't be matched<br />";
+										$repeater_additions[] = $url;
+									} else {
+										$wildcard = false;
+									}*/
+						
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
@@ -3840,6 +3852,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$repeater_values = array_column($repeater_rows_revised, 'url');
 					//$key_ts_info .= "repeater_rows_revised repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
 					array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
+					// Fix the sorting!
 					//
 					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 					//$key_ts_info .= "repeater_rows_revised: <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
