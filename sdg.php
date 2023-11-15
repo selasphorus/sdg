@@ -2747,13 +2747,13 @@ function get_snippets ( $atts = [] ) {
 									// Wildcard? WIP 231114
 									$wildcard_match = false;
 									if ( strpos($url, '*') !== false ) {
-										$condition_info .= "** Wildcard url<br />";
+										$snippet_logic_info .= "** Wildcard url<br />";
 										$url_base = substr($url, 0, strpos($url, '*'));
-										$condition_info .= "url_base: $url_base<br />";
+										$snippet_logic_info .= "url_base: $url_base<br />";
 										// match to $current_path? true if current_path begins with url_base
 										if ( substr($current_path, 0, strlen($url_base)) == $url_base ) {
 											$wildcard_match = true;
-											$condition_info .= "current_path begins with wildcard url_base: $url_base<br />";
+											$snippet_logic_info .= "current_path begins with wildcard url_base: $url_base<br />";
 										}								
 									}
 						
@@ -3496,7 +3496,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "-----------<br />";
 				foreach ( $conditions as $condition ) {				
 					$p_id = intval($condition);
-					$condition_info .= "p_id: ".$p_id."<br />";
+					$key_ts_info .= "p_id: ".$p_id."<br />";
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					if ( $post ) {
