@@ -3598,11 +3598,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$info .= count($updated_field_value)." items in updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
-					if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
+					/*if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
 						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 					} else {
 						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-					}
+					}*/
 				} else {
 					$updated_field_value  = $matched_posts; // for purposes of secondary and tertiary updates
 				}
@@ -3619,11 +3619,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
 					//$info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
 					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-					if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
+					/*if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
 						$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 					} else {
 						$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-					}
+					}*/
 				}
 				
 				//
@@ -3692,11 +3692,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								//
 								//$key_ts_info .= "=> <pre>".print_r($tertiary_updated_field_value, true)."</pre>";
 								//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($tertiary_updated_field_value, true)."<br />";
-								if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
+								/*if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
 									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snip_id<br />";
 								} else {
 									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snip_id<br />";
-								}
+								}*/
 							}
 							$key_ts_info .= "<br />";
 						}
