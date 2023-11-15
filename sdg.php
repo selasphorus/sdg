@@ -3569,11 +3569,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
 							// Remove individual instance id from ids array and save parent id instead? or.... WIP
 						} else {
-							//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
 					}				
 				}
-				$info .= count($matched_posts)." matched_posts<br />";
+				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				
 				/*
 				foreach ( $cs_post_ids as $x => $id ) {
@@ -3607,9 +3607,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$updated_field_value = $updates['updated_value'];
 				if ( $updates && count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$update_key'<br />";
-					$info .= count($updated_field_value)." items in updated_field_value array<br />";
-					//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
+					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
+					//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+					//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
 					if ( count($updated_field_value) < 10 ) { // TMP limit
 						if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
@@ -3630,9 +3630,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$secondary_updated_field_value = $secondary_updates['updated_value'];
 				if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$update_key'<br />";
-					$info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
-					//$info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
-					//$ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
+					$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
+					//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
+					//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
 					if ( count($secondary_updated_field_value) < 10 ) { // TMP limit
 						if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
