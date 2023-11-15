@@ -2776,6 +2776,7 @@ function get_snippets ( $atts = [] ) {
 										$url_base = substr($url, 0, strpos($url, '*'));
 										$snippet_logic_info .= "url_base: $url_base<br />";
 										if ( substr($current_path, 1) == "/" ) { $current_path_base = substr($current_path, 1); } else { $current_path_base = $current_path; }
+										$snippet_logic_info .= "current_path_base: $current_path_base<br />";
 										// match to $current_path? true if current_path begins with url_base
 										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
 											$wildcard_match = true;
