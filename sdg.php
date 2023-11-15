@@ -3540,8 +3540,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 							$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
 							//
 							if ( $target_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
-								serialize($secondary_updated_field_value);
-								$key_ts_info .= "serialized secondary_updated_field_value: ".print_r($secondary_updated_field_value,true)."<br />";
+								$secondary_updated_field_value = serialize($secondary_updated_field_value);
+								//$key_ts_info .= "serialized secondary_updated_field_value: ".print_r($secondary_updated_field_value,true)."<br />";
 							}
 							//
 							//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
