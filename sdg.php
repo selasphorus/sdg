@@ -3525,7 +3525,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				$wp_args['meta_query'] = $meta_query;
 				$snippets = get_posts($wp_args);
 				if ( $snippets ) {
-					$key_ts_info .= "Found ".count($snippets)." snippets eligible for secondary updates based on CS data<br />";
+					$key_ts_info .= "Found ".count($snippets)." snippets eligible for secondary updates based on CS data<br /><hr /><br />";
 					//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 					//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
 					foreach ( $snippets as $i => $snip_id ) {
@@ -3554,7 +3554,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 								$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snip_id<br />";
 							}*/
 						}
-						
+						$key_ts_info .= "<br />";
 					}
 				}
 				
@@ -4020,6 +4020,7 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 		// Sort the existing values and save the sorted array
 		if ( is_array($old_value) && !empty($old_value) ) {
 			$info .= count($old_value)." items in old_value array<br />";
+			$info .= "=> ".print_r($old_value, true)."<br />";
 			// TODO: what about if this isn't an array of post ids? generalize... tbd
 			$old_value = sort_post_ids_by_title($old_value); // WIP
 			$info .= "old_value (sorted): ".print_r($old_value, true)."<br />";
