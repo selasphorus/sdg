@@ -3553,6 +3553,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 							}
 							if ( $target_key == 'cs_post_ids' ) {
 								// Now update_snippet_logic so that cs_post_ids get properly converted to target_by_post field values
+								$key_ts_info .= "&rarr; Run update_snippet_logic for snip_id: $snip_id<br />";
 								$key_ts_info .= '<div class="code">'.update_snippet_logic( $snip_id ).'</div>';
 							}
 						}
