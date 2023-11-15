@@ -3680,7 +3680,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						
 						// Does the URL contain a wildcard character? i.e. asterisk?
 						// e.g. /shop*, events/*
-						if ( strpos($sidebar, '*') !== false ) {
+						if ( strpos($url, '*') !== false ) {
 							$wildcard = true;
 							$condition_info .= "** Wildcard url => add to repeaters; can't be matched<br />";
 							$repeater_additions[] = $url;
