@@ -3569,6 +3569,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
 							$matched_posts[] = $recurrence_id; // WIP
 						} else {
+							$key_ts_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
 							$matched_posts[] = $p_id;
 							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
