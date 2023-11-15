@@ -4030,6 +4030,8 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 			}
 			// re-serialize?
 			//update_field( $target_key, $old_value, $snippet_id );
+		} else if ( empty($old_value) ) {
+			$info .= "old_value is empty<br />";
 		} else {
 			$info .= "old_value: ".print_r($old_value, true)."<br />";
 		}
