@@ -203,6 +203,9 @@ function sdg_post_title ( $args = array() ) {
 
 function sort_post_ids_by_title ( $arr_ids = array() ) {
 	
+	$arr_info = array();
+	$info = "";
+	
 	$wp_args = array(
 		'post__in' => $arr_ids,
 		'orderby'   => 'title',
@@ -212,8 +215,12 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 	
 	$query = new WP_Query( $wp_args );
 	$post_ids = $query->posts;
+	$info .= count($post_ids)." posts found and sorted by title<br />";
 	
-	return $post_ids;
+	$arr_info['post_ids'] = $post_ids;
+	$arr_info['info'] = $info;
+	
+	return $arr_info;
 	
 }
 
