@@ -3536,10 +3536,14 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$key_ts_info .= $secondary_updates['info'];
 						$secondary_updated_field_value = $secondary_updates['updated_value'];
 						if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
-							if ( $target_key == 'cs_post_ids' ) { serialize($secondary_updated_field_value); } // text field, not relationship => save as string
-							//
 							$key_ts_info .= "about to update field '$target_key' for snip_id: $snip_id<br />";
 							$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
+							//
+							if ( $target_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
+								serialize($secondary_updated_field_value);
+								$key_ts_info .= "serialized secondary_updated_field_value: ".$secondary_updated_field_value."<br />";
+							}
+							//
 							//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
 							//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
 							if ( update_field( $target_key, $secondary_updated_field_value, $snip_id ) ) {
