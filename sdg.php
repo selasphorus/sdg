@@ -3469,6 +3469,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 						$matched_posts[] = $p_id;
 					}				
 				}
+				$info .= count($matched_posts)." matched_posts<br />";
 				
 				// Save the matched posts to the snippet field
 				$updates = get_updated_field_value( $snippet_id, $key, $matched_posts, 'array' ); // post_id, key, new_value, type
@@ -3484,6 +3485,8 @@ function update_snippet_logic ( $snippet_id = null ) {
 					} else {
 						$key_ts_info .= "update FAILED for field: ".$key." for snippet_id: $snippet_id<br />";
 					}
+				} else {
+					$updated_field_value  = $matched_posts; // for purposes of secondary updates
 				}
 				
 				// Update other snippets to prevent display of these cs_post_ids
@@ -3508,17 +3511,9 @@ function update_snippet_logic ( $snippet_id = null ) {
 						'compare' => 'IN',
 					),
 					'sidebar_id' => array(
-						/*'relation' => 'OR',
-						array(
-							'key' => 'sidebar_id',
-							'value' => 'sidebar-1',
-							'compare' => '=',
-						),*/
-						array(
-							'key' => 'sidebar_id',
-							'value' => 'cs-',
-							'compare' => 'NOT LIKE',
-						),
+						'key' => 'sidebar_id',
+						'value' => 'cs-',
+						'compare' => 'NOT LIKE',
 					),
 				);
 				$wp_args['meta_query'] = $meta_query;
@@ -4110,7 +4105,9 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 			}
 		
 		} else {
+		
 			$info .= "new_value array is empty ==> no update needed<br />";
+			
 		}
 		
 	} else {
