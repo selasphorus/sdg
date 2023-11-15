@@ -3491,7 +3491,7 @@ function update_snippet_logic ( $snippet_id = null ) {
 				// Update matching snippets with arr_ids...
 	
 				// WIP 231113
-				$key_ts_info .= "Preparing for secondary snippet updates...<br />";
+				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
 				// add cs_posts_ids to widgets that are set to snippet_display == notselected
 				// ... otherwise sidebar-1 widgets like News, Events will be displayed
 				// ... AND add/merge into exclude_by_post field for snippet_display == selected
@@ -3508,12 +3508,12 @@ function update_snippet_logic ( $snippet_id = null ) {
 						'compare' => 'IN',
 					),
 					'sidebar_id' => array(
-						'relation' => 'OR',
+						/*'relation' => 'OR',
 						array(
 							'key' => 'sidebar_id',
 							'value' => 'sidebar-1',
 							'compare' => '=',
-						),
+						),*/
 						array(
 							'key' => 'sidebar_id',
 							'value' => 'cs-',
@@ -3528,12 +3528,13 @@ function update_snippet_logic ( $snippet_id = null ) {
 					$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
 					foreach ( $snippets as $i => $snip_id ) {
 						$snippet_display = get_field('snippet_display', $snip_id, false);
+						$sidebar_id = get_field('sidebar_id', $snip_id, false);
 						if ( $snippet_display == "selected" ) {
 							$target_key = 'exclude_by_post';
 						} else {
 							$target_key = 'cs_post_ids';
 						}
-						$key_ts_info .= $i.") id: ".$snip_id." [snippet_display: ".$snippet_display."/target_key: ".$target_key."]<br />";
+						$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/target_key: ".$target_key."]<br />";
 						/*
 						$secondary_updates = get_updated_field_value( $snip_id, $target_key, $updated_field_value, 'array' ); // post_id, key, new_value, type
 						$key_ts_info .= $secondary_updates['info'];
