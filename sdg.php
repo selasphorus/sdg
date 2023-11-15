@@ -3565,8 +3565,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$matched_posts[] = $p_id;
 						$recurrence_id = get_post_meta( $p_id, '_recurrence_id', true );
 						if ( $recurrence_id ) {
-							$key_ts_info .= "p_id: ".$p_id."<br />";
-							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
+							$key_ts_info .= "p_id: ".$p_id."";
+							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
 							// Remove individual instance id from ids array and save parent id instead? or.... WIP
 						} else {
 							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
