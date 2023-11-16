@@ -3700,7 +3700,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
-						foreach ( $snippets as $i => $snip_id ) {
+						/*foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
 							$sidebar_id = get_field('sidebar_id', $snip_id, false);
 							if ( $snippet_display == "selected" ) {
@@ -3726,15 +3726,15 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								//
 								//$key_ts_info .= "=> <pre>".print_r($tertiary_updated_field_value, true)."</pre>";
 								//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($tertiary_updated_field_value, true)."<br />";
-								/*if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
+								if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
 									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snip_id<br />";
 								} else {
 									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snip_id<br />";
-								}*/
+								}
 							}
 							$key_ts_info .= "<br />";
 						}
-					}
+					}*/
 					
 				}
 					
