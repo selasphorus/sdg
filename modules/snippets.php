@@ -892,7 +892,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
 					}
 								
-					if ( ! ( $wtype == "text" || $wtype == "html" ) ) {
+					if ( ! ( $wtype == "text" || $wtype == "custom_html" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
 					
