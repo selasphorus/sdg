@@ -832,7 +832,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				}
 				if ( !in_array($wtype,$wtypes) ) {
 					$widget = null; // tft
-					$info .= "We're not currently processing widgets of type $wtype<br />";
+					$info .= "We're not currently processing widgets of type: $wtype<br />";
 				}
 				/*if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
 					$widget = $text_widgets[$wid];
@@ -891,8 +891,16 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						//$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
 						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
 					}
-								
-					if ( ! ( $wtype == "text" || $wtype == "custom_html" ) ) {
+					
+					if ( $wtype == "ninja_forms_widget" ) {
+						$info .= "NF form_id: ".$form_id."<br />";
+						$form_id = $widget['form_id'];
+						$display_title = $widget['display_title'];
+						// make a text snippet that uses the nf shortcode
+						// use form title for snippet title
+						// WIP
+					}
+					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
 					
