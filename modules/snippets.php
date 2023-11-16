@@ -1130,8 +1130,13 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						}
 		
 					} else {
-					
-						$info .= "( Not text or custom_html )<br />";
+						if ( ! ( $wtype == "text" || $wtype == "custom_html" ) ) {
+							$info .= "wtype: $wtype (Not text or custom_html)<br />";
+						} else if ( ! ( $snippet_title && $snippet_content ) ) {
+							$info .= "Incomplete data<br />";
+							if ( !$snippet_title ) { $info .= "=> No title<br />"; }
+							if ( !$snippet_content ) { $info .= "=> No content<br />"; }
+						}
 						
 					}
 				
