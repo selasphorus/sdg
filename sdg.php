@@ -3571,7 +3571,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
 							$matched_posts[] = $recurrence_id; // WIP
 						} else {
-							//$key_ts_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
+							$key_ts_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
 							$matched_posts[] = $p_id;
 							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
@@ -3700,7 +3700,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
-						/*foreach ( $snippets as $i => $snip_id ) {
+						/*
+						foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
 							$sidebar_id = get_field('sidebar_id', $snip_id, false);
 							if ( $snippet_display == "selected" ) {
@@ -3734,7 +3735,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							}
 							$key_ts_info .= "<br />";
 						}
-					}*/
+						*/
+					}
 					
 				}
 					
