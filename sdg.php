@@ -3607,6 +3607,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				*/
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
+				/*
 				$update_key = $key;
 				$updated_field_value = $matched_posts;
 				//$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
@@ -3631,11 +3632,14 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				} else {
 					//$updated_field_value  = $matched_posts; // for purposes of secondary and tertiary updates
 				}
+				*/
 				
 				// Also save those same matched_posts/updated_field_value to the target_by_post field -- this field determines actual snippet display
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
 				$update_key = 'target_by_post';
-				$update_value = $updated_field_value;
+				//$update_value = $updated_field_value;
+				$updated_field_value = $matched_posts;
+				//
 				$secondary_updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
 				$key_ts_info .= $secondary_updates['info'];
 				$secondary_updated_field_value = $secondary_updates['updated_value'];
