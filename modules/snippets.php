@@ -923,7 +923,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					
 					// If title and content are set, then prep to save widget as snippet
 					//if ( $snippet_title && $snippet_content ) {
-					if ( ( $wtype == "text" || $wtype == "custom_html" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
+					if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
