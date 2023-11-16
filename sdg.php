@@ -4329,7 +4329,8 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 				if ( $new_value_sorted ) {
 					$info .= $new_value_sorted['info'];
 					$new_value = $new_value_sorted['post_ids'];
-					$info .= "new_value (sorted): ".print_r($new_value, true)."<br />"; //"<pre></pre>";
+					$info .= "new_value sorted (sort_post_ids_by_title)<br />";
+					//$info .= "new_value (sorted): ".print_r($new_value, true)."<br />"; //"<pre></pre>";
 				}
 			}			
 			// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of recurring events)
