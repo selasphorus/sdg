@@ -893,9 +893,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					}
 					
 					if ( $wtype == "ninja_forms_widget" ) {
-						$info .= "NF form_id: ".$form_id."<br />";
 						$form_id = $widget['form_id'];
 						$display_title = $widget['display_title'];
+						$info .= "NF form_id: ".$form_id."<br />";
 						// make a text snippet that uses the nf shortcode
 						// use form title for snippet title
 						// WIP
