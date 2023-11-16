@@ -3638,7 +3638,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
 				$update_key = 'target_by_post';
 				//$update_value = $updated_field_value;
-				$updated_field_value = $matched_posts;
+				$update_value = $matched_posts;
 				//
 				$secondary_updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
 				$key_ts_info .= $secondary_updates['info'];
