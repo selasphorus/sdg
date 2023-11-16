@@ -735,8 +735,40 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
 	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
-	$text_widgets = get_option('widget_text');
-	$html_widgets = get_option('widget_custom_html');
+	//
+	$wtypes = array( 'text', 'custom_html', 'ninja_forms_widget' );
+	//$wpstc_options = array( 'widget_text', 'widget_custom_html', 'widget_ninja_forms_widget' );
+	//wtype: text => widget_text
+	//wtype: custom_html
+	//wtype: media_image => widget_media_image
+	//wtype: media_gallery => widget_media_gallery
+	//wtype: recent => widget_recent-posts
+	//wtype: categories => widget_categories
+	//wtype: em_calendar => widget_em_calendar
+	//wtype: ninja_forms_widget => widget_ninja_forms_widget
+	//wtype: wcpbc_products_by_category => widget_wcpbc_products_by_category
+	/*
+SELECT * FROM `wpstc_options` WHERE `option_name` 
+LIKE '%widget_media_image%'
+OR `option_name` LIKE '%widget_media_gallery%'
+OR `option_name` LIKE '%widget_recent%'
+OR `option_name` LIKE '%widget_categories%'
+OR `option_name` LIKE '%widget_em_calendar%'
+OR `option_name` LIKE '%widget_ninja_forms_widget%'
+OR `option_name` LIKE '%widget_wcpbc_products_by_category%'  
+ORDER BY `wpstc_options`.`option_name` ASC
+*/
+	//
+	//
+	//$text_widgets = get_option('widget_text');
+	//$html_widgets = get_option('widget_custom_html');
+	foreach ( $wtypes as $wtype ) {
+		$option_name = "widget_".$wtype;
+		$$option_name = get_option($option_name);
+		//$varname = $wtype."_widgets";
+	}
+	// WIP
+	//wtype: ninja_forms_widget
 	//
 	//$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
 	//$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
@@ -791,9 +823,18 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				// Separate type and id from widget_uid
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
+				$wtype_option = "widget_".$wtype;
 				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
 				// Widget type?
-				if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
+				if ( isset($$wtype_option[$wid]) ) {
+					$widget = $$wtype_option[$wid];
+					$info .= "Matching $wtype widget found.<br />";
+				}
+				if ( !in_array($wtype,$wtypes) ) {
+					$widget = null; // tft
+					$info .= "We're not currently processing widgets of type $wtype<br />";
+				}
+				/*if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
 					$widget = $text_widgets[$wid];
 					$info .= "Matching text widget found.<br />";
 				} else if ( $wtype == "custom_html" && isset($html_widgets[$wid]) ) {
@@ -802,7 +843,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				} else {
 					$widget = null; // tft
 					$info .= "This is not a standard WP text/custom_html widget<br />";
-				}
+				}*/
 					
 				// If a widget was found, gather the info needed to create/update the corresponding snippet
 				if ( $widget ) {
@@ -822,12 +863,16 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 				
 					// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
 					// TODO: check if fields are same for e.g. custom_html
-		
+					
+					// Defaults for title and content
+					$snippet_title = $widget_uid;
+					$snippet_content = null;
+					
+					// Get actual widget content etc
+					
 					// Title
 					if ( isset($widget['title']) && !empty($widget['title']) ) {
 						$snippet_title = $widget['title'];
-					} else {
-						$snippet_title = $widget_uid;
 					}
 					$info .= "title: ".$snippet_title."<br />";
 					
@@ -836,8 +881,6 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						$snippet_content = $widget['text'];
 					} else if ( isset($widget['content']) ) {
 						$snippet_content = $widget['content'];
-					} else {
-						$snippet_content = null; // ???
 					}
 					
 					// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
@@ -848,7 +891,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 						//$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
 						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
 					}
-					
+								
+					if ( ! ( $wtype == "text" || $wtype == "html" ) ) {
+						$info .= "<pre>".print_r($widget,true)."</pre>";
+					}
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
 					//$widget_sidebar_id = get_sidebar_id($widget_uid);
@@ -858,7 +904,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 					// If match, check for changes?
 					
 					// If title and content are set, then prep to save widget as snippet
-					if ( $snippet_title && $snippet_content ) {
+					//if ( $snippet_title && $snippet_content ) {
+					if ( ( $wtype == "text" || $wtype == "html" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
@@ -1082,6 +1129,10 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 						}
 		
+					} else {
+					
+						$info .= "( Not text or html )<br />";
+						
 					}
 				
 				}
