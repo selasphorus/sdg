@@ -2945,7 +2945,7 @@ function get_snippets ( $atts = [] ) {
 						$current_locations = array();
 						foreach ( $locations as $location ) {
 							if ( $location() ) {
-								//$snippet_logic_info .= "current page/post ".$location."<br />";
+								$snippet_logic_info .= "current page/post ".$location."<br />";
 								$current_locations[] = $location;
 							}
 						}
