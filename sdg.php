@@ -4163,6 +4163,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					foreach ( $conditions as $condition => $value ) {
 						// TODO: if widget_logic condition is "is_single" => save instead as target_by_post_type = "post" // WIP 231115
 						if ( $condition == "is_single" ) {
+							$key_ts_info .= "special case: is_single<br />";
 							/// NB: this code is redundant -- maybe figure out a way to streamline this?
 							$update_key = 'target_by_post_type';
 							$new_value = array( "post" );
