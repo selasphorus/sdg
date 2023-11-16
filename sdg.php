@@ -3555,7 +3555,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				}
 				
 				$matched_posts = array();
-				$update_limit = 150;
+				$update_limit = 100;
+				$key_ts_info .= "update_limit: ".$update_limit."<br />";
 				
 				$key_ts_info .= "-----------<br />";
 				foreach ( $conditions as $condition ) {				
