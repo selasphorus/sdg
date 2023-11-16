@@ -899,7 +899,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						//Ninja_Forms()->form( 1 )->get();
 						//$submissions = Ninja_Forms()->form( $form_id )->get_subs();
 						//$setting = $model->get_setting( 'key' );
-						$snippet_title = Ninja_Forms()->form( $form_id )->get_setting( 'title' );
+						$form = Ninja_Forms()->form( $form_id );
+						$info .= "form: <pre>".print_r($form, true)."</pre>";
+						//$snippet_title = Ninja_Forms()->form( $form_id )->get_setting( 'title' );
 						// Use form_id in nf shortcode for content
 						$snippet_content = "[ninja_form id=".$form_id."]";
 					}
