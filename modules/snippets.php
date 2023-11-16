@@ -1131,7 +1131,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		
 					} else {
 					
-						$info .= "( Not text or html )<br />";
+						$info .= "( Not text or custom_html )<br />";
 						
 					}
 				
