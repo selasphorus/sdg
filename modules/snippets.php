@@ -906,6 +906,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						// Use form_id in nf shortcode for content
 						$snippet_content = "[ninja_form id=".$form_id."]";
 					}
+					//
 					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
@@ -1149,6 +1150,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					} else {
 						if ( ! ( $wtype == "text" || $wtype == "custom_html" ) ) {
 							$info .= "wtype: $wtype (Not text or custom_html)<br />";
+							$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";
 						} else if ( ! ( $snippet_title && $snippet_content ) ) {
 							$info .= "Incomplete data<br />";
 							if ( !$snippet_title ) { $info .= "=> No title<br />"; }
