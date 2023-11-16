@@ -4154,14 +4154,38 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 			
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
 			
-				// If this is the widget_logic version of the field, update our new target_by_post_type field
+				// If this is the widget_logic version of the field, update our new target_by_post_type field (???)
 				if ( $key == 'widget_logic_location' ) {
 				
 					$wll_conditions = array();
 					$updated_conditions = array();
 					
 					foreach ( $conditions as $condition => $value ) {
-						$wll_conditions[] = $condition;
+						// TODO: if widget_logic condition is "is_single" => save instead as target_by_post_type = "post" // WIP 231115
+						if ( $condition == "is_single" ) {
+							/// NB: this code is redundant -- maybe figure out a way to streamline this?
+							$update_key = 'target_by_post_type';
+							$new_value = array( "post" );
+							$updates = get_updated_field_value( $snippet_id, $update_key, $new_value, 'array' ); // post_id, key, new_value, type
+							$key_ts_info .= $updates['info'];
+							$updated_field_value = $updates['updated_value'];
+							if ( $updates && count($updated_field_value) > 0 ) {
+								$key_ts_info .= "about to update field '$update_key'<br />";
+								$info .= count($updated_field_value)." items in updated_field_value array<br />";
+								//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+								if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
+									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+								} else {
+									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+								}
+							} else {
+								$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
+							}
+							$key_ts_info .= "<hr />";							
+							///
+						} else {
+							$wll_conditions[] = $condition;
+						}						
 					}
 					
 					// TODO: update to use new get_updated_field_value fcn
