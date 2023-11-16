@@ -3714,7 +3714,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								$key_ts_info .= "about to update field '$update_key' for snip_id: $snip_id<br />";
 								$key_ts_info .= count($tertiary_updated_field_value)." items in tertiary_updated_field_value array<br />";
 								//
-								$key_ts_info .= "[[Updates tmp disabled]]<br />";
+								$key_ts_info .= "--- tertiary updates tmp disabled ($update_key)<br />";
 								if ( $update_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
 									$tertiary_updated_field_value = serialize($tertiary_updated_field_value);
 									//$key_ts_info .= "serialized tertiary_updated_field_value: ".print_r($tertiary_updated_field_value,true)."<br />";
