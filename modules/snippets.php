@@ -80,8 +80,8 @@ function cs_sidebars_xfer ( $atts = [] ) {
 }
 
 //
-add_shortcode('snippets', 'get_snippets');
-function get_snippets ( $atts = [] ) {
+add_shortcode('snippets', 'display_snippets');
+function display_snippets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
@@ -92,14 +92,14 @@ function get_snippets ( $atts = [] ) {
     // Init vars
     $info = "";
 	$ts_info = "";
-	$post_snippets = array(); // this array will containing snippets matched for display on the given post
+	$arr_ids = array(); // this array will containing snippets matched for display on the given post
     
     $args = shortcode_atts( array(
     	'post_id' => null,
 		'limit'   => -1,
         'run_updates'  => false,
-        'dev' => false,
-        'return' => 'info',
+        'devmode' => false,
+        //'return' => 'info',
         'sidebar_id' => 'sidebar-1', // default
     ), $atts );
     
@@ -107,7 +107,74 @@ function get_snippets ( $atts = [] ) {
 	extract( $args );
 	
 	//
-	if ( $dev ) { 
+	if ( $devmode ) { 
+		$info .= '<h2>Snippets -- WIP</h2>';
+		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
+		$info .= "args: <pre>".print_r($args, true)."</pre>";
+	}
+
+	$arr_snippets = get_snippets ( $args );
+	$arr_ids = $arr_snippets['ids'];
+	$ts_info .= $arr_snippets['info'];
+	
+	// Compile info for the matching snippets for display
+	foreach ( $arr_ids as $snippet_id ) {
+	
+		$title = get_the_title( $snippet_id );
+		$snippet_content = get_the_content( null, false, $snippet_id );
+		//$snippet_content = apply_filters('the_content', $snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
+		//$snippet_content = do_shortcode($snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
+		$snippet_content = wpautop($snippet_content);
+		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
+		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
+		//
+		if ( $title == "Snippets" ) { continue; }
+		//
+		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
+		$info .= '<h2 class="widget-title">'.$title.'</h2>';
+		$info .= '<div class="textwidget custom-html-widget">';
+		$info .= $snippet_content;		
+		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
+		$info .= '</div>';
+		$info .= '</section>';
+	}
+	// 
+	if ( $devmode ) { $info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>';}
+	
+	return $info;
+	
+}
+
+// Get array of snippet IDs matching given attributes
+function get_snippets ( $args = array() ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: show_snippets", $do_log );
+    
+    // Init vars
+    $arr_info = array();
+    $info = "";
+	$active_snippets = array(); // this array will containing snippets matched for display on the given post
+    
+    // Defaults
+	$defaults = array(
+		'post_id' => null,
+		'limit'   => -1,
+        'run_updates'  => false,
+        'devmode' => false,
+        'return' => 'info',
+        'sidebar_id' => 'sidebar-1', // default
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	//
+	if ( $devmode ) { 
 		$info .= '<h2>Snippets -- WIP</h2>';
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
@@ -117,51 +184,51 @@ function get_snippets ( $atts = [] ) {
     
 	// Get post_type, if applicable
 	if ( is_singular() ) { // is_single
-		$ts_info .= "is_singular<br />";
+		$info .= "is_singular<br />";
 		if ( $post_id === null ) { $post_id = get_the_ID(); }
 		$post_type = get_post_type( $post_id );
 	} else {
-		$ts_info .= "NOT is_singular<br />";
+		$info .= "NOT is_singular<br />";
 		//$post_type = get_post_type( get_queried_object_id() );
 		$post_type = "N/A";
 		//post_type_archive_title();
 		if ( is_archive() ) {
-			$ts_info .= "is_archive<br />";
+			$info .= "is_archive<br />";
 			// what kind of archive?
 			$object = get_queried_object();
 			$object_class = get_class($object);
-			$ts_info .= "object_class: ".$object_class."<br />";
-			//$ts_info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
+			$info .= "object_class: ".$object_class."<br />";
+			//$info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
 			if ( is_tax() ) {
 				$tax = $object->taxonomy;
-				$ts_info .= "tax: ".$tax."<br />";
+				$info .= "tax: ".$tax."<br />";
 				$tax_obj = get_taxonomy($tax);
 				$tax_post_types = $tax_obj->object_type;
-				$ts_info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
+				$info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
 				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
 			} else if ( is_post_type_archive() ) {
-				$ts_info .= "is_post_type_archive: ";
+				$info .= "is_post_type_archive: ";
 				$post_archive_title = post_type_archive_title("",false);
-				$ts_info .= $post_archive_title."<br />";
+				$info .= $post_archive_title."<br />";
 				if ( $object->name ) {
 					$object_name = $object->name;
 				} else {
 					$object_name = strtolower($post_archive_title);
 				}
-				$ts_info .= "object_name: ".$object_name."<br />";
+				$info .= "object_name: ".$object_name."<br />";
 				$post_type = $object_name;
 			} else {
-				//$ts_info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
-				//$ts_info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
+				//$info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
+				//$info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
 			}
 			// WIP
 		}
 	}
-	$ts_info .= "post_type: $post_type<br />";
+	$info .= "post_type: $post_type<br />";
 		
 	// Check for custom sidebars 
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
-	//if ( $cs ) { $ts_info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
+	//if ( $cs ) { $info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
 	//e.g. Array( [sidebar-1] => cs-17 )
 	
 	// Set up basic query args for snippets retrieval
@@ -207,9 +274,9 @@ function get_snippets ( $atts = [] ) {
 	
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
-    //$ts_info .= "WP_Query run as follows:";
-    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
-    $ts_info .= "[".count($snippets)."] snippets found.<br />";
+    //$info .= "WP_Query run as follows:";
+    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
@@ -240,14 +307,14 @@ function get_snippets ( $atts = [] ) {
 		
 			$snippet_status = "inactive";
 			$snippet_logic_info .= "Snippet belongs to wp_inactive_widgets, i.e. status is inactive<br />";
-			// TODO: remove from post_snippets array, if it was previously added...
+			// TODO: remove from active_snippets array, if it was previously added...
 			
 		} else if ( $snippet_display == "show" ) {
 		
-			$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+			$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 			$snippet_status = "active";
 			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
-			$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
+			$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
 			
 		} else {
 		
@@ -258,7 +325,7 @@ function get_snippets ( $atts = [] ) {
 			if ( $snippet_display == "selected" ) {
 				$snippet_status = "inactive";
 			} else if ( $snippet_display == "notselected" ) {
-				$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+				$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 				$snippet_status = "active";
 			}
 		
@@ -310,14 +377,14 @@ function get_snippets ( $atts = [] ) {
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $snippet_display == "selected" && $any_all == "any" ) {
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to post_snippets array<br />";
+								$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $snippet_display == "notselected" ) {
-								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
 							}
@@ -343,23 +410,23 @@ function get_snippets ( $atts = [] ) {
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
 							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" && 
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_post/selected)<br />";
+								$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_post/selected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_post/notselected)<br />";
+								$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_post/notselected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							}
 							// Snippet is inactive -- is in array, and either selected/excluded or notselected/targeted
 							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
-							$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+							$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
 							$snippet_status = "inactive"; // ???
 							break;
@@ -373,7 +440,7 @@ function get_snippets ( $atts = [] ) {
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; 
 								if ( $snippet_display == "selected" ) {
-									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
 								}
 							}
@@ -449,23 +516,23 @@ function get_snippets ( $atts = [] ) {
 								}
 								if ( $url_match ) {
 									if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
-										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
-										$snippet_logic_info .= "=> snippet_id added to post_snippets array (target_by_url/selected)<br />";
+										$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_url/selected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
 									} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
-										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
-										$snippet_logic_info .= "=> snippet_id added to post_snippets array (exclude_by_url/notselected)<br />";
+										$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_url/notselected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
 									}
 									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
 									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
-									$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
 									break;
 								}
@@ -485,10 +552,10 @@ function get_snippets ( $atts = [] ) {
 						if ( match_terms( $target_taxonomies, $post_id ) ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 							} else {
-								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
 							}
@@ -497,7 +564,7 @@ function get_snippets ( $atts = [] ) {
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
-								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								if ( $any_all == "all" ) {
 									$snippet_logic_info .= "=> BREAK<br />";
@@ -505,7 +572,7 @@ function get_snippets ( $atts = [] ) {
 								}
 							} else if ( $snippet_display == "notselected" ) {
 								// WIP
-								//$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								//$snippet_status = "active";
 								//$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
 							}
@@ -524,12 +591,12 @@ function get_snippets ( $atts = [] ) {
 								if ( is_tax($taxonomy) ) {
 									$snippet_logic_info .= "This post is_tax archive for target taxonomy: $taxonomy<br />";
 									if ( $snippet_display == "selected" ) {
-										$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
 									} else {
-										$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+										$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 										$snippet_status = "inactive";
 										$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
 									}
@@ -555,23 +622,23 @@ function get_snippets ( $atts = [] ) {
 						//
 						//if ( match_locations( $target_locations, $post_id ) ) { // TODO? make match_locations fcn?
 						if ( in_array($current_location, $target_locations) ) {
-							//$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+							//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 							//$snippet_status = "active";
 							$snippet_logic_info .= "This post matches the target_locations<br />";
 							if ( $snippet_display == "selected" ) {
-								$post_snippets[] = $snippet_id; // add the item to the post_snippets array
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else {
-								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
 							if ( $snippet_display == "selected" ) {
-								$post_snippets = array_diff($post_snippets, array($snippet_id)); // remove the item from the post_snippets array
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 							}
 						}
@@ -592,39 +659,19 @@ function get_snippets ( $atts = [] ) {
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		//
 		$snippet_info .= '</div>'; // <div class="troubleshooting">
-		$ts_info .= $snippet_info;
+		$info .= $snippet_info;
     }
     
-    // Make sure there are no duplicates in the post_snippets array
-    $post_snippets = array_unique($post_snippets); // SORT_REGULAR
+    // Make sure there are no duplicates in the active_snippets array
+    $active_snippets = array_unique($active_snippets); // SORT_REGULAR
 	
 	// If returning array of IDs, finish here
-	if ( $return == "ids" ) { return $post_snippets; }
+	if ( $return == "ids" ) { return $active_snippets; }
 	
-	// Compile info for the matching snippets for display
-	foreach ( $post_snippets as $snippet_id ) {
-		$title = get_the_title( $snippet_id );
-		$snippet_content = get_the_content( null, false, $snippet_id );
-		//$snippet_content = apply_filters('the_content', $snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
-		//$snippet_content = do_shortcode($snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
-		$snippet_content = wpautop($snippet_content);
-		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
-		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
-		//
-		if ( $title == "Snippets" ) { continue; }
-		//
-		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
-		$info .= '<h2 class="widget-title">'.$title.'</h2>';
-		$info .= '<div class="textwidget custom-html-widget">';
-		$info .= $snippet_content;		
-		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
-		$info .= '</div>';
-		$info .= '</section>';
-	}
-	// 
-	if ( $dev ) { $info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>';}
+	$arr_info['info'] = $info;
+	$arr_info['ids'] = $active_snippets;
 	
-	return $info;
+	return $arr_info;
 	
 }
 
