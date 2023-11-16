@@ -4072,6 +4072,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 						}
+					} else {
+						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
 					}
 					/*
 					$existing_cpt_archive_conditions = get_field( 'target_by_post_type_archive', $snippet_id );
@@ -4311,6 +4313,8 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 	} else {
 		// WIP/TBD as needed...
 	}
+	
+	$info .= "updated_value: ".print_r($updated_value, true)."<br />"; //"<pre></pre>";
 	
 	$arr['info'] = $info;
 	$arr['updated_value'] = $updated_value;
