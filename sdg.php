@@ -4288,14 +4288,16 @@ function get_updated_field_value ( $post_id = null, $key = null, $new_value = nu
 		if ( !empty($new_value) ) {
 		
 			$info .= count($new_value)." items in new_value array<br />";
-			//$info .= "new_value: <pre>".print_r($new_value, true)."</pre>";
-			// WIP -- TODO: sort by post title and update
-			$new_value_sorted = sort_post_ids_by_title($new_value);
-			if ( $new_value_sorted ) {
-				$info .= $new_value_sorted['info'];
-				$new_value = $new_value_sorted['post_ids'];
-				//$info .= "new_value (sorted): ".print_r($new_value, true)."<br />"; //"<pre></pre>";
-			}
+			$info .= "new_value: <pre>".print_r($new_value, true)."</pre>";
+			// If we're dealing w/ an array of post ids, sort them by post title
+			if ( $key == "target_by_post" || $key == "exclude_by_post" ) {
+				$new_value_sorted = sort_post_ids_by_title($new_value);
+				if ( $new_value_sorted ) {
+					$info .= $new_value_sorted['info'];
+					$new_value = $new_value_sorted['post_ids'];
+					$info .= "new_value (sorted): ".print_r($new_value, true)."<br />"; //"<pre></pre>";
+				}
+			}			
 			// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of recurring events)
 			// Determine whether an update is needed
 			if ( empty($old_value) ) {
