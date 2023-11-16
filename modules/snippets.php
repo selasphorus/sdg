@@ -874,7 +874,6 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					if ( isset($widget['title']) && !empty($widget['title']) ) {
 						$snippet_title = $widget['title'];
 					}
-					$info .= "title: ".$snippet_title."<br />";
 					
 					// Content
 					if ( isset($widget['text']) ) {
@@ -896,13 +895,17 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$form_id = $widget['form_id'];
 						$display_title = $widget['display_title'];
 						$info .= "NF form_id: ".$form_id."<br />";
-						// make a text snippet that uses the nf shortcode
-						// use form title for snippet title
-						// WIP
+						// Get form title for use as snippet title
+						$snippet_title = get_the_title($form_id);
+						// Use form_id in nf shortcode for content
+						$snippet_content = "[ninja_form id=".$form_id."]";
 					}
 					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
+					
+					//
+					$info .= "title: ".$snippet_title."<br />";
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
 					//$widget_sidebar_id = get_sidebar_id($widget_uid);
@@ -1143,7 +1146,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						} else if ( ! ( $snippet_title && $snippet_content ) ) {
 							$info .= "Incomplete data<br />";
 							if ( !$snippet_title ) { $info .= "=> No title<br />"; }
-							if ( !$snippet_content ) { $info .= "=> No content<br />"; }
+							if ( !$snippet_content ) { $info .= "=> No content<br />"; } else { $info .= "snippet_content: <pre>".$snippet_content."</pre><br />"; }
 						}
 						
 					}
