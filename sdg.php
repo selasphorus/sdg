@@ -4036,7 +4036,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 						}
+					} else {
+						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
 					}
+					$key_ts_info .= "<hr />";
 					/*
 					$existing_cpt_conditions = get_field( 'target_by_post_type', $snippet_id );
 					if ( empty($existing_cpt_conditions) ) {
@@ -4075,6 +4078,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					} else {
 						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
 					}
+					$key_ts_info .= "<hr />";
 					/*
 					$existing_cpt_archive_conditions = get_field( 'target_by_post_type_archive', $snippet_id );
 					if ( empty($existing_cpt_archive_conditions) ) {
@@ -4111,7 +4115,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 						}
+					} else {
+						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
 					}
+					$key_ts_info .= "<hr />";
 					/*
 					$existing_tax_conditions = get_field( 'target_by_taxonomy_archive', $snippet_id );
 					if ( empty($existing_tax_conditions) ) {
