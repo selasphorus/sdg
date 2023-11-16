@@ -795,7 +795,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		// Is this a Custom Sidebar?
 		if ( strpos($sidebar, 'cs-') !== false ) {
 			$custom_sidebar = true;
-			if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
+			//if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
 		} else {
 			$custom_sidebar = false;
 		}
