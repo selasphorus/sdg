@@ -908,16 +908,16 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					if ( $wtype == "media_image" ) {
 						//
 						if ( isset($widget['attachment_id']) && !empty($widget['attachment_id']) ) {
-							$postarr['attachment_id'] = $widget['attachment_id'];
+							$meta_input['attachment_id'] = $widget['attachment_id'];
 						}
 						if ( isset($widget['image_title']) && !empty($widget['image_title']) ) {
-							$postarr['image_title'] = $widget['image_title'];
+							$meta_input['image_title'] = $widget['image_title'];
 						}
 						if ( isset($widget['link_type']) && !empty($widget['link_type']) ) {
-							$postarr['link_type'] = $widget['link_type'];
+							$meta_input['link_type'] = $widget['link_type'];
 						}
 						if ( isset($widget['link_url']) && !empty($widget['link_url']) ) {
-							$postarr['link_url'] = $widget['link_url'];
+							$meta_input['link_url'] = $widget['link_url'];
 						}
 						/*
 						[mega_menu_is_grid_widget] => true
