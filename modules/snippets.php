@@ -128,6 +128,19 @@ function display_snippets ( $atts = [] ) {
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
 		//
+		$wtype = get_post_meta( $snippet_id, 'widget_type', true );
+		if ( $wtype == "media_image" ) {
+			$img_id = get_post_meta( $snippet_id, 'attachment_id', true );
+			if ( $img_id ) {
+				//$img_size = get_post_meta( $snippet_id, 'img_size', true );
+				$classes = "snippet media_image";
+				$snippet_content .= '<div class="'.$classes.'">';
+				$snippet_content .= wp_get_attachment_image( $img_id ) );//$snippet_content .= wp_get_attachment_image( $img_id, $img_size, false ) );
+				//$snippet_content .= $caption_html;
+				$snippet_content .= '</div>';
+			}			
+		}
+		//
 		if ( $title == "Snippets" ) { continue; }
 		//
 		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
