@@ -1498,7 +1498,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 					}
 					$post_info .= "<br />";
-					//$info .= $post_info;
+					$info .= $post_info;
 				}
 				$info .= "<hr />";
 				//
@@ -1596,10 +1596,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					if ( $snippets ) {
 						// This is tmp disabled because it resulted in way too many posts in the target_by_post field
 						// TODO: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
-						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
-						$key_ts_info .= "CS posts:<br />";
-						$key_ts_info .= $post_info;
-						$key_ts_info .= "<br /><hr /><br />";
+						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";						
 						//$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
