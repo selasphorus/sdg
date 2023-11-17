@@ -1263,7 +1263,7 @@ function delete_widgets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
         'limit'   => 1,
-        'widget_types'	=> array( 'text' ), //, 'custom_html', 'media_image', 'ninja_forms_widget'
+        'widget_types'	=> array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
         'widget_id'	=> null,
         'sidebar_id' => null,
         'run_updates' => false,
@@ -1274,6 +1274,9 @@ function delete_widgets ( $atts = [] ) {
 	
 	$info = "";
 	$i = 0;
+	
+	if ( !is_array($widget_types) ) { $widget_types = explode(',', $widget_types); }
+	$info .= "widget_types: <pre>".print_r($widget_types,true)."</pre><hr /><hr />";
 	
 	$info .= "<h2>Delete Widgets</h2>";
 	

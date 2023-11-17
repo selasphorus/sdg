@@ -1090,6 +1090,8 @@ function sdg_list_terms ($atts = [], $content = null, $tag = '') {
 		'tax'			=> 'category',
 		'title'        	=> '',
     ), $atts );
+    
+    // TODO: update to extract args
 	
 	$all_items_url = ""; // tft
 	$all_items_link = ""; // tft
