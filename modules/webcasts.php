@@ -253,6 +253,7 @@ function get_live_webcast_id () {
 			'time_clause' => 'DESC',
 		),
 		'fields' => 'ids',
+		'cache_results' => false,
     );
     
     $query = new WP_Query( $wp_args );
