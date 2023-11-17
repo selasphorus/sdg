@@ -1369,6 +1369,9 @@ function delete_widgets ( $atts = [] ) {
 		}
 	}
 	*/
+	
+	return $info;
+	
 }
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
