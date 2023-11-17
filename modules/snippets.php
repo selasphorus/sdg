@@ -1319,7 +1319,7 @@ function delete_widgets ( $atts = [] ) {
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
 			if ( in_array( $widget_sidebar, $sidebars ) ) {
-				$info .= "&rarr; DELETE this widget!<br />";
+				$info .= "&rarr; Delete this widget!<br />";
 				unset($widgets[$key]);
 				$i++;
 			} else {
@@ -1334,13 +1334,13 @@ function delete_widgets ( $atts = [] ) {
         // update DB option
         if ( $i > 0 ) {
         	$info .= "Preparing to delete ".$i." ".$wtype." widgets!<br />";
-        	/*$updated = update_option( $option_name, $widgets );
+        	$updated = update_option( $option_name, $widgets );
 			if ( !$updated ) {
 				// do some form of error handling (6)
 				$info .= "ERROR ON UPDATE<br />";
 			} else {
 				$info .= $i." ".$wtype." widgets deleted!<br />";
-			}*/
+			}
         }
         
         $info .= "<br /><hr /><br />";
