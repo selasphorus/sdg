@@ -1490,6 +1490,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
 					$post_info .= " // ".$post->post_name." // ";
 					//$post_info .= "<br />";
+					// WIP 231117
+					// TODO: look for patterns -- e.g. coffee-hour-following-the-9am-eucharist-*
 				
 					// Is this an attached instance of a recurring event?
 					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
