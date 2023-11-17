@@ -109,7 +109,7 @@ div.code {
 
 .sidebar .snippet,
 .sidebar .snippet.widget {
-	border: 2px solid #f67b39;
+	border: 5px dotted #f67b39;
 }
 
 /** END WIP ***/
