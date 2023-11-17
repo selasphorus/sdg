@@ -135,7 +135,7 @@ function display_snippets ( $atts = [] ) {
 				//$img_size = get_post_meta( $snippet_id, 'img_size', true );
 				$classes = "snippet media_image";
 				$snippet_content .= '<div class="'.$classes.'">';
-				$snippet_content .= wp_get_attachment_image( $img_id ) );//$snippet_content .= wp_get_attachment_image( $img_id, $img_size, false ) );
+				$snippet_content .= wp_get_attachment_image( $img_id );//$snippet_content .= wp_get_attachment_image( $img_id, $img_size, false ) );
 				//$snippet_content .= $caption_html;
 				$snippet_content .= '</div>';
 			}			
