@@ -1488,7 +1488,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					// Get post status -- we're only interested published posts
 					$post_status = get_post_status( $id );
 					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
-					$post_info = " // ".$post->post_name." // ";
+					$post_info .= " // ".$post->post_name." // ";
 					//$post_info .= "<br />";
 				
 					// Is this an attached instance of a recurring event?
