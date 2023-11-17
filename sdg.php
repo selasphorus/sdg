@@ -809,6 +809,7 @@ function sdg_msg_bar( $args = array() ) {
 		'num_posts' => 1,
 		'prioritize_livestream' => true,
 		'post_id' => null,
+		'timestamp' => time(),
 	);
 
 	// Parse & Extract args
@@ -905,6 +906,10 @@ function sdg_msg_bar( $args = array() ) {
 			//$msg = get_the_excerpt( $post_id );
 			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
+		
+		// Attempt at cache-busting
+		$msg .= "<!-- ".time()." -->";
+		//
 		
 		$info .= '<div id="post-'.$post_id.'" class="'.$post_type.' featured-post">';
 		$info .= "<p>";
