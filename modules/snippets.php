@@ -837,9 +837,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				} else {
 					$widget = null;
 				}
-				if ( !in_array($wtype,$wtypes) || $wtype == "media_image" ) {
+				if ( !in_array($wtype, $wtypes) ) {
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
-					$info .= "widget: <pre>".print_r($widget,true)."</pre><hr />"; //if ( $widget ) {  }
 					$widget = null; // tft
 				}
 					
@@ -889,12 +888,41 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
 					}
 					
+					// Image Widget?
+					if ( $wtype == "media_image" ) {
+						//
+						if ( isset($widget['title']) && !empty($widget['title']) ) {
+							//$snippet_title = $widget['title'];
+						}
+						/*
+						[mega_menu_is_grid_widget] => true
+						[size] => grid_crop_square
+						[width] => 1500
+						[height] => 844
+						[caption] => 
+						[alt] => 
+						[link_url] => /worship-and-pray/go-deeper/worship/choral-evensong/
+						[image_classes] => 
+						[link_classes] => 
+						[link_rel] => 
+						[link_target_blank] => 
+						[image_title] => Purchase CDs
+						[attachment_id] => 304791
+						[url] => https://stcnycstg.wpengine.com/wp-content/uploads/2022/08/The-Saint-Thomas-Choir-at-the-Queens-Service-600x600.jpg
+						[title] => Choral Evensong
+						...
+						[link_type] => custom
+						*/
+					}
+					
+					// Ninja Forms Widget?
 					if ( $wtype == "ninja_forms_widget" ) {
 						$form_id = $widget['form_id'];
 						$display_title = $widget['display_title'];
 						$info .= "NF form_id: ".$form_id."<br />";
 						// Get form title for use as snippet title
 						// WIP
+						/*
 						//Ninja_Forms()->form( 1 )->get();
 						//$submissions = Ninja_Forms()->form( $form_id )->get_subs();
 						//$setting = $model->get_setting( 'key' );
@@ -902,10 +930,12 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						//$info .= "form: <pre>".print_r($form, true)."</pre>";
 						//$snippet_title = Ninja_Forms()->form( $form_id )->get_setting( 'title' );
 						// Use form_id in nf shortcode for content
+						*/
 						$snippet_content = "[ninja_form id=".$form_id."]";
 					}
+					
 					//
-					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) ) {
+					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "media_image" || $wtype == "ninja_forms_widget" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
 					
