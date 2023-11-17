@@ -1318,7 +1318,7 @@ function delete_widgets ( $atts = [] ) {
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
-			if ( in_array( $sidebars,$widget_sidebar ) ) {
+			if ( in_array( $widget_sidebar, $sidebars ) ) {
 				$info .= "&rarr; DELETE this widget!<br />";
 				unset($widgets[$key]);
 				$i++;
