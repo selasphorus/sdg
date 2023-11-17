@@ -1263,7 +1263,7 @@ function delete_widgets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
         'limit'   => 1,
-        'widget_types'	=> array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ),
+        'widget_types'	=> array( 'text' ), //, 'custom_html', 'media_image', 'ninja_forms_widget'
         'widget_id'	=> null,
         'sidebar_id' => null,
         'run_updates' => false,
@@ -1290,19 +1290,29 @@ function delete_widgets ( $atts = [] ) {
 		
 		//$$option_name = get_option($option_name);
 		$widgets = get_option($option_name);
+		//
+		$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
+		//
 		foreach ( $widgets as $key => $widget ) {
 			
 			$info .= "key: ".$key."/";
 			$info .= "widget[title]: ".$widget['title']."/";
 			$widget_uid = $wtype."-".$key;
-			$info .= "widget_uid: ".$widget_uid."/";
+			$info .= " [".$widget_uid."]";
 			$info .= "<br />";
+			
+			//
+			
 			// Which sidebar does this widget belong to?
 			//
 			
 			// Delete widget -- by unsetting key?
+			if ( $key == 3 ) { unset($widgets[$key]); }
 
 		}
+		//
+		$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
+		
         // update DB option
         //$updated = update_option( $option_name, $widgets );
 		//
