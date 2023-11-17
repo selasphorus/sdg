@@ -741,7 +741,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	//
-	$wtypes = array( 'text', 'custom_html', 'ninja_forms_widget' );
+	$wtypes = array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' );
 	//$wpstc_options = array( 'widget_text', 'widget_custom_html', 'widget_ninja_forms_widget' );
 	//wtype: text => widget_text
 	//wtype: custom_html
@@ -837,7 +837,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				} else {
 					$widget = null;
 				}
-				if ( !in_array($wtype,$wtypes) ) {
+				if ( !in_array($wtype,$wtypes) || $wtype == "media_image" ) {
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
 					$info .= "widget: <pre>".print_r($widget,true)."</pre><hr />"; //if ( $widget ) {  }
 					$widget = null; // tft
