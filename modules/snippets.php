@@ -834,21 +834,14 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				if ( isset($$wtype_option[$wid]) ) {
 					$widget = $$wtype_option[$wid];
 					$info .= "Matching $wtype widget found.<br />";
+				} else {
+					$widget = null;
 				}
 				if ( !in_array($wtype,$wtypes) ) {
-					$widget = null; // tft
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
-				}
-				/*if ( $wtype == "text" && isset($text_widgets[$wid]) ) {
-					$widget = $text_widgets[$wid];
-					$info .= "Matching text widget found.<br />";
-				} else if ( $wtype == "custom_html" && isset($html_widgets[$wid]) ) {
-					$widget = $html_widgets[$wid];
-					$info .= "Matching custom_html widget found.<br />";
-				} else {
+					if ( $widget ) { $info .= "widget: <pre>".print_r($widget,true)."</pre><hr />"; }
 					$widget = null; // tft
-					$info .= "This is not a standard WP text/custom_html widget<br />";
-				}*/
+				}
 					
 				// If a widget was found, gather the info needed to create/update the corresponding snippet
 				if ( $widget ) {
@@ -1193,7 +1186,107 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		}
 	}*/
 function convert_post_widgets_to_snippets () {
+	// WIP
+}
 
+// WIP -- messy draft -- do not use
+function delete_widgets ( $wtype = null ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: delete_widgets", $do_log );
+    
+    $args = shortcode_atts( array(
+		'limit'   => 1,
+        'sidebar_id' => null,
+        'widget_id'	=> null,
+        'wtype'	=> null,
+        'run_updates' => false,   
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	$info = "";
+	$i = 0;
+	
+	// Get wpstc_options data
+	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
+	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
+	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
+	//
+	$wtypes = array( 'text', 'custom_html', 'ninja_forms_widget' );
+	//
+	foreach ( $wtypes as $wtype ) {
+		$option_name = "widget_".$wtype;
+		$$option_name = get_option($option_name);
+	}
+	
+	// Loop through sidebars and remove/delete widgets
+	
+	$info .= "<h2>Sidebars/Widgets</h2>";
+	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
+		
+		// If we're handling a specific sidebar and this isn't it, move on to the next
+		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
+		
+		// Skip wp_inactive_widgets -- tft
+		//if ( $sidebar == 'wp_inactive_widgets' ) { continue; }
+		//if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
+		
+		// Get the registered sidebar info -- name, id, description, before_widget, etc.
+		$sidebar_name = null; // init
+		$sidebar_info = wp_get_sidebar( $sidebar );
+		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
+		
+		// Is this a Custom Sidebar?
+		if ( strpos($sidebar, 'cs-') !== false ) {
+			$custom_sidebar = true;
+			//if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
+		} else {
+			$custom_sidebar = false;
+		}
+		
+		$info .= "<h3>sidebar: ";
+		$info .= $sidebar;
+		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
+		if ( $custom_sidebar ) { $info .= " [cs]"; }
+		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
+		$info .= "</h3>";
+		
+		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		
+		$info .= '<div class="code">';
+		
+		// Loop through widgets and create corresponding snippet records
+		if ( is_array($widgets) ) {
+		
+			$info .= "<h4>Widgets</h4>";
+			foreach ( $widgets as $i => $widget_uid ) {
+			
+				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
+
+				// Separate type and id from widget_uid
+				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
+				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
+				$wtype_option = "widget_".$wtype;
+				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
+				// Widget type?
+				if ( isset($$wtype_option[$wid]) ) {
+					$widget = $$wtype_option[$wid];
+					$info .= "Matching $wtype widget found.<br />";
+				}
+				if ( !in_array($wtype,$wtypes) ) {
+					$widget = null; // tft
+					$info .= "We're not currently processing widgets of type: $wtype<br />";
+				}
+			}
+		}
+	}
 }
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
