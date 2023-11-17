@@ -1170,7 +1170,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$postarr['meta_input'] = $meta_input;
 						
 						if ( $wtype == "media_image" ) {
-							$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 						}
 						//
 						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
