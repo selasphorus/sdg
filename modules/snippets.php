@@ -1293,7 +1293,9 @@ function delete_widgets ( $atts = [] ) {
 		foreach ( $widgets as $key => $widget ) {
 			
 			$info .= "key: ".$key."/";
-			$info .= "widget[title]: ".$widget['title'];
+			$info .= "widget[title]: ".$widget['title']."/";
+			$widget_uid = $wtype."-".$key;
+			$info .= "widget_uid: ".$widget_uid."/";
 			$info .= "<br />";
 			// Which sidebar does this widget belong to?
 			//
