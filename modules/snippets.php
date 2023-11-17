@@ -1305,8 +1305,8 @@ function delete_widgets ( $atts = [] ) {
 		$i = 0;
 		foreach ( $widgets as $key => $widget ) {
 			
-			$info .= "key: ".$key."/";
-			$info .= "widget[title]: ".$widget['title']."/";
+			$info .= "key: ".$key." / ";
+			if ( isset($widget['title']) ) { $info .= $widget['title']; }
 			$widget_uid = $wtype."-".$key;
 			$info .= " [".$widget_uid."]";
 			$info .= "<br />";
@@ -2579,7 +2579,7 @@ function get_sidebar_id( $uid_to_match = null) {
 		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
 		
 		// Is this a Custom Sidebar?
-		if ( strpos($sidebar, 'cs-') !== false ) {
+		if ( strpos($sidebar_id, 'cs-') !== false ) {
 			$custom_sidebar = true;
 			//if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
 		} else {
@@ -2587,7 +2587,7 @@ function get_sidebar_id( $uid_to_match = null) {
 		}
 		
 		$info .= "<h3>sidebar: ";
-		$info .= $sidebar;
+		$info .= $sidebar_id;
 		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
 		if ( $custom_sidebar ) { $info .= " [cs]"; }
 		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
