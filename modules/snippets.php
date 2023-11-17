@@ -1169,7 +1169,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						// Finish setting up the post array for update/insert							
 						$postarr['meta_input'] = $meta_input;
 						
-						//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+						if ( $wtype == "media_image" ) {
+							$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+						}
+						//
 						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 							// Update existing snippet
