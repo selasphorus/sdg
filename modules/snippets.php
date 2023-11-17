@@ -1479,7 +1479,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				
-				/*
+				//
 				foreach ( $cs_post_ids as $x => $id ) {
 							
 					$post_info = $x.".) ".get_the_title($id)." [$id]";
@@ -1498,10 +1498,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 					}
 					$post_info .= "<br />";
-					$info .= $post_info;
+					//$info .= $post_info;
 				}
 				$info .= "<hr />";
-				*/
+				//
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
 				/*
@@ -1597,10 +1597,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						// This is tmp disabled because it resulted in way too many posts in the target_by_post field
 						// TODO: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
 						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
-						$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
+						$key_ts_info .= "CS posts:<br />";
+						$key_ts_info .= $post_info;
+						$key_ts_info .= "<br /><hr /><br />";
+						//$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
-						/*
+						
 						foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
 							$sidebar_id = get_field('sidebar_id', $snip_id, false);
@@ -1610,7 +1613,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								$update_key = 'cs_post_ids';
 							}
 							$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
-							//
+							/*
 							$update_value = $updated_field_value;
 							$tertiary_updates = get_updated_field_value( $snip_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
 							$key_ts_info .= $tertiary_updates['info'];
@@ -1632,10 +1635,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								} else {
 									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snip_id<br />";
 								}
-							}
+							}*/
 							$key_ts_info .= "<br />";
 						}
-						*/
+						
 					}
 					
 				}
