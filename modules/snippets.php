@@ -1594,7 +1594,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$wp_args['meta_query'] = $meta_query;
 					$snippets = get_posts($wp_args);
 					if ( $snippets ) {
+						// This is tmp disabled because it resulted in way too many posts in the target_by_post field
+						// TODO: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
 						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
+						$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
 						/*
