@@ -4,6 +4,7 @@
 
 /*** WIDGETS >> SNIPPETS -- WIP! ***/
 
+// Prior to deactivating/deleting the Custom Sidebars plugin, save the cs sidebar_id to all posts for which they were active
 add_shortcode('cs_sidebars_xfer', 'cs_sidebars_xfer');
 function cs_sidebars_xfer ( $atts = [] ) {
 
@@ -1251,7 +1252,8 @@ function convert_post_widgets_to_snippets () {
 }
 
 // WIP -- messy draft -- do not use
-function delete_widgets ( $wtype = null ) {
+add_shortcode('delete_widgets', 'delete_widgets');
+function delete_widgets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
@@ -1260,11 +1262,11 @@ function delete_widgets ( $wtype = null ) {
     sdg_log( "function called: delete_widgets", $do_log );
     
     $args = shortcode_atts( array(
-		'limit'   => 1,
-        'sidebar_id' => null,
+        'limit'   => 1,
+        'widget_types'	=> array(), //array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' )
         'widget_id'	=> null,
-        'wtype'	=> null,
-        'run_updates' => false,   
+        'sidebar_id' => null,
+        'run_updates' => false,
     ), $atts );
     
     // Extract
@@ -1275,18 +1277,36 @@ function delete_widgets ( $wtype = null ) {
 	
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
-	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
-	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
+	//$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
+	//$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	//
-	$wtypes = array( 'text', 'custom_html', 'ninja_forms_widget' );
 	//
 	foreach ( $wtypes as $wtype ) {
+	
 		$option_name = "widget_".$wtype;
-		$$option_name = get_option($option_name);
+		//$$option_name = get_option($option_name);
+		$widgets = get_option($option_name);
+		foreach ( $widgets as $key => $widget ) {
+			
+			$info .= "key: ".$key."/";
+			$info .= "widget[title]: ".$widget['title'];
+			$info .= "<br />";
+			// Which sidebar does this widget belong to?
+			//
+			
+			// Delete widget -- by unsetting key?
+
+		}
+        // update DB option
+        //$updated = update_option( $option_name, $widgets );
+		//
+		// if this is NOT it, move on (3)
+        // if ( mb_strtolower( $widget['title'] ) !== mb_strtolower( $title ) ) continue;
 	}
 	
 	// Loop through sidebars and remove/delete widgets
 	
+	/*
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
@@ -1348,6 +1368,7 @@ function delete_widgets ( $wtype = null ) {
 			}
 		}
 	}
+	*/
 }
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
