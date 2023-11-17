@@ -1313,8 +1313,8 @@ function delete_widgets ( $atts = [] ) {
 			
 			// Which sidebar does this widget belong to?
 			//$sidebar_id = wp_find_widgets_sidebar( $widget_id ); // nope
-			$sidebar_id = get_sidebar_id($widget_uid);
-			$info .= "&rarr; sidebar_id: ".$sidebar_id."<br />";
+			$widget_sidebar = get_sidebar_id($widget_uid);
+			$info .= "&rarr; widget_sidebar: ".$widget_sidebar."<br />";
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
@@ -2596,13 +2596,16 @@ function get_sidebar_id( $uid_to_match = null) {
 		// Loop through widgets and create corresponding snippet records
 		if ( is_array($widgets) ) {
 		
-			$info .= "<h4>Widgets</h4>";
+			//$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {			
 				if ( $widget_uid == $uid_to_match ) {
+					$info .= "Matching widget found in sidebar: ".$sidebar_id."<br />";
 					return $sidebar_id;
 				}
 			}
 		}
+		$info .= "&rarr; NO Matching widget found in sidebar: ".$sidebar_id." (".$sidebar_name.")<br />";
+		$info .= '</div>';
 	}
 	
 	return $info;
