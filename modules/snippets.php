@@ -668,7 +668,7 @@ function get_snippets ( $args = array() ) {
     // Make sure there are no duplicates in the active_snippets array
     $active_snippets = array_unique($active_snippets); // SORT_REGULAR
 	
-	$active_snippets[] = 330389; // tft
+	//$active_snippets[] = 330389; // tft
 	
 	// If returning array of IDs, finish here
 	if ( $return == "ids" ) { return $active_snippets; }
@@ -1182,6 +1182,19 @@ ORDER BY `wpstc_options`.`option_name` ASC
 	return $info;
 	
 } // END function convert_widgets_to_snippets
+
+// WIP
+/*
+    // WIP
+    if ( function_exists('get_post_sidebar_widget') ) {
+		$post_widget = get_post_sidebar_widget($post_id);
+		if ( $post_widget ) {
+			$classes[] = 'post-widget'; // TODO: figure out how to remove "no-sidebar" class imposed by twentysixteen -- load order issue...
+		}
+	}*/
+function convert_post_widgets_to_snippets () {
+
+}
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
 add_shortcode('update_snippet_logic', 'update_snippet_logic');
