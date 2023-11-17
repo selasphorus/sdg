@@ -908,7 +908,7 @@ function sdg_msg_bar( $args = array() ) {
 		}
 		
 		// Attempt at cache-busting
-		$msg .= "<!-- ".date("l jS \of F Y h:i:s A")()." -->";
+		$msg .= "<!-- ".date("l jS \of F Y h:i:s A")." -->";
 		//
 		
 		$info .= '<div id="post-'.$post_id.'" class="'.$post_type.' featured-post">';
@@ -922,7 +922,7 @@ function sdg_msg_bar( $args = array() ) {
     } else {
     	
 		// Attempt at cache-busting
-		$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A")()."] -->";
+		$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A")."] -->";
 		$info .= $msg;
 		
     }
