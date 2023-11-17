@@ -1318,10 +1318,15 @@ function delete_widgets ( $atts = [] ) {
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
-			unset($widgets[$key]);
+			if ( in_array( $sidebars,$widget_sidebar ) ) {
+				$info .= "&rarr; DELETE this widget!<br />";
+				unset($widgets[$key]);
+				$i++;
+			} else {
+				$info .= "&rarr; Do NOT delete this widget!<br />";
+			}		
 			
-			$i++;
-			//if ( $i > $limit ) { break; }
+			if ( $i > $limit ) { break; }
 		}
 		//
 		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
@@ -2608,7 +2613,8 @@ function get_sidebar_id( $uid_to_match = null) {
 		$info .= '</div>';
 	}
 	
-	return $info;
+	//return $info;
+	return null;
 
 }
 
