@@ -907,8 +907,7 @@ function sdg_msg_bar( $args = array() ) {
 			//$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
 		}
 		
-		// Attempt at cache-busting
-		$msg .= "<!-- ".date("l jS \of F Y h:i:s A e")." -->";
+		//$msg .= "<!-- ".date("l jS \of F Y h:i:s A e")." -->";
 		//
 		
 		$info .= '<div id="post-'.$post_id.'" class="'.$post_type.' featured-post">';
@@ -921,9 +920,8 @@ function sdg_msg_bar( $args = array() ) {
 		
     } else {
     	
-		// Attempt at cache-busting
-		$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A e")."] -->";
-		$info .= $msg;
+		//$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A e")."] -->";
+		//$info .= $msg;
 		
     }
     
