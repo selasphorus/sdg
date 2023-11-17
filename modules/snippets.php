@@ -1263,7 +1263,7 @@ function delete_widgets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
         'limit'   => 1,
-        'widget_types'	=> array(), //array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' )
+        'widget_types'	=> array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ),
         'widget_id'	=> null,
         'sidebar_id' => null,
         'run_updates' => false,
@@ -1275,6 +1275,8 @@ function delete_widgets ( $atts = [] ) {
 	$info = "";
 	$i = 0;
 	
+	$info .= "<h2>Delete Widgets</h2>";
+	
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
 	//$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
@@ -1284,6 +1286,8 @@ function delete_widgets ( $atts = [] ) {
 	foreach ( $widget_types as $wtype ) {
 	
 		$option_name = "widget_".$wtype;
+		$info .= "option_name: ".$option_name."<br />";
+		
 		//$$option_name = get_option($option_name);
 		$widgets = get_option($option_name);
 		foreach ( $widgets as $key => $widget ) {
