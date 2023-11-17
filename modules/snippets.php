@@ -1266,7 +1266,7 @@ function delete_widgets ( $atts = [] ) {
         'limit'   => 1,
         'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
         'widget_id'	=> null,
-        'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets' ),
+        'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
         'run_updates' => false,
     ), $atts );
     
@@ -1314,6 +1314,9 @@ function delete_widgets ( $atts = [] ) {
 			// Which sidebar does this widget belong to?
 			//$sidebar_id = wp_find_widgets_sidebar( $widget_id ); // nope
 			$widget_sidebar = get_sidebar_id($widget_uid);
+			if ( strpos($widget_sidebar, 'cs-') !== false ) {
+				$widget_sidebar = "cs_sidebar"; 
+			}
 			$info .= "&rarr; widget_sidebar: ".$widget_sidebar."<br />";
 			
 			// Delete widget -- by unsetting key?
