@@ -1481,12 +1481,14 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 				//
 				foreach ( $cs_post_ids as $x => $id ) {
-							
-					$post_info = $x.".) ".get_the_title($id)." [$id]";
+					
+					$post = get_post( $id );
+					$post_info = $x.".) ".$post->post_title." [$id]";
 				
 					// Get post status -- we're only interested published posts
 					$post_status = get_post_status( $id );
 					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
+					$post_info = " // ".$post->post_name." // ";
 					//$post_info .= "<br />";
 				
 					// Is this an attached instance of a recurring event?
