@@ -919,6 +919,12 @@ function sdg_msg_bar( $args = array() ) {
 		$info .= '</div>';
 		$info .= '</div><!-- /banner -->';
 		
+    } else {
+    	
+		// Attempt at cache-busting
+		$msg .= "<!-- sdg_msg_bar: no active post [".time()."] -->";
+		$info .= $msg;
+		
     }
     
     //$info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
