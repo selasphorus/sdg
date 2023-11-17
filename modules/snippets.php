@@ -1263,9 +1263,9 @@ function delete_widgets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
         'limit'   => 1,
-        'widget_types'	=> array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
+        'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
         'widget_id'	=> null,
-        'sidebar_id' => null,
+        'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets' ),
         'run_updates' => false,
     ), $atts );
     
@@ -1275,6 +1275,11 @@ function delete_widgets ( $atts = [] ) {
 	$info = "";
 	$i = 0;
 	
+	// Sidebars to process
+	if ( !is_array($sidebars) ) { $sidebars = explode(',', $sidebars); }
+	$info .= "sidebars: <pre>".print_r($sidebars,true)."</pre><hr /><hr />";
+	
+	// Widget Types to process
 	if ( !is_array($widget_types) ) { $widget_types = explode(',', $widget_types); }
 	$info .= "widget_types: <pre>".print_r($widget_types,true)."</pre><hr /><hr />";
 	
@@ -1306,7 +1311,9 @@ function delete_widgets ( $atts = [] ) {
 			$info .= "<br />";
 			
 			// Which sidebar does this widget belong to?
-			//
+			//$widget_sidebar_id = get_sidebar_id($widget_uid);
+			$sidebar_id = wp_find_widgets_sidebar( $widget_id );
+			$info .= "sidebar_id: ".$sidebar_id."<br />";
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
@@ -1320,13 +1327,14 @@ function delete_widgets ( $atts = [] ) {
 		
         // update DB option
         if ( $i > 0 ) {
-        	$updated = update_option( $option_name, $widgets );
+        	$info .= "Preparing to delete ".$i." ".$wtype." widgets!<br />";
+        	/*$updated = update_option( $option_name, $widgets );
 			if ( !$updated ) {
 				// do some form of error handling (6)
 				$info .= "ERROR ON UPDATE<br />";
 			} else {
 				$info .= $i." ".$wtype." widgets deleted!<br />";
-			}
+			}*/
         }
         
 	}
