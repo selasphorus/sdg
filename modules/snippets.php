@@ -961,7 +961,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					// If title and content are set, then prep to save widget as snippet
 					//if ( $snippet_title && $snippet_content ) {
 					//if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
-					if ( in_array($wtype, $wtypes) && $snippet_title && $snippet_content ) {
+					if ( in_array($wtype, $wtypes) && $snippet_title ) { // && $snippet_content
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
@@ -1186,8 +1186,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						}
 		
 					} else {
-						if ( ! ( $wtype == "text" || $wtype == "custom_html" ) ) {
-							$info .= "wtype: $wtype (Not text or custom_html)<br />";
+					
+						if ( ! in_array($wtype, $wtypes) ) {
+							$info .= "wtype: $wtype<br />";
 							$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";
 						} else if ( ! ( $snippet_title && $snippet_content ) ) {
 							$info .= "Incomplete data<br />";
