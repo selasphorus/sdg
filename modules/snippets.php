@@ -1319,13 +1319,16 @@ function delete_widgets ( $atts = [] ) {
 		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
 		
         // update DB option
-        $updated = update_option( $option_name, $widgets );
-        if ( !$updated ) {
-            // do some form of error handling (6)
-            $info .= "ERROR ON UPDATE<br />";
-        } else {
-        	$info .= $i." ".$wtype." widgets deleted!<br />";
+        if ( $i > 0 ) {
+        	$updated = update_option( $option_name, $widgets );
+			if ( !$updated ) {
+				// do some form of error handling (6)
+				$info .= "ERROR ON UPDATE<br />";
+			} else {
+				$info .= $i." ".$wtype." widgets deleted!<br />";
+			}
         }
+        
 	}
 	
 	// Loop through sidebars and remove/delete widgets
