@@ -167,6 +167,7 @@ function get_snippets ( $args = array() ) {
         'devmode' => false,
         'return' => 'info',
         'sidebar_id' => 'sidebar-1', // default
+        'classes' => array(), // for use when called by stc_body_class fcn
 	);
 
 	// Parse & Extract args
@@ -181,6 +182,8 @@ function get_snippets ( $args = array() ) {
 	}
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
+    
+    // is_singular, is_archive, is_tax, is_post_type_archive
     
 	// Get post_type, if applicable
 	if ( is_singular() ) { // is_single
@@ -664,6 +667,8 @@ function get_snippets ( $args = array() ) {
     
     // Make sure there are no duplicates in the active_snippets array
     $active_snippets = array_unique($active_snippets); // SORT_REGULAR
+	
+	$active_snippets[] = 330389; // tft
 	
 	// If returning array of IDs, finish here
 	if ( $return == "ids" ) { return $active_snippets; }
