@@ -1310,7 +1310,7 @@ function delete_widgets ( $atts = [] ) {
 			unset($widgets[$key]);
 			
 			$i++;
-			if ( $i > $limit ) { break; }
+			//if ( $i > $limit ) { break; }
 		}
 		//
 		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
@@ -1320,6 +1320,8 @@ function delete_widgets ( $atts = [] ) {
         if ( !$updated ) {
             // do some form of error handling (6)
             $info .= "ERROR ON UPDATE<br />";
+        } else {
+        	$info .= $i." ".$wtype." widgets deleted!<br />";
         }
 	}
 	
