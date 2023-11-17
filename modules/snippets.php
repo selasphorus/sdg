@@ -1281,7 +1281,7 @@ function delete_widgets ( $atts = [] ) {
 	//$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	//
 	//
-	foreach ( $wtypes as $wtype ) {
+	foreach ( $widget_types as $wtype ) {
 	
 		$option_name = "widget_".$wtype;
 		//$$option_name = get_option($option_name);
