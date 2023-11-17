@@ -839,7 +839,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				}
 				if ( !in_array($wtype,$wtypes) ) {
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
-					if ( $widget ) { $info .= "widget: <pre>".print_r($widget,true)."</pre><hr />"; }
+					$info .= "widget: <pre>".print_r($widget,true)."</pre><hr />"; //if ( $widget ) {  }
 					$widget = null; // tft
 				}
 					
