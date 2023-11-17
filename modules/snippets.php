@@ -970,7 +970,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					$info .= "title: ".$snippet_title."<br />";
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
-					//$widget_sidebar_id = get_sidebar_id($widget_uid);
+					$widget_sidebar_id = get_sidebar_id($widget_uid);
+					$info .= "widget_sidebar_id: ".$widget_sidebar_id."<br />";
 					
 					// TODO: check to see if snippet already exists with matching uid
 					// If no match, create new snippet post record with title and text as above
@@ -1311,8 +1312,8 @@ function delete_widgets ( $atts = [] ) {
 			$info .= "<br />";
 			
 			// Which sidebar does this widget belong to?
-			//$widget_sidebar_id = get_sidebar_id($widget_uid);
-			$sidebar_id = wp_find_widgets_sidebar( $widget_id );
+			//$sidebar_id = wp_find_widgets_sidebar( $widget_id ); // nope
+			$sidebar_id = get_sidebar_id($widget_uid);
 			$info .= "sidebar_id: ".$sidebar_id."<br />";
 			
 			// Delete widget -- by unsetting key?
@@ -1337,73 +1338,9 @@ function delete_widgets ( $atts = [] ) {
 			}*/
         }
         
+        $info .= "<br /><hr /><br />";
+        
 	}
-	
-	// Loop through sidebars and remove/delete widgets
-	
-	/*
-	$info .= "<h2>Sidebars/Widgets</h2>";
-	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
-	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
-		
-		// If we're handling a specific sidebar and this isn't it, move on to the next
-		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
-		
-		// Skip wp_inactive_widgets -- tft
-		//if ( $sidebar == 'wp_inactive_widgets' ) { continue; }
-		//if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
-		
-		// Get the registered sidebar info -- name, id, description, before_widget, etc.
-		$sidebar_name = null; // init
-		$sidebar_info = wp_get_sidebar( $sidebar );
-		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
-		
-		// Is this a Custom Sidebar?
-		if ( strpos($sidebar, 'cs-') !== false ) {
-			$custom_sidebar = true;
-			//if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
-		} else {
-			$custom_sidebar = false;
-		}
-		
-		$info .= "<h3>sidebar: ";
-		$info .= $sidebar;
-		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
-		if ( $custom_sidebar ) { $info .= " [cs]"; }
-		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
-		$info .= "</h3>";
-		
-		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
-		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
-		
-		$info .= '<div class="code">';
-		
-		// Loop through widgets and create corresponding snippet records
-		if ( is_array($widgets) ) {
-		
-			$info .= "<h4>Widgets</h4>";
-			foreach ( $widgets as $i => $widget_uid ) {
-			
-				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
-
-				// Separate type and id from widget_uid
-				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
-				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
-				$wtype_option = "widget_".$wtype;
-				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
-				// Widget type?
-				if ( isset($$wtype_option[$wid]) ) {
-					$widget = $$wtype_option[$wid];
-					$info .= "Matching $wtype widget found.<br />";
-				}
-				if ( !in_array($wtype,$wtypes) ) {
-					$widget = null; // tft
-					$info .= "We're not currently processing widgets of type: $wtype<br />";
-				}
-			}
-		}
-	}
-	*/
 	
 	return $info;
 	
@@ -2619,9 +2556,56 @@ The widget ID to look for.
 Return
 string|null The found sidebar's ID, or null if it was not found.
 */
-function get_sidebar_id( $widget_uid = null) {
-	//
-	return null;
+function get_sidebar_id( $uid_to_match = null) {
+	
+	$info = "";
+	
+	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
+	
+	// Loop through sidebars to look for match
+	
+	//$info .= "<h2>Sidebars/Widgets</h2>";
+	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
+	foreach ( $arr_sidebars_widgets as $sidebar_id => $widgets ) {
+		
+		// Get the registered sidebar info -- name, id, description, before_widget, etc.
+		$sidebar_name = null; // init
+		$sidebar_info = wp_get_sidebar( $sidebar_id );
+		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
+		
+		// Is this a Custom Sidebar?
+		if ( strpos($sidebar, 'cs-') !== false ) {
+			$custom_sidebar = true;
+			//if ( $sidebar == "cs-29" ) { $info .= "Sermons sidebar... skip it for now<br />"; continue; } // Sermons sidebar. Special case
+		} else {
+			$custom_sidebar = false;
+		}
+		
+		$info .= "<h3>sidebar: ";
+		$info .= $sidebar;
+		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
+		if ( $custom_sidebar ) { $info .= " [cs]"; }
+		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
+		$info .= "</h3>";
+		
+		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		
+		$info .= '<div class="code">';
+		
+		// Loop through widgets and create corresponding snippet records
+		if ( is_array($widgets) ) {
+		
+			$info .= "<h4>Widgets</h4>";
+			foreach ( $widgets as $i => $widget_uid ) {			
+				if ( $widget_uid == $uid_to_match ) {
+					return $sidebar_id;
+				}
+			}
+		}
+	}
+	
+	return $info;
 
 }
 
