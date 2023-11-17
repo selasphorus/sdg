@@ -1314,7 +1314,7 @@ function delete_widgets ( $atts = [] ) {
 			// Which sidebar does this widget belong to?
 			//$sidebar_id = wp_find_widgets_sidebar( $widget_id ); // nope
 			$sidebar_id = get_sidebar_id($widget_uid);
-			$info .= "sidebar_id: ".$sidebar_id."<br />";
+			$info .= "&rarr; sidebar_id: ".$sidebar_id."<br />";
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
