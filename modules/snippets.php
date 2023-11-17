@@ -1291,8 +1291,9 @@ function delete_widgets ( $atts = [] ) {
 		//$$option_name = get_option($option_name);
 		$widgets = get_option($option_name);
 		//
-		$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
+		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
 		//
+		$i = 0;
 		foreach ( $widgets as $key => $widget ) {
 			
 			$info .= "key: ".$key."/";
@@ -1301,23 +1302,25 @@ function delete_widgets ( $atts = [] ) {
 			$info .= " [".$widget_uid."]";
 			$info .= "<br />";
 			
-			//
-			
 			// Which sidebar does this widget belong to?
 			//
 			
 			// Delete widget -- by unsetting key?
-			if ( $key == 3 ) { unset($widgets[$key]); }
-
+			//if ( $key == 3 ) { unset($widgets[$key]); }
+			unset($widgets[$key]);
+			
+			$i++;
+			if ( $i > $limit ) { break; }
 		}
 		//
-		$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
+		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
 		
         // update DB option
-        //$updated = update_option( $option_name, $widgets );
-		//
-		// if this is NOT it, move on (3)
-        // if ( mb_strtolower( $widget['title'] ) !== mb_strtolower( $title ) ) continue;
+        $updated = update_option( $option_name, $widgets );
+        if ( !$updated ) {
+            // do some form of error handling (6)
+            $info .= "ERROR ON UPDATE<br />";
+        }
 	}
 	
 	// Loop through sidebars and remove/delete widgets
