@@ -1326,7 +1326,7 @@ function delete_widgets ( $atts = [] ) {
 				$info .= "&rarr; Do NOT delete this widget!<br />";
 			}		
 			
-			if ( $i > $limit ) { break; }
+			if ( $i > $limit && $limit > 0 ) { break; }
 		}
 		//
 		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
