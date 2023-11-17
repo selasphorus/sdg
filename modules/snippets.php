@@ -891,8 +891,17 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					// Image Widget?
 					if ( $wtype == "media_image" ) {
 						//
-						if ( isset($widget['title']) && !empty($widget['title']) ) {
-							//$snippet_title = $widget['title'];
+						if ( isset($widget['attachment_id']) && !empty($widget['attachment_id']) ) {
+							$postarr['attachment_id'] = $widget['attachment_id'];
+						}
+						if ( isset($widget['image_title']) && !empty($widget['image_title']) ) {
+							$postarr['image_title'] = $widget['image_title'];
+						}
+						if ( isset($widget['link_type']) && !empty($widget['link_type']) ) {
+							$postarr['link_type'] = $widget['link_type'];
+						}
+						if ( isset($widget['link_url']) && !empty($widget['link_url']) ) {
+							$postarr['link_url'] = $widget['link_url'];
 						}
 						/*
 						[mega_menu_is_grid_widget] => true
@@ -901,17 +910,17 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						[height] => 844
 						[caption] => 
 						[alt] => 
-						[link_url] => /worship-and-pray/go-deeper/worship/choral-evensong/
+						--[link_url] => /worship-and-pray/go-deeper/worship/choral-evensong/
 						[image_classes] => 
 						[link_classes] => 
 						[link_rel] => 
 						[link_target_blank] => 
-						[image_title] => Purchase CDs
-						[attachment_id] => 304791
+						--[image_title] => Purchase CDs
+						--[attachment_id] => 304791
 						[url] => https://stcnycstg.wpengine.com/wp-content/uploads/2022/08/The-Saint-Thomas-Choir-at-the-Queens-Service-600x600.jpg
-						[title] => Choral Evensong
+						--[title] => Choral Evensong
 						...
-						[link_type] => custom
+						--[link_type] => custom
 						*/
 					}
 					
@@ -951,7 +960,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					
 					// If title and content are set, then prep to save widget as snippet
 					//if ( $snippet_title && $snippet_content ) {
-					if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
+					//if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
+					if ( in_array($wtype, $wtypes) && $snippet_title && $snippet_content ) {
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 						$postarr['post_content'] = $snippet_content;
