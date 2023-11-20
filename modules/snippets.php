@@ -703,6 +703,7 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
 	$snippet_id = null;
 	$info = "";
+	$snippets = array();
 	
 	if ( $widget_uid ) {
 		$wp_args = array(
@@ -764,6 +765,52 @@ function get_snippet_by_post_id ( $post_id = null ) {
 
 }
 
+function get_snippet_by_content ( $snippet_title = null, $snippet_content = null ) {
+
+	$snippet_id = null;
+	$info = "";
+	$snippets = array();
+	
+	if ( $snippet_title || $snippet_content ) {
+		$wp_args = array(
+			'post_type'   => 'snippet',
+			'post_status' => 'publish',
+			'post_title' => $snippet_title,
+			'post_content' => $snippet_content,
+			'fields'      => 'ids',
+		);
+		/*$meta_query = array(
+			'relation' => 'AND',
+			'snippet_display' => array(
+				'key' => 'snippet_display',
+				'value' => array('selected', 'notselected'),
+				'compare' => 'IN',
+			),
+			'sidebar_id' => array(
+				'key' => 'sidebar_id',
+				'value' => 'cs-',
+				'compare' => 'NOT LIKE',
+			),
+		);
+		$wp_args['meta_query'] = $meta_query;*/
+		$snippets = get_posts($wp_args);
+	}
+	
+	if ( $snippets ) {
+		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		// get existing post id
+		if ( count($snippets) == 1 ) {
+			$snippet_id = $snippets[0];
+		} else if ( count($snippets) > 1 ) {
+			//$info .= "More than one matching snippet!<br />";
+			//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		}
+		//$info .= "snippet_id: ".$snippet_id."<br />";
+	}
+	
+	return $snippet_id;
+	
+}
 //
 add_shortcode('widgets_to_snippets', 'convert_widgets_to_snippets');
 function convert_widgets_to_snippets ( $atts = [] ) {
@@ -1383,14 +1430,18 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 				
 		// Does a snippet already exist based on this widget?
 		$snippet_id = get_snippet_by_post_id ( $post_id );
+		//
+		if ( !$snippet_id ) {
+			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
+			$snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+		}
+		//
 		if ( $snippet_id ) {
 			$postarr['ID'] = $snippet_id;
 			$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
 		} else {
 			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
 		}
-		//
-		// TODO: Write new fcn get_snippet_by_content fcn to see if snippet exists with same title/content, so as to avoid creating duplicate snippets
 		
 		$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 		$postarr['post_content'] = $snippet_content;
