@@ -731,6 +731,38 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
 }
 
+function get_snippet_by_post_id ( $post_id = null ) {
+
+	$snippet_id = null;
+	$info = "";
+	
+	if ( $widget_uid ) {
+		$wp_args = array(
+			'post_type'   => 'snippet',
+			'post_status' => 'publish',
+			'meta_key'    => 'post_id',
+			'meta_value'  => $post_id,
+			'fields'      => 'ids'
+		);	
+		$snippets = get_posts($wp_args);
+	}
+	
+	if ( $snippets ) {
+		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		// get existing post id
+		if ( count($snippets) == 1 ) {
+			$snippet_id = $snippets[0];
+		} else if ( count($snippets) > 1 ) {
+			//$info .= "More than one matching snippet!<br />";
+			//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		}
+		//$info .= "snippet_id: ".$snippet_id."<br />";
+	}
+	
+	return $snippet_id;
+
+}
+
 //
 add_shortcode('widgets_to_snippets', 'convert_widgets_to_snippets');
 function convert_widgets_to_snippets ( $atts = [] ) {
@@ -1323,6 +1355,17 @@ function convert_post_widgets_to_snippets () {
 		
 		$info .= "snippet_title: ".$snippet_title."<br />";
 		
+		$postarr = array();
+		$meta_input = array();
+				
+		// Does a snippet already exist based on this widget?
+		$snippet_id = get_snippet_by_post_id ( $post_id );
+		if ( $snippet_id ) {
+			$postarr['ID'] = $snippet_id;
+			$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
+		} else {
+			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
+		}
 		//
 		
 		$info .= "<hr /><br />";
