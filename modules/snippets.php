@@ -1301,7 +1301,7 @@ function convert_post_widgets_to_snippets () {
 		$widget_content = wpautop($widget_content);
 		
 		$info .= "widget_title: ".$widget_title."<br />";
-		$info .= "widget_content: <pre>".$widget_content."</pre><br />";
+		//$info .= "widget_content: <pre>".$widget_content."</pre><br />";
 		
 		// TODO: create/update widget
 		
