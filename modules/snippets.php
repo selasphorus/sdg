@@ -735,8 +735,9 @@ function get_snippet_by_post_id ( $post_id = null ) {
 
 	$snippet_id = null;
 	$info = "";
+	$snippets = array();
 	
-	if ( $widget_uid ) {
+	if ( $post_id ) {
 		$wp_args = array(
 			'post_type'   => 'snippet',
 			'post_status' => 'publish',
