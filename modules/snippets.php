@@ -1240,16 +1240,75 @@ ORDER BY `wpstc_options`.`option_name` ASC
 } // END function convert_widgets_to_snippets
 
 // WIP
-/*
-    // WIP
-    if ( function_exists('get_post_sidebar_widget') ) {
-		$post_widget = get_post_sidebar_widget($post_id);
-		if ( $post_widget ) {
-			$classes[] = 'post-widget'; // TODO: figure out how to remove "no-sidebar" class imposed by twentysixteen -- load order issue...
-		}
-	}*/
+add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
 function convert_post_widgets_to_snippets () {
+	
 	// WIP
+	
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: convert_post_widgets_to_snippets", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	$arr_ids = array(); // this array will containing snippets matched for display on the given post
+    
+    $args = shortcode_atts( array(
+    	'post_id' => null,
+		'limit'   => -1,
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	// Set up basic query args for snippets retrieval
+    $wp_args = array(
+		'post_type'		=> 'any',
+		'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
+		'posts_per_page'=> -1,
+        'fields'		=> 'ids',
+        //'orderby'		=> 'meta_value',
+		//'order'			=> 'ASC',
+        //'meta_key'		=> '_cs_replacements',
+	);
+	
+	// Meta query
+	$meta_query = array(
+		'post_widget' => array(
+			'key' => 'post_sidebar_widget_content',
+			'compare' => '!=',
+			'value' => '',
+		),
+	);
+	$wp_args['meta_query'] = $meta_query;
+	
+	$arr_posts = new WP_Query( $wp_args );
+	$posts = $arr_posts->posts;
+    //$info .= "WP_Query run as follows:";
+    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $info .= "[".count($posts)."] posts found.<br />";
+    
+    // Determine which snippets should be displayed for the post in question
+	foreach ( $posts as $post_id ) {
+		
+		$info .= "post_id: ".$post_id."<br />";
+		$widget_title = get_post_meta( $post_id, 'post_sidebar_widget_title', true );
+		if ( empty($widget_title) ) { $widget_title = "More Resources"; }
+		$widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
+		$widget_content = wpautop($widget_content);
+		
+		$info .= "widget_title: ".$widget_title."<br />";
+		$info .= "widget_content: <pre>".$widget_content."</pre><br />";
+		
+		// TODO: create/update widget
+		
+	}	
+    
+    return $info;
+    
 }
 
 // WIP -- messy draft -- do not use
