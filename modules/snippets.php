@@ -1437,14 +1437,14 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$key_ts_info .= $updates['info'];
 			$updated_field_value = $updates['updated_value'];
 			if ( $updates && count($updated_field_value) > 0 ) {
-				$key_ts_info .= "about to update field '$update_key'<br />";
-				$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
-				//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-				//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
+				$info .= "about to update field '$update_key'<br />";
+				$info .= count($updated_field_value)." items in updated_field_value array<br />";
+				//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+				//$info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
 				if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
-					$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+					$info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 				} else {
-					$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+					$info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 				}
 			}
 			//$info .= "&rarr;&rarr; update_snippet_logic<br />";
