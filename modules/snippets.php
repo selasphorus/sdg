@@ -1277,7 +1277,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 
 // WIP
 add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
-function convert_post_widgets_to_snippets () {
+function convert_post_widgets_to_snippets ( $atts = [] ) {
 	
 	// TS/logging setup
     $do_ts = false; 
