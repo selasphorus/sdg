@@ -929,13 +929,16 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$snippet_content = $widget['content'];
 					}
 					
+					// TODO: eliminate redundancy -- make relativize_urls function
 					// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
 					// e.g. <a href="https://stcnyclive.wpengine.com/theology/">Gain understanding by attending classes</a>
 					if ( strpos($snippet_content, 'http') !== false ) {
 						$info .= "** Absolute urls in snippet_content => relativize them<br />";
 						//$info = str_replace($search,$replace,$info);
 						//$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
-						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);						
+						$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
+						$snippet_content = str_replace('https://stcnycstg.wpengine.com/','/',$snippet_content);
+						$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
 					}
 					
 					// Image Widget?
@@ -1325,7 +1328,7 @@ function convert_post_widgets_to_snippets () {
     $info .= "<hr /><br />";
     
     // Determine which snippets should be displayed for the post in question
-	foreach ( $posts as $post_id ) {
+	foreach ( $posts as $i => $post_id ) {
 		
 		$info .= "post_id: ".$post_id."<br />";
 		
@@ -1345,6 +1348,7 @@ function convert_post_widgets_to_snippets () {
 		// TODO: create/update widget
 		
 		$snippet_title = $widget_title;
+		$snippet_content = $widget_content;
 		
 		// Modify generic titles
 		// "More Resources"/"About the Artist"
@@ -1354,6 +1358,18 @@ function convert_post_widgets_to_snippets () {
 		}
 		
 		$info .= "snippet_title: ".$snippet_title."<br />";
+		
+		// TODO: eliminate redundancy -- make relativize_urls function
+		// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
+		// e.g. <a href="https://stcnyclive.wpengine.com/theology/">Gain understanding by attending classes</a>
+		if ( strpos($snippet_content, 'http') !== false ) {
+			$info .= "** Absolute urls in snippet_content => relativize them<br />";
+			//$info = str_replace($search,$replace,$info);
+			$snippet_content = str_replace('https://stcnyclive.wpengine.com/','/',$snippet_content);
+			$snippet_content = str_replace('https://stcnycstg.wpengine.com/','/',$snippet_content);
+			$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
+		}
+		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";		
 		
 		$postarr = array();
 		$meta_input = array();
@@ -1367,8 +1383,65 @@ function convert_post_widgets_to_snippets () {
 			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
 		}
 		//
+		// TODO: Write new fcn get_snippet_by_content fcn to see if snippet exists with same title/content, so as to avoid creating duplicate snippets
+		
+		$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
+		$postarr['post_content'] = $snippet_content;
+		$postarr['post_type'] = 'snippet';
+		$postarr['post_status'] = 'publish';
+		$postarr['post_author'] = 1; // get_current_user_id()
+		// Set up preliminary meta_input
+		$meta_input['post_id'] = $post_id;
+		$meta_input['snippet_display'] = "selected";
+		
+		// Display logic -- target_by_post
+		// 	WIP
+		$meta_input['target_by_post'] = serialize(array($post_id));
+		
+		// Init action var
+		$action = null;
+						
+		// Finish setting up the post array for update/insert							
+		$postarr['meta_input'] = $meta_input;
+		
+		$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+		
+		/*
+		if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
+			$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
+			// Update existing snippet
+			$snippet_id = wp_update_post($postarr);
+			if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
+		} else {
+			$info .= "&rarr; About to create a new snippet<br />";
+			// Insert the post into the database
+			$snippet_id = wp_insert_post($postarr);
+			if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
+		}
+		// Handle errors
+		if ( is_wp_error($snippet_id) ) {
+			//$info .= $snippet_id->get_error_message();
+			$errors = $snippet_id->get_error_messages();
+			foreach ($errors as $error) {
+				$info .= $error;
+			}
+		}
+
+		//
+		if ( $action && $snippet_id ) {
+			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
+			// Update snippet logic
+			$info .= "&rarr;&rarr; update_snippet_logic<br />";
+			$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+		} else {
+			$info .= "&rarr;&rarr; No action<br />";
+			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+		}
+		*/
 		
 		$info .= "<hr /><br />";
+		
+		if ( $i > $limit ) { break; }
 		
 	}	
     
@@ -1853,6 +1926,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$wildcard = false;
 						}
 						
+						// TODO: eliminate redundancy -- make relativize_urls function
 						// Is this an STC absolute URL? If so, remove the first bit
 						if ( substr($url, 0, 4) == "http" ) {
 							$condition_info .= "** Absolute url => relativize it [$url]<br />";
