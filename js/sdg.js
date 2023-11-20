@@ -631,6 +631,7 @@ jQuery(document).ready(function($) {
         var modalwidth = modalDimensions["width"];
         var modalheight = modalDimensions["height"];
         var modal_at = modalDimensions["modal_at"];
+        var target_element = modalDimensions["target_element"];
 
         var theDialog = $(dialog_id).dialog({            
             autoOpen: false,
