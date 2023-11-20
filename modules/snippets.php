@@ -1296,7 +1296,10 @@ function convert_post_widgets_to_snippets () {
 	foreach ( $posts as $post_id ) {
 		
 		$info .= "post_id: ".$post_id."<br />";
-		$info .= "post_title: ".get_the_title($post_id)."<br />";
+		
+		$post_title = get_the_title($post_id);		
+		$info .= "post_title: ".$post_title."<br />";
+		
 		$widget_title = get_post_meta( $post_id, 'post_sidebar_widget_title', true );
 		if ( empty($widget_title) ) { $widget_title = "More Resources"; }
 		$widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
