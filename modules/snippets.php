@@ -1446,6 +1446,9 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 				} else {
 					$info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 				}
+			} else {
+				$info .= "field '$update_key'<br />";
+				$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 			}
 			//$info .= "&rarr;&rarr; update_snippet_logic<br />";
 			//$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
