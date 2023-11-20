@@ -1408,9 +1408,8 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		// Finish setting up the post array for update/insert							
 		$postarr['meta_input'] = $meta_input;
 		
-		$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+		//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 		
-		/*
 		if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 			$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 			// Update existing snippet
@@ -1439,9 +1438,8 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 		} else {
 			$info .= "&rarr;&rarr; No action<br />";
-			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+			$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 		}
-		*/
 		
 		$info .= "<hr /><br />";
 		
