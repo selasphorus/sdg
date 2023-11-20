@@ -1305,9 +1305,24 @@ function convert_post_widgets_to_snippets () {
 		$info .= "widget_title: ".$widget_title."<br />";
 		//$info .= "widget_content: <pre>".$widget_content."</pre><br />";
 		
-		$info .= "<hr /><br />";
+		$info .= "<hr />"; //$info .= "<hr /><br />";
 		
 		// TODO: create/update widget
+		
+		$snippet_title = $widget_title;
+		
+		// Modify generic titles
+		// "More Resources"/"About the Artist"
+		if ( strpos($snippet_title, 'More Resources') !== false || strpos($snippet_title, 'About the Artist') !== false ) {
+			// Append the post title
+			$snippet_title .= "[".$post_title."]";
+		}
+		
+		$info .= "snippet_title: ".$snippet_title."<br />";
+		
+		//
+		
+		$info .= "<hr /><br />";
 		
 	}	
     
