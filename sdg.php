@@ -1565,7 +1565,7 @@ function get_post_sidebar_widget ( $post_id = null ) {
     if ( empty($widget_title) ) { $widget_title = "More Resources"; }
     
     $widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
-    //$widget_content = wpautop($widget_content);
+    $widget_content = wpautop($widget_content);
     
     //$info .= "<!-- ACF post_sidebar_widget_content for post_id $post_id: ".print_r($sidebar_content,true)."-->";
 
