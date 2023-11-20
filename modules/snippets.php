@@ -1356,7 +1356,9 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		
 		// Modify generic titles
 		// "More Resources"/"About the Artist"
-		if ( strpos($snippet_title, 'More Resources') !== false || strpos($snippet_title, 'About the Artist') !== false ) {
+		if ( strpos($snippet_title, 'More Resources') !== false 
+			|| strpos($snippet_title, 'About the Artist') !== false 
+			|| strpos($snippet_title, 'About Our Guest Lecturer') !== false ) {
 			// Append the post title
 			$snippet_title .= " [".trim($post_title)."]";
 		}
