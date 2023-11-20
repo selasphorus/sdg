@@ -1401,7 +1401,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		
 		// Display logic -- target_by_post
 		// 	WIP
-		$meta_input['target_by_post'] = serialize(array($post_id));
+		$meta_input['target_by_post'] = serialize(array("$post_id"));
 		
 		// Init action var
 		$action = null;
