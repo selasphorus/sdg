@@ -606,6 +606,8 @@ jQuery(document).ready(function($) {
             modal_at = "center bottom+10%";
         }
         console.log('winheight: '+winheight);
+        console.log('modalheight: '+modalheight);
+        console.log('modalwidth: '+modalwidth);
         console.log('modal_at: '+modal_at);
         console.log('target_element: '+target_element);
         
