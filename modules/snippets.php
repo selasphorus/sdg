@@ -1299,11 +1299,16 @@ function convert_post_widgets_to_snippets () {
     // Extract
 	extract( $args );
 	
+	$info .= "shortcode atts:<br />"
+	$info .= "post_id: ".$post_id."<br />";
+	$info .= "limit: ".$limit."<br />";
+	$info .= "<hr />";
+	
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'any',
 		'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
-		'posts_per_page'=> -1,
+		'posts_per_page'=> $limit,
         'fields'		=> 'ids',
         //'orderby'		=> 'meta_value',
 		//'order'			=> 'ASC',
@@ -1441,7 +1446,7 @@ function convert_post_widgets_to_snippets () {
 		
 		$info .= "<hr /><br />";
 		
-		if ( $i > $limit ) { break; }
+		if ( $limit > 0 && $i > $limit ) { break; }
 		
 	}	
     
