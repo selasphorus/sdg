@@ -1297,7 +1297,7 @@ function convert_post_widgets_to_snippets () {
     // Extract
 	extract( $args );
 	
-	$info .= "shortcode atts:<br />"
+	$info .= "shortcode atts:<br />";
 	$info .= "post_id: ".$post_id."<br />";
 	$info .= "limit: ".$limit."<br />";
 	$info .= "<hr />";
