@@ -1290,6 +1290,7 @@ function convert_post_widgets_to_snippets () {
     //$info .= "WP_Query run as follows:";
     //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($posts)."] posts found.<br />";
+    $info .= "<hr /><br />";
     
     // Determine which snippets should be displayed for the post in question
 	foreach ( $posts as $post_id ) {
