@@ -573,7 +573,7 @@ jQuery(document).ready(function($) {
         var modalheight;
         //var modalposition;
         var modal_at;
-        var target_element = "#site-header-menu";
+        var target_element = "#site-navigation";
         //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
 
         //alert ("window dimensions: "+winwidth+" x "+winheight);
@@ -607,6 +607,7 @@ jQuery(document).ready(function($) {
         }
         console.log('winheight: '+winheight);
         console.log('modal_at: '+modal_at);
+        console.log('target_element: '+target_element);
         
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
