@@ -1304,6 +1304,8 @@ function convert_post_widgets_to_snippets () {
 		$info .= "widget_title: ".$widget_title."<br />";
 		//$info .= "widget_content: <pre>".$widget_content."</pre><br />";
 		
+		$info .= "<br />";
+		
 		// TODO: create/update widget
 		
 	}	
