@@ -1399,10 +1399,6 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
 		
-		// Display logic -- target_by_post
-		// 	WIP
-		$meta_input['target_by_post'] = serialize(array("$post_id"));
-		
 		// Init action var
 		$action = null;
 						
@@ -1435,8 +1431,24 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		if ( $action && $snippet_id ) {
 			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 			// Update snippet logic
-			$info .= "&rarr;&rarr; update_snippet_logic<br />";
-			$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+			$update_key = 'target_by_post';
+			$update_value = array($post_id);
+			$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+			$key_ts_info .= $updates['info'];
+			$updated_field_value = $updates['updated_value'];
+			if ( $updates && count($updated_field_value) > 0 ) {
+				$key_ts_info .= "about to update field '$update_key'<br />";
+				$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
+				//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+				//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";
+				if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
+					$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+				} else {
+					$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+				}
+			}
+			//$info .= "&rarr;&rarr; update_snippet_logic<br />";
+			//$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 		} else {
 			$info .= "&rarr;&rarr; No action<br />";
 			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
