@@ -573,6 +573,7 @@ jQuery(document).ready(function($) {
         var modalheight;
         //var modalposition;
         var modal_at;
+        var target_element = "#site-header-menu";
         //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
 
         //alert ("window dimensions: "+winwidth+" x "+winheight);
@@ -589,7 +590,7 @@ jQuery(document).ready(function($) {
         }
         
 		// Determine positioning for modal window
-		var modal_at_default = "center top+200px";
+		var modal_at_default = "center bottom+200px";
         if ( winheight > 1200) {
             modalheight = winheight * 0.7;
             //modal_at = "center top+25%";
@@ -602,7 +603,7 @@ jQuery(document).ready(function($) {
             modal_at = modal_at_default;
         } else {
             modalheight = winheight * 0.8;
-            modal_at = "center top+10%";
+            modal_at = "center bottom+10%";
         }
         console.log('winheight: '+winheight);
         console.log('modal_at: '+modal_at);
@@ -615,7 +616,7 @@ jQuery(document).ready(function($) {
         //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")");
         //console.log('modalwidth: '+modalwidth+'; modalheight: '+modalheight);
 
-        var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
+        var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at, target_element:target_element };
 
         return dimensions;
 
@@ -637,7 +638,10 @@ jQuery(document).ready(function($) {
             width: modalwidth,
             closeOnEscape: true,
             closeText: "x",
-            position: { my: "center top", at: modal_at, of: "#site-header-menu" }
+            // my: Defines which position on the element being positioned to align with the target element
+            // at: Defines which position on the target element to align the positioned element against
+            // of: Which element to position against
+            position: { my: "center top", at: modal_at, of: target_element }
             //position: { my: "center top", at: "center top+25%", of: window }
         });
 
