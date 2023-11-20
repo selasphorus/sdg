@@ -1318,7 +1318,7 @@ function convert_post_widgets_to_snippets () {
 		// "More Resources"/"About the Artist"
 		if ( strpos($snippet_title, 'More Resources') !== false || strpos($snippet_title, 'About the Artist') !== false ) {
 			// Append the post title
-			$snippet_title .= " [".$post_title."]";
+			$snippet_title .= " [".trim($post_title)."]";
 		}
 		
 		$info .= "snippet_title: ".$snippet_title."<br />";
