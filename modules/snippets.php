@@ -1396,6 +1396,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$postarr['post_author'] = 1; // get_current_user_id()
 		// Set up preliminary meta_input
 		$meta_input['post_id'] = $post_id;
+		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
 		
 		// Display logic -- target_by_post
