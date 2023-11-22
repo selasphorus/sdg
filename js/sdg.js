@@ -676,9 +676,10 @@ jQuery(document).ready(function($) {
             //var isOpen = false, dialogOpen = false;
             
             // Get the handle_id so as to open the correct dialog -- there may be multiple instances per page (e.g. day title links in event/sermon lists)
-            var handle_id = $(this).attr('id');
-            var item_id = handle_id.substr(14); // e.g. dialog_handle_35381
-            var dialog_id = "#dialog_content_"+item_id;
+            var handle_id = "#"+$(this).attr('id');
+            var dialog_id = str.replace(/handle/g, "content");
+            //var item_id = handle_id.substr(14); // e.g. dialog_handle_35381
+            //var dialog_id = "#dialog_content_"+item_id;
             //dialog_id = "#day_title_"+handle_id; // old
             console.log('handle_id: '+handle_id);
             console.log('dialog_id: '+dialog_id);
