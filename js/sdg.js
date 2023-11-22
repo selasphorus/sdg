@@ -606,6 +606,7 @@ jQuery(document).ready(function($) {
             modal_at = "center bottom+10%";
         }
         console.log('winheight: '+winheight);
+        console.log('winwidth: '+winwidth);
         console.log('modalheight: '+modalheight);
         console.log('modalwidth: '+modalwidth);
         console.log('modal_at: '+modal_at);
@@ -636,7 +637,7 @@ jQuery(document).ready(function($) {
         var target_element = modalDimensions["target_element"];
 
         var theDialog = $(dialog_id).dialog({      
-        	//title: "Dialog Title",
+        	title: dialog_id,
         	//appendTo: "#someElem" // Which element the dialog (and overlay, if modal) should be appended to. // Default: "body"      
             autoOpen: false,
             modal: true,
