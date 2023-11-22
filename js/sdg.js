@@ -612,7 +612,7 @@ jQuery(document).ready(function($) {
         console.log('modal_at: '+modal_at);
         console.log('target_element: '+target_element);
         
-        console.log('em width: '+winwidth/parseFloat($("body").css("font-size"));
+        console.log('em width: '+winwidth/parseFloat($("body").css("font-size")) );
         //$(window).width() / parseFloat($("body").css("font-size"));
         
 		// Round the numbers
@@ -640,7 +640,7 @@ jQuery(document).ready(function($) {
         var target_element = modalDimensions["target_element"];
 
         var theDialog = $(dialog_id).dialog({      
-        	title: dialog_id,
+        	//title: dialog_id,
         	//appendTo: "#someElem" // Which element the dialog (and overlay, if modal) should be appended to. // Default: "body"      
             autoOpen: false,
             modal: true,
