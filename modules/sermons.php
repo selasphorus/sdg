@@ -591,7 +591,8 @@ add_shortcode('sermon_filters', 'build_sermon_filters');
 // TODO: eventually: create general function for sdg_filterform ( $menus = array() ) for creation of filter forms for other content tyeps
 function build_sermon_filters() {
 	
-	$info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.esc_url( get_permalink() ).'" method="get">';
+	$archive_url = "/sermon-archive"; // TODO: get url programmatically per site rather than hard-coding //esc_url( get_permalink() ) -- permalink approach doesn't work with snippets setup
+	$info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.$archive_url.'" method="get">';
 	
 	// Years select menu
 	$years = range( 2001, date('Y') );
