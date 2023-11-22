@@ -612,6 +612,9 @@ jQuery(document).ready(function($) {
         console.log('modal_at: '+modal_at);
         console.log('target_element: '+target_element);
         
+        console.log('em width: '+winwidth/parseFloat($("body").css("font-size"));
+        //$(window).width() / parseFloat($("body").css("font-size"));
+        
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
         modalheight = Math.round(modalheight);
