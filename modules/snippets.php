@@ -1359,6 +1359,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
         //'orderby'		=> 'meta_value',
 		//'order'			=> 'ASC',
         //'meta_key'		=> '_cs_replacements',
+        //post__in (array) – use post ids. WIP -- array ( $post_id )
 	);
 	
 	// Meta query

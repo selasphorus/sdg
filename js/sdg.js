@@ -635,7 +635,9 @@ jQuery(document).ready(function($) {
         var modal_at = modalDimensions["modal_at"];
         var target_element = modalDimensions["target_element"];
 
-        var theDialog = $(dialog_id).dialog({            
+        var theDialog = $(dialog_id).dialog({      
+        	//title: "Dialog Title",
+        	//appendTo: "#someElem" // Which element the dialog (and overlay, if modal) should be appended to. // Default: "body"      
             autoOpen: false,
             modal: true,
             height: modalheight,
