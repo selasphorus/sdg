@@ -129,7 +129,7 @@ jQuery(document).ready(function($) {
                 
                 //console.log( 'Dialog content found.' ); // tft
                 
-                var theDialog = prepDialog( dialog_id );
+                var theDialog = prepDialog( handle_id, dialog_id );
                 theDialog.dialog("open");
             
                 if ($(dialog_id).dialog('isOpen') === true) {
@@ -181,7 +181,7 @@ jQuery(document).ready(function($) {
             
             console.log('NO cvalue found for '+cname);
             
-            var theDialog = prepDialog( dialog_id );
+            var theDialog = prepDialog( handle_id, dialog_id )( dialog_id );
             
             theDialog.dialog("open");
             
@@ -568,13 +568,11 @@ jQuery(document).ready(function($) {
         var winheight = $(window).height();
         var bodywidth = $(document.body).width();
         var bodyheight = $(document.body).height();
-
+        //
         var modalwidth;
         var modalheight;
         //var modalposition;
-        var modal_at;
-        var target_element = "#site-navigation";
-        //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
+        var modal_at;   
 
         //alert ("window dimensions: "+winwidth+" x "+winheight);
         
@@ -605,15 +603,13 @@ jQuery(document).ready(function($) {
             modalheight = winheight * 0.8;
             modal_at = "center bottom+10%";
         }
+        
+        //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight+'; emwidth: '+emwidth);
         console.log('winheight: '+winheight);
         console.log('winwidth: '+winwidth);
         console.log('modalheight: '+modalheight);
         console.log('modalwidth: '+modalwidth);
         console.log('modal_at: '+modal_at);
-        console.log('target_element: '+target_element);
-        
-        console.log('em width: '+winwidth/parseFloat($("body").css("font-size")) );
-        //$(window).width() / parseFloat($("body").css("font-size"));
         
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
@@ -623,21 +619,29 @@ jQuery(document).ready(function($) {
         //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")");
         //console.log('modalwidth: '+modalwidth+'; modalheight: '+modalheight);
 
-        var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at, target_element:target_element };
+        var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
 
         return dimensions;
 
     }
 
-    function prepDialog( dialog_id ) {
+    function prepDialog( handle_id, dialog_id ) {
 
-		console.log('about to prepDialog for dialog_id: '+dialog_id);
+		console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
 		
         var modalDimensions = getModalDimensions();
         var modalwidth = modalDimensions["width"];
         var modalheight = modalDimensions["height"];
         var modal_at = modalDimensions["modal_at"];
-        var target_element = modalDimensions["target_element"];
+        
+        var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
+        if ( emwidth < 56 ) { // For mobile devices, effectively, where sticky header isn't sticky
+        	var target_element = handle_id;
+        } else {
+        	var target_element = "#site-navigation";
+        }
+        console.log('emwidth: '+emwidth);
+        console.log('target_element: '+target_element);
 
         var theDialog = $(dialog_id).dialog({      
         	//title: dialog_id,
@@ -679,7 +683,7 @@ jQuery(document).ready(function($) {
             console.log('handle_id: '+handle_id);
             console.log('dialog_id: '+dialog_id);
             
-            var theDialog = prepDialog( dialog_id );
+            var theDialog = prepDialog( handle_id, dialog_id );
             
             theDialog.dialog("open");
             
