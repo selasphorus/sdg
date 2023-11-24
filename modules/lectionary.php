@@ -764,7 +764,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$info = "";
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
-	$info .= $indent.'<strong>calc_date_from_str</strong><br />';
+	$info .= '<strong>calc_date_from_str</strong><br />';
 	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
@@ -1216,7 +1216,7 @@ function calc_litdates( $atts = [] ) {
                     'date_calculated' => $calc_date_str
                 );
 
-                $calc_info .= "About to add row to post_id $post_id: <pre>".print_r( $row, true )."</pre>";
+                $calc_info .= $indent."About to add row to post_id $post_id: <pre>".print_r( $row, true )."</pre>";
                 if ( $testing != "true" ) {
                     if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
                         $calc_info .= $indent."ACF row added for post_id: $post_id<br />"; // tft
