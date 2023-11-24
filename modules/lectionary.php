@@ -774,7 +774,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
     //
-    list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", "", "" );
+    list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", null, "" );
     list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
     $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
 	//
@@ -1075,7 +1075,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 
 	}        
 	
-    $info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />';
+    if ( $calc_date ) { $info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />'; } 
     
     $info .= '</div>';
         
