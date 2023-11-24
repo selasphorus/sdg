@@ -1100,7 +1100,11 @@ function calc_litdates( $atts = [] ) {
 	extract( $args );
 
 	// WIP
-    if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
+    //if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
+    
+    $info .= ">>> calc_litdates <<<<br />";
+    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
+    $info .= "year: $year<br />";
     
     // Set up the WP query args
 	$wp_args = array(
@@ -1118,7 +1122,7 @@ function calc_litdates( $atts = [] ) {
                 'compare' => 'EXISTS'
             )
         ),
-        'orderby'	=> $orderby,
+        'orderby' => $orderby,
         'order'	=> $order,
 	);
     
@@ -1129,13 +1133,9 @@ function calc_litdates( $atts = [] ) {
     // Run the query
 	$arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
-    
-    $info .= ">>> calc_litdates <<<<br />";
-    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
-    $info .= "year: $year<br />";
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
-    $info .= "<!-- args: <pre>".print_r( $args, true )."</pre> -->";
+    $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     $info .= "<br />";
     
