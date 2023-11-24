@@ -497,7 +497,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
     $ts_info .= "<!-- the_date: ".$the_date." -->\n";
     $ts_info .= "the_date: ".$the_date."<br />";
-    if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= "strtotime(the_date) FAILED<br />"; }
+    if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= '<span class="error">strtotime(the_date) FAILED</span><br />'; }
     //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
     
     //$info .= $ts_info; // tft
@@ -1165,7 +1165,7 @@ function calc_litdates( $atts = [] ) {
         	$calc_date = $calc['calc_date'];
         	$calc_info .= $calc['calc_info'];
         } else {
-        	$calc_info .= "calc_date_from_str failed<br />";
+        	$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
         }
                 
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
