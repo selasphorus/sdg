@@ -185,31 +185,31 @@ function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
 
 	$info = "\n<!-- get_lit_dates_list -->\n";
     
-    $args = shortcode_atts( 
-        array(
-            'year'   => date('Y'),
-            'month' => null
-        ), 
-        $atts
-    );
+    $args = shortcode_atts( array(
+      	'year'   => date('Y'),
+        'month' => null,
+    ), $atts );
     
+    // Extract
+	extract( $args );
+	
     // Set year
-    if ( $args['year'] == "this_year" ) {
+    if ( $year == "this_year" ) {
     	$month = date('Y');
-    } else if ( $args['year'] == "next_year" ) {
+    } else if ( $year == "next_year" ) {
     	$month = date('Y')+1;
-    } else {
-    	$year = (int) $args['year'];
     }
     
     // Set month
-    if ( $args['month'] == "this_month" ) {
+    if ( $month == "this_month" ) {
     	$month = date('m');
-    } else if ( $args['month'] == "next_month" ) {
+    } else if ( $month == "next_month" ) {
     	$month = date('m')+1;
-    } else {
-    	$month = (int) $args['month'];
     }
+    
+    // Just in case?
+    $year = (int) $year;
+    $month = (int) $month;
     
     // Get litdate posts according to date
     $litdate_args = array( 'year' => $year, 'month' => $month );
@@ -435,20 +435,16 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "";
 	$ts_info = "\n<!-- get_day_title -->\n";
+	$hide_day_titles = 0;
     
-    $args = shortcode_atts( 
-        array(
-            'post_id'   => get_the_ID(),
-            'series_id' => null,
-            'the_date'  => null,
-        ), 
-        $atts
-    );
+    $args = shortcode_atts( array(
+		'post_id'   => get_the_ID(),
+		'series_id' => null,
+		'the_date'  => null,
+	), $atts);
     
-    $post_id = (int) $args['post_id'];
-    $series_id = (int) $args['series_id'];
-    $the_date = $args['the_date'];
-    $hide_day_titles = 0; // init
+    // Extract
+	extract( $args );
 
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
@@ -819,7 +815,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
         
         // Find the liturgical_date_calc post for the selected year
         // (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
-        $args = array(
+        $wp_args = array(
             'post_type'   => 'liturgical_date_calc',
             'post_status' => 'publish',
             'posts_per_page' => 1,
@@ -830,7 +826,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
                 )
             )
         );
-        $result = new WP_Query( $args );
+        $result = new WP_Query( $wp_args );
         if ( $result ) {
         	$liturgical_date_calc_post = $result->posts[0];
         	//$calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; // tft
@@ -1082,20 +1078,16 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = [] ) {
 
-    // TODO: build in failsafe -- run this fcn ONLY for user stcdev/queenbee
-    
-    $current_user = wp_get_current_user();
-    if ( $current_user->user_login != 'stcdev' ) {
-    	return "You are not authorized to run this operation.<br />";    
-    }
+    // Failsafe -- run this fcn ONLY if logged in as webdev
+    if ( !queenbee() ) { return "You are not authorized to run this operation.<br />"; }
     
 	$info = ""; // init >> calculate_variable_dates <<
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
         'testing' => true,
         'verbose' => false,
-        'id' => null,
+        'ids' => null,
         'year' => date('Y'),
         'num_posts' => 10,
         'admin_tag_slug' => 'dates-calculated', // 'programmatically-updated'
@@ -1103,19 +1095,15 @@ function calc_litdates( $atts = [] ) {
         'order' => 'ASC',
         'meta_key' => null
     ), $atts );
+    
+    // Extract
+	extract( $args );
 	
-    $testing = $a['testing'];
-    $verbose = $a['verbose'];
-    $num_posts = (int) $a['num_posts'];
     $year = get_query_var( 'y' );
-    if ( $year == "" ) { $year = $a['year']; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $a['year'];
-    $orderby = $a['orderby'];
-    $order = $a['order'];
-    $meta_key = $a['meta_key'];
-    $admin_tag_slug = $a['admin_tag_slug'];
+    if ( $year == "" ) { $year = $year; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $year;
     
     // Set up the WP query args
-	$args = array(
+	$wp_args = array(
 		'post_type' => 'liturgical_date',
 		'post_status' => 'publish',
         'posts_per_page' => $num_posts,
@@ -1134,19 +1122,19 @@ function calc_litdates( $atts = [] ) {
         'order'	=> $order,
 	);
     
-    //if ( $a['id'] !== null ) { $args['p'] = $a['id']; }
-    if ( $a['id'] !== null ) { $args['post__in'] = explode(', ', $a['id']); }
-    if ( $a['meta_key'] !== null ) { $args['meta_key'] = $meta_key; }
+    //if ( $id !== null ) { $args['p'] = $id; }
+    if ( $ids !== null ) { $wp_args['post__in'] = explode(', ', $ids); }
+    if ( $meta_key !== null ) { $wp_args['meta_key'] = $meta_key; }
     
     // Run the query
-	$arr_posts = new WP_Query( $args );
+	$arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
     
     $info .= ">>> calc_litdates <<<<br />";
     $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "year: $year<br />";
     $info .= "[num posts: ".count($posts)."]<br />";
-    //$info .= "args: <pre>".print_r( $args, true )."</pre>";
+    //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
     $info .= "<!-- args: <pre>".print_r( $args, true )."</pre> -->";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     $info .= "<br />";
@@ -1357,22 +1345,19 @@ function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
     $day_num = null;
     $post_type = null;
     
-    $a = shortcode_atts( array(
-		'id'       => get_the_ID(),
-		'service'  => 'morning_prayer', // default to morning prayer
-        'event_id' => null
+    $args = shortcode_atts( array(
+		'post_id'       => get_the_ID(),
+        'event_id' => null,
+		'service'  => 'morning_prayer',
     ), $atts );
     
-	$post_id = $a['id'];
-	$event_id = $a['event_id'];
-    $service = $a['service'];
+    // Extract
+	extract( $args );
     
     $post = get_post( $post_id );
     if ( $post ) { $post_type = $post->post_type; }
+    if ( $post_type == 'event' ) { $event_id = $post_id; }
     
-    if ( $post_type == 'event' ) {
-		$event_id = $post_id;
-	}
     if ( is_dev_site() ) {
         //$info .= "post_id: $post_id; post_type: $post_type; event_id: $event_id; <br />";
     }
@@ -1405,7 +1390,7 @@ function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
     //$info .= "Psalms for Day ".$day_num.": ";
     
     // Find post with day_num = event day or today's day, if no event has been selected
-    $args = array(
+    $wp_args = array(
         'post_type'   => 'psalms_of_the_day',
         'post_status' => 'publish',
         'posts_per_page' => 1,
@@ -1416,7 +1401,7 @@ function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
             )
         )
     );
-    $psalms_of_the_day = new WP_Query( $args );
+    $psalms_of_the_day = new WP_Query( $wp_args );
     $potd_id = $psalms_of_the_day->ID;
     $mp_psalms = the_field( 'mp_psalms', $potd_id );
     $ep_psalms = the_field( 'ep_psalms', $potd_id );

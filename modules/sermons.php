@@ -320,10 +320,12 @@ function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
 		
 	$info = "";
 	
-	$a = shortcode_atts( array(
-		'id'       => get_the_ID(),
+	$args = shortcode_atts( array(
+		'post_id'       => get_the_ID(),
     ), $atts );
-	$post_id = $a['id'];
+    
+    // Extract
+	extract( $args );
 	
     $sermon_pdf = get_field('sermon_pdf', $post_id);
 	if ($sermon_pdf) { 
@@ -343,14 +345,14 @@ function get_cpt_sermon_event ( $atts = [] ) {
 	
     $info = ""; // init
     
-    $a = shortcode_atts( array(
+    $args = shortcode_atts( array(
         'id'       	=> get_the_ID(),
         //'link'		=> true,
         //'link_text'	=> null,
     ), $atts );
-    $post_id = $a['id'];
-    //$link = $a['link'];
-    //$link_text = $a['link_text'];
+    
+    // Extract
+	extract( $args );
     
     // Show the link to the Service at which the sermon was delivered
     $related_event = get_field('related_event', $post_id);
@@ -373,7 +375,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $msg = "<!-- find_matching_sermons -->";
     
     // Set up basic args to retrieve all sermons in descending order by date delivered
-    $args = array(
+    $wp_args = array(
         'post_type'     => 'sermon',
         'post_status'   => 'publish',
         'posts_per_page'=> 10,
@@ -384,7 +386,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     
     if ( $year == null && $author == null && $bbook == null && $topic == null ) {
         // All filters are set to null >> run the query with no additional args
-        $sermons = new WP_Query( $args );
+        $sermons = new WP_Query( $wp_args );
         return $sermons;
     }
     
@@ -531,7 +533,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
             ),
         );
         //$msg .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
-        $args['tax_query'] = $tax_query;
+        $wp_args['tax_query'] = $tax_query;
         
     } else if ( $topic ) {
     	$msg .= "topic: [$topic]<br />";
@@ -546,12 +548,12 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     } else {
         $meta_query = $meta_query_components;
     }
-    if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
+    if ( !empty($meta_query) ) { $wp_args['meta_query'] = $meta_query; }
     
-    $msg .= '<!-- args: <pre>'.print_r($args, true).'</pre> -->';
+    $msg .= '<!-- wp_args: <pre>'.print_r($wp_args, true).'</pre> -->';
     
     // Run the query
-    $result = new WP_Query( $args );
+    $result = new WP_Query( $wp_args );
     $arr_sermons = $result->posts;
     $msg .= '<!-- count arr_sermons:'.count($arr_sermons).' -->';
     $msg .= "<!-- Last SQL-Query: {$result->request} -->"; // tft
@@ -560,7 +562,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $msg .= "<!-- END find_matching_sermons -->";
     
     
-    $info['args'] = $args;
+    $info['args'] = $wp_args; // TODO: rename key to wp_args, for consistency?
     $info['msg'] = $msg;
     $info['posts'] = $arr_sermons; //$info['posts'] = $posts;
     
@@ -614,13 +616,13 @@ function build_sermon_filters() {
         $author_ids = array(15012, 15001, 14984, 143207, 15022, 147858); // Fr. Bennett:
     }
     */
-    $args = array(
+    $wp_args = array(
         'post_type'   => 'person',
         'post_status' => 'publish',
         'include'     => $author_ids,
         'orderby'   => 'post__in',
     );
-    $sermon_authors = get_posts($args);
+    $sermon_authors = get_posts($wp_args);
     //$info .= print_r($sermon_authors, true);
     
     // Given that the number of ids included is so limited, the select_distinct query isn't currently necessary. Use get_posts instead.

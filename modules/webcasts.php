@@ -948,15 +948,14 @@ function load_hls_js( $atts = [] ) {
 
 	$info = "";
 
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
         'player_id' => null,
         'src' => null,
         'masked' => null
     ), $atts );
     
-    $player_id = $a['player_id'];
-    $src = $a['src'];
-    $masked = $a['masked'];
+    // Extract
+	extract( $args );
     
     $info = "";
     

@@ -198,7 +198,7 @@ function get_cpt_person_content( $post_id = null ) {
     if ( is_dev_site() ) {
         /*
         // Get Related Events
-        $args = array(
+        $wp_args = array(
             'posts_per_page'=> -1,
             'post_type'		=> 'event',
             'meta_query'	=> array(
@@ -213,9 +213,9 @@ function get_cpt_person_content( $post_id = null ) {
             'meta_key' 	=> '_event_start_date',
         );
 
-        $query = new WP_Query( $args );
+        $query = new WP_Query( $wp_args );
         $event_posts = $query->posts;
-        $info .= "<!-- args: <pre>".print_r($args,true)."</pre> -->";
+        $info .= "<!-- wp_args: <pre>".print_r($wp_args,true)."</pre> -->";
         $info .= "<!-- Last SQL-Query: {$query->request} -->";
 
         if ( $event_posts ) { 

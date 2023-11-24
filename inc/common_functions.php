@@ -688,7 +688,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     }
 
 	// Set args
-    $args = array(
+    $wp_args = array(
         'post_type'   => $related_post_type,
         'post_status' => 'publish',
         'posts_per_page' => $limit,
@@ -700,7 +700,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
         )
     );
     // Run query
-    $related_posts = new WP_Query( $args );
+    $related_posts = new WP_Query( $wp_args );
 
     // Loop through the records returned 
     if ( $related_posts ) {
@@ -763,7 +763,7 @@ function get_possible_duplicate_posts( $post_id = null, $return = 'all' ) {
 	}
 	
 	// Set args
-    $args = array(
+    $wp_args = array(
         'post_type'   => $post_type,
         'post_status' => $post_status,
         'posts_per_page' => $limit,
@@ -776,7 +776,7 @@ function get_possible_duplicate_posts( $post_id = null, $return = 'all' ) {
     );
     
     // Run query
-    $related_posts = new WP_Query( $args );
+    $related_posts = new WP_Query( $wp_args );
 
     // Loop through the records returned 
     if ( $related_posts ) {
@@ -897,16 +897,15 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     	$identical_posts = true; // until proven otherwise
     	
     	// Get posts based on submitted IDs
-    	$a = shortcode_atts( array(
+    	$args = shortcode_atts( array(
 			'post_type'	=> 'post',
 			'ids'     	=> array(),
 			'form_type'	=> 'simple_merge',
 			'limit'    	=> '-1'
 		), $atts );
-	
-		$post_type = $a['post_type'];
-		$form_type = $a['form_type'];
-		$limit = $a['limit'];
+		
+		// Extract
+		extract( $args );
 	
 		// Set post_status options based on user role
 		if ( current_user_can('read_repertoire') ) {
@@ -916,7 +915,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		}
 	
 		// Set up basic query args for retrieval of posts to merge
-		$args = array(
+		$wp_args = array(
 			'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
 			'post_status'     => $post_status,
 			//'posts_per_page'  => $limit, //-1, //$posts_per_page,
@@ -926,9 +925,9 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		);
 	
 		// Turn the list of IDs into a proper array
-		if ( !empty( $a['ids'] ) ) {
-			$str_ids = $a['ids'];
-			$post_ids = array_map( 'intval', sdg_att_explode( $a['ids'] ) );
+		if ( !empty( $ids ) ) {
+			$str_ids = $ids;
+			$post_ids = array_map( 'intval', sdg_att_explode( $ids ) );
 		} else if ( isset($_GET['ids']) ) {
 			$post_ids = $_GET['ids'];
 			$str_ids = implode(", ", $_GET['ids']);
@@ -946,7 +945,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 			$str_ids = "";
 		}
 	
-		$args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
+		$wp_args['ids'] = $str_ids; // pass string as arg to be processed by birdhive_get_posts
 	
 		//if ( count($post_ids) < 1 ) { $ts_info .= "Not enough post_ids submitted.<br />"; }
 	
@@ -955,11 +954,11 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
 		// If post_ids have been submitted, then run the query
 		if ( count($post_ids) > 1 ) {
 			
-			//$ts_info .= "About to pass args to birdhive_get_posts: <pre>".print_r($args,true)."</pre>"; // tft
+			//$ts_info .= "About to pass wp_args to birdhive_get_posts: <pre>".print_r($wp_args,true)."</pre>"; // tft
 	
-			// Get posts matching the assembled args
+			// Get posts matching the assembled wp_args
 			// =====================================
-			$posts_info = birdhive_get_posts( $args );
+			$posts_info = birdhive_get_posts( $wp_args );
 	
 			if ( isset($posts_info['arr_posts']) ) {
 		
@@ -1569,26 +1568,26 @@ function sdg_list_media_items ($atts = [] ) {
 	$info = "";
     $mime_types = array();
 	
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
       	'type'        => null,
 		'category'    => null,
 		'grouped_by'  => null,
     ), $atts );
+    
+    // Extract
+	extract( $args );
 	
-    if ($a['type'] == "pdf") {
+    if ($type == "pdf") {
         $mime_types[] = "application/pdf";
     } else {
-        $mime_types[] = $a['type'];
+        $mime_types[] = $type;
     }
     
     //$unsupported_mimes  = array( 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/tiff', 'image/x-icon' );
     //$all_mimes          = get_allowed_mime_types();
     //$mime_types       = array_diff( $all_mimes, $unsupported_mimes );
-    
-    $category = $a['category'];
-    $grouped_by = $a['grouped_by'];
 	
-    $args = array(
+    $wp_args = array(
         'post_type' => 'attachment',
         'post_status' => 'inherit',
         'posts_per_page' => -1,
@@ -1597,12 +1596,12 @@ function sdg_list_media_items ($atts = [] ) {
     );
     
     if ( !empty($mime_types) ) {
-        $args['post_mime_type'] = $mime_types;
+        $wp_args['post_mime_type'] = $mime_types;
     }
     //'post_mime_type' => 'image/gif',
     
     if ( $category !== null ) {
-        $args['tax_query'] = array(
+        $wp_args['tax_query'] = array(
             array(
                 'taxonomy' 	=> 'media_category',
                 'field' 	=> 'slug',
@@ -1611,7 +1610,7 @@ function sdg_list_media_items ($atts = [] ) {
         );
     }
 
-    $arr_posts = new WP_Query( $args );
+    $arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
     //$info .= print_r($arr_posts, true);
     //$info .= "<!-- Last SQL-Query: ".$wpdb->last_query." -->";
@@ -1664,7 +1663,7 @@ function sdg_list_media_items ($atts = [] ) {
                     
                     $the_year = $year;
                     
-                    $args = array(
+                    $wp_args = array(
                         'post_type'   => 'liturgical_date_calc',
                         'post_status' => 'publish',
                         'posts_per_page' => 1,
@@ -1676,7 +1675,7 @@ function sdg_list_media_items ($atts = [] ) {
                         )
                     );
                     $liturgical_date_calc_post_id = null; // init
-                    $liturgical_date_calc_post_obj = new WP_Query( $args );
+                    $liturgical_date_calc_post_obj = new WP_Query( $wp_args );
                     if ( $liturgical_date_calc_post_obj ) { 
                         $liturgical_date_calc_post = $liturgical_date_calc_post_obj->posts;
                         $liturgical_date_calc_post_id = $liturgical_date_calc_post[0]->ID;

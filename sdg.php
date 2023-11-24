@@ -749,7 +749,7 @@ function sdg_autocomplete_search() {
     $post_status = "publish";
     
     // Set up basic query args
-    $args = array(
+    $wp_args = array(
 		'post_type'       => $post_type,
 		'post_status'     => $post_status,
 		'posts_per_page'  => -1, //$posts_per_page,
@@ -765,7 +765,7 @@ function sdg_autocomplete_search() {
     $tax_operator = 'IN';
     
     if ( $taxonomy ) {    
-		$args['tax_query'] = array(
+		$wp_args['tax_query'] = array(
 			array(
 				'taxonomy'  => $taxonomy,
 				'field'     => $tax_field,
@@ -778,7 +778,7 @@ function sdg_autocomplete_search() {
 	$suggestions = []; // init results array
     
 	// Run the search
-    $posts = get_posts( $args );
+    $posts = get_posts( $wp_args );
     
     foreach ( $posts as $post_id ) {
         $suggestions[] = [
@@ -852,7 +852,7 @@ function sdg_msg_bar( $args = array() ) {
 			),
 		);
 		//$info .= "tax_query: <pre>".print_r($tax_query, true)."</pre>";
-		$args['tax_query'] = $tax_query;
+		$wp_args['tax_query'] = $tax_query;
 		*/
 		
 		$query = new WP_Query( $wp_args );
@@ -926,7 +926,7 @@ function sdg_msg_bar( $args = array() ) {
 		
     }
     
-    //$info .= "testing: ".$a['testing']."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
+    //$info .= "testing: ".$testing."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     //$info .= "year: $year<br />";
     //$info .= "[num posts: ".count($webcasts_posts)."]<br />";
 	
@@ -1078,7 +1078,7 @@ function sdg_list_terms ($atts = [], $content = null, $tag = '') {
 
 	$info = "";
 	
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
       	'child_of'		=> 0,
 		'cat'			=> 0,
 		//'depth'			=> 0,
@@ -1092,42 +1092,43 @@ function sdg_list_terms ($atts = [], $content = null, $tag = '') {
 		'title'        	=> '',
     ), $atts );
     
-    // TODO: update to extract args
+    // Extract
+	extract( $args );
 	
 	$all_items_url = ""; // tft
 	$all_items_link = ""; // tft
 	$exclusions_per_taxonomy = array(); // init
 	
-	if ( $a['tax'] == "category" ) {
+	if ( $tax == "category" ) {
 		$exclusions_per_taxonomy = array(); // TODO: set/get this as option -- e.g. STC array(1389, 1674, 1731)
 		$all_items_url = "/news/";
-	} else if ( $a['tax'] == "event-categories" ) {
+	} else if ( $tax == "event-categories" ) {
 		$exclusions_per_taxonomy = array();  // TODO: set/get this as option -- e.g. STC array(1675, 1690)
 		$all_items_url = "/events/";
 	}
 	// Turn exclusion/inclusion attribute from comma-sep list into array as prep for merge/ for use w/ sdg_get_terms_orderby
-	if ( !empty($a['exclude']) ) { $a['exclude'] = array_map('intval', explode(',', $a['exclude']) ); } //$integerIDs = array_map('intval', explode(',', $string));
-	if ( !empty($a['include']) ) { $a['include'] = array_map('intval', explode(',', $a['include']) ); }
-	$exclusions = array_merge($a['exclude'], $exclusions_per_taxonomy);
-	$inclusions = $a['include'];
+	if ( !empty($exclude) ) { $exclude = array_map('intval', explode(',', $exclude) ); } //$integerIDs = array_map('intval', explode(',', $string));
+	if ( !empty($include) ) { $include = array_map('intval', explode(',', $include) ); }
+	$exclusions = array_merge($exclude, $exclusions_per_taxonomy);
+	$inclusions = $include;
 	$term_names_to_skip = array(); // e.g. 'Featured Posts', 'Featured Events'
 	
 	// List terms in a given taxonomy using wp_list_categories (also useful as a widget if using a PHP Code plugin)
-    $args = array(
-        'child_of' => $a['child_of'],
-		//'depth' => $a['depth'],
+    $wp_args = array(
+        'child_of' => $child_of,
+		//'depth' => $depth,
 		'exclude' => $exclusions,
 		'include' => $inclusions,
-        //'current_category'    => $a['cat'],
-        'taxonomy'     => $a['tax'],
-        'orderby'      => $a['orderby'],
-        //'show_count'   => $a['show_count'],
-        //'hierarchical' => $a['hierarchical'],
-        //'title_li'     => $a['title']
+        //'current_category'    => $cat,
+        'taxonomy'     => $tax,
+        'orderby'      => $orderby,
+        //'show_count'   => $show_count,
+        //'hierarchical' => $hierarchical,
+        //'title_li'     => $title
     );
-	$info .= "<!-- ".print_r($args, true)." -->"; // tft
+	$info .= "<!-- wp_args: ".print_r($wp_args, true)." -->"; // tft
 	
-	$terms = get_terms($args);
+	$terms = get_terms($wp_args);
 	
 	/*
 	'meta_query' => array(
@@ -1142,7 +1143,7 @@ function sdg_list_terms ($atts = [], $content = null, $tag = '') {
 	
     if ($all_items_url) { 
         $all_items_link = '<a href="'.$all_items_url.'"';
-        if ( $a['tax'] === "event-categories" ) {
+        if ( $tax === "event-categories" ) {
             $all_items_link .= ' title="All Events">All Events';
         } else {
             $all_items_link .= ' title="All Articles">All Articles';
@@ -1157,7 +1158,7 @@ function sdg_list_terms ($atts = [], $content = null, $tag = '') {
 		foreach ( $terms as $term ) {
 			if ( !in_array($term->name, $term_names_to_skip) ) {
 			//if ($term->name != 'Featured Events' AND $term->name != 'Featured Events (2)') {
-				if ( $a['tax'] === "event-categories" ) {
+				if ( $tax === "event-categories" ) {
                     $term_link = "/events/?category=".$term->slug;
                 } else {
                     $term_link = get_term_link( $term );
@@ -1801,7 +1802,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     $info = "";
     
     // Set up the basic query args
-    $args = array(
+    $wp_args = array(
 		'post_type' => $arr_post_types,
 		'post_status' => 'publish',
         'posts_per_page' => -1,
@@ -1813,14 +1814,14 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
     // TODO: account for non-rep program_items other than 'sermon' -- e.g. ???? ...
     if ( $field_name != 'program_item' || ( $field_name == 'program_item' && $label_str == 'sermon' ) ) {
         
-        $args['name'] = $sanitized_title;
-        $args['numberposts'] = 1;
+        $wp_args['name'] = $sanitized_title;
+        $wp_args['numberposts'] = 1;
         
     } else {
         
         // For non-sermon program items, add meta_query
         // (1) Search by title_uid/title_for_matching -- best, most likely to be accurate
-        $args['meta_query'] = 
+        $wp_args['meta_query'] = 
             array(
                 //'relation' => 'OR',
                 array(
@@ -1835,7 +1836,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
 
     }
     
-	$arr_posts = new WP_Query( $args );
+	$arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
     
     // WIP -- things to try if no matches are found with first query
@@ -2018,14 +2019,14 @@ add_filter( 'document_title_parts', function( $title_parts_array ) {
 add_shortcode('image_url_from_id', 'get_image_url_from_id');
 function get_image_url_from_id( $atts = [] ) {
     
-    $args = shortcode_atts( 
-        array(
-            'id'   => null
-        ), $atts );
-	$image_id = $a['id'];
-	//$image_id = (int) $a['id'];
+    $args = shortcode_atts( array(
+		'id'   => null
+	), $atts );
+    
+    // Extract
+	extract( $args );
 	
-	if ( ! empty($image_id) ) { $url = wp_get_attachment_url($image_id); } else { $url = null; }
+	if ( ! empty($id) ) { $url = wp_get_attachment_url($id); } else { $url = null; }
 	
 	return $url;
 	
@@ -2300,13 +2301,16 @@ function sdg_search_filter_links ($atts = [], $content = null, $tag = '') {
 	
 	$info = "";
 	
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
 		'exclude'       => '',
 		'include'       => '',
      	'orderby'		=> 'name', // 'id', 'meta_value'
       	'show_count'	=> 1,
 		'title'        	=> '',
     ), $atts );
+    
+    // Extract
+	extract( $args );
 	
 	$terms = array();
 	$terms[] = array('name'=>'People', 'post_type' => 'person');

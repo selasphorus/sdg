@@ -1,4 +1,4 @@
-<?php
+$wp_args_related$wp_args_related$wp_args_related<?php
 
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
@@ -1231,23 +1231,22 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
     $ts_info .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; // tft
     //$ts_info .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
         
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
 		'post_type'    => 'post',
-		'fields'       => null,
         'form_type'    => 'simple_search',
+		'fields'       => null,
         'limit'        => '-1'
     ), $atts );
     
-    $post_type = $a['post_type'];
-    $form_type = $a['form_type'];
-    $limit = $a['limit'];
+    // Extract
+	extract( $args );
     
     //$info .= "form_type: $form_type<br />"; // tft
 
     // After building the form, assuming any search terms have been submitted, we're going to call the function birdhive_get_posts
     // In prep for that search call, initialize some vars to be used in the args array
     // Set up basic query args
-    $args = array(
+    $wp_args = array(
 		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
 		'post_status'     => 'publish',
 		'posts_per_page'  => $limit, //-1, //$posts_per_page,
@@ -1288,10 +1287,10 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
     $query_assignment = "primary"; // init -- each field pertains to either primary or related query
     
     // Check to see if any fields have been designated via the shortcode attributes
-    if ( $a['fields'] ) {
+    if ( $fields ) {
         
         // Turn the fields list into an array
-        $arr_fields = sdg_att_explode( $a['fields'] );
+        $arr_fields = sdg_att_explode( $fields );
         //$info .= print_r($arr_fields, true); // tft
         
         // e.g. http://stthomas.choirplanner.com/library/search.php?workQuery=Easter&composerQuery=Williams
@@ -1564,7 +1563,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     }                    
                     
                     if ( ( $field_name == "post_title" ) && !empty($field_value) ) {
-                    	$args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
+                    	$wp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
                     }
                     
                     if ( $field_type == "text" && !empty($field_value) && $field_name != "post_title" ) {
@@ -2048,7 +2047,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         
         
         // 
-        $args_related = array(); // init
+        $wp_args_related_related = array(); // init
         $rep_cat_queried = false;
         
         //$ts_info .= "mq_components_primary: <pre>".print_r($mq_components_primary,true)."</pre>"; // tft
@@ -2061,14 +2060,14 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         // then set up a second set of args/birdhive_get_posts
         
         if ( $search_primary_post_type == true ) {
-			$args['post_type'] = $post_type;
+			$wp_args['post_type'] = $post_type;
 		}
 		
 		if ( $search_related_post_type == true ) {
-			if ( is_array($args) && is_array($args_related) ) {
-				$args_related = array_merge( $args_related, $args ); //$args_related = $args;
+			if ( is_array($wp_args) && is_array($wp_args_related) ) {
+				$wp_args_related = array_merge( $wp_args_related, $wp_args ); //$wp_args_related = $wp_args;
 			}
-            $args_related['post_type'] = $related_post_type;
+            $wp_args_related['post_type'] = $related_post_type;
         }
         
         if ( $search_primary_post_type == true && $search_related_post_type == true && $search_operator == "and" ) { 
@@ -2083,7 +2082,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             } else if ( $search_related_post_type == true ) {
                 // Searching related post_type only
                 $ts_info .= "Searching related post_type only<br />";
-                $args = null; // reset primary args to prevent triggering of second query
+                $wp_args = null; // reset primary args to prevent triggering of second query
             }
         }
         
@@ -2091,7 +2090,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         // ==============================
         /* 
         WIP if meta_key = title_clean and related_post_type is true then incorporate also, using title_clean meta_value:
-        $args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
+        $wp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
         */
         
         if ( $search_primary_post_type == true ) {
@@ -2108,7 +2107,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			/*foreach ( $mq_components_primary AS $component ) {
 				$meta_query[] = $component;
 			}*/
-			if ( !empty($meta_query) ) { $args['meta_query'] = $meta_query; }
+			if ( !empty($meta_query) ) { $wp_args['meta_query'] = $meta_query; }
 		}
 		
 		// related query
@@ -2126,7 +2125,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			/*foreach ( $mq_components_related AS $component ) {
 				$meta_query_related[] = $component;
 			}*/
-			if ( !empty($meta_query_related) ) { $args_related['meta_query'] = $meta_query_related; }
+			if ( !empty($meta_query_related) ) { $wp_args_related['meta_query'] = $meta_query_related; }
 		}            
         
         // Finalize tax_query or queries
@@ -2201,7 +2200,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 					),
 				);
 			}
-			if ( !empty($tax_query) ) { $args['tax_query'] = $tax_query; }
+			if ( !empty($tax_query) ) { $wp_args['tax_query'] = $tax_query; }
 		}
 		
 		// related query
@@ -2212,7 +2211,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 			foreach ( $tq_components_related AS $component ) {
 				$tax_query_related[] = $component;
 			}
-			if ( !empty($tax_query_related) ) { $args_related['tax_query'] = $tax_query_related; }
+			if ( !empty($tax_query_related) ) { $wp_args_related['tax_query'] = $tax_query_related; }
 		}            
 
         ///// WIP
@@ -2223,7 +2222,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
             
             if ( $search_operator == "or" ) {
                 if ( !empty($tax_query) && !empty($meta_query) ) {
-                    $args['_meta_or_tax'] = true; // custom parameter -- see posts_where filters
+                    $wp_args['_meta_or_tax'] = true; // custom parameter -- see posts_where filters
                 }
             }
         }
@@ -2264,12 +2263,12 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
 				}			
 			}
             
-            if ( $search_related_post_type == true && $args_related && $default_query == false ) {
+            if ( $search_related_post_type == true && $wp_args_related && $default_query == false ) {
                 
-                $ts_info .= "About to pass args_related to birdhive_get_posts: <pre>".print_r($args_related,true)."</pre>"; // tft
+                $ts_info .= "About to pass wp_args_related to birdhive_get_posts: <pre>".print_r($wp_args_related,true)."</pre>"; // tft
                 
                 //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
-                $related_posts_info = birdhive_get_posts( $args_related );
+                $related_posts_info = birdhive_get_posts( $wp_args_related );
                 
                 if ( isset($related_posts_info['arr_posts']) ) {
                 
@@ -2383,7 +2382,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     //$info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_posts->posts)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
                
                     if ( count($arr_posts->posts) == 0 ) { // || $form_type == "advanced_search"
-                        //$ts_info .= "args: <pre>".print_r($args,true)."</pre>"; // tft
+                        //$ts_info .= "wp_args: <pre>".print_r($wp_args,true)."</pre>"; // tft
                     }
                     
                     // Print last SQL query string
@@ -2405,7 +2404,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
         }
         
         
-    } // END if ( $a['fields'] )
+    } // END if ( $fields )
 
     $info .= '<div class="troubleshooting">';
     $info .= $ts_info;

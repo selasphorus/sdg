@@ -1713,7 +1713,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
     
     $info = "";
     
-    $a = shortcode_atts( array(
+    $args = shortcode_atts( array(
 		'post_type'   => 'repertoire',
         //'meta_key'  => null,
 		'num_posts'   => 5,
@@ -1728,15 +1728,9 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
         
     ), $atts );
     
-    $post_type = $a['post_type'];
-    //$meta_key = $a['meta_key'];
-    $single_post_id = $a['post_id'];
-    $num_posts = $a['num_posts'];
-    $verbose = $a['verbose'];
+    // Extract
+	extract( $args );
     
-    // tax_query components
-    $taxonomy = $a['taxonomy'];
-    $tax_terms = $a['tax_terms'];
     /*if ( strpos($tax_terms,",")) { 
         $tax_terms = sdg_att_explode( $tax_terms );
         $tax_terms = "array('".implode("','",$tax_terms)."')"; // wrap each item in single quotes
@@ -1747,41 +1741,33 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
     } else {
         $tax_operator = 'IN';
     }
-    
-    // meta_query components
-    $meta_key = $a['meta_key'];
-    $meta_value = $a['meta_value'];
     //$meta_values = sdg_att_explode( $meta_values );
     //$meta_values = "array('".implode("','",$meta_values)."')"; // wrap each item in single quotes
     
-    // date_query components
-    $date_query = $a['date_query'];
-    $date_str = $a['date_str'];
-    
     $info .= "<p>";
     $info .= "About to run title/t4m updates for post_type: $post_type (batch size: $num_posts)."; //, meta_key: $meta_key
-    if ( $single_post_id ) { $info .= "<br />post_id specified: $single_post_id."; }
+    if ( $post_id ) { $info .= "<br />post_id specified: $post_id."; }
     $info .= "</p>";
     
     // Update in batches to fix title/t4m fields.
-    $args = array(
+    $wp_args = array(
 		'post_type'   => $post_type,
 		'post_status' => 'publish'
     );
     
-    if ( $single_post_id ) {
+    if ( $post_id ) {
         
         // If ID has been specified, get that specific single post
-        $args['p'] = $single_post_id;
+        $wp_args['p'] = $post_id;
         
     } else {
         
         // Otherwise, get posts not updated recently
         
-        $args['orderby'] = 'post_title';
-        $args['order'] = 'ASC';
-        $args['posts_per_page'] = $num_posts;
-        $args['date_query'] = array(
+        $wp_args['orderby'] = 'post_title';
+        $wp_args['order'] = 'ASC';
+        $wp_args['posts_per_page'] = $num_posts;
+        $wp_args['date_query'] = array(
             /*array(
                 'column' => 'post_date_gmt',
                 'before' => '1 year ago',
@@ -1796,7 +1782,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
             
             if ( $taxonomy && $tax_terms ) {
                 
-                $args['tax_query'] = array(
+                $wp_args['tax_query'] = array(
                     array(
                         'taxonomy'  => $taxonomy,
                         'field'     => 'slug',
@@ -1807,7 +1793,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
                 
             } else if ( $meta_key && $meta_value ) {
                 
-                $args['meta_query'] = array(
+                $wp_args['meta_query'] = array(
                     array(
                         'key'     => $meta_key,
                         'value'   => $meta_value,
@@ -1818,7 +1804,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
                 
             } else if ( $post_type == "repertoire" ) {
                 
-                $args['meta_query'] = array(
+                $wp_args['meta_query'] = array(
                     array(
                         'key'     => 'title_clean',
                         'compare' => '!=',
@@ -1849,8 +1835,8 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
         )*/
 
     
-    //$info .= 'args1: <pre>'.print_r($args, true).'</pre>';    
-    $arr_posts = new WP_Query( $args );
+    //$info .= 'wp_args: <pre>'.print_r($wp_args, true).'</pre>';    
+    $arr_posts = new WP_Query( $wp_args );
     //$posts = $arr_posts->posts;
     $info .= "Found ".count($arr_posts->posts)." posts.<br /><br />";
     if ( count($arr_posts->posts) == 0 ) {
@@ -1935,7 +1921,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
                     $update_info .= 'old_title: '.$old_title.'<br />';
                     $update_info .= 'new_title: '.$new_title.'<br />';
                     $update_info .= '>> New post_title<br />';
-                } else { // if ( $single_post_id )
+                } else {
                     $info .= "<!-- old_title: ".$old_title." (unchanged) -->";
                 }
                 
@@ -1951,7 +1937,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
                     } else {
                         $update_info .= "hmmm...";
                     }
-                } else { // if ( $single_post_id )
+                } else {
                     $info .= "<!-- old_t4m: ".$old_t4m." (unchanged) -->";
                 }
                 
@@ -1979,7 +1965,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
         
     }
     
-    $info .= 'args1: <pre>'.print_r($args, true).'</pre>';
+    $info .= 'wp_args: <pre>'.print_r($wp_args, true).'</pre>';
     
     return $info;
     
@@ -1994,7 +1980,7 @@ function posts_cleanup( $atts = [] ) {
 	$info = ""; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
         'testing' => true,
         'post_type' => 'event',
         'num_posts' => 10,
@@ -2004,12 +1990,11 @@ function posts_cleanup( $atts = [] ) {
         'meta_key' => null
     ), $atts );
     
-    $num_posts = (int) $a['num_posts'];
-    $orderby = $a['orderby'];
-    $admin_tag_slug = $a['admin_tag_slug'];
+    // Extract
+	extract( $args );
     
-	$args = array(
-		'post_type' => $a['post_type'],
+	$wp_args = array(
+		'post_type' => $post_type,
 		'post_status' => 'publish',
         'posts_per_page' => $num_posts,
         'tax_query' => array(
@@ -2038,20 +2023,20 @@ function posts_cleanup( $atts = [] ) {
         'orderby'	=> $orderby,
 	);
     
-    if ( $a['order'] !== null ) {
-        $args['order'] = $a['order'];
+    if ( $order !== null ) {
+        $wp_args['order'] = $order;
     }
     
-    if ( $a['meta_key'] !== null ) {
-        $args['meta_key'] = $a['meta_key'];
+    if ( $meta_key !== null ) {
+        $wp_args['meta_key'] = $meta_key;
     }
     
     
-	$arr_posts = new WP_Query( $args );
+	$arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
     
-    $info .= "testing: ".$a['testing']."<br /><br />";
-    $info .= "<!-- args: <pre>".print_r( $args, true )."</pre> -->";
+    $info .= "testing: ".$testing."<br /><br />";
+    $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     $info .= "[num posts: ".count($posts)."]<br /><br />";
     
@@ -2112,7 +2097,7 @@ function posts_cleanup( $atts = [] ) {
             // Update the post into the database
             // TODO fix/check clean_slug fcn and then set this live for both sites again.
             if ( is_dev_site() ) {
-            //if ( $a['testing'] == 'false' ) {
+            //if ( $testing == 'false' ) {
                 wp_update_post( $update_args, true );                        
                 if ( is_wp_error($post_id) ) {
 
@@ -2148,10 +2133,12 @@ function posts_cleanup( $atts = [] ) {
 //add_shortcode('run_post_updates', 'run_post_updates');
 function run_post_updates( $atts = [] ) {
 
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
         'post_id' => get_the_ID()
     ), $atts );
-    $post_id = (int) $a['post_id'];
+    
+    // Extract
+	extract( $args );
     
 	$info = ""; // init
     $admin_terms = array();
@@ -2235,7 +2222,7 @@ function run_post_updates( $atts = [] ) {
             //}
             
             // If changes have been made, then update the post
-            if ( $changes_made == true ) { // && $a['testing'] == 'false'
+            if ( $changes_made == true ) { // && $testing == 'false'
                 
                 wp_update_post( $update_args, true );    
 
@@ -2272,7 +2259,7 @@ function sermon_updates ( $atts = [] ) {
 
 	$info = "";
 
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
         'legacy' => false,
         'testing' => true,
         //'id' => null,
@@ -2281,12 +2268,12 @@ function sermon_updates ( $atts = [] ) {
         //'header' => 'false',
     ), $atts );
     
-    $num_posts = (int) $a['num_posts'];
-    //$date_str = esc_attr( $a['date_str'] );
+    // Extract
+	extract( $args );
     
     $info = ""; // init
     
-    $args = array(
+    $wp_args = array(
         'post_type' => 'sermon',
         'post_status' => 'publish',
         'posts_per_page' => $num_posts,
@@ -2294,10 +2281,10 @@ function sermon_updates ( $atts = [] ) {
         'order'   => 'ASC'
     );
     
-    if ( $a['legacy'] == 'true' ) {
+    if ( $legacy == 'true' ) {
         
         // Legacy Events
-        $args['meta_query'] = 
+        $wp_args['meta_query'] = 
             array(
                 'relation' => 'AND',
                 array(
@@ -2313,7 +2300,7 @@ function sermon_updates ( $atts = [] ) {
     } else {
         
         // NON-Legacy Events
-        $args['meta_query'] =
+        $wp_args['meta_query'] =
             array(
                 'relation' => 'AND',
                 array(
@@ -2332,10 +2319,10 @@ function sermon_updates ( $atts = [] ) {
         
     }
     
-	$arr_posts = new WP_Query( $args );
+	$arr_posts = new WP_Query( $wp_args );
     $sermon_posts = $arr_posts->posts;
     
-    $info .= "args: <pre>".print_r( $args, true )."</pre>";
+    $info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     //$info .= "arr_posts->posts: <pre>".print_r( $arr_posts->posts, true )."</pre>";
     $info .= "[num sermon_posts: ".count($sermon_posts)."]<br /><br />";
@@ -2350,7 +2337,7 @@ function sermon_updates ( $atts = [] ) {
         $info .= make_link( get_the_permalink( $sermon_post_id ), '<em>'.$sermon_title.'</em>', $sermon_title );
         $info .= '&nbsp;[id:'.$sermon_post_id.'] // ';
         
-        if ( $a['legacy'] == 'true' ) {
+        if ( $legacy == 'true' ) {
             
             // Legacy Events
             // ADD related_event record by retrieving event post ID based on legacy_event_id
@@ -2388,7 +2375,7 @@ function sermon_updates ( $atts = [] ) {
                 if ( $sermon_date != "" ) {
 
                     // Get event(s) based on sermon_date -- in Worship Services events-category only                
-                    $args2 = array(
+                    $wp_args2 = array(
                         'post_type'     => 'event',
                         'post_status'   => 'publish',
                         'posts_per_page' => 10,
@@ -2412,9 +2399,9 @@ function sermon_updates ( $atts = [] ) {
                         ),
                     );
 
-                    $arr_posts2 = new WP_Query( $args2 );
+                    $arr_posts2 = new WP_Query( $wp_args2 );
                     $event_posts = $arr_posts2->posts;
-                    //$info .= "args2: <pre>".print_r( $args2, true )."</pre>"; // tft
+                    //$info .= "wp_args2: <pre>".print_r( $wp_args2, true )."</pre>"; // tft
                     //$info .= "Last SQL-Query: <pre>{$arr_posts2->request}</pre><br />"; // tft
                 }
                 
@@ -2442,7 +2429,7 @@ function sermon_updates ( $atts = [] ) {
                 $info .= '&nbsp;[id:'.$event_id.']<br />';
                 
                 // Add postmeta for the sermon with this info
-                if ( $event_id && $a['testing'] == 'false' ) {
+                if ( $event_id && $testing == 'false' ) {
                     add_post_meta( $sermon_post_id, 'related_event', $event_id, true );
                 } else {
                     $info .= "test mode: add_post_meta is disabled.<br />";
@@ -2451,7 +2438,7 @@ function sermon_updates ( $atts = [] ) {
             
         } else {
             
-            if ( $a['legacy'] == 'true' ) {
+            if ( $legacy == 'true' ) {
                 $info .= "No live events matching legacy_event_id $legacy_event_id.<br />";
             } else {
                 $info .= "No matching events for sermon_date '$sermon_date'.<br />";

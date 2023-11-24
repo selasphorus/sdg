@@ -70,7 +70,7 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
     $ts_info .= "meta_field: ".$meta_field."; meta_key: ".$meta_key."; term_id: ".$term_id."<br />";
     
     // Build query args
-    $args = array(
+    $wp_args = array(
         'posts_per_page'=> -1,
         'post_type'		=> 'event',
         'meta_query'	=> array(
@@ -87,11 +87,11 @@ function get_related_events ( $meta_field = null, $term_id = null, $return_field
 		'fields' => $return_fields,
     );
     
-    $query = new WP_Query( $args );
+    $query = new WP_Query( $wp_args );
     $event_posts = $query->posts;
     
 
-    $ts_info .= "args: <pre>".print_r($args, true)."</pre>";
+    $ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     $ts_info .= "event_posts: <pre>".print_r($event_posts, true)."</pre>";
     $ts_info .= "Last SQL-Query: <pre>{$query->request} </pre><br />";
     
@@ -273,16 +273,14 @@ function get_event_personnel( $atts = [] ) {
     sdg_log( "divline2", $do_log );
     
     // TODO: rename ast $args for consistency across fcns
-    $a = shortcode_atts( array(
-		'id'        => get_the_ID(),
+    $args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
         'run_updates' => false,
-        'display' => 'table'       
+        'display'	=> 'table'       
     ), $atts );
     
-    // TODO: extract
-    $post_id = $a['id'];
-    $run_updates = $a['run_updates'];
-    $display = $a['display'];
+    // Extract
+	extract( $args );
     
     // Init vars
     $arr_info = array();
@@ -773,16 +771,14 @@ function get_event_program_items( $atts = [] ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
-	$a = shortcode_atts( array(
-		'id'        => get_the_ID(),
+	$args = shortcode_atts( array(
+		'post_id'        => get_the_ID(),
         'run_updates' => false,
         'display' => 'table'       
     ), $atts );
     
-    // TODO: extract
-    $post_id = $a['id'];
-    $run_updates = $a['run_updates'];
-    $display = $a['display'];
+    // Extract
+	extract( $args );
     
     // Init vars
     $arr_info = array(); // wip 06/27/23
@@ -2057,24 +2053,24 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 // Phasing this out in favor of the subsequent more general fcn
 // Clean up Event Personnel: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_personnel_cleanup', 'event_personnel_cleanup');
-function event_personnel_cleanup(  $atts = [] ) {
+function event_personnel_cleanup( $atts = [] ) {
 	
     // Not an admin? Don't touch my database!
     if ( !current_user_can('administrator') ) { return false; }
     
     // Parse shortcode attributes
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
 		'post_id'        => null, //get_the_ID(),
         'num_posts' => 5,
     ), $atts );
     
 	// Extract attribute values into variables
-    extract($a);
+    extract($args);
     
     $info = "";
     
     // Get all posts w/ personnel rows
-    $args = array(
+    $wp_args = array(
 		'post_type'   => 'event',
 		'post_status' => 'publish',
         'posts_per_page' => $num_posts,
@@ -2116,13 +2112,13 @@ function event_personnel_cleanup(  $atts = [] ) {
             )*/
         ),
     );
-    $result = new WP_Query( $args );
+    $result = new WP_Query( $wp_args );
     $posts = $result->posts;
     
     if ( $posts ) {
         
         $info .= "Found ".count($posts)." event posts with personnel postmeta.<br /><br />";
-        //$info .= "args: <pre>".print_r($args, true)."</pre>";
+        //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
         //$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
         
         foreach ( $posts AS $post ) {
@@ -2205,7 +2201,7 @@ function event_personnel_cleanup(  $atts = [] ) {
     } else {
         
         $info .= "No matching posts found.<br />";
-        $info .= "args: <pre>".print_r($args, true)."</pre>";
+        $info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
         $info .= "Last SQL-Query: <pre>".$result->request."</pre>";
         
     }
@@ -2222,7 +2218,7 @@ function event_program_cleanup( $atts = [] ) {
     if ( !current_user_can('administrator') ) { return false; }
     
     // Parse shortcode attributes
-	$a = shortcode_atts( array(
+	$args = shortcode_atts( array(
 		'ids'   => null, //get_the_ID(),
         'num_posts' => 1, // default is one post at a time because most have multiple program rows and these meta queries are SLOW!
         'scope'		=> 'both', // personnel, program_items, or both
@@ -2230,7 +2226,7 @@ function event_program_cleanup( $atts = [] ) {
     ), $atts );
     
 	// Extract attribute values into variables
-    extract($a);
+    extract($args);
     
     // Init vars
     $info = "";
@@ -2939,7 +2935,7 @@ function get_event_programs_containing_post( $post_id = null ) { // formerly get
     
     /* OLD approach -- very very slow
         
-    $args = array(
+    $wp_args = array(
         'posts_per_page'=> -1,
         'post_type'		=> 'event',
         'meta_query'	=> array(
@@ -2951,9 +2947,9 @@ function get_event_programs_containing_post( $post_id = null ) { // formerly get
         )
     );
 
-    $query = new WP_Query( $args );
+    $query = new WP_Query( $wp_args );
     $arr_posts = $query->get_posts();
-    //$info .= "args: <pre>".print_r($args, true)."</pre>"; // tft
+    //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>"; // tft
     //$info .= "Last SQL-Query: <pre>".$query->request."</pre>";
     //$info .= "arr_posts: <pre>".print_r($arr_posts, true)."</pre>"; // tft
 
@@ -2982,7 +2978,7 @@ function display_webcast_events() {
 	
     // Query Events Manager [EM] posts
     // TODO: test this...
-    $args = array(
+    $wp_args = array(
         'post_type'         => 'event',
         'posts_per_page'    => 5,
         'scope'   	        => 'future',
@@ -2995,7 +2991,7 @@ function display_webcast_events() {
         )
     );
 
-    $result = new WP_Query( $args );
+    $result = new WP_Query( $wp_args );
     $upcoming_events = $result->posts;
 
 	// Loop through the events: set up each one as
@@ -3015,7 +3011,7 @@ function display_webcast_events() {
     
     // Query Events Manager [EM] posts
     // TODO: test this...
-    $args = array(
+    $wp_args = array(
         'post_type'         => 'event',
         'posts_per_page'    => 5,
         'scope'   	        => 'past',
@@ -3028,7 +3024,7 @@ function display_webcast_events() {
         )
     );
 
-    $result = new WP_Query( $args );
+    $result = new WP_Query( $wp_args );
     $past_events = $result->posts;
 	
 	if (count($past_events) > 0) { $info .= "<h2>Past</h2>"; }
@@ -3680,7 +3676,7 @@ function get_special_date_content( $the_date = null ) {
     // NB: set event record to "All day" and assign 'special-notice' event category
     
     // Build query args
-    $args = array(
+    $wp_args = array(
         'posts_per_page'=> 1, // get one event only
         'post_type'		=> 'event',
         'meta_query'	=> array(
@@ -3698,7 +3694,7 @@ function get_special_date_content( $the_date = null ) {
         ),
     );
     
-    $query = new WP_Query( $args );
+    $query = new WP_Query( $wp_args );
     $posts = $query->posts;
     
     if ( $posts ) {
@@ -3798,6 +3794,7 @@ function display_event_stats( $post_id = null ) {
 	
 	$info = ""; // init
     
+    // TODO: determine whether this is somehow better than the usual extra($args) approach...
     extract( shortcode_atts( 
         array( 
             'post_id' => 'post_id'
