@@ -814,9 +814,9 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 	}
 	
 	if ( !empty($calc_basis) ) {            
-		if ( $verbose == "true" ) { $info .= $indent."calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
+		if ( $verbose == "true" ) { $info .= $indent."liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
 	} else {
-		if ( $verbose == "true" ) { $info .= $indent."No calc_basis found.<br />"; }
+		if ( $verbose == "true" ) { $info .= $indent."No liturgical calc_basis found.<br />"; }
 	}
         
 	// Find the liturgical_date_calc post for the selected year
@@ -875,16 +875,14 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 	}
 		
 	// If no basis date string has yet been established, then default to January first of the designated year
-	if ( $basis_date_str == "" ) {
-		$basis_date_str = "$year-01-01";
-	}
-	if ( $verbose == "true" ) { $info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />"; }
+	if ( $basis_date_str == "" ) { $basis_date_str = $year."-01-01"; }
+	if ( $verbose == "true" ) { $info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span><br />"; } // ($calc_basis // $calc_basis_field)
         
 	// Get the basis_date from the string version
 	$basis_date = strtotime($basis_date_str);
 	$basis_date_weekday = strtolower( date('l', $basis_date) );
 	
-	if ( $verbose == "true" ) { $info .= $indent."basis_date: $basis_date_str ($basis_date_weekday) ($calc_basis // $calc_basis_field)<br />"; } // .'<span class="notice">'.'</span>'
+	if ( $verbose == "true" ) { $info .= $indent."basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
         
 	// Check to see if the date to be calculated is in fact the same as the base date
 	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
