@@ -753,26 +753,33 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 
+// Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
 function calc_date_from_str( $str = null, $verbose = false ) {
-
-	$calc = array();
+	
+	// Abort if string is empty
 	if ( $str ) { $date_calculation_str = $str; } else { return false; }
+	
+	// Init vars
+	$calc = array();
+	$info = "";
 	
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
-	// init vars
+	// Init vars
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
-    
-    list( $calc_info, $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", "", "", "" );
+    //
+    list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", "", "" );
     list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
     $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
-
+	//
 	$calc_components = explode(" ", $date_calculation_str);
-	if ( $verbose == "true" ) { $calc_info .= $indent."calc_components: ".print_r($calc_components,true)."<br />"; }
+	if ( $verbose == "true" ) { $info .= $indent."calc_components: ".print_r($calc_components,true)."<br />"; }
 	
+	// Loop through all the components of the exploded date_calculation_str and determine component type
+	// WIP -- why do this?
 	foreach ( $calc_components as $component ) {
 		$component_info = "";
 		if ( array_key_exists($component, $liturgical_bases) ) {
@@ -792,284 +799,282 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 		} else {
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
-		if ( $verbose == "true" ) { $calc_info .= $component_info; }
+		if ( $verbose == "true" ) { $info .= $component_info; }
 	}
 	
 	// WIP!!!
 	
-	/*
 	// calc_basis
 	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
-        foreach ( $liturgical_bases AS $basis => $basis_field ) {
-            if (stripos($date_calculation_str, $basis) !== false) {
-                $calc_basis = $basis;
-                $calc_basis_field = $basis_field;
-            }
-        }
+	foreach ( $liturgical_bases AS $basis => $basis_field ) {
+		if (stripos($date_calculation_str, $basis) !== false) {
+			$calc_basis = $basis;
+			$calc_basis_field = $basis_field;
+		}
+	}
+	
+	if ( !empty($calc_basis) ) {            
+		if ( $verbose == "true" ) { $info .= $indent."calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
+	} else {
+		if ( $verbose == "true" ) { $info .= $indent."No calc_basis found.<br />"; }
+	}
         
-        if ( $calc_basis != "" ) {            
-            //$calc_info .= $indent."calc_basis: $calc_basis // $calc_basis_field<br />"; // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
-        } else {
-            if ( $verbose == "true" ) { $calc_info .= $indent."No calc_basis found.<br />"; }
-        }
+	// Find the liturgical_date_calc post for the selected year
+	// (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
+	$wp_args = array(
+		'post_type'   => 'liturgical_date_calc',
+		'post_status' => 'publish',
+		'posts_per_page' => 1,
+		'meta_query' => array(
+			array(
+				'key'     => 'litdate_year',
+				'value'   => $year.'-01-01'
+			)
+		)
+	);
+	$result = new WP_Query( $wp_args );
+	if ( $result ) {
+		$liturgical_date_calc_post = $result->posts[0];
+		//if ( $verbose == "true" ) { $info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; } // tft
+		$liturgical_date_calc_id = $liturgical_date_calc_post->ID;
+		if ( $verbose == "true" ) { $info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
+	} else {
+		if ( $verbose == "true" ) { $info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />"; }
+		$liturgical_date_calc_id = null;
+	}
         
-        // Find the liturgical_date_calc post for the selected year
-        // (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
-        $wp_args = array(
-            'post_type'   => 'liturgical_date_calc',
-            'post_status' => 'publish',
-            'posts_per_page' => 1,
-            'meta_query' => array(
-                array(
-                    'key'     => 'litdate_year',
-                    'value'   => $year.'-01-01'
-                )
-            )
-        );
-        $result = new WP_Query( $wp_args );
-        if ( $result ) {
-        	$liturgical_date_calc_post = $result->posts[0];
-        	//$calc_info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; // tft
-        	$liturgical_date_calc_id = $liturgical_date_calc_post->ID;
-        	if ( $verbose == "true" ) { $calc_info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
-        } else {
-        	if ( $verbose == "true" ) { $calc_info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />"; }
-        	$liturgical_date_calc_id = null;
-        }
-        
-        // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-        if ( $calc_basis == 'christmas' ) {
-            $basis_date_str = $year."-12-25";          
-        } else if ( $calc_basis == 'epiphany' ) {                
-            $basis_date_str = $year."-01-06";
-            $num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-        } else {
-            if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
-                $basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
-            }
-        }
+	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
+	if ( $calc_basis == 'christmas' ) {
+		$basis_date_str = $year."-12-25";          
+	} else if ( $calc_basis == 'epiphany' ) {                
+		$basis_date_str = $year."-01-06";
+		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
+	} else {
+		if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
+			$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
+		}
+	}
     
-        // Get related dates, where relevant
-        // +~+~+~+~+~+~+~+~+~+~+
-        
-        // 1. Advent Sunday date
-        if ( $calc_basis == "epiphany" || $calc_basis == "advent" || $calc_basis == "pentecost" ) {
-            $advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
-            if ( $verbose == "true" ) { $calc_info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />"; }
-        }
-        
-        // 2. Ash Wednesday date
-        if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
-            $ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
-            if ( empty($ash_wednesday_date) ) { 
-            	$calc_info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
-            } else {
-            	if ( $verbose == "true" ) { $calc_info .= $indent."ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
-            }
-        }
+	// Get related dates, where relevant
+	// +~+~+~+~+~+~+~+~+~+~+
+	
+	// 1. Advent Sunday date
+	if ( $calc_basis == "epiphany" || $calc_basis == "advent" || $calc_basis == "pentecost" ) {
+		$advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
+		if ( $verbose == "true" ) { $info .= $indent."advent_sunday_date: ".$advent_sunday_date."<br />"; }
+	}
+	
+	// 2. Ash Wednesday date
+	if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) {
+		$ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
+		if ( empty($ash_wednesday_date) ) { 
+			$info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+		} else {
+			if ( $verbose == "true" ) { $info .= $indent."ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
+		}
+	}
 		
-		// If no basis date string has yet been established, then default to January first of the designated year
-        if ( $basis_date_str == "" ) {
-            $basis_date_str = "$year-01-01";
-        }
-        //$calc_info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />";
+	// If no basis date string has yet been established, then default to January first of the designated year
+	if ( $basis_date_str == "" ) {
+		$basis_date_str = "$year-01-01";
+	}
+	if ( $verbose == "true" ) { $info .= $indent.'<span class="notice">'."basis_date_str: $basis_date_str</span> ($calc_basis // $calc_basis_field)<br />"; }
         
-        // Get the basis_date from the string version
-        $basis_date = strtotime($basis_date_str);
-        $basis_date_weekday = strtolower( date('l', $basis_date) );
+	// Get the basis_date from the string version
+	$basis_date = strtotime($basis_date_str);
+	$basis_date_weekday = strtolower( date('l', $basis_date) );
+	
+	if ( $verbose == "true" ) { $info .= $indent."basis_date: $basis_date_str ($basis_date_weekday) ($calc_basis // $calc_basis_field)<br />"; } // .'<span class="notice">'.'</span>'
         
-        if ( $verbose == "true" ) { $calc_info .= $indent."basis_date: $basis_date_str ($basis_date_weekday) ($calc_basis // $calc_basis_field)<br />"; } // .'<span class="notice">'.'</span>'
+	// Check to see if the date to be calculated is in fact the same as the base date
+	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
+		
+		$calc_date = $basis_date;
+		$info .= $indent."date to be calculated is same as basis_date.<br />";
+		
+	} else {
+            
+        // ** Extract components of date_calculation_str & calculate date for $year
         
-        // Check to see if the date to be calculated is in fact the same as the base date
-        if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
-            
-            $calc_date = $basis_date;
-            $calc_info .= $indent."date to be calculated is same as basis_date.<br />";
-            
-        } else {
-            
-            // ** Extract components of date_calculation_str & calculate date for $year
-            
-            // Does the date to be calculated fall before/after/of/in the basis_date/season?
-            foreach ( $boias AS $boia ) {
-            	if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-            		$calc_info .= $indent."boia '$boia' found in date_calculation_str<br />";
-            		$calc_boia[] = strtolower($boia);
-            		if ( count($matches) > 1 ) { $complex_formula = true; }
-            		if ( $verbose == "true" ) { $calc_info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
-            	}
-            }
-            if ( $verbose == "true" ) { $calc_info .= $indent."calc_boia: ".print_r($calc_boia, true)."<br />"; }
-			if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; } else { $complex_formula = true; }
+		// Does the date to be calculated fall before/after/of/in the basis_date/season?
+		foreach ( $boias AS $boia ) {
+			if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
+				$info .= $indent."boia '$boia' found in date_calculation_str<br />";
+				$calc_boia[] = strtolower($boia);
+				if ( count($matches) > 1 ) { $complex_formula = true; }
+				if ( $verbose == "true" ) { $info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
+			}
+		}
+		if ( $verbose == "true" ) { $info .= $indent."calc_boia: ".print_r($calc_boia, true)."<br />"; }
+		if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; } else { $complex_formula = true; }
 			
-            // What's the weekday for the date to be calculated?
-            foreach ( $weekdays AS $weekday ) {
-                if (stripos($date_calculation_str, $weekday) !== false) {
-                	$calc_info .= $indent.$indent."weekday '$weekday' found in date_calculation_str<br />";
-                    $calc_weekday[] = strtolower($weekday);
-                }
-            }
-            if ( $verbose == "true" ) { $calc_info .= $indent."calc_weekday: ".print_r($calc_weekday, true)."<br />"; }
-			if ( count($calc_weekday) == 1 ) { $calc_weekday = $calc_weekday[0]; } else { $complex_formula = true; }
+		// What's the weekday for the date to be calculated?
+		foreach ( $weekdays AS $weekday ) {
+			if (stripos($date_calculation_str, $weekday) !== false) {
+				$info .= $indent.$indent."weekday '$weekday' found in date_calculation_str<br />";
+				$calc_weekday[] = strtolower($weekday);
+			}
+		}
+		if ( $verbose == "true" ) { $info .= $indent."calc_weekday: ".print_r($calc_weekday, true)."<br />"; }
+		if ( count($calc_weekday) == 1 ) { $calc_weekday = $calc_weekday[0]; } else { $complex_formula = true; }
 			
+		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 			
-			// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
+		// ** Determine the calc_interval -- number of days/weeks...
+        //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
+		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
+			if ( $verbose == "true" ) { $info .= $indent."date_calculation_str contains numbers.<br />"; }
+			if ( $verbose == "true" ) { $info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
 			
-            // ** Determine the calc_interval -- number of days/weeks...
-            if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-            //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
-                
-                if ( $verbose == "true" ) { $calc_info .= $indent."date_calculation_str contains numbers.<br />"; }
-                if ( $verbose == "true" ) { $calc_info .= $indent."matches: <pre>".print_r($matches, true)."</pre><br />"; }
-                
-                // Extract the calc_interval integer from the string by getting rid of everything else
-                // WIP deal w/ multiple value possibilities for weekday, boia
-                if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
-                	$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
-                	$calc_interval = trim( $calc_interval );
-                } else {
-                	$calc_interval = null; // tft
-                }
-                
-                //if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
-                if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
-                    $calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
-                }
-                if ( $verbose == "true" && !empty($calc_interval) ) { $calc_info .= $indent."calc_interval: $calc_interval<br />"; }
-                
-            } else if ( strpos(strtolower($date_calculation_str), 'last') !== false ) {
-                
-                // e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
-                //$calc_info .= $indent."LAST<br />"; // tft
-                if ( $calc_basis == "epiphany" ) {
-                    $calc_interval = $num_sundays_after_epiphany;
-                } else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
-                    $calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
-                } else if ( $date_calculation_str == "last sunday before advent" ) {
-                    $calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
-                }
-                
-            }
+			// Extract the calc_interval integer from the string by getting rid of everything else
+			// WIP deal w/ multiple value possibilities for weekday, boia
+			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
+				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
+				$calc_interval = trim( $calc_interval );
+			} else {
+				$calc_interval = null; // tft
+			}
+			
+			//if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
+			if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
+				$calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
+			}
+			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= $indent."calc_interval: $calc_interval<br />"; }
+			
+		} else if ( strpos(strtolower($date_calculation_str), 'last') !== false ) {
+			
+			// e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
+			//$info .= $indent."LAST<br />"; // tft
+			if ( $calc_basis == "epiphany" ) {
+				$calc_interval = $num_sundays_after_epiphany;
+			} else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
+				$calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
+			} else if ( $date_calculation_str == "last sunday before advent" ) {
+				$calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
+			}
+			
+		}
             
-            // If the calc_formula hasn't already been determined, build it
-            if ( $calc_formula == "" ) {
-                
-                //$calc_info .= $indent."About to build calc_formula...<br />"; // tft
-                
-                // If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
-                if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
-                    $first_sunday = strtotime("next Sunday", $basis_date);
-                    //$calc_info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
-                    if ( $calc_interval ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
-                    if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
-                } else if ( $basis_date ) {
-                    $first_sunday = $basis_date;
-                    if ( $verbose == "true" ) { $calc_info .= $indent."first_sunday is equal to basis_date.<br />"; }
-                }
-                
-				if ( $complex_formula == true ) {
-					
-					// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
-					// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
-					
-				} else {
+		// If the calc_formula hasn't already been determined, build it
+		if ( $calc_formula == "" ) {
+			
+			//$info .= $indent."About to build calc_formula...<br />"; // tft
+			
+			// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
+			if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
+				$first_sunday = strtotime("next Sunday", $basis_date);
+				//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
+				if ( $calc_interval ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
+				if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
+			} else if ( $basis_date ) {
+				$first_sunday = $basis_date;
+				if ( $verbose == "true" ) { $info .= $indent."first_sunday is equal to basis_date.<br />"; }
+			}
+			
+			if ( $complex_formula == true ) {
 				
-					if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
+				// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+				// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
+				
+			} else {
+			
+				if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
 
-						if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
-							$calc_formula = "+".$calc_interval." weeks";
-							$basis_date = $first_sunday;                    
-						} else if ( $calc_boia == "before" ) { 
-							$calc_formula = "previous Sunday";
-						} else if ( $calc_boia == "after" ) { 
-							$calc_formula = "next Sunday";
-						} else if ( $first_sunday ) {
-							$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
-						} 
+					if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
+						$calc_formula = "+".$calc_interval." weeks";
+						$basis_date = $first_sunday;                    
+					} else if ( $calc_boia == "before" ) { 
+						$calc_formula = "previous Sunday";
+					} else if ( $calc_boia == "after" ) { 
+						$calc_formula = "next Sunday";
+					} else if ( $first_sunday ) {
+						$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
+					} 
 
-					} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
-					
-						//$calc_info .= $indent."setting prev/next<br />"; // tft
-						// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
-						if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
-						$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
-					}
-                
-                }
-                
-            }
-            
-            // If there's no $calc_formula yet, use the date_calculation_str directly
-            if ( empty($calc_formula) && empty($calc_date) ) {
-                $calc_info .= $indent."calc based directly on date_calculation_str<br />"; // .'<span class="notice">'.'</span>'
-                if ( $calc_boia != "after" ) {
-                    $calc_formula = $date_calculation_str;               
-                } else {
-                	//$calc_info .= $indent."Unable to determine calc_formula -- calc_boia: \"$calc_boia\"; calc_date: $calc_date<br />";
-                }
-            }
-            
-            //$calc_info .= $indent.">> date_calculation_str: $date_calculation_str<br />"; // tft
-            //$calc_info .= $indent.">> [$calc_interval] -- [$calc_weekday] -- [$calc_boia] -- [$calc_basis_field]<br />"; // tft
-            //$calc_info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
-            //
-            // calc_date not yet determined >> do the actual calculation using the formula and basis_date
-            if ( empty($calc_date) ) {
-            
-            	$calc_info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
-            	
-            	// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
-            	// Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
-            	//
-            	
-            	if ( $calc_formula != "" && $basis_date != "" ) {
-            		$calc_date = strtotime("$calc_formula", $basis_date);
-            	} else {
-            		$calc_info .= $indent."Can't do calc -- calc_formula or basis_date is empty.<br />";
-            	}
-                //$calc_info .= $indent.'strtotime("'.$calc_formula.'",$basis_date)<br />';
-                //$calc_info .= $indent."calc_date -- ".$calc_date.' = strtotime("'.$calc_formula.'", '.$basis_date.')<br />'; // tft
-                // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
-                // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
-            }
-            
-            // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
-            if ( $calc_basis == "epiphany" ) {
-            
-            	// Make sure this supposed date in the Epiphany season doesn't run into Lent
-                $calc_info .= $indent."There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
-                if ( $calc_date > strtotime($ash_wednesday_date) ) { //if ( (int) $calc_interval > (int) $num_sundays_after_epiphany ) {
-                    $calc_info .= $indent.'<span class="warning">Uh oh! That\'s too many Sundays.</span><br />'; // tft
-                    $calc_info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calc_date).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
-                    $calc_date = "N/A";
-                }
-                
-            } else if ( $calc_basis == "lent" ) {
-            
-                // TODO: make sure date doesn't overlap w/ holy week
-                
-            } else if ( $calc_basis == "pentecost" ) {
-                
-                // Make sure this supposed date in Ordinary Time/Pentecost season isn't actually in Advent
-                // Pentecost: "This season ends on the Saturday before the First Sunday of Advent."                
-                // TODO -- figure out if this is the LAST Sunday of Pentecost?
-                
-                if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
-                //if ( $calc_date > strtotime($advent_sunday_date) ) {
-                    //$calc_info .= $indent.date( 'Y-m-d', strtotime("previous Saturday", strtotime($advent_sunday_date)) );
-                    $calc_info .= $indent.'<span class="warning">'."Uh oh! ".date('Y-m-d',$calc_date)." conflicts with Advent. Advent Sunday is $advent_sunday_date.</span><br />"; // tft
-                    $calc_date = "N/A";
-                } else {
-                    $calc_info .= $indent."Ok -- Advent begins on $advent_sunday_date.<br />"; // tft
-                }
-            }
+				} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
+				
+					//$info .= $indent."setting prev/next<br />"; // tft
+					// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
+					if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
+					$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+				}
+			
+			}
+			
+		}
+		
+		// If there's no $calc_formula yet, use the date_calculation_str directly
+		if ( empty($calc_formula) && empty($calc_date) ) {
+			$info .= $indent."calc based directly on date_calculation_str<br />"; // .'<span class="notice">'.'</span>'
+			if ( $calc_boia != "after" ) {
+				$calc_formula = $date_calculation_str;               
+			} else {
+				//$info .= $indent."Unable to determine calc_formula -- calc_boia: \"$calc_boia\"; calc_date: $calc_date<br />";
+			}
+		}
+		
+		//$info .= $indent.">> date_calculation_str: $date_calculation_str<br />"; // tft
+		//$info .= $indent.">> [$calc_interval] -- [$calc_weekday] -- [$calc_boia] -- [$calc_basis_field]<br />"; // tft
+		//$info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
+		//
+		// calc_date not yet determined >> do the actual calculation using the formula and basis_date
+		if ( empty($calc_date) ) {
+		
+			$info .= $indent.'>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
+			
+			// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
+			// Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
+			//
+			
+			if ( $calc_formula != "" && $basis_date != "" ) {
+				$calc_date = strtotime("$calc_formula", $basis_date);
+			} else {
+				$info .= $indent."Can't do calc -- calc_formula or basis_date is empty.<br />";
+			}
+			//$info .= $indent.'strtotime("'.$calc_formula.'",$basis_date)<br />';
+			//$info .= $indent."calc_date -- ".$calc_date.' = strtotime("'.$calc_formula.'", '.$basis_date.')<br />'; // tft
+			// X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
+			// calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
+		}
+		
+		// Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
+		if ( $calc_basis == "epiphany" ) {
+		
+			// Make sure this supposed date in the Epiphany season doesn't run into Lent
+			$info .= $indent."There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
+			if ( $calc_date > strtotime($ash_wednesday_date) ) { //if ( (int) $calc_interval > (int) $num_sundays_after_epiphany ) {
+				$info .= $indent.'<span class="warning">Uh oh! That\'s too many Sundays.</span><br />'; // tft
+				$info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calc_date).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
+				$calc_date = "N/A";
+			}
+			
+		} else if ( $calc_basis == "lent" ) {
+		
+			// TODO: make sure date doesn't overlap w/ holy week
+			
+		} else if ( $calc_basis == "pentecost" ) {
+			
+			// Make sure this supposed date in Ordinary Time/Pentecost season isn't actually in Advent
+			// Pentecost: "This season ends on the Saturday before the First Sunday of Advent."                
+			// TODO -- figure out if this is the LAST Sunday of Pentecost?
+			
+			if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
+			//if ( $calc_date > strtotime($advent_sunday_date) ) {
+				//$info .= $indent.date( 'Y-m-d', strtotime("previous Saturday", strtotime($advent_sunday_date)) );
+				$info .= $indent.'<span class="warning">'."Uh oh! ".date('Y-m-d',$calc_date)." conflicts with Advent. Advent Sunday is $advent_sunday_date.</span><br />"; // tft
+				$calc_date = "N/A";
+			} else {
+				$info .= $indent."Ok -- Advent begins on $advent_sunday_date.<br />"; // tft
+			}
+		}
 
-        }
-        */
+	}        
+	
+    // END WIP
         
     $calc['calc_date'] = $calc_date;
-    $calc['calc_info'] = $calc_info;
+    $calc['calc_info'] = $info;
     
     return $calc;
 
@@ -1081,7 +1086,7 @@ function calc_litdates( $atts = [] ) {
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !queenbee() ) { return "You are not authorized to run this operation.<br />"; }
     
-	$info = ""; // init >> calculate_variable_dates <<
+	$info = "";
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
 	$args = shortcode_atts( array(
@@ -1126,7 +1131,7 @@ function calc_litdates( $atts = [] ) {
         'order'	=> $order,
 	);
     
-    //if ( $id !== null ) { $args['p'] = $id; }
+    // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
     if ( $ids !== null ) { $wp_args['post__in'] = explode(', ', $ids); }
     if ( $meta_key !== null ) { $wp_args['meta_key'] = $meta_key; }
     
@@ -1139,6 +1144,7 @@ function calc_litdates( $atts = [] ) {
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     $info .= "<br />";
     
+    // Loop through the posts and calculate the variable dates for the given year
     foreach ( $posts AS $post ) {
         
         setup_postdata( $post );
@@ -1160,12 +1166,13 @@ function calc_litdates( $atts = [] ) {
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
         $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
         
+        //
         $calc = calc_date_from_str($date_calculation_str, $verbose);
         if ( $calc ) {
         	$calc_date = $calc['calc_date'];
-        	$calc_info .= $calc['calc_info'];
+        	$calc_info .= $indent.$calc['calc_info'];
         } else {
-        	$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
+        	$calc_info .= $indent.'<span class="error">calc_date_from_str failed</span><br />';
         }
                 
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
