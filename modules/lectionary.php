@@ -1170,17 +1170,21 @@ function calc_litdates( $atts = [] ) {
         $date_calculation_str = str_replace('christmas day', 'christmas', strtolower($date_calculation_str) );
         $date_calculation_str = str_replace('the epiphany', 'epiphany', strtolower($date_calculation_str) );
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
-        $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
         
-        //
-        $calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
-        if ( $calc ) {
-        	$calc_date = $calc['calc_date'];
-        	$calc_info .= $indent.$calc['calc_info'];
-        } else {
-        	$calc_info .= $indent.'<span class="error">calc_date_from_str failed</span><br />';
-        }
-                
+        if ( !empty($date_calculation_str) ) {
+        	$calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
+			$calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
+			if ( $calc ) {
+				$calc_date = $calc['calc_date'];
+				$calc_info .= $indent.$calc['calc_info'];
+			} else {
+				$calc_info .= $indent.'<span class="error">calc_date_from_str failed</span><br />';
+			}
+    	} else {
+    		$calc_info .= $indent."date_calculation_st is empty<br />"; // tft
+    		$calc = null;
+    	}   
+        
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
             $calc_date_str = date('Y-m-d', $calc_date);
             //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
