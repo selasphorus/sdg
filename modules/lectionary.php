@@ -764,8 +764,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$info = "";
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
-	$info .= '<h3>calc_date_from_str</h3>';
-	$info .= '<div class="code">';
+	$info .= $indent.'<strong>calc_date_from_str</strong><br />';
+	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
 	// Init vars
