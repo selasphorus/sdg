@@ -825,6 +825,7 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 		'post_type'   => 'liturgical_date_calc',
 		'post_status' => 'publish',
 		'posts_per_page' => 1,
+		'fields'	=> 'ids',
 		'meta_query' => array(
 			array(
 				'key'     => 'litdate_year',
@@ -832,14 +833,13 @@ function calc_date_from_str( $str = null, $verbose = false ) {
 			)
 		)
 	);
-	$result = new WP_Query( $wp_args );
-	if ( $result ) {
-		$liturgical_date_calc_post = $result->posts[0];
-		//if ( $verbose == "true" ) { $info .= "liturgical_date_calc_post: <pre>".print_r( $liturgical_date_calc_post, true )."</pre><br />"; } // tft
-		$liturgical_date_calc_id = $liturgical_date_calc_post->ID;
+	$query = new WP_Query( $wp_args );
+	$posts = $query->posts;    
+	if ( count($posts) > 0 ) {
+		$liturgical_date_calc_id = $posts[0];
 		if ( $verbose == "true" ) { $info .= $indent."liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
 	} else {
-		if ( $verbose == "true" ) { $info .= $indent."No matching liturgical_date_calc_post for args ".print_r($args,true)."<br />"; }
+		if ( $verbose == "true" ) { $info .= $indent."No matching liturgical_date_calc_post for wp_args ".print_r($wp_args,true)."<br />"; }
 		$liturgical_date_calc_id = null;
 	}
         
