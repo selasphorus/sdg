@@ -762,10 +762,10 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	// Init vars
 	$calc = array();
 	$info = "";
-	
-	if ( $verbose == "true" ) { $info .= $indent."year as passed to fcn calc_date_from_str: ".$year."<br />"; }
-	
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
+	
+	$info .= '<div class="code">';
+	if ( $verbose == "true" ) { $info .= $indent."year as passed to fcn calc_date_from_str: ".$year."<br />"; }
 	
 	// Init vars
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
@@ -1072,6 +1072,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}        
 	
     // END WIP
+    
+    $info .= '</div>';
         
     $calc['calc_date'] = $calc_date;
     $calc['calc_info'] = $info;
