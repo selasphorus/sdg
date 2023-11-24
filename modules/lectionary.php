@@ -754,10 +754,10 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 // Function(s) to calculate variable liturgical_dates
 
 // Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
-function calc_date_from_str( $str = null, $verbose = false ) {
+function calc_date_from_str( $year = null, $date_calculation_str = null, $verbose = false ) {
 	
-	// Abort if string is empty
-	if ( $str ) { $date_calculation_str = $str; } else { return false; }
+	// Abort if date_calculation_str or year is empty
+	if ( empty($date_calculation_str) || empty($year) ) { return false; }
 	
 	// Init vars
 	$calc = array();
@@ -1165,7 +1165,7 @@ function calc_litdates( $atts = [] ) {
         $calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
         
         //
-        $calc = calc_date_from_str($date_calculation_str, $verbose);
+        $calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
         if ( $calc ) {
         	$calc_date = $calc['calc_date'];
         	$calc_info .= $indent.$calc['calc_info'];
