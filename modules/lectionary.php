@@ -903,7 +903,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 				$info .= $indent."boia '$boia' found in date_calculation_str<br />";
 				$calc_boia[] = strtolower($boia);
 				if ( count($matches) > 1 ) { $complex_formula = true; }
-				if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+				//if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
 			}
 		}
 		if ( $verbose == "true" ) { $info .= "calc_boia: ".print_r($calc_boia, true)."<br />"; }
@@ -926,7 +926,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
 			if ( $verbose == "true" ) { $info .= "date_calculation_str contains numbers.<br />"; }
-			if ( $verbose == "true" ) { $info .= "number matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+			//if ( $verbose == "true" ) { $info .= "number matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
 			
 			// Extract the calc_interval integer from the string by getting rid of everything else
 			// WIP deal w/ multiple value possibilities for weekday, boia
@@ -977,9 +977,12 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 				
 				// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
 				// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
+				$info .= '<span class="notice">Complex Formula!</span><br />';
 				
 			} else {
 			
+				if ( $verbose == "true" ) { $info .= "(Not a complex formula)<br />"; }
+				
 				if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
 
 					if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
