@@ -763,6 +763,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$calc = array();
 	$info = "";
 	
+	if ( $verbose == "true" ) { $info .= $indent."year as passed to fcn calc_date_from_str: ".$year."<br />"; }
+	
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
 	// Init vars
