@@ -1067,7 +1067,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			//if ( $calc_date > strtotime($advent_sunday_date) ) {
 				//$info .= $indent.date( 'Y-m-d', strtotime("previous Saturday", strtotime($advent_sunday_date)) );
 				$info .= $indent.'<span class="warning">'."Uh oh! ".date('Y-m-d',$calc_date)." conflicts with Advent. Advent Sunday is $advent_sunday_date.</span><br />"; // tft
-				$calc_date = "N/A";
+				$calc_date = null; //$calc_date = "N/A";
 			} else {
 				$info .= $indent."Ok -- Advent begins on $advent_sunday_date.<br />"; // tft
 			}
