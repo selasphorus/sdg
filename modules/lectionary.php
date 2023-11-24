@@ -1010,11 +1010,11 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		
 		// If there's no $calc_formula yet, use the date_calculation_str directly
 		if ( empty($calc_formula) && empty($calc_date) ) {
-			$info .= $indent."calc based directly on date_calculation_str<br />"; // .'<span class="notice">'.'</span>'
+			$info .= '<span class="notice">'."calc based directly on date_calculation_str</span><br />"; // .'</span>'
 			if ( $calc_boia != "after" ) {
 				$calc_formula = $date_calculation_str;               
 			} else {
-				//$info .= $indent."Unable to determine calc_formula -- calc_boia: \"$calc_boia\"; calc_date: $calc_date<br />";
+				if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calc_boia\"; calc_date: $calc_date</span><br />"; }
 			}
 		}
 		
@@ -1075,7 +1075,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 
 	}        
 	
-    // END WIP
+    $info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />';
     
     $info .= '</div>';
         
