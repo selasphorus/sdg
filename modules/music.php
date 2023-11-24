@@ -1,4 +1,4 @@
-$wp_args_related$wp_args_related$wp_args_related<?php
+<?php
 
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
