@@ -1098,9 +1098,9 @@ function calc_litdates( $atts = [] ) {
     
     // Extract
 	extract( $args );
-	
-    $year = get_query_var( 'y' );
-    if ( $year == "" ) { $year = $year; } //$year = get_query_var( 'year' ) ? get_query_var( 'year' ) : $year;
+
+	// WIP
+    if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
     
     // Set up the WP query args
 	$wp_args = array(
