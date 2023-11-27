@@ -181,7 +181,7 @@ jQuery(document).ready(function($) {
             
             console.log('NO cvalue found for '+cname);
             
-            var theDialog = prepDialog( handle_id, dialog_id )( dialog_id );
+            var theDialog = prepDialog( handle_id, dialog_id );
             
             theDialog.dialog("open");
             
