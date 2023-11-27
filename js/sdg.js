@@ -687,7 +687,7 @@ jQuery(document).ready(function($) {
             // my: Defines which position on the element being positioned to align with the target element
             // at: Defines which position on the target element to align the positioned element against
             // of: Which element to position against
-            position: { my: modal_anchor, at: modal_at, of: target_element }
+            position: { my: modal_anchor, at: modal_at, of: target_element, collision: "fit" }
             //position: { my: "center top", at: "center top+25%", of: window }
         });
 
