@@ -648,14 +648,15 @@ jQuery(document).ready(function($) {
         
         var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
         if ( emwidth < 56 && handle_id != dialog_id ) { // For mobile devices, effectively, where sticky header isn't sticky -- except where handle_id is same as dialog_id, as w/ nf_dialog
-        	var target_element = handle_id;
+        	target_element = handle_id;
         	//modal_anchor = "center center";
         } else if ( scroll > 100 ) {
-        	var target_element = handle_id;
+        	modal_at = "center top+"+offset.top;
+        	//target_element = handle_id;
         	//modal_anchor = "center center";
         }
         //
-        console.log("offset top: " + offset.top + "; offset left: " + offset.left);
+        console.log("handle offset top: " + offset.top + "; offset left: " + offset.left);
         console.log('scroll: '+scroll);
         console.log('emwidth: '+emwidth);
         console.log('modal_anchor: '+modal_anchor);
