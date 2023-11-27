@@ -636,23 +636,29 @@ jQuery(document).ready(function($) {
 
 		console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
 		
+		var target_element = "#site-navigation"; // default
+		//
         var modalDimensions = getModalDimensions();
         var modalwidth = modalDimensions["width"];
         var modalheight = modalDimensions["height"];
+        var modal_anchor = "center top";
         var modal_at = modalDimensions["modal_at"];
-        var scroll = $(window).scrollTop();
-        console.log('scroll: '+scroll);
-        
+        var scroll = $(window).scrollTop();        
         var offset = $(handle_id).offset();
-        console.log("offset top: " + offset.top + "; offset left: " + offset.left);
         
         var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
         if ( emwidth < 56 && handle_id != dialog_id ) { // For mobile devices, effectively, where sticky header isn't sticky -- except where handle_id is same as dialog_id, as w/ nf_dialog
         	var target_element = handle_id;
-        } else {
-        	var target_element = "#site-navigation";
+        	modal_anchor = "center center";
+        } else if ( scroll > 100 ) {
+        	var target_element = handle_id;
+        	modal_anchor = "center center";
         }
+        //
+        console.log("offset top: " + offset.top + "; offset left: " + offset.left);
+        console.log('scroll: '+scroll);
         console.log('emwidth: '+emwidth);
+        console.log('modal_anchor: '+modal_anchor);
         console.log('target_element: '+target_element);
 
         var theDialog = $(dialog_id).dialog({      
@@ -667,7 +673,7 @@ jQuery(document).ready(function($) {
             // my: Defines which position on the element being positioned to align with the target element
             // at: Defines which position on the target element to align the positioned element against
             // of: Which element to position against
-            position: { my: "center top", at: modal_at, of: target_element }
+            position: { my: modal_anchor, at: modal_at, of: target_element }
             //position: { my: "center top", at: "center top+25%", of: window }
         });
 
