@@ -579,8 +579,6 @@ jQuery(document).ready(function($) {
         //
         var modalwidth;
         var modalheight;
-
-        //alert ("window dimensions: "+winwidth+" x "+winheight);
         
         // Width
         if ( winwidth > 1300) {
@@ -604,18 +602,18 @@ jQuery(document).ready(function($) {
             modalheight = winheight * 0.8;
         }
         
-        //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight+'; emwidth: '+emwidth);
-        console.log('winheight: '+winheight);
-        console.log('winwidth: '+winwidth);
-        console.log('modalheight: '+modalheight);
-        console.log('modalwidth: '+modalwidth);
+        //console.log('winheight: '+winheight);
+        //console.log('winwidth: '+winwidth);
+        //console.log('modalheight: '+modalheight);
+        //console.log('modalwidth: '+modalwidth);
         
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
         modalheight = Math.round(modalheight);
 
         if ( modalheight > 500 ) { modalheight = 500; }
-        //console.log('modalwidth: '+modalwidth+'; modalheight: '+modalheight);
+        //console.log("window dimensions: "+winwidth+" x "+winheight);
+        //console.log("modal dimensions: "+modalwidth+" x "+modalheight);
 
         var dimensions = { height:modalheight, width:modalwidth };
 
@@ -648,7 +646,7 @@ jQuery(document).ready(function($) {
         //if ( winheight < 400) { modal_at = "center bottom+10%"; }
         
         // Adjust defaults as needed based on screen size, scroll position, etc.
-        if ( emwidth < 56  ) { // For mobile devices, effectively, where sticky header isn't sticky
+        /*if ( emwidth < 56  ) { // For mobile devices, effectively, where sticky header isn't sticky
         	if ( handle_id == dialog_id ) { // Is handle_id same as dialog_id? (as w/ nf_dialog)
         		// tbd
         	} else {
@@ -664,16 +662,16 @@ jQuery(document).ready(function($) {
 				//modal_anchor = "center center";
 			}
         
-        }
+        }*/
         
         //
-        console.log('emwidth: '+emwidth);
-        console.log('scroll: '+scroll);
-        console.log("handle offset top: " + offset.top + "; handle offset left: " + offset.left);
-        console.log('-------');
-        console.log('modal_anchor: '+modal_anchor);
-        console.log('modal_at: '+modal_at);
-        console.log('target_element: '+target_element);
+        //console.log('emwidth: '+emwidth);
+        //console.log('scroll: '+scroll);
+        //console.log("handle offset top: " + offset.top + "; handle offset left: " + offset.left);
+       	//console.log('-------');
+        //console.log('modal_anchor: '+modal_anchor);
+        //console.log('modal_at: '+modal_at);
+        //console.log('target_element: '+target_element);
 
         var theDialog = $(dialog_id).dialog({      
         	//title: dialog_id,
