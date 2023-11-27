@@ -108,7 +108,13 @@ jQuery(document).ready(function($) {
         var cvalue = getCookie(cname);
         //let cname = 'email_capture_attempted';
         //let cvalue = getCookie(cname);
+        
+        //var handle_id = "#"+$(this).attr('id');
+        //var dialog_id = handle_id.replace(/handle/g, "content");
+        var handle_id = "#nf_dialog";
         var dialog_id = "#nf_dialog";
+        //console.log('handle_id: '+handle_id);
+    	//console.log('dialog_id: '+dialog_id);
         
         if (cvalue != "") {
         
@@ -166,6 +172,7 @@ jQuery(document).ready(function($) {
         // Check cookie
         var cname = 'human_verified';
         var cvalue = getCookie(cname);
+        var handle_id = "#nf_dialog";
         var dialog_id = "#nf_dialog";
         
         if (cvalue != "") {
@@ -635,7 +642,7 @@ jQuery(document).ready(function($) {
         var modal_at = modalDimensions["modal_at"];
         
         var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
-        if ( emwidth < 56 ) { // For mobile devices, effectively, where sticky header isn't sticky
+        if ( emwidth < 56 && handle_id != dialog_id ) { // For mobile devices, effectively, where sticky header isn't sticky -- except where handle_id is same as dialog_id, as w/ nf_dialog
         	var target_element = handle_id;
         } else {
         	var target_element = "#site-navigation";
