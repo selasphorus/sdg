@@ -640,6 +640,8 @@ jQuery(document).ready(function($) {
         var modalwidth = modalDimensions["width"];
         var modalheight = modalDimensions["height"];
         var modal_at = modalDimensions["modal_at"];
+        var scroll = $(window).scrollTop();
+        console.log('scroll: '+scroll);
         
         var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
         if ( emwidth < 56 && handle_id != dialog_id ) { // For mobile devices, effectively, where sticky header isn't sticky -- except where handle_id is same as dialog_id, as w/ nf_dialog
