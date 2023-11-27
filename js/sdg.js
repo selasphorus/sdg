@@ -111,7 +111,7 @@ jQuery(document).ready(function($) {
         
         //var handle_id = "#"+$(this).attr('id');
         //var dialog_id = handle_id.replace(/handle/g, "content");
-        var handle_id = "#nf_dialog";
+        var handle_id = "#nf_dialog"; // ???
         var dialog_id = "#nf_dialog";
         //console.log('handle_id: '+handle_id);
     	//console.log('dialog_id: '+dialog_id);
@@ -172,7 +172,7 @@ jQuery(document).ready(function($) {
         // Check cookie
         var cname = 'human_verified';
         var cvalue = getCookie(cname);
-        var handle_id = "#nf_dialog";
+        var handle_id = "#nf_dialog"; // ???
         var dialog_id = "#nf_dialog";
         
         if (cvalue != "") {
