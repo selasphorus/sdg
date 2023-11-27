@@ -565,6 +565,7 @@ jQuery(document).ready(function($) {
 	
     /**** Modal PopUp Windows ***/
 
+	// Determine modal dimensions (width, height0 based on width and height of dinwo)
     function getModalDimensions() {
     
     	console.log('about to getModalDimensions'); // tft
@@ -578,12 +579,10 @@ jQuery(document).ready(function($) {
         //
         var modalwidth;
         var modalheight;
-        //var modalposition;
-        var modal_at;   
 
         //alert ("window dimensions: "+winwidth+" x "+winheight);
         
-        // Determine dimensions for modal window
+        // Width
         if ( winwidth > 1300) {
             modalwidth = winwidth * 0.6;
         } else if ( winwidth > 800) {
@@ -594,21 +593,15 @@ jQuery(document).ready(function($) {
             modalwidth = winwidth * 0.99;
         }
         
-		// Determine positioning for modal window
-		var modal_at_default = "center bottom+50px";
+        // Height
         if ( winheight > 1200) {
             modalheight = winheight * 0.7;
-            //modal_at = "center top+25%";
-            modal_at = modal_at_default;
         } else if ( winheight > 800) {
             modalheight = winheight * 0.75;
-            modal_at = modal_at_default;
         } else if ( winheight > 400) {
             modalheight = winheight * 0.75;
-            modal_at = modal_at_default;
         } else {
             modalheight = winheight * 0.8;
-            modal_at = "center bottom+10%";
         }
         
         //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight+'; emwidth: '+emwidth);
@@ -616,17 +609,15 @@ jQuery(document).ready(function($) {
         console.log('winwidth: '+winwidth);
         console.log('modalheight: '+modalheight);
         console.log('modalwidth: '+modalwidth);
-        console.log('modal_at: '+modal_at);
         
 		// Round the numbers
         modalwidth = Math.round(modalwidth);
         modalheight = Math.round(modalheight);
 
         if ( modalheight > 500 ) { modalheight = 500; }
-        //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")");
         //console.log('modalwidth: '+modalwidth+'; modalheight: '+modalheight);
 
-        var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
+        var dimensions = { height:modalheight, width:modalwidth };
 
         return dimensions;
 
@@ -636,30 +627,52 @@ jQuery(document).ready(function($) {
 
 		console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
 		
-		var target_element = "#site-navigation"; // default
-		//
+		// Get modal dimensions
         var modalDimensions = getModalDimensions();
-        var modalwidth = modalDimensions["width"];
-        var modalheight = modalDimensions["height"];
-        var modal_anchor = "center top";
-        var modal_at = modalDimensions["modal_at"];
-        var scroll = $(window).scrollTop();        
-        var offset = $(handle_id).offset();
+        var modal_height = modalDimensions["height"];
+        var modal_width = modalDimensions["width"];
         
-        var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
-        if ( emwidth < 56 && handle_id != dialog_id ) { // For mobile devices, effectively, where sticky header isn't sticky -- except where handle_id is same as dialog_id, as w/ nf_dialog
-        	target_element = handle_id;
+		// Determine positioning for modal window
+		// --------------------------------------
+		
+		// Set positioning defaults
+		var target_element = "#site-navigation"; // Which element to position against		
+        var modal_anchor = "center top"; // Defines which position on the element being positioned to align with the target element
+		var modal_at = "center bottom+50px"; // Defines which position on the target element to align the positioned element against
+
+		//
+		var winheight = $(window).height();
+		var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
+        var scroll = $(window).scrollTop();
+        var offset = $(handle_id).offset();
+        //if ( winheight < 400) { modal_at = "center bottom+10%"; }
+        
+        // Adjust defaults as needed based on screen size, scroll position, etc.
+        if ( emwidth < 56  ) { // For mobile devices, effectively, where sticky header isn't sticky
+        	if ( handle_id == dialog_id ) { // Is handle_id same as dialog_id? (as w/ nf_dialog)
+        		// tbd
+        	} else {
+        		target_element = handle_id;
+        	}        	
         	//modal_anchor = "center center";
-        } else if ( scroll > 100 ) {
-        	modal_at = "center top+"+offset.top;
-        	//target_element = handle_id;
-        	//modal_anchor = "center center";
+        	
+        } else {
+        
+        	if ( scroll > 100 ) {
+				//modal_at = "center top+"+offset.top;
+				//target_element = handle_id;
+				//modal_anchor = "center center";
+			}
+        
         }
+        
         //
-        console.log("handle offset top: " + offset.top + "; offset left: " + offset.left);
-        console.log('scroll: '+scroll);
         console.log('emwidth: '+emwidth);
+        console.log('scroll: '+scroll);
+        console.log("handle offset top: " + offset.top + "; handle offset left: " + offset.left);
+        console.log('-------');
         console.log('modal_anchor: '+modal_anchor);
+        console.log('modal_at: '+modal_at);
         console.log('target_element: '+target_element);
 
         var theDialog = $(dialog_id).dialog({      
@@ -667,8 +680,8 @@ jQuery(document).ready(function($) {
         	//appendTo: "#someElem" // Which element the dialog (and overlay, if modal) should be appended to. // Default: "body"      
             autoOpen: false,
             modal: true,
-            height: modalheight,
-            width: modalwidth,
+            height: modal_height,
+            width: modal_width,
             closeOnEscape: true,
             closeText: "x",
             // my: Defines which position on the element being positioned to align with the target element
