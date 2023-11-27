@@ -636,9 +636,9 @@ jQuery(document).ready(function($) {
 		// --------------------------------------
 		
 		// Set positioning defaults
-		var target_element = "#site-navigation"; // Which element to position against		
-        var modal_anchor = "center top"; // Defines which position on the element being positioned to align with the target element
-		var modal_at = "center bottom+50px"; // Defines which position on the target element to align the positioned element against
+		var target_element = null; //var target_element = "#site-navigation"; // Which element to position against		
+        var modal_anchor = "center"; //var modal_anchor = "center top"; // Defines which position on the element being positioned to align with the target element
+		var modal_at = "center"; //var modal_at = "center bottom+50px"; // Defines which position on the target element to align the positioned element against
 
 		//
 		var winheight = $(window).height();
