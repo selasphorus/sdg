@@ -1406,8 +1406,28 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		
 		// TODO: create/update widget
 		
+		$postarr = array();
+		$meta_input = array();
+		//
 		$snippet_title = $widget_title;
 		$snippet_content = $widget_content;
+		
+		$info .= "snippet_title: ".$snippet_title."<br />";
+		
+		// Does a snippet already exist based on this widget?
+		$snippet_id = get_snippet_by_post_id ( $post_id );
+		if ( !$snippet_id ) {
+			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
+			$snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+			if ( $snippet_id ) { $info .= "Snippet matched by title/content<br />"; } else { $info .= "No snippet match found by title/content<br />"; }
+		}
+		//
+		if ( $snippet_id ) {
+			$postarr['ID'] = $snippet_id;
+			$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
+		} else {
+			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
+		}		
 		
 		// Modify generic titles
 		// "More Resources"/"About the Artist"
@@ -1420,8 +1440,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$snippet_title .= " [".trim($post_title)."]";
 		}
 		
-		$info .= "snippet_title: ".$snippet_title."<br />";
-		
+		// Clean up the content
 		// TODO: eliminate redundancy -- make relativize_urls function
 		// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
 		// e.g. <a href="https://stcnyclive.wpengine.com/theology/">Gain understanding by attending classes</a>
@@ -1432,26 +1451,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$snippet_content = str_replace('https://stcnycstg.wpengine.com/','/',$snippet_content);
 			$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
 		}
-		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";		
-		
-		$postarr = array();
-		$meta_input = array();
-				
-		// Does a snippet already exist based on this widget?
-		$snippet_id = get_snippet_by_post_id ( $post_id );
-		//
-		if ( !$snippet_id ) {
-			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
-			$snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
-			if ( $snippet_id ) { $info .= "Snippet matched by title/content<br />"; }
-		}
-		//
-		if ( $snippet_id ) {
-			$postarr['ID'] = $snippet_id;
-			$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
-		} else {
-			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
-		}
+		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";	
 		
 		$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 		$postarr['post_content'] = $snippet_content;
