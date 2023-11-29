@@ -1443,6 +1443,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		if ( !$snippet_id ) {
 			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
 			$snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+			if ( $snippet_id ) { $info .= "Snippet matched by title/content<br />";
 		}
 		//
 		if ( $snippet_id ) {
