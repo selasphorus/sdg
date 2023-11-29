@@ -1043,18 +1043,25 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$post_args = array();
 						$post_args['orderby'] = 'date';
 						$post_args['order'] = 'DESC';
+						//
+						$shortcode = "[display_posts";
 						
 						if ( isset($widget['number']) && !empty($widget['number']) ) {
 							//$meta_input['number'] = $widget['number'];
 							$post_args['limit'] = $widget['number'];
+							$shortcode .= ' limit="'.$widget['number'].'"';
 						}
 						if ( isset($widget['show_date']) && !empty($widget['show_date']) ) {
 							$meta_input['show_date'] = $widget['show_date'];
 							//$post_args['show_date'] = $widget['show_date']; // TBD/TODO?
+							//$shortcode .= ' show_date="'.$widget['show_date'].'"';
 						}
 						//
+						$shortcode .= "]";
+						//
 						if ( function_exists('birdhive_get_posts') ) {
-							$snippet_content .= birdhive_display_posts($post_args);							
+							//$snippet_content .= birdhive_display_posts($post_args);
+							$snippet_content .= $shortcode;						
 						}
 					}
 					
