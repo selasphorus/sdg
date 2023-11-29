@@ -765,10 +765,11 @@ function get_snippet_by_post_id ( $post_id = null ) {
 
 }
 
-function get_snippet_by_content ( $snippet_title = null, $snippet_content = null ) {
+function get_snippet_by_content ( $snippet_title = null, $snippet_content = null, $return = "id" ) {
 
-	$snippet_id = null;
+	$arr_info = array();
 	$info = "";
+	$snippet_id = null;
 	$snippets = array();
 	
 	if ( $snippet_title || $snippet_content ) {
@@ -808,7 +809,13 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	}
 	
-	return $snippet_id;
+	// If returning id alone finish here
+	if ( $return == "id" ) { return $snippet_id; }
+	
+	$arr_info['info'] = $info;
+	$arr_info['id'] = $snippet_id;
+	
+	return $arr_info;
 	
 }
 //
@@ -1418,7 +1425,9 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$snippet_id = get_snippet_by_post_id ( $post_id );
 		if ( !$snippet_id ) {
 			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
-			$snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+			$snippet_match = get_snippet_by_content ( $snippet_title, $snippet_content, "info" ); // $snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+			$info .= $snippet_match['info'];
+			$snippet_id = $snippet_match['id'];
 			if ( $snippet_id ) { $info .= "Snippet matched by title/content<br />"; } else { $info .= "No snippet match found by title/content<br />"; }
 		}
 		//
