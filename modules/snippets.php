@@ -750,7 +750,7 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 				array(
 					'key'		=> 'post_ids',
 					'compare' 	=> 'LIKE',
-					'value' 	=> '"'.$post_id.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
+					'value' 	=> $post_id,//'value' 	=> '"'.$post_id.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
 				)
 			),
 		);	
