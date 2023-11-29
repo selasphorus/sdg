@@ -970,6 +970,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
 				if ( $wtype == "recent" ) {
 					$wtype_option = "widget_recent-posts";
+					$wid = substr($wid, strpos($wid, "-") + 1);
 				} else {
 					$wtype_option = "widget_".$wtype;
 				}
