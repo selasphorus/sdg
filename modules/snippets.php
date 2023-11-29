@@ -821,13 +821,18 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-		$snippet_id = $snippets[0];
-		// Check to see if content also matches
-		// snippet->post_content... WIP
-		if ( count($snippets) == 1 ) {
-			//$snippet_id = $snippets[0];
-		} else if ( count($snippets) > 1 ) {
-			$info .= "More than one matching snippet!<br />";
+		foreach ( $snippets as $id ) {
+			$post = get_post( $id );
+			// Check to see if content also matches
+			$post_content = $post->post_content;
+			if ( $post_content == $snippet_content ) {
+				$snippet_id = $id;
+				break;
+			}
+		}
+		// For TS
+		if ( count($snippets) > 1 ) {
+			$info .= "More than one matching snippet found (by post_title)!<br />";
 			//$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 			$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		}
