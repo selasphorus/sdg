@@ -328,7 +328,7 @@ function get_snippets ( $args = array() ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
-    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
