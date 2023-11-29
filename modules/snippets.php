@@ -769,8 +769,8 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 		}
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	} else {
-		global $wpdb;
-		$info .= "wp_query: <pre>".print_r( $wpdb->last_query, true)."</pre>";
+		//global $wpdb;
+		//$info .= "wp_query: <pre>".print_r( $wpdb->last_query, true)."</pre>";
 	}
 	
 	// If returning id alone finish here
@@ -1471,7 +1471,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";	
 		
 		// Does a snippet already exist based on this widget?
-		$snippet_match = get_snippet_by_post_id ( $post_id, "info" );
+		$snippet_match = get_snippet_by_post_id ( $post_id ); //, "info"
 		$info .= $snippet_match['info'];
 		$snippet_id = $snippet_match['id'];
 		if ( $snippet_id ) {
@@ -1502,7 +1502,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
 		
-		$post_ids = array($post_id);
+		$post_ids = array( $post_id );
 		
 		// If snippet_id, get existing value for post_ids
 		if ( $snippet_id ) {
