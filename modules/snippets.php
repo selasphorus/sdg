@@ -1347,7 +1347,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 	
 	$info .= "<h2>Convert Post Widgets to Snippets</h2>";
 	$info .= "shortcode atts:<br />";
-	$info .= "post_id: ".$post_id."<br />";
+	$info .= "ids: ".$ids."<br />";
 	$info .= "limit: ".$limit."<br />";
 	$info .= "<hr />";
 	
