@@ -912,7 +912,6 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		//$varname = $wtype."_widgets";
 	}
 	// WIP
-	//wtype: ninja_forms_widget
 	//
 	//$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
 	//$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
@@ -963,23 +962,27 @@ ORDER BY `wpstc_options`.`option_name` ASC
 			$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {
 			
+				$widget = null; // init
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
 
 				// Separate type and id from widget_uid
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
-				$wtype_option = "widget_".$wtype;
+				if ( $wtype == "recent" ) {
+					$wtype_option = "widget_recent-posts";
+				} else {
+					$wtype_option = "widget_".$wtype;
+				}
 				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
 				// Widget type?
 				if ( isset($$wtype_option[$wid]) ) {
 					$widget = $$wtype_option[$wid];
 					$info .= "Matching $wtype widget found.<br />";
-				} else {
-					$widget = null;
+				} else if ( $wtype == "recent" ) {
+					//
 				}
 				if ( !in_array($wtype, $wtypes) ) {
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
-					$widget = null; // tft
 				}
 					
 				// If a widget was found, gather the info needed to create/update the corresponding snippet
