@@ -1038,11 +1038,20 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					
 					// Recent Posts Widget?
 					if ( $wtype == "recent" ) {
+						// TODO/WIP 231129: create snippet_content based on the following settings -- use sdg display_posts fcn(?)
+						//
+						$post_args = array();
 						if ( isset($widget['number']) && !empty($widget['number']) ) {
 							//$meta_input['number'] = $widget['number'];
+							$post_args['limit'] = $widget['number'];
 						}
 						if ( isset($widget['show_date']) && !empty($widget['show_date']) ) {
 							$meta_input['show_date'] = $widget['show_date'];
+							//$post_args['show_date'] = $widget['show_date']; // TBD/TODO?
+						}
+						//
+						if ( function_exists('birdhive_get_posts') ) {
+							$snippet_content .= birdhive_display_posts($post_args);							
 						}
 					}
 					
