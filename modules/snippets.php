@@ -759,7 +759,7 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 		$snippets = get_posts($wp_args);
 	}
 	
-	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
+	//$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		$snippet_id = $snippets[0];
@@ -822,7 +822,7 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 		$snippets = get_posts($wp_args);
 	}
 	
-	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
+	//$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		foreach ( $snippets as $id ) {
