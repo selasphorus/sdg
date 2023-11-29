@@ -1461,7 +1461,10 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		
 		// Does a snippet already exist based on this widget?
 		$snippet_id = get_snippet_by_post_id ( $post_id );
-		if ( !$snippet_id ) {
+		if ( $snippet_id ) {
+			$info .= "Snippet matched by post_id<br />";
+		} else {
+			$info .= "No snippet match found by post_id<br />";
 			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
 			$snippet_match = get_snippet_by_content ( $snippet_title, $snippet_content, "info" ); // $snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
 			$info .= $snippet_match['info'];
