@@ -1045,6 +1045,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$post_args['order'] = 'DESC';
 						//
 						$shortcode = "[display_posts";
+						//
+						$shortcode .= ' orderby="date"';
+						$shortcode .= ' order="DESC"';
+						$shortcode .= ' show_subtitles="false"';
 						
 						if ( isset($widget['number']) && !empty($widget['number']) ) {
 							//$meta_input['number'] = $widget['number'];
