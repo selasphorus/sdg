@@ -749,7 +749,7 @@ function get_snippet_by_post_id ( $post_id = null ) {
 				array(
 					'key'		=> 'post_id',
 					'compare' 	=> 'LIKE',
-					'value' 	=> '"' . $post_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+					'value' 	=> '"'.$post_id.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
 				)
 			),
 		);	
@@ -786,7 +786,7 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 			'post_status' => 'publish',
 			//'post_title' => $snippet_title, // Nope, this doesn't work
 			//'post_content' => $snippet_content, // Nope, this neither
-			's' => $snippet_title,
+			's' => '"'.$snippet_title.'"',
 			'search_columns' => array('post_title'),
 			'fields'      => 'ids',
 		);
