@@ -1041,6 +1041,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						// TODO/WIP 231129: create snippet_content based on the following settings -- use sdg display_posts fcn(?)
 						//
 						$post_args = array();
+						$post_args['orderby'] = 'date';
+						$post_args['order'] = 'DESC';
+						
 						if ( isset($widget['number']) && !empty($widget['number']) ) {
 							//$meta_input['number'] = $widget['number'];
 							$post_args['limit'] = $widget['number'];
