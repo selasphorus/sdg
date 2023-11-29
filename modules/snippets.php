@@ -770,7 +770,7 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	} else {
 		global $wpdb;
-		$info .= "wp_query: <pre>".print_r( $wpdb->last_query, true)."</pre>";
+		//$info .= "wp_query: <pre>".print_r( $wpdb->last_query, true)."</pre>";
 	}
 	
 	// If returning id alone finish here
