@@ -866,7 +866,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		'limit'   => 1,
         'sidebar_id' => null,
         'widget_id'	=> null,
-        'run_updates' => false,   
+        'run_updates' => false,
+        'wtypes' => 'default',
     ), $atts );
     
     // Extract
@@ -880,8 +881,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	//
-	$wtypes = array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' );
-	//$wpstc_options = array( 'widget_text', 'widget_custom_html', 'widget_ninja_forms_widget' );
+	if ( $wtypes == "default" ) { $wtypes = array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ); } else { $wtypes = explode(", ",$wtypes); }
 	//wtype: text => widget_text
 	//wtype: custom_html
 	//wtype: media_image => widget_media_image
