@@ -760,11 +760,11 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
-		// get existing post id
+		$snippet_id = $snippets[0];
 		if ( count($snippets) == 1 ) {
 			$snippet_id = $snippets[0];
 		} else if ( count($snippets) > 1 ) {
-			//$info .= "More than one matching snippet!<br />";
+			$info .= "More than one matching snippet!<br />";
 			//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		}
 		//$info .= "snippet_id: ".$snippet_id."<br />";
