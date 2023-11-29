@@ -968,9 +968,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 
 				// Separate type and id from widget_uid				
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
-				if ( $wtype == "recent" ) { $wtype = "recent-posts"; }
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
+				//
 				$wtype_option = "widget_".$wtype;
+				if ( $wtype == "recent" ) { $wtype_option .= "-posts"; }
 				$info .= "wtype: ".$wtype."/"."wid: ".$wid."/"."wtype_option: ".$wtype_option."<br />";
 				// Widget type?
 				if ( isset($$wtype_option[$wid]) ) {
