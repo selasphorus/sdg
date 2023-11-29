@@ -804,6 +804,7 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 			$snippet_id = $snippets[0];
 		} else if ( count($snippets) > 1 ) {
 			$info .= "More than one matching snippet!<br />";
+			$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 			$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		}
 		//$info .= "snippet_id: ".$snippet_id."<br />";
