@@ -1036,6 +1036,16 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
 					}
 					
+					// Recent Posts Widget?
+					if ( $wtype == "recent" ) {
+						if ( isset($widget['number']) && !empty($widget['number']) ) {
+							//$meta_input['number'] = $widget['number'];
+						}
+						if ( isset($widget['show_date']) && !empty($widget['show_date']) ) {
+							$meta_input['show_date'] = $widget['show_date'];
+						}
+					}
+					
 					// Image Widget?
 					if ( $wtype == "media_image" ) {
 						//
@@ -1092,7 +1102,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					}
 					
 					//
-					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "media_image" || $wtype == "ninja_forms_widget" ) ) {
+					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "media_image" || $wtype == "ninja_forms_widget" || $wtype == "recent" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
 					
