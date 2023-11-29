@@ -1502,18 +1502,23 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
 		
+		$post_ids = array($post_id);
+		
 		// If snippet_id, get existing value for post_ids
 		if ( $snippet_id ) {
-			$post_ids = get_field('post_ids', $snippet_id, false);
-			// Is the post_id already in the list? If not, add it
-			//wip
-			$post_ids .= "; ".$post_id;
+		
+			$updates = get_updated_field_value( $snippet_id, 'post_ids', $post_ids, 'array' ); // post_id, key, new_value, type
+			$info .= $updates['info'];
+			$updated_field_value = $updates['updated_value'];
+			//
+			if ( $updates && count($updated_field_value) > 0 ) {
+				$info .= count($updated_field_value)." items in updated_field_value array<br />";
+				//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
+				$meta_input['post_ids'] = serialize($updated_field_value);
+			}
 		} else {
-			$post_ids = $post_id;
+			$meta_input['post_ids'] = serialize($post_ids);
 		}
-		$meta_input['post_ids'] = $post_ids;
-		//$meta_input['post_id'] = $post_id; // Phase out this field(?)
-		//
 		
 		// Init action var
 		$action = null;
