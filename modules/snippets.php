@@ -732,10 +732,11 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
 }
 
-function get_snippet_by_post_id ( $post_id = null ) {
+function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 
-	$snippet_id = null;
+	$arr_info = array();
 	$info = "";
+	$snippet_id = null;
 	$snippets = array();
 	
 	if ( $post_id ) {
@@ -756,8 +757,9 @@ function get_snippet_by_post_id ( $post_id = null ) {
 		$snippets = get_posts($wp_args);
 	}
 	
+	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
-		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
+		$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		// get existing post id
 		if ( count($snippets) == 1 ) {
 			$snippet_id = $snippets[0];
@@ -768,7 +770,13 @@ function get_snippet_by_post_id ( $post_id = null ) {
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	}
 	
-	return $snippet_id;
+	// If returning id alone finish here
+	if ( $return == "id" ) { return $snippet_id; }
+	
+	$arr_info['info'] = $info;
+	$arr_info['id'] = $snippet_id;
+	
+	return $arr_info;
 
 }
 
@@ -807,8 +815,8 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 		$snippets = get_posts($wp_args);
 	}
 	
+	$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
-		$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 		$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		//$snippet_id = $snippets[0];
 		// Check to see if content also matches
@@ -1460,7 +1468,9 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";	
 		
 		// Does a snippet already exist based on this widget?
-		$snippet_id = get_snippet_by_post_id ( $post_id );
+		$snippet_match = get_snippet_by_post_id ( $post_id, "info" );
+		$info .= $snippet_match['info'];
+		$snippet_id = $snippet_match['id'];
 		if ( $snippet_id ) {
 			$info .= "Snippet matched by post_id<br />";
 		} else {
