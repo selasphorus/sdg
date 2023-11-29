@@ -1413,6 +1413,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			'compare' => '!=',
 			'value' => '',
 		),
+		// WIP: add handling of legacy sidebar fields, e.g. sidebar_0, sidebar_1.... -- for Pages only
 	);
 	$wp_args['meta_query'] = $meta_query;
 	
@@ -1476,7 +1477,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";	
 		
 		// Does a snippet already exist based on this widget?
-		$snippet_match = get_snippet_by_post_id ( $post_id, "info" );
+		$snippet_match = get_snippet_by_post_id ( $post_id ); //, "info"
 		$info .= $snippet_match['info'];
 		$snippet_id = $snippet_match['id'];
 		if ( $snippet_id ) {
@@ -1484,7 +1485,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		} else {
 			$info .= "No snippet match found by post_id<br />";
 			// Check to see if snippet exists with same title/content, so as to avoid creating duplicate snippets -- e.g. "More About Fr. Gioia"
-			$snippet_match = get_snippet_by_content ( $snippet_title, $snippet_content, "info" ); // $snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
+			$snippet_match = get_snippet_by_content ( $snippet_title, $snippet_content ); // , "info" // $snippet_id = get_snippet_by_content ( $snippet_title, $snippet_content );
 			$info .= $snippet_match['info'];
 			$snippet_id = $snippet_match['id'];
 			if ( $snippet_id ) { $info .= "Snippet matched by title/content<br />"; } else { $info .= "No snippet match found by title/content<br />"; }
@@ -1593,7 +1594,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
     
 }
 
-// WIP -- messy draft -- do not use
+// WIP
 add_shortcode('delete_widgets', 'delete_widgets');
 function delete_widgets ( $atts = [] ) {
 
