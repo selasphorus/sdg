@@ -1463,7 +1463,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$posts = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
-    $info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+    //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     $info .= "[".count($posts)."] posts found.<br />";
     $info .= "<hr /><br />";
     
