@@ -1338,7 +1338,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 	$arr_ids = array(); // this array will containing snippets matched for display on the given post
     
     $args = shortcode_atts( array(
-    	'post_id' => null,
+    	'ids' => null,
 		'limit'   => -1,
     ), $atts );
     
@@ -1362,6 +1362,12 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
         //'meta_key'		=> '_cs_replacements',
         //post__in (array) – use post ids. WIP -- array ( $post_id )
 	);
+	
+	if ( !empty($ids) ) {
+		$ts_info .= "Getting posts by IDs: ".$ids."<br />";				
+		$post_ids = array_map( 'intval', birdhive_att_explode( $ids ) );
+		$wp_args['post__in'] = $post_ids;
+	}
 	
 	// Meta query
 	$meta_query = array(

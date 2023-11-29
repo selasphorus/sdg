@@ -2242,10 +2242,10 @@ function event_program_cleanup( $atts = [] ) {
     $info .= "num_posts: ".$num_posts."<br />";
     if ( !empty($ids) ) {
     	$info .= "ids: ".$ids."<br />";
-    	$posts_in = array_map( 'intval', birdhive_att_explode( $ids ) );
+    	$post_ids = array_map( 'intval', birdhive_att_explode( $ids ) );
 		$field_check = "N/A";
     } else {
-    	$posts_in = null;
+    	$post_ids = null;
     }
     $info .= "++++++++++++++++++++++++++++++++++++++<br />";
     
@@ -2269,7 +2269,7 @@ function event_program_cleanup( $atts = [] ) {
 			);
 
 			// Posts by ID
-			if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
+			if ( $post_ids ) { $wp_args['post__in'] = $post_ids; }
 		
 			// First round query -- the quick ones
 			// Define meta_key and meta_value
@@ -2312,8 +2312,8 @@ function event_program_cleanup( $atts = [] ) {
 			);
 			
 			// Posts by ID
-			if ( $posts_in ) { 
-				$wp_args['post__in'] = $posts_in;
+			if ( $post_ids ) { 
+				$wp_args['post__in'] = $post_ids;
 			} else {				
 				// No IDs? Then use admin_tag to filter out posts that have already been processed
 				$wp_args['tax_query'] = array(
@@ -2572,7 +2572,7 @@ function event_program_cleanup( $atts = [] ) {
 				);
 
 				// Posts by ID
-				if ( $posts_in ) { $wp_args['post__in'] = $posts_in; }
+				if ( $post_ids ) { $wp_args['post__in'] = $post_ids; }
 		
 				// First round query -- the quick ones
 				// Define meta_key and meta_value
@@ -2617,8 +2617,8 @@ function event_program_cleanup( $atts = [] ) {
 			);
 			
 			// Posts by ID
-			if ( $posts_in ) { 
-				$wp_args['post__in'] = $posts_in;
+			if ( $post_ids ) { 
+				$wp_args['post__in'] = $post_ids;
 			} else {				
 				// No IDs? Then use admin_tag to filter out posts that have already been processed
 				$wp_args['tax_query'] = array(
