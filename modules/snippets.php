@@ -973,7 +973,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				} else {
 					$wtype_option = "widget_".$wtype;
 				}
-				$info .= "wtype: ".$wtype."/"."wid: ".$wid."<br />";
+				$info .= "wtype: ".$wtype."/"."wid: ".$wid."/"."wtype_option: ".$wtype_option."<br />";
 				// Widget type?
 				if ( isset($$wtype_option[$wid]) ) {
 					$widget = $$wtype_option[$wid];
