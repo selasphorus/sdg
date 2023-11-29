@@ -44,6 +44,10 @@
 	float: right;
 }
 
+.snippet .anchor_top {
+	display: none;
+}
+
 .up {
 	width: 0;
 	height: 0;
