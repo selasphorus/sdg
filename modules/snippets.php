@@ -1364,7 +1364,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 	);
 	
 	if ( !empty($ids) ) {
-		$ts_info .= "Getting posts by IDs: ".$ids."<br />";				
+		$info .= "Getting posts by IDs: ".$ids."<br />";				
 		$post_ids = array_map( 'intval', birdhive_att_explode( $ids ) );
 		$wp_args['post__in'] = $post_ids;
 	}
