@@ -907,6 +907,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 	//$text_widgets = get_option('widget_text');
 	//$html_widgets = get_option('widget_custom_html');
 	foreach ( $wtypes as $wtype ) {
+		if ( $wtype == "recent" ) { $wtype = "recent-posts"; }
 		$option_name = "widget_".$wtype;
 		$$option_name = get_option($option_name);
 		//$varname = $wtype."_widgets";
@@ -965,15 +966,11 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				$widget = null; // init
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
 
-				// Separate type and id from widget_uid
+				// Separate type and id from widget_uid				
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
+				if ( $wtype == "recent" ) { $wtype = "recent-posts"; }
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
-				if ( $wtype == "recent" ) {
-					$wtype_option = "widget_recent-posts";
-					$wid = substr($wid, strpos($wid, "-") + 1);
-				} else {
-					$wtype_option = "widget_".$wtype;
-				}
+				$wtype_option = "widget_".$wtype;
 				$info .= "wtype: ".$wtype."/"."wid: ".$wid."/"."wtype_option: ".$wtype_option."<br />";
 				// Widget type?
 				if ( isset($$wtype_option[$wid]) ) {
