@@ -258,10 +258,15 @@ function get_snippets ( $args = array() ) {
 		'post_status'	=> 'publish',
 		'posts_per_page'=> $limit,
         'fields'		=> 'ids',
-        'orderby'		=> 'meta_value',
-		'order'			=> 'ASC',
-        'meta_key'		=> 'sidebar_sortnum',
+        //'orderby'		=> 'meta_value',
+		//'order'			=> 'ASC',
+        //'meta_key'		=> 'sidebar_sortnum',
+        'orderby' => array( 
+			'sort_clause' => 'ASC',
+			'priority_clause' => 'ASC',
+		),
 	);
+	
 	
 	// Meta query
 	$meta_query = array(
@@ -270,6 +275,14 @@ function get_snippets ( $args = array() ) {
 			'key' => 'snippet_display',
 			'value' => array('show', 'selected', 'notselected'),
 			'compare' => 'IN',
+		),
+		'sort_clause' => array(
+			'key' => 'sidebar_sortnum',
+			'compare' => 'EXISTS',
+		),
+		'priority_clause' => array(
+			'key' => 'snippet_priority',
+			'compare' => 'EXISTS',
 		),
 		/*'sidebar_id' => array(
 			'key' => 'sidebar_id',
@@ -291,6 +304,25 @@ function get_snippets ( $args = array() ) {
 			),
 		),
 	);
+	/*
+	$args = array(
+		'meta_query' => array(
+			'relation' => 'AND',
+			'query_one' => array(
+				'key' => 'key_one',
+				'value' => 'value_one', // Optional
+			),
+			'query_two' => array(
+				'key' => 'key_two',
+				'compare' => 'EXISTS', // Optional
+			), 
+		),
+		'orderby' => array( 
+			'query_one' => 'ASC',
+			'query_two' => 'DESC',
+		),
+	);
+	*/
 	$wp_args['meta_query'] = $meta_query;
 	
 	$arr_posts = new WP_Query( $wp_args );
