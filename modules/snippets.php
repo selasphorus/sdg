@@ -747,7 +747,7 @@ function get_snippet_by_post_id ( $post_id = null ) {
 			'fields'      => 'ids',
 			'meta_query'	=> array(
 				array(
-					'key'		=> 'post_id',
+					'key'		=> 'post_ids',
 					'compare' 	=> 'LIKE',
 					'value' 	=> '"'.$post_id.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
 				)
