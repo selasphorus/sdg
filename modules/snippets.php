@@ -1547,7 +1547,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$update_key = 'target_by_post';
 			$update_value = array($post_id);
 			$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
-			$key_ts_info .= $updates['info'];
+			$info .= $updates['info'];
 			$updated_field_value = $updates['updated_value'];
 			if ( $updates && count($updated_field_value) > 0 ) {
 				$info .= "about to update field '$update_key'<br />";
