@@ -739,6 +739,8 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 	$snippet_id = null;
 	$snippets = array();
 	
+	$info .= ">> get_snippet_by_post_id <<<br />";
+	
 	if ( $post_id ) {
 		$wp_args = array(
 			'post_type'   => 'snippet',
@@ -789,6 +791,8 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	$info = "";
 	$snippet_id = null;
 	$snippets = array();
+	
+	$info .= ">> get_snippet_by_content <<<br />";
 	
 	//$query = new WP_Query( array( 's' => 'keyword' ) );
 	if ( $snippet_title || $snippet_content ) {
