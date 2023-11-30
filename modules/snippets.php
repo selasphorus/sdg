@@ -261,9 +261,9 @@ function get_snippets ( $args = array() ) {
         //'orderby'		=> 'meta_value',
 		//'order'			=> 'ASC',
         //'meta_key'		=> 'sidebar_sortnum',
-        'orderby' => array( 
-			'sort_clause' => 'ASC',
+        'orderby' => array(
 			'priority_clause' => 'ASC',
+			'sort_clause' => 'ASC',
 		),
 	);
 	
