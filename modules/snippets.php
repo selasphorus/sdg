@@ -2664,7 +2664,7 @@ function sdg_update_custom_field ( $args = array() ) {
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-	//$info .= "args: <pre>".print_r($args, true)."</pre>";
+	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
 	
 	// Make sure we've got something to update
@@ -2676,6 +2676,7 @@ function sdg_update_custom_field ( $args = array() ) {
 	
 	// Get updated value, as needed
 	if ( $arr_additions || $arr_removals ) {
+		$info .= "get updated value based on arr_additions/arr_removals<br />";
 		$updated = get_updated_arr_field_value ( $args );
 		$info .= $updated['info'];
 		$value = $updated['arr_updated'];
@@ -2770,16 +2771,18 @@ function get_updated_arr_field_value ( $args = array() ) {
 	if ( is_array($arr_current) && !empty($arr_current) ) {
 	
 		$info .= count($arr_current)." items in arr_current array<br />";
+		$info .= "About to attempt sorting [disabled]<br />";
+		// WIP 231130
 		//$info .= "=> ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
 		// TODO: what about if this isn't an array of post ids? generalize... tbd
+		/*
 		$arr_current_sorted = sort_post_ids_by_title($arr_current);
 		if ( $arr_current_sorted ) {
 			$info .= $arr_current_sorted['info'];
 			$arr_current = $arr_current_sorted['post_ids'];
 			//$info .= "arr_current (sorted): ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
 		}
-		// re-serialize?
-		//update_field( $target_key, $arr_current, $snippet_id );
+		*/
 		
 	} else if ( empty($arr_current) ) {
 	
@@ -2794,13 +2797,16 @@ function get_updated_arr_field_value ( $args = array() ) {
 	// Prepare the revised data	
 	if ( $field_type == 'repeater' ) {
 		
-		// First, remove duplicates and repeater_removals
-		
+		// First, remove duplicates and repeater_removals		
 		if ( !empty($repeater_rows) ) {
 			
 			$info .= count($repeater_rows)." repeater_rows<br />"; //$key_ts_info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";//"<br />"; //<pre></pre>
 		
 			$info .= "<h4>About to clean up repeater_rows by removing repeater_removals...</h4>";
+			
+			// Remove duplicates?
+			//$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
+			
 			// Update repeater_rows array by removing removals
 			if ( !empty($repeater_removals) ) {
 				sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
