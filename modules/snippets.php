@@ -1876,7 +1876,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$post = get_post( $p_id );
 					if ( $post ) {
 						
-						$post_info = $x.".) ".$post->post_title." [$id]";
+						$post_info = $x.".) ".$post->post_title." [$p_id]";
 						// Get post status -- we're only interested published posts
 						$post_status = $post->post_status; // get_post_status( $id );					
 						$slug = $post->post_name;
