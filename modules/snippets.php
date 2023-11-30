@@ -1926,7 +1926,26 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
-				$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
+				if ( count($wildcard_urls > 0 ) ) {
+				
+					$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
+					$update_key = 'target_by_url';
+					$wildcard_updates = get_updated_field_value( $snippet_id, $update_key, $wildcard_urls, 'array' ); // post_id, key, new_value, type
+					$key_ts_info .= $wildcard_updates['info'];
+					$wildcard_updates_field_value = $wildcard_updates['updated_value'];
+					if ( $wildcard_updates && count($wildcard_updates_field_value) > 0 ) {
+						$key_ts_info .= "about to update field '$update_key'<br />";
+						$key_ts_info .= count($wildcard_updates_field_value)." items in wildcard_updates_field_value array<br />";
+						//$key_ts_info .= "=> <pre>".print_r($wildcard_updates_field_value, true)."</pre>";
+						//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($wildcard_updates_field_value, true)."<br />";
+						if ( update_field( $update_key, $wildcard_updates_field_value, $snippet_id ) ) {
+							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
+						} else {
+							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
+						}
+					}
+				
+				}
 				$key_ts_info .= "<hr />";
 				//
 				
