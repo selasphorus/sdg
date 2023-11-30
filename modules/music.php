@@ -2472,7 +2472,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     }
     
     $ts_info .= 'rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
-    $rep_ids = array_unique($rep_ids);
+    //$rep_ids = array_unique($rep_ids);
     //$info .= 'array_unique rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
     //$info .= "<br />+++++++++++<br />";
     
