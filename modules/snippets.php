@@ -1865,63 +1865,59 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "update_limit: ".$update_limit."<br />";
 				
 				$key_ts_info .= "-----------<br />";
-				foreach ( $conditions as $condition ) {				
+				$slug_to_match = ""; // init
+				foreach ( $conditions as $x => $condition ) {	
+							
 					$p_id = intval($condition);
 					//$key_ts_info .= "p_id: ".$p_id."<br />";
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					if ( $post ) {
+						
+						$post_info = $x.".) ".$post->post_title." [$id]";
+						// Get post status -- we're only interested published posts
+						$post_status = $post->post_status; // get_post_status( $id );					
+						$slug = $post->post_name;
+						$post_type = $post->post_type;
+						//
+						if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
+						$post_info .= " // ".$slug; //" // "
+						
+						// WIP 231117/231129...
+						// TODO: look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
+						$base_slug = ""; // init
+						if ( $post_type == "event" ) {
+							$base_slug = substr($slug, 0, -11);							
+							if ( $base_slug == $slug_to_match ) {
+								$post_info .= " // <strong>".$base_slug."</strong>";
+							} else {
+								$post_info .= " // ".$base_slug;
+							}
+						}
+					
+						// Is this an attached instance of a recurring event?
 						$recurrence_id = get_post_meta( $p_id, '_recurrence_id', true );
 						if ( $recurrence_id ) {
-							$key_ts_info .= "p_id: ".$p_id."";
-							$key_ts_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
+							//$post_info .= "p_id: ".$p_id."";
+							$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
+							// Remove individual instance id from ids array and save parent id instead? or.... WIP
 							$matched_posts[] = $recurrence_id; // WIP
 						} else {
-							//$key_ts_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
+							//$post_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
 							$matched_posts[] = $p_id;
-							//$key_ts_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+							//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
+						$key_ts_info .= $post_info;
+						$slug_to_match = $base_slug;
+						
 					} else {
 						$key_ts_info .= "NO POST FOUND for p_id: ".$p_id."";
 					}		
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
-				
-				//
-				foreach ( $cs_post_ids as $x => $id ) {
-					
-					$post = get_post( $id );
-					$post_info = $x.".) ".$post->post_title." [$id]";
-				
-					// Get post status -- we're only interested published posts
-					$post_status = $post->post_status; // get_post_status( $id );					
-					$slug = $post->post_name;
-					$post_type = $post->post_type;
-					
-					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
-					$post_info .= " // ".$slug; //" // "
-					//$post_info .= "<br />";
-					// WIP 231117/231129...
-					// TODO: look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
-					// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
-					if ( $post_type == "event" ) {
-						$base_slug = substr($slug, 0, -11);
-						$post_info .= " // ".$base_slug;
-					}
-				
-					// Is this an attached instance of a recurring event?
-					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
-					if ( $recurrence_id ) {
-						$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span>';
-						// Remove individual instance id from ids array and save parent id instead? or.... WIP
-					} else {
-						//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
-					}
-					$post_info .= "<br />";
-					$info .= $post_info;
-				}
-				$info .= "<hr />";
+				$key_ts_info .= "<hr />";
 				//
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
