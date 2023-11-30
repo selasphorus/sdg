@@ -1926,7 +1926,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
-				if ( count($wildcard_urls > 0 ) ) {
+				if ( count($wildcard_urls) > 0 ) {
 				
 					$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
 					$update_key = 'target_by_url';
