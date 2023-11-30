@@ -304,31 +304,15 @@ function get_snippets ( $args = array() ) {
 			),
 		),
 	);
-	/*
-	$args = array(
-		'meta_query' => array(
-			'relation' => 'AND',
-			'query_one' => array(
-				'key' => 'key_one',
-				'value' => 'value_one', // Optional
-			),
-			'query_two' => array(
-				'key' => 'key_two',
-				'compare' => 'EXISTS', // Optional
-			), 
-		),
-		'orderby' => array( 
-			'query_one' => 'ASC',
-			'query_two' => 'DESC',
-		),
-	);
-	*/
 	$wp_args['meta_query'] = $meta_query;
 	
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
-    $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    // Print last SQL query string
+    global $wpdb;
+    $info .= "last_query: <pre>".$wpdb->last_query."</pre>"; // tft
     $info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
