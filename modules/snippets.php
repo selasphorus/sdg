@@ -1929,20 +1929,79 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				if ( count($wildcard_urls) > 0 ) {
 				
 					$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
-					$update_key = 'target_by_url';
-					$wildcard_updates = get_updated_field_value( $snippet_id, $update_key, $wildcard_urls, 'array' ); // post_id, key, new_value, type
+					$repeater_key = 'target_by_url';
+					$wildcard_updates = get_updated_field_value( $snippet_id, $repeater_key, $wildcard_urls, 'array' ); // post_id, key, new_value, type
 					$key_ts_info .= $wildcard_updates['info'];
-					$wildcard_updates_field_value = $wildcard_updates['updated_value'];
-					if ( $wildcard_updates && count($wildcard_updates_field_value) > 0 ) {
-						$key_ts_info .= "about to update field '$update_key'<br />";
+					$wildcard_update_urls = $wildcard_updates['updated_value'];
+					if ( $wildcard_updates && count($wildcard_update_urls) > 0 ) {
+					
+						//$key_ts_info .= "about to update field '$repeater_key'<br />";						
+						$key_ts_info .= "<h4>About to add to $repeater_key repeater_rows...</h4>";
+						
+						// TODO: streamline this via new repeater update fcn?
+						$repeater_rows = get_field( $repeater_key, $snippet_id );
+						$repeater_rows_revised = array();
+						if ( empty($repeater_rows) ) { 
+							$repeater_rows = array();
+							$repeater_values = array();
+						} else {
+							// Sort the existing repeater_rows and save the sorted array
+							$repeater_values = array_column($repeater_rows, 'url');
+							//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
+							array_multisort($repeater_values, SORT_ASC, $repeater_rows);
+							update_field( $repeater_key, $repeater_rows, $snippet_id );
+						}
+				
+						//$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
+						foreach ( $wildcard_update_urls as $url ) {
+							// TODO: make sure url isn't a duplicate of an existing array item
+							if ( in_array($url, $repeater_values) ) {
+								$key_ts_info .= "The url '".$url."' is already in the repeater_rows array<br />";
+							} else {
+								$repeater_rows_revised[] = array('url' => $url);
+								$key_ts_info .= "Added url '".$url."' to the repeater_rows_revised array<br />";
+							}
+						}
+						
+						// Update the field with the revised array
+						if ( !empty($repeater_rows_revised) ) {
+				
+							// Remove duplicates
+							$key_ts_info .= "About to update repeater_rows...<br />";
+							//
+							//$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
+							//
+							$repeater_values = array_column($repeater_rows_revised, 'url');
+							//$key_ts_info .= "repeater_rows_revised repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
+							array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
+							// Fix the sorting!
+							//
+							$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
+							//$key_ts_info .= "repeater_rows_revised: <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
+							//
+							if ( $repeater_rows_revised == $repeater_rows ) {
+								$key_ts_info .= "No changes necessary -- repeater_rows_revised == repeater_rows<br />";
+							} else {
+								//$key_ts_info .= "updates tmp disabled<br />";
+								if ( update_field( $repeater_key, $repeater_rows_revised, $snippet_id ) ) {
+									$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+								} else {
+									$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
+								}
+							}
+				
+						}
+				
+						/*
 						$key_ts_info .= count($wildcard_updates_field_value)." items in wildcard_updates_field_value array<br />";
-						//$key_ts_info .= "=> <pre>".print_r($wildcard_updates_field_value, true)."</pre>";
+						$key_ts_info .= "=> <pre>".print_r($wildcard_updates_field_value, true)."</pre>";
 						//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($wildcard_updates_field_value, true)."<br />";
 						if ( update_field( $update_key, $wildcard_updates_field_value, $snippet_id ) ) {
 							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
 						} else {
 							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
 						}
+						*/
 					}
 				
 				}
