@@ -1908,6 +1908,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$matched_posts[] = $p_id;
 							//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
+						$post_info .= "<br />";
 						$key_ts_info .= $post_info;
 						$slug_to_match = $base_slug;
 						
