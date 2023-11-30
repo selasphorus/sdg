@@ -2495,7 +2495,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $i = 0;
     foreach ( $rep_ids as $rep_id ) {
         
-        $info .= "rep_id: $rep_id<br />"; 
+        $ts_info .= 'rep_id: <pre>'.print_r($rep_id, true).'</pre>';
         continue;
         //if ( !is_int($rep_id) ) { $info .= "rep_id $rep_id NOT IS INT!<br />"; continue; }
         
