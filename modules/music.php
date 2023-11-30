@@ -2472,7 +2472,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     }
     
     $ts_info .= 'rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
-    //$rep_ids = array_unique($rep_ids);
+    
+    /////$rep_ids = array_unique($rep_ids);
     //$info .= 'array_unique rep_ids: <pre>'.print_r($rep_ids, true).'</pre>';
     //$info .= "<br />+++++++++++<br />";
     
@@ -2493,6 +2494,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $i = 0;
     foreach ( $rep_ids as $rep_id ) {
+        
+        if ( !is_int($rep_id) ) { $info .= "rep_id $rep_id NOT IS INT!<br />"; continue; }
         
         $post_id = $rep_id;
         $post_title = get_the_title($post_id);
