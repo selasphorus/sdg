@@ -310,9 +310,8 @@ function get_snippets ( $args = array() ) {
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
     //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-    // Print last SQL query string
-    global $wpdb;
-    $info .= "last_query: <pre>".$wpdb->last_query."</pre>"; // tft
+    // Print SQ
+    $info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // tft
     $info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
