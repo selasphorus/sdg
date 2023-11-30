@@ -1867,7 +1867,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "-----------<br />";
 				$slug_to_match = ""; // init
 				// order conditions (post_ids) by title
-				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working
+				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working // WIP 231129
 				foreach ( $conditions as $x => $condition ) {
 							
 					$p_id = intval($condition);
