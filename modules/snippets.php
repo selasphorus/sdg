@@ -1570,6 +1570,11 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
 		
+		//
+		$widget_position = get_post_meta( $post_id, 'post_sidebar_widget_position', true ); // options: top/bottom
+		if ( $widget_position == "top" ) { $snippet_priority = 1; } else { $snippet_priority = 3; }
+		$meta_input['snippet_priority'] = $snippet_priority;
+		
 		$post_ids = array( $post_id );
 		
 		// If snippet_id, get existing value for post_ids
