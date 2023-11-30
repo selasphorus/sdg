@@ -173,7 +173,7 @@ function get_snippets ( $args = array() ) {
     sdg_log( "function called: show_snippets", $do_log );
     
     // Init vars
-    $arr_info = array();
+    $arr_result = array();
     $info = "";
 	$active_snippets = array(); // this array will containing snippets matched for display on the given post
     
@@ -706,10 +706,10 @@ function get_snippets ( $args = array() ) {
 	// If returning array of IDs, finish here
 	if ( $return == "ids" ) { return $active_snippets; }
 	
-	$arr_info['info'] = $info;
-	$arr_info['ids'] = $active_snippets;
+	$arr_result['info'] = $info;
+	$arr_result['ids'] = $active_snippets;
 	
-	return $arr_info;
+	return $arr_result;
 	
 }
 
@@ -749,7 +749,7 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 
 function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 
-	$arr_info = array();
+	$arr_result = array();
 	$info = "";
 	$snippet_id = null;
 	$snippets = array();
@@ -793,16 +793,16 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 	// If returning id alone finish here
 	if ( $return == "id" ) { return $snippet_id; }
 	
-	$arr_info['info'] = $info;
-	$arr_info['id'] = $snippet_id;
+	$arr_result['info'] = $info;
+	$arr_result['id'] = $snippet_id;
 	
-	return $arr_info;
+	return $arr_result;
 
 }
 
 function get_snippet_by_content ( $snippet_title = null, $snippet_content = null, $return = "id" ) {
 
-	$arr_info = array();
+	$arr_result = array();
 	$info = "";
 	$snippet_id = null;
 	$snippets = array();
@@ -861,10 +861,10 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	// If returning id alone finish here
 	if ( $return == "id" ) { return $snippet_id; }
 	
-	$arr_info['info'] = $info;
-	$arr_info['id'] = $snippet_id;
+	$arr_result['info'] = $info;
+	$arr_result['id'] = $snippet_id;
 	
-	return $arr_info;
+	return $arr_result;
 	
 }
 //
@@ -1215,16 +1215,21 @@ ORDER BY `wpstc_options`.`option_name` ASC
 								//$info .= count($cs_post_ids)." posts using this sidebar: ".print_r($cs_post_ids,true)."<br />";
 								
 								//
-								// WIP generalized fcn to determine revised value
-								$updates = get_updated_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids, 'array' ); // post_id, key, new_value, type
+								// Determine revised value based on new and existing values for field
+								$update_args = array( 'post_id' => $snippet_id, 'key' => 'cs_post_ids', 'arr_additions' => $cs_post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
+								$updates = get_updated_arr_field_value( $update_args );
 								$info .= $updates['info'];
-								$updated_field_value = $updates['updated_value'];
+								$updated_value = $updates['updated_value'];
+								if ( $updated_value ) { $meta_input['cs_post_ids'] = $updated_value; }
+								/*$updates = get_updated_arr_field_value( $snippet_id, 'cs_post_ids', $cs_post_ids );
+								$info .= $updates['info'];
+								$updated_field_value = $updates['arr_updated'];
 								//
 								if ( $updates && count($updated_field_value) > 0 ) {
 									$info .= count($updated_field_value)." items in updated_field_value array<br />";
 									//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 									$meta_input['cs_post_ids'] = serialize($updated_field_value);
-								}
+								}*/
 								
 							} else {
 								$info .= "There are no posts using this custom sidebar<br />";
@@ -1579,16 +1584,14 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		
 		// If snippet_id, get existing value for post_ids
 		if ( $snippet_id ) {
-		
-			$updates = get_updated_field_value( $snippet_id, 'post_ids', $post_ids, 'array' ); // post_id, key, new_value, type
+			
+			// Determine revised value based on new and existing values for field
+			$update_args = array( 'post_id' => $snippet_id, 'key' => 'post_ids', 'arr_additions' => $post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
+			$updates = get_updated_arr_field_value( $update_args );
 			$info .= $updates['info'];
-			$updated_field_value = $updates['updated_value'];
-			//
-			if ( $updates && count($updated_field_value) > 0 ) {
-				$info .= count($updated_field_value)." items in updated_field_value array<br />";
-				//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-				$meta_input['post_ids'] = serialize($updated_field_value);
-			}
+			$updated_value = $updates['updated_value'];
+			if ( $updated_value ) { $meta_input['post_ids'] = $updated_value; }
+			
 		} else {
 			$meta_input['post_ids'] = serialize($post_ids);
 		}
@@ -1623,13 +1626,19 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 
 		//
 		if ( $action && $snippet_id ) {
-			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
-			// Update snippet logic
+		
+			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";	
+						
+			// Update snippet logic to add post from which sidebar content this snippet was created
+			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return'  => 'info', 'field_type' => 'relationship', );
+			$info .= sdg_update_custom_field( $update_args );
+			
+			/*
 			$update_key = 'target_by_post';
 			$update_value = array($post_id);
-			$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+			$updates = get_updated_arr_field_value( $snippet_id, $update_key, $update_value );
 			$info .= $updates['info'];
-			$updated_field_value = $updates['updated_value'];
+			$updated_field_value = $updates['arr_updated'];
 			if ( $updates && count($updated_field_value) > 0 ) {
 				$info .= "about to update field '$update_key'<br />";
 				$info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -1644,6 +1653,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 				//$info .= "field '$update_key'<br />";
 				//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 			}
+			*/
 			//$info .= "&rarr;&rarr; update_snippet_logic<br />";
 			//$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 		} else {
@@ -1861,6 +1871,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				}
 				
 				$matched_posts = array();
+				$matched_post_removals = array();
 				$update_limit = 250;
 				$key_ts_info .= "update_limit: ".$update_limit."<br />";
 				
@@ -1897,6 +1908,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								// Add this to URLs to target *instead of* matched_posts -- WIP...
 								$wildcard_url = $base_slug."*";
 								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
+								$matched_post_removals[] = $p_id;
 								continue;
 							} else {
 								$post_info .= " // ".$base_slug;
@@ -1925,96 +1937,24 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
+				$key_ts_info .= count($matched_post_removals)." matched_post_removals<br />";
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
-				if ( count($wildcard_urls) > 0 ) {
-				
-					$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
-					$repeater_key = 'target_by_url';
-					$wildcard_updates = get_updated_field_value( $snippet_id, $repeater_key, $wildcard_urls, 'array' ); // post_id, key, new_value, type
-					$key_ts_info .= $wildcard_updates['info'];
-					$wildcard_update_urls = $wildcard_updates['updated_value'];
-					if ( $wildcard_updates && count($wildcard_update_urls) > 0 ) {
-					
-						//$key_ts_info .= "about to update field '$repeater_key'<br />";						
-						$key_ts_info .= "<h4>About to add to $repeater_key repeater_rows...</h4>";
-						
-						// TODO: streamline this via new repeater update fcn?
-						$repeater_rows = get_field( $repeater_key, $snippet_id );
-						$repeater_rows_revised = array();
-						if ( empty($repeater_rows) ) { 
-							$repeater_rows = array();
-							$repeater_values = array();
-						} else {
-							// Sort the existing repeater_rows and save the sorted array
-							$repeater_values = array_column($repeater_rows, 'url');
-							//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
-							array_multisort($repeater_values, SORT_ASC, $repeater_rows);
-							update_field( $repeater_key, $repeater_rows, $snippet_id );
-						}
-				
-						//$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
-						foreach ( $wildcard_update_urls as $url ) {
-							// TODO: make sure url isn't a duplicate of an existing array item
-							if ( in_array($url, $repeater_values) ) {
-								$key_ts_info .= "The url '".$url."' is already in the repeater_rows array<br />";
-							} else {
-								$repeater_rows_revised[] = array('url' => $url);
-								$key_ts_info .= "Added url '".$url."' to the repeater_rows_revised array<br />";
-							}
-						}
-						
-						// Update the field with the revised array
-						if ( !empty($repeater_rows_revised) ) {
-				
-							// Remove duplicates
-							$key_ts_info .= "About to update repeater_rows...<br />";
-							//
-							//$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
-							//
-							$repeater_values = array_column($repeater_rows_revised, 'url');
-							//$key_ts_info .= "repeater_rows_revised repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
-							array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
-							// Fix the sorting!
-							//
-							$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
-							//$key_ts_info .= "repeater_rows_revised: <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
-							//
-							if ( $repeater_rows_revised == $repeater_rows ) {
-								$key_ts_info .= "No changes necessary -- repeater_rows_revised == repeater_rows<br />";
-							} else {
-								//$key_ts_info .= "updates tmp disabled<br />";
-								if ( update_field( $repeater_key, $repeater_rows_revised, $snippet_id ) ) {
-									$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-								} else {
-									$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-								}
-							}
-				
-						}
-				
-						/*
-						$key_ts_info .= count($wildcard_updates_field_value)." items in wildcard_updates_field_value array<br />";
-						$key_ts_info .= "=> <pre>".print_r($wildcard_updates_field_value, true)."</pre>";
-						//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($wildcard_updates_field_value, true)."<br />";
-						if ( update_field( $update_key, $wildcard_updates_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-						*/
-					}
-				
+				if ( count($wildcard_urls) > 0 ) {				
+					// Run the update
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return'  => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				$key_ts_info .= "<hr />";
-				//
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
 				/*
+					$repeater_key = 'target_by_url';
 				$update_key = $key;
 				$updated_field_value = $matched_posts;
-				//$updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+				// Determine revised value based on new and existing values for field
+				//$updates = get_updated_arr_field_value( $snippet_id, $update_key, $update_value );
 				//$key_ts_info .= $updates['info'];
-				//$updated_field_value = $updates['updated_value'];
+				//$updated_field_value = $updates['arr_updated'];
 				//if ( $updates && count($updated_field_value) > 0 ) {
 				if ( count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$update_key'<br />";
@@ -2038,13 +1978,14 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 				// Also save those same matched_posts/updated_field_value to the target_by_post field -- this field determines actual snippet display
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
+				
+				// Update field with revised value based on new and existing values for field
+				$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return'  => 'info', 'field_type' => 'relationship' );
+				$key_ts_info .= sdg_update_custom_field( $update_args );
+				/*
 				$update_key = 'target_by_post';
-				//$update_value = $updated_field_value;
-				$update_value = $matched_posts;
-				//
-				$secondary_updates = get_updated_field_value( $snippet_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
 				$key_ts_info .= $secondary_updates['info'];
-				$secondary_updated_field_value = $secondary_updates['updated_value'];
+				$secondary_updated_field_value = $secondary_updates['arr_updated'];
 				if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$update_key'<br />";
 					$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
@@ -2059,7 +2000,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					} else {
 						$key_ts_info .= "--- No updates run -- update limit set to $update_limit records or fewer ---<br />";
 					}
-				}
+				}*/
 				
 				//
 				$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
@@ -2115,11 +2056,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								$update_key = 'cs_post_ids';
 							}
 							$key_ts_info .= $i.") id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
-							/*
-							$update_value = $updated_field_value;
-							$tertiary_updates = get_updated_field_value( $snip_id, $update_key, $update_value, 'array' ); // post_id, key, new_value, type
+							/*$tertiary_updates = get_updated_arr_field_value( $snip_id, $update_key, $updated_field_value );
 							$key_ts_info .= $tertiary_updates['info'];
-							$tertiary_updated_field_value = $tertiary_updates['updated_value'];
+							$tertiary_updated_field_value = $tertiary_updates['arr_updated'];
 							if ( $tertiary_updates && count($tertiary_updated_field_value) > 0 ) {
 								$key_ts_info .= "about to update field '$update_key' for snip_id: $snip_id<br />";
 								$key_ts_info .= count($tertiary_updated_field_value)." items in tertiary_updated_field_value array<br />";
@@ -2311,9 +2250,12 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "<hr />";
 				
 				// Save the matched posts to the snippet field
-				$updates = get_updated_field_value( $snippet_id, $target_key, $matched_posts, 'array' ); // post_id, key, new_value, type
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return'  => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
+				$key_ts_info .= sdg_update_custom_field( $update_args );
+				
+				/*$updates = get_updated_arr_field_value( $snippet_id, $target_key, $matched_posts );
 				$key_ts_info .= $updates['info'];
-				$updated_field_value = $updates['updated_value'];
+				$updated_field_value = $updates['arr_updated'];
 				if ( $updates && count($updated_field_value) > 0 ) {
 					$key_ts_info .= "about to update field '$target_key'<br />";
 					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -2325,9 +2267,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
 					}
 				}
+				*/
 				
 				// Update the associated repeater field as needed
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return'  => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
+				/*
 				// First, remove duplicates and repeater_removals
 				$repeater_rows_revised = array();
 				//
@@ -2400,7 +2346,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					}
 				
 				}
-				
+				*/
 				
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 			
@@ -2439,10 +2385,15 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$key_ts_info .= "cpt_conditions: ".print_r($cpt_conditions, true)."<br />";
 					
 					// CPT conditions
+					// Update field with revised value based on new and existing values for field
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
+				
+					/*
 					$update_key = 'target_by_post_type';
-					$updates = get_updated_field_value( $snippet_id, $update_key, $cpt_conditions, 'array' ); // post_id, key, new_value, type
+					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $cpt_conditions );
 					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['updated_value'];
+					$updated_field_value = $updates['arr_updated'];
 					if ( $updates && count($updated_field_value) > 0 ) {
 						$key_ts_info .= "about to update field '$update_key'<br />";
 						$info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -2454,7 +2405,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						}
 					} else {
 						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}
+					}*/
 					$key_ts_info .= "<hr />";
 					/*
 					$existing_cpt_conditions = get_field( 'target_by_post_type', $snippet_id );
@@ -2478,10 +2429,15 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					*/
 					
 					// CPT Archive conditions
+					// Update field with revised value based on new and existing values for field
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
+					
+					/*
 					$update_key = 'target_by_post_type_archive';
-					$updates = get_updated_field_value( $snippet_id, $update_key, $cpt_archive_conditions, 'array' ); // post_id, key, new_value, type
+					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $cpt_archive_conditions );
 					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['updated_value'];
+					$updated_field_value = $updates['arr_updated'];
 					if ( $updates && count($updated_field_value) > 0 ) {
 						$key_ts_info .= "about to update field '$update_key'<br />";
 						$info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -2493,7 +2449,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						}
 					} else {
 						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}
+					}*/
 					$key_ts_info .= "<hr />";
 					/*
 					$existing_cpt_archive_conditions = get_field( 'target_by_post_type_archive', $snippet_id );
@@ -2518,10 +2474,15 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					*/
 					
 					// Taxonomy Archive Conditions
+					// Update field with revised value based on new and existing values for field				
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
+					
+					/*
 					$update_key = 'target_by_taxonomy_archive';
-					$updates = get_updated_field_value( $snippet_id, $update_key, $tax_conditions, 'array' ); // post_id, key, new_value, type
+					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $tax_conditions );
 					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['updated_value'];
+					$updated_field_value = $updates['arr_updated'];
 					if ( $updates && count($updated_field_value) > 0 ) {
 						$key_ts_info .= "about to update field '$update_key'<br />";
 						$info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -2533,7 +2494,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						}
 					} else {
 						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}
+					}*/
 					$key_ts_info .= "<hr />";
 					/*
 					$existing_tax_conditions = get_field( 'target_by_taxonomy_archive', $snippet_id );
@@ -2580,12 +2541,17 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						// TODO: if widget_logic condition is "is_single" => save instead as target_by_post_type = "post" // WIP 231115
 						if ( $condition == "is_single" ) {
 							$key_ts_info .= "special case: is_single<br />";
-							/// NB: this code is redundant -- maybe figure out a way to streamline this?
+							
+							// Update field with revised value based on new and existing values for field				
+							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return'  => 'info', 'field_type' => 'array' );
+							$key_ts_info .= sdg_update_custom_field( $update_args );
+					
+							/*
 							$update_key = 'target_by_post_type';
-							$new_value = array( "post" );
-							$updates = get_updated_field_value( $snippet_id, $update_key, $new_value, 'array' ); // post_id, key, new_value, type
+							$arr_additions = array( "post" );
+							$updates = get_updated_arr_field_value( $snippet_id, $update_key, $arr_additions );
 							$key_ts_info .= $updates['info'];
-							$updated_field_value = $updates['updated_value'];
+							$updated_field_value = $updates['arr_updated'];
 							if ( $updates && count($updated_field_value) > 0 ) {
 								$key_ts_info .= "about to update field '$update_key'<br />";
 								$info .= count($updated_field_value)." items in updated_field_value array<br />";
@@ -2597,7 +2563,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 								}
 							} else {
 								$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-							}
+							}*/
 							$key_ts_info .= "<hr />";							
 							///
 						} else {
@@ -2605,7 +2571,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						}						
 					}
 					
-					// TODO: update to use new get_updated_field_value fcn
+					// Update field with revised value based on new and existing values for field
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
+					
+					/*
 					$existing_conditions = get_field( 'target_by_location', $snippet_id );
 					if ( empty($existing_conditions) ) {
 						$key_ts_info .= "No existing_conditions => update `target_by_location` with widget_logic cpt_conditions<br />";
@@ -2623,7 +2593,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						} else {
 							$key_ts_info .= "update FAILED for field `target_by_location` for snippet_id: $snippet_id<br />";
 						}
-					}
+					}*/
 					
 				}
 				
@@ -2672,109 +2642,280 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	
 }
 
-//
-function get_updated_field_value ( $post_id = null, $key = null, $new_value = null, $type = 'array' ) {
+// **************************
+// Helper function -- TODO: move to common_functions or admin_functions?
+function sdg_update_custom_field ( $args = array() ) {
+
+	$info = "";
+	$updated = false;
+	$info .= ">> sdg_update_custom_field <<<br />";
+	
+	// Defaults
+	$defaults = array(
+		'post_id' => null,
+		'key' => null,
+		'field_type' => 'string', // other options include: array, serialized, repeater, relationship...
+		'repeater_field' => null, // for field_type == 'repeater', must designate sub-field
+		'value' => null,
+        'arr_additions' => array(),
+        'arr_removals' => array(),
+		'return'  => 'bool',
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	//$info .= "args: <pre>".print_r($args, true)."</pre>";
+	extract( $args );
+	
+	// Make sure we've got something to update
+	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
+		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; value: [$value]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals])<br />";
+		// Return as directed
+		if ( $return == "bool" ) { return $updated; } else { return $info; }
+	}
+	
+	// Get updated value, as needed
+	if ( $arr_additions || $arr_removals ) {
+		$updated = get_updated_arr_field_value ( $args );
+		$info .= $updated['info'];
+		$value = $updated['arr_updated'];
+	}	
+	
+	$info .= "about to update field '$key'<br />";
+	$info .= "=> value: <pre>".print_r($value, true)."</pre>";
+	if ( is_array($value) ) {
+		//$info .= count($value)." items in value array<br />";
+		//$info .= "=> <pre>".print_r($value, true)."</pre>";
+	} else {
+		//$info .= "value: $value<br />";
+	}
+
+	// Do the update
+	if ( update_field( $key, $value, $post_id ) ) {
+		$info .= "updated field: ".$key." for post_id: $post_id ($post_type)<br />";
+		$updated = true;
+	} else {
+		$info .= "update FAILED for field: ".$key." for post_id: $post_id ($post_type)<br />";
+	}
+	
+	// Return as directed
+	if ( $return == "bool" ) { return $updated; } else { return $info; }
+						
+}
+
+// Helper function -- TODO: move to common_functions or admin_functions?
+function get_updated_arr_field_value ( $args = array() ) {
 
 	// init
-	$arr = array();
+	$arr_result = array();
 	$info = "";
-	$info .= ">> get_updated_field_value for key: $key <<<br />";
-	//
-	if ( $type == 'array' ) {
-		$updated_value = array();
-	} else {
-		$updated_value = null;
+	$updated_value = null;
+	$arr_updated = array();
+	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
+	
+	// Defaults
+	$defaults = array(
+		'post_id' => null,
+		'key' => null,
+		'field_type' => 'array', // serialized, repeater, relationship....
+		'repeater_field' => null, // for field_type == 'repeater', must designate sub-field
+        'arr_additions' => array(),
+        'arr_removals' => array(),
+        // TODO: add update_limit options?
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	if ( !( $post_id && $key && ( $arr_additions || $arr_removals ) ) ) {
+		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
 	}
 	
 	// Get existing field value, if any
 	if ( $post_id ) {
-		$old_value = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value);
-		//$old_value = get_post_meta( $post_id, $key, true );
+		$arr_current = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value); //$arr_current = get_post_meta( $post_id, $key, true );
 	} else {
-		$old_value = null;
+		$arr_current = array();
 	}
 	
-	if ( $type == 'array' ) {
-		
-		//$info .= "field/var type == 'array'<br />";
-		
-		// Unserialize as needed -- TODO: eliminate redundancy
-		if ( !is_array($old_value) && strpos($old_value, '{') !== false ) {
-			$info .= "unserialize old_value...<br >";
-			$old_value = unserialize($old_value);
-			//$info .= "=> ".print_r($old_value,true)."<br />";
-		}
-		//if ( !is_array($old_value) && !empty($old_value) ) { $old_value = json_decode($old_value); }
-		
-		// Sort the existing values and save the sorted array
-		if ( is_array($old_value) && !empty($old_value) ) {
-			$info .= count($old_value)." items in old_value array<br />";
-			//$info .= "=> ".print_r($old_value, true)."<br />"; //"<pre></pre>";
-			// TODO: what about if this isn't an array of post ids? generalize... tbd
-			$old_value_sorted = sort_post_ids_by_title($old_value);
-			if ( $old_value_sorted ) {
-				$info .= $old_value_sorted['info'];
-				$old_value = $old_value_sorted['post_ids'];
-				//$info .= "old_value (sorted): ".print_r($old_value, true)."<br />"; //"<pre></pre>";
-			}
-			// re-serialize?
-			//update_field( $target_key, $old_value, $snippet_id );
-		} else if ( empty($old_value) ) {
-			$info .= "old_value is empty<br />";
+	// Unserialize as needed -- TODO: eliminate redundancy
+	if ( $field_type == 'repeater' ) {
+		 
+		$repeater_rows = get_field( $repeater_key, $snippet_id );
+		$repeater_rows_revised = array();
+		if ( empty($repeater_rows) ) { 
+			$repeater_rows = array();
+			$repeater_values = array();
 		} else {
-			$info .= "old_value: ".print_r($old_value, true)."<br />";
+			// Sort the existing repeater_rows and save the sorted array
+			$repeater_values = array_column($repeater_rows, 'url');
+			//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
+			array_multisort($repeater_values, SORT_ASC, $repeater_rows);
+			update_field( $repeater_key, $repeater_rows, $snippet_id );
+		}
+						
+	} else if ( $field_type == 'serialized' ) {
+	
+		if ( !is_array($arr_current) && strpos($arr_current, '{') !== false ) {
+			$info .= "unserialize arr_current...<br >";
+			$arr_current = unserialize($arr_current);
+			//$info .= "=> ".print_r($arr_current,true)."<br />";
 		}
 		
-		// Evaluate the new data
-		if ( !empty($new_value) ) {
+	}
+	//if ( !is_array($arr_current) && !empty($arr_current) ) { $arr_current = json_decode($arr_current); }
+	
+	// Sort the existing values and save the sorted array
+	if ( is_array($arr_current) && !empty($arr_current) ) {
+	
+		$info .= count($arr_current)." items in arr_current array<br />";
+		//$info .= "=> ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
+		// TODO: what about if this isn't an array of post ids? generalize... tbd
+		$arr_current_sorted = sort_post_ids_by_title($arr_current);
+		if ( $arr_current_sorted ) {
+			$info .= $arr_current_sorted['info'];
+			$arr_current = $arr_current_sorted['post_ids'];
+			//$info .= "arr_current (sorted): ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
+		}
+		// re-serialize?
+		//update_field( $target_key, $arr_current, $snippet_id );
 		
-			$info .= count($new_value)." items in new_value array<br />";
-			//$info .= "new_value: <pre>".print_r($new_value, true)."</pre>";
+	} else if ( empty($arr_current) ) {
+	
+		$info .= "arr_current is empty<br />";
+		
+	} else {
+	
+		$info .= "arr_current: ".print_r($arr_current, true)."<br />";
+		
+	}
+	
+	// Prepare the revised data	
+	if ( $field_type == 'repeater' ) {
+		
+		// First, remove duplicates and repeater_removals
+		
+		if ( !empty($repeater_rows) ) {
 			
+			$info .= count($repeater_rows)." repeater_rows<br />"; //$key_ts_info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";//"<br />"; //<pre></pre>
+		
+			$info .= "<h4>About to clean up repeater_rows by removing repeater_removals...</h4>";
+			// Update repeater_rows array by removing removals
+			if ( !empty($repeater_removals) ) {
+				sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
+				//$info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+				foreach ( $repeater_rows as $k => $v ) {
+					$repeater_value = $v[$repeater_field]; //$repeater_url = $v['url'];
+					//$info .= "k: $k / repeater_value (v): $repeater_value<br />";
+					if ( in_array($repeater_value, $repeater_removals) ) {
+						$info .= "The value: $repeater_value will NOT be added to the arr_updated array<br />";
+						//$info .= "removing repeater_value: $repeater_value<br />";
+						//unset($repeater_rows[$k]);
+					} else {
+						//$info .= "Adding repeater_value to arr_updated -- not in repeater_removals array: $repeater_value<br />";
+						$arr_updated[] = array($repeater_field => $repeater_value); //$arr_updated[$k] = $repeater_rows[$k];
+					}
+				}
+			} else {
+				$info .= "repeater_removals array is empty<br />";
+			}
+		}
+		
+		// Second, add repeater_additions, making sure they're not duplicates...
+		if ( !empty($repeater_additions) ) {
+			$info .= "<h4>About to add repeater_additions to repeater_rows...</h4>";
+			//$info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
+			foreach ( $repeater_additions as $repeater_value ) {
+				// TODO: make sure repeater_value isn't a duplicate of an existing array item
+				if ( in_array($repeater_value, $repeater_values) ) {
+					$info .= "The repeater_value '".$repeater_value."' is already in the repeater_rows array<br />";
+				} else {
+					$arr_updated[] = array($repeater_field => $repeater_value);
+					$info .= "Added repeater_value '".$repeater_value."' to the arr_updated array<br />";
+				}
+			}
+		}
+		
+		// Sort the revised array
+		if ( !empty($arr_updated) ) {
+		
+			$info .= "About to sort repeater arr_updated...<br />";
+			
+			// Remove duplicates
+			//$arr_updated = array_unique($arr_updated, SORT_REGULAR); // not working!
+			
+			// Sort by sortcol
+			$repeater_values = array_column($arr_updated, $repeater_field);
+			//$info .= "arr_updated repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
+			array_multisort($repeater_values, SORT_ASC, $arr_updated);
+			// TODO: Fix the sorting!			
+		
+		}
+	
+	} else {
+	
+		// NOT a repeater field -- could be of field_type 'array', 'serialized', or 'relationship'
+		
+		// Removals
+		if ( !empty($arr_removals) && !empty($arr_current) ) {
+			$arr_updated = array_diff($arr_current, $arr_removals);
+		} else {
+			$arr_updated = $arr_current;
+		}
+		
+		// Additions
+		if ( !empty($arr_additions) ) {
+	
+			$info .= count($arr_additions)." items in arr_additions<br />";
+			//$info .= "arr_additions: <pre>".print_r($arr_additions, true)."</pre>";
+		
 			// If we're dealing w/ an array of post ids, sort them by post title
 			if ( $key == "target_by_post" || $key == "exclude_by_post" ) {
-				$new_value_sorted = sort_post_ids_by_title($new_value);
-				if ( $new_value_sorted ) {
-					$info .= $new_value_sorted['info'];
-					$new_value = $new_value_sorted['post_ids'];
-					$info .= "new_value sorted (sort_post_ids_by_title)<br />";
-					//$info .= "new_value (sorted): ".print_r($new_value, true)."<br />"; //"<pre></pre>";
+				$arr_additions_sorted = sort_post_ids_by_title($arr_additions);
+				if ( $arr_additions_sorted ) {
+					$info .= $arr_additions_sorted['info'];
+					$arr_additions = $arr_additions_sorted['post_ids'];
+					$info .= "arr_additions sorted (sort_post_ids_by_title)<br />";
+					//$info .= "arr_additions (sorted): ".print_r($arr_additions, true)."<br />"; //"<pre></pre>";
 				}
 			}			
 			// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of recurring events)
 			// Determine whether an update is needed
-			if ( empty($old_value) ) {
-				$info .= $key." field is empty (old_value) >> use new_value<br />";
-				$updated_value = $new_value;
-			} else if ( $new_value == $old_value ) {
-				$info .= "new_value for '$key' same as old_value => no update needed<br />";
+			if ( empty($arr_updated) ) {
+				$info .= $key." field is empty >> use arr_additions<br />";
+				$arr_updated = $arr_additions;
+			} else if ( $arr_additions == $arr_updated ) {
+				$info .= "arr_additions for '$key' same as arr_current/arr_updated => no update needed<br />";
 			} else {
 				// Merge old and new arrays
-				$info .= "Merge old_value with new_value for '$key' field<br />";
-				$updated_value = array_unique(array_merge($old_value, $new_value));
-				sort($updated_value); // Sort the array -- TODO: sort instead by post title
-				$info .= count($updated_value)." items in updated_value array<br />";
+				$info .= "Merge arr_current/arr_updated with arr_additions for '$key' field<br />";
+				$arr_updated = array_unique(array_merge($arr_updated, $arr_additions));
+				sort($arr_updated); // Sort the array -- TODO: sort instead by post title
+				$info .= count($arr_updated)." items in arr_updated array<br />";
 			}
-		
+	
 		} else {
+	
+			$info .= "arr_additions array is empty ==> no update needed<br />";
 		
-			$info .= "new_value array is empty ==> no update needed<br />";
-			
 		}
 		
-	} else {
-		// WIP/TBD as needed...
 	}
 	
-	//$info .= "updated_value: ".print_r($updated_value, true)."<br />"; //"<pre></pre>";
+	//$info .= "arr_updated: ".print_r($arr_updated, true)."<br />"; //"<pre></pre>";
 	
-	$arr['info'] = $info;
-	$arr['updated_value'] = $updated_value;
+	if ( $field_type == "serialized" ) { $updated_value = serialize($arr_updated); } else { $updated_value = $arr_updated; }
 	
-	//return $updated_value;
-	return $arr;
+	$arr_result['info'] = $info;
+	$arr_result['updated_value'] = $updated_value;
+	//$arr_result['arr_updated'] = $arr_updated;
+	
+	return $arr_result;
 	
 }
+
+// **************************
 
 /*** Copied from mods to WidgetContext ***/
 //
