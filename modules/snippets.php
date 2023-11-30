@@ -1866,6 +1866,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 				$key_ts_info .= "-----------<br />";
 				$slug_to_match = ""; // init
+				$wildcard_urls = array();
 				// order conditions (post_ids) by title
 				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working // WIP 231129
 				foreach ( $conditions as $x => $condition ) {
@@ -1893,7 +1894,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$base_slug = substr($slug, 0, -11);							
 							if ( $base_slug == $slug_to_match ) {
 								$post_info .= " // <strong>".$base_slug."</strong>";
-								// Add this to URLs to target *instead of* matched_posts
+								// Add this to URLs to target *instead of* matched_posts -- WIP...
+								$wildcard_url = $base_slug."*";
+								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
+								continue;
 							} else {
 								$post_info .= " // ".$base_slug;
 							}
@@ -1921,6 +1925,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
+				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
+				$key_ts_info .= "=> <pre>".print_r($wildcard_urls, true)."</pre>";
 				$key_ts_info .= "<hr />";
 				//
 				
