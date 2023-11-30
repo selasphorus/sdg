@@ -1895,12 +1895,20 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$post_info = $x.".) ".$post->post_title." [$id]";
 				
 					// Get post status -- we're only interested published posts
-					$post_status = get_post_status( $id );
+					$post_status = $post->post_status; // get_post_status( $id );					
+					$slug = $post->post_name;
+					$post_type = $post->post_type;
+					
 					if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
-					$post_info .= " // ".$post->post_name." // ";
+					$post_info .= " // ".$slug; //" // "
 					//$post_info .= "<br />";
-					// WIP 231117
-					// TODO: look for patterns -- e.g. coffee-hour-following-the-9am-eucharist-*
+					// WIP 231117/231129...
+					// TODO: look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+					// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
+					if ( $post_type == "event" ) {
+						$base_slug = substr($slug, 0, -11);
+						$post_info .= " // ".$base_slug;
+					}
 				
 					// Is this an attached instance of a recurring event?
 					$recurrence_id = get_post_meta( $id, '_recurrence_id', true );
