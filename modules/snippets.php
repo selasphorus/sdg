@@ -309,7 +309,7 @@ function get_snippets ( $args = array() ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
-    //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     // Print last SQL query string
     global $wpdb;
     $info .= "last_query: <pre>".$wpdb->last_query."</pre>"; // tft
