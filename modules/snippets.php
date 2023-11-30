@@ -1867,8 +1867,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "-----------<br />";
 				$slug_to_match = ""; // init
 				// order conditions (post_ids) by title
-				$conditions = sort_post_ids_by_title($conditions);
-				foreach ( $conditions as $x => $condition ) {	
+				//$conditions = sort_post_ids_by_title($conditions);
+				foreach ( $conditions as $x => $condition ) {
 							
 					$p_id = intval($condition);
 					//$key_ts_info .= "p_id: ".$p_id."<br />";
@@ -1915,7 +1915,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$slug_to_match = $base_slug;
 						
 					} else {
-						$key_ts_info .= "NO POST FOUND for p_id: ".$p_id."";
+						$key_ts_info .= "NO POST FOUND for p_id: ".$p_id."<br />";
 					}		
 				}
 				$matched_posts = array_unique($matched_posts);
