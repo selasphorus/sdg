@@ -1849,7 +1849,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
+	$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 	
@@ -2085,7 +2085,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					
 				}
 					
-			} else if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
+			} else if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' || $key == 'target_by_post' || $key == 'exclude_by_post' ) {
 				
 				// Init arrays
 				$matched_posts = array();
@@ -2093,10 +2093,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$repeater_additions = array();
 				$repeater_removals = array();				
 				//
-				if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' ) {
+				if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'target_by_post' ) {
 					$target_key = 'target_by_post';
 					$repeater_key = 'target_by_url';
-				} else if ( $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' ) {
+				} else if ( $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' || $key == 'exclude_by_post' ) {
 					$target_key = 'exclude_by_post';
 					$repeater_key = 'exclude_by_url';
 				}
@@ -2150,6 +2150,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$url = $condition;
 					}					
 					//
+					// WIP/TODO: fold in $key == 'target_by_post' // $key == 'exclude_by_post' -- 
+					// check posts from those relationship fields, look for patterns, remove posts and add wildcard urls to repeater fields as relevant
+					
+					
 					if ( $url ) {
 					
 						$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
