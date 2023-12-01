@@ -2803,7 +2803,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 				if ( in_array($add_value, $repeater_values) ) {
 					$info .= "The repeater_value '".$add_value."' is already in the repeater_rows array<br />";
 				} else {
-					$repeater_rows_revised[] = array($repeater_field => $repeater_value);
+					$repeater_rows_revised[] = array($repeater_field => $add_value);
 					$info .= "Added repeater_value '".$add_value."' to the repeater_rows_revised array<br />";
 				}
 			}
