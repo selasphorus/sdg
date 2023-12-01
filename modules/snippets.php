@@ -2502,10 +2502,11 @@ function sdg_update_custom_field ( $args = array() ) {
 	
 	// Get updated value, as needed
 	if ( $arr_additions || $arr_removals ) {
-		$info .= "get updated value based on arr_additions/arr_removals<br />";
+		$info .= "get updated value based on arr_additions/arr_removals<br /><br />";
 		$updated = get_updated_arr_field_value ( $args );
 		$info .= $updated['info'];
 		$value = $updated['updated_value'];
+		$info .= "<hr /><br />";
 	}
 	
 	$info .= "about to update field '$key'<br />";
@@ -2521,6 +2522,9 @@ function sdg_update_custom_field ( $args = array() ) {
 		$info .= "Updated temporarily disabled for repeater fields!<br />";
 		if ( $return == "bool" ) { return $updated; } else { return $info; } // tft
 	}
+	
+	// TODO: check to see if $value is same as existing value for this field >> only attempt update if update is actually needed
+	//
 	
 	// Do the update
 	if ( update_field( $key, $value, $post_id ) ) {
