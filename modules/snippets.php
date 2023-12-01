@@ -2666,6 +2666,8 @@ function sdg_update_custom_field ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
+	//
+	$post_type = get_post_type($post_id);
 	
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
@@ -2748,7 +2750,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		
 		$info .= "repeater_field: ".$repeater_field."<br />";
 		
-		$repeater_rows = get_field( $key, $snippet_id );
+		$repeater_rows = get_field( $key, $post_id );
 		$repeater_rows_revised = array();
 		if ( empty($repeater_rows) ) { 
 			$repeater_rows = array();
@@ -2758,7 +2760,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 			$repeater_values = array_column($repeater_rows, $repeater_field);
 			//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
 			array_multisort($repeater_values, SORT_ASC, $repeater_rows);
-			update_field( $key, $repeater_rows, $snippet_id );
+			update_field( $key, $repeater_rows, $post_id );
 		}
 		
 		$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
