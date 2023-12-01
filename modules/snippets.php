@@ -2099,6 +2099,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$repeater_key = 'exclude_by_url';
 				}
 				//
+				// TODO: update to use fcn sdg_update_custom_field
 				$repeater_rows = get_field( $repeater_key, $snippet_id );
 				if ( empty($repeater_rows) ) { 
 					$repeater_rows = array();
@@ -2738,13 +2739,6 @@ function get_updated_arr_field_value ( $args = array() ) {
 		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
 	}
 	
-	// Get existing field value, if any
-	if ( $post_id ) {
-		$arr_current = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value); //$arr_current = get_post_meta( $post_id, $key, true );
-	} else {
-		$arr_current = array();
-	}
-	
 	$info .= "field_type: ".$field_type."<br />";
 	
 	//
@@ -2754,6 +2748,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		
 		$repeater_rows = get_field( $key, $post_id );
 		$repeater_rows_revised = array();
+		
 		if ( empty($repeater_rows) ) { 
 			$repeater_rows = array();
 			$repeater_values = array();
@@ -2786,12 +2781,12 @@ function get_updated_arr_field_value ( $args = array() ) {
 					$repeater_value = $v[$repeater_field]; //$repeater_url = $v['url'];
 					//$info .= "k: $k / repeater_value (v): $repeater_value<br />";
 					if ( in_array($repeater_value, $arr_removals) ) {
-						$info .= "The value: $repeater_value will NOT be added to the arr_updated array<br />";
+						$info .= "The value: $repeater_value will NOT be added to the repeater_rows_revised array<br />";
 						//$info .= "removing repeater_value: $repeater_value<br />";
 						//unset($repeater_rows[$k]);
 					} else {
-						//$info .= "Adding repeater_value to arr_updated -- not in repeater_removals array: $repeater_value<br />";
-						$arr_updated[] = array($repeater_field => $repeater_value); //$arr_updated[$k] = $repeater_rows[$k];
+						//$info .= "Adding repeater_value to repeater_rows_revised -- not in repeater_removals array: $repeater_value<br />";
+						$repeater_rows_revised[] = array($repeater_field => $repeater_value); //$arr_updated[$k] = $repeater_rows[$k];
 					}
 				}
 			} else {
@@ -2803,13 +2798,13 @@ function get_updated_arr_field_value ( $args = array() ) {
 		if ( !empty($arr_additions) ) {
 			$info .= "<h4>About to add arr_additions to repeater_rows...</h4>";
 			//$info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
-			foreach ( $arr_additions as $repeater_value ) {
+			foreach ( $arr_additions as $add_value ) {
 				// TODO: make sure repeater_value isn't a duplicate of an existing array item
-				if ( in_array($repeater_value, $repeater_values) ) {
-					$info .= "The repeater_value '".$repeater_value."' is already in the repeater_rows array<br />";
+				if ( in_array($add_value, $repeater_values) ) {
+					$info .= "The repeater_value '".$add_value."' is already in the repeater_rows array<br />";
 				} else {
-					$arr_updated[] = array($repeater_field => $repeater_value);
-					$info .= "Added repeater_value '".$repeater_value."' to the arr_updated array<br />";
+					$repeater_rows_revised[] = array($repeater_field => $repeater_value);
+					$info .= "Added repeater_value '".$add_value."' to the repeater_rows_revised array<br />";
 				}
 			}
 		} else {
@@ -2817,7 +2812,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		}
 		
 		// Sort the revised array
-		if ( !empty($arr_updated) ) {
+		if ( !empty($repeater_rows_revised) ) {
 		
 			$info .= "About to sort repeater arr_updated...<br />";
 			
@@ -2825,18 +2820,31 @@ function get_updated_arr_field_value ( $args = array() ) {
 			//$arr_updated = array_unique($arr_updated, SORT_REGULAR); // not working!
 			
 			// Sort by sortcol
-			$repeater_values = array_column($arr_updated, $repeater_field);
+			$repeater_values = array_column($repeater_rows_revised, $repeater_field);
 			//$info .= "arr_updated repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
-			array_multisort($repeater_values, SORT_ASC, $arr_updated);
-			// TODO: Fix the sorting!			
+			array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
+			// TODO: Fix the sorting!	
+			
+			$arr_updated = $repeater_rows_revised;
 		
 		} else {
-			$info .= "arr_updated is empty<br />";
+		
+			$info .= "repeater_rows_revised is empty -- use pre-existing repeater_rows<br />";
+			$arr_updated = $repeater_rows;
+			
 		}
+		
 		
 	} else {
 	
 		// NOT a repeater field -- could be of field_type 'array', 'serialized', or 'relationship'
+	
+		// Get existing field value, if any
+		if ( $post_id ) {
+			$arr_current = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value); //$arr_current = get_post_meta( $post_id, $key, true );
+		} else {
+			$arr_current = array();
+		}
 		
 		// Unserialize as needed
 		if ( $field_type == 'serialized' && !is_array($arr_current) && strpos($arr_current, '{') !== false ) {
