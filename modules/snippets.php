@@ -2518,10 +2518,10 @@ function sdg_update_custom_field ( $args = array() ) {
 		$info .= "=> value: $value<br />";
 	}
 	
-	if ( $field_type == 'repeater' ) {
+	/*if ( $field_type == 'repeater' ) {
 		$info .= "Updated temporarily disabled for repeater fields!<br />";
 		if ( $return == "bool" ) { return $updated; } else { return $info; } // tft
-	}
+	}*/
 	
 	// TODO: check to see if $value is same as existing value for this field >> only attempt update if update is actually needed
 	//
