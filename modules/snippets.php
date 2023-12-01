@@ -2710,7 +2710,7 @@ function sdg_update_custom_field ( $args = array() ) {
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-	$info .= "args: <pre>".print_r($args, true)."</pre>";
+	//$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
 	//
 	$post_type = get_post_type($post_id);
@@ -2718,8 +2718,8 @@ function sdg_update_custom_field ( $args = array() ) {
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update!<br />";
-		$info .= "post_id: [$post_id]; key: [$key]; ";
-		$info .= "value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
+		//$info .= "post_id: [$post_id]; key: [$key]; ";
+		//$info .= "value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
 		// Return as directed
 		if ( $return == "bool" ) { return $updated; } else { return $info; }
 	}
@@ -2733,12 +2733,12 @@ function sdg_update_custom_field ( $args = array() ) {
 	}
 	
 	$info .= "about to update field '$key'<br />";
-	$info .= "=> value: <pre>".print_r($value, true)."</pre>";
+	//$info .= "=> value: <pre>".print_r($value, true)."</pre>";
 	if ( is_array($value) ) {
-		//$info .= count($value)." items in value array<br />";
+		$info .= "=> ".count($value)." items in value array<br />";
 		//$info .= "=> <pre>".print_r($value, true)."</pre>";
 	} else {
-		//$info .= "value: $value<br />";
+		$info .= "=> value: $value<br />";
 	}
 
 	// Do the update
