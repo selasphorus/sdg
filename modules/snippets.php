@@ -1990,34 +1990,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "<hr />";
 				
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
-				/*
-					$repeater_key = 'target_by_url';
-				$update_key = $key;
-				$updated_field_value = $matched_posts;
-				// Determine revised value based on new and existing values for field
-				//$updates = get_updated_arr_field_value( $snippet_id, $update_key, $update_value );
-				//$key_ts_info .= $updates['info'];
-				//$updated_field_value = $updates['arr_updated'];
-				//if ( $updates && count($updated_field_value) > 0 ) {
-				if ( count($updated_field_value) > 0 ) {
-					$key_ts_info .= "about to update field '$update_key'<br />";
-					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
-					//$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
-					//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-					//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($updated_field_value, true)."<br />";					
-					if ( count($updated_field_value) < $update_limit ) {
-						if ( update_field( $key, $updated_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-					} else {
-						$key_ts_info .= "--- No updates run -- update limit set to $update_limit records or fewer ---<br />";
-					}
-				} else {
-					//$updated_field_value  = $matched_posts; // for purposes of secondary and tertiary updates
-				}
-				*/
+				//???
 				
 				// Also save those same matched_posts/updated_field_value to the target_by_post field -- this field determines actual snippet display
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
@@ -2025,25 +1998,6 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				// Update field with revised value based on new and existing values for field
 				$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return' => 'info', 'field_type' => 'relationship' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
-				/*
-				$update_key = 'target_by_post';
-				$key_ts_info .= $secondary_updates['info'];
-				$secondary_updated_field_value = $secondary_updates['arr_updated'];
-				if ( $secondary_updates && count($secondary_updated_field_value) > 0 ) {
-					$key_ts_info .= "about to update field '$update_key'<br />";
-					$key_ts_info .= count($secondary_updated_field_value)." items in secondary_updated_field_value array<br />";
-					//$key_ts_info .= "=> <pre>".print_r($secondary_updated_field_value, true)."</pre>";
-					//$key_ts_info .= "about to update field '$update_key' with value(s): ".print_r($secondary_updated_field_value, true)."<br />";
-					if ( count($secondary_updated_field_value) < $update_limit ) {
-						if ( update_field( $update_key, $secondary_updated_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-					} else {
-						$key_ts_info .= "--- No updates run -- update limit set to $update_limit records or fewer ---<br />";
-					}
-				}*/
 				
 				//
 				$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
@@ -2297,100 +2251,9 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
-				/*$updates = get_updated_arr_field_value( $snippet_id, $target_key, $matched_posts );
-				$key_ts_info .= $updates['info'];
-				$updated_field_value = $updates['arr_updated'];
-				if ( $updates && count($updated_field_value) > 0 ) {
-					$key_ts_info .= "about to update field '$target_key'<br />";
-					$key_ts_info .= count($updated_field_value)." items in updated_field_value array<br />";
-					//$key_ts_info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-					//$key_ts_info .= "about to update field '$target_key' with value(s): ".print_r($updated_field_value, true)."<br />";
-					if ( update_field( $target_key, $updated_field_value, $snippet_id ) ) {
-						$key_ts_info .= "updated field: ".$target_key." for snippet_id: $snippet_id<br />";
-					} else {
-						$key_ts_info .= "update FAILED for field: ".$target_key." for snippet_id: $snippet_id<br />";
-					}
-				}
-				*/
-				
 				// Update the associated repeater field as needed
 				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
-				
-				/*
-				// First, remove duplicates and repeater_removals
-				$repeater_rows_revised = array();
-				//
-				if ( !empty($repeater_rows) ) {
-			
-					$key_ts_info .= count($repeater_rows)." repeater_rows<br />"; //$key_ts_info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";//"<br />"; //<pre></pre>
-				
-					$key_ts_info .= "<h4>About to clean up repeater_rows by removing repeater_removals...</h4>";
-					// Update repeater_rows array by removing removals
-					if ( !empty($repeater_removals) ) {
-						sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-						//$key_ts_info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
-						foreach ( $repeater_rows as $k => $v ) {
-							$repeater_url = $v['url'];
-							//$key_ts_info .= "k: $k / repeater_url (v): $repeater_url<br />";
-							if ( in_array($repeater_url, $repeater_removals) ) {
-								$key_ts_info .= "The url: $repeater_url will NOT be added to the repeater_rows_revised array<br />";
-								//$key_ts_info .= "removing url: $repeater_url<br />";
-								//unset($repeater_rows[$k]);
-							} else {
-								//$key_ts_info .= "Adding url to repeater_rows_revised -- not in repeater_removals array: $repeater_url<br />";
-								$repeater_rows_revised[] = array('url' => $repeater_url); //$repeater_rows_revised[$k] = $repeater_rows[$k];
-							}
-						}
-					} else {
-						$key_ts_info .= "repeater_removals array is empty<br />";
-					}
-				}
-			
-				// Second, add repeater_additions, making sure they're not duplicates...
-				if ( !empty($repeater_additions) ) {
-					$key_ts_info .= "<h4>About to add repeater_additions to repeater_rows...</h4>";
-					//$key_ts_info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
-					foreach ( $repeater_additions as $url ) {
-						// TODO: make sure url isn't a duplicate of an existing array item
-						if ( in_array($url, $repeater_values) ) {
-							$key_ts_info .= "The url '".$url."' is already in the repeater_rows array<br />";
-						} else {
-							$repeater_rows_revised[] = array('url' => $url);
-							$key_ts_info .= "Added url '".$url."' to the repeater_rows_revised array<br />";
-						}
-					}
-				}
-			
-				// Update the field with the revised array
-				if ( !empty($repeater_rows_revised) ) {
-				
-					// Remove duplicates
-					$key_ts_info .= "About to update repeater_rows...<br />";
-					//
-					//$repeater_rows_revised = array_unique($repeater_rows_revised, SORT_REGULAR); // not working!
-					//
-					$repeater_values = array_column($repeater_rows_revised, 'url');
-					//$key_ts_info .= "repeater_rows_revised repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
-					array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
-					// Fix the sorting!
-					//
-					$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
-					//$key_ts_info .= "repeater_rows_revised: <pre>".print_r($repeater_rows_revised, true)."</pre><br />";
-					//
-					if ( $repeater_rows_revised == $repeater_rows ) {
-						$key_ts_info .= "No changes necessary -- repeater_rows_revised == repeater_rows<br />";
-					} else {
-						//$key_ts_info .= "updates tmp disabled<br />";
-						if ( update_field( $repeater_key, $repeater_rows_revised, $snippet_id ) ) {
-							$key_ts_info .= "updated repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for repeater field: ".$repeater_key." for snippet_id: $snippet_id<br />";
-						}
-					}
-				
-				}
-				*/
 				
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
 			
@@ -2432,135 +2295,19 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-				
-					/*
-					$update_key = 'target_by_post_type';
-					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $cpt_conditions );
-					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['arr_updated'];
-					if ( $updates && count($updated_field_value) > 0 ) {
-						$key_ts_info .= "about to update field '$update_key'<br />";
-						$info .= count($updated_field_value)." items in updated_field_value array<br />";
-						//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-						if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-					} else {
-						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}*/
 					$key_ts_info .= "<hr />";
-					/*
-					$existing_cpt_conditions = get_field( 'target_by_post_type', $snippet_id );
-					if ( empty($existing_cpt_conditions) ) {
-						$key_ts_info .= "No existing_cpt_conditions => update `target_by_post_type` with widget_logic cpt_conditions<br />";
-						$updated_cpt_conditions = $cpt_conditions;
-					} else if ( $existing_cpt_conditions == $cpt_conditions ) {
-						$key_ts_info .= "existing_cpt_conditions in `target_by_post_type` field same as widget_logic cpt_conditions => no update needed<br />";
-					} else {
-						// Merge the arrays
-						$updated_cpt_conditions = array_unique(array_merge($existing_cpt_conditions, $cpt_conditions));
-					}
-					if ( $updated_cpt_conditions ) {							
-						$key_ts_info .= "updated_cpt_conditions: ".print_r($updated_cpt_conditions, true)."<br />";
-						if ( update_field( 'target_by_post_type', $updated_cpt_conditions, $snippet_id ) ) {
-							$key_ts_info .= "updated field `target_by_post_type` for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field `target_by_post_type` for snippet_id: $snippet_id<br />";
-						}
-					}
-					*/
 					
 					// CPT Archive conditions
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-					
-					/*
-					$update_key = 'target_by_post_type_archive';
-					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $cpt_archive_conditions );
-					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['arr_updated'];
-					if ( $updates && count($updated_field_value) > 0 ) {
-						$key_ts_info .= "about to update field '$update_key'<br />";
-						$info .= count($updated_field_value)." items in updated_field_value array<br />";
-						//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-						if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-					} else {
-						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}*/
 					$key_ts_info .= "<hr />";
-					/*
-					$existing_cpt_archive_conditions = get_field( 'target_by_post_type_archive', $snippet_id );
-					if ( empty($existing_cpt_archive_conditions) ) {
-						$key_ts_info .= "No existing_cpt_archive_conditions => update `target_by_post_type_archive` with widget_logic cpt_archive_conditions<br />";
-						$updated_cpt_archive_conditions = $cpt_archive_conditions;
-					} else if ( $existing_cpt_archive_conditions == $cpt_archive_conditions ) {
-						$key_ts_info .= "existing_cpt_archive_conditions in `target_by_post_type_archive` field same as widget_logic cpt_archive_conditions => no update needed<br />";
-					} else {
-						// Merge the arrays
-						$updated_cpt_archive_conditions = array_unique(array_merge($existing_cpt_archive_conditions, $cpt_archive_conditions));
-					}
-					//
-					if ( $updated_cpt_archive_conditions ) {							
-						$key_ts_info .= "updated_cpt_archive_conditions: ".print_r($updated_cpt_archive_conditions, true)."<br />";
-						if ( update_field( 'target_by_post_type_archive', $updated_cpt_archive_conditions, $snippet_id ) ) {
-							$key_ts_info .= "updated field `target_by_post_type_archive` for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field `target_by_post_type_archive` for snippet_id: $snippet_id<br />";
-						}
-					}
-					*/
 					
 					// Taxonomy Archive Conditions
 					// Update field with revised value based on new and existing values for field				
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-					
-					/*
-					$update_key = 'target_by_taxonomy_archive';
-					$updates = get_updated_arr_field_value( $snippet_id, $update_key, $tax_conditions );
-					$key_ts_info .= $updates['info'];
-					$updated_field_value = $updates['arr_updated'];
-					if ( $updates && count($updated_field_value) > 0 ) {
-						$key_ts_info .= "about to update field '$update_key'<br />";
-						$info .= count($updated_field_value)." items in updated_field_value array<br />";
-						//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-						if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
-							$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-						}
-					} else {
-						$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-					}*/
 					$key_ts_info .= "<hr />";
-					/*
-					$existing_tax_conditions = get_field( 'target_by_taxonomy_archive', $snippet_id );
-					if ( empty($existing_tax_conditions) ) {
-						$key_ts_info .= "No existing_tax_conditions => update `target_by_post_type` with widget_logic conditions<br />";
-						$updated_tax_conditions = $tax_conditions;
-					} else if ( $existing_tax_conditions == $tax_conditions ) {
-						$key_ts_info .= "existing_tax_conditions in `target_by_post_type` field same as widget_logic conditions => no update needed<br />";
-					} else {
-						$updated_tax_conditions = array_unique(array_merge($existing_tax_conditions, $tax_conditions)); // Merge the arrays
-					}
-					//
-					if ( $updated_tax_conditions ) {							
-						$key_ts_info .= "updated_tax_conditions: ".print_r($updated_tax_conditions, true)."<br />";
-						//$key_ts_info .= "updates tmp disabled<br />";
-						if ( update_field( 'target_by_taxonomy_archive', $updated_tax_conditions, $snippet_id ) ) {
-							$key_ts_info .= "updated field `target_by_taxonomy_archive` for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field `target_by_taxonomy_archive` for snippet_id: $snippet_id<br />";
-						}
-					}
-					*/
 				}
 				
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
@@ -2589,25 +2336,6 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							// Update field with revised value based on new and existing values for field				
 							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return' => 'info', 'field_type' => 'array' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
-					
-							/*
-							$update_key = 'target_by_post_type';
-							$arr_additions = array( "post" );
-							$updates = get_updated_arr_field_value( $snippet_id, $update_key, $arr_additions );
-							$key_ts_info .= $updates['info'];
-							$updated_field_value = $updates['arr_updated'];
-							if ( $updates && count($updated_field_value) > 0 ) {
-								$key_ts_info .= "about to update field '$update_key'<br />";
-								$info .= count($updated_field_value)." items in updated_field_value array<br />";
-								//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
-								if ( update_field( $update_key, $updated_field_value, $snippet_id ) ) {
-									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snippet_id<br />";
-								} else {
-									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snippet_id<br />";
-								}
-							} else {
-								$key_ts_info .= count($updated_field_value)." count(updated_field_value) but no update because....???<br />";					
-							}*/
 							$key_ts_info .= "<hr />";							
 							///
 						} else {
@@ -2618,26 +2346,6 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-					
-					/*
-					$existing_conditions = get_field( 'target_by_location', $snippet_id );
-					if ( empty($existing_conditions) ) {
-						$key_ts_info .= "No existing_conditions => update `target_by_location` with widget_logic cpt_conditions<br />";
-						$updated_conditions = $wll_conditions;
-					} else if ( $existing_conditions == $wll_conditions ) {
-						$key_ts_info .= "existing_conditions in `target_by_location` field same as widget_logic wll_conditions => no update needed<br />";
-					} else {
-						$updated_conditions = array_unique(array_merge($existing_conditions, $wll_conditions)); // Merge the arrays
-					}
-					//
-					if ( $updated_conditions ) {							
-						$key_ts_info .= "updated_cpt_conditions: ".print_r($updated_conditions, true)."<br />";
-						if ( update_field( 'target_by_location', $updated_conditions, $snippet_id ) ) {
-							$key_ts_info .= "updated field `target_by_location` for snippet_id: $snippet_id<br />";
-						} else {
-							$key_ts_info .= "update FAILED for field `target_by_location` for snippet_id: $snippet_id<br />";
-						}
-					}*/
 					
 				}
 				
@@ -2670,8 +2378,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 			}
 			
-			$ts_info .= $key_ts_info;
-			$ts_info .= "<hr />";
+			//$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
+			if ( $key == 'cs_post_ids' ) {
+				$ts_info .= $key_ts_info;
+				$ts_info .= "<hr />";
+			}
 			
 		} else {
 			//$ts_info .= "No meta data found for key: $key<br />";
