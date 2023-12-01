@@ -2682,7 +2682,7 @@ function sdg_update_custom_field ( $args = array() ) {
 		$updated = get_updated_arr_field_value ( $args );
 		$info .= $updated['info'];
 		$value = $updated['updated_value'];
-	}	
+	}
 	
 	$info .= "about to update field '$key'<br />";
 	$info .= "=> value: <pre>".print_r($value, true)."</pre>";
@@ -2777,13 +2777,13 @@ function get_updated_arr_field_value ( $args = array() ) {
 			//$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
 			
 			// Update repeater_rows array by removing removals
-			if ( !empty($repeater_removals) ) {
-				sort($repeater_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
+			if ( !empty($arr_removals) ) {
+				sort($arr_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
 				//$info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
 				foreach ( $repeater_rows as $k => $v ) {
 					$repeater_value = $v[$repeater_field]; //$repeater_url = $v['url'];
 					//$info .= "k: $k / repeater_value (v): $repeater_value<br />";
-					if ( in_array($repeater_value, $repeater_removals) ) {
+					if ( in_array($repeater_value, $arr_removals) ) {
 						$info .= "The value: $repeater_value will NOT be added to the arr_updated array<br />";
 						//$info .= "removing repeater_value: $repeater_value<br />";
 						//unset($repeater_rows[$k]);
@@ -2793,15 +2793,15 @@ function get_updated_arr_field_value ( $args = array() ) {
 					}
 				}
 			} else {
-				$info .= "repeater_removals array is empty<br />";
+				$info .= "arr_removals is empty<br />";
 			}
 		}
 		
 		// Second, add repeater_additions, making sure they're not duplicates...
-		if ( !empty($repeater_additions) ) {
-			$info .= "<h4>About to add repeater_additions to repeater_rows...</h4>";
+		if ( !empty($arr_additions) ) {
+			$info .= "<h4>About to add arr_additions to repeater_rows...</h4>";
 			//$info .= "repeater_additions: <pre>".print_r($repeater_additions, true)."</pre>";
-			foreach ( $repeater_additions as $repeater_value ) {
+			foreach ( $arr_additions as $repeater_value ) {
 				// TODO: make sure repeater_value isn't a duplicate of an existing array item
 				if ( in_array($repeater_value, $repeater_values) ) {
 					$info .= "The repeater_value '".$repeater_value."' is already in the repeater_rows array<br />";
@@ -2810,6 +2810,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 					$info .= "Added repeater_value '".$repeater_value."' to the arr_updated array<br />";
 				}
 			}
+		} else {
+			$info .= "arr_additions is empty<br />";
 		}
 		
 		// Sort the revised array
@@ -2826,6 +2828,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 			array_multisort($repeater_values, SORT_ASC, $arr_updated);
 			// TODO: Fix the sorting!			
 		
+		} else {
+			$info .= "arr_updated is empty<br />";
 		}
 		
 	} else {
@@ -2908,7 +2912,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 	
 		} else {
 	
-			$info .= "arr_additions array is empty ==> no update needed<br />";
+			$info .= "arr_additions is empty ==> no update needed<br />";
 		
 		}
 		
