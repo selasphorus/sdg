@@ -2135,8 +2135,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					//
 					if ( is_array($condition) ) {
 						if ( isset($condition['url']) ) {
-							$url = $condition['url'];
-							$condition_info .= "url: ".$url."<br />";
+							$url = $condition['url'];							
 						} else {
 							$condition_info .= "condition: <pre>".print_r($condition, true)."</pre>";
 							continue;
@@ -2149,15 +2148,17 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						if ( $post ) { $matched_post_id = $p_id; }
 					} */else {
 						$condition_info .= "condition: ".$condition." [".gettype($condition)."]<br />";
-						$url = $condition;
+						if ( !$key == 'target_by_post' && !$key == 'exclude_by_post' ) {
+							$url = $condition;
+						}						
 					}					
 					//
 					// WIP/TODO: fold in $key == 'target_by_post' // $key == 'exclude_by_post' -- 
 					// check posts from those relationship fields, look for patterns, remove posts and add wildcard urls to repeater fields as relevant
 					
-					
 					if ( $url ) {
-					
+						
+						$condition_info .= "url: ".$url."<br />";
 						$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
 						
 						// Parse the url
@@ -2243,7 +2244,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$post_type = $matched_post->post_type;
 						//
 						//if ( $post_status != "publish" ) { $condition_info .= " <em>*** ".$post_status." ***</em>"; }
-						$condition_info .= " // ".$slug; //" // "
+						$condition_info .= "&rarr; &rarr; slug: ".$slug;
 						
 						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
@@ -2252,18 +2253,18 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						if ( $post_type == "event" ) {
 							$base_slug = substr($slug, 0, -11);							
 							if ( $base_slug == $slug_to_match ) {
-								$condition_info .= " // <strong>".$base_slug."</strong>";
+								$condition_info .= "&rarr; &rarr; base_slug: <strong>".$base_slug."</strong>";
 								// Add this to URLs to target *instead of* matched_posts -- WIP...
 								$wildcard_url = $base_slug."*";
 								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
 								$matched_post_removals[] = $matched_post_id;
 								if ( $url ) {
-									$condition_info .= "&rarr; handle as wildcard url >> remove from repeater_rows array: $url<br />";
+									$condition_info .= "&rarr; &rarr; &rarr; handle as wildcard url >> remove from repeater_rows array: $url<br />";
 									$repeater_removals[] = $url;
 								}
 								continue;
 							} else {
-								$condition_info .= " // ".$base_slug;
+								$condition_info .= "&rarr; &rarr; base_slug: ".$base_slug;
 							}
 						}
 						
