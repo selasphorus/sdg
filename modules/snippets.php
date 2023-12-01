@@ -1772,7 +1772,7 @@ function delete_widgets ( $atts = [] ) {
 	
 }
 
-//add_shortcode('update_snippets', 'update_snippets');
+add_shortcode('update_snippets', 'update_snippets');
 function update_snippets ( $atts = [] ) {
 
 	// TS/logging setup
