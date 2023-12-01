@@ -1919,10 +1919,13 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "update_limit: ".$update_limit."<br />";
 				
 				$key_ts_info .= "-----------<br />";
-				$slug_to_match = ""; // init
+				// Prep for pattern matching
 				$wildcard_urls = array();
-				// order conditions (post_ids) by title
+				$slug_to_match = "";
+				
+				// WIP: order conditions (post_ids) by title
 				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working // WIP 231129
+				
 				foreach ( $conditions as $x => $condition ) {
 							
 					$p_id = intval($condition);
@@ -1941,7 +1944,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						$post_info .= " // ".$slug; //" // "
 						
 						// WIP 231117/231129...
-						// TODO: look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
 						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
 						$base_slug = ""; // init
 						if ( $post_type == "event" ) {
@@ -2038,7 +2042,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$snippets = get_posts($wp_args);
 					if ( $snippets ) {
 						// This is tmp disabled because it resulted in way too many posts in the target_by_post field
-						// TODO: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
+						// TODO/wip: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
 						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";						
 						//$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
@@ -2085,6 +2089,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				
 				// Init arrays
 				$matched_posts = array();
+				$matched_post_removals = array();
 				$repeater_additions = array();
 				$repeater_removals = array();				
 				//
@@ -2111,6 +2116,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				//$key_ts_info .= "existing repeater_rows: ".print_r($repeater_rows, true)."<br />";
 				//
 				// TODO: (re-)check repeater_rows to see if updates are needed from target_by_url => target_by_post
+				//
+				// TODO/WIP: // Prep for pattern matching
+				$wildcard_urls = array();
+				$slug_to_match = "";
 				//
 				$key_ts_info .= "-----------<br />";
 				foreach ( $conditions as $condition ) {
@@ -2220,11 +2229,45 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					//
 					if ( $matched_post_id ) {
 						$condition_info .= "&rarr; matching post found with id: $matched_post_id<br />";
+						
+						// WIP pattern matching
+						$matched_post = get_post( $matched_post_id );
+						$slug = $matched_post->post_name;
+						$post_type = $post->post_type;
+						//
+						//if ( $post_status != "publish" ) { $condition_info .= " <em>*** ".$post_status." ***</em>"; }
+						$condition_info .= " // ".$slug; //" // "
+						
+						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
+						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
+						$base_slug = ""; // init
+						if ( $post_type == "event" ) {
+							$base_slug = substr($slug, 0, -11);							
+							if ( $base_slug == $slug_to_match ) {
+								$condition_info .= " // <strong>".$base_slug."</strong>";
+								// Add this to URLs to target *instead of* matched_posts -- WIP...
+								$wildcard_url = $base_slug."*";
+								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
+								$matched_post_removals[] = $matched_post_id;
+								if ( $url ) {
+									$condition_info .= "&rarr; handle as wildcard url >> remove from repeater_rows array: $url<br />";
+									$repeater_removals[] = $url;
+								}
+								continue;
+							} else {
+								$condition_info .= " // ".$base_slug;
+							}
+						}
+						
 						$matched_posts[] = $matched_post_id;
 						if ( $url ) {
 							$condition_info .= "&rarr; remove from repeater_rows array: $url<br />";
 							$repeater_removals[] = $url;
-						}						
+						}
+						
+						$slug_to_match = $base_slug;
+						
 					} else {
 						$condition_info .= "&rarr; NO matching post found<br />";
 						if ( $url ) {
@@ -2245,6 +2288,19 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					$key_ts_info .= $condition_info;
 					
 				} // END foreach $conditions
+				
+				/*
+				// WIP 231130
+				$matched_posts = array_unique($matched_posts);
+				$key_ts_info .= count($matched_posts)." matched_posts<br />";
+				$key_ts_info .= count($matched_post_removals)." matched_post_removals<br />";
+				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
+				if ( count($wildcard_urls) > 0 ) {				
+					// Run the update
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+					$key_ts_info .= sdg_update_custom_field( $update_args );
+				}
+				*/
 				$key_ts_info .= "<hr />";
 				
 				// Save the matched posts to the snippet field
