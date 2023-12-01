@@ -2679,7 +2679,7 @@ function sdg_update_custom_field ( $args = array() ) {
 		$info .= "get updated value based on arr_additions/arr_removals<br />";
 		$updated = get_updated_arr_field_value ( $args );
 		$info .= $updated['info'];
-		$value = $updated['arr_updated'];
+		$value = $updated['updated_value'];
 	}	
 	
 	$info .= "about to update field '$key'<br />";
@@ -2712,7 +2712,6 @@ function get_updated_arr_field_value ( $args = array() ) {
 	$info = "";
 	$updated_value = null;
 	$arr_updated = array();
-	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
 	
 	// Defaults
 	$defaults = array(
@@ -2729,6 +2728,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
+	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
+	
 	if ( !( $post_id && $key && ( $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
 	}
@@ -2740,62 +2741,28 @@ function get_updated_arr_field_value ( $args = array() ) {
 		$arr_current = array();
 	}
 	
-	// Unserialize as needed -- TODO: eliminate redundancy
+	$info .= "field_type: ".$field_type."<br />";
+	
+	//
 	if ( $field_type == 'repeater' ) {
-		 
-		$repeater_rows = get_field( $repeater_key, $snippet_id );
+		
+		$info .= "repeater_field: ".$repeater_field."<br />";
+		
+		$repeater_rows = get_field( $key, $snippet_id );
 		$repeater_rows_revised = array();
 		if ( empty($repeater_rows) ) { 
 			$repeater_rows = array();
 			$repeater_values = array();
 		} else {
 			// Sort the existing repeater_rows and save the sorted array
-			$repeater_values = array_column($repeater_rows, 'url');
+			$repeater_values = array_column($repeater_rows, $repeater_field);
 			//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
 			array_multisort($repeater_values, SORT_ASC, $repeater_rows);
-			update_field( $repeater_key, $repeater_rows, $snippet_id );
-		}
-						
-	} else if ( $field_type == 'serialized' ) {
-	
-		if ( !is_array($arr_current) && strpos($arr_current, '{') !== false ) {
-			$info .= "unserialize arr_current...<br >";
-			$arr_current = unserialize($arr_current);
-			//$info .= "=> ".print_r($arr_current,true)."<br />";
+			update_field( $key, $repeater_rows, $snippet_id );
 		}
 		
-	}
-	//if ( !is_array($arr_current) && !empty($arr_current) ) { $arr_current = json_decode($arr_current); }
-	
-	// Sort the existing values and save the sorted array
-	if ( is_array($arr_current) && !empty($arr_current) ) {
-	
-		$info .= count($arr_current)." items in arr_current array<br />";
-		$info .= "About to attempt sorting [disabled]<br />";
-		// WIP 231130
-		//$info .= "=> ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
-		// TODO: what about if this isn't an array of post ids? generalize... tbd
-		/*
-		$arr_current_sorted = sort_post_ids_by_title($arr_current);
-		if ( $arr_current_sorted ) {
-			$info .= $arr_current_sorted['info'];
-			$arr_current = $arr_current_sorted['post_ids'];
-			//$info .= "arr_current (sorted): ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
-		}
-		*/
-		
-	} else if ( empty($arr_current) ) {
-	
-		$info .= "arr_current is empty<br />";
-		
-	} else {
-	
-		$info .= "arr_current: ".print_r($arr_current, true)."<br />";
-		
-	}
-	
-	// Prepare the revised data	
-	if ( $field_type == 'repeater' ) {
+		$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
+		$info .= "repeater_values: ".print_r($repeater_values, true)."<br />";
 		
 		// First, remove duplicates and repeater_removals		
 		if ( !empty($repeater_rows) ) {
@@ -2858,10 +2825,46 @@ function get_updated_arr_field_value ( $args = array() ) {
 			// TODO: Fix the sorting!			
 		
 		}
-	
+		
 	} else {
 	
 		// NOT a repeater field -- could be of field_type 'array', 'serialized', or 'relationship'
+		
+		// Unserialize as needed
+		if ( $field_type == 'serialized' && !is_array($arr_current) && strpos($arr_current, '{') !== false ) {
+			$info .= "unserialize arr_current...<br >";
+			$arr_current = unserialize($arr_current);
+			//$info .= "=> ".print_r($arr_current,true)."<br />";
+		}
+		
+		//if ( !is_array($arr_current) && !empty($arr_current) ) { $arr_current = json_decode($arr_current); }
+	
+		// Sort the existing values and save the sorted array
+		if ( is_array($arr_current) && !empty($arr_current) ) {
+	
+			$info .= count($arr_current)." items in arr_current array<br />";
+			$info .= "About to attempt sorting [disabled]<br />";
+			// WIP 231130
+			//$info .= "=> ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
+			// TODO: what about if this isn't an array of post ids? generalize... tbd
+			/*
+			$arr_current_sorted = sort_post_ids_by_title($arr_current);
+			if ( $arr_current_sorted ) {
+				$info .= $arr_current_sorted['info'];
+				$arr_current = $arr_current_sorted['post_ids'];
+				//$info .= "arr_current (sorted): ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
+			}
+			*/
+		
+		} else if ( empty($arr_current) ) {
+	
+			$info .= "arr_current is empty<br />";
+		
+		} else {
+	
+			$info .= "arr_current: ".print_r($arr_current, true)."<br />";
+		
+		}
 		
 		// Removals
 		if ( !empty($arr_removals) && !empty($arr_current) ) {
