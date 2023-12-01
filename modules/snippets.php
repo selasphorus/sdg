@@ -2109,12 +2109,12 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				} else {
 					// Sort the existing repeater_rows and save the sorted array
 					$repeater_values = array_column($repeater_rows, 'url');
-					$condition_info .= count($repeater_rows)." existing repeater_rows found<br />";
-					//$condition_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
+					$key_ts_info .= count($repeater_rows)." existing repeater_rows found<br />";
+					//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
 					// sorting disabled -- we'll do this later via fcn get_updated_arr_field_value
 					//array_multisort($repeater_values, SORT_ASC, $repeater_rows);
 					//update_field( $repeater_key, $repeater_rows, $snippet_id );
-					//$condition_info .= "existing repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
+					//$key_ts_info .= "existing repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
 				}
 				
 				// TODO: (re-)check repeater_rows to see if updates are needed from target_by_url => target_by_post
