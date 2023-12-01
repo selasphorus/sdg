@@ -2148,7 +2148,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						if ( $post ) { $matched_post_id = $p_id; }
 					} */else {
 						$condition_info .= "condition: ".$condition." [".gettype($condition)."]<br />";
-						if ( !$key == 'target_by_post' && !$key == 'exclude_by_post' ) {
+						if ( $key != 'target_by_post' && $key != 'exclude_by_post' ) {
 							$url = $condition;
 						}						
 					}					
