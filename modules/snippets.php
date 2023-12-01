@@ -2528,11 +2528,12 @@ function sdg_update_custom_field ( $args = array() ) {
 	
 	// Do the update
 	if ( update_field( $key, $value, $post_id ) ) {
-		$info .= "updated field: ".$key." for post_id: $post_id ($post_type)<br />";
+		$info .= "updated field: '".$key."' for post_id: $post_id ($post_type)<br />";
 		$updated = true;
 	} else {
-		$info .= "update FAILED for field: ".$key." for post_id: $post_id ($post_type)<br />";
+		$info .= "update FAILED for field: '".$key."' for post_id: $post_id ($post_type)<br />";
 	}
+	$info .= "<hr /><br />";
 	
 	// Return as directed
 	if ( $return == "bool" ) { return $updated; } else { return $info; }
@@ -2586,6 +2587,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 			
 		} else {
 		
+			$info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";
+			
 			// Sort the existing repeater_rows and save the sorted array
 			$repeater_values = array_column($repeater_rows, $repeater_field);
 			$info .= "About to sort existing repeater_rows...<br />";
