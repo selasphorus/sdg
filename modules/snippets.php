@@ -2237,7 +2237,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						// WIP pattern matching
 						$matched_post = get_post( $matched_post_id );
 						$slug = $matched_post->post_name;
-						$post_type = $post->post_type;
+						$post_type = $matched_post->post_type;
 						//
 						//if ( $post_status != "publish" ) { $condition_info .= " <em>*** ".$post_status." ***</em>"; }
 						$condition_info .= " // ".$slug; //" // "
