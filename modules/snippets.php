@@ -1630,7 +1630,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";	
 						
 			// Update snippet logic to add post from which sidebar content this snippet was created
-			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return'  => 'info', 'field_type' => 'relationship', );
+			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return' => 'info', 'field_type' => 'relationship', );
 			$info .= sdg_update_custom_field( $update_args );
 			
 			/*
@@ -1941,7 +1941,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
 				if ( count($wildcard_urls) > 0 ) {				
 					// Run the update
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return'  => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				$key_ts_info .= "<hr />";
@@ -1980,7 +1980,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
 				
 				// Update field with revised value based on new and existing values for field
-				$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return'  => 'info', 'field_type' => 'relationship' );
+				$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return' => 'info', 'field_type' => 'relationship' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				/*
 				$update_key = 'target_by_post';
@@ -2250,7 +2250,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				$key_ts_info .= "<hr />";
 				
 				// Save the matched posts to the snippet field
-				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return'  => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 				/*$updates = get_updated_arr_field_value( $snippet_id, $target_key, $matched_posts );
@@ -2270,7 +2270,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 				*/
 				
 				// Update the associated repeater field as needed
-				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return'  => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 				/*
@@ -2386,7 +2386,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					
 					// CPT conditions
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 					/*
@@ -2430,7 +2430,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					
 					// CPT Archive conditions
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 					/*
@@ -2475,7 +2475,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					
 					// Taxonomy Archive Conditions
 					// Update field with revised value based on new and existing values for field				
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 					/*
@@ -2543,7 +2543,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$key_ts_info .= "special case: is_single<br />";
 							
 							// Update field with revised value based on new and existing values for field				
-							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return'  => 'info', 'field_type' => 'array' );
+							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return' => 'info', 'field_type' => 'array' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 							/*
@@ -2572,7 +2572,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 					}
 					
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return'  => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 					/*
@@ -2671,7 +2671,9 @@ function sdg_update_custom_field ( $args = array() ) {
 	
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
-		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; value: [$value]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals])<br />";
+		$info .= "Insufficient data for update!<br />";
+		$info .= "post_id: [$post_id]; key: [$key]; ";
+		$info .= "value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
 		// Return as directed
 		if ( $return == "bool" ) { return $updated; } else { return $info; }
 	}
