@@ -265,8 +265,7 @@ function get_snippets ( $args = array() ) {
 			'priority_clause' => 'ASC',
 			'sort_clause' => 'ASC',
 		),
-	);
-	
+	);	
 	
 	// Meta query
 	$meta_query = array(
@@ -1768,6 +1767,52 @@ function delete_widgets ( $atts = [] ) {
         $info .= "<br /><hr /><br />";
         
 	}
+	
+	return $info;
+	
+}
+
+//add_shortcode('update_snippets', 'update_snippets');
+function update_snippets ( $atts = [] ) {
+
+	// TS/logging setup
+    $do_ts = false; 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: update_snippets", $do_log );
+    
+    $args = shortcode_atts( array(
+        'limit'   => 1,
+        //'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ),
+        //'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
+    ), $atts );
+    
+    // Extract
+	extract( $args );
+	
+	$info = "";
+	$i = 0;
+	
+	// Set up basic query args for snippets retrieval
+    $wp_args = array(
+		'post_type'		=> 'snippet',
+		'post_status'	=> 'publish',
+		'posts_per_page'=> $limit,
+        'fields'		=> 'ids',
+	);
+	
+	$arr_posts = new WP_Query( $wp_args );
+	$snippets = $arr_posts->posts;
+    //$info .= "WP_Query run as follows:";
+    //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+    // Print SQ
+    $info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // tft
+    $info .= "[".count($snippets)."] snippets found.<br />";
+    
+    // Determine which snippets should be displayed for the post in question
+	foreach ( $snippets as $snippet_id ) {
+		$info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ).'</div>';
+	}	
 	
 	return $info;
 	
