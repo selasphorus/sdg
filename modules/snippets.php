@@ -2487,8 +2487,9 @@ function sdg_update_custom_field ( $args = array() ) {
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update!<br />";
-		//$info .= "post_id: [$post_id]; key: [$key]; ";
-		//$info .= "value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
+		$info .= "post_id: [$post_id]; key: [$key]";
+		//$info .= "; value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
+		$info .= "<hr /><br />";
 		// Return as directed
 		if ( $return == "bool" ) { return $updated; } else { return $info; }
 	}
@@ -2574,14 +2575,15 @@ function get_updated_arr_field_value ( $args = array() ) {
 			update_field( $key, $repeater_rows, $post_id );
 		}
 		
-		$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
-		$info .= "repeater_values: ".print_r($repeater_values, true)."<br />";
+		//$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
+		//$info .= "repeater_values: ".print_r($repeater_values, true)."<br />";
 		
 		// First, remove duplicates and repeater_removals		
 		if ( !empty($repeater_rows) ) {
 			
 			$info .= count($repeater_rows)." repeater_rows<br />"; //$key_ts_info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";//"<br />"; //<pre></pre>
-		
+			$info .= count($repeater_values)." repeater_values<br />";
+			
 			$info .= "<h4>About to clean up repeater_rows by removing repeater_removals...</h4>";
 			
 			// Remove duplicates?
