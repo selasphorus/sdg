@@ -2435,12 +2435,12 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 			}
 			
 			//$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
-			if ( $key == 'cs_post_ids' ) {
+			if ( $key == 'cs_post_ids' || $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				$ts_info .= $key_ts_info;
 				$ts_info .= "<hr />";
 			}
 			
-		} else {
+		} else { // if ( !empty($$key) ) {
 			//$ts_info .= "No meta data found for key: $key<br />";
 		}
 	}
