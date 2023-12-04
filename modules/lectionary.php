@@ -835,7 +835,7 @@ function parse_date_str ( $args = array() ) {
 	foreach ( $liturgical_bases AS $basis => $basis_field ) {
 		if (stripos($date_calculation_str, $basis) !== false) {
 			$calc_bases[] = array( $basis => $basis_field );
-			if ( $verbose == "true" ) { $info .= "calc_basis ".$calc_basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+			if ( $verbose == "true" ) { $info .= "calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
 	// just in case there's some crazy date string containing multiple basis dates...
