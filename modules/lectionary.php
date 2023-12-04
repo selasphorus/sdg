@@ -758,6 +758,8 @@ function parse_date_str ( $args = array() ) {
 	//
 	$arr_info = array();
 	$arr_elements = array();
+	$complex_formula = false;
+	//
 	$info = "";
 	$info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
@@ -826,7 +828,7 @@ function parse_date_str ( $args = array() ) {
 	
 	// WIP!!!
 	
-	$complex_formula = false;
+	
 	
 	// 1. Liturgical calc basis (calc_basis)
 	$calc_bases = array();
@@ -900,10 +902,7 @@ function parse_date_str ( $args = array() ) {
 			$info .= "$rarr; "."weekday '$weekday' found in date_calculation_str<br />";
 			$calc_weekdays[] = strtolower($weekday);
 		}
-	}
-	if ( $verbose == "true" ) { $info .= "calc_weekdays: ".print_r($calc_weekdays, true)."<br />"; }
-	if ( count($calc_weekdays) == 1 ) { $calc_weekday = $calc_weekdays[0]; } else { $complex_formula = true; }
-	
+	}	
 	//
 	if ( empty($calc_weekdays) ) {
 		if ( $verbose == "true" ) { $info .= "No calc_weekday found.<br />"; }
