@@ -754,6 +754,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 // Function(s) to calculate variable liturgical_dates
 
 // Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
+// TODO: break this function into smaller components so as to better handle complex formulas like Corpus Christi
 function calc_date_from_str( $year = null, $date_calculation_str = null, $verbose = false ) {
 	
 	// Abort if date_calculation_str or year is empty
@@ -813,6 +814,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		if (stripos($date_calculation_str, $basis) !== false) {
 			$calc_basis = $basis;
 			$calc_basis_field = $basis_field;
+			if ( $verbose == "true" ) { $info .= "calc_basis ".$calc_basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
 	
@@ -978,6 +980,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 				// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
 				// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
 				$info .= '<span class="notice">Complex Formula!</span><br />';
+				
+				
 				
 			} else {
 			
