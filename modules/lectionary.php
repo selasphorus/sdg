@@ -899,8 +899,8 @@ function parse_date_str ( $args = array() ) {
 			$calc_weekdays[] = strtolower($weekday);
 		}
 	}
-	if ( $verbose == "true" ) { $info .= "calc_weekday: ".print_r($calc_weekday, true)."<br />"; }
-	if ( count($calc_weekday) == 1 ) { $calc_weekday = $calc_weekday[0]; } else { $complex_formula = true; }
+	if ( $verbose == "true" ) { $info .= "calc_weekdays: ".print_r($calc_weekdays, true)."<br />"; }
+	if ( count($calc_weekdays) == 1 ) { $calc_weekday = $calc_weekdays[0]; } else { $complex_formula = true; }
 	
 	//
 	if ( empty($calc_weekdays) ) {
@@ -912,8 +912,8 @@ function parse_date_str ( $args = array() ) {
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
-	} else if ( count($calc_weekday) == 1 ) {
-		$calc_weekday = $calc_weekday[0];
+	} else if ( count($calc_weekdays) == 1 ) {
+		$calc_weekday = $calc_weekdays[0];
 		if ( $verbose == "true" ) { $info .= "calc_weekday: $calc_weekday<br />"; }
 	}
 	// 
@@ -1001,14 +1001,15 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	// Parse the date string
-	$date_elements_info = parse_date_str ( 'year' => $year, 'liturgical_date_calc_id' => $liturgical_date_calc_id, 'date_calculation_str' => $date_calculation_str );
+	$args = array( 'year' => $year, 'liturgical_date_calc_id' => $liturgical_date_calc_id, 'date_calculation_str' => $date_calculation_str );
+	$date_elements_info = parse_date_str ( $args );
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
 	if ( count($date_elements) > 1 ) { $complex_formula = true; }
 	$calc_date = null;	
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) {
-		$info .= "$element) components: <pre>".print_r($components, true)."</pre>";
+		$info .= $element.") components: <pre>".print_r($components, true)."</pre>";
 		// >>>> $calc_date = calc_date_from_components( $components ) -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 	}
 	
