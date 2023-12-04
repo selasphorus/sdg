@@ -842,8 +842,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		$cb = $calc_bases[0];
 		$calc_basis = array_key_first($cb);
 		$calc_basis_field = $cb[0];
-		$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
-		$info .= "cb: <pre>".print_r($cb, true)."</pre>";
+		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
+		//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
 		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
 	}
 	
