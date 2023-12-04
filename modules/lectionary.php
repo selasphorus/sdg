@@ -837,7 +837,7 @@ function parse_date_str ( $args = array() ) {
 	foreach ( $liturgical_bases AS $basis => $basis_field ) {
 		if (stripos($date_calculation_str, $basis) !== false) {
 			$calc_bases[] = array( $basis => $basis_field );
-			if ( $verbose == "true" ) { $info .= "$rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+			if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
 	// just in case there's some crazy date string containing multiple basis dates...
@@ -866,7 +866,7 @@ function parse_date_str ( $args = array() ) {
 	// can we do this without the loop -- match str against array of substr?
 	foreach ( $boias AS $boia ) {
 		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-			$info .= "$rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
+			$info .= "&rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
 			//$calc_boia = strtolower($boia);
 			$calc_boias[] = strtolower($boia);
 			if ( count($matches) > 1 ) { 
@@ -899,7 +899,7 @@ function parse_date_str ( $args = array() ) {
 	$calc_weekdays = array();
 	foreach ( $weekdays AS $weekday ) {
 		if (stripos($date_calculation_str, $weekday) !== false) {
-			$info .= "$rarr; "."weekday '$weekday' found in date_calculation_str<br />";
+			$info .= "&rarr; "."weekday '$weekday' found in date_calculation_str<br />";
 			$calc_weekdays[] = strtolower($weekday);
 		}
 	}	
