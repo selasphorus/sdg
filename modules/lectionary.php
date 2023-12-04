@@ -783,11 +783,20 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
 	
 	// Loop through all the components of the exploded date_calculation_str and determine component type
-	// WIP -- why do this?
+	// WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas... 
+	// "after the", "before the", "in the"(?)
+	// e.g. Corpus Christi: "thursday after the 1st sunday after pentecost"
+	// if str contains either multiple calc_bases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
+	
+	
 	foreach ( $calc_components as $component ) {
 		$component_info = "";
 		if ( array_key_exists($component, $liturgical_bases) ) {
 			$component_info .= $indent."component '".$component."' is liturgical_base<br />";
+			// >> save as calc_basis, replacing loop below?
+			// WIP
+			// if multiple bases are found, proceed with the core subclause and then repeat calc...
+			//
 		} else if ( in_array(ucfirst($component), $months) ) {
 			$component_info .= $indent."component '".$component."' is month<br />";
 		} else if ( in_array($component, $weekdays) ) {
@@ -807,22 +816,45 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	// WIP!!!
+	//$calc_bases
+	//$calc_boias
+	//calc_date_from_components
 	
 	// calc_basis
 	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
 	foreach ( $liturgical_bases AS $basis => $basis_field ) {
 		if (stripos($date_calculation_str, $basis) !== false) {
-			$calc_basis = $basis;
-			$calc_basis_field = $basis_field;
+			$calc_bases[] = array( $basis => $basis_field ); // wip
+			//$calc_basis = $basis;
+			//$calc_basis_field = $basis_field;
 			if ( $verbose == "true" ) { $info .= "calc_basis ".$calc_basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
-	
-	if ( !empty($calc_basis) ) {            
+	// just in case there's some crazy date string containing multiple basis dates...
+	if ( count($calc_bases) > 1 ) {
+		$info .= '<span class="notice">More than one calc_basis found!</span><br />';
+		$info .= '</div>';
+		$calc['calc_info'] = $info;
+		return $calc; // abort early -- we don't know what to do with this date_calculation_str
+	} else if ( count($calc_bases) == 1 ) {
+		$calc_basis = $calc_bases[0][0];
+		$calc_basis_field = $calc_bases[0][1];
 		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
 	} else {
 		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	}
+	
+	/*
+	// Does the date to be calculated fall before/after/of/in the basis_date/season?
+	// can we do this without the loop -- match str against array of substr?
+	foreach ( $boias AS $boia ) {
+		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
+			$info .= $indent."boia '$boia' found in date_calculation_str<br />";
+			$calc_boia[] = strtolower($boia);
+			if ( count($matches) > 1 ) { $complex_formula = true; }
+			if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+		}
+	}*/
         
 	// Find the liturgical_date_calc post for the selected year
 	// (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
@@ -874,14 +906,18 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		$ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
 		if ( empty($ash_wednesday_date) ) { 
 			$info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+			// TBD: abort?
 		} else {
 			if ( $verbose == "true" ) { $info .= "ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
 		}
 	}
 		
 	// If no basis date string has yet been established, then default to January first of the designated year
-	if ( $basis_date_str == "" ) { $basis_date_str = $year."-01-01"; }
-	if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
+	if ( $basis_date_str == "" ) {
+		$basis_date_str = $year."-01-01";
+		if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+	}
+	if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
         
 	// Get the basis_date from the string version
 	$basis_date = strtotime($basis_date_str);
@@ -905,11 +941,18 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 				$info .= $indent."boia '$boia' found in date_calculation_str<br />";
 				$calc_boia[] = strtolower($boia);
 				if ( count($matches) > 1 ) { $complex_formula = true; }
-				//if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+				if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
 			}
 		}
 		if ( $verbose == "true" ) { $info .= "calc_boia: ".print_r($calc_boia, true)."<br />"; }
-		if ( count($calc_boia) == 1 ) { $calc_boia = $calc_boia[0]; } else { $complex_formula = true; }
+		if ( count($calc_boia) == 1 ) {
+			$calc_boia = $calc_boia[0];
+		} else {
+			$complex_formula = true;
+			// WIP 231204
+			// get core sub-formula...
+			// "after the", "before the", "in the"(?)
+		}
 			
 		// What's the weekday for the date to be calculated?
 		foreach ( $weekdays AS $weekday ) {
@@ -980,7 +1023,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 				// WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
 				// Break the date_calculation_str down into components -- first "1st sunday after pentecost", then thursday after that date
 				$info .= '<span class="notice">Complex Formula!</span><br />';
-				
+				///
 				
 				
 			} else {
@@ -1089,6 +1132,11 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
     return $calc;
 
 }
+
+function calc_date_from_components () {
+
+}
+
 
 add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = [] ) {
