@@ -529,7 +529,9 @@ function get_snippets ( $args = array() ) {
 										// Check for wildcard match
 										$snippet_logic_info .= "** Wildcard url<br />";
 										$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />"; //$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
+										
 										// Remove the asterisk to get the url_base
+										// TODO: build in option for asterisk mid-url, e.g. /events/2022-07-31/?category=webcasts >> /events/*/?category=webcasts
 										$url_base = trim( substr($url, 0, strpos($url, '*')) );
 										// clean up the bases so that the /s don't get in the way -- TODO: do this more efficiently, maybe with a custom trim fcn?
 										if ( substr($url_base, 0, 1) == "/" ) { $url_base = substr($url_base, 1); } // Trim leading slash, if any
@@ -1943,7 +1945,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 						if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
 						$post_info .= " // ".$slug; //" // "
 						
-						// WIP 231117/231129...
+						// WIP 231117/231129/231130...
+						// TODO: separate this out into a new function -- we're doing this repeatedly
+						// args to include: slug, path, post_id, post_type, slug_to_match --
+						// -- OR -- fcn to process all URLs/slugs as big patch, returning revised array of repeater row values and post ids
+						
 						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
 						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
@@ -2212,6 +2218,8 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 							$slug = end($url_bits);
 							//$condition_info .= "url_bits: ".print_r($url_bits, true)."<br />";
 							$condition_info .= "$post_type slug: $slug<br />";
+							// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+							// WIP 231130
 						} else {
 							$condition_info .= "path: $path<br />";
 							//$condition_info .= "url: $url<br />";
@@ -2463,7 +2471,205 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	
 }
 
+// TODO/WIP: separate out widget_logic fields and convert those separately from updating/processing snippet-native fields
+function convert_widget_logic () {
+
+}
 // **************************
+
+function match_url_patterns ( $args = array () ) {
+
+	// init
+	$arr_result = array();
+	$info = "";
+	$array_wip = array(); // for urls and post ids combined
+	$arr_urls = array();
+	$arr_wildcard_urls = array();
+	$arr_posts = array();
+	$slug_to_match = "";
+	
+	$info .= ">> match_url_patterns <<<br />";
+	
+	// Defaults
+	$defaults = array(
+        'urls' => array(),
+        'posts' => array(),
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	//$info .= "args: <pre>".print_r($args, true)."</pre>";
+	extract( $args );
+	
+	///
+	// WIP 231130
+	// 1. Compile one master array of URLs & post_ids -- $array_wip -- merging content of both urls and posts arrays as transmitted in args
+	// 2. Sort the $array_wip by URL, post_title
+	// 3. Loop through, look for patterns and create wildcards urls accordingly
+	// 4. If a url can't be replaced by a wildcard, check to see if a matching post_id can be found (if there isn't one already); 
+	// 4a. if so, add it to the posts array
+	// 4b. if not, add it to the urls array
+	// 5. Clean up urls array to add wildcards, remove urls replaced by wildcards
+	// 6. Similarly, clean up posts array to remove posts replaced by wildcards
+	
+	
+	foreach ( $arr_posts as $post_id) {
+	
+		$info .= "post_id: ".$post_id."<br />";
+		
+		// Check to verify that post_id is a valid post id
+		$post = get_post( $post_id );
+		if ( $post ) {
+						
+			$post_info = $x.".) ".$post->post_title." [$p_id]";
+			// Get post status -- we're only interested published posts
+			$post_status = $post->post_status; // get_post_status( $id );					
+			$slug = $post->post_name;
+			$post_type = $post->post_type;
+			//
+			// get path, add it to $arr_urls_updated? or just $arr_urls
+			
+			
+			if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
+			$post_info .= " // ".$slug; //" // "
+			
+			// WIP 231117/231129/231130...
+			// TODO: separate this out into a new function -- we're doing this repeatedly
+			// args to include: slug, path, post_id, post_type, slug_to_match --
+			// -- OR -- fcn to process all URLs/slugs as big patch, returning revised array of repeater row values and post ids
+			
+			// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+			// TODO: expand beyond event posts? where else might url/slug patterns be found...?
+			// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
+			$base_slug = ""; // init
+			if ( $post_type == "event" ) {
+				$base_slug = substr($slug, 0, -11);							
+				if ( $base_slug == $slug_to_match ) {
+					$post_info .= " // <strong>".$base_slug."</strong>";
+					// Add this to URLs to target *instead of* matched_posts -- WIP...
+					$wildcard_url = $base_slug."*";
+					if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
+					$matched_post_removals[] = $post_id;
+					continue;
+				} else {
+					$post_info .= " // ".$base_slug;
+				}
+			}
+		
+			// Is this an attached instance of a recurring event?
+			$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
+			if ( $recurrence_id ) {
+				//$post_info .= "p_id: ".$p_id."";
+				$post_info .= '&rarr; RID: <span class="nb">'.$recurrence_id.'</span><br />';
+				// Remove individual instance id from ids array and save parent id instead? or.... WIP
+				$matched_posts[] = $recurrence_id; // WIP
+			} else {
+				//$post_info .= "p_id: ".$p_id." (not attached to a recurring event)<br />";
+				$matched_posts[] = $post_id;
+				//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
+			}
+			$post_info .= "<br />";
+			//
+			$info .= $post_info;
+			$slug_to_match = $base_slug;
+			
+		} else {
+			$key_ts_info .= "NO POST FOUND for post_id: ".$post_id."<br />";
+		}		
+	}
+	
+	foreach ( $arr_urls as $url) {
+	
+		$info .= "url: ".$url."<br />";
+		$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
+		
+		// Parse the url
+		$hostname = parse_url($url, PHP_URL_HOST);
+		if ( !empty($hostname) ) { $condition_info .= "&rarr; hostname: $hostname<br />"; }
+		//
+		$path = parse_url($url, PHP_URL_PATH);
+		//$info .= "&rarr; path: $path<br />";
+		$querystring = parse_url($url, PHP_URL_QUERY);
+		if ( !empty($querystring) ) {
+			$querystring = "?".$querystring;
+			$info .= "&rarr; querystring: $querystring<br />";
+		}
+		
+		// Does the URL contain a wildcard character? i.e. asterisk?
+		// e.g. /shop*, events/*
+		if ( strpos($url, '*') !== false ) {
+			$wildcard = true;
+			$info .= "** Wildcard url => add to repeaters; can't be matched<br />";
+			$repeater_additions[] = $url;
+		} else {
+			$wildcard = false;
+		}
+		
+		// TODO: eliminate redundancy -- make relativize_urls function
+		// Is this an STC absolute URL? If so, remove the first bit
+		if ( substr($url, 0, 4) == "http" ) {
+			$info .= "** Absolute url => relativize it [$url]<br />";
+			//$url_bits = parse_url($url);
+			// If this is an STC url, remove everything except the path
+			if ( preg_match("/stc|saint/", $hostname) ) {
+				$url = $path.$querystring;
+				$info .= "&rarr; revised url: $url<br />";
+				$info .= "&rarr; remove old: $url_bk<br />";
+				$repeater_removals[] = $url_bk; // Remove the absolute URL
+			}
+		}
+		//
+		$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+		if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
+			$post_type = "event";
+		} else if ( preg_match($date_validation_regex, $url) ) {
+			$post_type = "post";
+		}
+		//
+		if ( $post_type ) {
+			// Extract slug from path
+			// First, trim trailing slash, if any
+			if ( substr($path, -1) == "/" ) { $path = substr($path, 0, -1); }
+			$url_bits = explode("/",$path); // The last bit is slug
+			$slug = end($url_bits);
+			//$info .= "url_bits: ".print_r($url_bits, true)."<br />";
+			$info .= "$post_type slug: $slug<br />";
+			// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
+			// WIP 231130
+		} else {
+			$info .= "path: $path<br />";
+			//$info .= "url: $url<br />";
+		
+		}
+		// Look for matching post
+		if ( $wildcard == false ) {
+			if ( $slug && $post_type ) {
+				$info .= "get_page_by_path with slug: $slug; post_type: $post_type<br />";
+				$matched_post = get_page_by_path($slug, OBJECT, $post_type);
+			} else {
+				$info .= "get_page_by_path with path: $path<br />";
+				$matched_post = get_page_by_path($path);
+			}
+			if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
+		} else {
+			$condition_info .= "wildcard url => no attempt made to match post<br />";
+		}
+		
+	
+		$slug_to_match = $base_slug;
+		
+	}
+	
+	///
+	
+	$arr_result['info'] = $info;
+	$arr_result['arr_urls'] = $arr_urls;
+	$arr_result['arr_post_ids'] = $arr_post_ids;
+	
+	return $arr_result;
+	
+}
+
 // Helper function -- TODO: move to common_functions or admin_functions?
 function sdg_update_custom_field ( $args = array() ) {
 
@@ -2549,6 +2755,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 	$updated_value = null;
 	$arr_updated = array();
 	
+	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
+	
 	// Defaults
 	$defaults = array(
 		'post_id' => null,
@@ -2563,8 +2771,6 @@ function get_updated_arr_field_value ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	
-	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
 	
 	if ( !( $post_id && $key && ( $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
