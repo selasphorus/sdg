@@ -922,7 +922,7 @@ function parse_date_str ( $args = array() ) {
 	
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
-		$sub_formula = substr( $date_calculation_str, strpos($date_calculation_str, "after the "+9) ); // WIP 231204
+		$sub_formula = substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 ); // WIP 231204
 		$info .= "sub_formula: $sub_formula<br />";
 	}
 	// get core sub-formula...
