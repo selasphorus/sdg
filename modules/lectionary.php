@@ -835,7 +835,7 @@ function parse_date_str ( $args = array() ) {
 	foreach ( $liturgical_bases AS $basis => $basis_field ) {
 		if (stripos($date_calculation_str, $basis) !== false) {
 			$calc_bases[] = array( $basis => $basis_field );
-			if ( $verbose == "true" ) { $info .= "calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+			if ( $verbose == "true" ) { $info .= "$rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
 	// just in case there's some crazy date string containing multiple basis dates...
@@ -864,7 +864,7 @@ function parse_date_str ( $args = array() ) {
 	// can we do this without the loop -- match str against array of substr?
 	foreach ( $boias AS $boia ) {
 		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-			$info .= $indent."boia '$boia' found in date_calculation_str<br />";
+			$info .= "$rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
 			//$calc_boia = strtolower($boia);
 			$calc_boias[] = strtolower($boia);
 			if ( count($matches) > 1 ) { 
@@ -897,7 +897,7 @@ function parse_date_str ( $args = array() ) {
 	$calc_weekdays = array();
 	foreach ( $weekdays AS $weekday ) {
 		if (stripos($date_calculation_str, $weekday) !== false) {
-			$info .= $indent."weekday '$weekday' found in date_calculation_str<br />";
+			$info .= "$rarr; "."weekday '$weekday' found in date_calculation_str<br />";
 			$calc_weekdays[] = strtolower($weekday);
 		}
 	}
@@ -920,7 +920,12 @@ function parse_date_str ( $args = array() ) {
 	}
 	// 
 	
-	// WIP 231204
+	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
+	if ( $complex_formula ) {
+		$sub_formula = substr(); // WIP 231204
+		$sub_formula = substr( $date_calculation_str, strpos($date_calculation_str, "after the "+9) );
+		$info .= "sub_formula: $sub_formula<br />";
+	}
 	// get core sub-formula...
 	// "after the", "before the", "in the"(?)
 	// break complex formulas into separate elements
