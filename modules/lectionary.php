@@ -772,7 +772,7 @@ function parse_date_str ( $args = array() ) {
 	$arr_info = array();
 	$arr_elements = array();
 	$info = "";
-	$info .= '<strong>>>> parse_date_str <<<</strong><br />';
+	$info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
@@ -943,9 +943,10 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	// Init vars
 	$calc = array();
 	$info = "";
+	$calc_date = null;
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
-	$info .= '<strong>>>> calc_date_from_str <<<</strong><br />';
+	$info .= '<strong>&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
 	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
@@ -1047,7 +1048,7 @@ function calc_date_from_components ( $args = array() ) {
 	$calc_formula = null;
 	$calc_date = null;
 	
-	$info .= '<strong>>>> calc_date_from_str <<<</strong><br />';
+	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
 	
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
@@ -1278,7 +1279,7 @@ function calc_litdates( $atts = [] ) {
 	// WIP
     //if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
     
-    $info .= ">>> calc_litdates <<<<br />";
+    $info .= "&gt;&gt;&gt; calc_litdates &lt;&lt;&lt;<br />";
     $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "year: $year<br />";
     
