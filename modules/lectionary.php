@@ -789,8 +789,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	
 	$calc_components = explode(" ", $date_calculation_str);
 	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
+	$component_info = "";
 	foreach ( $calc_components as $component ) {
-		$component_info = "";
 		if ( array_key_exists($component, $liturgical_bases) ) {
 			$component_info .= $indent."component '".$component."' is liturgical_base<br />";
 			// >> save as calc_basis, replacing loop below?
