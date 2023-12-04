@@ -779,8 +779,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
     list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
     $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
 	//
-	$calc_components = explode(" ", $date_calculation_str);
-	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
+	
 	
 	// Loop through all the components of the exploded date_calculation_str and determine component type
 	// WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas... 
@@ -788,7 +787,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	// e.g. Corpus Christi: "thursday after the 1st sunday after pentecost"
 	// if str contains either multiple calc_bases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
 	
-	
+	$calc_components = explode(" ", $date_calculation_str);
+	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
 	foreach ( $calc_components as $component ) {
 		$component_info = "";
 		if ( array_key_exists($component, $liturgical_bases) ) {
@@ -812,21 +812,24 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		} else {
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
-		if ( $verbose == "true" ) { $info .= $component_info; }
+		if ( $verbose == "true" ) { $info .= "<hr />component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	}
 	
 	// WIP!!!
 	$calc_bases = array();
 	$calc_boias = array();
+	$complex_formula = false;
+	
+	
 	//calc_date_from_components
+	
+	// Determine the calc components
 	
 	// calc_basis
 	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
 	foreach ( $liturgical_bases AS $basis => $basis_field ) {
 		if (stripos($date_calculation_str, $basis) !== false) {
-			$calc_bases[] = array( $basis => $basis_field ); // wip
-			//$calc_basis = $basis;
-			//$calc_basis_field = $basis_field;
+			$calc_bases[] = array( $basis => $basis_field );
 			if ( $verbose == "true" ) { $info .= "calc_basis ".$calc_basis." (".$basis_field.") found in date_calculation_str.<br />"; }
 		}
 	}
