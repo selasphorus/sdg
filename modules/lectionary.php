@@ -923,7 +923,7 @@ function parse_date_str ( $args = array() ) {
 	if ( $complex_formula ) {
 		$sub_formula = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
 		$info .= "sub_formula: $sub_formula<br />";
-		$super_formula = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the") )); // WIP 231204
+		$super_formula = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
 		$info .= "super_formula: $super_formula<br />";
 	}
 	// get core sub-formula...
