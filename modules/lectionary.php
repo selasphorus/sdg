@@ -755,6 +755,13 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 function parse_date_str ( $args = array() ) {
 	
+	//
+	$arr_info = array();
+	$arr_elements = array();
+	$info = "";
+	$info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
+	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
+	
 	// Defaults
 	$defaults = array(
 		'year'						=> null,
@@ -767,12 +774,6 @@ function parse_date_str ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
-	
-	//
-	$arr_info = array();
-	$arr_elements = array();
-	$info = "";
-	$info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
