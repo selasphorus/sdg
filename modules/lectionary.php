@@ -868,11 +868,12 @@ function parse_date_str ( $args = array() ) {
 			$calc_boias[] = strtolower($boia);
 			if ( count($matches) > 1 ) { 
 				$complex_formula = true;
+				$info .= count($matches)." boia matches for '$boia'<br />";
 				foreach ( $matches as $match ) {
 					//
 				}
 			}
-			if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+			//if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
 		}
 	}
 	//
@@ -946,7 +947,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$calc_date = null;
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
-	$info .= '<strong>&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
+	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
 	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
