@@ -812,8 +812,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		} else {
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
-		if ( $verbose == "true" ) { $info .= "<hr />component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	}
+	if ( $verbose == "true" ) { $info .= "<hr />component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	
 	// WIP!!!
 	$calc_bases = array();
