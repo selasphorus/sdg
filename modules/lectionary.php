@@ -816,8 +816,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	// WIP!!!
-	//$calc_bases
-	//$calc_boias
+	$calc_bases = array();
+	$calc_boias = array();
 	//calc_date_from_components
 	
 	// calc_basis
@@ -831,7 +831,9 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		}
 	}
 	// just in case there's some crazy date string containing multiple basis dates...
-	if ( count($calc_bases) > 1 ) {
+	if ( empty($calc_bases) ) {
+		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
+	} else if ( count($calc_bases) > 1 ) {
 		$info .= '<span class="notice">More than one calc_basis found!</span><br />';
 		$info .= '</div>';
 		$calc['calc_info'] = $info;
@@ -840,8 +842,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		$calc_basis = $calc_bases[0][0];
 		$calc_basis_field = $calc_bases[0][1];
 		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; } // $info .= "calc_basis_field: $calc_basis_field -- "; // tft            
-	} else {
-		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	}
 	
 	/*
