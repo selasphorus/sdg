@@ -1026,7 +1026,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$calc_date = null;	
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) {
-		$info .= $element.") components: <pre>".print_r($components, true)."</pre>";
+		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		// >>>> $calc_date = calc_date_from_components( $components ) -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 	}
 	
