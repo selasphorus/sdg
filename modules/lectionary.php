@@ -783,6 +783,7 @@ function parse_date_str ( $args = array() ) {
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
 	//
 	$calc_basis = null;
+	$calc_basis_field = null;
 	$calc_boia = null;
 	$calc_weekday = null;
 	//
