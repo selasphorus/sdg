@@ -781,7 +781,10 @@ function parse_date_str ( $args = array() ) {
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
-	
+	//
+	$calc_basis = null;
+	$calc_boia = null;
+	$calc_weekday = null;
 	//
 	// get as args
 	//$date_str, $liturgical_date_calc_id
@@ -925,7 +928,7 @@ function parse_date_str ( $args = array() ) {
 		$components = array();
 		//$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
 		$arr_elements['sub_calc_str'] = array($sub_calc_str, $components);
-		$info .= "sub_calc_str: $sub_formula<br />";
+		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
 		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
 		$components = array();
