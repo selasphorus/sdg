@@ -774,8 +774,9 @@ function parse_date_str ( $args = array() ) {
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
+	//
+	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
@@ -1028,7 +1029,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {//
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
-		// >>>> $calc_date = calc_date_from_components( $components ) -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
+		$calc_date = calc_date_from_components( $components );
+		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 	}
 	
 	
@@ -1047,6 +1049,11 @@ function calc_date_from_components ( $args = array() ) {
 
 	// WIP
 	
+	// Init vars
+	$info = "";
+	$calc_formula = null;
+	$calc_date = null;
+	
 	// Defaults
 	$defaults = array(
 		'calc_basis'		=> null,
@@ -1061,11 +1068,8 @@ function calc_date_from_components ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	
-	// Init vars
-	$info = "";
-	$calc_formula = null;
-	$calc_date = null;
+	//
+	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	
 	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
 	
