@@ -829,10 +829,7 @@ function parse_date_str ( $args = array() ) {
 	
 	
 	// Determine the calc components
-	
 	// WIP!!!
-	
-	
 	
 	// 1. Liturgical calc basis (calc_basis)
 	$calc_bases = array();
@@ -927,18 +924,18 @@ function parse_date_str ( $args = array() ) {
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
 		$components = array();
-		//$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
-		$arr_elements['sub_calc_str'] = array($sub_calc_str, $components);
+		//$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['sub_calc_str'] = $components;
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
 		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
 		$components = array();
-		//$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
-		$arr_elements['super_calc_str'] = array($super_calc_str, $components);
+		//$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['super_calc_str'] = $components;
 		$info .= "super_calc_str: $super_calc_str<br />";
 	} else {
-		$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
-		$arr_elements['calc_str'] = array($date_calculation_str, $components);
+		$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['calc_str'] = $components;
 	}
 	// get core sub-formula...
 	// "after the", "before the", "in the"(?)
@@ -1029,7 +1026,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( count($date_elements) > 1 ) { $complex_formula = true; }
 	$calc_date = null;	
 	// >> loop through elements foreach $elements as $element => $components
-	foreach ( $date_elements as $element => $components ) {
+	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {//
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		// >>>> $calc_date = calc_date_from_components( $components ) -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 	}
