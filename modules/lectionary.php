@@ -921,10 +921,20 @@ function parse_date_str ( $args = array() ) {
 	
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
-		$sub_formula = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
-		$info .= "sub_formula: $sub_formula<br />";
-		$super_formula = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
-		$info .= "super_formula: $super_formula<br />";
+		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+		$components = array();
+		//$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['sub_calc_str'] = array($sub_calc_str, $components);
+		$info .= "sub_calc_str: $sub_formula<br />";
+		//
+		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
+		$components = array();
+		//$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['super_calc_str'] = array($super_calc_str, $components);
+		$info .= "super_calc_str: $super_calc_str<br />";
+	} else {
+		$components = array( 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
+		$arr_elements['calc_str'] = array($date_calculation_str, $components);
 	}
 	// get core sub-formula...
 	// "after the", "before the", "in the"(?)
