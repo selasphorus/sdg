@@ -924,7 +924,7 @@ function parse_date_str ( $args = array() ) {
 	} else if ( count($calc_boias) > 1 ) {
 		$complex_formula = true;
 		$info .= '<span class="notice">More than one calc_boia found!</span><br />';
-		$info .= "calc_boias: <pre>".print_r($calc_boias, true)."</pre>";
+		$info .= "calc_boias: ".print_r($calc_boias, true)."<br />"; //<pre></pre>
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
@@ -941,7 +941,7 @@ function parse_date_str ( $args = array() ) {
 	} else if ( count($calc_weekdays) > 1 ) {
 		$complex_formula = true;
 		$info .= '<span class="notice">More than one calc_weekday found!</span><br />';
-		$info .= "calc_weekdays: <pre>".print_r($calc_weekdays, true)."</pre>";
+		$info .= "calc_weekdays: ".print_r($calc_weekdays, true)."<br />"; //<pre></pre>
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
