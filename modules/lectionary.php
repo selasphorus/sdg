@@ -997,25 +997,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( count($posts) > 0 ) {
 		$liturgical_date_calc_id = $posts[0];
 		if ( $verbose == "true" ) { $info .= "liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
-		
-		// Get related dates
-		// +~+~+~+~+~+~+~+~+~+~+
-	
-		// 1. Advent Sunday date
-		//if ( $calc_basis == "epiphany" || $calc_basis == "advent" || $calc_basis == "pentecost" ) { }
-		$advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
-		if ( $verbose == "true" ) { $info .= "advent_sunday_date: ".$advent_sunday_date."<br />"; }
-	
-		// 2. Ash Wednesday date
-		//if ( $calc_basis == "epiphany" || $calc_basis == "lent" ) { }
-		$ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
-		if ( empty($ash_wednesday_date) ) { 
-			$info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
-			// TBD: abort?
-		} else {
-			if ( $verbose == "true" ) { $info .= "ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
-		}
-		
 	} else {
 		if ( $verbose == "true" ) { $info .= "No matching liturgical_date_calc_post for wp_args ".print_r($wp_args,true)."<br />"; }
 		$liturgical_date_calc_id = null;
@@ -1033,20 +1014,28 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
-		if ( $new_basis_date ) { 
-			$info .= "new_basis_date: ".$new_basis_date."<br />";
-			$components['calc_basis'] = $new_basis_date;
+	
+		if ( strtolower($date_calculation_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
+			$calc_date = $basis_date;
+			$info .= "date to be calculated is same as basis_date.<br />";		
+		} else {
+			//
+			if ( $new_basis_date ) { 
+				$info .= "new_basis_date: ".$new_basis_date."<br />";
+				$components['calc_basis'] = $new_basis_date;
+			}
+			//
+			$components['year'] = $year;
+			$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
+			$components['date_calculation_str'] = $date_calculation_str;
+			$components['verbose'] = $verbose;
+			//
+			$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
+		
+			$calc = calc_date_from_components( $components );
+			$info .= $calc['info'];
+			$calc_date = $calc['date'];
 		}
-		//
-		$components['year'] = $year;
-		$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
-		$components['date_calculation_str'] = $date_calculation_str;
-		$components['verbose'] = $verbose;
-		//
-		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
-		$calc = calc_date_from_components( $components );
-		$info .= $calc['info'];
-		$calc_date = $calc['date'];
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 		if ( $calc_date ) {
 			$new_basis_date = $calc_date;
@@ -1081,6 +1070,9 @@ function calc_date_from_components ( $args = array() ) {
 	
 	// Defaults
 	$defaults = array(
+		'year'				=> null,
+		'liturgical_date_id'=> null,
+		'date_calculation_str'=> null,
 		'calc_basis'		=> null,
 		'calc_basis_field'	=> null,
         'calc_boia'			=> null,
@@ -1096,27 +1088,8 @@ function calc_date_from_components ( $args = array() ) {
 	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-	if ( $calc_basis == 'christmas' ) {
-		$basis_date_str = $year."-12-25";          
-	} else if ( $calc_basis == 'epiphany' ) {                
-		$basis_date_str = $year."-01-06";
-		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) {
-		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
-	}
-
-	// If no basis date string has yet been established, then default to January first of the designated year
-	if ( $basis_date_str == "" ) {
-		$basis_date_str = $year."-01-01";
-		if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
-	}
-	if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
-        
-	// Get the basis_date from the string version
-	$basis_date = strtotime($basis_date_str);
-	$basis_date_weekday = strtolower( date('l', $basis_date) );
+	$basis_date = get_basis_date( $year, $calc_basis );
 	
-	if ( $verbose == "true" ) { $info .= "basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
         
 	// Check to see if the date to be calculated is in fact the same as the base date
 	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
@@ -1254,9 +1227,17 @@ function calc_date_from_components ( $args = array() ) {
 			// calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
 		}
 		
+		
 		// Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
 		if ( $calc_basis == "epiphany" ) {
-		
+			
+			$ash_wednesday_date = get_post_meta( $liturgical_date_calc_id, 'ash_wednesday_date', true);
+			if ( empty($ash_wednesday_date) ) { 
+				$info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $liturgical_date_calc_id<br />";
+				// TBD: abort?
+			}
+			if ( $verbose == "true" ) { $info .= "ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
+			
 			// Make sure this supposed date in the Epiphany season doesn't run into Lent
 			$info .= "There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
 			if ( $calc_date > strtotime($ash_wednesday_date) ) { //if ( (int) $calc_interval > (int) $num_sundays_after_epiphany ) {
@@ -1274,6 +1255,9 @@ function calc_date_from_components ( $args = array() ) {
 			// Make sure this supposed date in Ordinary Time/Pentecost season isn't actually in Advent
 			// Pentecost: "This season ends on the Saturday before the First Sunday of Advent."                
 			// TODO -- figure out if this is the LAST Sunday of Pentecost?
+			
+			$advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
+			if ( $verbose == "true" ) { $info .= "advent_sunday_date: ".$advent_sunday_date."<br />"; }
 			
 			if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
 			//if ( $calc_date > strtotime($advent_sunday_date) ) {
@@ -1294,6 +1278,40 @@ function calc_date_from_components ( $args = array() ) {
     return $arr_info;
 	
 	
+}
+
+function get_basis_date ( $year = date('Y'), $liturgical_date_calc_id = null, $calc_basis = null ) {
+
+	if ( empty($calc_basis) ) { return null; }
+	
+	$basis_date_str = null;
+	$basis_date = null;
+	
+	if ( $calc_basis == 'christmas' ) {
+		$basis_date_str = $year."-12-25";          
+	} else if ( $calc_basis == 'epiphany' ) {                
+		$basis_date_str = $year."-01-06";
+		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
+	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) {
+		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
+	}
+
+	// If no basis date string has yet been established, then default to January first of the designated year
+	if ( $basis_date_str == "" ) {
+		$basis_date_str = $year."-01-01";
+		if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+	}
+	if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
+
+	if ( $basis_date_str ) {
+		// Get the basis_date from the string version
+		$basis_date = strtotime($basis_date_str);
+		$basis_date_weekday = strtolower( date('l', $basis_date) );	
+		//if ( $verbose == "true" ) { $info .= "basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
+	}
+	
+	return $basis_date;
+
 }
 
 
