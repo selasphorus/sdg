@@ -1050,6 +1050,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	
 		$info .= "element: [".$element."]<br />";
 		//
+		if ( isset($components['date_calculation_str']) ) { $date_calculation_str = $components['date_calculation_str']; }
+		//
 		if ( isset($components['calc_basis']) && strtolower($date_calculation_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
 			$calc_date = get_basis_date( $year, $liturgical_date_calc_id, $components['calc_basis'], $components['calc_basis_field'] );
 			$info .= "date to be calculated is same as basis_date.<br />";		
