@@ -783,6 +783,7 @@ function parse_date_str ( $args = array() ) {
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
 	//
+	$components = array();
 	$calc_basis = null;
 	$calc_basis_field = null;
 	$calc_boia = null;
@@ -852,13 +853,21 @@ function parse_date_str ( $args = array() ) {
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
+		//
 	} else if ( count($calc_bases) == 1 ) {
 		$cb = $calc_bases[0];
 		$calc_basis_field = array_values($cb)[0];
 		$calc_basis = array_key_first($cb);
 		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
-		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; }       
+		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; }
+		$components['calc_basis'] = $calc_basis;
+		$components['calc_basis_field'] = $calc_basis_field;
+		// calc_basis identical to date_calculation_str?
+		/*if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
+			$calc_date = $basis_date;
+			$info .= "date to be calculated is same as basis_date.<br />";
+		}*/
 	}
 	
 	// 2. BOIAs
@@ -893,6 +902,7 @@ function parse_date_str ( $args = array() ) {
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
 	} else if ( count($calc_boias) == 1 ) {
 		$calc_boia = $calc_boias[0];
+		$components['calc_boia'] = $calc_boia;
 		if ( $verbose == "true" ) { $info .= "calc_boia: $calc_boia<br />"; }
 	}
 	
@@ -917,6 +927,7 @@ function parse_date_str ( $args = array() ) {
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
 	} else if ( count($calc_weekdays) == 1 ) {
 		$calc_weekday = $calc_weekdays[0];
+		$components['calc_weekday'] = $calc_weekday;
 		if ( $verbose == "true" ) { $info .= "calc_weekday: $calc_weekday<br />"; }
 	}
 	// 
@@ -924,18 +935,13 @@ function parse_date_str ( $args = array() ) {
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
-		$components = array();
-		//$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
 		$arr_elements['sub_calc_str'] = $components;
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
 		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
-		$components = array();
-		//$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
 		$arr_elements['super_calc_str'] = $components;
 		$info .= "super_calc_str: $super_calc_str<br />";
 	} else {
-		$components = array( 'date_calculation_str' => $date_calculation_str, 'calc_basis' => $calc_basis, 'calc_basis_field' => $calc_basis_field, 'calc_boia' => $calc_boia, 'calc_weekday' => $calc_weekday );
 		$arr_elements['calc_str'] = $components;
 	}
 	// get core sub-formula...
@@ -1081,10 +1087,8 @@ function calc_date_from_components ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	//
-	$info .= "args: <pre>".print_r($args, true)."</pre>";
-	
 	$info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
-	
+	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
 	if ( $calc_basis == 'christmas' ) {
