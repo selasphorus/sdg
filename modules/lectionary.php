@@ -976,9 +976,9 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
 	// Init vars
-    list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", null, "" );
-    list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
-    $calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
+    //list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", null, "" );
+    //list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
+    //$calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
 	//
 	
 	// Find the liturgical_date_calc post for the selected year
@@ -1040,6 +1040,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$info .= "new_basis_date: ".$new_basis_date."<br />";
 			$components['calc_basis'] = $new_basis_date;
 		}
+		$components['verbose'] = $verbose;
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		$calc = calc_date_from_components( $components );
 		$info .= $calc['info'];
@@ -1071,15 +1072,16 @@ function calc_date_from_components ( $args = array() ) {
 	$info = "";
 	$calc_formula = null;
 	$calc_date = null;
+	//
+	$basis_date_str = null;
+	$calc_interval = null;
 	
 	// Defaults
 	$defaults = array(
 		'calc_basis'		=> null,
 		'calc_basis_field'	=> null,
-		'basis_date_str'	=> null,
         'calc_boia'			=> null,
         'calc_weekday'		=> null,
-        'calc_interval'		=> null,
         'verbose'			=> false,
 	);
 
