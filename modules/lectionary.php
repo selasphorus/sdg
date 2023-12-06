@@ -1066,6 +1066,8 @@ function calc_date_from_components ( $args = array() ) {
 	$calc_date = null;
 	//
 	$calc_interval = null;
+	//
+	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions 
 	
 	// Defaults
 	$defaults = array(
