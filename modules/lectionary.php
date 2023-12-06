@@ -1124,7 +1124,7 @@ function calc_date_from_components ( $args = array() ) {
 	extract( $args );
 	//
 	$info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
-	$info .= "args: <pre>".print_r($args, true)."</pre>";
+	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
 	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );	
