@@ -753,6 +753,68 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 
+function get_calc_bases_from_str ( $date_calculation_str = "" ) {
+	
+	$calc_bases = array();
+	
+	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
+	
+	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
+	foreach ( $liturgical_bases AS $basis => $basis_field ) {
+		if (stripos($date_calculation_str, $basis) !== false) {
+			$calc_bases[] = array( $basis => $basis_field );
+			//if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+		}
+	}
+	
+	return $calc_bases;
+	
+}
+
+function get_calc_boias_from_str ( $date_calculation_str = "" ) {
+	
+	$calc_boias = array();
+	
+	$boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
+	
+	// can we do this without the loop -- match str against array of substr?
+	foreach ( $boias AS $boia ) {
+		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
+			//$info .= "&rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
+			//$calc_boia = strtolower($boia);
+			$calc_boias[] = strtolower($boia);
+			if ( count($matches) > 1 ) { 
+				$complex_formula = true;
+				//$info .= count($matches)." boia matches for '$boia'<br />";
+				//foreach ( $matches as $match ) { }
+			}
+			//if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+		}
+	}
+	
+	return $calc_boias;
+	
+}
+
+function get_calc_weekdays_from_str ( $date_calculation_str = "" ) {
+	
+	$calc_weekdays = array();
+	
+	$weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+	
+	// What's the weekday for the date to be calculated?
+	$calc_weekdays = array();
+	foreach ( $weekdays AS $weekday ) {
+		if (stripos($date_calculation_str, $weekday) !== false) {
+			//$info .= "&rarr; "."weekday '$weekday' found in date_calculation_str<br />";
+			$calc_weekdays[] = strtolower($weekday);
+		}
+	}	
+	
+	return $calc_weekdays;
+	
+}
+
 function parse_date_str ( $args = array() ) {
 	
 	//
@@ -777,10 +839,11 @@ function parse_date_str ( $args = array() ) {
 	//
 	//$info .= "args: <pre>".print_r($args, true)."</pre>";
 	//
-	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
+	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
+	//
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-    $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
+    $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season?
 	//
 	$components = array();
 	$calc_basis = null;
@@ -831,16 +894,7 @@ function parse_date_str ( $args = array() ) {
 	// WIP!!!
 	
 	// 1. Liturgical calc basis (calc_basis)
-	$calc_bases = array();
-	
-	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
-	foreach ( $liturgical_bases AS $basis => $basis_field ) {
-		if (stripos($date_calculation_str, $basis) !== false) {
-			$calc_bases[] = array( $basis => $basis_field );
-			if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
-		}
-	}
-	// just in case there's some crazy date string containing multiple basis dates...
+	$calc_bases = get_calc_bases_from_str($date_calculation_str);
 	if ( empty($calc_bases) ) {
 		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	} else if ( count($calc_bases) > 1 ) {
@@ -860,34 +914,11 @@ function parse_date_str ( $args = array() ) {
 		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; }
 		$components['calc_basis'] = $calc_basis;
 		$components['calc_basis_field'] = $calc_basis_field;
-		// calc_basis identical to date_calculation_str?
-		/*if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
-			$calc_date = $basis_date;
-			$info .= "date to be calculated is same as basis_date.<br />";
-		}*/
 	}
 	
 	// 2. BOIAs
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
-	$calc_boias = array();
-	
-	// can we do this without the loop -- match str against array of substr?
-	foreach ( $boias AS $boia ) {
-		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-			$info .= "&rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
-			//$calc_boia = strtolower($boia);
-			$calc_boias[] = strtolower($boia);
-			if ( count($matches) > 1 ) { 
-				$complex_formula = true;
-				$info .= count($matches)." boia matches for '$boia'<br />";
-				foreach ( $matches as $match ) {
-					//
-				}
-			}
-			//if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
-		}
-	}
-	//
+	$calc_boias = get_calc_calc_boias_from_str($date_calculation_str);
 	if ( empty($calc_boias) ) {
 		if ( $verbose == "true" ) { $info .= "No boias found.<br />"; }
 	} else if ( count($calc_boias) > 1 ) {
@@ -904,15 +935,7 @@ function parse_date_str ( $args = array() ) {
 	}
 	
 	// 3. Weekdays
-	// What's the weekday for the date to be calculated?
-	$calc_weekdays = array();
-	foreach ( $weekdays AS $weekday ) {
-		if (stripos($date_calculation_str, $weekday) !== false) {
-			$info .= "&rarr; "."weekday '$weekday' found in date_calculation_str<br />";
-			$calc_weekdays[] = strtolower($weekday);
-		}
-	}	
-	//
+	$calc_weekdays = get_calc_weekdays_from_str($date_calculation_str);
 	if ( empty($calc_weekdays) ) {
 		if ( $verbose == "true" ) { $info .= "No calc_weekday found.<br />"; }
 	} else if ( count($calc_weekdays) > 1 ) {
@@ -933,13 +956,24 @@ function parse_date_str ( $args = array() ) {
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
 		$components['date_calculation_str'] = $sub_calc_str;
-		if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
+		//if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
+		//
+		$calc_weekdays = get_calc_weekdays_from_str($sub_calc_str);
+		if ( count($calc_weekdays) == 1 ) {
+			$components['calc_weekday'] = $calc_weekdays[0];
+		}
+		//
 		$arr_elements['sub_calc_str'] = $components;
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
 		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
 		$components['date_calculation_str'] = $super_calc_str;
-		if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[0]; }
+		//
+		$calc_weekdays = get_calc_weekdays_from_str($super_calc_str);
+		if ( count($calc_weekdays) == 1 ) {
+			$components['calc_weekday'] = $calc_weekdays[0];
+		}
+		//
 		$arr_elements['super_calc_str'] = $components;
 		$info .= "super_calc_str: $super_calc_str<br />";
 	} else {
