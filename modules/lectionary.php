@@ -1032,8 +1032,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$calc_date = null;
 	$new_basis_date = null;
 	//
-	$components['verbose'] = $verbose;
-	$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
 	
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
@@ -1041,6 +1039,10 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$info .= "new_basis_date: ".$new_basis_date."<br />";
 			$components['calc_basis'] = $new_basis_date;
 		}
+		//
+		$components['verbose'] = $verbose;
+		$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
+		//
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		$calc = calc_date_from_components( $components );
 		$info .= $calc['info'];
