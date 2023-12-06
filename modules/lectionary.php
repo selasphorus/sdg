@@ -975,12 +975,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
-	// Init vars
-    //list( $calc_basis, $calc_basis_field, $calc_month, $calc_date, $calc_formula ) = array( "", "", "", null, "" );
-    //list( $basis_date_str, $basis_date, $basis_date_weekday ) = array( "", "", "" );
-    //$calc_weekday = $calc_boia = $calc_interval = array(); // in case more than one match is found
-	//
-	
 	// Find the liturgical_date_calc post for the selected year
 	// (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
 	$wp_args = array(
@@ -1067,10 +1061,7 @@ function calc_date_from_components ( $args = array() ) {
 	// Init vars
 	$arr_info = array();
 	$info = "";
-	$calc_formula = null;
 	$calc_date = null;
-	//
-	$calc_interval = null;
 	//
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions 
 	
@@ -1103,9 +1094,10 @@ function calc_date_from_components ( $args = array() ) {
 		$info .= "date to be calculated is same as basis_date.<br />";
 		
 	} else {
-            
+        
+		$calc_formula = null;
+		$calc_interval = null;
         // ** Extract components of date_calculation_str & calculate date for $year
-
 			
 		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 			
@@ -1114,15 +1106,14 @@ function calc_date_from_components ( $args = array() ) {
 		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
 			if ( $verbose == "true" ) { $info .= "date_calculation_str contains numbers.<br />"; }
-			//if ( $verbose == "true" ) { $info .= "number matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
+			if ( $verbose == "true" ) { $info .= "number matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
 			
 			// Extract the calc_interval integer from the string by getting rid of everything else
 			// WIP deal w/ multiple value possibilities for weekday, boia
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
-				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
-				$calc_interval = trim( $calc_interval );
-			} else {
-				$calc_interval = null; // tft
+				// TODO: fix this
+				//$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
+				//$calc_interval = trim( $calc_interval );
 			}
 			
 			//if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
@@ -1261,9 +1252,9 @@ function calc_date_from_components ( $args = array() ) {
 			}
 		}
 
-	}    
+	}
+	$info .= "<br /><hr /><br />";
 	
-	///WIP
 	$arr_info['date'] = $calc_date;
     $arr_info['info'] = $info;
     
