@@ -1280,7 +1280,7 @@ function calc_date_from_components ( $args = array() ) {
 	
 }
 
-function get_basis_date ( $year = date('Y'), $liturgical_date_calc_id = null, $calc_basis = null ) {
+function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null ) {
 
 	if ( empty($calc_basis) ) { return null; }
 	
