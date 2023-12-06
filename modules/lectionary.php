@@ -918,7 +918,7 @@ function parse_date_str ( $args = array() ) {
 	
 	// 2. BOIAs
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
-	$calc_boias = get_calc_calc_boias_from_str($date_calculation_str);
+	$calc_boias = get_calc_boias_from_str($date_calculation_str);
 	if ( empty($calc_boias) ) {
 		if ( $verbose == "true" ) { $info .= "No boias found.<br />"; }
 	} else if ( count($calc_boias) > 1 ) {
