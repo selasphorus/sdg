@@ -1148,7 +1148,7 @@ function calc_date_from_components ( $args = array() ) {
 		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
 			if ( $verbose == "true" ) { $info .= "date_calculation_str contains numbers.<br />"; }
-			if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre><br />"; } //
+			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre><br />"; } //
 			
 			// Extract the calc_interval integer from the string by getting rid of everything else
 			// WIP deal w/ multiple value possibilities for weekday, boia
