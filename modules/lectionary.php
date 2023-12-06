@@ -1378,6 +1378,7 @@ function calc_litdates( $atts = [] ) {
     	
         // init
         $calc_info = "";
+        $calc_date = null;
         $calc_date_str = "";
         
         $changes_made = false;
