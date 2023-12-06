@@ -1030,7 +1030,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$components['date_calculation_str'] = $date_calculation_str;
 			$components['verbose'] = $verbose;
 			//
-			$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
+			//$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		
 			$calc = calc_date_from_components( $components );
 			$info .= $calc['info'];
