@@ -1318,7 +1318,10 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
 		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) {
+	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis ) {
+		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
+		$basis_date_str = $calc_basis;
+	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	}
 
