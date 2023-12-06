@@ -1398,8 +1398,9 @@ function calc_litdates( $atts = [] ) {
 				$calc_info .= $indent.'<span class="error">calc_date_from_str failed</span><br />';
 			}
     	} else {
-    		$calc_info .= $indent."date_calculation_st is empty<br />"; // tft
+    		$calc_info .= $indent."date_calculation_str is empty<br />"; // tft
     		$calc = null;
+    		continue;
     	}   
         
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
