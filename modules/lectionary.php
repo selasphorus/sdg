@@ -960,7 +960,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( empty($date_calculation_str) || empty($year) ) { return false; }
 	
 	// Init vars
-	$calc = array();
+	$arr_info = array();
 	$info = "";
 	$calc_date = null;
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
@@ -1025,12 +1025,23 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
 	if ( count($date_elements) > 1 ) { $complex_formula = true; }
-	$calc_date = null;	
+	$calc_date = null;
+	$new_basis_date = null;
+	
 	// >> loop through elements foreach $elements as $element => $components
-	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {//
+	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
+		if ( $new_basis_date ) { 
+			$info .= "new_basis_date: ".$new_basis_date."<br />";
+			$components['calc_basis'] = $new_basis_date;
+		}
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
-		$calc_date = calc_date_from_components( $components );
+		$calc = calc_date_from_components( $components );
+		$info .= $calc['info'];
+		$calc_date = $calc['date'];
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
+		if ( $calc_date && $complex_formula ) {
+			$new_basis_date = $calc_date;
+		}
 	}
 	
 	
@@ -1038,10 +1049,10 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
     
     $info .= '</div>';
         
-    $calc['calc_date'] = $calc_date;
-    $calc['calc_info'] = $info;
+    $arr_info['calc_date'] = $calc_date;
+    $arr_info['calc_info'] = $info;
     
-    return $calc;
+    return $arr_info;
 
 }
 
@@ -1050,6 +1061,7 @@ function calc_date_from_components ( $args = array() ) {
 	// WIP
 	
 	// Init vars
+	$arr_info = array();
 	$info = "";
 	$calc_formula = null;
 	$calc_date = null;
@@ -1269,7 +1281,10 @@ function calc_date_from_components ( $args = array() ) {
 	}    
 	
 	///WIP
-	//return
+	$arr_info['date'] = $calc_date;
+    $arr_info['info'] = $info;
+    
+    return $arr_info;
 	
 	
 }
