@@ -1038,15 +1038,20 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$components['calc_basis'] = $new_basis_date;
 		}
 		//
-		$components['verbose'] = $verbose;
+		$components['year'] = $year;
 		$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
+		$components['date_calculation_str'] = $date_calculation_str;
+		$components['verbose'] = $verbose;
 		//
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		$calc = calc_date_from_components( $components );
 		$info .= $calc['info'];
 		$calc_date = $calc['date'];
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
-		if ( $calc_date ) { $new_basis_date = $calc_date; }
+		if ( $calc_date ) {
+			$new_basis_date = $calc_date;
+			// TODO: replace substr in date_calculation_str
+		}
 	}
 	
 	
