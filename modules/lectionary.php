@@ -776,7 +776,7 @@ function parse_date_str ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	//
-	$info .= "args: <pre>".print_r($args, true)."</pre>";
+	//$info .= "args: <pre>".print_r($args, true)."</pre>";
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
     $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
@@ -826,7 +826,7 @@ function parse_date_str ( $args = array() ) {
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
 	}
-	if ( $verbose == "true" ) { $info .= "<hr />component_info (FYI): <br />".$component_info."<br /><hr />"; }
+	if ( $verbose == "true" ) { $info .= "component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	
 	
 	// Determine the calc components
@@ -1071,7 +1071,7 @@ function calc_date_from_components ( $args = array() ) {
 	//
 	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	
-	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
+	$info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
 	
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
