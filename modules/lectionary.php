@@ -789,8 +789,6 @@ function parse_date_str ( $args = array() ) {
 	$calc_boia = null;
 	$calc_weekday = null;
 	//
-	// get as args
-	//$date_str, $liturgical_date_calc_id
 	
 	// Loop through all the components of the exploded date_calculation_str and determine component type
 	// WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas... 
@@ -1033,6 +1031,9 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( count($date_elements) > 1 ) { $complex_formula = true; }
 	$calc_date = null;
 	$new_basis_date = null;
+	//
+	$components['verbose'] = $verbose;
+	$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
 	
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
@@ -1040,7 +1041,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$info .= "new_basis_date: ".$new_basis_date."<br />";
 			$components['calc_basis'] = $new_basis_date;
 		}
-		$components['verbose'] = $verbose;
 		$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 		$calc = calc_date_from_components( $components );
 		$info .= $calc['info'];
@@ -1098,10 +1098,8 @@ function calc_date_from_components ( $args = array() ) {
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
 		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-	} else {
-		if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
-			$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
-		}
+	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) { // if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
+		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	}
 
 	// If no basis date string has yet been established, then default to January first of the designated year
