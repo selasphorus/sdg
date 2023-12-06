@@ -1016,7 +1016,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
 	
 		if ( isset($components['calc_basis']) && strtolower($date_calculation_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
-			$calc_date = get_basis_date( $year, $components['calc_basis'] );
+			$calc_date = get_basis_date( $year, $liturgical_date_calc_id, $components['calc_basis'], $components['calc_basis_field'] );
 			$info .= "date to be calculated is same as basis_date.<br />";		
 		} else {
 			//
@@ -1065,7 +1065,6 @@ function calc_date_from_components ( $args = array() ) {
 	$calc_formula = null;
 	$calc_date = null;
 	//
-	$basis_date_str = null;
 	$calc_interval = null;
 	
 	// Defaults
@@ -1088,8 +1087,7 @@ function calc_date_from_components ( $args = array() ) {
 	$info .= "args: <pre>".print_r($args, true)."</pre>";
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-	$basis_date = get_basis_date( $year, $calc_basis );
-	
+	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );	
         
 	// Check to see if the date to be calculated is in fact the same as the base date
 	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
@@ -1146,6 +1144,7 @@ function calc_date_from_components ( $args = array() ) {
 			//$info .= $indent."About to build calc_formula...<br />"; // tft
 			
 			// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
+			$basis_date_weekday = strtolower( date('l', $basis_date) );
 			if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
 				$first_sunday = strtotime("next Sunday", $basis_date);
 				//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
@@ -1280,10 +1279,11 @@ function calc_date_from_components ( $args = array() ) {
 	
 }
 
-function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null ) {
+function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null, $calc_basis_field = null ) {
 
-	if ( empty($calc_basis) ) { return null; }
+	//if ( empty($calc_basis) ) { return null; }
 	
+	$info = "";
 	$basis_date_str = null;
 	$basis_date = null;
 	
@@ -1299,14 +1299,14 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 	// If no basis date string has yet been established, then default to January first of the designated year
 	if ( $basis_date_str == "" ) {
 		$basis_date_str = $year."-01-01";
-		if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+		//if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
 	}
-	if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
+	//if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
 
 	if ( $basis_date_str ) {
 		// Get the basis_date from the string version
 		$basis_date = strtotime($basis_date_str);
-		$basis_date_weekday = strtolower( date('l', $basis_date) );	
+		//$basis_date_weekday = strtolower( date('l', $basis_date) );	
 		//if ( $verbose == "true" ) { $info .= "basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
 	}
 	
