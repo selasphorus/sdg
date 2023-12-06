@@ -120,7 +120,7 @@ function get_lit_dates ( $args ) {
         }
         
         // Format date_str
-        $full_date_str = date("Y-m-d", $start );        
+        $full_date_str = date("Y-m-d", $start );
         $ts_info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
         
         // Add meta_query components for date calculations and assignments        
@@ -1042,7 +1042,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
 	$calc_date = null;
-	$new_basis_date = null;
+	$new_basis_date_str = null;
 	//
 	
 	// >> loop through elements foreach $elements as $element => $components
@@ -1055,9 +1055,9 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$info .= "date to be calculated is same as basis_date.<br />";		
 		} else {
 			//
-			if ( $new_basis_date ) { 
-				$info .= "new_basis_date: ".$new_basis_date."<br />";
-				$components['calc_basis'] = $new_basis_date;
+			if ( $new_basis_date_str ) { 
+				$info .= "new_basis_date_str: ".$new_basis_date_str."<br />";
+				$components['calc_basis'] = $new_basis_date_str;
 			}
 			//
 			$components['year'] = $year;
@@ -1073,7 +1073,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		}
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 		if ( $calc_date ) {
-			$new_basis_date = $calc_date;
+			$new_basis_date_str = date("Y-m-d", $calc_date );
 			// TODO: replace substr in date_calculation_str
 		}
 	}
