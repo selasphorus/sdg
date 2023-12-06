@@ -1037,7 +1037,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	// Parse the date string
-	$args = array( 'year' => $year, 'date_calculation_str' => $date_calculation_str );
+	$args = array( 'year' => $year, 'date_calculation_str' => $date_calculation_str, 'verbose' => $verbose );
 	$date_elements_info = parse_date_str ( $args );
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
