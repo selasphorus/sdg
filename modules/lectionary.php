@@ -767,7 +767,6 @@ function parse_date_str ( $args = array() ) {
 	// Defaults
 	$defaults = array(
 		'year'						=> null,
-		'liturgical_date_calc_id'	=> null,
 		'date_calculation_str'		=> null,
 		'verbose'					=> true, // tft
 	);
@@ -1024,7 +1023,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	// Parse the date string
-	$args = array( 'year' => $year, 'liturgical_date_calc_id' => $liturgical_date_calc_id, 'date_calculation_str' => $date_calculation_str );
+	$args = array( 'year' => $year, 'date_calculation_str' => $date_calculation_str );
 	$date_elements_info = parse_date_str ( $args );
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
@@ -1100,7 +1099,7 @@ function calc_date_from_components ( $args = array() ) {
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
 		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) { // if ( !empty($liturgical_date_calc_id) && !empty($calc_basis_field) ) {
+	} else  if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	}
 
