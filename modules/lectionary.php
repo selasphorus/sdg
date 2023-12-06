@@ -933,11 +933,13 @@ function parse_date_str ( $args = array() ) {
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
 		$components['date_calculation_str'] = $sub_calc_str;
+		if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
 		$arr_elements['sub_calc_str'] = $components;
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
 		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
 		$components['date_calculation_str'] = $super_calc_str;
+		if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[0]; }
 		$arr_elements['super_calc_str'] = $components;
 		$info .= "super_calc_str: $super_calc_str<br />";
 	} else {
