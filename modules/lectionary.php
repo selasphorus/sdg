@@ -1015,8 +1015,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	// >> loop through elements foreach $elements as $element => $components
 	foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
 	
-		if ( strtolower($date_calculation_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
-			$calc_date = $basis_date;
+		if ( isset($components['calc_basis']) && strtolower($date_calculation_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
+			$calc_date = get_basis_date( $year, $components['calc_basis'] );
 			$info .= "date to be calculated is same as basis_date.<br />";		
 		} else {
 			//
