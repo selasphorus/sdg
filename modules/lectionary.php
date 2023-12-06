@@ -932,13 +932,16 @@ function parse_date_str ( $args = array() ) {
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calculation_str, strpos($date_calculation_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+		$components['date_calculation_str'] = $sub_calc_str;
 		$arr_elements['sub_calc_str'] = $components;
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
-		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 )); // WIP 231204
+		$super_calc_str = trim(substr( $date_calculation_str, 0, strpos($date_calculation_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
+		$components['date_calculation_str'] = $super_calc_str;
 		$arr_elements['super_calc_str'] = $components;
 		$info .= "super_calc_str: $super_calc_str<br />";
 	} else {
+		$components['date_calculation_str'] = $date_calculation_str;
 		$arr_elements['calc_str'] = $components;
 	}
 	// get core sub-formula...
@@ -1029,7 +1032,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			//
 			$components['year'] = $year;
 			$components['liturgical_date_calc_id'] = $liturgical_date_calc_id;
-			$components['date_calculation_str'] = $date_calculation_str;
+			//$components['date_calculation_str'] = $date_calculation_str;
 			$components['verbose'] = $verbose;
 			//
 			//$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
