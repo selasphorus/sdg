@@ -1057,7 +1057,12 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			//
 			if ( $new_basis_date_str ) { 
 				$info .= "new_basis_date_str: ".$new_basis_date_str."<br />";
+				// TODO: str_replace "the sub_calc_str" in date_calculation_str
+				$date_calculation_str = str_replace("the sub_calc_str", $new_basis_date_str, $date_calculation_str );
+				//$date_calculation_str = str_replace("sub_calc_str", $new_basis_date_str, $date_calculation_str );
 				$components['calc_basis'] = $new_basis_date_str;
+				$components['calc_basis_field'] = null;
+				$components['date_calculation_str'] = $date_calculation_str;
 			}
 			//
 			$components['year'] = $year;
@@ -1074,7 +1079,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
 		if ( $calc_date ) {
 			$new_basis_date_str = date("Y-m-d", $calc_date );
-			// TODO: replace substr in date_calculation_str
 		}
 	}
 	
