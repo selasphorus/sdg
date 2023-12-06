@@ -1027,7 +1027,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$date_elements_info = parse_date_str ( $args );
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
-	if ( count($date_elements) > 1 ) { $complex_formula = true; }
 	$calc_date = null;
 	$new_basis_date = null;
 	//
@@ -1047,9 +1046,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		$info .= $calc['info'];
 		$calc_date = $calc['date'];
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
-		if ( $calc_date && $complex_formula ) {
-			$new_basis_date = $calc_date;
-		}
+		if ( $calc_date ) { $new_basis_date = $calc_date; }
 	}
 	
 	
