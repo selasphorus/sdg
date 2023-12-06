@@ -1112,7 +1112,7 @@ function calc_date_from_components ( $args = array() ) {
 			
 			// Extract the calc_interval integer from the string by getting rid of everything else
 			// WIP deal w/ multiple value possibilities for weekday, boia
-			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) {
+			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
 				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
 				$calc_interval = trim( $calc_interval );
