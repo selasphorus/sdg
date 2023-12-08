@@ -1129,7 +1129,14 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	}
 	
 	
-    if ( $calc_date ) { $info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />'; } 
+    if ( $calc_date ) {
+    	if ( is_int($calc_date) ) {
+    		$info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />';
+    	} else {
+    		$info .= '<span class="notice">'."calc_date invalid: ".$calc_date." (string)</span>".'<br />';
+    		$calc_date = null;
+    	}
+    } 
         
     $arr_info['calc_date'] = $calc_date;
     $arr_info['calc_info'] = $info;
