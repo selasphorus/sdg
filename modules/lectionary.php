@@ -822,7 +822,7 @@ function get_calc_boias_from_str ( $date_calculation_str = "" ) {
 	// can we do this without the loop -- match str against array of substr?
 	foreach ( $boias AS $boia ) {
 		if ( preg_match_all('/'.$boia.'/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
-			//$info .= "&rarr; "."boia '$boia' found in date_calculation_str<br />"; // $indent.
+			//$info .= "&rarr; "."boia '$boia' found in date_calculation_str<br />"; // 
 			//$calc_boia = strtolower($boia);
 			$calc_boias[] = strtolower($boia);
 			if ( count($matches) > 1 ) { 
@@ -1435,25 +1435,25 @@ function calc_litdates( $atts = [] ) {
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
         
         if ( !empty($date_calculation_str) ) {
-        	$calc_info .= $indent."date_calculation_str: $date_calculation_str<br />"; // tft
+        	$calc_info .= "date_calculation_str: $date_calculation_str<br />"; // tft
 			$calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
 			if ( $calc ) {
 				$calc_date = $calc['calc_date'];
-				$calc_info .= $indent.$calc['calc_info'];
+				$calc_info .= $calc['calc_info'];
 			} else {
-				$calc_info .= $indent.'<span class="error">calc_date_from_str failed</span><br />';
+				$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
 			}
     	} else {
-    		$calc_info .= $indent."date_calculation_str is empty<br />"; // tft
+    		$calc_info .= "date_calculation_str is empty<br />"; // tft
     		//$calc = null;
     	}   
         
         if ( !empty($calc_date) && $calc_date != "N/A" ) {
             $calc_date_str = date('Y-m-d', $calc_date);
             //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
-            $calc_info .= $indent."calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
+            $calc_info .= "calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
         } else {
-            $calc_info .= $indent."calc_date N/A<br />"; // tft            
+            $calc_info .= "calc_date N/A<br />"; // tft            
         }
         
         // 3. Save dates to ACF repeater field row for date_calculatedday_
@@ -1469,9 +1469,9 @@ function calc_litdates( $atts = [] ) {
                     if ( $date_calculated == $calc_date_str ) {
                         // Already in there
                         $newrow = false;
-                        $calc_info .= $indent."+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />".$indent."+++<br />"; // tft
+                        $calc_info .= "+++ Old news. This date_calculated ($calc_date_str) is already in the database.<br />"."+++<br />"; // tft
                     } else {
-                    	//$calc_info .= $indent."Old date_calculated: $date_calculated.<br />"; // tft
+                    	//$calc_info .= "Old date_calculated: $date_calculated.<br />"; // tft
                     }
                 endwhile;
             } // end if
@@ -1482,10 +1482,10 @@ function calc_litdates( $atts = [] ) {
                     'date_calculated' => $calc_date_str
                 );
 
-                $calc_info .= $indent."About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
+                $calc_info .= "About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
                 if ( $testing != "true" ) {
                     if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
-                        $calc_info .= $indent."ACF row added for post_id: $post_id<br />"; // tft
+                        $calc_info .= "ACF row added for post_id: $post_id<br />"; // tft
                     }
                 }
 
