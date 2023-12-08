@@ -1124,7 +1124,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		if ( is_int($calc_date) ) {
 			$new_basis_date_str = date("Y-m-d", $calc_date );
 		} else {
-			$info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />';
+			if ( $verbose == "true" ) { $info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />'; }
 		}
 	}
 	
@@ -1133,7 +1133,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
     	if ( is_int($calc_date) ) {
     		$info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />';
     	} else {
-    		$info .= '<span class="notice">'."calc_date invalid: ".$calc_date." (string)</span>".'<br />';
+    		if ( $verbose == "true" ) { $info .= '<span class="notice">'."calc_date not a valid date: ".$calc_date." (string)</span>".'<br />'; }
     		$calc_date = null;
     	}
     } 
