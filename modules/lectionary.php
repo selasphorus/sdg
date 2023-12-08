@@ -753,6 +753,48 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 
+function get_liturgical_date_calc_id ( $year = null ) {
+	// WIP
+}
+
+function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null, $calc_basis_field = null ) {
+
+	//if ( empty($calc_basis) ) { return null; }
+	
+	$info = "";
+	$basis_date_str = null;
+	$basis_date = null;
+	
+	if ( $calc_basis == 'christmas' ) {
+		$basis_date_str = $year."-12-25";          
+	} else if ( $calc_basis == 'epiphany' ) {                
+		$basis_date_str = $year."-01-06";
+		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
+	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis ) {
+		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
+		$basis_date_str = $calc_basis;
+	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
+		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
+	}
+
+	// If no basis date string has yet been established, then default to January first of the designated year
+	if ( $basis_date_str == "" ) {
+		$basis_date_str = $year."-01-01";
+		//if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+	}
+	//if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
+
+	if ( $basis_date_str ) {
+		// Get the basis_date from the string version
+		$basis_date = strtotime($basis_date_str);
+		//$basis_date_weekday = strtolower( date('l', $basis_date) );	
+		//if ( $verbose == "true" ) { $info .= "basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
+	}
+	
+	return $basis_date;
+
+}
+
 function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 	
 	$calc_bases = array();
@@ -994,8 +1036,7 @@ function parse_date_str ( $args = array() ) {
 	
 }
 
-// Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
-// TODO: break this function into smaller components so as to better handle complex formulas like Corpus Christi
+// WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
 function calc_date_from_str( $year = null, $date_calculation_str = null, $verbose = false ) {
 	
 	// Abort if date_calculation_str or year is empty
@@ -1012,6 +1053,8 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
 	// Find the liturgical_date_calc post for the selected year
+	//$liturgical_date_calc_id = get_liturgical_date_calc_id ( $year ); // WIP
+	
 	// (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
 	$wp_args = array(
 		'post_type'   => 'liturgical_date_calc',
@@ -1295,7 +1338,7 @@ function calc_date_from_components ( $args = array() ) {
 		}
 
 	}
-	$info .= "<br /><hr /><br />";
+	$info .= "<br /><hr />"; // <br />
 	
 	$arr_info['date'] = $calc_date;
     $arr_info['info'] = $info;
@@ -1303,44 +1346,6 @@ function calc_date_from_components ( $args = array() ) {
     return $arr_info;
 	
 	
-}
-
-function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null, $calc_basis_field = null ) {
-
-	//if ( empty($calc_basis) ) { return null; }
-	
-	$info = "";
-	$basis_date_str = null;
-	$basis_date = null;
-	
-	if ( $calc_basis == 'christmas' ) {
-		$basis_date_str = $year."-12-25";          
-	} else if ( $calc_basis == 'epiphany' ) {                
-		$basis_date_str = $year."-01-06";
-		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
-	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis ) {
-		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
-		$basis_date_str = $calc_basis;
-	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
-		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
-	}
-
-	// If no basis date string has yet been established, then default to January first of the designated year
-	if ( $basis_date_str == "" ) {
-		$basis_date_str = $year."-01-01";
-		//if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
-	}
-	//if ( $verbose == "true" ) { $info .= "basis_date_str: $basis_date_str ($calc_basis)<br />"; } // '<span class="notice">'.</span> // ($calc_basis // $calc_basis_field)
-
-	if ( $basis_date_str ) {
-		// Get the basis_date from the string version
-		$basis_date = strtotime($basis_date_str);
-		//$basis_date_weekday = strtolower( date('l', $basis_date) );	
-		//if ( $verbose == "true" ) { $info .= "basis_date: $basis_date_str ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calc_basis // $calc_basis_field)
-	}
-	
-	return $basis_date;
-
 }
 
 
@@ -1479,7 +1484,7 @@ function calc_litdates( $atts = [] ) {
                     'date_calculated' => $calc_date_str
                 );
 
-                $calc_info .= $indent."About to add row to post_id $post_id: <pre>".print_r( $row, true )."</pre>";
+                $calc_info .= $indent."About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
                 if ( $testing != "true" ) {
                     if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
                         $calc_info .= $indent."ACF row added for post_id: $post_id<br />"; // tft
