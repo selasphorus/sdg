@@ -1176,7 +1176,10 @@ function calc_date_from_components ( $args = array() ) {
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
 	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );
-        
+	if ( $calc_basis == "epiphany" ) {
+		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
+	}
+	
 	// Check to see if the date to be calculated is in fact the same as the base date
 	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
 		
@@ -1187,10 +1190,9 @@ function calc_date_from_components ( $args = array() ) {
         
 		$calc_formula = null;
 		$calc_interval = null;
-        // ** Extract components of date_calculation_str & calculate date for $year
-			
 		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
-			
+		
+        // ** Extract components of date_calculation_str & calculate date for $year
 		// ** Determine the calc_interval -- number of days/weeks...
         //if ( preg_match('/([0-9]+)/', $date_calculation_str) ) {
 		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
@@ -1217,7 +1219,6 @@ function calc_date_from_components ( $args = array() ) {
 			// e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
 			//$info .= $indent."LAST<br />"; // tft
 			if ( $calc_basis == "epiphany" ) {
-				$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
 				$calc_interval = $num_sundays_after_epiphany;
 			} else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
 				$calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
