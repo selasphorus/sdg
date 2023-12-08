@@ -1121,8 +1121,10 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 			$calc_date = $calc['date'];
 		}
 		// WIP -- if more than one element, get $calc_date as $new_basis_date from first calc and pass it to second in loop
-		if ( $calc_date ) {
+		if ( is_int($calc_date) ) {
 			$new_basis_date_str = date("Y-m-d", $calc_date );
+		} else {
+			$info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />'; } 
 		}
 	}
 	
