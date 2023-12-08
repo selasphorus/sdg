@@ -1495,7 +1495,9 @@ function calc_litdates( $atts = [] ) {
                 $calc_info .= "About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
                 if ( $testing != "true" ) {
                     if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
-                        $calc_info .= "ACF row added for post_id: $post_id<br />"; // tft
+                        $calc_info .= "ACF row added for post_id: $post_id<br />";
+                    } else {
+                    	$calc_info .= "ACF add row FAILED for post_id: $post_id<br />";
                     }
                 }
 
