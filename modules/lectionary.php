@@ -769,7 +769,6 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
-		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
 	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis ) {
 		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
 		$basis_date_str = $calc_basis;
@@ -1176,7 +1175,7 @@ function calc_date_from_components ( $args = array() ) {
 	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );	
+	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );
         
 	// Check to see if the date to be calculated is in fact the same as the base date
 	if ( strtolower($date_calculation_str) == $calc_basis ) { // Easter, Christmas, Ash Wednesday", &c.=
@@ -1218,6 +1217,7 @@ function calc_date_from_components ( $args = array() ) {
 			// e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
 			//$info .= $indent."LAST<br />"; // tft
 			if ( $calc_basis == "epiphany" ) {
+				$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
 				$calc_interval = $num_sundays_after_epiphany;
 			} else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
 				$calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
