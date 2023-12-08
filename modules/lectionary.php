@@ -1049,7 +1049,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	$indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 	
 	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
-	$info .= '<div class="code indent">';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
 	// Find the liturgical_date_calc post for the selected year
@@ -1129,8 +1128,6 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 	
 	
     if ( $calc_date ) { $info .= '<span class="notice">'.'calc_date: '.date('Y-m-d', $calc_date).'</span>'.'<br />'; } 
-    
-    $info .= '</div>';
         
     $arr_info['calc_date'] = $calc_date;
     $arr_info['calc_info'] = $info;
@@ -1421,7 +1418,8 @@ function calc_litdates( $atts = [] ) {
         $post_title = $post->post_title;
         $slug = $post->post_name;
         $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
-    	
+        $info .= '<div class="code indent">';
+        
         // init
         $calc_info = "";
         $calc_date = null;
@@ -1496,8 +1494,8 @@ function calc_litdates( $atts = [] ) {
         	$calc_info .= "calc_date_str is empty.<br />";
         }
         
-        $info .= $calc_info;
-        $info .= "<br />";
+        $info .= $calc_info;    
+    	$info .= '</div>';
              
     } // END foreach post
     
