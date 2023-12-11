@@ -434,7 +434,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	$info = "";
-	$ts_info = "\n<!-- get_day_title -->\n";
+	$ts_info = "";
 	$hide_day_titles = 0;
     
     $args = shortcode_atts( array(
@@ -445,10 +445,12 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Extract
 	extract( $args );
+	
+	$info .= "\n<!-- get_day_title -->\n";
 
     if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $ts_info .= "<!-- post_id: ".$post_id." -->\n"; // tft
-    if ( $series_id ) { $ts_info .= "<!-- series_id: ".$series_id." -->\n"; }
+    $ts_info .= "post_id: ".$post_id."<br />"; // tft
+    if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
     
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
     // Make sure the date hasn't been returned enclosed in quotation marks
@@ -488,17 +490,15 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //*/
     //if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
     //if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
-    //if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
-    //if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
-    //if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre><br />"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
+    //if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
+    //if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
+    //if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
     
     
     $date_bits = explode(", ",$the_date);
     $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
-    $ts_info .= "<!-- the_date: ".$the_date." -->\n";
     $ts_info .= "the_date: ".$the_date."<br />";
     if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= '<span class="error">strtotime(the_date) FAILED</span><br />'; }
-    //$ts_info .= "<!-- the_date: [".$the_date."] -->\n"; // tft
     
     //$info .= $ts_info; // tft
     
@@ -514,7 +514,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     //$ts_info .= "<!-- hide_day_titles: [$hide_day_titles] -->";
     
     if ( $hide_day_titles == 1 ) { 
-        $ts_info .= "<!-- hide_day_titles is set to true for this post/event -->";
+        $ts_info .= "hide_day_titles is set to true for this post/event<br />";
         return $info;
     } else {
         //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
@@ -522,7 +522,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
 	if ( $the_date == null ) {
         
-        $ts_info .= "<!-- the_date is null -- get the_date -->"; // tft
+        $ts_info .= "the_date is null -- get the_date<br />"; // tft
 		
         // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
         if ( $post_id === null ) {
@@ -533,7 +533,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
             $post = get_post( $post_id );
             $post_type = $post->post_type;
-            $ts_info .= "<!-- post_type: ".$post_type." -->"; // tft
+            $ts_info .= "post_type: ".$post_type."<br />"; // tft
 
             if ( $post_type == 'event' ) {
                 
@@ -542,7 +542,6 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 
             } else if ( $post_type == 'sermon' ) {
                 
-                $ts_info .= "<!-- sermon -->";
                 $the_date = the_field( 'sermon_date', $post_id );
                 //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
                 
@@ -557,7 +556,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     if ( $the_date == null ) {
         
         // If still no date has been found, give up.
-        $ts_info .= "<!-- no date available for which to find day_title -->\n"; // tft
+        $ts_info .= "no date available for which to find day_title<br />"; // tft
         $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
         return $info;
         
@@ -565,7 +564,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Get litdate posts according to date
     $date_str = date("Y-m-d", strtotime($the_date));
-    $ts_info .= "<!-- date_str: ".$date_str." -->\n"; // tft
+    $ts_info .= "date_str: ".$date_str."<br />"; // tft
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
     $year = substr($date_str, 0, 4); // for checking display_dates later in the fcn
@@ -574,14 +573,14 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     	$litdate_posts = $litdates['posts'][$date_str];
 	} else if ( isset($litdates['posts']) ) {
 		$litdate_posts = $litdates['posts'];
-		$ts_info .= "<!-- litdates['posts'][$date_str] not set -->";
-		//$ts_info .= "<!-- litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre> -->"; // tft
+		$ts_info .= "litdates['posts'][$date_str] not set<br />";
+		//$ts_info .= "litdates['posts']: <pre>".print_r($litdates['posts'], true)."</pre>"; // tft
 	} else {
 		$litdate_posts = array(); // empty
 	}
     if ( is_array($litdate_posts) ) { $num_litdate_posts = count($litdate_posts); } else { $num_litdate_posts = 0; }
-    //$ts_info .= "<!-- SQL-Query: <pre>{$arr_posts->request}</pre> -->"; // tft
-    $ts_info .= "<!-- num_litdate_posts: ".$num_litdate_posts." -->"; // tft
+    //$ts_info .= "SQL-Query: <pre>{$arr_posts->request}</pre>"; // tft
+    $ts_info .= "num_litdate_posts: ".$num_litdate_posts."<br />"; // tft
     //if ( $litdates['ts_info'] ) { $ts_info .= $litdates['ts_info']; }
     
     // If some posts were retrieved for dates calculated and/or assigned
@@ -590,7 +589,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // WIP
     if ( $num_litdate_posts == 0 ) {    
-    	$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->";
+    	$ts_info .= "litdate_args: <pre>".print_r($litdate_args, true)."</pre>";
     }
     
     if ( $num_litdate_posts > 0 ) {
@@ -603,15 +602,15 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         foreach ( $litdate_posts AS $litdate_post ) {
             
             $litdate_id = $litdate_post->ID;
-            $ts_info .= "<!-- litdate_post->ID: ".$litdate_id." -->"; // tft
+            $ts_info .= "litdate_post->ID: ".$litdate_id."<br />"; // tft
             
             // Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $litdate_id, $year );
 			$ts_info .= $display_dates_info['info'];
 			$display_dates = $display_dates_info['dates'];
-			$ts_info .= "<!-- display_dates: <pre>".print_r($display_dates, true)."</pre> -->";
+			$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
 			if ( !in_array($date_str, $display_dates) ) {
-				$ts_info .= "<!-- date_str: ".$date_str." is not one of the display_dates for this litdate. -->";
+				$ts_info .= "date_str: ".$date_str." is not one of the display_dates for this litdate.<br />";
 				// Therefore don't show it.
 				$litdate_id = null;
 				continue;
@@ -619,36 +618,36 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             
             // Get date_type (fixed, calculated, assigned)
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
-            $ts_info .= "<!-- date_type: ".$date_type." -->"; // tft
+            $ts_info .= "date_type: ".$date_type."<br />"; // tft
             
             // Get category/priority
             $terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
-            //$ts_info .= "<!-- terms: ".print_r($terms, true)." -->"; // tft
+            //$ts_info .= "terms: ".print_r($terms, true)."<br />"; // tft
             
             $priority = 999;
             if ( $terms ) {
                 
                 foreach ( $terms as $term ) {
                     $term_priority = get_term_meta($term->term_id, 'priority', true);
-                    $ts_info .= "<!-- term: ".$term->slug." :: term_priority: ".$term_priority." -->"; // tft
+                    $ts_info .= "term: ".$term->slug." :: term_priority: ".$term_priority."<br />"; // tft
 
                     if ( !empty($term_priority) ) {
                     	if ( $term_priority < $priority ) { // top priority is lowest number
                     		$priority = $term_priority;
-                        	$ts_info .= "<!-- NEW priority: ".$priority." -->"; // tft
+                        	$ts_info .= "NEW priority: ".$priority."<br />"; // tft
                         } else if ( isset($top_priority) && $term_priority == $top_priority ) {
-                        	$ts_info .= "<!-- term_priority is same as priority -->"; // tft
+                        	$ts_info .= "term_priority is same as priority<br />"; // tft
                     	} else {
-                    		$ts_info .= "<!-- term_priority is higher than priority -->"; // tft
+                    		$ts_info .= "term_priority is higher than priority<br />"; // tft
                     	}                        
                     } else {
-                    	$ts_info .= "<!-- term_priority is not set for term ".$term->slug." -->";
+                    	$ts_info .= "term_priority is not set for term ".$term->slug."<br />";
                     }
                 }
                 
             }
             
-            $ts_info .= "<!-- priority: ".$priority." -->"; // tft
+            $ts_info .= "priority: ".$priority."<br />"; // tft
             $key = $priority."-".$litdate_id; // this will cause sort by priority num, then by litdate_id
             $litdates[$key] = $litdate_id;
             //$litdates[$top_priority] = $litdate_post_id;
@@ -658,17 +657,17 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         if ( count($litdates) > 0 ) {
         
-        	$ts_info .= "<!-- litdates: ".print_r($litdates, true)." -->"; // tft
+        	$ts_info .= "litdates: ".print_r($litdates, true)."<br />"; // tft
         	uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
-        	$ts_info .= "<!-- litdates sorted: ".print_r($litdates, true)." -->"; // tft
+        	$ts_info .= "litdates sorted: ".print_r($litdates, true)."<br />"; // tft
        
 			// Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
 			//$firstKey = array_key_first($array);
 		
 			$top_key = array_key_first($litdates);
-			$ts_info .= "<!-- top_key: ".$top_key." -->"; // tft
+			$ts_info .= "top_key: ".$top_key."<br />"; // tft
 			$litdate_id = $litdates[$top_key];
-			$ts_info .= "<!-- litdate_id: ".$litdate_id." -->"; // tft
+			$ts_info .= "litdate_id: ".$litdate_id."<br />"; // tft
 			
         }
     }
@@ -726,12 +725,12 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 					$info .= 		'<p>'.$collect_text.'</p>';
 					$info .= 	'</div>';
 				}
-				$info .= '</div>'; //<!-- /calendar-day-desc -->
+				$info .= '</div>'; ///calendar-day-desc<br />
 
 			} else {
-				//$ts_info .= "<!-- no collect_text found -->";
-				//$ts_info .= "<!-- collect_args: <pre>".print_r($collect_args, true)."</pre> -->";
-				//$ts_info .= "<!-- collect_post: <pre>".print_r($collect_post, true)."</pre> -->";
+				//$ts_info .= "no collect_text found<br />";
+				//$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+				//$ts_info .= "collect_post: <pre>".print_r($collect_post, true)."</pre>";
 				// If no content or collect, just show the day title
 				$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span><br />';
 			}
@@ -739,13 +738,13 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
     } else {
 		
-        $ts_info .= "<!-- no litdate found for display -->";
-		//$ts_info .= "<!-- params: <pre>".print_r($params, true)."</pre> -->";
+        $ts_info .= "no litdate found for display<br />";
+		//$ts_info .= "params: <pre>".print_r($params, true)."</pre>";
         
 	}
 	
 	$info .= get_special_date_content( $the_date );
-	$info .= $ts_info;
+	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
 	
 	return $info;
 	
@@ -1198,7 +1197,7 @@ function calc_date_from_components ( $args = array() ) {
 		if ( preg_match_all('/[0-9]+/', $date_calculation_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
 			if ( $verbose == "true" ) { $info .= "date_calculation_str contains numbers.<br />"; }
-			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre><br />"; } //
+			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre>"; } //
 			
 			// Extract the calc_interval integer from the string by getting rid of everything else
 			// WIP deal w/ multiple value possibilities for weekday, boia
@@ -1417,7 +1416,7 @@ function calc_litdates( $atts = [] ) {
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
     $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
-    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
+    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>"; // tft
     $info .= "<br />";
     
     // Loop through the posts and calculate the variable dates for the given year
