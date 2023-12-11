@@ -697,7 +697,8 @@ jQuery(document).ready(function($) {
     //var handle_id;
 	//var dialog_id;
 	
-	$("a.dialog_handle").on("click", function() {
+	$('body').on('click','.dialog_handle',function(){
+	//$("a.dialog_handle").on("click", function() {
 	
 		console.log('click registered on a dialog_handle link');
 		
