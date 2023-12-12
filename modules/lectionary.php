@@ -405,16 +405,16 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	
 	// Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $post_id, 'date_type', true );
-    $info .= "<!-- litdate post_id: ".$post_id."; date_type: ".$date_type." -->";
+    $info .= "litdate post_id: ".$post_id."; date_type: ".$date_type."<br />";
          
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
 		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id ) ) { 
-			$info .= "<!-- No fixed_date_str found. -->";
+			$info .= "No fixed_date_str found.<br />";
 		} else {
-			$info .= "<!-- fixed_date_str: ".$fixed_date_str." -->";
+			$info .= "fixed_date_str: ".$fixed_date_str."<br />";
 			$formatted_fixed_date_str = date("Y-m-d",strtotime($fixed_date_str));
-			$info .= "<!-- formatted_fixed_date_str: ".$formatted_fixed_date_str." -->";
+			$info .= "formatted_fixed_date_str: ".$formatted_fixed_date_str."<br />";
 			$dates[] = $formatted_fixed_date_str;
 		}		
 	} else {
@@ -438,11 +438,11 @@ function get_display_dates ( $post_id = null, $year = null ) {
 			$date_assigned = get_sub_field('date_assigned');
 			$replacement_date = get_sub_field('replacement_date');
 			$year_assigned = substr($date_assigned, 0, 4);
-			$info .= "<!-- date_assigned: ".$date_assigned." (".$year_assigned.") -->";
+			$info .= "date_assigned: ".$date_assigned." (".$year_assigned.")<br />";
 			if ( $year_assigned == $year ) {
 				if ( $replacement_date == "1" ) {
 					if ( $date_assigned != $fixed_date_str ) {
-						$info .= "<!-- replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year." -->";
+						$info .= "replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year."<br />";
 						$fixed_date_str = $date_assigned;
 						$dates = array($fixed_date_str); // Since this is a replacement_date it should be the only one displayed in the given year -- don't add it to array; replace the array
 						break;
