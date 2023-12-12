@@ -825,7 +825,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	}
 	
 	$info .= get_special_date_content( $the_date );
-	$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+	if ( $devmode ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
