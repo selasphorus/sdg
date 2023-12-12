@@ -406,7 +406,7 @@ function get_display_dates ( $post_id = null, $year = null ) {
 	// Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $post_id, 'date_type', true );
     $info .= "--- get_display_dates ---<br />";
-    $info .= "litdate post_id: ".$post_id."; date_type: ".$date_type."<br />";
+    $info .= "litdate post_id: ".$post_id."; date_type: ".$date_type."; year: ".$year."<br />";
          
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
@@ -414,6 +414,10 @@ function get_display_dates ( $post_id = null, $year = null ) {
 			$info .= "No fixed_date_str found.<br />";
 		} else {
 			$info .= "fixed_date_str: ".$fixed_date_str."<br />";
+			if ( $year ) {
+				$fixed_date_str .= " ".$year;
+				$info .= "fixed_date_str (mod): ".$fixed_date_str."<br />";
+			}
 			$formatted_fixed_date_str = date("Y-m-d",strtotime($fixed_date_str));
 			$info .= "formatted_fixed_date_str: ".$formatted_fixed_date_str."<br />";
 			$dates[] = $formatted_fixed_date_str;
