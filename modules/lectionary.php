@@ -71,8 +71,13 @@ function get_lit_dates ( $args ) {
 	while ($start <= $end) {
 		
 		// Build  query to search for any liturgical dates that match, whether dates are fixed, calculated, or manually assigned
-		// TODO: consider running separate queries for fixed, assigned, calc?
+		// TODO/WIP: run separate queries for fixed, assigned, calc -- so as to account for possibility that e.g. no assigned/calc dates exist for a fixed date litdate entry
 		// 
+        $arr_posts = array();
+        
+        // Format date_str
+        $full_date_str = date("Y-m-d", $start );
+        $ts_info .= "full_date_str: '$full_date_str'<br />"; // tft
     
 		$litdate_args = array(
 			'post_type'		=> 'liturgical_date',
@@ -97,10 +102,16 @@ function get_lit_dates ( $args ) {
         // Prep meta_sub_query which will check for various kinds of date matches
         $meta_sub_query = array( 'relation'  => 'OR' );
         
+        // +~+~+~+~+~+~+~+~+~+~+
+        // 1. FIXED DATES
+        $litdate_args_fixed = $litdate_args;
+        $meta_query_fixed = $meta_query;
+        $meta_sub_query_fixed = $meta_sub_query;
+        
         // Add meta_query components for fixed dates
         $fixed_date_str = date("F d", $start ); // day w/ leading zeros
         //$ts_info .= "<!-- fixed_date_str: '$fixed_date_str' -->\n"; // tft
-        $meta_sub_query[] = array(
+        $meta_sub_query_fixed[] = array(
 			'key'		=> 'fixed_date_str',
 			'compare'	=> '=',
 			'value'		=> $fixed_date_str,
@@ -112,50 +123,104 @@ function get_lit_dates ( $args ) {
             //$ts_info .= "<!-- day_num: '$day_num' -->\n"; // tft
             $fixed_date_str_alt = date("F j", $start ); // day w/ out leading zeros
             //$ts_info .= "<!-- fixed_date_str_alt: '$fixed_date_str_alt' -->\n"; // tft
-            $meta_sub_query[] = array(
+            $meta_sub_query_fixed[] = array(
 				'key'		=> 'fixed_date_str',
 				'compare'	=> '=',
 				'value'		=> $fixed_date_str_alt,
 			);
         }
         
-        // Format date_str
-        $full_date_str = date("Y-m-d", $start );
-        $ts_info .= "full_date_str: '$full_date_str'<br />"; // tft
+        // Add sub_query to meta_query
+    	$meta_query_fixed[] = $meta_sub_query_fixed;    	
+		$litdate_args_fixed['meta_query'] = $meta_query_fixed;
+		
+		// Run the query
+		//$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		$arr_fixed = new WP_Query( $litdate_args_fixed );
+		$arr_posts_fixed = $arr_fixed->posts;
+		$arr_posts = array_merge($arr_posts, $arr_posts_fixed);
+		
+        // +~+~+~+~+~+~+~+~+~+~+
+        // 2. VARIABLE DATES
         
+        $litdate_args_variable = $litdate_args;
+        $meta_query_variable = $meta_query;
+        $meta_sub_query_variable = $meta_sub_query;
+        
+        // TODO: streamline subqueries
         // Add meta_query components for date calculations and assignments        
-		$meta_sub_query[] = array(
-			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-			'compare'	=> '=',
-			'value'		=> $full_date_str,
+		$meta_sub_query_variable[] = array(
+			'relation' => 'AND',
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> 'EXISTS',
+			),
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> $full_date_str,
+			),
 		);
-		$meta_sub_query[] = array(
-			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-			'compare'	=> '=',
-			'value'		=> $full_date_str,
+		$meta_sub_query_variable[] = array(
+			'relation' => 'AND',
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> 'EXISTS',
+			),
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> $full_date_str,
+			),
+			//'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			//'compare'	=> '=',
+			//'value'		=> $full_date_str,
 		);
 		// The following parameters can be phased out eventually once the DB is updated to standardize the date formats
-		$meta_sub_query[] = array(
-			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-			'compare'	=> '=',
-			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+		$meta_sub_query_variable[] = array(
+			'relation' => 'AND',
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> 'EXISTS',
+			),
+			array(
+				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),
+			//'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+			//'compare'	=> '=',
+			//'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
 		);
-		$meta_sub_query[] = array(
-			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-			'compare'	=> '=',
-			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+		$meta_sub_query_variable[] = array(
+			'relation' => 'AND',
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> 'EXISTS',
+			),
+			array(
+				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+				'compare'	=> '=',
+				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),
+			//'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			//'compare'	=> '=',
+			//'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
 		);
         
         // Add sub_query to meta_query
-    	$meta_query[] = $meta_sub_query;
-    	
-		$litdate_args['meta_query'] = $meta_query;
-	
+    	$meta_query_variable[] = $meta_sub_query_variable;    	
+		$litdate_args_variable['meta_query'] = $meta_query_variable;
+		
 		// Run the query
 		//$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
-		$arr_posts = new WP_Query( $litdate_args );
-		$litdate_posts[$full_date_str] = $arr_posts->posts;
+		$arr_variable = new WP_Query( $litdate_args_variable );
+		$arr_posts_variable = $arr_variable->posts;
+		$arr_posts = array_merge($arr_posts, $arr_posts_variable);
         
+        // +~+~+~+~+~+~+~+~+~+~+
+		$litdate_posts[$full_date_str] = $arr_posts;
+		
 		// Go to the next day
 		$start = strtotime("+1 day", $start);
 	}
