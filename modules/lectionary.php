@@ -150,7 +150,7 @@ function get_lit_dates ( $args ) {
         // TODO: streamline subqueries
         // Add meta_query components for date calculations and assignments        
 		$meta_sub_query_variable[] = array(
-			'relation' => 'AND',
+			/*'relation' => 'AND',
 			array(
 				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
 				'compare'	=> 'EXISTS',
@@ -159,10 +159,13 @@ function get_lit_dates ( $args ) {
 				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
 				'compare'	=> '=',
 				'value'		=> $full_date_str,
-			),
+			),*/
+			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> $full_date_str,
 		);
 		$meta_sub_query_variable[] = array(
-			'relation' => 'AND',
+			/*'relation' => 'AND',
 			array(
 				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
 				'compare'	=> 'EXISTS',
@@ -171,14 +174,14 @@ function get_lit_dates ( $args ) {
 				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
 				'compare'	=> '=',
 				'value'		=> $full_date_str,
-			),
-			//'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-			//'compare'	=> '=',
-			//'value'		=> $full_date_str,
+			),*/
+			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> $full_date_str,
 		);
 		// The following parameters can be phased out eventually once the DB is updated to standardize the date formats
 		$meta_sub_query_variable[] = array(
-			'relation' => 'AND',
+			/*'relation' => 'AND',
 			array(
 				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
 				'compare'	=> 'EXISTS',
@@ -187,13 +190,13 @@ function get_lit_dates ( $args ) {
 				'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
 				'compare'	=> '=',
 				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-			),
-			//'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
-			//'compare'	=> '=',
-			//'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),*/
+			'key'		=> 'date_calculations_XYZ_date_calculated', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
 		);
 		$meta_sub_query_variable[] = array(
-			'relation' => 'AND',
+			/*'relation' => 'AND',
 			array(
 				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
 				'compare'	=> 'EXISTS',
@@ -202,10 +205,10 @@ function get_lit_dates ( $args ) {
 				'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
 				'compare'	=> '=',
 				'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
-			),
-			//'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
-			//'compare'	=> '=',
-			//'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
+			),*/
+			'key'		=> 'date_assignments_XYZ_date_assigned', // variable dates via ACF repeater row values
+			'compare'	=> '=',
+			'value'		=> str_replace("-", "", $full_date_str), // get rid of hyphens for matching -- dates are stored as yyyymmdd due to apparent ACF bug
 		);
         
         // Add sub_query to meta_query
