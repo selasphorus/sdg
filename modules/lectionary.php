@@ -25,7 +25,7 @@ function get_lit_dates ( $args ) {
 	$start_date = null;
 	$end_date = null;
 	
-	$ts_info = "\n<!-- get_lit_dates -->\n";
+	$ts_info = "--- get_lit_dates ---<br />";
 	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
@@ -62,7 +62,7 @@ function get_lit_dates ( $args ) {
 		
 	}
 	
-	$ts_info .= "<!-- start_date: '$start_date'; end_date: '$end_date'; year: '$year'; month: '$month' -->\n"; // tft
+	$ts_info .= "start_date: '$start_date'; end_date: '$end_date'; year: '$year'; month: '$month'<br />"; // tft
     
     // Loop through all dates in range from start to end
     $start = strtotime($start_date);
@@ -121,7 +121,7 @@ function get_lit_dates ( $args ) {
         
         // Format date_str
         $full_date_str = date("Y-m-d", $start );
-        $ts_info .= "<!-- full_date_str: '$full_date_str' -->\n"; // tft
+        $ts_info .= "full_date_str: '$full_date_str'<br />"; // tft
         
         // Add meta_query components for date calculations and assignments        
 		$meta_sub_query[] = array(
@@ -455,50 +455,59 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
     // Make sure the date hasn't been returned enclosed in quotation marks
     // e.g. "Sunday, February 5, 2023"
-    $ts_info .= "var the_date is of type: ".gettype($the_date)."<br />";
+    $the_date_type = gettype($the_date);
+    $ts_info .= "var the_date is of type: ".$the_date_type."<br />";
     //$ts_info .= "var_export of the_date: ".var_export($the_date,true)."<br />";
     //
-    if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[1] the_date contains quotation marks<br />"; } else { $ts_info .= "[1] the_date contains NO quotation marks<br />"; }
-    //
-    //$the_date = filter_var($the_date, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_STRING); // FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH //$the_date = filter_var($the_date, FILTER_FLAG_STRIP_LOW, FILTER_FLAG_STRIP_HIGH);
-    //$the_date = (string) $the_date;
-    //$the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
-    //$the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
-    $the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
-    //
-    $the_date = htmlspecialchars_decode($the_date);
-    $the_date = html_entity_decode($the_date);
-    $the_date = strip_tags($the_date);
-    $the_date = stripslashes($the_date);
-    //
+    if ( $the_date_type == "string" ) {
+    	if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[1] the_date contains quotation marks<br />"; } else { $ts_info .= "[1] the_date contains NO quotation marks<br />"; }
+		//
+		//$the_date = filter_var($the_date, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_SANITIZE_STRING); // FILTER_FLAG_ENCODE_LOW, FILTER_FLAG_ENCODE_HIGH //$the_date = filter_var($the_date, FILTER_FLAG_STRIP_LOW, FILTER_FLAG_STRIP_HIGH);
+		//$the_date = (string) $the_date;
+		//$the_date = preg_replace('/[^\PC\s]/u', '', $the_date);
+		//$the_date = preg_replace('/[\x00-\x1F\x7F]/', '', $the_date);
+		$the_date = preg_replace('/[[:cntrl:]]/', '', $the_date);
+		//
+		$the_date = htmlspecialchars_decode($the_date);
+		$the_date = html_entity_decode($the_date);
+		$the_date = strip_tags($the_date);
+		$the_date = stripslashes($the_date);
+		//
+	
+		if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[2] the_date contains quotation marks<br />"; } else { $ts_info .= "[2] the_date contains NO quotation marks<br />"; }
+	
+		// Remove quotation marks
+		$the_date = str_replace('\"', '', $the_date);
+		$the_date = str_replace("\'", '', $the_date);
+		$the_date = str_replace('"', '', $the_date);
+		$the_date = str_replace("'", "", $the_date);
+		
+		//$ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
+    	//
+    	$ts_info .= "var_export of revised the_date: ".var_export($the_date,true)."<br />";
+    	
+    	//if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all: ".print_r($matches, true)."<br />"; }
     
-    if ( strpos($the_date, '"') !== false || strpos($the_date, "'") !== false ) { $ts_info .= "[2] the_date contains quotation marks<br />"; } else { $ts_info .= "[2] the_date contains NO quotation marks<br />"; }
+		//*/
+		//if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
+		//if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
+		//if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
+		//if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
+		//if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
+    	
+    	$date_bits = explode(", ",$the_date); // ???
+		$ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
+		$ts_info .= "the_date: ".$the_date."<br />";
+		if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= '<span class="error">strtotime(the_date) FAILED</span><br />'; }
     
-    // Remove quotation marks
-    $the_date = str_replace('\"', '', $the_date);
-    $the_date = str_replace("\'", '', $the_date);
-    $the_date = str_replace('"', '', $the_date);
-    $the_date = str_replace("'", "", $the_date);
+    	$date_str = date("Y-m-d", strtotime($the_date));
+    	$ts_info .= "date_str: ".$date_str."<br />"; // tft
     
+    } else {
+    	
+    	//the_date is NOT a string?!?
     
-    //$ts_info .= "string cleanup attempted via filter_var, preg_replace, htmlspecialchars_decode, html_entity_decode, strip_tags, stripslashes, str_replace...<br />";
-    //
-    $ts_info .= "var_export of revised the_date: ".var_export($the_date,true)."<br />";
-    
-    //if (preg_match_all("/[,\s\n\t]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all: ".print_r($matches, true)."<br />"; }
-    
-    //*/
-    //if ( strpos($the_date, ',') !== false || strpos($the_date, ",") !== false ) { $ts_info .= "the_date contains one or more commas<br />"; } else { $ts_info .= "the_date contains NO commas<br />"; }
-    //if ( strpos($the_date, ' ') !== false ) { $ts_info .= "the_date contains one or more spaces<br />"; } else { $ts_info .= "the_date contains NO spaces<br />"; }
-    //if (preg_match_all("/[A-Za-z]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all alpha: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all alpha: No matches<br />"; }
-    //if (preg_match_all("/[0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all numeric: No matches<br />"; }
-    //if (preg_match_all("/[^A-Za-z0-9]+/i", $the_date, $matches)) { $ts_info .= "preg_match_all NOT alpha-numeric: <pre>".print_r($matches, true)."</pre>"; } else { $ts_info .= "preg_match_all NON-alphanumeric: No matches<br />"; }
-    
-    
-    $date_bits = explode(", ",$the_date);
-    $ts_info .= "date_bits: ".print_r($date_bits,true)."<br />";
-    $ts_info .= "the_date: ".$the_date."<br />";
-    if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= '<span class="error">strtotime(the_date) FAILED</span><br />'; }
+    }
     
     //$info .= $ts_info; // tft
     
@@ -563,8 +572,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     }
     
     // Get litdate posts according to date
-    $date_str = date("Y-m-d", strtotime($the_date));
-    $ts_info .= "date_str: ".$date_str."<br />"; // tft
+    
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
     $year = substr($date_str, 0, 4); // for checking display_dates later in the fcn
@@ -579,9 +587,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		$litdate_posts = array(); // empty
 	}
     if ( is_array($litdate_posts) ) { $num_litdate_posts = count($litdate_posts); } else { $num_litdate_posts = 0; }
-    //$ts_info .= "SQL-Query: <pre>{$arr_posts->request}</pre>"; // tft
-    $ts_info .= "num_litdate_posts: ".$num_litdate_posts."<br />"; // tft
-    //if ( $litdates['ts_info'] ) { $ts_info .= $litdates['ts_info']; }
+    //$ts_info .= "SQL-Query: <pre>{$arr_posts->request}</pre>";
+    $ts_info .= "num_litdate_posts: ".$num_litdate_posts."<br />";
+    $ts_info .= $litdates['troubleshooting'];
     
     // If some posts were retrieved for dates calculated and/or assigned
     
