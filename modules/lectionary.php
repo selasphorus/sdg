@@ -77,7 +77,7 @@ function get_lit_dates ( $args ) {
         
         // Format date_str
         $full_date_str = date("Y-m-d", $start );
-        $ts_info .= "full_date_str: '$full_date_str'<br />"; // tft
+        //$ts_info .= "full_date_str: '$full_date_str'<br />"; // tft
     
 		$litdate_args = array(
 			'post_type'		=> 'liturgical_date',
