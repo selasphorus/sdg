@@ -3704,18 +3704,15 @@ function get_special_date_content( $the_date = null ) {
         $ts_info .= "<!-- timestamp: '$timestamp' -->\n";
         $info .= $ts_info;
         
-        $info .= '<div class="message centered">';
-        $info .= '<p class="scalloped narrow">';
+        $info .= '<div class="message centered special-notice scalloped">';
     	foreach ( $posts as $post ) {
     		//$info .= "<pre>".print_r($post, true)."</pre>"; // tft
     		$post_id = $post->ID;
     		if ( $post_id ) {
     			$notice_text = $post->post_content;
-    			// TODO: strip any <p></p> tags?
     			$info .= $notice_text;
     		}
     	}
-    	$info .= '</p>';
         $info .= '</div>';
     } else {
     	$info .= "<!-- No posts found by fcn get_special_date_content -->";
