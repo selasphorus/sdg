@@ -1152,7 +1152,7 @@ function calc_date_from_str( $year = null, $date_calculation_str = null, $verbos
 		$liturgical_date_calc_id = $posts[0];
 		if ( $verbose == "true" ) { $info .= "liturgical_date_calc_id: $liturgical_date_calc_id<br />"; }
 	} else {
-		if ( $verbose == "true" ) { $info .= "No matching liturgical_date_calc_post for wp_args: <pre>".print_r($wp_args,true)."</pre><br />"; }
+		if ( $verbose == "true" ) { $info .= "No matching liturgical_date_calc_post for wp_args: ".print_r($wp_args,true)."<br />"; } // <pre></pre>
 		$liturgical_date_calc_id = null;
 		// TBD: abort?
 	}
