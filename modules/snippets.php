@@ -52,24 +52,27 @@ function cs_sidebars_xfer ( $atts = [] ) {
 		$cs = get_post_meta( $post_id, '_cs_replacements', true );
 		$sidebar_id = get_post_meta( $post_id, 'sidebar_id', true );
 		$info .= "current sidebar_id: <pre>".print_r($sidebar_id, true)."</pre>";
+		$revised_sidebar_id = "";
 		if ( empty($sidebar_id) ) {
-			$sidebar_id = "";
 			$info .= "_cs_replacements:<br />";
 			foreach ( $cs as $k => $v ) {
 				$info .= "k: ".$k." => v: ".$v."<br />";
-				$sidebar_id .= $v;
-				if ( count($cs) > 1 ) { $sidebar_id .= ";"; } // will this ever happen? don't think so, but just in case...
+				$revised_sidebar_id .= $v;
+				if ( count($cs) > 1 ) { $revised_sidebar_id .= ";"; } // will this ever happen? don't think so, but just in case...
 			}
 		}
 		//$info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>";
-		$info .= "revised sidebar_id: ".$sidebar_id."<br />";
+		$info .= "revised sidebar_id: ".$revised_sidebar_id."<br />";
 		
 		// Update postmeta with revised sidebar_id value
-		$update_key = 'sidebar_id';
-		if ( update_field( $update_key, $sidebar_id, $post_id ) ) {
-			$info .= "updated field: ".$update_key." for post_id: $post_id<br />";
-		} else {
-			$info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
+		if ( !empty($revised_sidebar_id) && $revised_sidebar_id != $sidebar_id ) {
+			$info .= "sidebar_id field requires an update<br />";
+			$update_key = 'sidebar_id';
+			if ( update_field( $update_key, $sidebar_id, $post_id ) ) {
+				$info .= "updated field: ".$update_key." for post_id: $post_id<br />";
+			} else {
+				$info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
+			}
 		}
 		
 		$info .= "<br />";
