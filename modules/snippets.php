@@ -51,7 +51,7 @@ function cs_sidebars_xfer ( $atts = [] ) {
 		
 		$cs = get_post_meta( $post_id, '_cs_replacements', true );
 		$sidebar_id = get_post_meta( $post_id, 'sidebar_id', true );
-		$info .= "current sidebar_id: <pre>".print_r($sidebar_id, true)."</pre>";
+		$info .= "current sidebar_id: ".print_r($sidebar_id, true)."<br />";
 		$revised_sidebar_id = "";
 		if ( empty($sidebar_id) ) {
 			$info .= "_cs_replacements:<br />";
@@ -73,6 +73,8 @@ function cs_sidebars_xfer ( $atts = [] ) {
 			} else {
 				$info .= "update FAILED for field: ".$update_key." for post_id: $post_id<br />";
 			}
+		} else {
+			$info .= "No update needed.<br />";
 		}
 		
 		$info .= "<br />";
