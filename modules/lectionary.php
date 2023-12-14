@@ -1642,9 +1642,14 @@ function get_cpt_reading_content( $post_id = null ) {
     
     // Link to text of Bible Verses -- WIP
     $bible_book_id = get_post_meta( $post_id, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $post_id );
-    $info .= "bible_book_id: '".$bible_book_id."'<br />"; // tft
-    $bible_corpus_id = get_post_meta( $bible_book_id, 'bible_corpus_id', true );
-    $info .= "bible_corpus_id: '".$bible_corpus_id."'<br />"; // tft
+    if ( is_array($bible_book_id) ) {
+    	$info .= "bible_book_id is array: ".print_r($bible_book_id, true)."<br />";
+    } else {
+    	$info .= "bible_book_id: '".$bible_book_id."'<br />";
+    	$bible_corpus_id = get_post_meta( $bible_book_id, 'bible_corpus_id', true );
+    	$info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
+    }
+    
     $chapterverses = get_field( 'chapterverses', $post_id );
     
     // Get book num from book name
