@@ -51,7 +51,7 @@ function cs_sidebars_xfer ( $atts = [] ) {
 		
 		$cs = get_post_meta( $post_id, '_cs_replacements', true );
 		$sidebar_id = get_post_meta( $post_id, 'sidebar_id', true );
-		//$info .= "sidebar_id: <pre>".print_r($sidebar_id, true)."</pre>";
+		$info .= "current sidebar_id: <pre>".print_r($sidebar_id, true)."</pre>";
 		if ( empty($sidebar_id) ) {
 			$sidebar_id = "";
 			$info .= "_cs_replacements:<br />";
