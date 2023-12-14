@@ -2760,8 +2760,6 @@ function get_updated_arr_field_value ( $args = array() ) {
 	$updated_value = null;
 	$arr_updated = array();
 	
-	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
-	
 	// Defaults
 	$defaults = array(
 		'post_id' => null,
@@ -2776,6 +2774,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	
+	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
 	
 	if ( !( $post_id && $key && ( $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
