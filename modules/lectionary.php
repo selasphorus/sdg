@@ -518,6 +518,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Extract
 	extract( $args );
+	$devmode = get_query_var('devmode');
 	
 	$info .= "\n<!-- get_day_title -->\n";
 
