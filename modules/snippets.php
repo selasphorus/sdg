@@ -1177,6 +1177,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							$meta_input['sidebar_id'] = $sidebar;
 							$meta_input['sidebar_sortnum'] = $i;
 						}
+						$meta_input['snippet_priority'] = 2; // Standard/default priority level
 						
 						// Proceed to processing widget display logic
 						
@@ -2466,6 +2467,10 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 			//$ts_info .= "No meta data found for key: $key<br />";
 		}
 	}
+	
+	// Check to make sure snippet_priority is set
+	$snippet_priority = get_field( 'snippet_priority', $snippet_id );
+	if ( empty($snippet_priority) ) { update_field( 'snippet_priority', 2, $snippet_id ); }
 	
 	if ( $do_ts ) { $info .= $ts_info; }
 	
