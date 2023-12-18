@@ -667,7 +667,9 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // If some posts were retrieved for dates calculated and/or assigned
     
-    $litdate_id = null; // init
+    // Init
+    $litdate_id = null;
+    $litdate_id_secondary = null;
     
     // WIP
     if ( $num_litdate_posts == 0 ) {    
@@ -701,8 +703,13 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             // Get date_type (fixed, calculated, assigned)
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
             $ts_info .= "date_type: ".$date_type."<br />";
-            $is_secondary = get_term_meta($term->term_id, 'secondary', true);
+            $is_secondary = get_term_meta($litdate_id, 'secondary', true);
             $ts_info .= "is_secondary: ".$is_secondary."<br />";
+            if ( $is_secondary ) {
+            	$litdate_id_secondary = $litdate_id;
+				$ts_info .= "litdate_id_secondary: ".$litdate_id_secondary."<br />";
+				continue;
+            }
             
             // Get category/priority
             $terms = get_the_terms( $litdate_id, 'liturgical_date_category' );
@@ -752,8 +759,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 			$litdate_id = $litdates[$top_key];
 			$ts_info .= "litdate_id: ".$litdate_id."<br />";
 			//
-			// Check for any secondary date that should be displayed in addition under the day title
 			
+			$ts_info .= "<hr />";
 			
         }
     }
@@ -827,6 +834,11 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         $ts_info .= "no litdate found for display<br />";
 		//$ts_info .= "params: <pre>".print_r($params, true)."</pre>";
         
+	}
+	
+	if ( $litdate_id_secondary ) {
+		//$litdate_title = get_the_title( $litdate_id );
+		$info .= "<em>".get_the_title( $litdate_id_secondary )."</em>";
 	}
 	
 	$info .= get_special_date_content( $the_date );
