@@ -1340,11 +1340,19 @@ function calc_date_from_components ( $args = array() ) {
 				} 
 
 			} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
-			
+				
 				//$info .= $indent."setting prev/next<br />"; // tft
-				// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
-				if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
-				$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+				
+				if ( $calc_interval && $calc_boia == "before" ) {
+					$calc_formula = "-".$calc_interval;
+				} else if ( $calc_interval && $calc_boia == "after" ) {
+					$calc_formula = "+".$calc_interval;        
+				} else {
+					// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
+					if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
+					$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+				}
+				
 			}
 			
 		}
