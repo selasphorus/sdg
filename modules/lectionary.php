@@ -703,7 +703,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             // Get date_type (fixed, calculated, assigned)
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
             $ts_info .= "date_type: ".$date_type."<br />";
-            $is_secondary = get_term_meta($litdate_id, 'secondary', true);
+            $is_secondary = get_post_meta($litdate_id, 'secondary', true);
             $ts_info .= "is_secondary: [".$is_secondary."]<br />";
             if ( $is_secondary ) {
             	$litdate_id_secondary = $litdate_id;
