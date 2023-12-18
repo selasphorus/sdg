@@ -707,6 +707,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $ts_info .= "is_secondary: [".$is_secondary."]<br />";
             if ( $is_secondary ) {
             	$litdate_id_secondary = $litdate_id;
+            	$litdate_id = null;
 				$ts_info .= "litdate_id_secondary: ".$litdate_id_secondary."<br />";
 				continue;
             }
