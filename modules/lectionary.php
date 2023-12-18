@@ -704,7 +704,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $date_type = get_post_meta( $litdate_id, 'date_type', true );
             $ts_info .= "date_type: ".$date_type."<br />";
             $is_secondary = get_term_meta($litdate_id, 'secondary', true);
-            $ts_info .= "is_secondary: ".$is_secondary."<br />";
+            $ts_info .= "is_secondary: [".$is_secondary."]<br />";
             if ( $is_secondary ) {
             	$litdate_id_secondary = $litdate_id;
 				$ts_info .= "litdate_id_secondary: ".$litdate_id_secondary."<br />";
@@ -720,7 +720,6 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 
                 foreach ( $terms as $term ) {
                     $term_priority = get_term_meta($term->term_id, 'priority', true);
-                    $is_secondary = get_term_meta($term->term_id, 'secondary', true);
                     $ts_info .= "term: ".$term->slug." :: term_priority: ".$term_priority."<br />";
 
                     if ( !empty($term_priority) ) {
