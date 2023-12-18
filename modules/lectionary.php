@@ -744,6 +744,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
             $litdates[$key] = $litdate_id;
             //$litdates[$top_priority] = $litdate_post_id;
             //
+            $ts_info .= "<hr />";
             
         }
         
@@ -759,9 +760,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 			$litdate_id = $litdates[$top_key];
 			$ts_info .= "litdate_id: ".$litdate_id."<br />";
 			//
-			
-			$ts_info .= "<hr />";
-			
+		
         }
     }
     
