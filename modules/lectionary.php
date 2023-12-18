@@ -1312,47 +1312,56 @@ function calc_date_from_components ( $args = array() ) {
 		// If the calc_formula hasn't already been determined, build it
 		if ( $calc_formula == "" ) {
 			
-			//$info .= $indent."About to build calc_formula...<br />"; // tft
+			if ( $verbose == "true" ) { $info .= "About to build calc_formula...<br />"; }
 			
-			// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
-			$basis_date_weekday = strtolower( date('l', $basis_date) );
-			if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
-				$first_sunday = strtotime("next Sunday", $basis_date);
-				//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
-				if ( $calc_interval ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
-				if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
-			} else if ( $basis_date ) {
-				$first_sunday = $basis_date;
-				if ( $verbose == "true" ) { $info .= "first_sunday is equal to basis_date.<br />"; }
-			}
+			if ( strpos(strtolower($calc_interval), 'days') !== false ) {
 			
-			if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
-
-				if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
-					$calc_formula = "+".$calc_interval." weeks";
-					$basis_date = $first_sunday;                    
-				} else if ( $calc_boia == "before" ) { 
-					$calc_formula = "previous Sunday";
-				} else if ( $calc_boia == "after" ) { 
-					$calc_formula = "next Sunday";
-				} else if ( $first_sunday ) {
-					$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
-				} 
-
-			} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
+				if ( $verbose == "true" ) { $info .= "Calc by days +/-...<br />"; }
 				
-				//$info .= $indent."setting prev/next<br />"; // tft
-				
+				//
 				if ( $calc_interval && $calc_boia == "before" ) {
 					$calc_formula = "-".$calc_interval;
 				} else if ( $calc_interval && $calc_boia == "after" ) {
 					$calc_formula = "+".$calc_interval;        
-				} else {
+				}
+				
+			} else {
+			
+				// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
+				$basis_date_weekday = strtolower( date('l', $basis_date) );
+				if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
+					$first_sunday = strtotime("next Sunday", $basis_date);
+					//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
+					if ( $calc_interval ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
+					if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
+				} else if ( $basis_date ) {
+					$first_sunday = $basis_date;
+					if ( $verbose == "true" ) { $info .= "first_sunday is equal to basis_date.<br />"; }
+				}
+			
+				if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
+
+					if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
+						$calc_formula = "+".$calc_interval." weeks";
+						$basis_date = $first_sunday;                    
+					} else if ( $calc_boia == "before" ) { 
+						$calc_formula = "previous Sunday";
+					} else if ( $calc_boia == "after" ) { 
+						$calc_formula = "next Sunday";
+					} else if ( $first_sunday ) {
+						$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
+					} 
+
+				} else if ( $calc_basis != "" && $calc_boia == ( "before" || "after") ) {
+				
+					//$info .= $indent."setting prev/next<br />"; // tft
+				
 					// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
 					if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
 					$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
-				}
 				
+				}
+			
 			}
 			
 		}
