@@ -711,16 +711,18 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 
                 foreach ( $terms as $term ) {
                     $term_priority = get_term_meta($term->term_id, 'priority', true);
-                    $ts_info .= "term: ".$term->slug." :: term_priority: ".$term_priority."<br />"; // tft
+                    $is_secondary = get_term_meta($term->term_id, 'secondary', true);
+                    $ts_info .= "term: ".$term->slug." :: term_priority: ".$term_priority;
+                    $ts_info .= " :: is_secondary: ".$is_secondary."<br />";
 
                     if ( !empty($term_priority) ) {
                     	if ( $term_priority < $priority ) { // top priority is lowest number
                     		$priority = $term_priority;
-                        	$ts_info .= "NEW priority: ".$priority."<br />"; // tft
+                        	$ts_info .= "NEW priority: ".$priority."<br />";
                         } else if ( isset($top_priority) && $term_priority == $top_priority ) {
-                        	$ts_info .= "term_priority is same as priority<br />"; // tft
+                        	$ts_info .= "term_priority is same as priority<br />";
                     	} else {
-                    		$ts_info .= "term_priority is higher than priority<br />"; // tft
+                    		$ts_info .= "term_priority is higher than priority<br />";
                     	}                        
                     } else {
                     	$ts_info .= "term_priority is not set for term ".$term->slug."<br />";
@@ -729,7 +731,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
                 
             }
             
-            $ts_info .= "priority: ".$priority."<br />"; // tft
+            $ts_info .= "priority: ".$priority."<br />";
             $key = $priority."-".$litdate_id; // this will cause sort by priority num, then by litdate_id
             $litdates[$key] = $litdate_id;
             //$litdates[$top_priority] = $litdate_post_id;
@@ -743,13 +745,14 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         	uksort($litdates, sdg_arr_sort( 'key', null, 'ASC' ));
         	$ts_info .= "litdates sorted: ".print_r($litdates, true)."<br />"; // tft
        
-			// Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important
-			//$firstKey = array_key_first($array);
-		
+			// Get first item in the associative array -- that's the one to use because it has the lowest priority number and therefore is most important		
 			$top_key = array_key_first($litdates);
 			$ts_info .= "top_key: ".$top_key."<br />"; // tft
 			$litdate_id = $litdates[$top_key];
-			$ts_info .= "litdate_id: ".$litdate_id."<br />"; // tft
+			$ts_info .= "litdate_id: ".$litdate_id."<br />";
+			//
+			// Check for any secondary date that should be displayed in addition under the day title
+			
 			
         }
     }
