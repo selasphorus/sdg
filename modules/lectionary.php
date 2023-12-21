@@ -805,6 +805,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 				$info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
 				$info .= $litdate_title;
 				$info .= '</a>';
+				if ( $litdate_id_secondary ) { $info .= '<span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
 				$info .= '<br />';
 				$info .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
 				$info .= 		'<h2 autofocus>'.$litdate_title.'</h2>';
@@ -835,9 +836,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
 	}
 	
-	if ( $litdate_id_secondary ) {
-		$info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>';
-	}
+	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
 	if ( $devmode ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
