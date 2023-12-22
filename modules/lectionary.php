@@ -835,7 +835,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		
         $ts_info .= "no litdate found for display<br />";
 		//$ts_info .= "params: <pre>".print_r($params, true)."</pre>";
-		if ( $litdate_id_secondary ) { $info .= '<span class="calendar-day">&nbsp;&#126;&nbsp;</span><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span><br />'; }
+		if ( $litdate_id_secondary ) { $info .= '<span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span><br />'; }
         
 	}
 	
