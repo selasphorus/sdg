@@ -1946,10 +1946,11 @@ function update_snippet_logic ( $atts = [] ) {
 					$p_id = intval($condition);
 					// Check to see if p_id is a valid post id
 					if ( $p_id ) { $post = get_post( $p_id ); }
-					if ( !$post ) {
+					if ( !is_object($post) ) {
 						$key_ts_info .= $x.".) ";
 						//$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
 						$key_ts_info .= "NO POST FOUND for condition: ".$condition."<br />";
+						
 					} else {
 						
 						$post_info = $x.".) ".$post->post_title." [$p_id]";
@@ -1998,8 +1999,7 @@ function update_snippet_logic ( $atts = [] ) {
 						}
 						$post_info .= "<br />";
 						$key_ts_info .= $post_info;
-						$slug_to_match = $base_slug;
-						
+						$slug_to_match = $base_slug;						
 					}	
 				}
 				$matched_posts = array_unique($matched_posts);
