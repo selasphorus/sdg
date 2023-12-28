@@ -2091,13 +2091,13 @@ function update_snippet_logic ( $atts = [] ) {
 						
 						foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
-							$sidebar_id = get_field('sidebar_id', $snip_id, false);
+							$snip_sidebar_id = get_field('sidebar_id', $snip_id, false);
 							if ( $snippet_display == "selected" ) {
 								$update_key = 'exclude_by_post';
 							} else {
 								//$update_key = 'cs_post_ids';
 							}
-							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
+							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [snip_sidebar_id: ".$snip_sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
 							//
 							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
