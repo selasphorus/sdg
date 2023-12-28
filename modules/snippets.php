@@ -1833,6 +1833,7 @@ function update_snippet_logic ( $atts = [] ) {
     $args = shortcode_atts( array(
         'snippet_id' => null,
         'process_legacy_fields' => false,
+        'meta_keys' => null, // option to designate specific keys/fields for update
         'reverse' => false, // TODO/WIP: for old custom-sidebar widgets, add option to reverse all the logic for general use -- e.g. sermons sidebar cs-29
     ), $atts );
     
@@ -1856,7 +1857,9 @@ function update_snippet_logic ( $atts = [] ) {
 	
 	// Get snippet logic
 	// -- WIP
-	if ( $process_legacy_fields == "true" ) {
+	if ( $meta_keys ) {
+		$meta_keys = explode(',', $meta_keys);
+	} else if ( $process_legacy_fields == "true" ) {
 		$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
 	} else {
 		$meta_keys = array( 'target_by_url', 'exclude_by_url','target_by_post', 'exclude_by_post', 'target_by_post_type', 'target_by_location', 'target_by_taxonomy' );
