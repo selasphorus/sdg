@@ -2064,15 +2064,20 @@ function update_snippet_logic ( $atts = [] ) {
 							'value' => array('selected'), //, 'notselected'
 							'compare' => 'IN',
 						),
-						/*'sidebar_id' => array(
+						'sidebar_id' => array(
 							'key' => 'sidebar_id',
 							'value' => 'cs-',
 							'compare' => 'NOT LIKE',
-						),*/
+						),
 						'sidebar_id' => array(
 							'key' => 'sidebar_id',
-							'value' => 'sidebar-1',
+							'value' => 'bottom-widgets',
+							'compare' => 'NOT LIKE',
 						),
+						/*'sidebar_id' => array(
+							'key' => 'sidebar_id',
+							'value' => 'sidebar-1',
+						),*/
 					);
 					$wp_args['meta_query'] = $meta_query;
 					$snippets = get_posts($wp_args);
