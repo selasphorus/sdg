@@ -1986,7 +1986,7 @@ function update_snippet_logic ( $atts = [] ) {
 								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
 								$matched_post_removals[] = $p_id;
 								$post_info .= " &rarr; post added to matched_post_removals; handle via wildcard url<br />";
-								$key_ts_info .= $post_info;
+								//$key_ts_info .= $post_info;
 								continue;
 							} else {
 								$post_info .= " // ".$base_slug;
