@@ -2235,7 +2235,7 @@ function update_snippet_logic ( $atts = [] ) {
 							// If url contains /sermon/ instead of /sermons/, then update it -- UNTESTED 231228
 							if ( strpos($url, "/sermon/") !== false ) { $url = str_replace("/sermon/", "/sermons/", $url); }
 						} else if ( strpos($url, "/event-series/") !== false ) {
-							$post_type = "event-series";
+							$post_type = "event_series";
 						} else if ( strpos($url, "/events/") !== false || strpos($url, "/event/") !== false ) {
 							$post_type = "event";
 							if ( strpos($url, "/event/") !== false ) { $url = str_replace("/event/", "/events/", $url); }
