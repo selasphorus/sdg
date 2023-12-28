@@ -1944,6 +1944,9 @@ function update_snippet_logic ( $atts = [] ) {
 					
 					$post = null;
 					$p_id = intval($condition);
+					
+					$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
+					
 					// Check to see if p_id is a valid post id
 					if ( $p_id ) { $post = get_post( $p_id ); }
 					if ( !is_object($post) ) {
