@@ -2092,7 +2092,7 @@ function update_snippet_logic ( $atts = [] ) {
 							} else {
 								$update_key = 'cs_post_ids';
 							}
-							$key_ts_info .= $i.") ".get_the_title($snip_id)." /id: ".$snip_id." [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
+							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
 							/*$tertiary_updates = get_updated_arr_field_value( $snip_id, $update_key, $updated_field_value );
 							$key_ts_info .= $tertiary_updates['info'];
 							$tertiary_updated_field_value = $tertiary_updates['arr_updated'];
