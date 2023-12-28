@@ -1946,11 +1946,11 @@ function update_snippet_logic ( $atts = [] ) {
 					$p_id = intval($condition);
 					
 					//$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
-					$key_ts_info .= $x.".) "."p_id: ".$p_id."<br />";
+					//$key_ts_info .= $x.".) "."p_id: ".$p_id."<br />";
 					
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
-					$key_ts_info .= "post: <pre>".print_r($post, true)."</pre>";
+					//$key_ts_info .= "post: <pre>".print_r($post, true)."</pre>";
 					
 					if ( !is_object($post) ) {
 						$key_ts_info .= $x.".) ";
@@ -1985,6 +1985,8 @@ function update_snippet_logic ( $atts = [] ) {
 								$wildcard_url = $base_slug."*";
 								if ( !in_array($wildcard_url, $wildcard_urls) ) { $wildcard_urls[] = $wildcard_url; }
 								$matched_post_removals[] = $p_id;
+								$post_info .= "post added to matched_post_removals; handle via wildcard url<br />";
+								$key_ts_info .= $post_info;
 								continue;
 							} else {
 								$post_info .= " // ".$base_slug;
