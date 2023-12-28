@@ -2065,11 +2065,24 @@ function update_snippet_logic ( $atts = [] ) {
 							'compare' => 'IN',
 						),
 						'sidebar_id' => array(
+							'relation' => 'AND',
+							array(
+								'key' => 'sidebar_id',
+								'value' => 'bottom-widgets',
+								'compare' => '!=',
+							),
+							array(
+								'key' => 'sidebar_id',
+								'value' => 'cs-',
+								'compare' => 'NOT LIKE',
+							),
+						),
+						/*'sidebar_id' => array(
 							'key' => 'sidebar_id',
 							'value' => 'cs-',
 							'compare' => 'NOT LIKE',
 						),
-						/*'sidebar_id' => array(
+						'sidebar_id' => array(
 							'key' => 'sidebar_id',
 							'value' => 'bottom-widgets',
 							'compare' => 'NOT LIKE',
