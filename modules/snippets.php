@@ -2038,7 +2038,7 @@ function update_snippet_logic ( $atts = [] ) {
 				//
 				$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
 				// Is this a Custom Sidebar? If so, update other snippets accordingly
-				if ( strpos($sidebar_id, 'cs-') !== false ) {
+				if ( count($matched_posts) > 0 && strpos($sidebar_id, 'cs-') !== false ) {
 				
 					// Update other snippets to prevent display of these cs_post_ids
 					// Update matching snippets with arr_ids...
@@ -2061,7 +2061,7 @@ function update_snippet_logic ( $atts = [] ) {
 						'relation' => 'AND',
 						'snippet_display' => array(
 							'key' => 'snippet_display',
-							'value' => array('selected', 'notselected'),
+							'value' => array('selected'), //, 'notselected'
 							'compare' => 'IN',
 						),
 						/*'sidebar_id' => array(
@@ -2090,30 +2090,13 @@ function update_snippet_logic ( $atts = [] ) {
 							if ( $snippet_display == "selected" ) {
 								$update_key = 'exclude_by_post';
 							} else {
-								$update_key = 'cs_post_ids';
+								//$update_key = 'cs_post_ids';
 							}
 							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [sidebar_id: ".$sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
-							/*$tertiary_updates = get_updated_arr_field_value( $snip_id, $update_key, $updated_field_value );
-							$key_ts_info .= $tertiary_updates['info'];
-							$tertiary_updated_field_value = $tertiary_updates['arr_updated'];
-							if ( $tertiary_updates && count($tertiary_updated_field_value) > 0 ) {
-								$key_ts_info .= "about to update field '$update_key' for snip_id: $snip_id<br />";
-								$key_ts_info .= count($tertiary_updated_field_value)." items in tertiary_updated_field_value array<br />";
-								//
-								$key_ts_info .= "--- tertiary updates tmp disabled ($update_key)<br />";
-								if ( $update_key == 'cs_post_ids' ) { // text field, not relationship => save as string								
-									$tertiary_updated_field_value = serialize($tertiary_updated_field_value);
-									//$key_ts_info .= "serialized tertiary_updated_field_value: ".print_r($tertiary_updated_field_value,true)."<br />";
-								}
-								//
-								//$key_ts_info .= "=> <pre>".print_r($tertiary_updated_field_value, true)."</pre>";
-								//$key_ts_info .= "about to update field '$key' with value(s): ".print_r($tertiary_updated_field_value, true)."<br />";
-								if ( update_field( $update_key, $tertiary_updated_field_value, $snip_id ) ) {
-									$key_ts_info .= "updated field: ".$update_key." for snippet_id: $snip_id<br />";
-								} else {
-									$key_ts_info .= "update FAILED for field: ".$update_key." for snippet_id: $snip_id<br />";
-								}
-							}*/
+							//
+							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' );
+							$key_ts_info .= sdg_update_custom_field( $update_args );
+							
 							$key_ts_info .= "<br />";
 						}
 						
