@@ -2222,19 +2222,27 @@ function update_snippet_logic ( $atts = [] ) {
 								$condition_info .= "&rarr; remove old: $url_bk<br />";
 								$repeater_removals[] = $url_bk; // Remove the absolute URL
 							}
+						} else {
+							// Is there a leading / ? If not, add one, so as to standardize url formats
+							if ( substr($url, 0, 1) !== "/" ) {
+								$url = "/".$url;
+							}
 						}
 						//
 						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
-						if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
-							$post_type = "event";
-						} else if ( substr($url, 6) == "sermon" || substr($url, 1, 6) == "sermon" ) {
+						if ( strpos($url, "/sermons/") !== false || strpos($url, "/sermon/") !== false ) {
 							$post_type = "sermon";
 							// If url contains /sermon/ instead of /sermons/, then update it -- UNTESTED 231228
-							if ( substr($url, 7) == "sermon/" || substr($url, 1, 7) == "sermon/" ) {
-								$url = str_replace("sermon/","sermons/",$url);
-							}
+							if ( strpos($url, "/sermon/") !== false ) { $url = str_replace("/sermon/", "/sermons/", $url); }
+						} else if ( strpos($url, "/event-series/") !== false ) {
+							$post_type = "event-series";
+						} else if ( strpos($url, "/events/") !== false || strpos($url, "/event/") !== false ) {
+							$post_type = "event";
+							if ( strpos($url, "/event/") !== false ) { $url = str_replace("/event/", "/events/", $url); }
 						} else if ( preg_match($date_validation_regex, $url) ) {
 							$post_type = "post";
+						} else {
+							$post_type = "page";
 						}
 						//
 						if ( $post_type ) {
