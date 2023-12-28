@@ -2229,6 +2229,10 @@ function update_snippet_logic ( $atts = [] ) {
 							$post_type = "event";
 						} else if ( substr($url, 6) == "sermon" || substr($url, 1, 6) == "sermon" ) {
 							$post_type = "sermon";
+							// If url contains /sermon/ instead of /sermons/, then update it
+							if ( substr($url, 7) == "sermon/" || substr($url, 1, 7) == "sermon/" ) {
+								$url = str_replace("sermon/","sermons/",$url);
+							}
 						} else if ( preg_match($date_validation_regex, $url) ) {
 							$post_type = "post";
 						}
