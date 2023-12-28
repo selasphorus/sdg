@@ -1389,7 +1389,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 							// Update snippet logic
 							$info .= "&rarr;&rarr; update_snippet_logic<br />";
-							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
+							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true' ) ); //$info .= '<div class="code">'.'</div>';
 						} else {
 							$info .= "&rarr;&rarr; No action<br />";
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
@@ -1659,8 +1659,6 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 				//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 			}
 			*/
-			//$info .= "&rarr;&rarr; update_snippet_logic<br />";
-			//$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ); //$info .= '<div class="code">'.update_snippet_logic ( $snippet_id ).'</div>';
 		} else {
 			$info .= "&rarr;&rarr; No action<br />";
 			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
@@ -1825,7 +1823,7 @@ function update_snippets ( $atts = [] ) {
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
 add_shortcode('update_snippet_logic', 'update_snippet_logic');
-function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic ( $snippet_id = null ) {
+function update_snippet_logic ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = true; 
@@ -1834,6 +1832,7 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
     
     $args = shortcode_atts( array(
         'snippet_id' => null,
+        'process_legacy_fields' => false,
         'reverse' => false, // TODO/WIP: for old custom-sidebar widgets, add option to reverse all the logic for general use -- e.g. sermons sidebar cs-29
     ), $atts );
     
@@ -1857,7 +1856,11 @@ function update_snippet_logic ( $atts = [] ) { //function update_snippet_logic (
 	
 	// Get snippet logic
 	// -- WIP
-	$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
+	if ( $process_legacy_fields == "true" ) {
+		$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
+	} else {
+		$meta_keys = array( 'target_by_url', 'exclude_by_url','target_by_post', 'exclude_by_post', 'target_by_post_type', 'target_by_location', 'target_by_taxonomy' );
+	}
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
 	
