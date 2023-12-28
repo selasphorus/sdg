@@ -2808,6 +2808,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		'repeater_field' => null, // for field_type == 'repeater', must designate sub-field
         'arr_additions' => array(),
         'arr_removals' => array(),
+        'verbose' => false, // TODO: incorporate this fully!
         // TODO: add update_limit options?
 	);
 
@@ -2838,7 +2839,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 			
 		} else {
 		
-			//$info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";
+			if ( $verbose == 'true' ) { $info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>"; }
 			
 			// Sort the existing repeater_rows and save the sorted array
 			$repeater_values = array_column($repeater_rows, $repeater_field);
@@ -2846,9 +2847,8 @@ function get_updated_arr_field_value ( $args = array() ) {
 			//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
 			array_multisort($repeater_values, SORT_ASC, $repeater_rows);
 			//update_field( $key, $repeater_rows, $post_id );
-			//$info .= "repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
-			//$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
-			//$info .= "repeater_values: <pre>".print_r($repeater_values, true)."</pre>";
+			if ( $verbose == 'true' ) { $info .= "repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>"; }
+			if ( $verbose == 'true' ) { $info .= "repeater_values: <pre>".print_r($repeater_values, true)."</pre>"; }
 		
 			// Remove duplicates and repeater_removals
 			
@@ -2864,7 +2864,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 				$info .= "<h4>About to clean up repeater_rows by removing arr_removals...</h4>";
 				
 				sort($arr_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-				//$info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>";
+				if ( $verbose == 'true' ) { $info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>"; }
 				foreach ( $repeater_rows as $k => $v ) {
 					$repeater_value = $v[$repeater_field]; //$repeater_url = $v['url'];
 					//$info .= "k: $k / repeater_value (v): $repeater_value<br />";
@@ -2926,7 +2926,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 			
 		}
 		
-		$info .= "repeater_rows_revised, aka arr_updated: <pre>".print_r($arr_updated, true)."</pre><br />";
+		if ( $verbose == 'true' ) { $info .= "repeater_rows_revised, aka arr_updated: <pre>".print_r($arr_updated, true)."</pre><br />"; }
 		
 	} else {
 	
@@ -3021,7 +3021,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		
 	}
 	
-	//$info .= "arr_updated: ".print_r($arr_updated, true)."<br />"; //"<pre></pre>";
+	if ( $verbose == 'true' ) { $info .= "arr_updated: ".print_r($arr_updated, true)."<br />"; } //"<pre></pre>";
 	
 	if ( $field_type == "serialized" ) { $updated_value = serialize($arr_updated); } else { $updated_value = $arr_updated; }
 	
