@@ -1941,9 +1941,9 @@ function update_snippet_logic ( $atts = [] ) {
 				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working // WIP 231129
 				
 				foreach ( $conditions as $x => $condition ) {
-							
+					
+					$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
 					$p_id = intval($condition);
-					//$key_ts_info .= "p_id: ".$p_id."<br />";
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					if ( $post ) {
