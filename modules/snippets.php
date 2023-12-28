@@ -1950,7 +1950,7 @@ function update_snippet_logic ( $atts = [] ) {
 					
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
-					$key_ts_info .= "post: ".print_r($post, true)."<br />";
+					$key_ts_info .= "post: <pre>".print_r($post, true)."</pre>";
 					
 					if ( !is_object($post) ) {
 						$key_ts_info .= $x.".) ";
