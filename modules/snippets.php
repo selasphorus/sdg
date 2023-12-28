@@ -1942,11 +1942,15 @@ function update_snippet_logic ( $atts = [] ) {
 				
 				foreach ( $conditions as $x => $condition ) {
 					
-					$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
+					$post = null;
 					$p_id = intval($condition);
 					// Check to see if p_id is a valid post id
-					$post = get_post( $p_id );
-					if ( $post ) {
+					if ( $p_id ) { $post = get_post( $p_id ); }
+					if ( !$post ) {
+						$key_ts_info .= $x.".) ";
+						//$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
+						$key_ts_info .= "NO POST FOUND for condition: ".$condition."<br />";
+					} else {
 						
 						$post_info = $x.".) ".$post->post_title." [$p_id]";
 						// Get post status -- we're only interested published posts
@@ -1996,9 +2000,7 @@ function update_snippet_logic ( $atts = [] ) {
 						$key_ts_info .= $post_info;
 						$slug_to_match = $base_slug;
 						
-					} else {
-						$key_ts_info .= "NO POST FOUND for p_id: ".$p_id."<br />";
-					}		
+					}	
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
