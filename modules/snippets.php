@@ -2061,7 +2061,7 @@ function update_snippet_logic ( $atts = [] ) {
 						'relation' => 'AND',
 						'snippet_display' => array(
 							'key' => 'snippet_display',
-							'value' => array('selected'), //, 'notselected'
+							'value' => array('selected', 'notselected'), //
 							'compare' => 'IN',
 						),
 						'sidebar_id' => array(
@@ -2108,6 +2108,7 @@ function update_snippet_logic ( $atts = [] ) {
 							if ( $snippet_display == "selected" ) {
 								$update_key = 'exclude_by_post';
 							} else {
+								$update_key = 'target_by_post';
 								//$update_key = 'cs_post_ids';
 							}
 							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [snip_sidebar_id: ".$snip_sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
