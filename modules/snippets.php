@@ -2227,6 +2227,8 @@ function update_snippet_logic ( $atts = [] ) {
 						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
 						if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
 							$post_type = "event";
+						} else if ( substr($url, 6) == "sermon" || substr($url, 1, 6) == "sermon" ) {
+							$post_type = "sermon";
 						} else if ( preg_match($date_validation_regex, $url) ) {
 							$post_type = "post";
 						}
