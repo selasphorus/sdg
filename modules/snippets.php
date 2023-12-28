@@ -2006,7 +2006,7 @@ function update_snippet_logic ( $atts = [] ) {
 							//$post_info .= "postmeta: ".print_r(get_post_meta($id), true)."<br />";
 						}
 						$post_info .= "<br />";
-						$key_ts_info .= $post_info;
+						//$key_ts_info .= $post_info;
 						$slug_to_match = $base_slug;						
 					}	
 				}
@@ -2069,12 +2069,12 @@ function update_snippet_logic ( $atts = [] ) {
 							'value' => 'cs-',
 							'compare' => 'NOT LIKE',
 						),
-						'sidebar_id' => array(
+						/*'sidebar_id' => array(
 							'key' => 'sidebar_id',
 							'value' => 'bottom-widgets',
 							'compare' => 'NOT LIKE',
 						),
-						/*'sidebar_id' => array(
+						'sidebar_id' => array(
 							'key' => 'sidebar_id',
 							'value' => 'sidebar-1',
 						),*/
@@ -2100,7 +2100,8 @@ function update_snippet_logic ( $atts = [] ) {
 							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [snip_sidebar_id: ".$snip_sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
 							//
 							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' );
-							$key_ts_info .= sdg_update_custom_field( $update_args );
+							//$key_ts_info .= sdg_update_custom_field( $update_args );
+							$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
 							
 							$key_ts_info .= "<br />";
 						}
