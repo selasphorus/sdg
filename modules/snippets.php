@@ -2838,7 +2838,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 			
 		} else {
 		
-			$info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";
+			//$info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";
 			
 			// Sort the existing repeater_rows and save the sorted array
 			$repeater_values = array_column($repeater_rows, $repeater_field);
@@ -2846,9 +2846,9 @@ function get_updated_arr_field_value ( $args = array() ) {
 			//$key_ts_info .= "repeater_rows repeater_values: ".print_r($repeater_rows, true)."<br />";
 			array_multisort($repeater_values, SORT_ASC, $repeater_rows);
 			//update_field( $key, $repeater_rows, $post_id );
-			$info .= "repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
+			//$info .= "repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
 			//$info .= "repeater_rows: ".print_r($repeater_rows, true)."<br />";
-			$info .= "repeater_values: <pre>".print_r($repeater_values, true)."</pre>";
+			//$info .= "repeater_values: <pre>".print_r($repeater_values, true)."</pre>";
 		
 			// Remove duplicates and repeater_removals
 			
