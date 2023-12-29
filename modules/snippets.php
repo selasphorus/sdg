@@ -2390,9 +2390,9 @@ function update_snippet_logic ( $atts = [] ) {
 				*/
 				$key_ts_info .= "<hr />";
 				
-				$key_ts_info .= count($matched_posts)." matched_posts<br />";
-				$key_ts_info .= count($matched_post_removals)." matched_post_removals<br />";
-				$key_ts_info .= count($repeater_additions)." repeater_additions<br />";
+				$key_ts_info .= count($matched_posts)." matched_posts; ";
+				$key_ts_info .= count($matched_post_removals)." matched_post_removals; ";
+				$key_ts_info .= count($repeater_additions)." repeater_additions; ";
 				$key_ts_info .= count($repeater_removals)." repeater_removals<br />";
 				
 				// Save the matched posts to the snippet field
