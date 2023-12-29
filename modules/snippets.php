@@ -2393,7 +2393,7 @@ function update_snippet_logic ( $atts = [] ) {
 				$key_ts_info .= count($matched_posts)." matched_posts; ";
 				$key_ts_info .= count($matched_post_removals)." matched_post_removals; ";
 				$key_ts_info .= count($repeater_additions)." repeater_additions; ";
-				$key_ts_info .= count($repeater_removals)." repeater_removals<br />";
+				$key_ts_info .= count($repeater_removals)." repeater_removals<br /><br />";
 				
 				// Save the matched posts to the snippet field
 				if ( $matched_posts ) {
@@ -2552,11 +2552,10 @@ function update_snippet_logic ( $atts = [] ) {
 				$ts_info .= "<hr />";
 			}*/
 			$ts_info .= $key_ts_info;
-			$ts_info .= "<hr />";
-			$ts_info .= "<hr />";
+			$ts_info .= "<hr /><hr />";
 			
 		} else { // if ( !empty($$key) ) {
-			$ts_info .= "No meta data found for key: $key<br />";
+			$ts_info .= "No meta data found for key: $key<br /><hr /><hr />";
 		}
 	}
 	
