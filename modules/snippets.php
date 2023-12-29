@@ -2206,11 +2206,15 @@ function update_snippet_logic ( $atts = [] ) {
 						$condition_info .= "condition: ".$condition." [".gettype($condition)."]<br />";
 						if ( $key != 'target_by_post' && $key != 'exclude_by_post' ) {
 							$url = $condition;
-						}						
+						} else if ( gettype($condition) == "integer" ) {
+							$tmp_post = get_post($condition);
+							if ( $tmp_post ) { $matched_post_id = $condition; }
+						}					
 					}					
 					//
 					// WIP/TODO: fold in $key == 'target_by_post' // $key == 'exclude_by_post' -- 
 					// check posts from those relationship fields, look for patterns, remove posts and add wildcard urls to repeater fields as relevant
+					
 					
 					if ( $url ) {
 						
@@ -2341,6 +2345,7 @@ function update_snippet_logic ( $atts = [] ) {
 						}
 						
 						$matched_posts[] = $matched_post_id;
+						//
 						if ( $url ) {
 							$condition_info .= "&rarr; remove from repeater_rows array: $url<br />";
 							$repeater_removals[] = $url;
@@ -2386,17 +2391,17 @@ function update_snippet_logic ( $atts = [] ) {
 				$key_ts_info .= "<hr />";
 				
 				// Save the matched posts to the snippet field
-				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 				// WIP Update the original $key field to clear it out, having xferred those values to the target_key field
 				if ( $reverse == "true" ) {
-					$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
-					//$key_ts_info .= sdg_update_custom_field( $update_args );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
+					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				
 				// Update the associated repeater field as needed
-				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions, 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
