@@ -2769,7 +2769,7 @@ function sdg_update_custom_field ( $args = array() ) {
 	
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
-		$info .= "Insufficient data for update!<br />";
+		$info .= "<strong>Insufficient data for update!</strong><br />";
 		$info .= "post_id: [$post_id]; key: [$key]";
 		$info .= "; value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
 		$info .= "<hr /><br />";
