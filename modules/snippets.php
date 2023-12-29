@@ -2771,7 +2771,7 @@ function sdg_update_custom_field ( $args = array() ) {
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update!<br />";
 		$info .= "post_id: [$post_id]; key: [$key]";
-		//$info .= "; value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
+		$info .= "; value: [".print_r($value,true)."]; arr_additions: [".print_r($arr_additions,true)."]; arr_removals: [".print_r($arr_removals,true)."])<br />";
 		$info .= "<hr /><br />";
 		// Return as directed
 		if ( $return == "bool" ) { return $updated; } else { return $info; }
