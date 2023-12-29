@@ -887,6 +887,7 @@ function convert_widgets_to_snippets ( $atts = [] ) {
         'widget_id'	=> null,
         'run_updates' => false,
         'wtypes' => 'default',
+        'verbose' => false,
     ), $atts );
     
     // Extract
@@ -1389,7 +1390,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
 							// Update snippet logic
 							$info .= "&rarr;&rarr; update_snippet_logic<br />";
-							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true' ) ); //$info .= '<div class="code">'.'</div>';
+							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true', 'verbose' => $verbose ) ); //$info .= '<div class="code">'.'</div>';
 						} else {
 							$info .= "&rarr;&rarr; No action<br />";
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
@@ -1445,6 +1446,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
     $args = shortcode_atts( array(
     	'ids' => null,
 		'limit'   => -1,
+        'verbose' => false,
     ), $atts );
     
     // Extract
@@ -1690,6 +1692,7 @@ function delete_widgets ( $atts = [] ) {
         'widget_id'	=> null,
         'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
         'run_updates' => false,
+        'verbose' => false,
     ), $atts );
     
     // Extract
@@ -1787,6 +1790,7 @@ function update_snippets ( $atts = [] ) {
     
     $args = shortcode_atts( array(
         'limit'   => 1,
+        'verbose' => false,
         //'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ),
         //'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
     ), $atts );
@@ -1814,7 +1818,7 @@ function update_snippets ( $atts = [] ) {
     
     // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
-		$info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ).'</div>';
+		$info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'verbose' => $verbose ) ).'</div>';
 	}	
 	
 	return $info;
@@ -1835,6 +1839,7 @@ function update_snippet_logic ( $atts = [] ) {
         'process_legacy_fields' => false,
         'meta_keys' => null, // option to designate specific keys/fields for update
         'reverse' => false, // TODO/WIP: for old custom-sidebar widgets, add option to reverse all the logic for general use -- e.g. sermons sidebar cs-29
+        'verbose' => false, // WIP
     ), $atts );
     
     // Extract
@@ -1862,7 +1867,7 @@ function update_snippet_logic ( $atts = [] ) {
 	} else if ( $process_legacy_fields == "true" ) {
 		$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
 	} else {
-		$meta_keys = array( 'target_by_url', 'exclude_by_url','target_by_post', 'exclude_by_post', 'target_by_post_type', 'target_by_location', 'target_by_taxonomy' );
+		$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'target_by_location', 'target_by_taxonomy' );
 	}
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
 	foreach ( $meta_keys as $key ) {
@@ -2132,7 +2137,8 @@ function update_snippet_logic ( $atts = [] ) {
 				$repeater_additions = array();
 				$repeater_removals = array();
 				//
-				// WIP 231218
+				// WIP 231228
+				// TODO: mod for origin and target keys, in case of "reverse" updates
 				if ( strpos($key, 'target_by') !== false ) {
 					if ( $reverse == "true" ) { $action = 'exclude';  } else { $action = 'target'; }
 				} else {
@@ -2380,6 +2386,12 @@ function update_snippet_logic ( $atts = [] ) {
 				$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
+				// WIP Update the original $key field to clear it out, having xferred those values to the target_key field
+				if ( $reverse == "true" ) {
+					$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' ); // , 'arr_removals' => $matched_post_removals
+					//$key_ts_info .= sdg_update_custom_field( $update_args );
+				}
+				
 				// Update the associated repeater field as needed
 				$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions , 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
@@ -2514,7 +2526,7 @@ function update_snippet_logic ( $atts = [] ) {
 			}
 			
 		} else { // if ( !empty($$key) ) {
-			//$ts_info .= "No meta data found for key: $key<br />";
+			$ts_info .= "No meta data found for key: $key<br />";
 		}
 	}
 	
