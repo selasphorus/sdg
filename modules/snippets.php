@@ -2155,6 +2155,10 @@ function update_snippet_logic ( $atts = [] ) {
 					$target_key = 'exclude_by_post';
 					$repeater_key = 'exclude_by_url';
 				}
+				$key_ts_info .= "reverse: [".$reverse."]<br />";
+				$key_ts_info .= "action: ".$action."<br />";
+				$key_ts_info .= "target_key: ".$target_key."<br />";
+				$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
 				
 				//
 				// TODO: update to use fcn sdg_update_custom_field
