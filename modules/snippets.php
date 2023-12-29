@@ -2883,6 +2883,10 @@ function get_updated_arr_field_value ( $args = array() ) {
 	
 	$info .= "field_type: ".$field_type."<br />";
 	
+	// Init
+	$arr_current = array();
+	$arr_updated = array();
+	
 	//
 	if ( $field_type == 'repeater' ) {
 		
@@ -2985,8 +2989,6 @@ function get_updated_arr_field_value ( $args = array() ) {
 			if ( empty($arr_removals) ) {
 				$info .= " -- use pre-existing repeater_rows<br />"; // WIP 231228
 				$arr_updated = $repeater_rows;
-			} else {
-				$arr_updated = array();
 			}
 			
 		}
@@ -3001,7 +3003,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 		if ( $post_id ) {
 			$arr_current = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value); //$arr_current = get_post_meta( $post_id, $key, true );
 		} else {
-			$arr_current = array();
+			
 		}
 		
 		// Unserialize as needed
@@ -3080,7 +3082,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 	
 		} else {
 	
-			$info .= "arr_additions is empty ==> no update needed<br />";
+			$info .= "arr_additions is empty<br />"; //  ==> no update needed
 		
 		}
 		
