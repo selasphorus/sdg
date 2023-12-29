@@ -2523,11 +2523,14 @@ function update_snippet_logic ( $atts = [] ) {
 			}
 			
 			//$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
-			if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'target_by_url' || $key == 'exclude_by_url' ) {
+			/*if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				$ts_info .= $key_ts_info;
 				$ts_info .= "<hr />";
 				$ts_info .= "<hr />";
-			}
+			}*/
+			$ts_info .= $key_ts_info;
+			$ts_info .= "<hr />";
+			$ts_info .= "<hr />";
 			
 		} else { // if ( !empty($$key) ) {
 			$ts_info .= "No meta data found for key: $key<br />";
