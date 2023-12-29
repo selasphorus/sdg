@@ -2923,7 +2923,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 				$info .= "<h4>About to clean up repeater_rows by removing arr_removals...</h4>";
 				
 				sort($arr_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-				if ( $verbose == 'true' ) { $info .= "repeater_removals: <pre>".print_r($repeater_removals, true)."</pre>"; }
+				if ( $verbose == 'true' ) { $info .= "arr_removals: <pre>".print_r($arr_removals, true)."</pre>"; }
 				foreach ( $repeater_rows as $k => $v ) {
 					$repeater_value = $v[$repeater_field]; //$repeater_url = $v['url'];
 					//$info .= "k: $k / repeater_value (v): $repeater_value<br />";
@@ -2932,7 +2932,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 						//$info .= "removing repeater_value: $repeater_value<br />";
 						//unset($repeater_rows[$k]);
 					} else {
-						$info .= "Adding repeater_value to repeater_rows_revised -- not in repeater_removals array: $repeater_value<br />";
+						$info .= "Adding repeater_value to repeater_rows_revised -- not in arr_removals array: $repeater_value<br />";
 						$repeater_rows_revised[] = array($repeater_field => $repeater_value); //$arr_updated[$k] = $repeater_rows[$k];
 					}
 				}
@@ -2982,6 +2982,12 @@ function get_updated_arr_field_value ( $args = array() ) {
 		
 			$info .= "repeater_rows_revised is empty -- use pre-existing repeater_rows<br />";
 			$arr_updated = $repeater_rows;
+			/*if ( !empty($arr_additions) || empty($arr_removals) ) {
+				// -- use pre-existing repeater_rows -- WIP 231228
+				$arr_updated = $repeater_rows;
+			} else {
+				$arr_updated = array();
+			}*/
 			
 		}
 		
