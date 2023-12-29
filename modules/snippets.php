@@ -1870,12 +1870,15 @@ function update_snippet_logic ( $atts = [] ) {
 		$meta_keys = array( 'target_by_url', 'exclude_by_url', 'target_by_post', 'exclude_by_post', 'target_by_post_type', 'target_by_location', 'target_by_taxonomy' );
 	}
 	//$meta_keys = array( 'target_by_url_txt', 'exclude_by_url_txt', 'target_by_taxonomy', 'target_by_post_type', 'target_by_location' );
+	$ts_info .= "meta_keys => <pre>".print_r($meta_keys, true)."</pre>";
+	//
 	foreach ( $meta_keys as $key ) {
 	
-		$$key = get_field( $key, $snippet_id );
-		//$$key = get_post_meta( $snippet_id, $key, true );
 		$key_ts_info = "";
 		$key_ts_info .= "<strong>key: $key</strong><br />";
+		//
+		$$key = get_field( $key, $snippet_id );
+		//$$key = get_post_meta( $snippet_id, $key, true );
 		//$key_ts_info .= "key: $key => ".$$key."<br />";
 		//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
 		
