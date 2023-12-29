@@ -2980,14 +2980,14 @@ function get_updated_arr_field_value ( $args = array() ) {
 		
 		} else {
 		
-			$info .= "repeater_rows_revised is empty -- use pre-existing repeater_rows<br />";
-			$arr_updated = $repeater_rows;
-			/*if ( !empty($arr_additions) || empty($arr_removals) ) {
-				// -- use pre-existing repeater_rows -- WIP 231228
+			$info .= "repeater_rows_revised is empty<br />";
+			//$arr_updated = $repeater_rows;
+			if ( empty($arr_removals) ) {
+				$info .= " -- use pre-existing repeater_rows<br />"; // WIP 231228
 				$arr_updated = $repeater_rows;
 			} else {
 				$arr_updated = array();
-			}*/
+			}
 			
 		}
 		
