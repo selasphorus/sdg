@@ -2398,7 +2398,7 @@ function update_snippet_logic ( $atts = [] ) {
 				// WIP Update the original $key field to clear it out, having xferred those values to the target_key field
 				if ( $reverse == "true" && ( $key == 'target_by_post' || $key == 'exclude_by_post' )  ) {
 					$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
-					$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
+					$key_ts_info .= "REVERSE update_args: <pre>".print_r($update_args, true)."</pre>";
 					//$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				
@@ -2409,7 +2409,7 @@ function update_snippet_logic ( $atts = [] ) {
 				if ( $reverse == "true" && ( $key == 'target_by_url' || $key == 'exclude_by_url' )  ) {
 					//remove repeater data from original key field, having xferred those values to the repeater_key field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $repeater_additions, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
-					$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
+					$key_ts_info .= "REVERSE update_args: <pre>".print_r($update_args, true)."</pre>";
 					//$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				
