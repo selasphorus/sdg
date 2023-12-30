@@ -425,7 +425,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'logbook', 'organs', 'press', 'projects', 'sources', 'venues' ); // , 'groups', 'newsletters', 'snippets'
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources', 'venues' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
     }
