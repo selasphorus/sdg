@@ -415,19 +415,19 @@ $includes = array( 'posttypes', 'taxonomies' );
 $admin_functions_filepath = $plugin_path . 'inc/'.'admin_functions.php';
 $common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
 
-if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "no $admin_functions_filepath found"; }
-if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "no $common_functions_filepath found"; }
+if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "file $admin_functions_filepath not found"; }
+if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "file $common_functions_filepath not found"; }
 
 foreach ( $includes as $inc ) {
     $filepath = $plugin_path . 'inc/'.$inc.'.php'; 
-    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "inc file $filepath not found"; }
 }
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources', 'venues' ); // , 'groups', 'newsletters', 'snippets'
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources', 'venues' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
-    	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "no $filepath found"; }
+    	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
     }
 }
 
