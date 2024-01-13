@@ -826,7 +826,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 				//$ts_info .= "collect_post: <pre>".print_r($collect_post, true)."</pre>";
 				// If no content or collect, just show the day title
 				$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
-				if ( $litdate_id_secondary ) { $info .= '<span class="calendar-day-spacer">&nbsp;&#126;&nbsp;</span><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
+				if ( $litdate_id_secondary ) { $info .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
 				$info .= '<br />';
 			}
         }
