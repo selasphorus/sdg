@@ -1316,7 +1316,7 @@ function calc_date_from_components ( $args = array() ) {
 			// e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
 			//$info .= $indent."LAST<br />"; // tft
 			if ( $calc_basis == "epiphany" ) {
-				$calc_interval = $num_sundays_after_epiphany;
+				$calc_interval = $num_sundays_after_epiphany; // WIP 240113
 			} else if ( $calc_basis == "easter" ) { // && $calc_boia == "before"
 				$calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
 			} else if ( $date_calculation_str == "last sunday before advent" ) {
