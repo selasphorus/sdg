@@ -1010,7 +1010,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		$info .= '<div class="code">';
 		
 		// Loop through widgets and create corresponding snippet records
-		if ( is_array($widgets) ) {
+		if ( is_array($widgets) && !empty($widgets) ) {
 		
 			$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {
@@ -1452,6 +1452,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				$info .= "<hr />";
 			} // foreach ( $widgets...
 			
+		} else {
+			$info .= "[No widgets]<br />";
 		}
 		
 		//...
