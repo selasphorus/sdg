@@ -1437,7 +1437,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 								$info .= "&rarr;&rarr; update_snippet_logic<br />";
 								$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true', 'verbose' => $verbose ) ); //$info .= '<div class="code">'.'</div>';
 							} else {
-								$info .= "&rarr;&rarr; No successful action<br />";
+								$info .= "&rarr;&rarr; No insert/update completed [action: $action]<br />";
 								//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 							}
 						
