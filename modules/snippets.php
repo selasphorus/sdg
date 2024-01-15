@@ -1742,7 +1742,7 @@ function delete_widgets ( $atts = [] ) {
         'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
         'widget_id'	=> null,
         'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
-        'run_updates' => false,
+        'action' => 'test',
         'verbose' => false,
     ), $atts );
     
@@ -1754,7 +1754,8 @@ function delete_widgets ( $atts = [] ) {
 	
 	// Sidebars to process
 	if ( !is_array($sidebars) ) { $sidebars = explode(',', $sidebars); }
-	$info .= "sidebars: <pre>".print_r($sidebars,true)."</pre><hr /><hr />";
+	$info .= "sidebars to process: <pre>".print_r($sidebars,true)."</pre><hr /><hr />";
+	$info .= "action: ".$action."<br />";
 	// TODO: further testing and adjustments to avoid deleting image widgets from mega menus!!!
 	
 	// Widget Types to process
@@ -1802,8 +1803,10 @@ function delete_widgets ( $atts = [] ) {
 			//
 			if ( in_array( $widget_sidebar, $sidebars ) ) {
 				$info .= "&rarr; Delete this widget!<br />";
-				unset($widgets[$key]);
-				$i++;
+				if ( $action != "test") {
+					unset($widgets[$key]);
+					$i++;
+				}
 			} else {
 				$info .= "&rarr; Do NOT delete this widget!<br />";
 			}		
@@ -1816,12 +1819,14 @@ function delete_widgets ( $atts = [] ) {
         // update DB option
         if ( $i > 0 ) {
         	$info .= "Preparing to delete ".$i." ".$wtype." widgets!<br />";
-        	$updated = update_option( $option_name, $widgets );
-			if ( !$updated ) {
-				// do some form of error handling (6)
-				$info .= "ERROR ON UPDATE<br />";
-			} else {
-				$info .= $i." ".$wtype." widgets deleted!<br />";
+        	if ( $action != "test") {
+				$updated = update_option( $option_name, $widgets );
+				if ( !$updated ) {
+					// do some form of error handling (6)
+					$info .= "ERROR ON UPDATE<br />";
+				} else {
+					$info .= $i." ".$wtype." widgets deleted!<br />";
+				}
 			}
         }
         
