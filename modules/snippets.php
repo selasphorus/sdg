@@ -1182,11 +1182,11 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					}
 					
 					//
-					$info .= "title: ".$snippet_title."<br />";
+					if ( $verbose ) { $info .= "title: ".$snippet_title."<br />"; }
 					
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
 					$widget_sidebar_id = get_sidebar_id($widget_uid);
-					$info .= "widget_sidebar_id: ".$widget_sidebar_id."<br />";
+					if ( $verbose ) { $info .= "widget_sidebar_id: ".$widget_sidebar_id."<br />"; }
 					
 					// TODO: check to see if snippet already exists with matching uid
 					// If no match, create new snippet post record with title and text as above
@@ -1279,7 +1279,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					
 						// Get widget logic -- WIP
 						if ( isset($widget_logic[$widget_uid]) ) {
-							$info .= "... found widget logic ...<br />";
+							if ( $verbose ) { $info .= "... found widget logic ...<br />"; }
 							//$info .= "logic: <pre>".print_r($widget_logic[$widget_uid],true)."</pre><br />";
 							$conditions = $widget_logic[$widget_uid];
 						}
@@ -1317,7 +1317,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 			
 							} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
 			
-								$info .= "condition: ".$condition."<br />";
+								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 			
 								// Init values array
@@ -1343,7 +1343,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		
 							} else if ( $condition == "taxonomy" ) {
 			
-								$info .= "condition: ".$condition."<br />";
+								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 			
 								if ( isset($subconditions['taxonomies']) ) { 
@@ -1355,24 +1355,26 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		
 							} else if ( $condition == "word_count" ) {
 		
-								$info .= "condition: ".$condition."<br />";
+								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								// WIP
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
 		
 							} else if ( is_array($subconditions) && !empty($subconditions) ) {
-								$info .= "condition: ".$condition."<br />";
+								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
 									//$info .= "single empty subcondition<br />";
 								} else {
-									$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
+									if ( $verbose ) { $info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />"; }
 									//$info .= count($subconditions)." subconditions<br />";
 								}
 								/*foreach ( $subconditions as $k => $v ) {
 									//$info .= "k: ".$k." => v: ".$v."<br />";
 								}*/
 							} else {
-								$info .= "condition: ".$condition."<br />";
-								$info .= $subconditions." [not an array]<br />";
+								if ( $verbose ) { 
+									$info .= "condition: ".$condition."<br />";
+									$info .= $subconditions." [not an array]<br />";
+								}
 								//$meta_input[$condition] = $subconditions;
 							}
 							if ( !$subs_empty ) {
@@ -1785,6 +1787,8 @@ function delete_widgets ( $atts = [] ) {
 			
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
+			if ( $widget_sidebar == "mega-menu" ) { continue; } // WIP -- TODO: instead, just make sure earlier in the fcn that "mega-menu" is NOT in the $sidebars array!
+			//
 			if ( in_array( $widget_sidebar, $sidebars ) ) {
 				$info .= "&rarr; Delete this widget!<br />";
 				unset($widgets[$key]);
