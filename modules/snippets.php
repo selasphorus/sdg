@@ -1451,7 +1451,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				
 				//if ( $i > $limit ) { break; } // tft
 				
-				if ( $verbose ) { $info .= "<hr />"; }
+				if ( count($widgets) > 1 ) { $info .= "<hr />"; }
 				
 			} // foreach ( $widgets...
 			
