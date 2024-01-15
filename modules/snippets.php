@@ -879,7 +879,7 @@ function widget_and_snippets ( $atts = [] ) { //function convert_widgets_to_snip
     $do_ts = false; 
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    sdg_log( "function called: convert_widgets_to_snippets", $do_log );
+    sdg_log( "function called: widget_and_snippets", $do_log );
     
     $args = shortcode_atts( array(
 		'limit'   => 1,
