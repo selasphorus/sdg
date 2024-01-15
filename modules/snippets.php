@@ -872,8 +872,8 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	
 }
 //
-add_shortcode('widget_and_snippets', 'widget_and_snippets');
-function widget_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
+add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
+function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
