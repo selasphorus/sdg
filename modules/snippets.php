@@ -975,6 +975,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 	
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	$info .= "wtypes: <pre>".print_r($wtypes,true)."</pre><hr />";
+	$info .= "protected_sidebars: <pre>".print_r($protected_sidebars,true)."</pre><hr />";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
 		
