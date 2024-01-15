@@ -872,8 +872,8 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	
 }
 //
-add_shortcode('widgets_to_snippets', 'convert_widgets_to_snippets');
-function convert_widgets_to_snippets ( $atts = [] ) {
+add_shortcode('widget_and_snippets', 'widget_and_snippets');
+function widget_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
 
 	// TS/logging setup
     $do_ts = false; 
@@ -885,6 +885,8 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 		'limit'   => 1,
         'sidebar_id' => null,
         'widget_id'	=> null,
+		'post_id' => null,
+        'action' => 'info', // other option: 'convert' -- WIP
         'run_updates' => false,
         'wtypes' => 'default',
         'verbose' => false,
@@ -902,15 +904,17 @@ function convert_widgets_to_snippets ( $atts = [] ) {
 	$cs_sidebars = get_option('cs_sidebars'); // contains name, id, description, before_widget, etc. for custom sidebars
 	//
 	if ( $wtypes == "default" ) { $wtypes = array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ); } else { $wtypes = explode(", ",$wtypes); }
-	//wtype: text => widget_text
-	//wtype: custom_html
-	//wtype: media_image => widget_media_image
-	//wtype: media_gallery => widget_media_gallery
-	//wtype: recent => widget_recent-posts
-	//wtype: categories => widget_categories
-	//wtype: em_calendar => widget_em_calendar
-	//wtype: ninja_forms_widget => widget_ninja_forms_widget
-	//wtype: wcpbc_products_by_category => widget_wcpbc_products_by_category
+	/*
+	wtype: text => widget_text
+	wtype: custom_html
+	wtype: media_image => widget_media_image
+	wtype: media_gallery => widget_media_gallery
+	wtype: recent => widget_recent-posts
+	wtype: categories => widget_categories
+	wtype: em_calendar => widget_em_calendar
+	wtype: ninja_forms_widget => widget_ninja_forms_widget
+	wtype: wcpbc_products_by_category => widget_wcpbc_products_by_category
+	*/
 	/*
 SELECT * FROM `wpstc_options` WHERE `option_name` 
 LIKE '%widget_media_image%'
@@ -922,21 +926,49 @@ OR `option_name` LIKE '%widget_ninja_forms_widget%'
 OR `option_name` LIKE '%widget_wcpbc_products_by_category%'  
 ORDER BY `wpstc_options`.`option_name` ASC
 */
-	//
-	//
-	//$text_widgets = get_option('widget_text');
-	//$html_widgets = get_option('widget_custom_html');
+	// Get widget options per type
 	foreach ( $wtypes as $wtype ) {
 		if ( $wtype == "recent" ) { $wtype = "recent-posts"; }
 		$option_name = "widget_".$wtype;
 		$$option_name = get_option($option_name);
 		//$varname = $wtype."_widgets";
 	}
-	// WIP
-	//
-	//$info .= "text_widgets: <pre>".print_r($text_widgets,true)."</pre><hr />";
-	//$info .= "html_widgets: <pre>".print_r($html_widgets,true)."</pre><hr />";
 	////////
+	$info .= "<h3>action: ".$action."</h3>";
+	
+	// Get widgets and snippets for display/conversion
+	// If no post_id has been specified, show summary of all widgets (grouped by sidebar) and snippets
+	// TODO/WIP 240115
+	if ( $post_id ) {
+		$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
+		// Check for custom sidebars 
+		$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
+		if ( $cs_replacements ) { 
+			$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
+			$first_key = array_key_first($cs_replacements);
+			if ($first_key !== null) {
+				$sidebar_id = $cs_replacements[$first_key];
+			}
+		} else {
+			// Get page template? i.e. make sure this post uses a sidebar at all...
+			$info .= "This post uses the default sidebar.<br />";
+			$sidebar_id  = "sidebar-1"; // Default sidebar_id
+		}
+	}
+	if ( $sidebar_id ) {
+		$info .= "<h3>sidebar_id: ".$sidebar_id."</h3>";
+		//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
+		$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
+		//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
+		$info .= '=> "'.$sidebar['name'].'"<br />';
+		if ( isset($arr_sidebars_widgets[$sidebar_id]) ) {
+			$arr_sidebars_widgets = array($sidebar_id, $arr_sidebars_widgets[$sidebar_id]);
+			//$widgets = $arr_sidebars_widgets[$sidebar_id];
+		} else if ( isset($cs_sidebars[$sidebar_id]) ) {
+			$arr_sidebars_widgets = array($sidebar_id, $cs_sidebars[$sidebar_id]);
+			//$widgets = $cs_sidebars[$sidebar_id];
+		}
+	}
 	
 	// Loop through sidebars and convert widgets to snippets
 	
@@ -1355,9 +1387,6 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						// WIP
 						$meta_input['widget_logic'] = print_r($conditions, true);
 						
-						// Init action var
-						$action = null;
-						
 						// Finish setting up the post array for update/insert							
 						$postarr['meta_input'] = $meta_input;
 						
@@ -1365,35 +1394,42 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 						}
 						//
-						if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
-							$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
-							// Update existing snippet
-							$snippet_id = wp_update_post($postarr);
-							if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
-						} else {
-							$info .= "&rarr; About to create a new snippet<br />";
-							// Insert the post into the database
-							$snippet_id = wp_insert_post($postarr);
-							if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
-						}
-						// Handle errors
-						if ( is_wp_error($snippet_id) ) {
-							//$info .= $snippet_id->get_error_message();
-							$errors = $snippet_id->get_error_messages();
-							foreach ($errors as $error) {
-								$info .= $error;
+						if ( $action != "info" ) {
+						
+							// Init action var
+							$success = null;
+							
+							if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
+								$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
+								// Update existing snippet
+								$snippet_id = wp_update_post($postarr);
+								if ( !is_wp_error($snippet_id) ) { $success = "updated"; }
+							} else {
+								$info .= "&rarr; About to create a new snippet<br />";
+								// Insert the post into the database
+								$snippet_id = wp_insert_post($postarr);
+								if ( !is_wp_error($snippet_id) ) { $success = "inserted"; }
 							}
-						}
-		
-						//
-						if ( $action && $snippet_id ) {
-							$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";				
-							// Update snippet logic
-							$info .= "&rarr;&rarr; update_snippet_logic<br />";
-							$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true', 'verbose' => $verbose ) ); //$info .= '<div class="code">'.'</div>';
-						} else {
-							$info .= "&rarr;&rarr; No action<br />";
-							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+							// Handle errors
+							if ( is_wp_error($snippet_id) ) {
+								//$info .= $snippet_id->get_error_message();
+								$errors = $snippet_id->get_error_messages();
+								foreach ($errors as $error) {
+									$info .= $error;
+								}
+							}
+							
+							//
+							if ( $success && $snippet_id ) {
+								$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";				
+								// Update snippet logic
+								$info .= "&rarr;&rarr; update_snippet_logic<br />";
+								$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true', 'verbose' => $verbose ) ); //$info .= '<div class="code">'.'</div>';
+							} else {
+								$info .= "&rarr;&rarr; No successful action<br />";
+								//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
+							}
+						
 						}
 		
 					} else {
@@ -1704,6 +1740,7 @@ function delete_widgets ( $atts = [] ) {
 	// Sidebars to process
 	if ( !is_array($sidebars) ) { $sidebars = explode(',', $sidebars); }
 	$info .= "sidebars: <pre>".print_r($sidebars,true)."</pre><hr /><hr />";
+	// TODO: further testing and adjustments to avoid deleting image widgets from mega menus!!!
 	
 	// Widget Types to process
 	if ( !is_array($widget_types) ) { $widget_types = explode(',', $widget_types); }
@@ -2577,7 +2614,7 @@ function update_snippet_logic ( $atts = [] ) {
 
 // TODO/WIP: separate out widget_logic fields and convert those separately from updating/processing snippet-native fields
 function convert_widget_logic () {
-
+	//
 }
 // **************************
 
@@ -3457,7 +3494,7 @@ function get_sidebar_id( $uid_to_match = null) {
 }
 
 // WIP
-add_shortcode('widget_and_snippets', 'show_widgets_and_snippets');
+add_shortcode('show_widgets_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = [] ) {
 
 	// TS/logging setup
@@ -3472,47 +3509,45 @@ function show_widgets_and_snippets ( $atts = [] ) {
     $args = shortcode_atts( array(
 		'limit'   => 1,
 		'post_id' => null,
+		'sidebar_id' => null,
     ), $atts );
     
     // Extract
 	extract( $args );
 	
-	// Get widgets and snippets set to display per post
-	
-	// If no post_id has been specified, get random post ids according to $limit
-	// TODO
-	
-	if ( $post_id === null ) { return "No post_id; "; } // tft
+	// Get widgets and snippets set to display	
+	// If no post_id has been specified, show summary of all widgets (grouped by sidebar) and snippets
+	// TODO/WIP 240115
+	//if ( $post_id === null ) { return "No post_id; "; } // tft
 	//
 	$arr_sidebars_widgets = get_option('sidebars_widgets');
 	$cs_sidebars = get_option('cs_sidebars');
 	//
 	$info .= '<div class="code">';
 	
-	$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
-	
-	// Default sidebar_id
-	$sidebar_id  = "sidebar-1";
-	
-	// Check for custom sidebars 
-	$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
-	if ( $cs_replacements ) { 
-		$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
-		$first_key = array_key_first($cs_replacements);
-		if ($first_key !== null) {
-			$sidebar_id = $cs_replacements[$first_key];
+	if ( $post_id ) {
+		$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
+		// Check for custom sidebars 
+		$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
+		if ( $cs_replacements ) { 
+			$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
+			$first_key = array_key_first($cs_replacements);
+			if ($first_key !== null) {
+				$sidebar_id = $cs_replacements[$first_key];
+			}
+		} else {
+			// Get page template? i.e. make sure this post uses a sidebar at all...
+			$info .= "This post uses the default sidebar.<br />";
+			$sidebar_id  = "sidebar-1"; // Default sidebar_id
 		}
-	} else {
-		// Get page template? i.e. make sure this post uses a sidebar at all...
-		//...
-		$info .= "This post uses the default sidebar.<br />";
 	}
-	$info .= "sidebar_id: ".$sidebar_id."<br />";
-	
-	//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
-	$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
-	//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
-	$info .= '=> "'.$sidebar['name'].'"<br />';
+	if ( $sidebar_id ) {
+		$info .= "<h3>sidebar_id: ".$sidebar_id."</h3>";
+		//$sidebar = wp_list_widget_controls($sidebar_id); // Show the widgets and their settings for a sidebar -- Used in the admin widget config screen -- DN seem to work at all on front end
+		$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
+		//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
+		$info .= '=> "'.$sidebar['name'].'"<br />';
+	}
 	
 	// Get widgets
 	// -------
