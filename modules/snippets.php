@@ -897,6 +897,7 @@ function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_sni
 	
 	$info = "";
 	$i = 0;
+	$protected_sidebars = array('sidebar-4', 'bottom-widgets', 'mega-menu');
 	
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
@@ -1006,6 +1007,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		
 		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
+		
+		// TODO: Check to see if this widget is from a sidebar that we're including in conversions -- not in_array($sidebar, $protected_sidebars)-- exclude widgets from homepage features (sidebar-4), bottom-widgets, mega-menu, etc...
+		// additional "action" var per sidebar? e.g. $sidebar_action =null; convert; update etc....
 		
 		$info .= '<div class="code">';
 		
@@ -1195,6 +1199,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					// If title and content are set, then prep to save widget as snippet
 					//if ( $snippet_title && $snippet_content ) {
 					//if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
+					//
 					if ( in_array($wtype, $wtypes) && $snippet_title ) { // && $snippet_content
 						//
 						$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
@@ -1403,14 +1408,18 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							
 							if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 								$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
-								// Update existing snippet
-								$snippet_id = wp_update_post($postarr);
-								if ( !is_wp_error($snippet_id) ) { $success = "updated"; }
+								if ( $action == "convert" || $action == "update" ) {
+									// Update existing snippet
+									$snippet_id = wp_update_post($postarr);
+									if ( !is_wp_error($snippet_id) ) { $success = "updated"; }
+								}								
 							} else {
 								$info .= "&rarr; About to create a new snippet<br />";
-								// Insert the post into the database
-								$snippet_id = wp_insert_post($postarr);
-								if ( !is_wp_error($snippet_id) ) { $success = "inserted"; }
+								if ( $action == "convert" || $action == "update" ) {
+									// Insert the post into the database
+									$snippet_id = wp_insert_post($postarr);
+									if ( !is_wp_error($snippet_id) ) { $success = "inserted"; }
+								}
 							}
 							// Handle errors
 							if ( is_wp_error($snippet_id) ) {
@@ -1645,7 +1654,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		}
 		
 		// Init action var
-		$action = null;
+		$success = null;
 						
 		// Finish setting up the post array for update/insert							
 		$postarr['meta_input'] = $meta_input;
@@ -1656,12 +1665,12 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 			$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 			// Update existing snippet
 			$snippet_id = wp_update_post($postarr);
-			if ( !is_wp_error($snippet_id) ) { $action = "updated"; }
+			if ( !is_wp_error($snippet_id) ) { $success = "updated"; }
 		} else {
 			$info .= "&rarr; About to create a new snippet<br />";
 			// Insert the post into the database
 			$snippet_id = wp_insert_post($postarr);
-			if ( !is_wp_error($snippet_id) ) { $action = "inserted"; }
+			if ( !is_wp_error($snippet_id) ) { $success = "inserted"; }
 		}
 		// Handle errors
 		if ( is_wp_error($snippet_id) ) {
@@ -1673,9 +1682,9 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 		}
 
 		//
-		if ( $action && $snippet_id ) {
+		if ( $success && $snippet_id ) {
 		
-			$info .= "&rarr;&rarr; Success! -- snippet record ".$action." [".$snippet_id."]<br />";	
+			$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";	
 						
 			// Update snippet logic to add post from which sidebar content this snippet was created
 			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return' => 'info', 'field_type' => 'relationship', );
