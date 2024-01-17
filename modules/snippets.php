@@ -1,7 +1,4 @@
 <?php
-
-
-
 /*** WIDGETS >> SNIPPETS -- WIP! ***/
 
 // Prior to deactivating/deleting the Custom Sidebars plugin, save the cs sidebar_id to all posts for which they were active
@@ -871,7 +868,8 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	return $arr_result;
 	
 }
-//
+
+// Display (and optionally convert/update) widgets and snippets
 add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
 function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
 
@@ -968,6 +966,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		} else if ( isset($cs_sidebars[$sidebar_id]) ) {
 			$arr_sidebars_widgets = array($sidebar_id, $cs_sidebars[$sidebar_id]);
 			//$widgets = $cs_sidebars[$sidebar_id];
+		} else {
+			$info .= "No widgets found for sidebar_id: ".$sidebar_id." in arr_sidebars_widgets or cs_sidebars<br />";
 		}
 	}
 	
