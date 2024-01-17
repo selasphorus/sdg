@@ -961,15 +961,15 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
 		$info .= '=> "'.$sidebar['name'].'"<br />';
 		if ( isset($arr_sidebars_widgets[$sidebar_id]) && is_array($arr_sidebars_widgets[$sidebar_id]) && !empty($arr_sidebars_widgets[$sidebar_id]) ) {
-			$arr_sidebars_widgets = array($sidebar_id, $arr_sidebars_widgets[$sidebar_id]);
+			$arr_sidebars_widgets = array($sidebar_id => $arr_sidebars_widgets[$sidebar_id]);
 			//$widgets = $arr_sidebars_widgets[$sidebar_id];
-			$info .= count($arr_sidebars_widgets[1])." widgets ready for processing (sidebars_widgets)<br />";
+			$info .= count($arr_sidebars_widgets[$sidebar_id])." widgets ready for processing (sidebars_widgets)<br />";
 			//$info .= "widgets ready for processing (sidebars_widgets):<br />";
 			//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 		} else if ( isset($cs_sidebars[$sidebar_id]) ) {
-			$arr_sidebars_widgets = array($sidebar_id, $cs_sidebars[$sidebar_id]);
+			$arr_sidebars_widgets = array($sidebar_id => $cs_sidebars[$sidebar_id]);
 			//$widgets = $cs_sidebars[$sidebar_id];
-			$info .= count($cs_sidebars[1])." widgets ready for processing (cs_sidebars)<br />";
+			$info .= count($cs_sidebars[$sidebar_id])." widgets ready for processing (cs_sidebars)<br />";
 		} else {
 			$info .= "No widgets found for sidebar_id: ".$sidebar_id." in arr_sidebars_widgets or cs_sidebars<br />";
 		}
