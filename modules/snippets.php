@@ -963,9 +963,11 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		if ( isset($arr_sidebars_widgets[$sidebar_id]) ) {
 			$arr_sidebars_widgets = array($sidebar_id, $arr_sidebars_widgets[$sidebar_id]);
 			//$widgets = $arr_sidebars_widgets[$sidebar_id];
+			$info .= count($arr_sidebars_widgets[$sidebar_id])." widgets ready for processing (sidebars_widgets)<br />";
 		} else if ( isset($cs_sidebars[$sidebar_id]) ) {
 			$arr_sidebars_widgets = array($sidebar_id, $cs_sidebars[$sidebar_id]);
 			//$widgets = $cs_sidebars[$sidebar_id];
+			$info .= count($cs_sidebars[$sidebar_id])." widgets ready for processing (cs_sidebars)<br />";
 		} else {
 			$info .= "No widgets found for sidebar_id: ".$sidebar_id." in arr_sidebars_widgets or cs_sidebars<br />";
 		}
