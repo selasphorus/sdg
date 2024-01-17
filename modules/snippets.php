@@ -983,6 +983,8 @@ ORDER BY `wpstc_options`.`option_name` ASC
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
 		
+		if ( $verbose ) { $info .= "sidebar: ".$sidebar."/sidebar_id: ".$sidebar_id."<br />"; }
+		
 		// If we're handling a specific sidebar and this isn't it, move on to the next
 		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
 		
