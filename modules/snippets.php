@@ -960,7 +960,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		$sidebar = wp_get_sidebar( $sidebar_id ); // Retrieves the registered sidebar with the given ID: name, id, description, before_widget, etc.
 		//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
 		$info .= '=> "'.$sidebar['name'].'"<br />';
-		if ( isset($arr_sidebars_widgets[$sidebar_id]) && !empty($arr_sidebars_widgets[$sidebar_id]) ) {
+		if ( isset($arr_sidebars_widgets[$sidebar_id]) && is_array($arr_sidebars_widgets[$sidebar_id]) && !empty($arr_sidebars_widgets[$sidebar_id]) ) {
 			$arr_sidebars_widgets = array($sidebar_id, $arr_sidebars_widgets[$sidebar_id]);
 			//$widgets = $arr_sidebars_widgets[$sidebar_id];
 			$info .= count($arr_sidebars_widgets[$sidebar_id])." widgets ready for processing (sidebars_widgets)<br />";
