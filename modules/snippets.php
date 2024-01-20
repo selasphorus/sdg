@@ -2365,9 +2365,11 @@ function update_snippet_logic ( $atts = [] ) {
 						// Look for matching post
 						if ( $wildcard == false ) {
 							if ( $slug && $post_type ) {
-								$condition_info .= "get_page_by_path with slug: $slug; post_type: $post_type<br />";
+								$condition_info .= "get_page_by_path with post_type: $post_type; slug: $slug<br />";
 								$matched_post = get_page_by_path($slug, OBJECT, $post_type);
-							} else {
+							}
+							if ( !$matched_post ) {
+								$condition_info .= "No match via slug/post_type =><br />";
 								$condition_info .= "get_page_by_path with path: $path<br />";
 								$matched_post = get_page_by_path($path);
 							}
