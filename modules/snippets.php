@@ -2383,6 +2383,9 @@ function update_snippet_logic ( $atts = [] ) {
 									$condition_info .= "get_page_by_path with p_type: $p_type; slug: $slug<br />";
 									$matched_post = get_page_by_path($slug, OBJECT, $p_type);
 									if ( $matched_post ) { break; } // if post was matched, break out of loop and move on
+									$condition_info .= "get_page_by_path with p_type: $p_type; path: $p_type/$slug<br />";
+									$matched_post = get_page_by_path($p_type."/".$slug, OBJECT, $p_type);
+									if ( $matched_post ) { break; } // if post was matched, break out of loop and move on
 								}								
 							}
 							if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
