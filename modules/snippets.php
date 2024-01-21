@@ -2373,6 +2373,16 @@ function update_snippet_logic ( $atts = [] ) {
 								$condition_info .= "get_page_by_path with path: $path<br />";
 								$matched_post = get_page_by_path($path);
 							}
+							if ( !$matched_post && $slug ) {
+								// WIP -- e.g.  `/a-grain-of-wheat-martyrs-of-our-time/` => events series -- maybe: loop through post types to try get_page_by_path again for all CPT options? 240120
+								$condition_info .= "Attempt to match incomplete path via slug/guess at p_type =><br />";
+								$p_types = array('person', 'event-series', 'repertoire', 'sermon-series');
+								foreach ( $p_types as $p_type ) {
+									$condition_info .= "get_page_by_path with post_type: $p_type; slug: $slug<br />";
+									$matched_post = get_page_by_path($slug, OBJECT, $p_type);
+									if ( $matched_post ) { break; } // if post was matched, break out of loop and move on
+								}								
+							}
 							if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
 						} else {
 							$condition_info .= "wildcard url => no attempt made to match post<br />";
