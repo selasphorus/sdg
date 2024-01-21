@@ -2378,7 +2378,7 @@ function update_snippet_logic ( $atts = [] ) {
 								$condition_info .= "Attempt to match incomplete path via slug/guess at p_type =><br />";
 								$p_types = array('person', 'event-series', 'repertoire', 'sermon-series');
 								foreach ( $p_types as $p_type ) {
-									$condition_info .= "get_page_by_path with post_type: $p_type; slug: $slug<br />";
+									$condition_info .= "get_page_by_path with p_type: $p_type; slug: $slug<br />";
 									$matched_post = get_page_by_path($slug, OBJECT, $p_type);
 									if ( $matched_post ) { break; } // if post was matched, break out of loop and move on
 								}								
