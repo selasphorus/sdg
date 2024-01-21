@@ -2350,13 +2350,13 @@ function update_snippet_logic ( $atts = [] ) {
 						if ( $post_type ) {
 							// Extract slug from path
 							// First, trim trailing slash, if any
+							$path = untrailingslashit($path); // wp native function to remove trailing forward slashes and backslashes if they exist
 							//if ( substr($path, -1) == "/" ) { $path = substr($path, 0, -1); }
 							//$url_bits = explode("/",$path); // The last bit is slug
 							//$slug = end($url_bits);
 							//$condition_info .= "url_bits: ".print_r($url_bits, true)."<br />";
-							$slug = basename(untrailingslashit($path));
+							$slug = basename($path);
 							$condition_info .= "$post_type slug: $slug<br />";
-							//$path = untrailingslashit($path); // wp native function to remove trailing forward slashes and backslashes if they exist
 							// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 							// WIP 231130
 						} else {
