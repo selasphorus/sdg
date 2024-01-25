@@ -113,6 +113,16 @@ div.code {
 
 .sidebar .snippet,
 .sidebar .snippet.widget {
+	display: none; /* tmp/transitional */
+}
+
+.stcdev .sidebar .snippet,
+.stcdev .sidebar .snippet.widget {
+	opacity: 0.5;
+}
+
+.devsite .sidebar .snippet,
+.devsite .sidebar .snippet.widget {
 	border: 5px dotted #f67b39;
 }
 
