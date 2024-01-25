@@ -118,6 +118,7 @@ div.code {
 
 .stcdev .sidebar .snippet,
 .stcdev .sidebar .snippet.widget {
+	display: block;
 	opacity: 0.5;
 }
 
