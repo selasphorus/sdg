@@ -1464,7 +1464,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					}
 					
 					$x++;
-					if ( $x > $limit ) { break; } // tft
+					if ( $x > $limit ) { break; } else { $info .= "--- $x widgets processed ---<br />"; } // tft
 				
 				}
 				
