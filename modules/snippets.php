@@ -894,7 +894,7 @@ function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_sni
 	extract( $args );
 	
 	$info = "";
-	$i = 0;
+	$x = 0; // counter for widgets processed -- for comparison to $limit
 	$protected_sidebars = array('sidebar-4', 'bottom-widgets', 'mega-menu');
 	
 	// Get wpstc_options data
@@ -1462,6 +1462,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						}
 						
 					}
+					
+					$x++;
+					if ( $x > $limit ) { break; } // tft
 				
 				}
 				
