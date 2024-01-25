@@ -1469,7 +1469,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				
 				//if ( $i > $limit ) { break; } // tft
 				
-				if ( $limit > 0 && $x > $limit ) { break; }// else { $info .= "--- $x widgets processed ---<br />"; } // tft
+				if ( $limit > 0 && $x > $limit ) { break; }
 				if ( count($widgets) > 1 ) { $info .= "<hr />"; }
 				
 			} // foreach ( $widgets...
@@ -1481,7 +1481,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		//...
 		$info .= '</div>';
 		
-		if ( $limit > 0 && $x > $limit ) { break; } else { $info .= "--- $x widgets processed ---<br />"; } // tft
+		if ( $limit > 0 && $x > $limit ) { break; }
 		
 	}
 	
