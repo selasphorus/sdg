@@ -116,6 +116,8 @@ div.code {
 	display: none; /* tmp/transitional */
 }
 
+.devmode .sidebar .snippet,
+.devmode .sidebar .snippet.widget,
 .admin-view .sidebar .snippet,
 .admin-view .sidebar .snippet.widget,
 .stcdev .sidebar .snippet,
