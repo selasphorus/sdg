@@ -582,11 +582,10 @@ function sdg_selectively_dequeue_admin_scripts_and_styles() {
 }
 
 // Enable shortcodes in sidebar widgets
-add_filter( 'widget_text', 'shortcode_unautop' );
 add_filter( 'widget_text', 'do_shortcode' );
 //
 if ( function_exists('is_dev_site') && is_dev_site() ) {
-	//add_filter( 'widget_text', 'shortcode_unautop' );
+	add_filter( 'widget_text', 'shortcode_unautop' );
 }
 
 // ACF
