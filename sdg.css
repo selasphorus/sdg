@@ -116,6 +116,8 @@ div.code {
 	display: none; /* tmp/transitional */
 }
 
+.admin-view .sidebar .snippet,
+.admin-view .sidebar .snippet.widget,
 .stcdev .sidebar .snippet,
 .stcdev .sidebar .snippet.widget {
 	display: block;
