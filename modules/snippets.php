@@ -128,7 +128,8 @@ function display_snippets ( $atts = [] ) {
 		//$snippet_content = apply_filters('the_content', $snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
 		//$snippet_content = do_shortcode($snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
 		if ( $snippet_content && !has_shortcode( $snippet_content, 'display_posts' ) ) { $snippet_content = wpautop($snippet_content); } // TODO: mod to do only if content does not contain ANY shortcode!
-		if ( has_shortcode( $snippet_content, 'display_posts' ) ) { $snippet_content = apply_shortcodes($snippet_content); }
+		if ( has_shortcode( $snippet_content, 'display_posts' ) ) { $snippet_content = apply_shortcodes($snippet_content); } // nothing
+		if ( has_shortcode( $snippet_content, 'display_posts' ) ) { $snippet_content = do_shortcode($snippet_content); }
 		//$snippet_content = apply_shortcodes( $snippet_content );
 		//$snippet_content = shortcode_unautop( $snippet_content );
 		//
