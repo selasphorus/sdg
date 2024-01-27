@@ -575,7 +575,6 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		if ( strtotime($the_date) ) { $ts_info .= "strtotime(the_date): ".strtotime($the_date)."<br />"; } else { $ts_info .= '<span class="error">strtotime(the_date) FAILED</span><br />'; }
     
     	$date_str = date("Y-m-d", strtotime($the_date));
-    	$ts_info .= "date_str: ".$date_str."<br />"; // tft
     
     } else {
     	
@@ -646,6 +645,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     }
     
     // Get litdate posts according to date
+    $ts_info .= "date_str: ".$date_str."<br />";
     
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
