@@ -3669,6 +3669,8 @@ add_filter('em_cp_event_recurring_public','__return_true');
 function get_special_date_content( $the_date = null ) {
 
 	$info = "";
+	$the_date = date_i18n('Y-m-d',$the_date);
+	//
 	$ts_info = "<!-- get_special_date_content -->";
     $ts_info .= "<!-- the_date: '$the_date' -->";
     $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->"; // tft
