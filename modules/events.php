@@ -3672,7 +3672,7 @@ function get_special_date_content( $the_date = null ) {
 	
 	if ( $the_date && !preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $the_date) ) {
 		$the_date = date_i18n('Y-m-d', $the_date); // format the date, as needed
-	} else {
+	} else if ( empty($the_date) ){
 		//$the_date = date_i18n('Y-m-d'); // today
 	}
 	
