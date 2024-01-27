@@ -3714,8 +3714,12 @@ function get_special_date_content( $the_date = null ) {
     		}
     	}
         $info .= '</div>';
+        
     } else {
-    	$info .= "<!-- No posts found by fcn get_special_date_content -->";
+    	
+    	$info .= $ts_info;
+    	$info .= "<!-- No posts found by fcn get_special_date_content for date $the_date -->";
+    	
     }
 	return $info;
 	
