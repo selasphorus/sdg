@@ -3852,4 +3852,17 @@ function append_slug($data) {
         if( !is_numeric(substr($data['post_name'], -4)) ) {
               $random = rand(1111,9999);
               $data['post_name'] = sanitize_title($data['post_title'], $post_ID);
-   
+              $data['post_name'] .= '-' . $random;
+          }
+          
+        $data['post_name'] = sanitize_title($data['post_title'], $post_ID);
+        $data['post_name'] .= '-' . generate_arbitrary_number_here();
+    }
+
+    return $data;
+}
+
+add_filter('wp_insert_post_data', 'append_slug', 10); 
+*/
+
+?>

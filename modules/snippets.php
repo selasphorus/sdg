@@ -3696,3 +3696,7 @@ function show_widgets_and_snippets ( $atts = [] ) {
 
 // TODO: write fcn to to delete (inactive) html and text widgets that have been already converted — per sidebar ID
 function widgets_cleanup() {
+
+}
+
+?>
