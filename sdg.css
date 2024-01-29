@@ -111,9 +111,10 @@ div.code {
 	font-weight: 700;
 }
 
+/* TMP/Transitional:
 .sidebar .snippet,
 .sidebar .snippet.widget {
-	display: none; /* tmp/transitional */
+	display: none;
 }
 
 .devmode .sidebar .snippet,
@@ -125,6 +126,7 @@ div.code {
 	display: block;
 	opacity: 0.5;
 }
+*/
 
 .devsite .sidebar .snippet,
 .devsite .sidebar .snippet.widget {
