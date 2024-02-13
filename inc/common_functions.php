@@ -678,7 +678,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
 	$info = null; // init
 	
 	// If we don't have actual values for all parameters, there's not enough info to proceed
-	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return "test"; } //return null; }
+	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
 	
 	$related_id = null; // init
     if ( $return == 'single' ) {
@@ -702,8 +702,6 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     // Run query
     $related_posts = new WP_Query( $wp_args );
     
-    $info = "Test"; // tft
-    
     // Loop through the records returned 
     if ( $related_posts ) {
         
@@ -715,10 +713,6 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
             }
             $info = $related_id;
         } else {
-        	$info .= "<br />";
-        	//$info .= "related_posts: ".print_r($related_posts,true);
-        	$info .= "related_posts->posts:<pre>".print_r($related_posts->posts,true)."</pre>";
-        	$info .= "wp_args:<pre>".print_r($wp_args,true)."</pre>";
             $info = $related_posts->posts;
         }
         
@@ -732,8 +726,6 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     } else {
     	$info = "No matching posts found for wp_args: ".print_r($wp_args,true);
     }
-	
-	//$info .= "TEST";
 	
 	return $info;
 	
