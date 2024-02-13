@@ -701,7 +701,9 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     );
     // Run query
     $related_posts = new WP_Query( $wp_args );
-
+    
+    $info = "Test"; // tft
+    
     // Loop through the records returned 
     if ( $related_posts ) {
         
