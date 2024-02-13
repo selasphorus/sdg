@@ -719,8 +719,9 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
         }
         
         $info .= "<br />";
-        $info .= "related_posts: ".print_r($related_posts,true);
-        $info .= "wp_args: ".print_r($wp_args,true);
+        //$info .= "related_posts: ".print_r($related_posts,true);
+        $info .= "related_posts->posts:<pre>".print_r($related_posts->posts,true)."</pre>";
+        $info .= "wp_args:<pre>".print_r($wp_args,true)."</pre>";
         
     } else {
     	$info = "No matching posts found for wp_args: ".print_r($wp_args,true);

@@ -1,2 +1,0 @@
-# sdg
-WP plugin SDG
