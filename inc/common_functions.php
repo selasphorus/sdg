@@ -718,11 +718,15 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
             $info = $related_posts->data();
         }
         
+        $info .= "<br />";
+        $info .= "related_posts: ".print_r($related_posts,true);
+        $info .= "wp_args: ".print_r($wp_args,true);
+        
     } else {
     	$info = "No matching posts found for wp_args: ".print_r($wp_args,true);
     }
 	
-	$info .= "TEST";
+	//$info .= "TEST";
 	
 	return $info;
 	
