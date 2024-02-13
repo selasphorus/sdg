@@ -722,6 +722,8 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     	$info = "No matching posts found for wp_args: ".print_r($wp_args,true);
     }
 	
+	$info .= "TEST";
+	
 	return $info;
 	
 }
