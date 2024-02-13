@@ -678,7 +678,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
 	$info = null; // init
 	
 	// If we don't have actual values for all parameters, there's not enough info to proceed
-	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
+	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return "test"; } //return null; }
 	
 	$related_id = null; // init
     if ( $return == 'single' ) {
