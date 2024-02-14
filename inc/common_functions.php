@@ -697,7 +697,9 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
                 'key'     => $related_field_name,
                 'value'   => $post_id
             )
-        )
+        ),
+        'orderby'		=> 'title',
+        'order'			=> 'ASC',
     );
     // Run query
     $related_posts = new WP_Query( $wp_args );
