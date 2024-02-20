@@ -1615,8 +1615,10 @@ function display_postmeta( $args = array() ) {
     			if ( strpos($value,"<") !== false ) {
     				$info .= $key.' {html} =><br />';
     				//$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
+    				$info .= '<div class="devwip">';
     				$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe><br />';
-    				$info .= '<div class="devwip" style="width: 50%; float:left;"><pre>'.htmlspecialchars($value).'</pre></div>';
+    				$info .= '<div style="width: 50%; float:left;"><pre>'.htmlspecialchars($value).'</pre></div>';
+    				$info .= '</div>';
     			} else {
     				$info .= $key." => ".$value."<br />";
     			}    			
