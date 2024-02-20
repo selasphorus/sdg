@@ -1613,7 +1613,7 @@ function display_all_postmeta( $args = array() ) {
     			if ( empty($value) ) { continue; }
     			//
     			if ( strpos($value,"<") !== false ) {
-    				$info .= $key.' {html} => <div class="devwip">'.$value.'</div>';
+    				$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
     			} else {
     				$info .= $key." => ".$value."<br />";
     			}    			
