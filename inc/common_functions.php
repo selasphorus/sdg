@@ -1608,10 +1608,10 @@ function display_all_postmeta( $args = array() ) {
     		if (count($value) > 1) {
     			$info .= $key." => ".print_r($value,true);
     		} else {
-    			if ( strpos($value,"<") !== false ) {
+    			if ( strpos($value[0],"<") !== false ) {
     				$info .= $key." {html} => ".$value."<br />";
     			} else {
-    				$info .= $key." => ".$value."<br />";
+    				$info .= $key." => ".$value[0]."<br />";
     			}    			
     		}
     	}
