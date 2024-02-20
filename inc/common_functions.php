@@ -1567,6 +1567,45 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
 }
 
+function display_all_postmeta( $args = array() ) {
+    
+    // TS/logging setup
+    $do_ts = true; // default to true tft 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
+	//$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+	
+	// Defaults
+	$defaults = array(
+		'post_id'	=> null,
+		'format'	=> "singular", // default to singular; other option is excerpt
+		'img_size'	=> "thumbnail",
+		'sources'	=> array("featured_image", "gallery"),
+		'echo'		=> true,
+		'return'  	=> 'html',
+		'do_ts'  	=> false,
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+	
+    if ( $post_id === null ) { $post_id = get_the_ID(); }
+    
+    $postmeta = get_post_meta( $post_id );
+    $info .= "postmeta: <pre>".print_r($postmeta,true).'</pre>';
+    
+    if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    
+    return $info;
+	
+}
 
 /*********** MEDIA ***********/
 
