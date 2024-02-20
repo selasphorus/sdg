@@ -1613,7 +1613,9 @@ function display_postmeta( $args = array() ) {
     			if ( empty($value) ) { continue; }
     			//
     			if ( strpos($value,"<") !== false ) {
-    				$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
+    				$info .= $key.' {html} =><br />';
+    				//$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
+    				$info .= '<iframe srcdoc="'.$value.'">[iframe]</iframe>';
     			} else {
     				$info .= $key." => ".$value."<br />";
     			}    			
