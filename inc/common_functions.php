@@ -1601,11 +1601,13 @@ function display_all_postmeta( $args = array() ) {
     $postmeta = get_post_meta( $post_id );
     //$info .= "postmeta: <pre>".print_r($postmeta,true).'</pre>';
     $info .= "<h3>Post Meta Data for post with ID $post_id</h3>";
+    $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
     	if ( strpos("_",$key) !== 0 ) {
     		$info .= $key." => ".print_r($value,true);
     	}
     }
+    $info .= "</pre>";
     
     if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
