@@ -1620,7 +1620,8 @@ function display_postmeta( $args = array() ) {
     				//$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe>';
     				//$info .= '<div style="width: 50%; float:left;">'.htmlspecialchars($value).'</div>';
     				if ( $key == 'venue_html_vp' ) {
-						$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
+						//$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
+						$info .= "[WIP]";
 					} else {
 						$info .= htmlspecialchars($value);
 					}    				
