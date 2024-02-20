@@ -1603,7 +1603,7 @@ function display_all_postmeta( $args = array() ) {
     $info .= "<h3>Post Meta Data for post with ID $post_id</h3>";
     $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
-    	if ( strpos($key,"_") !== false ) {
+    	if ( strpos($key,"_") !== 0 ) {
     		$info .= $key." => ".print_r($value,true);
     	}
     }
