@@ -425,7 +425,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources', 'venues' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 'venues', 
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
     }
@@ -1485,6 +1485,8 @@ function sdg_custom_post_content() {
 		$info .= get_cpt_reading_content();
 	} else if ($post_type === "sermon") {
 		//$info .= get_cpt_sermon_content(); // Disabled because the function doesn't currently add any actual custom content.
+	} else if ($post_type === "venue") {
+		$info .= get_cpt_venue_content();
 	} else {
 		//$info .= "<p>[post] content (default)-- coming soon</p>";
 		//return false;
