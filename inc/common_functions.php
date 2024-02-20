@@ -1567,7 +1567,7 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
 }
 
-function display_all_postmeta( $args = array() ) {
+function display_postmeta( $args = array() ) {
     
     // TS/logging setup
     $do_ts = true; // default to true tft 
