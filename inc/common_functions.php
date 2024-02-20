@@ -1610,7 +1610,7 @@ function display_all_postmeta( $args = array() ) {
     		} else {
     			$value = $value[0];
     			if ( strpos($value,"<") !== false ) {
-    				$info .= $key.' {html} => <code>'.$value.'</code>';
+    				$info .= $key.' {html} => <div class="devwip">'.$value.'</div>';
     			} else {
     				$info .= $key." => ".$value."<br />";
     			}    			

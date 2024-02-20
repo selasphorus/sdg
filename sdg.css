@@ -221,13 +221,15 @@ body.admin-bar .msg_bar_close {
 /*** Troubleshooting & Dev styles ***/
 /* TODO: streamline, simplify */
 .devinfo,
-.dev-only {
+.dev-only,
+.troubleshooting,
+.troubleshooting.inline {
 	display: none;
 }
 
 .troubleshooting,
-.troubleshooting.inline {
-	display: none;
+.troubleshooting.inline,
+.devwip {
     text-align: left;
 	padding: 1rem;
 	background-color: #d1fb9d;
