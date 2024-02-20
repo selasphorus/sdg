@@ -52,90 +52,23 @@ function get_cpt_venue_content( $post_id = null ) {
         }
     }
     
-    // TODO: arranger, transcriber, translator, librettist
-    
-    // Publications
-    if ( is_dev_site() ) {
-        // Editions
-        $arr_obj_editions = get_related_posts( $post_id, 'edition', 'editor' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
+    // Organs
+    $arr_obj_organs = get_related_posts( $post_id, 'organ', 'venues_organs' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
+    if ( $arr_obj_organs ) {
         
-        if ( $arr_obj_editions ) {
+        $info .= '<div class="dev-only organs">';
+        $info .= "<h3>Organs:</h3>";
 
-            $info .= '<div class="publications">';
-            $info .= "<h3>Publications:</h3>";
-
-            //$info .= "<p>arr_obj_editions (".count($arr_obj_editionss)."): <pre>".print_r($arr_obj_editions, true)."</pre></p>";
-            foreach ( $arr_obj_editions as $edition ) {
-                //$info .= $edition->post_title."<br />";
-                $info .= make_link( get_permalink($edition->ID), $edition->post_title, "TEST edition title" )."<br />";
-            }
-
-            $info .= '</div>';
-        }
-    }
-    
-    // Sermons
-    $arr_obj_sermons = get_related_posts( $post_id, 'sermon', 'sermon_author' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
-    if ( $arr_obj_sermons ) {
-        
-        $info .= '<div class="dev-only sermons">';
-        $info .= "<h3>Sermons:</h3>";
-
-        foreach ( $arr_obj_sermons as $sermon ) {
-            //$info .= $sermon->post_title."<br />";
-            $info .= make_link( get_permalink($sermon->ID), $sermon->post_title, "TEST sermon title" )."<br />";
+        foreach ( $arr_obj_organs as $organ ) {
+            //$info .= $organ->post_title."<br />";
+            $info .= make_link( get_permalink($organ->ID), $organ->post_title, "TEST sermon title" )."<br />";
         }
         
         $info .= '</div>';
     }
     
-    // Related Events
-    if ( is_dev_site() ) {
-        /*
-        // Get Related Events
-        $wp_args = array(
-            'posts_per_page'=> -1,
-            'post_type'		=> 'event',
-            'meta_query'	=> array(
-                array(
-                    'key'		=> "personnel_XYZ_person", // name of custom field, with XYZ as a wildcard placeholder (must do this to avoid hashing)
-                    'compare' 	=> 'LIKE',
-                    'value' 	=> '"' . $post_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
-                )
-            ),
-            'orderby'	=> 'meta_value',
-            'order'     => 'DESC',
-            'meta_key' 	=> '_event_start_date',
-        );
-
-        $query = new WP_Query( $wp_args );
-        $event_posts = $query->posts;
-        $info .= "<!-- wp_args: <pre>".print_r($wp_args,true)."</pre> -->";
-        $info .= "<!-- Last SQL-Query: {$query->request} -->";
-
-        if ( $event_posts ) { 
-            global $post;
-            $info .= '<div class="dev-only em_events">';
-            //-- STC
-            $info .= '<h3>Events at Saint Thomas Church:</h3>';
-            foreach($event_posts as $post) { 
-                setup_postdata($post);
-                // TODO: modify to show title & event date as link text
-                $event_title = get_the_title();
-                $date_str = get_post_meta( get_the_ID(), '_event_start_date', true );
-                if ( $date_str ) { $event_title .= ", ".$date_str; }
-                $info .= make_link( get_the_permalink(), $event_title ) . "<br />";	
-            }
-            $info .= '</div>';
-        } else {
-            $info .= "<!-- No related events found for post_id: $post_id -->";
-        }
-        wp_reset_query();
-        */
-    }
-    
     // Person Categories
-	$term_obj_list = get_the_terms( $post_id, 'person_category' );
+	$term_obj_list = get_the_terms( $post_id, 'venue_category' );
 	if ( $term_obj_list ) {
 		$terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
 		$info .= '<div class="dev-only categories">';
