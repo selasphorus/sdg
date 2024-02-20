@@ -1469,6 +1469,7 @@ function sdg_custom_post_content() {
 	$ts_info = "";
 	$post_type = get_post_type( get_the_ID() );
 	
+	$info .= "<!-- START sdg_custom_post_content -->";
 	if ($post_type === "group") {
 		$info .= get_cpt_group_content();
 	} else if ($post_type === "liturgical_date") {
@@ -1494,6 +1495,7 @@ function sdg_custom_post_content() {
 	}
 	
 	if ( $do_ts ) { $info .= $ts_info; }
+	$info .= "<!-- END sdg_custom_post_content -->";
 	
 	return $info;
 }
