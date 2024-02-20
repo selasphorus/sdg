@@ -1583,12 +1583,12 @@ function display_all_postmeta( $args = array() ) {
 	// Defaults
 	$defaults = array(
 		'post_id'	=> null,
-		'format'	=> "singular", // default to singular; other option is excerpt
+		/*'format'	=> "singular", // default to singular; other option is excerpt
 		'img_size'	=> "thumbnail",
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
 		'return'  	=> 'html',
-		'do_ts'  	=> false,
+		'do_ts'  	=> false,*/
 	);
 
 	// Parse & Extract args

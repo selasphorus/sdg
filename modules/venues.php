@@ -36,7 +36,7 @@ function get_cpt_venue_content( $post_id = null ) {
     
     // Compositions
     // TODO: consider eliminating check for has_term, in case someone forgot to apply the appropriate category
-    if ( has_term( 'composers', 'person_category', $post_id ) ) {
+    /*if ( has_term( 'composers', 'person_category', $post_id ) ) {
         // Get compositions
         $arr_obj_compositions = get_related_posts( $post_id, 'repertoire', 'composer' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
         if ( $arr_obj_compositions ) {
@@ -50,7 +50,7 @@ function get_cpt_venue_content( $post_id = null ) {
                 $info .= make_link( get_permalink($composition->ID), $rep_info, "TEST rep title" )."<br />";
             }
         }
-    }
+    }*/
     
     // Organs
     $arr_obj_organs = get_related_posts( $post_id, 'organ', 'venues_organs' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
@@ -77,6 +77,8 @@ function get_cpt_venue_content( $post_id = null ) {
 		}
 		$info .= '</div>';
 	}
+    
+    $info .= display_all_postmeta( array('post_id' => $post_id) );
     
     return $info;
     
