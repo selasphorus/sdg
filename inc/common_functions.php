@@ -1611,14 +1611,19 @@ function display_postmeta( $args = array() ) {
     		} else {
     			$value = $value[0];
     			if ( empty($value) ) { continue; }
-    			//
+    			// TMP/WIP for AGO
+    			
     			if ( strpos($value,"<") !== false ) {
     				$info .= $key.' {html} =><br />';
     				//$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
     				$info .= '<div class="devwip">';
     				//$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe>';
     				//$info .= '<div style="width: 50%; float:left;">'.htmlspecialchars($value).'</div>';
-    				$info .= htmlspecialchars($value);
+    				if ( $key == 'venue_html_vp' ) {
+						$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
+					} else {
+						$info .= htmlspecialchars($value);
+					}    				
     				$info .= '</div>';
     			} else {
     				$info .= $key." => ".$value."<br />";
