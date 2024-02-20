@@ -1604,7 +1604,16 @@ function display_all_postmeta( $args = array() ) {
     $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
     	if ( strpos($key,"_") !== 0 ) {
-    		$info .= $key." => ".print_r($value,true);
+    		//$info .= $key." => ".print_r($value,true);
+    		if (count($value) > 1) {
+    			$info .= $key." => ".print_r($value,true);
+    		} else {
+    			if ( strpos($value,"<") !== false ) {
+    				$info .= $key." {html} => ".$value."<br />";
+    			} else {
+    				$info .= $key." => ".$value."<br />";
+    			}    			
+    		}
     	}
     }
     $info .= "</pre>";
