@@ -1611,7 +1611,7 @@ function display_postmeta( $args = array() ) {
     		} else {
     			$value = $value[0];
     			if ( empty($value) ) { continue; }
-    			// TMP/WIP for AGO
+    			
     			
     			if ( strpos($value,"<") !== false ) {
     				$info .= $key.' {html} =><br />';
@@ -1619,9 +1619,11 @@ function display_postmeta( $args = array() ) {
     				$info .= '<div class="devwip">';
     				//$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe>';
     				//$info .= '<div style="width: 50%; float:left;">'.htmlspecialchars($value).'</div>';
-    				if ( $key == 'venue_html_vp' ) {
+    				if ( $key == 'venue_html_vp' ) { // TMP/WIP for AGO
 						//$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
 						$info .= "[WIP]";
+					} else if ( $key == 'organs_html_ip' || $key == 'organs_html_vp' ) { // TMP/WIP for AGO
+						$info .= $value;
 					} else {
 						$info .= htmlspecialchars($value);
 					}    				
