@@ -1601,6 +1601,7 @@ function display_all_postmeta( $args = array() ) {
     $postmeta = get_post_meta( $post_id );
     //$info .= "postmeta: <pre>".print_r($postmeta,true).'</pre>';
     $info .= "<h3>Post Meta Data for post with ID $post_id</h3>";
+    $info .= "<h4>(Displaying NON-empty values only)</h4>";
     $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
     	if ( strpos($key,"_") !== 0 ) {
@@ -1609,6 +1610,8 @@ function display_all_postmeta( $args = array() ) {
     			$info .= $key." => ".print_r($value,true);
     		} else {
     			$value = $value[0];
+    			if ( empty($value) ) { next; }
+    			//
     			if ( strpos($value,"<") !== false ) {
     				$info .= $key.' {html} => <div class="devwip">'.$value.'</div>';
     			} else {
