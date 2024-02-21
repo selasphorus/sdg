@@ -80,6 +80,10 @@ function get_cpt_venue_content( $post_id = null ) {
     
     $info .= display_postmeta( array('post_id' => $post_id) );
     
+    if ( queenbee() ) {
+    	$info .= "<p>Bzzz!</p>";
+    }
+    
     return $info;
     
 }
