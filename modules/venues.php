@@ -82,7 +82,6 @@ function get_cpt_venue_content( $post_id = null ) {
     
     if ( queenbee() ) {
     	$info .= "<p>Bzzz!</p>";
-    	$info .= acf_form();
     }
     
     return $info;
