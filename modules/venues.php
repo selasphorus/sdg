@@ -80,7 +80,7 @@ function get_cpt_venue_content( $post_id = null ) {
     
     //$info .= display_postmeta( array('post_id' => $post_id) );
     
-    $venue_filename = get_post_meta( $post_id, 'venue_filename' );
+    $venue_filename = get_post_meta( $post_id, 'venue_filename', true );
     $info .= "venue_filename: ".$venue_filename."<br />";
     
     return $info;
