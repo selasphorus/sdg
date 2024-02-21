@@ -30,6 +30,20 @@ $plugin_path = plugin_dir_path( __FILE__ );
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
+// Function to check for dev/admin user
+function queenbee() {
+	$current_user = wp_get_current_user();
+	$username = $current_user->user_login;
+	$useremail = $current_user->user_email;
+	//
+    if ( $username == 'stcdev' || $useremail == "birdhive@gmail.com" ) {
+    	return true;
+    } else {
+    	return false;
+    }
+}
+
+//
 if ( ! is_admin() ) {
     require_once( ABSPATH . 'wp-admin/includes/post.php' ); // so that we can run functions like post_exists on the front end
 }
