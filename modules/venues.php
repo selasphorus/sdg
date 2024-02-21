@@ -78,11 +78,7 @@ function get_cpt_venue_content( $post_id = null ) {
 		$info .= '</div>';
 	}
     
-    $info .= display_postmeta( array('post_id' => $post_id) );
-    
-    if ( queenbee() ) {
-    	$info .= "<p>Bzzz!</p>";
-    }
+    //$info .= display_postmeta( array('post_id' => $post_id) );
     
     return $info;
     
