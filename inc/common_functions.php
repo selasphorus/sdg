@@ -1604,14 +1604,16 @@ function display_postmeta( $args = array() ) {
     $info .= "<h4>(Displaying NON-empty values only)</h4>";
     $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
-    	if ( strpos($key,"_") !== 0 ) {
+    	if ( strpos($key,"_") !== 0 ) { // Don't bother to display ACF field identifier postmeta
     		//$info .= $key." => ".print_r($value,true);
     		if (count($value) > 1) {
+    		
     			$info .= $key." => ".print_r($value,true);
-    		} else {
-    			$value = $value[0];
-    			if ( empty($value) ) { continue; }
     			
+    		} else {
+    		
+    			$value = $value[0];
+    			if ( empty($value) ) { continue; }    			
     			
     			if ( strpos($value,"<") !== false ) {
     				$info .= $key.' {html} =><br />';
@@ -1623,10 +1625,11 @@ function display_postmeta( $args = array() ) {
 						//$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
 						$info .= "[WIP]";
 					} else if ( $key == 'organs_html_ip' || $key == 'organs_html_vp' ) { // TMP/WIP for AGO
+						//strip_tags($value, '<p><a>');
 						$info .= $value;
 					} else {
 						$info .= htmlspecialchars($value);
-					}    				
+					}
     				$info .= '</div>';
     			} else {
     				$info .= $key." => ".$value."<br />";
