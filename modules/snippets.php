@@ -111,9 +111,9 @@ function display_snippets ( $atts = [] ) {
 	
 	//
 	if ( $devmode ) { 
-		//$info .= '<h2>Snippets -- WIP</h2>';
-		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
-		//$info .= "args: <pre>".print_r($args, true)."</pre>";
+		$ts_info .= '<h2>Snippets -- WIP</h2>';
+		//$ts_info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
+		$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
 	}
 
 	$arr_snippets = get_snippets ( $args );
@@ -163,7 +163,7 @@ function display_snippets ( $atts = [] ) {
 		$info .= '</section>';
 	}
 	// 
-	//if ( $devmode ) { $info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>';}
+	if ( $devmode ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
