@@ -103,7 +103,8 @@ function display_snippets ( $atts = [] ) {
         'run_updates'  => false,
         'devmode' => false,
         //'return' => 'info',
-        'sidebar_id' => 'sidebar-1', // default
+        'snippet_position' => 'side', // other option: 'bottom'
+        'sidebar_id' => 'sidebar-1', // default -- phase out in favor of position(?)
     ), $atts );
     
     // Extract
@@ -190,7 +191,8 @@ function get_snippets ( $args = array() ) {
         'run_updates'  => false,
         'devmode' => false,
         'return' => 'info',
-        'sidebar_id' => 'sidebar-1', // default
+        'snippet_position' => 'side', // other option: bottom
+        'sidebar_id' => 'sidebar-1', // default sidebar -- phase this out in favor position var?
         'classes' => array(), // for use when called by stc_body_class fcn
 	);
 
@@ -288,13 +290,13 @@ function get_snippets ( $args = array() ) {
 			'key' => 'snippet_priority',
 			'compare' => 'EXISTS',
 		),
-		/*'sidebar_id' => array(
-			'key' => 'sidebar_id',
-			'value' => $sidebar_id,
+		'snippet_position' => array(
+			'key' => 'snippet_position',
+			'value' => $snippet_position,
 			'compare' => '=',
-		),*/
+		),
 		// The sidebar clause ensures that we don't get widgets from bottom-widgets, wp_inactive_widgets, etc.
-		'sidebar_id' => array(
+		/*'sidebar_id' => array(
 			'relation' => 'OR',
 			array(
 				'key' => 'sidebar_id',
@@ -306,7 +308,7 @@ function get_snippets ( $args = array() ) {
 				'value' => 'cs-',
 				'compare' => 'LIKE',
 			),
-		),
+		),*/
 	);
 	$wp_args['meta_query'] = $meta_query;
 	
@@ -885,7 +887,7 @@ function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_sni
     
     $args = shortcode_atts( array(
 		'limit'   => 1,
-        'sidebar_id' => null,
+        'sidebar_id' => null, // which legacy sidebar to process
         'widget_id'	=> null,
 		'post_id' => null,
         'action' => 'info', // other option: 'convert' -- WIP
