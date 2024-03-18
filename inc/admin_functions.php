@@ -316,6 +316,7 @@ function update_title_for_matching ( $post_id ) {
 // TODO: 
 // 1) separate out the title building bit so that it can be used independently of wp_insert_post_data
 // 2) bind this with a t4m update function
+// 3) create separate build_the_title functions per CPT
 
 function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
     
@@ -336,7 +337,15 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     sdg_log( "[btt] abbr: ".(int)$abbr, $do_log );
     $post_type = get_post_type( $post_id );
     
-    // Before we get any further, if this is a repertoire record, check for a title_clean value
+    // Check for CPT-specific build_the_title function
+    // WIP
+    $function_name = "build_".$post_type."_title";
+    if ( function_exists($function_name) ) {}
+    //build_POSTTYPE_title
+    //build_repertoire_title
+    //build_edition_title
+    
+    // If this is a repertoire record, check for a title_clean value
     // If there is no title_clean, abort -- there's a problem!
     if ( $post_type == 'repertoire' ) {
     	if ( isset($arr['title_clean']) ) { $title_clean = $arr['title_clean']; } else { $title_clean = get_field('title_clean', $post_id); }
@@ -1585,7 +1594,9 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         $the_post = get_post( $post_id );
         $post_title = $the_post->post_title;
         $title_clean = get_post_meta( $post_id, 'title_clean', true ); // or use get_field?
-        //
+        
+        // Get title/slug based on post field values
+        // TODO: create separate build_the_title functions per CPT(?)
         $new_title = build_the_title( $post_id );
         $new_slug = sanitize_title($new_title);
         $old_t4m = get_post_meta( $post_id, 'title_for_matching', true ); // or use get_field?
