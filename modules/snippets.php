@@ -153,7 +153,7 @@ function display_snippets ( $atts = [] ) {
 			}			
 		}
 		// Remove empty paragraphs
-		$snippet_content = sdg_remove_empty_p($snippet_content);
+		//$snippet_content = sdg_remove_empty_p($snippet_content);
 		//
 		if ( $title == "Snippets" ) { continue; }
 		//
