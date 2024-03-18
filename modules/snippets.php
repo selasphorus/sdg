@@ -152,6 +152,8 @@ function display_snippets ( $atts = [] ) {
 				$snippet_content .= '</div>';
 			}			
 		}
+		// Remove empty paragraphs
+		$snippet_content = sdg_remove_empty_p($snippet_content);
 		//
 		if ( $title == "Snippets" ) { continue; }
 		//
