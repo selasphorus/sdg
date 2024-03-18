@@ -1692,6 +1692,7 @@ function sdg_remove_empty_p( $content ) {
 	//$content = force_balance_tags( $content );
 	$content = preg_replace( '#<p>\s*+(<br\s*/*>)?\s*</p>#i', '', $content );
 	$content = preg_replace( '~\s?<p>(\s|&nbsp;)+</p>\s?~', '', $content );
+	$content = preg_replace( '<p>(\s|&nbsp;)+</p>', '', $content );
 	return $content;
 }
 
