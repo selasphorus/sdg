@@ -3670,10 +3670,10 @@ function get_special_date_content( $the_date = null ) {
 
 	$info = "";
 	
-	if ( $the_date && !preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $the_date) ) {
-		$the_date = date_i18n('Y-m-d', $the_date); // format the date, as needed
-	} else if ( empty($the_date) ){
-		//$the_date = date_i18n('Y-m-d'); // today
+	if ( empty($the_date) ) { return null; }
+	
+	if ( !preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $the_date) ) {
+		$the_date = date_i18n('Y-m-d', strtotime($the_date) ); // format the date, as needed
 	}
 	
 	//
