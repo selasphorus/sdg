@@ -134,6 +134,7 @@ function display_snippets ( $atts = [] ) {
 		//$snippet_content = apply_shortcodes( $snippet_content );
 		//$snippet_content = shortcode_unautop( $snippet_content );
 		//
+		// WIP/TBD: better to use get_post_meta or get_field?
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		$sidebar_sortnum = get_post_meta( $snippet_id, 'sidebar_sortnum', true );
 		$wtype = get_post_meta( $snippet_id, 'widget_type', true );
@@ -142,13 +143,17 @@ function display_snippets ( $atts = [] ) {
 		//
 		if ( $wtype == "media_image" ) {
 			$img_id = get_post_meta( $snippet_id, 'attachment_id', true );
+			$link_type = get_post_meta( $snippet_id, 'link_type', true );
+			$link_url = get_post_meta( $snippet_id, 'link_url', true );
 			if ( $img_id ) {
 				//$img_size = get_post_meta( $snippet_id, 'img_size', true );
 				$img_size = "full";
 				$classes = "snippet_media_image";
 				$snippet_content .= '<div class="'.$classes.'">';
+				if ( $link_url ) { $snippet_content .= '<a href="'.$link_url.'">'; }
 				$snippet_content .= wp_get_attachment_image( $img_id, $img_size );//$snippet_content .= wp_get_attachment_image( $img_id, $img_size, false ) );
 				//$snippet_content .= $caption_html;
+				if ( $link_url ) { $snippet_content .= '</a>'; }
 				$snippet_content .= '</div>';
 			}			
 		}
