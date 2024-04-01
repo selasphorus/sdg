@@ -138,7 +138,7 @@ function update_repertoire_events( $rep_id = null, $run_slow_queries = false, $a
 function get_cpt_repertoire_content( $post_id = null ) {
 	
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -247,7 +247,7 @@ function get_cpt_repertoire_content( $post_id = null ) {
 function get_cpt_edition_content( $post_id = null ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -443,7 +443,7 @@ function is_anon( $post_id = null ) {
 function str_from_persons_array ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: str_from_persons_array", $do_log );
@@ -913,7 +913,7 @@ function get_authorship_info ( $args = array() ) {
 function get_excerpted_from( $post_id = null ) {
 
 	// TS/logging setup
-	$do_ts = false; 
+	$do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log ); 
     

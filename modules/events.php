@@ -46,7 +46,7 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 function get_related_events ( $meta_field = null, $term_id = null, $return_fields = 'ids' ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 
@@ -118,7 +118,7 @@ add_shortcode('display_event_program', 'get_event_program_content');
 function get_event_program_content( $post_id = null ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -178,7 +178,7 @@ add_shortcode('display_event_ticketing_info', 'get_event_ticketing_info');
 function get_event_ticketing_info( $post_id = null ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -268,7 +268,7 @@ add_shortcode('display_event_personnel', 'get_event_personnel');
 function get_event_personnel( $atts = [] ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -566,7 +566,7 @@ function get_event_personnel( $atts = [] ) {
 function get_personnel_role ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -635,7 +635,7 @@ function get_personnel_role ( $args = array() ) {
 function get_personnel_person ( $args = array() ) {
 	
 	// TS/logging setup
-	$do_ts = false; 
+	$do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_personnel_person", $do_log );
@@ -767,7 +767,7 @@ add_shortcode('display_event_program_items', 'get_event_program_items');
 function get_event_program_items( $atts = [] ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1143,7 +1143,7 @@ function get_event_program_items( $atts = [] ) {
 function get_program_item_label ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -2875,7 +2875,7 @@ function event_program_cleanup( $atts = [] ) {
 function get_event_programs_containing_post( $post_id = null ) { // formerly get_program_containing_post
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -3361,7 +3361,7 @@ add_filter( 'em_widget_calendar_get_args', 'match_widget_to_event_content',1,3 )
 function match_widget_to_event_content ( $instance ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -3445,7 +3445,7 @@ function em_args_mod($args){
 function sdg_em_custom_scopes( $scope = null ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
@@ -3558,7 +3558,7 @@ function my_em_scope_conditions($conditions, $args){
 function sdg_em_custom_scope_arg( $args = array() ){
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: sdg_em_custom_scope_arg", $do_log );
@@ -3572,7 +3572,7 @@ add_filter( 'em_events_build_sql_conditions', 'sdg_em_custom_scope_condition',10
 function sdg_em_custom_scope_condition( $conditions, $args ){
 
 	// TS/logging setup
-	$do_ts = false; 
+	$do_ts = devmode_active(); 
     $do_log = false;
 	sdg_log( "divline2", $do_log );
     sdg_log( "function called: sdg_em_custom_scope_condition", $do_log );
@@ -3751,7 +3751,7 @@ add_filter( 'em_events_build_sql_conditions', 'sdg_custom_event_search_build_sql
 function sdg_custom_event_search_build_sql_conditions($conditions, $args){
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: sdg_custom_event_search_build_sql_conditions", $do_log );

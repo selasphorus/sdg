@@ -1218,7 +1218,7 @@ function sdg_get_terms_orderby( $orderby, $args ) {
 function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonomy = "", $return_info = false ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1290,7 +1290,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1474,7 +1474,7 @@ add_action( 'admin_init', function () {
 function sdg_custom_post_content() {
 	
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1703,7 +1703,7 @@ function sdg_remove_empty_p( $content ) {
 function match_placeholder ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     

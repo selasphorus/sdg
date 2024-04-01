@@ -6,7 +6,7 @@ add_shortcode('cs_sidebars_xfer', 'cs_sidebars_xfer');
 function cs_sidebars_xfer ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: cs_sidebars_xfer", $do_log );
@@ -87,7 +87,7 @@ add_shortcode('snippets', 'display_snippets');
 function display_snippets ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
@@ -181,7 +181,7 @@ function display_snippets ( $atts = [] ) {
 function get_snippets ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
@@ -887,7 +887,7 @@ add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
 function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: widget_and_snippets", $do_log );
@@ -1509,7 +1509,7 @@ add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
 function convert_post_widgets_to_snippets ( $atts = [] ) {
 	
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: convert_post_widgets_to_snippets", $do_log );
@@ -1757,7 +1757,7 @@ add_shortcode('delete_widgets', 'delete_widgets');
 function delete_widgets ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: delete_widgets", $do_log );
@@ -1867,7 +1867,7 @@ add_shortcode('update_snippets', 'update_snippets');
 function update_snippets ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: update_snippets", $do_log );
@@ -3563,7 +3563,7 @@ add_shortcode('show_widgets_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = [] ) {
 
 	// TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_widgets_and_snippets", $do_log );

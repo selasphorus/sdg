@@ -146,7 +146,7 @@ function sanitize ( $str = null ) {
 function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_title_uid", $do_log );
@@ -197,7 +197,7 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
 function update_title_for_matching ( $post_id ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log ); 
     sdg_log( "function: sdg_update_title_for_matching", $do_log );
@@ -321,7 +321,7 @@ function update_title_for_matching ( $post_id ) {
 function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: build_the_title", $do_log );
@@ -340,7 +340,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     // Check for CPT-specific build_the_title function
     // WIP
     $function_name = "build_".$post_type."_title";
-    if ( function_exists($function_name) ) {}
+    if ( function_exists($function_name) ) {
+    
+    }
     //build_POSTTYPE_title
     //build_repertoire_title
     //build_edition_title
@@ -1007,7 +1009,7 @@ function modify_post_title( $data ) {
 function build_the_title_on_insert( $data, $postarr ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline1", $do_log );
     sdg_log( "function called: build_the_title_on_insert", $do_log );
@@ -1238,7 +1240,7 @@ function filter_the_title( $post_title, $post_id = null ) {
 function make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function: make_clean_title", $do_log );
@@ -1355,7 +1357,7 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
 function clean_slug( $post_id ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function: clean_slug", $do_log );
@@ -1488,7 +1490,7 @@ add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
 function sdg_save_post_callback( $post_id, $post, $update ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline1", $do_log );
     //sdg_log( "action: save_post", $do_log );
@@ -1717,7 +1719,7 @@ add_shortcode('title_updates', 'run_title_updates');
 function run_title_updates ($atts = [], $content = null, $tag = '') {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: run_title_updates", $do_log );

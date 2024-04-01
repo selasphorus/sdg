@@ -13,7 +13,7 @@ if ( !function_exists( 'add_action' ) ) {
 function sdg_post_title ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -235,7 +235,7 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -860,7 +860,7 @@ add_shortcode('sdg_merge_form', 'sdg_merge_form');
 function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     
     // TS/logging setup
-    $do_ts = false; 
+    $do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
