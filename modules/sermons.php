@@ -281,7 +281,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }
         $info .= '<div class="sermon-date calendar-date">';
 		$info .= '<span class="screen-only">'.$the_date."</span>";
-		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
+		$info .= '<span class="print-only"><strong>'.$the_date_print."</strong></span><br />";
 		$info .= '</div>';
         
         if ( $related_events ) {
@@ -292,7 +292,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }
         
     }
-    
+	
     // Sermon Webcast (Audio)
     if ( is_singular('sermon') 
         && has_term( 'webcasts', 'admin_tag', $post_id ) 
@@ -324,7 +324,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	if ( !empty($citations) ) {
 		$citations = "Scripture citation(s): ".$citations;
 		if ( is_singular('sermon') ) { 
-			$info .= '<p class="citations">'.$citations.'</p>'; 
+			$info .= '<p class="citations screen-only">'.$citations.'</p>'; 
 		} else {
 			$info .= $citations;
 		}
@@ -335,6 +335,24 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
     
+	$info .= '<div class="print-only">';
+	$info .= '&#10011';
+	$info .= "A Sermon by<br />".$authorship;
+	if ( !empty($citations) ) {
+		$info .= "on<br />".$citations;
+	}
+	$info .= '&#10011';
+	$info .= '</div>';
+   
+    /*
+    +
+	A Sermon by
+	The Rev. Canon Carl Turner, Rector
+	on
+	Exodus 20:1-17; 1 Corinthians 1:18-25; John 2:13-22
+	+
+	*/
+	
     $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'print-only entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
     $info .= sdg_post_title( $title_args );
     
