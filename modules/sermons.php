@@ -312,8 +312,8 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
     
-    $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
-    $info .= '<h2 class="print-only sermon-title">'.sdg_post_title( $title_args ).'</h2>';
+    $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'print-only entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
+    $info .= sdg_post_title( $title_args );
     
     $info .= '</div>';
     
