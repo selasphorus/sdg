@@ -336,10 +336,10 @@ function get_cpt_sermon_meta( $post_id = null ) {
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
     
 	$info .= '<div class="print-only">';
-	$info .= '&#10011';
-	$info .= "A Sermon by<br />".$authorship;
+	$info .= '&#10011<br />';
+	$info .= "A Sermon by<br />".$authorship.'<br />';
 	if ( !empty($citations) ) {
-		$info .= "on<br />".$citations;
+		$info .= "on<br />".$citations.'<br />';
 	}
 	$info .= '&#10011';
 	$info .= '</div>';
