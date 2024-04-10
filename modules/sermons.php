@@ -209,11 +209,22 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	// Show the link(s) to the Service(s) at which the sermon was delivered
     $related_events = get_field('related_event', $post_id); // fast retrieval but impractical in terms of data entry without mods to display of event titles in UI
 	if ($related_events) {
-        if ($authors) { $info .= " | "; }
-        foreach( $related_events as $related_event ){
-            $info .= make_link( get_the_permalink( $related_event->ID ), get_the_title( $related_event->ID ) );
-            $info .= '<!-- related_event->ID: '.$related_event->ID.' -->';  
-        }      
+		$event_info = "";
+		$event_info_print = "";
+		foreach( $related_events as $related_event ){
+			$event_info .= make_link( get_the_permalink( $related_event->ID ), get_the_title( $related_event->ID ) );
+			$event_info .= '<!-- related_event->ID: '.$related_event->ID.' -->';
+			$event_info_print .= get_the_title( $related_event->ID );
+		}
+		// Screen version
+		$info .= '<span class="screen-only">';
+		if ($authors) { $info .= " | "; }
+		$info .= $event_info;
+		$info .= '</span>';
+		// Print version
+		$info .= '<span class="print-only">';
+		$info .= $event_info_print;
+		$info .= '</span>';
     }
     
     if ( !empty($authors) || !empty($related_events) ) {
@@ -260,13 +271,25 @@ function get_cpt_sermon_meta( $post_id = null ) {
     $sermon_date = get_field('sermon_date', $post_id);
     if ( is_singular('sermon') && $sermon_date ) {
         
-        $info .= '<div class="sermon-date calendar-date">';
         //$info .= "<!-- sermon_date: ".print_r($sermon_date, true)."-->"; // tft
 		$date = date_create($sermon_date);
 		$the_date = date_format($date,"l, F d, Y \@ h:i a");
-		$info .= $the_date."<br />";
+		$the_date_print = date_format($date,"l, F d, Y");
+		$the_time = date_format($date,"h:i a");
+        $info .= '<div class="sermon-date calendar-date">';
+		$info .= '<span class="screen-only">'.$the_date."</span><br />";
+		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
         if ( function_exists('get_day_title') ) { $info .= get_day_title( array ('the_date' => $sermon_date ) ); }
 		$info .= '</div>';
+		
+		
+		left:
+		date
+		day title
+		
+		right:
+		service title
+		time
         
     }
     
@@ -275,7 +298,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         && has_term( 'webcasts', 'admin_tag', $post_id ) 
         && get_post_meta( $post_id, 'audio_file', true ) != "" ) { 
         $sermon_audio = true;
-        $info .= '<a href="#sermon-audio">Listen to the sermon</a>';
+        $info .= '<a href="#sermon-audio" class="screen-only">Listen to the sermon</a>';
         $info .= "<!-- audio_file: ".get_post_meta( $post_id, 'audio_file', true )." -->";
     } else {
         $sermon_audio = false;
