@@ -272,7 +272,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$date = date_create($sermon_date);
 		$the_date = date_format($date,"l, F d, Y \@ h:i a");
 		$the_date_print = date_format($date,"l, F d, Y");
-		$the_time = date_format($date,"h:i a");
+		$the_time = date_format($date,"H:i a");
         if ( function_exists('get_day_title') ) {
         	$the_date .= '<br />'.get_day_title( array ('the_date' => $sermon_date ) );
         	$the_date_print .= '<br />'.get_day_title( array ('the_date' => $sermon_date, 'formatted' => false ) );
@@ -281,19 +281,9 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$info .= '<span class="screen-only">'.$the_date."</span>";
 		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
 		$info .= '</div>';
-		
-		/*
-		left:
-		date
-		day title
-		
-		right:
-		service title
-		time
-        */
         
         if ( $related_events ) {
-			$info .= '<div class="print-only floatright">';
+			$info .= '<div class="print-only floatright" style="width: fit-content;">';
 			$info .= $event_info_print;
 			$info .= '<br />'.$the_time;
 			$info .= '</div>';
