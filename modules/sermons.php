@@ -287,7 +287,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         
         if ( $related_events ) {
 			$info .= '<div class="print-only related-event-info">';
-			$info .= $event_info_print;
+			$info .= '<strong>'.$event_info_print.'</strong>';
 			$info .= '<br />'.$the_time;
 			$info .= '</div>';
         }
