@@ -221,10 +221,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		if ($authors) { $info .= " | "; }
 		$info .= $event_info;
 		$info .= '</span>';
-		// Print version
-		$info .= '<span class="print-only">';
-		$info .= $event_info_print;
-		$info .= '</span>';
+		// Print version -- see below
     }
     
     if ( !empty($authors) || !empty($related_events) ) {
@@ -294,6 +291,13 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		service title
 		time
         */
+        
+        if ( $related_events ) {
+			$info .= '<div class="print-only floatright">';
+			$info .= $event_info_print;
+			$info .= '<br />'.$the_time;
+			$info .= '</div>';
+        }
         
     }
     
