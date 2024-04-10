@@ -336,7 +336,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
     
-	$info .= '<div class="print-only">';
+	$info .= '<div class="print-only centered">';
 	$info .= '&#10011<br />';
 	$info .= "A Sermon by<br />".$authorship.'<br />';
 	if ( !empty($citations) ) {
