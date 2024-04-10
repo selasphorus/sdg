@@ -190,8 +190,9 @@ function get_cpt_sermon_meta( $post_id = null ) {
     
 	$post = get_post( $post_id ); // Is this necessary?
 	
-	$info .= '<!-- cpt_sermon_meta -->';
-    $info .= '<!-- sermon_id: '.$post_id.' -->';
+	$info .= '<!-- cpt_sermon_meta for sermon_id: '.$post_id.' -->';
+	
+	$info .= '<div class="cpt_sermon_meta">';
 	
 	// Display the sermon author
     $authors = get_field('sermon_author', $post_id);
@@ -257,7 +258,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
     $sermon_date = get_field('sermon_date', $post_id);
     if ( is_singular('sermon') && $sermon_date ) {
         
-        $info .= '<div class="calendar-date">';
+        $info .= '<div class="sermon-date calendar-date">';
         //$info .= "<!-- sermon_date: ".print_r($sermon_date, true)."-->"; // tft
 		$date = date_create($sermon_date);
 		$the_date = date_format($date,"l, F d, Y \@ h:i a");
@@ -308,6 +309,9 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
+    
+    $info .= '</div>';
+    
     $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
 	
 	$info .= '<!-- /cpt_sermon_meta -->';
