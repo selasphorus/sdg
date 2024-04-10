@@ -270,7 +270,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         
         //$info .= "<!-- sermon_date: ".print_r($sermon_date, true)."-->"; // tft
 		$date = date_create($sermon_date);
-		$the_date = date_format($date,"l, F d, Y \@ h:i a");
+		$the_date = date_format($date,"l, F d, Y \@ g:i a");
 		$the_date_print = date_format($date,"l, F d, Y");
 		$the_time = date_format($date,"g:i a");
         if ( function_exists('get_day_title') ) {
