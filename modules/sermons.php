@@ -323,11 +323,10 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	}
 	
 	if ( !empty($citations) ) {
-		$citations = "Scripture citation(s): ".$citations;
 		if ( is_singular('sermon') ) { 
-			$info .= '<p class="citations screen-only">'.$citations.'</p>'; 
+			$info .= '<p class="citations screen-only">Scripture citation(s): '.$citations.'</p>'; 
 		} else {
-			$info .= $citations;
+			$info .= "Scripture citation(s): ".$citations;
 		}
 	} else if ( $sermon_audio == true ) {
         $info .= "<hr />";
