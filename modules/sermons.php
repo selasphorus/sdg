@@ -274,7 +274,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         //$info .= "<!-- sermon_date: ".print_r($sermon_date, true)."-->"; // tft
 		$date = date_create($sermon_date);
 		$the_date = date_format($date,"l, F d, Y \@ g:i a");
-		$the_date_print = date_format($date,"l, F d, Y");
+		$the_date_print = '<strong>'.date_format($date,"l, F d, Y").'</strong>';
 		$the_time = date_format($date,"g:i a");
         if ( function_exists('get_day_title') ) {
         	$the_date .= '<br />'.get_day_title( array ('the_date' => $sermon_date ) );
@@ -282,7 +282,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }
         $info .= '<div class="sermon-date calendar-date">';
 		$info .= '<span class="screen-only">'.$the_date."</span>";
-		$info .= '<span class="print-only"><strong>'.$the_date_print."</strong></span><br />";
+		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
 		$info .= '</div>';
         
         if ( $related_events ) {
