@@ -282,7 +282,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         if ( function_exists('get_day_title') ) { $info .= get_day_title( array ('the_date' => $sermon_date ) ); }
 		$info .= '</div>';
 		
-		
+		/*
 		left:
 		date
 		day title
@@ -290,6 +290,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		right:
 		service title
 		time
+        */
         
     }
     
