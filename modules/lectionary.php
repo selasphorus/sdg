@@ -837,7 +837,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 				}
 			
 			} else {
-				$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
+				$info .= '<span id="'.$litdate_id.'">'.$litdate_title.'</span>'; // class="calendar-day"
 			}
 			
         }
