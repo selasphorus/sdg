@@ -276,10 +276,13 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$the_date = date_format($date,"l, F d, Y \@ h:i a");
 		$the_date_print = date_format($date,"l, F d, Y");
 		$the_time = date_format($date,"h:i a");
+        if ( function_exists('get_day_title') ) {
+        	$the_date .= '<br />'.get_day_title( array ('the_date' => $sermon_date ) );
+        	$the_date_print .= '<br />'.get_day_title( array ('the_date' => $sermon_date, 'formatted' => false ) );
+        }
         $info .= '<div class="sermon-date calendar-date">';
-		$info .= '<span class="screen-only">'.$the_date."</span><br />";
+		$info .= '<span class="screen-only">'.$the_date."</span>";
 		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
-        if ( function_exists('get_day_title') ) { $info .= get_day_title( array ('the_date' => $sermon_date ) ); }
 		$info .= '</div>';
 		
 		/*
