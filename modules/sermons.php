@@ -217,7 +217,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 			$event_info_print .= get_the_title( $related_event->ID );
 		}
 		// Screen version
-		$info .= '<span class="screen-only">';
+		$info .= '<span class="screen-only related-event-info">';
 		if ($authors) { $info .= " | "; }
 		$info .= $event_info;
 		$info .= '</span>';
@@ -283,7 +283,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$info .= '</div>';
         
         if ( $related_events ) {
-			$info .= '<div class="print-only floatright" style="width: fit-content;">';
+			$info .= '<div class="print-only related-event-info">';
 			$info .= $event_info_print;
 			$info .= '<br />'.$the_time;
 			$info .= '</div>';
