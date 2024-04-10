@@ -506,6 +506,8 @@ add_shortcode('day_title', 'get_day_title');
 function get_day_title( $atts = [], $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
+    // TODO: add option to return day title only -- just the text, with no link or other formatting
+    
 	$info = "";
 	$ts_info = "";
 	$hide_day_titles = 0;
@@ -514,6 +516,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 		'post_id'   => get_the_ID(),
 		'series_id' => null,
 		'the_date'  => null,
+		'formatted' => true,
 	), $atts);
     
     // Extract
@@ -771,7 +774,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
         
         $show_title = show_litdate_on_date( $litdate_id, $date_str );
         
-        if ( $show_title == true ) {
+        if ( $show_title == true && $formatted == true ) {
         
         	$litdate_title = get_the_title( $litdate_id );
 			$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
@@ -829,6 +832,8 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 				if ( $litdate_id_secondary ) { $info .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
 				$info .= '<br />';
 			}
+        } else if ( $show_title == true ) {
+        	$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
         }
         
     } else {
