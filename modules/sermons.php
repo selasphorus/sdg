@@ -205,7 +205,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             $author = get_the_title( $author->ID );
             if (strpos($author,", ") ) {
             	$author_name = substr( $author, 0, strpos($author,", ") );
-            	$author_title = trim(str_replace($author_name, "", $author));
+            	$author_title = trim(str_replace($author_name.", ", "", $author));
             	$authorship .= $author_name.', <span class="person-title">'.$author_title.'</span>';
             } else {
             	$authorship .= $author;
