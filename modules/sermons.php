@@ -339,7 +339,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	$info .= '&#10011<br />';
 	$info .= "A Sermon by<br />".$authorship.'<br />';
 	if ( !empty($citations) ) {
-		$info .= "on<br />".$citations.'<br />';
+		$info .= "<em>on</em><br />".$citations.'<br />';
 	}
 	$info .= '&#10011';
 	$info .= '</div>';
