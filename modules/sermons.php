@@ -202,7 +202,14 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$authorship = "";
         foreach( $authors as $author ){
             // TODO: hyperlink author(s)?
-            $authorship .= get_the_title( $author->ID );
+            $author = get_the_title( $author->ID );
+            if (strpos($author,", ") ) {
+            	$author_name = substr( $author, 0, strpos($author,", ") );
+            	$author_title = trim(str_replace($author_name, "", $author));
+            	$authorship .= $author_name.', <span class="person-title">'.$author_title.'</span>';
+            } else {
+            	$authorship .= $author;
+            }
             if ( count($authors) > 1 ) { $authorship .= "; "; }
         }
         $info .= '<span class="preacher sermon-author screen-only">'.$authorship.'</span>';
