@@ -289,7 +289,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         }
         $info .= '<div class="sermon-date calendar-date">';
 		$info .= '<span class="screen-only">'.$the_date."</span>";
-		$info .= '<span class="print-only">'.$the_date_print."</span><br />";
+		$info .= '<span class="print-only">'.$the_date_print."</span>";
 		$info .= '</div>';
         
         if ( $related_events ) {
