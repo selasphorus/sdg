@@ -204,7 +204,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             // TODO: hyperlink author(s)?
             $author = get_the_title( $author->ID );
             if (strpos($author,", ") ) {
-            	$author_name = substr( $author, 0, strpos($author,", ")-2 );
+            	$author_name = substr( $author, 0, strpos($author,", ")-1 );
             	$author_title = trim(str_replace($author_name, "", $author));
             	$authorship .= $author_name.', <span class="person-title">'.$author_title.'</span>';
             } else {
