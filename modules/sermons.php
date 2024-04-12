@@ -192,7 +192,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	$info .= '<!-- cpt_sermon_meta for sermon_id: '.$post_id.' -->';
 	
-	$info .= '<div class="cpt_sermon_meta">';
+	$info .= '<div id="cpt_sermon_meta" class="cpt_sermon_meta">';
 	
 	$info .= '<div id="letterhead-logo"><img src="/wp-content/themes/apostle/graphics/stc-letterhead.png" class="print-only" /></div>';
 	
@@ -342,30 +342,20 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	// Related Bbooks
     $sermon_bbooks = get_field('sermon_bbooks', $post_id, false);
     
-	$info .= '<div class="print-only centered clear">';
+	$info .= '<div id="sermon-basics" class="print-only centered clear">';
 	$info .= '&#10011<br />';
 	$info .= "A Sermon by<br />".$authorship.'<br />';
 	if ( !empty($citations) ) {
 		$info .= "<em>on</em><br />".$citations.'<br />';
 	}
 	$info .= '&#10011';
-	$info .= '</div>';
-   
-    /*
-    +
-	A Sermon by
-	The Rev. Canon Carl Turner, Rector
-	on
-	Exodus 20:1-17; 1 Corinthians 1:18-25; John 2:13-22
-	+
-	*/
-	
+    
     $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'print-only entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
-    $info .= '<div class="print-only centered clear">';
+    
     $info .= sdg_post_title( $title_args );
     $info .= '</div>';
     
-    $info .= '</div>';
+    $info .= '</div>'; // END div id=cpt_sermon_meta
     
     $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
 	
