@@ -150,7 +150,7 @@ function display_snippets ( $atts = [] ) {
 				$img_size = "full";
 				$classes = "snippet_media_image";
 				$snippet_content .= '<div class="'.$classes.'">';
-				if ( $link_url ) { $snippet_content .= '<a href="'.$link_url.' target="_new">'; }
+				if ( $link_url ) { $snippet_content .= '<a href="'.$link_url.'" target="_new">'; }
 				$snippet_content .= wp_get_attachment_image( $img_id, $img_size );//$snippet_content .= wp_get_attachment_image( $img_id, $img_size, false ) );
 				//$snippet_content .= $caption_html;
 				if ( $link_url ) { $snippet_content .= '</a>'; }
