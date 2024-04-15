@@ -350,7 +350,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	}
 	$info .= '&#10011';
     
-    $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
+    $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false ); // $do_ts
     
     $info .= sdg_post_title( $title_args );
     $info .= '</div>'; // END div id=sermon-basics
