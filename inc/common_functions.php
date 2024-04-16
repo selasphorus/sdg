@@ -1866,7 +1866,7 @@ function sdg_list_media_items ($atts = [] ) {
 /*********** DATES/TIME/SCOPES ***********/
 
 // Create custom scopes: "Upcoming", "This Week", "This Season", "Next Season", "This Year", "Next Year"
-// Returns array of $dates with $dates['start'] and $dates['end'] in format 'Y-m-d'
+// Returns array of $dates with $dates['start'] and $dates['end'] in format 'Ymd' (or TBD: other $date_format)
 // NB: these scope definitions can be used for any post type with date fields -- other than EM events, which are handled separately through events module and EM plugin
 function sdg_scope_dates( $scope = null ) {
     
@@ -1962,8 +1962,8 @@ function sdg_scope_dates( $scope = null ) {
 			$season_end = strtotime("+1 Year", $season_end);
 		}
 		
-		$start_date = date_i18n('Y-m-d',$season_start);
-		$end_date = date_i18n('Y-m-d',$season_end);
+		$start_date = date_i18n($date_format,$season_start);
+		$end_date = date_i18n($date_format,$season_end);
     
     } else if ( $scope == 'next_season' ) {
     
@@ -1975,13 +1975,13 @@ function sdg_scope_dates( $scope = null ) {
 			$season_end = strtotime("+1 Year", $season_end);
 		}
 		
-		$start_date = date_i18n('Y-m-d',$season_start);
-		$end_date = date_i18n('Y-m-d',$season_end);
+		$start_date = date_i18n($date_format,$season_start);
+		$end_date = date_i18n($date_format,$season_end);
     
     } else if ( $scope == 'ytd' ) {
     
     	$start = strtotime("January 1st, {$year}");		
-		$start_date = date_i18n('Y-m-d',$start);
+		$start_date = date_i18n($date_format,$start);
 		$end_date = date_i18n($date_format); // today
     
     } else if ( $scope == 'this_year' ) {
@@ -1989,8 +1989,8 @@ function sdg_scope_dates( $scope = null ) {
     	$start = strtotime("January 1st, {$year}");
     	$end = strtotime("December 31st, {$year}");
 		
-		$start_date = date_i18n('Y-m-d',$start);
-		$end_date = date_i18n('Y-m-d',$end);
+		$start_date = date_i18n($date_format,$start);
+		$end_date = date_i18n($date_format,$end);
     
     } else if ( $scope == 'last_year' ) {
     
@@ -1998,8 +1998,8 @@ function sdg_scope_dates( $scope = null ) {
     	$start = strtotime("January 1st, {$year}");
     	$end = strtotime("December 31st, {$year}");
 		
-		$start_date = date_i18n('Y-m-d',$start);
-		$end_date = date_i18n('Y-m-d',$end);
+		$start_date = date_i18n($date_format,$start);
+		$end_date = date_i18n($date_format,$end);
     
     } else if ( $scope == 'next_year' ) {
     
@@ -2007,8 +2007,8 @@ function sdg_scope_dates( $scope = null ) {
     	$start = strtotime("January 1st, {$year}");
     	$end = strtotime("December 31st, {$year}");
 		
-		$start_date = date_i18n('Y-m-d',$start);
-		$end_date = date_i18n('Y-m-d',$end);
+		$start_date = date_i18n($date_format,$start);
+		$end_date = date_i18n($date_format,$end);
     
     }
 	
