@@ -1861,4 +1861,163 @@ function sdg_list_media_items ($atts = [] ) {
 	return $info;
 }
 
+/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
+
+/*********** DATES/TIME/SCOPES ***********/
+
+// Create custom scopes: "Upcoming", "This Week", "This Season", "Next Season", "This Year", "Next Year"
+// Returns array of $dates with $dates['start'] and $dates['end'] in format 'Y-m-d'
+// NB: these scope definitions can be used for any post type with date fields -- other than EM events, which are handled separately through events module and EM plugin
+function sdg_scope_dates( $scope = null ) {
+    
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+	
+	if ( empty($scope) ) { return null; }
+	
+	// Init vars
+	$dates = array();
+	$start_date = null;
+	$end_date = null;
+	
+    // get info about today's date
+    $today = time(); //$today = new DateTime();
+	$year = date_i18n('Y');
+	
+	// Define basic season parameters
+	$season_start = strtotime("September 1st");
+	$season_end = strtotime("July 1st");
+	
+	if ( $scope == 'today' ){
+        
+        $start_date = date_i18n("Y-m-d"); // today
+        $end_date = $start_date;
+    
+    } else if ( $scope == 'today_onward' ){ // if ( $scope == 'today-onward' ){
+        
+        $start_date = date_i18n("Y-m-d"); // today
+        $decade = strtotime($start_date." +10 years");
+        $end_date = date_i18n("Y-m-d",$decade);
+    
+    } else if ( $scope == 'upcoming' ) {
+    
+    	// Get start/end dates of today plus six        
+        $start_date = date_i18n("Y-m-d"); // today
+        $seventh_day = strtotime($start_date." +6 days");
+        $end_date = date_i18n("Y-m-d",$seventh_day);
+    
+    } else if ( $scope == 'this_week' ) {
+    
+    	// Get start/end dates for the current week        
+        $sunday = strtotime("last sunday");
+        $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
+        $start_date = date_i18n("Y-m-d",$sunday);
+        $end_date = date_i18n("Y-m-d",$saturday);
+    
+    } else if ( $scope == 'last_week' ) {
+    
+    	// Get start/end dates for the previous week
+    	// WIP       
+        $sunday = strtotime("last sunday");
+        $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
+        $start_date = date_i18n("Y-m-d",$sunday);
+        $end_date = date_i18n("Y-m-d",$saturday);
+    
+    } else if ( $scope == 'next_week' ) {
+    
+    	// Get start/end dates for the next week
+    	// WIP
+        $sunday = strtotime("last sunday");
+        $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
+        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
+        $start_date = date_i18n("Y-m-d",$sunday);
+        $end_date = date_i18n("Y-m-d",$saturday);
+    
+    } else if ( $scope == 'this_month' ) {
+    
+    	// Get start/end dates for the current month
+    	// WIP
+    
+    } else if ( $scope == 'last_month' ) {
+    
+    	// Get start/end dates for the previous month
+    	// WIP
+    
+    } else if ( $scope == 'next_month' ) {
+    
+    	// Get start/end dates for the next month
+    	// WIP
+    
+    } else if ( $scope == 'this_season' ) {
+    
+    	// Get actual season start/end dates
+		if ($today < $season_start){
+			$season_start = strtotime("-1 Year", $season_start);
+		} else {
+			$season_end = strtotime("+1 Year", $season_end);
+		}
+		
+		$start_date = date_i18n('Y-m-d',$season_start);
+		$end_date = date_i18n('Y-m-d',$season_end);
+    
+    } else if ( $scope == 'next_season' ) {
+    
+		// Get actual season start/end dates
+		if ($today > $season_start){
+			$season_start = strtotime("+1 Year", $season_start);
+			$season_end = strtotime("+2 Year", $season_end);
+		} else {
+			$season_end = strtotime("+1 Year", $season_end);
+		}
+		
+		$start_date = date_i18n('Y-m-d',$season_start);
+		$end_date = date_i18n('Y-m-d',$season_end);
+    
+    } else if ( $scope == 'ytd' ) {
+    
+    	$start = strtotime("January 1st, {$year}");		
+		$start_date = date_i18n('Y-m-d',$start);
+		$end_date = date_i18n("Y-m-d"); // today
+    
+    } else if ( $scope == 'this_year' ) {
+    
+    	$start = strtotime("January 1st, {$year}");
+    	$end = strtotime("December 31st, {$year}");
+		
+		$start_date = date_i18n('Y-m-d',$start);
+		$end_date = date_i18n('Y-m-d',$end);
+    
+    } else if ( $scope == 'last_year' ) {
+    
+    	$year = $year-1;
+    	$start = strtotime("January 1st, {$year}");
+    	$end = strtotime("December 31st, {$year}");
+		
+		$start_date = date_i18n('Y-m-d',$start);
+		$end_date = date_i18n('Y-m-d',$end);
+    
+    } else if ( $scope == 'next_year' ) {
+    
+    	$year = $year+1;
+    	$start = strtotime("January 1st, {$year}");
+    	$end = strtotime("December 31st, {$year}");
+		
+		$start_date = date_i18n('Y-m-d',$start);
+		$end_date = date_i18n('Y-m-d',$end);
+    
+    }
+	
+	$dates['start'] = $start_date;
+	$dates['end'] 	= $end_date;
+	
+	return $dates;
+	
+}
+
+/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
+
 ?>
