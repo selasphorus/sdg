@@ -1881,6 +1881,7 @@ function sdg_scope_dates( $scope = null ) {
 	$dates = array();
 	$start_date = null;
 	$end_date = null;
+	$date_format = "Ymd"; // no hyphens for ACF fields(?) ... "Y-m-d"
 	
     // get info about today's date
     $today = time(); //$today = new DateTime();
@@ -1892,30 +1893,30 @@ function sdg_scope_dates( $scope = null ) {
 	
 	if ( $scope == 'today' ){
         
-        $start_date = date_i18n("Y-m-d"); // today
+        $start_date = date_i18n($date_format); // today
         $end_date = $start_date;
     
     } else if ( $scope == 'today_onward' ){ // if ( $scope == 'today-onward' ){
         
-        $start_date = date_i18n("Y-m-d"); // today
+        $start_date = date_i18n($date_format); // today
         $decade = strtotime($start_date." +10 years");
-        $end_date = date_i18n("Y-m-d",$decade);
+        $end_date = date_i18n($date_format,$decade);
     
     } else if ( $scope == 'upcoming' ) {
     
     	// Get start/end dates of today plus six        
-        $start_date = date_i18n("Y-m-d"); // today
+        $start_date = date_i18n($date_format); // today
         $seventh_day = strtotime($start_date." +6 days");
-        $end_date = date_i18n("Y-m-d",$seventh_day);
+        $end_date = date_i18n($date_format,$seventh_day);
     
     } else if ( $scope == 'this_week' ) {
     
     	// Get start/end dates for the current week        
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
-        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
-        $start_date = date_i18n("Y-m-d",$sunday);
-        $end_date = date_i18n("Y-m-d",$saturday);
+        $saturday = strtotime(date($date_format,$sunday)." +6 days");
+        $start_date = date_i18n($date_format,$sunday);
+        $end_date = date_i18n($date_format,$saturday);
     
     } else if ( $scope == 'last_week' ) {
     
@@ -1923,9 +1924,9 @@ function sdg_scope_dates( $scope = null ) {
     	// WIP       
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
-        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
-        $start_date = date_i18n("Y-m-d",$sunday);
-        $end_date = date_i18n("Y-m-d",$saturday);
+        $saturday = strtotime(date($date_format,$sunday)." +6 days");
+        $start_date = date_i18n($date_format,$sunday);
+        $end_date = date_i18n($date_format,$saturday);
     
     } else if ( $scope == 'next_week' ) {
     
@@ -1933,9 +1934,9 @@ function sdg_scope_dates( $scope = null ) {
     	// WIP
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
-        $saturday = strtotime(date("Y-m-d",$sunday)." +6 days");
-        $start_date = date_i18n("Y-m-d",$sunday);
-        $end_date = date_i18n("Y-m-d",$saturday);
+        $saturday = strtotime(date($date_format,$sunday)." +6 days");
+        $start_date = date_i18n($date_format,$sunday);
+        $end_date = date_i18n($date_format,$saturday);
     
     } else if ( $scope == 'this_month' ) {
     
@@ -1981,7 +1982,7 @@ function sdg_scope_dates( $scope = null ) {
     
     	$start = strtotime("January 1st, {$year}");		
 		$start_date = date_i18n('Y-m-d',$start);
-		$end_date = date_i18n("Y-m-d"); // today
+		$end_date = date_i18n($date_format); // today
     
     } else if ( $scope == 'this_year' ) {
     
