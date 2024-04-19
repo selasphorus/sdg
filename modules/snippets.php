@@ -3250,7 +3250,7 @@ function match_terms( $rules, $post_id ) {
 		$match_type = 'any'; // Default: match any of the given terms
 	}
 	$ts_info .= "match_type: ".$match_type."<br />";
-	$ts_info .= "rules (str): ".$rules."<br />";
+	//$ts_info .= "rules (str): ".$rules."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("rules (str): '".$rules."'");
