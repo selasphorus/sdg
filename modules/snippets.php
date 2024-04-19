@@ -3221,7 +3221,7 @@ function match_terms( $rules, $post_id ) {
 		$post_id = get_the_ID();
 		//$post_type = get_post_type( $post_id );
 	}
-	$ts_info .= "post_id: ".$post_id."<br />";
+	$ts_info .= "match_terms post_id: ".$post_id."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("divline2");
