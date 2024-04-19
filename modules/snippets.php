@@ -3414,12 +3414,10 @@ function match_terms( $rules, $post_id ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'all') >> return true"); }
 			//return true;
 			$match = true;
-			break;
 		} else if ( $match_type == 'complex' && $matches_found > 0 ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
 			//return true;
 			$match = true;
-			break;
 		}
 		
 		// Now all that's left is to deal with complex queries...
