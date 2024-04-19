@@ -602,7 +602,7 @@ function get_snippets ( $args = array() ) {
 						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
 						
 						// TODO: simplify this logic
-						$term_match = match_terms( $target_taxonomies, $post_id );
+						$term_match = match_terms( $target_taxonomies, $post_id, $snippet_display );
 						$snippet_logic_info .= $term_match['info'];
 						if ( $term_match['match'] ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the target taxonomy terms<br />";
@@ -3211,7 +3211,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 
 /*** Copied from mods to WidgetContext ***/
 //
-function match_terms( $rules, $post_id ) {
+function match_terms( $rules, $post_id, $snippet_display ) {
     
     $arr_result = array();
     $match = null;
@@ -3377,10 +3377,13 @@ function match_terms( $rules, $post_id ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
-						$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
-						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false"); }
-						//return false; // post has the term but rules say it must NOT have this term
-						$match = false;
+						if ( $snippet_display == "selected" ) {
+							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
+							$match = false; // post has the term but rules say it must NOT have this term	
+						} else if ( $snippet_display == "notselected" ) {
+							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE; snippet_display NOTselected) >> return true<br />";
+							$match = true; // post has the term so it excluded from being hidden
+						}					
 						break;
 					} else {
 						$ts_info .= "Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue<br />";
