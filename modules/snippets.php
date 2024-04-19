@@ -115,9 +115,7 @@ function display_snippets ( $atts = [] ) {
 		$ts_info .= '<h2>Snippets -- WIP</h2>';
 		//$ts_info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 	}
-	if ( $devmode || $do_ts ) {
-		$ts_info .= "display_snippets args: <pre>".print_r($args, true)."</pre>";
-	}
+	//if ( $devmode || $do_ts ) { $ts_info .= "display_snippets args: <pre>".print_r($args, true)."</pre>"; }
 
 	$arr_snippets = get_snippets ( $args );
 	$arr_ids = $arr_snippets['ids'];
@@ -215,9 +213,7 @@ function get_snippets ( $args = array() ) {
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
 	}*/
-	if ( $do_ts ) {
-		$info .= "get_snippets args: <pre>".print_r($args, true)."</pre>";
-	}
+	//if ( $do_ts ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
     
@@ -328,8 +324,8 @@ function get_snippets ( $args = array() ) {
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
-    $info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-    $info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
+    //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+    //$info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
     $info .= "[".count($snippets)."] snippets found.<br />";
     
     // Determine which snippets should be displayed for the post in question
