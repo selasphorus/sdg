@@ -597,11 +597,14 @@ function get_snippets ( $args = array() ) {
 						
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
-						$arr_post_taxonomies = get_post_taxonomies();
+						$arr_post_taxonomies = get_post_taxonomies($post_id);
 						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
+						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
 						
 						// TODO: simplify this logic
-						if ( match_terms( $target_taxonomies, $post_id ) ) { // ! empty( $target_taxonomies ) && 
+						$term_match = match_terms( $target_taxonomies, $post_id );
+						$snippet_logic_info .= $term_match['match'];
+						if ( $term_match['match'] ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
@@ -3209,7 +3212,9 @@ function get_updated_arr_field_value ( $args = array() ) {
 /*** Copied from mods to WidgetContext ***/
 //
 function match_terms( $rules, $post_id ) {
-        
+    
+    $arr_result = array();
+    $match = null;
     $ts_info = "";
     
 	if ( $post_id == null ) { 
@@ -3321,23 +3326,31 @@ function match_terms( $rules, $post_id ) {
 						$ts_info .= "Match found (single rule; has_term; exclusion false) >> return true<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion false) >> return true"); }
 						//return $ts_info; //
-						return true; // post has term for single rule AND term is not negated, therefore it is a match
+						//return true; // post has term for single rule AND term is not negated, therefore it is a match
+						$match = true;
+						break;
 					} else {
 						$ts_info .= "Match found (single rule; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion TRUE) >> return false"); }
-						return false;
+						//return false;
+						$match = false;
+						break;
 					}                        
 				} else if ($exclusion == 'no') {
 					$ts_info .= "NO match found (single rule; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (single rule; NOT has_term; exclusion false) >> return false"); }
-					return false; // post has term but single rule requires posts withOUT that term, therefore no match
+					//return false; // post has term but single rule requires posts withOUT that term, therefore no match
+					$match = false;
+					break;
 				}
 				
 			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) { 
 				
 				$ts_info .= "Match found (match_type 'any'; has_term; exclusion false) >> return true<br />";
 				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
-				return true; // Match any => match found (no need to check remaining rules, if any)
+				//return true; // Match any => match found (no need to check remaining rules, if any)
+				$match = true;
+				break;
 				
 			} else if ( $match_type == 'all' ) {
 				
@@ -3345,7 +3358,9 @@ function match_terms( $rules, $post_id ) {
 					if ( $exclusion == 'yes' ) {
 						$ts_info .= "Match found (match_type 'all'; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'all'; has_term; exclusion TRUE) >> return false"); }
-						return false; // post has the term but rules say it must NOT have this term
+						//return false; // post has the term but rules say it must NOT have this term
+						$match = false;
+						break;
 					} else {
 						$ts_info .= "Ok so far! (match_type 'all'; has_term; exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
@@ -3353,7 +3368,9 @@ function match_terms( $rules, $post_id ) {
 				} else if ( $exclusion == 'no' ) {
 					$ts_info .= "NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false"); }
-					return false; // post does not have the term and rules require it must match all
+					//return false; // post does not have the term and rules require it must match all
+					$match = false;
+					break;
 				}
 				
 			} else if ( $match_type == 'complex' ) {
@@ -3362,7 +3379,9 @@ function match_terms( $rules, $post_id ) {
 					if ( $exclusion == 'yes' ) {
 						$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false"); }
-						return false; // post has the term but rules say it must NOT have this term
+						//return false; // post has the term but rules say it must NOT have this term
+						$match = false;
+						break;
 					} else {
 						$ts_info .= "Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue"); }
@@ -3393,10 +3412,14 @@ function match_terms( $rules, $post_id ) {
 		// If we got through the entire list of rules and the post matched all the rules, return true
 		if ( $match_type == 'all' ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'all') >> return true"); }
-			return true;
+			//return true;
+			$match = true;
+			break;
 		} else if ( $match_type == 'complex' && $matches_found > 0 ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
-			return true;
+			//return true;
+			$match = true;
+			break;
 		}
 		
 		// Now all that's left is to deal with complex queries...
@@ -3423,8 +3446,12 @@ function match_terms( $rules, $post_id ) {
 	}
 
 	//if ( function_exists('sdg_log') ) { sdg_log("End of the line. Returning null."); }
-	return null;
+	//return null;
 	//return $match;
+	
+	$arr_result['match'] = $match;
+	$arr_result['info'] = $ts_info;
+	return $arr_result;
 	
 }
 
