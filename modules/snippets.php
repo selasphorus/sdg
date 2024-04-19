@@ -603,7 +603,7 @@ function get_snippets ( $args = array() ) {
 						
 						// TODO: simplify this logic
 						$term_match = match_terms( $target_taxonomies, $post_id );
-						$snippet_logic_info .= $term_match['match'];
+						$snippet_logic_info .= $term_match['info'];
 						if ( $term_match['match'] ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
