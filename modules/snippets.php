@@ -379,7 +379,7 @@ function get_snippets ( $args = array() ) {
 				$snippet_status = "active";
 			}
 		
-			$meta_keys = array( 'target_by_post_type', 'target_by_post_type_archive', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_location', 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url' );
+			$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_post_type_archive', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
 			
 				$$key = get_post_meta( $snippet_id, $key, true );
@@ -441,70 +441,6 @@ function get_snippets ( $args = array() ) {
 						} else {
 							$snippet_logic_info .= "This post does NOT match any of the array values.<br />";
 							$snippet_logic_info .= "=> continue<br />";
-						}
-					
-					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
-						
-						$target_taxonomies = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
-						$arr_post_taxonomies = get_post_taxonomies($post_id);
-						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
-						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
-						
-						// TODO: simplify this logic
-						$arr_match = match_terms( $target_taxonomies, $post_id, $snippet_display );
-						$term_match = $arr_match['match'];
-						$snippet_logic_info .= $arr_match['info'];
-						if ( $term_match ) { // ! empty( $target_taxonomies ) && 
-							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."]<br />";
-							if ( $snippet_display == "selected" || $term_match == "exception") {
-								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
-								$snippet_status = "active";
-							} else {
-								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
-								$snippet_status = "inactive";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
-								$snippet_logic_info .= "=> BREAK<br />";
-								break;
-							}
-						} else {
-							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
-							if ( $snippet_display == "selected" ) {
-								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
-								$snippet_status = "inactive";
-								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
-							} else if ( $snippet_display == "notselected" ) {
-								// WIP
-								//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
-								//$snippet_status = "active";
-								//$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
-							}
-							// break?							
-						}
-					
-					} else if ( $key == 'target_by_taxonomy_archive' ) {
-					
-						$target_taxonomies = get_field($key, $snippet_id, false);
-						//$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
-						
-						if ( is_tax() ) {
-							// If this is a taxonomy archive AND target_taxonomies are set, check for a match
-							$snippet_logic_info .= "current page is_tax<br />";
-							foreach ( $target_taxonomies as $taxonomy ) {
-								if ( is_tax($taxonomy) ) {
-									$snippet_logic_info .= "This post is_tax archive for target taxonomy: $taxonomy<br />";
-									if ( $snippet_display == "selected" ) {
-										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
-										$snippet_status = "active";
-										$snippet_logic_info .= "=> BREAK<br />";
-										break;
-									} else {
-										$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
-										$snippet_status = "inactive";
-										$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
-									}
-								}
-							}
 						}
 					
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
@@ -657,6 +593,71 @@ function get_snippets ( $args = array() ) {
 							
 						} // if ( is_array($target_urls) && !empty($target_urls) ) {
 						
+					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
+						
+						$target_taxonomies = get_field($key, $snippet_id, false);
+						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						$arr_post_taxonomies = get_post_taxonomies($post_id);
+						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
+						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
+						
+						// TODO: simplify this logic
+						$arr_match = match_terms( $target_taxonomies, $post_id, $snippet_display );
+						$term_match = $arr_match['match'];
+						$snippet_logic_info .= $arr_match['info'];
+						if ( $term_match ) { // ! empty( $target_taxonomies ) && 
+							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."]<br />";
+							if ( $snippet_display == "selected" || $term_match == "exception") {
+								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+								$snippet_status = "active";
+							} else {
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+								$snippet_status = "inactive";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
+							}
+							//$snippet_logic_info .= "=> BREAK<br />";
+							//break;
+						} else {
+							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
+							if ( $snippet_display == "selected" ) {
+								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+								$snippet_status = "inactive";
+								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
+							} else if ( $snippet_display == "notselected" ) {
+								// WIP
+								//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+								//$snippet_status = "active";
+								//$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
+							}
+							// break?							
+						}
+					
+					} else if ( $key == 'target_by_taxonomy_archive' ) {
+					
+						$target_taxonomies = get_field($key, $snippet_id, false);
+						//$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						
+						if ( is_tax() ) {
+							// If this is a taxonomy archive AND target_taxonomies are set, check for a match
+							$snippet_logic_info .= "current page is_tax<br />";
+							foreach ( $target_taxonomies as $taxonomy ) {
+								if ( is_tax($taxonomy) ) {
+									$snippet_logic_info .= "This post is_tax archive for target taxonomy: $taxonomy<br />";
+									if ( $snippet_display == "selected" ) {
+										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+										$snippet_status = "active";
+										$snippet_logic_info .= "=> BREAK<br />";
+										break;
+									} else {
+										$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+										$snippet_status = "inactive";
+										$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
+									}
+								}
+							}
+						}
+					
 					} else if ( $key == 'target_by_location' ) {
 						// Is the given post/page in the right site location?
 						$target_locations = get_field($key, $snippet_id, false);
