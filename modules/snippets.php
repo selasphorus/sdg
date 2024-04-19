@@ -606,7 +606,7 @@ function get_snippets ( $args = array() ) {
 						$term_match = $arr_match['match'];
 						$snippet_logic_info .= $arr_match['info'];
 						if ( $term_match ) { // ! empty( $target_taxonomies ) && 
-							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."]<br />";
+							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."/".$snippet_display."]<br />";
 							if ( $snippet_display == "selected" || $term_match == "exception") {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
@@ -3361,8 +3361,12 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 						$match = false;
 						break;
 					} else {
-						$ts_info .= "Ok so far! (match_type 'all'; has_term; exclusion false) >> continue<br />";
-						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
+						if ( $snippet_display == "notselected" ) {
+							$ts_info .= "Match found (match_type 'all'; has_term; exclusion TRUE; snippet_display NOTselected)... WIP<br />";
+						} else {
+							$ts_info .= "Ok so far! (match_type 'all'; has_term; exclusion false) >> continue<br />";
+							//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
+						}
 					}
 				} else if ( $exclusion == 'no' ) {
 					$ts_info .= "NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false<br />";
