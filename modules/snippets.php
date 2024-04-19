@@ -114,7 +114,9 @@ function display_snippets ( $atts = [] ) {
 	if ( $devmode ) { 
 		$ts_info .= '<h2>Snippets -- WIP</h2>';
 		//$ts_info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
-		$ts_info .= "args: <pre>".print_r($args, true)."</pre>";
+	}
+	if ( $devmode || $do_ts ) {
+		$ts_info .= "display_snippets args: <pre>".print_r($args, true)."</pre>";
 	}
 
 	$arr_snippets = get_snippets ( $args );
@@ -171,7 +173,7 @@ function display_snippets ( $atts = [] ) {
 		$info .= '</section>';
 	}
 	// 
-	if ( $devmode ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $devmode || $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -181,7 +183,7 @@ function display_snippets ( $atts = [] ) {
 function get_snippets ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
@@ -212,6 +214,9 @@ function get_snippets ( $args = array() ) {
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
 	}*/
+	if ( $do_ts ) {
+		$info .= "get_snippets args: <pre>".print_r($args, true)."</pre>";
+	}
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
     
