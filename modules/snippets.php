@@ -343,7 +343,7 @@ function get_snippets ( $args = array() ) {
 		$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
 		//
 		$snippet_status = "unknown"; // init
-		$snippet_info .= '<div class="troubleshooting">';
+		//$snippet_info .= '<div class="troubleshooting">';
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display;
 		if ( $sidebar_id ) { $snippet_info .= '/'.$sidebar_id; }
 		$snippet_info .= ']<br />';
@@ -710,7 +710,7 @@ function get_snippets ( $args = array() ) {
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		//
-		$snippet_info .= '</div>'; // <div class="troubleshooting">
+		//$snippet_info = '<div class="troubleshooting">'.$snippet_info.'</div>'; // 
 		$info .= $snippet_info;
     }
     
