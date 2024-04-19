@@ -3221,7 +3221,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 		$post_id = get_the_ID();
 		//$post_type = get_post_type( $post_id );
 	}
-	$ts_info .= "match_terms post_id: ".$post_id."<br />";
+	$ts_info .= "match_terms post_id: ".$post_id." for snippet_display: ".$snippet_display."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
 		//sdg_log("divline2");
@@ -3381,7 +3381,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
 							$match = false; // post has the term but rules say it must NOT have this term	
 						} else if ( $snippet_display == "notselected" ) {
-							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE; snippet_display NOTselected) >> return true<br />";
+							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE; snippet_display NOTselected) >> return TRUE<br />";
 							$match = true; // post has the term so it excluded from being hidden
 						}					
 						break;
