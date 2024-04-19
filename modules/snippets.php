@@ -423,7 +423,7 @@ function get_snippets ( $args = array() ) {
 						//
 						//if ( $target_type && $post_type == $target_type ) {
 						if ( is_array($target_post_types) && in_array($post_type, $target_post_types) ) {
-							$snippet_logic_info .= "current post_type [".$post_type."] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
+							$snippet_logic_info .= "current post_type is in target post_types array<br />";//$snippet_logic_info .= "current post_type [".$post_type."] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $snippet_display == "selected" && $any_all == "any" ) {
