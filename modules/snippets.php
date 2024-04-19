@@ -464,18 +464,15 @@ function get_snippets ( $args = array() ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								$snippet_logic_info .= "=> BREAK<br />";
+								break;
 							}
-							$snippet_logic_info .= "=> BREAK<br />";
-							break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
 							if ( $snippet_display == "selected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								if ( $any_all == "all" ) {
-									$snippet_logic_info .= "=> BREAK<br />";
-									break;								
-								}
+								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
 							} else if ( $snippet_display == "notselected" ) {
 								// WIP
 								//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
