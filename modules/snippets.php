@@ -607,7 +607,7 @@ function get_snippets ( $args = array() ) {
 						$snippet_logic_info .= $arr_match['info'];
 						if ( $term_match ) { // ! empty( $target_taxonomies ) && 
 							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."/".$snippet_display."]<br />";
-							if ( $snippet_display == "selected" || $term_match == "exception") {
+							if ( $snippet_display == "selected" || $term_match === "exception") {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 							} else {
