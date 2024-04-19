@@ -173,7 +173,7 @@ function display_snippets ( $atts = [] ) {
 		$info .= '</section>';
 	}
 	// 
-	if ( $devmode || $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $devmode || $do_ts ) { $info .= $ts_info; }//$info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= "<hr />".$ts_info; } else { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
