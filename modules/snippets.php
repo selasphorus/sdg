@@ -3249,7 +3249,7 @@ function match_terms( $rules, $post_id ) {
 	} else {
 		$match_type = 'any'; // Default: match any of the given terms
 	}
-	$ts_info .= "match_type: ".$match_type."<br />";
+	$ts_info .= "match_type: ".$match_type."<br /><hr />";
 	//$ts_info .= "rules (str): ".$rules."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
@@ -3406,6 +3406,8 @@ function match_terms( $rules, $post_id ) {
 				$arr_tterms[$taxonomy] = array($term);
 			}
 			*/
+			
+			$ts_info .= "---<br />";
 			
 		} // end foreach $arr_rules
 		
