@@ -436,7 +436,7 @@ function get_snippets ( $args = array() ) {
 							} else if ( $snippet_display == "notselected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown [>> REMOVED FROM ARRAY]<br />";
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match any of the array values.<br />";
@@ -475,8 +475,8 @@ function get_snippets ( $args = array() ) {
 								break;
 							}
 							// Snippet is inactive -- is in array, and either selected/excluded or notselected/targeted
-							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
 							$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
 							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
 							$snippet_status = "inactive"; // ???
 							break;
@@ -492,6 +492,7 @@ function get_snippets ( $args = array() ) {
 								if ( $snippet_display == "selected" ) {
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
+									$snippet_logic_info .= "[>> REMOVED FROM ARRAY]<br />";
 								}
 							}
 							$snippet_logic_info .= "=> continue<br />";
@@ -568,7 +569,7 @@ function get_snippets ( $args = array() ) {
 											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
 										}
 									} else {
-										$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
+										//$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
 										//$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />";
 									}
 								} else {
@@ -591,8 +592,8 @@ function get_snippets ( $args = array() ) {
 										break;
 									}
 									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
-									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
 									$snippet_status = "inactive";
 									break;
 								}
@@ -622,7 +623,7 @@ function get_snippets ( $args = array() ) {
 							} else {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown [>> REMOVED FROM ARRAY]<br />";
 								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
 							}
 							//$snippet_logic_info .= "=> BREAK<br />";
@@ -632,6 +633,7 @@ function get_snippets ( $args = array() ) {
 							if ( $snippet_display == "selected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
+								$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
 								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
 							} else if ( $snippet_display == "notselected" ) {
 								// WIP
@@ -662,6 +664,7 @@ function get_snippets ( $args = array() ) {
 										$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 										$snippet_status = "inactive";
 										$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
+										$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
 									}
 								}
 							}
@@ -697,12 +700,14 @@ function get_snippets ( $args = array() ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should NOT be shown<br />";
+								$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
 							if ( $snippet_display == "selected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
+								$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
 							}
 						}
 						//
