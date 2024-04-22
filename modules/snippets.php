@@ -3432,8 +3432,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 			}
 			
-			if ( $match == true ) { $ts_info .= $term_info; }
-			$ts_info .= "---<br />";
+			if ( $match == true ) { $ts_info .= $term_info."---<br />"; }
 			
 		} // end foreach $arr_rules
 		
