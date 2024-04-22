@@ -614,9 +614,9 @@ function get_snippets ( $args = array() ) {
 					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
 						
 						$target_taxonomies = get_field($key, $snippet_id, false);
-						$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
+						//$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						$arr_post_taxonomies = get_post_taxonomies($post_id);
-						$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
+						//$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
 						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
 						
 						// TODO: simplify this logic
