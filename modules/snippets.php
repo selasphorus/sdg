@@ -529,11 +529,9 @@ function get_snippets ( $args = array() ) {
 							
 							foreach ( $target_urls as $k => $v ) {
 								
+								$url_match = false; // init
 								//$snippet_logic_info .= "target_url (v): ".print_r($v, true)."<br />";
 								
-								//$url = $v['url'];
-								//$field = get_field_object('my_field');
-								//$field_key = $field['key'];
 								// WIP/TODO: get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
 								if ( $key == 'target_by_url' ) {
@@ -549,7 +547,7 @@ function get_snippets ( $args = array() ) {
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
-									$url_match = false;
+									
 									if ( $url == $current_path ) {
 										// URL matches current path
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
@@ -583,7 +581,7 @@ function get_snippets ( $args = array() ) {
 								} else {
 									$snippet_logic_info .= "field_key '$field_key' not set for v: ".print_r($v,true)."<br />";
 								}
-								if ( $url_match ) {
+								if ( $url_match == true ) {
 									if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
 										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
