@@ -3328,8 +3328,6 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			$term = $rule['term'];
 			if ( isset($rule['operator']) ) { $operator = $rule['operator']; } else { $operator = null; }
 			$exclusion = $rule['exclusion'];
-			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
-			$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion."<br />";
 			
 			if ( $taxonomy == 'match_type' || empty($taxonomy) ) {
 				//if ( function_exists('sdg_log') ) { sdg_log("match_type or empty >> continue"); }
@@ -3343,6 +3341,13 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				//$ts_info .= " => arr_taxonomies: ".print_r($arr_taxonomies,true)."<br />";
 				continue;
 			}
+			
+			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
+			//$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion."<br />";
+			$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy;
+			if ( $operator ) { $ts_info .= "; operator: ".$operator; }
+			if ( $exclusion ) { $ts_info .= "; exclusion: ".$exclusion; }
+			$ts_info .= "<br />";
 			
 			// Handle the matching based on the number and complexity of the rules
 			if ( $num_rules == 1 ) {
