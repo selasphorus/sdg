@@ -506,7 +506,7 @@ function get_snippets ( $args = array() ) {
 						if ( is_array($target_urls) && !empty($target_urls) ) {
 						
 							//$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
-							$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
+							//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
 						
 							// Get current page path and/or slug
 							global $wp;
@@ -521,7 +521,7 @@ function get_snippets ( $args = array() ) {
 							
 							foreach ( $target_urls as $k => $v ) {
 								
-								$snippet_logic_info .= "target_url (v): ".print_r($v, true)."<br />";
+								//$snippet_logic_info .= "target_url (v): ".print_r($v, true)."<br />";
 								
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
