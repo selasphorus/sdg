@@ -3245,14 +3245,13 @@ function get_updated_arr_field_value ( $args = array() ) {
 //
 function match_terms( $rules, $post_id, $snippet_display ) {
     
+    // Init vars
     $arr_result = array();
     $match = null; // return true, false, or exception (??? wip)
     $ts_info = "";
+    $num_matches = 0;
     
-	if ( $post_id == null ) { 
-		$post_id = get_the_ID();
-		//$post_type = get_post_type( $post_id );
-	}
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
 	$ts_info .= "match_terms post_id: ".$post_id." for snippet_display: ".$snippet_display."<br />";
 	
 	if ( function_exists('sdg_log') ) { 
@@ -3261,17 +3260,12 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 		//sdg_log("post_id: ".$post_id);
 	}
 	
-	// init/defaults
-	//$match = false;
-	//$arr_tterms = array(); // Multidimensional array of taxonomies & terms
-	
 	// Determine the match_type
 	if ( (strpos($rules, '||') !== false && strpos($rules, '&&') !== false )  // String includes both 'and' AND 'or' operators
 		|| preg_match("/\s*\:\s*-\s*/", $rules) != 0 // has_exclusions
 		//|| preg_match("/(\\()*(\\))/", $x) !== false // String contains something (enclosed within parens)
 		) { 
 		$match_type = 'complex';
-		$matches_found = 0;
 	} else if ( 
 		strpos($rules, '&&') !== false // If string contains "and" but no or operator, and no parens
 		|| preg_match("/match_type\s*\:\s*all/", $rules) != 0 // Match if string contains "match_type:all" (with or without whitespace around colon)
@@ -3430,7 +3424,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 					} else {
 						$ts_info .= "Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue"); }
-						$matches_found++;
+						$num_matches++;
 					}
 				} else if ( $exclusion == 'no' ) {
 					$ts_info .= "NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false (?)<br />";
@@ -3440,59 +3434,24 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 			}
 			
-			/*
-			// Store terms in tterms array for match_type = all and complex matching once the loop is finished
-			if ( $exclusion == true ) {
-				$term = "-".$term;
-			}
-			if ($arr_tterms[$taxonomy]) {
-				array_push($arr_tterms[$taxonomy],$term);
-			} else {
-				$arr_tterms[$taxonomy] = array($term);
-			}
-			*/
-			
 			$ts_info .= "---<br />";
 			
 		} // end foreach $arr_rules
 		
 		// If we got through the entire list of rules and the post matched all the rules, return true
-		if ( $match_type == 'all' ) {
+		if ( $match_type == 'all' && $num_matches == count($arr_rules) ) {
+			$ts_info .= "match_type = all; num_matches [".$num_matches."] equal to count(arr_rules) [".count($arr_rules)."]<br />";
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'all') >> return true"); }
 			//return true;
 			$match = true;
-		} else if ( $match_type == 'complex' && $matches_found > 0 ) {
+		} else if ( $match !=== false && $match_type == 'complex' && $num_matches > 0 ) {
+			// WIP
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
 			//return true;
 			$match = true;
 		}
 		
-		// Now all that's left is to deal with complex queries...
-		
-		//if ( !empty($operator) )
-		
-		/*if ( $arr_tterms ) {
-			
-			foreach ( $arr_tterms as $taxonomy => $arr_terms ) {
-				sdg_log("taxonomy: ".$taxonomy."; arr_terms: ".print_r($arr_terms, true));
-				
-				$post_terms = get_the_terms( $post_id, $taxonomy );
-				
-				if ( has_term( $term, $taxonomy, $post_id ) ) {
-					if ( $match_type == 'all' ) { // If a match has been found and this is a simple query, go ahead and return match/true
-						return true;
-					} else if ( $match_type == 'complex' ) {
-						//
-					}
-				}
-			}
-		}*/
-		
 	}
-
-	//if ( function_exists('sdg_log') ) { sdg_log("End of the line. Returning null."); }
-	//return null;
-	//return $match;
 	
 	$arr_result['match'] = $match;
 	$arr_result['info'] = $ts_info;
