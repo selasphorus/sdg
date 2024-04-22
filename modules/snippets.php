@@ -516,6 +516,7 @@ function get_snippets ( $args = array() ) {
 							//if ( $permalink != $current_url ) { $current_url = $permalink; }
 							$current_path = parse_url($current_url, PHP_URL_PATH);
 							$snippet_logic_info .= "current_path: ".$current_path."<br />";
+							$snippet_logic_info .= "-----<br />";
 							
 							foreach ( $target_urls as $k => $v ) {
 								//$url = $v['url'];
@@ -565,6 +566,8 @@ function get_snippets ( $args = array() ) {
 									} else {
 										$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
 									}
+								} else {
+									$snippet_logic_info .= "field_key '$field_key' not set for v: ".print_r($v,true)."<br />";
 								}
 								if ( $url_match ) {
 									if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
