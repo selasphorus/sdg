@@ -3339,7 +3339,8 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			// Check to see if taxonomy even APPLIES to the given post before worrying about whether it matches a specific term in that taxonomy
 			$arr_taxonomies = get_post_taxonomies(); // get_post_taxonomies( $post_id );
 			if ( !in_array( $taxonomy, $arr_taxonomies ) ) {
-				$ts_info .= "taxonomy '$taxonomy' does not apply => arr_taxonomies: ".print_r($arr_taxonomies,true)."<br />";
+				$ts_info .= "taxonomy '$taxonomy' does not apply<br />";
+				//$ts_info .= " => arr_taxonomies: ".print_r($arr_taxonomies,true)."<br />";
 				continue;
 			}
 			
