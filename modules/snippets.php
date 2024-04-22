@@ -546,6 +546,7 @@ function get_snippets ( $args = array() ) {
 									if ( $url == $current_path ) {
 										// URL matches current path
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
+										$snippet_logic_info .= "---<br />";
 										$url_match = true;										
 									} else if ( strpos($url, '*') !== false ) {
 										// Check for wildcard match
@@ -568,6 +569,7 @@ function get_snippets ( $args = array() ) {
 											$url_match = true;
 											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
 										}
+										$snippet_logic_info .= "---<br />";
 									} else {
 										//$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
 										//$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />";
@@ -597,7 +599,6 @@ function get_snippets ( $args = array() ) {
 									$snippet_status = "inactive";
 									break;
 								}
-								$snippet_logic_info .= "---<br />";
 							} // foreach ( $target_urls as $k => $v ) {
 							if ( $snippet_status == "inactive" ) { $snippet_logic_info .= "current_path not targeted<br />"; }
 							
@@ -630,11 +631,12 @@ function get_snippets ( $args = array() ) {
 							//break;
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target taxonomy terms<br />";
-							if ( $snippet_display == "selected" ) {
+							if ( $snippet_display == "selected" && $any_all == "all" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
 								$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
-								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
+								$snippet_logic_info .= "=> BREAK<br />";
+								break;
 							} else if ( $snippet_display == "notselected" ) {
 								// WIP
 								//$active_snippets[] = $snippet_id; // add the item to the active_snippets array
