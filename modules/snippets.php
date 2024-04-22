@@ -439,7 +439,8 @@ function get_snippets ( $args = array() ) {
 							} else if ( $snippet_display == "notselected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown [>> REMOVED FROM ARRAY]<br />";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match any of the array values.<br />";
@@ -481,7 +482,8 @@ function get_snippets ( $args = array() ) {
 							}
 							// Snippet is inactive -- is in array, and either selected/excluded or notselected/targeted
 							$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
-							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
+							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
+							$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
 							$snippet_status = "inactive"; // ???
 							break;
@@ -497,7 +499,7 @@ function get_snippets ( $args = array() ) {
 								if ( $snippet_display == "selected" ) {
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
-									$snippet_logic_info .= "[>> REMOVED FROM ARRAY]<br />";
+									$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 								}
 							}
 							$snippet_logic_info .= "=> continue<br />";
@@ -604,7 +606,8 @@ function get_snippets ( $args = array() ) {
 									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
-									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
+									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
+									$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 									$snippet_logic_info .= "---<br />";
 									break;
 								}
@@ -634,7 +637,8 @@ function get_snippets ( $args = array() ) {
 							} else {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown [>> REMOVED FROM ARRAY]<br />";
+								$snippet_logic_info .= "...but because snippet_display == notselected, that means it should not be shown<br />";
+								$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 								if ( $any_all == "all" ) { $snippet_logic_info .= "=> BREAK<br />"; break; }
 							}
 							//$snippet_logic_info .= "=> BREAK<br />";
@@ -721,7 +725,8 @@ function get_snippets ( $args = array() ) {
 							if ( $snippet_display == "selected" && $any_all == "all" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= " [>> REMOVED FROM ARRAY] (selected/ALL)<br />";
+								$snippet_logic_info .= "(selected/ALL)<br />";
+								$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 							}
 						}
 						//
