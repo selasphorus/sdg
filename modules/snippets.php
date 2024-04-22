@@ -598,7 +598,7 @@ function get_snippets ( $args = array() ) {
 								}
 								$snippet_logic_info .= "---<br />";
 							} // foreach ( $target_urls as $k => $v ) {
-							$snippet_logic_info .= "current_path not targeted<br />";
+							if ( $snippet_status == "inactive" ) { $snippet_logic_info .= "current_path not targeted<br />"; }
 							
 						} // if ( is_array($target_urls) && !empty($target_urls) ) {
 						
