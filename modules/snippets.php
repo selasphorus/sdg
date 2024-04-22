@@ -551,7 +551,6 @@ function get_snippets ( $args = array() ) {
 									if ( $url == $current_path ) {
 										// URL matches current path
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
-										$snippet_logic_info .= "---<br />";
 										$url_match = true;										
 									} else if ( strpos($url, '*') !== false ) {
 										// Check for wildcard match
@@ -590,6 +589,7 @@ function get_snippets ( $args = array() ) {
 										//$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_url/selected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
+										$snippet_logic_info .= "---<br />";
 										break;
 									} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
 										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
@@ -598,12 +598,14 @@ function get_snippets ( $args = array() ) {
 										//$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_url/notselected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
+										$snippet_logic_info .= "---<br />";
 										break;
 									}
 									// Snippet is inactive -- found in target urls, and either selected/excluded or notselected/targeted
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
-									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
 									$snippet_status = "inactive";
+									$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display." [>> REMOVED FROM ARRAY]<br />";
+									$snippet_logic_info .= "---<br />";
 									break;
 								}
 							} // foreach ( $target_urls as $k => $v ) {
