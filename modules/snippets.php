@@ -563,7 +563,7 @@ function get_snippets ( $args = array() ) {
 											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
 										}
 									} else {
-										//$snippet_logic_info .= "url $url does not match current_path $current_path<br />";
+										$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
 									}
 								}
 								if ( $url_match ) {
@@ -588,6 +588,7 @@ function get_snippets ( $args = array() ) {
 									$snippet_status = "inactive";
 									break;
 								}
+								$snippet_logic_info .= "---<br />";
 							} // foreach ( $target_urls as $k => $v ) {
 							$snippet_logic_info .= "current_path not targeted<br />";
 							
