@@ -3444,7 +3444,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'all') >> return true"); }
 			//return true;
 			$match = true;
-		} else if ( $match !=== false && $match_type == 'complex' && $num_matches > 0 ) {
+		} else if ( $match !== false && $match_type == 'complex' && $num_matches > 0 ) {
 			// WIP
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
 			//return true;
