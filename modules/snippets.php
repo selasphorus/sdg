@@ -3343,10 +3343,10 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			
 			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
 			//$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion."<br />";
-			$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy;
-			if ( $operator ) { $ts_info .= "; operator: ".$operator; }
-			if ( $exclusion ) { $ts_info .= "; exclusion: ".$exclusion; }
-			$ts_info .= "<br />";
+			$term_info = "term: ".$term."; taxonomy: ".$taxonomy;
+			if ( $operator ) { $term_info .= "; operator: ".$operator; }
+			if ( $exclusion ) { $term_info .= "; exclusion: ".$exclusion; }
+			$term_info .= "<br />";
 			
 			// Handle the matching based on the number and complexity of the rules
 			if ( $num_rules == 1 ) {
@@ -3432,6 +3432,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 			}
 			
+			if ( $match == true ) { $ts_info .= $term_info; }
 			$ts_info .= "---<br />";
 			
 		} // end foreach $arr_rules
@@ -3447,7 +3448,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
 			//return true;
 			$match = true;
-		}
+		}		
 		
 	}
 	
