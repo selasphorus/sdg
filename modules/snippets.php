@@ -519,6 +519,9 @@ function get_snippets ( $args = array() ) {
 							$snippet_logic_info .= "-----<br />";
 							
 							foreach ( $target_urls as $k => $v ) {
+								
+								$snippet_logic_info .= "target_url (v): ".print_r($v, true)."<br />";
+								
 								//$url = $v['url'];
 								//$field = get_field_object('my_field');
 								//$field_key = $field['key'];
@@ -565,6 +568,7 @@ function get_snippets ( $args = array() ) {
 										}
 									} else {
 										$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
+										//$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />";
 									}
 								} else {
 									$snippet_logic_info .= "field_key '$field_key' not set for v: ".print_r($v,true)."<br />";
