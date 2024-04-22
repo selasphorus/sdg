@@ -364,7 +364,8 @@ function get_snippets ( $args = array() ) {
 			$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 			$snippet_status = "active";
 			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
-			$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
+			//$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
+			$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
 			
 		} else {
 		
@@ -376,6 +377,7 @@ function get_snippets ( $args = array() ) {
 				$snippet_status = "inactive";
 			} else if ( $snippet_display == "notselected" ) {
 				$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+				$snippet_logic_info .= "[>> ADDED TO ARRAY] (by default/notselected)<br />";
 				$snippet_status = "active";
 			}
 		
@@ -429,7 +431,8 @@ function get_snippets ( $args = array() ) {
 							if ( $snippet_display == "selected" && $any_all == "any" ) {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
+								//$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
+								$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
@@ -462,14 +465,16 @@ function get_snippets ( $args = array() ) {
 							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" && 
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_post/selected)<br />";
+								$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
+								//$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_post/selected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
 							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_post/notselected)<br />";
+								$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
+								//$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_post/notselected)<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
@@ -581,14 +586,16 @@ function get_snippets ( $args = array() ) {
 									if ( $key == 'target_by_url' && $snippet_display == "selected" ) {
 										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
-										$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_url/selected)<br />";
+										$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
+										//$snippet_logic_info .= "=> snippet_id added to active_snippets array (target_by_url/selected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
 									} else if ( $key == 'exclude_by_url' && $snippet_display == "notselected" ) {
 										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 										$snippet_status = "active";
-										$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_url/notselected)<br />";
+										$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
+										//$snippet_logic_info .= "=> snippet_id added to active_snippets array (exclude_by_url/notselected)<br />";
 										//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
@@ -620,6 +627,7 @@ function get_snippets ( $args = array() ) {
 							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."/".$snippet_display."]<br />";
 							if ( $snippet_display == "selected" || $term_match === "exception") {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+								$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
 								$snippet_status = "active";
 							} else {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
@@ -659,6 +667,7 @@ function get_snippets ( $args = array() ) {
 									$snippet_logic_info .= "This post is_tax archive for target taxonomy: $taxonomy<br />";
 									if ( $snippet_display == "selected" ) {
 										$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+										$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
 										$snippet_status = "active";
 										$snippet_logic_info .= "=> BREAK<br />";
 										break;
@@ -695,6 +704,7 @@ function get_snippets ( $args = array() ) {
 							$snippet_logic_info .= "This post matches the target_locations<br />";
 							if ( $snippet_display == "selected" ) {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
+								$snippet_logic_info .= " [>> ADDED TO ARRAY]<br />";
 								$snippet_status = "active";
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
