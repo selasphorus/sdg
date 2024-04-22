@@ -716,10 +716,10 @@ function get_snippets ( $args = array() ) {
 							}
 						} else {
 							$snippet_logic_info .= "This post does NOT match the target_locations<br />";
-							if ( $snippet_display == "selected" ) {
+							if ( $snippet_display == "selected" && $any_all == "all" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
-								$snippet_logic_info .= " [>> REMOVED FROM ARRAY]<br />";
+								$snippet_logic_info .= " [>> REMOVED FROM ARRAY] (selected/ALL)<br />";
 							}
 						}
 						//
