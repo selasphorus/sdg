@@ -571,7 +571,7 @@ function get_snippets ( $args = array() ) {
 										// match to $current_path? true if current_path begins with url_base
 										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
 											$url_match = true;
-											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base<br />";
+											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base >> url_match = TRUE<br />";
 										}
 										$snippet_logic_info .= "---<br />";
 									} else {
@@ -3367,7 +3367,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 						break;
 					}                        
 				} else if ($exclusion == 'no') {
-					$ts_info .= "NO match found (single rule; NOT has_term; exclusion false) >> return false<br />";
+					//$ts_info .= "NO match found (single rule; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (single rule; NOT has_term; exclusion false) >> return false"); }
 					//return false; // post has term but single rule requires posts withOUT that term, therefore no match
 					$match = false;
@@ -3400,7 +3400,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 						}
 					}
 				} else if ( $exclusion == 'no' ) {
-					$ts_info .= "NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false<br />";
+					//$ts_info .= "NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'all'; NOT has_term; exclusion false) >> return false"); }
 					//return false; // post does not have the term and rules require it must match all
 					$match = false;
@@ -3425,7 +3425,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 						$num_matches++;
 					}
 				} else if ( $exclusion == 'no' ) {
-					$ts_info .= "NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false (?)<br />";
+					//$ts_info .= "NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false (?)<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false"); }
 					//return false; // post does not have the term and rules require it must match all
 				}
