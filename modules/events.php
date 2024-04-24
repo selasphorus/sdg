@@ -2846,14 +2846,12 @@ function event_program_cleanup( $atts = [] ) {
 		
 			if ( $scope == "program_items" ) {
 				$info .= "No matching posts found.<br />";
-				$info .= '<div class="troubleshooting">';
-				$info .= $ts_info;
 				/*
-				$info .= "field_check: ".$field_check."<br />";
-				$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
-				$info .= "Last SQL-Query: <pre>".$result->request."</pre>";
+				$ts_info .= "field_check: ".$field_check."<br />";
+				$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
+				$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 				*/
-				$info .= '</div>';
+				$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
 			}
 		
 		}
