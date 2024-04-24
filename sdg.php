@@ -610,7 +610,6 @@ add_filter('acf/settings/row_index_offset', '__return_zero');
 function devmode_active() {
 	
 	$devmode = false; // init
-	$queenbee = get_option( 'devadmin_username', 'queenbee' ); // WIP
 	
     if ( is_user_logged_in() ) {
         $current_user = wp_get_current_user();
@@ -622,7 +621,7 @@ function devmode_active() {
 	$devmode = get_query_var('devmode');
 	if ($devmode !== "" && $devmode !== "false") {      
 		return true;        
-	} else if ( $username == 'queenbee' && is_dev_site() ) { 
+	} else if ( is_dev_site() && function_exists( 'queenbee' ) && queenbee() ) {
         return true;
 	}
 	

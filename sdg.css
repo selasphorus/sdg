@@ -121,17 +121,12 @@ div.code {
 .devmode .sidebar .snippet.widget,
 .admin-view .sidebar .snippet,
 .admin-view .sidebar .snippet.widget,
-.stcdev .sidebar .snippet,
-.stcdev .sidebar .snippet.widget {
+.queenbee .sidebar .snippet,
+.queenbee .sidebar .snippet.widget {
 	display: block;
 	opacity: 0.5;
 }
 */
-
-.devsite .sidebar .snippet,
-.devsite .sidebar .snippet.widget {
-	border: 5px dotted #f67b39;
-}
 
 /** END WIP ***/
 
@@ -236,8 +231,8 @@ body.admin-bar .msg_bar_close {
 }
 
 .devmode .troubleshooting,
-.stcdev .devinfo,
-.stcdev .devview {
+.queenbee .devinfo,
+.queenbee .devview {
 	display: block;
 	margin: 0.5rem 0;
 }
@@ -251,10 +246,10 @@ body.admin-bar .msg_bar_close {
 }
 
 .devmode .troubleshooting.inline,
-.stcdev span.devinfo,
-.stcdev span.devview
-.stcdev .devinfo.inline,
-.stcdev .devview.inline {
+.queenbee span.devinfo,
+.queenbee span.devview
+.queenbee .devinfo.inline,
+.queenbee .devview.inline {
 	display: inline;
 }
 
