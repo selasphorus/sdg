@@ -619,7 +619,7 @@ function devmode_active() {
     }
     
 	$devmode = get_query_var('devmode');
-	if ($devmode !== "" && $devmode !== "false") {      
+	if ($devmode != "" && $devmode != "false") {      
 		return true;        
 	} else if ( is_dev_site() && function_exists( 'queenbee' ) && queenbee() ) {
         return true;
