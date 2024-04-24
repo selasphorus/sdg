@@ -793,7 +793,6 @@ function get_event_program_items( $atts = [] ) {
 	
 	if ($post_id == null) { $post_id = get_the_ID(); }
 	$ts_info .= "<!-- Event Program Items for post_id: $post_id -->";
-    if ( is_dev_site() ) { $info .= "<!-- DEV -->"; } else { $info .= "<!-- NOT dev -->"; }
     //$ts_info .= "<!-- display: $display -->";
     
     // What type of program is this? Service order or concert program?
@@ -1046,7 +1045,7 @@ function get_event_program_items( $atts = [] ) {
 			}
 			
 			// Insert row_info for troubleshooting
-			if ( is_dev_site() || devmode_active() ) {
+			if ( devmode_active() ) { //if ( is_dev_site() || devmode_active() ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
@@ -1100,7 +1099,7 @@ function get_event_program_items( $atts = [] ) {
 			
 			// Data Cleanup -- WIP
 			// ...figuring out how to sync repertoire related_events w/ updates to program items -- display some TS info to aid this process
-			if ( is_dev_site() ) {
+			/*if ( devmode_active() ) {
 				$arr_row_info = event_program_row_cleanup ( $post_id, $i, $row, "program_items" );								
 				$ts_info .= $arr_row_info['info'];
 				$row_errors = $arr_row_info['errors'];
@@ -1114,7 +1113,7 @@ function get_event_program_items( $atts = [] ) {
 						}					
 					}
 				}
-			}
+			}*/
 
 			// --------------------
             

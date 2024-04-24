@@ -610,7 +610,7 @@ add_filter('acf/settings/row_index_offset', '__return_zero');
 function devmode_active() {
 	
 	$devmode = false; // init
-	$queenbee = get_option( 'devadmin_username', 'queenbee' );
+	$queenbee = get_option( 'devadmin_username', 'queenbee' ); // WIP
 	
     if ( is_user_logged_in() ) {
         $current_user = wp_get_current_user();

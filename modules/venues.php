@@ -56,7 +56,7 @@ function get_cpt_venue_content( $post_id = null ) {
     $arr_obj_organs = get_related_posts( $post_id, 'organ', 'venues_organs' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
     if ( $arr_obj_organs ) {
         
-        $info .= '<div class="dev-only organs">';
+        $info .= '<div class="devview organs">';
         $info .= "<h3>Organs:</h3>";
 
         foreach ( $arr_obj_organs as $organ ) {
@@ -71,7 +71,7 @@ function get_cpt_venue_content( $post_id = null ) {
 	$term_obj_list = get_the_terms( $post_id, 'venue_category' );
 	if ( $term_obj_list ) {
 		$terms_string = join(', ', wp_list_pluck($term_obj_list, 'name'));
-		$info .= '<div class="dev-only categories">';
+		$info .= '<div class="devview categories">';
 		if ( $terms_string ) {
 			$info .= "<p>Categories: ".$terms_string."</p>";
 		}

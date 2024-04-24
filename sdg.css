@@ -221,7 +221,7 @@ body.admin-bar .msg_bar_close {
 /*** Troubleshooting & Dev styles ***/
 /* TODO: streamline, simplify */
 .devinfo,
-.dev-only,
+.devview,
 .troubleshooting,
 .troubleshooting.inline {
 	display: none;
@@ -235,9 +235,9 @@ body.admin-bar .msg_bar_close {
 	background-color: #d1fb9d;
 }
 
-.dev-view .troubleshooting,
+.devmode .troubleshooting,
 .stcdev .devinfo,
-.stcdev .dev-only {
+.stcdev .devview {
 	display: block;
 	margin: 0.5rem 0;
 }
@@ -250,16 +250,12 @@ body.admin-bar .msg_bar_close {
 	margin-bottom: 0;
 }
 
-.dev-view .troubleshooting.inline,
+.devmode .troubleshooting.inline,
 .stcdev span.devinfo,
-.stcdev span.dev-only
+.stcdev span.devview
 .stcdev .devinfo.inline,
-.stcdev .dev-only.inline {
+.stcdev .devview.inline {
 	display: inline;
-}
-
-div.dev-view {
-	margin: 1rem 0;
 }
 
 /*** Tables ***/

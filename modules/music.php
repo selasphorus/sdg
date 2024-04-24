@@ -2020,7 +2020,7 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                 
                 if ( $form_type == "advanced_search" ) {
                     $info .= '<br />';
-                    /*$info .= '<div class="dev-only">';
+                    /*$info .= '<div class="devview">';
                     $info .= '<span class="troubleshooting smaller">'.$field_info.'</span>\n'; // tft
                     $info .= '</div>';*/
                     //$info .= '<!-- '."\n".$field_info."\n".' -->';
