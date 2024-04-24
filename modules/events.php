@@ -956,9 +956,9 @@ function get_event_program_items( $atts = [] ) {
             if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
             //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
-            $row_info .= "<!-- START arr_item_name['info'] -->";
+            $row_info .= "<!-- START arr_item_name['ts_info'] -->";
             $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
-            $row_info .= "<!-- END arr_item_name['info'] -->";
+            $row_info .= "<!-- END arr_item_name['ts_info'] -->";
             //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
             //$row_info .= "program_item_name: $program_item_name";
             //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
@@ -1264,7 +1264,7 @@ function get_program_item_name ( $args = array() ) {
 		//'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
 		'program_item_label'=> null, // used for match args and to determine use_title_as_label >> do this some other way before calling this fcn?
 		//'show_item_title'	=> null, // don't need to pass this as arg -- it's a row parameter, no?
-		'program_composers'	=> null,
+		'program_composers'	=> array(),
 		'run_updates'   => false, // related to placeholder fill-in functionality -- move this to some other fcn
 		'display'    	=> null, // arg for get_rep_info
 	);
