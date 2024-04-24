@@ -618,8 +618,8 @@ function devmode_active() {
     	$username = null;
     }
     
-	$devmode = get_query_var('devmode');
-	if ($devmode != "" && $devmode != "false") {      
+	$devmode = get_query_var('dev');
+	if ($devmode == "true" || $devmode == "yes") { //if ($devmode != "" && $devmode != "false") {
 		return true;        
 	} else if ( is_dev_site() && function_exists( 'queenbee' ) && queenbee() ) {
         return true;
