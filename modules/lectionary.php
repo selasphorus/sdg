@@ -508,6 +508,11 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
     
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
 	$info = "";
 	$ts_info = "";
 	$hide_day_titles = 0;
@@ -521,7 +526,6 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
     
     // Extract
 	extract( $args );
-	$devmode = get_query_var('devmode');
 	
 	$info .= "\n<!-- get_day_title -->\n";
 
@@ -853,7 +857,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( $devmode ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	

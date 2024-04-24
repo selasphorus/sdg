@@ -512,7 +512,7 @@ function sdg_scripts_method() {
 // Add custom query vars
 add_filter( 'query_vars', 'sdg_query_vars' );
 function sdg_query_vars( $qvars ) {
-	$qvars[] = 'devmode';
+	$qvars[] = 'dev';
 	$qvars[] = 'y'; // = year -- for date_calculations (and - ?)
     return $qvars;
 }
