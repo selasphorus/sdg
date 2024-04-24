@@ -125,7 +125,7 @@ function get_event_program_content( $post_id = null ) {
 	// Init vars
 	$info = "";
 	$ts_info = "";
-    $ts_info .= "+~+~+~+~+ get_event_program_content +~+~+~+~+<br />";
+    $ts_info .= "===== get_event_program_content =====<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // What type of program is this? Service order or concert program?
@@ -163,7 +163,7 @@ function get_event_program_content( $post_id = null ) {
     }
     
 	$info .= '</div>';
-    $ts_info .= "+~+~+~+~+ // get_event_program_content +~+~+~+~+<br />";
+    $ts_info .= "===== // get_event_program_content =====<br />";
 	
 	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	$info = $ts_info.$info; // ts_info at the top of the page
@@ -283,7 +283,7 @@ function get_event_personnel( $atts = [] ) {
     $arr_info = array();
     $info = "";
     $ts_info = "";
-    $ts_info .= "+~+~+~+~+ get_event_personnel +~+~+~+~+<br />";
+    $ts_info .= "===== get_event_personnel =====<br />";
     
     // *** WIP ***
     //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
@@ -782,7 +782,7 @@ function get_event_program_items( $atts = [] ) {
     $arr_info = array(); // wip 06/27/23
     $info = "";
     $ts_info = "";
-    $ts_info .= "+~+~+~+~+ get_event_program_items +~+~+~+~+<br />";
+    $ts_info .= "===== get_event_program_items =====<br />";
     
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
@@ -2399,7 +2399,7 @@ function event_program_cleanup( $atts = [] ) {
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
 			//$info .= '<div class="troubleshooting">'.$ts_info_personnel.'</div>';
 			//
-			$info .= "=====================<br />";
+			$info .= "---------------------<br />";
 			
 			foreach ( $posts AS $post_id ) {
 			
@@ -2728,7 +2728,7 @@ function event_program_cleanup( $atts = [] ) {
 				$info .= '<div class="troubleshooting">'.$ts_info_program_items.'</div>';
 			}			
 			//
-			$info .= "=====================<br />";
+			$info .= "---------------------<br />";
 			
 			foreach ( $posts AS $post_id ) {
 				
