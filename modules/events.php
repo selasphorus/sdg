@@ -125,6 +125,7 @@ function get_event_program_content( $post_id = null ) {
 	// Init vars
 	$info = "";
 	$ts_info = "";
+    $ts_info .= "+~+~+~+~+ get_event_program_content +~+~+~+~+<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // What type of program is this? Service order or concert program?
@@ -162,6 +163,7 @@ function get_event_program_content( $post_id = null ) {
     }
     
 	$info .= '</div>';
+    $ts_info .= "+~+~+~+~+ // get_event_program_content +~+~+~+~+<br />";
 	
 	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	$info = $ts_info.$info; // ts_info at the top of the page
@@ -250,11 +252,6 @@ function get_event_ticketing_info( $post_id = null ) {
         $info .= '</div>';
     }
     
-    // Code comments for troubleshooting
-    //$info .= "<!-- post_id: $post_id -->";
-    //$info .= "<!-- program_type: $program_type -->";
-    //$info .= "<!-- program_order: $program_order -->";
-    
 	$info .= '</div>';
 	
 	return $info;
@@ -286,6 +283,7 @@ function get_event_personnel( $atts = [] ) {
     $arr_info = array();
     $info = "";
     $ts_info = "";
+    $ts_info .= "+~+~+~+~+ get_event_personnel +~+~+~+~+<br />";
     
     // *** WIP ***
     //if ( devmode_active() || is_dev_site() ) { $run_updates = true; } // TMP disabled 03/25/22
@@ -784,6 +782,7 @@ function get_event_program_items( $atts = [] ) {
     $arr_info = array(); // wip 06/27/23
     $info = "";
     $ts_info = "";
+    $ts_info .= "+~+~+~+~+ get_event_personnel +~+~+~+~+<br />";
     
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
