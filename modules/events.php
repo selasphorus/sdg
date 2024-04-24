@@ -1281,7 +1281,7 @@ function get_program_item_name ( $args = array() ) {
     // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
     // TODO: add option to display all movements/sections of a musical work
     
-    $ts_info .= "row: ".print_r($row, true)."<br />";
+    $ts_info .= "row: <pre>".print_r($row, true)."</pre>";
     
     $num_items = 0; // init
     
