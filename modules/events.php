@@ -1053,7 +1053,7 @@ function get_event_program_items( $atts = [] ) {
 				if ( $display == 'table' ) {
 					$table .= $row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					$info .= $row_info;
+					$info .= '<div class="troubleshooting">'.$row_info.'</div>'; //$info .= $row_info;
 				}
 			}
 			
