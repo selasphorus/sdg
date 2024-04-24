@@ -498,7 +498,7 @@ function get_snippets ( $args = array() ) {
 								//???
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
 								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; 
-								if ( $snippet_display == "selected" ) {
+								if ( $snippet_display == "selected" && $any_all == "all" ) {
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
 									$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
