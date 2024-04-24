@@ -791,12 +791,12 @@ function get_event_program_items( $atts = [] ) {
     // TODO: deal more thoroughly w/ non-table display option, or eliminate that parameter altogether.
 	
 	if ($post_id == null) { $post_id = get_the_ID(); }
-	$ts_info .= "<!-- Event Program Items for post_id: $post_id -->";
+	$ts_info .= "Event Program Items for post_id: $post_id<br />";
     //$ts_info .= "<!-- display: $display -->";
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
-    $ts_info .= "<!-- program_type: $program_type -->";
+    $ts_info .= "program_type: $program_type<br />>";
     
     // Program Layout -- left or centered?
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
@@ -818,7 +818,7 @@ function get_event_program_items( $atts = [] ) {
     if ( empty($rows) ) { $rows = array(); }
     //$rows = (!empty(get_field('program_items', $post_id))) ? 'default' : array();
     
-    $ts_info .= "<!-- ".count($rows)." program_items rows -->"; // tft
+    $ts_info .= count($rows)." program_items rows<br />>"; // tft
     
     if ( count($rows) > 0 ) {
         
@@ -866,7 +866,7 @@ function get_event_program_items( $atts = [] ) {
             
             // Is a row_type set? WIP -- working on phasing out deprecated fields like 'show_item_label' in favor of simple row_types setup
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
-            $row_info .= "<!-- get_event_program_items ==> row_type: ".$row_type." -->";
+            $row_info .= "get_event_program_items ==> row_type: ".$row_type."<br />>";
             // ROW TYPES WIP: 
             /*
             Program item rows types:
@@ -951,7 +951,7 @@ function get_event_program_items( $atts = [] ) {
             if ( $arr_item_name['use_title_as_label'] ) {
                 $use_title_as_label = true;
             	$program_item_label = $arr_item_name['title_as_label'];
-            	$row_info .= "<!-- title_as_label -->";
+            	$row_info .= "title_as_label<br />>";
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
@@ -961,9 +961,9 @@ function get_event_program_items( $atts = [] ) {
             if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
             //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
-            $row_info .= "<!-- START arr_item_name['ts_info'] -->";
+            $row_info .= "START arr_item_name['ts_info']<br />";
             $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
-            $row_info .= "<!-- END arr_item_name['ts_info'] -->";
+            $row_info .= "END arr_item_name['ts_info']<br />";
             //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
             //$row_info .= "program_item_name: $program_item_name";
             //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
