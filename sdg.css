@@ -228,6 +228,8 @@ body.admin-bar .msg_bar_close {
     text-align: left;
 	padding: 1rem;
 	background-color: #d1fb9d;
+	font-size: 0.9rem;
+	font-family: monospace;
 }
 
 .devmode .troubleshooting,
