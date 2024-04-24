@@ -782,7 +782,7 @@ function get_event_program_items( $atts = [] ) {
     $arr_info = array(); // wip 06/27/23
     $info = "";
     $ts_info = "";
-    $ts_info .= "+~+~+~+~+ get_event_personnel +~+~+~+~+<br />";
+    $ts_info .= "+~+~+~+~+ get_event_program_items +~+~+~+~+<br />";
     
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
