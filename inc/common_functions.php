@@ -19,6 +19,7 @@ function sdg_post_title ( $args = array() ) {
     
     // Init vars
 	$info = "";
+	$ts_info = "";
 	//$ts_info = "START sdg_post_title<br />";
 	
 	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
