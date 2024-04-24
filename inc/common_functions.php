@@ -19,7 +19,7 @@ function sdg_post_title ( $args = array() ) {
     
     // Init vars
 	$info = "";
-	$ts_info = "START sdg_post_title<br />";
+	//$ts_info = "START sdg_post_title<br />";
 	
 	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
 	
@@ -55,9 +55,9 @@ function sdg_post_title ( $args = array() ) {
 	$ts_info .= "post_id: ".$post_id."<br />";
 	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
 	if ( !$show_subtitle ) {
-    	$ts_info .= "show_subtitles: false<br />";
+    	//$ts_info .= "[sdgpt] show_subtitles: false<br />";
     } else {
-    	$ts_info .= "show_subtitles: true<br />";
+    	//$ts_info .= "[sdgpt] show_subtitles: true<br />";
     }
 	
 	// If a title has been submitted, use it; if not, get the post_title
@@ -194,7 +194,7 @@ function sdg_post_title ( $args = array() ) {
 	$info .= $subtitle;
 	$info .= $series_subtitle;
 	
-	$ts_info .= "END sdg_post_title<br />";
+	//$ts_info .= "END sdg_post_title<br />";
 	
 	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
