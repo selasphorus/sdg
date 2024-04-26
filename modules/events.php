@@ -1637,6 +1637,8 @@ function get_program_item_ids ( $rows = array() ) {
 function get_program_composers ( $item_ids = array() ) {
 
 	$arr = array();
+	$arr_ids = array();
+	$ts_info = "";
 	
 	foreach( $item_ids as $x => $item_id ) {	
 		$item_post_type = get_post_type( $item_id );
@@ -1645,9 +1647,9 @@ function get_program_composers ( $item_ids = array() ) {
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				if ( isset($arr_ids[$composer_id]) ) {
-					array_push($arr[$composer_id],$x);
+					array_push($arr_ids[$composer_id],$x);
 				} else {
-					$arr[$composer_id] = array($x);
+					$arr_ids[$composer_id] = array($x);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
@@ -1656,6 +1658,8 @@ function get_program_composers ( $item_ids = array() ) {
 		}
 	}
 	
+	$arr['ids'] = $arr_ids;
+	$arr['info'] = $ts_info;
 	return $arr;	
 
 }
