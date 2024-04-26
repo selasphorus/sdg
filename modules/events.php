@@ -862,7 +862,8 @@ function get_event_program_items( $atts = [] ) {
             $label_update_required = false;
             $delete_row = false;
         
-            //$row_info .= "<!-- get_event_program_items ==> program row [$i]: ".print_r($row, true)." -->";
+            //$row_info .= "get_event_program_items ==> program row [$i]: ".print_r($row, true)."<br />";
+            $row_info .= "program_composers: ".print_r($program_composers, true)."<br />";
             
             // Is a row_type set? WIP -- working on phasing out deprecated fields like 'show_item_label' in favor of simple row_types setup
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
@@ -906,30 +907,30 @@ function get_event_program_items( $atts = [] ) {
             // TODO: modify to simplify as below -- set to true/false based on stored value, if any
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
                 $show_row = $row['show_row'];
-                //$row_info .= "<!-- get_event_program_items ==> show_row = ".$row['show_row']." -->"; // tft
+                //$row_info .= "get_event_program_items ==> show_row = ".$row['show_row']."<br />";
             } else { 
                 $show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
-                //$row_info .= "<!-- get_event_program_items ==> show_row = 1 (default) -->"; // tft
+                //$row_info .= "get_event_program_items ==> show_row = 1 (default)<br />";
             }
         
             // Should we display the item label for this row?
             // TODO: streamline/eliminate this deprecated field and simply update row_type
             if ( isset($row['show_item_label']) && $row['show_item_label'] == "0" ) { 
                 $show_item_label = false;
-                $row_info .= "<!-- get_event_program_items ==> show_item_label FALSE -->"; // tft
+                $row_info .= "get_event_program_items ==> show_item_label FALSE<br />";
             } else { 
                 $show_item_label = true; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
-                $row_info .= "<!-- get_event_program_items ==> show_item_label TRUE (default) -->"; // tft
+                $row_info .= "get_event_program_items ==> show_item_label TRUE (default)<br />";
             }
                 
             // Should the item title for this row be displayed on the front end?
             // TODO: streamline/eliminate this deprecated field and simply update row_type
             if ( isset($row['show_item_title']) && $row['show_item_title'] == "0" ) { 
                 $show_item_title = false;
-                $row_info .= "<!-- show_item_title = 0, i.e. false -->"; // tft
+                $row_info .= "show_item_title = 0, i.e. false<br />";
             } else { 
                 $show_item_title = true; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
-                $row_info .= "<!-- default: show_item_title = true -->"; // tft
+                $row_info .= "default: show_item_title = true<br />";
             }
         
         	// Get the item label
