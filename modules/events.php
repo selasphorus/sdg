@@ -831,7 +831,7 @@ function get_event_program_items( $atts = [] ) {
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
 		$program_composer_ids = get_program_composer_ids($program_item_ids);
 		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
-		
+		// WIP: use this program_composer_ids array to be sure to show composer only once per row; composer dates only once per program
 	} else {
 		$program_composer_ids = array(); // ???
 	}
@@ -886,7 +886,6 @@ function get_event_program_items( $atts = [] ) {
             $delete_row = false;
         
             //$row_info .= "get_event_program_items ==> program row [$i]: ".print_r($row, true)."<br />";
-            $row_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
             
             // Is a row_type set? WIP -- working on phasing out deprecated fields like 'show_item_label' in favor of simple row_types setup
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
