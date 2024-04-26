@@ -832,6 +832,8 @@ function get_event_program_items( $atts = [] ) {
 		$program_composer_ids = get_program_composer_ids($program_item_ids);
 		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
 		// WIP: use this program_composer_ids array to be sure to show composer only once per row; composer dates only once per program
+		// If there's only one id, then display that person's name and dates once only, in the first row
+		// Consider options for single-composer, multi-item rows, vs. mixed multi-item rows 
 	} else {
 		$program_composer_ids = array(); // ???
 	}
@@ -839,7 +841,6 @@ function get_event_program_items( $atts = [] ) {
 	//
 	// WIP: Set date/name display rules based on that overview info
 	// Only then run a loop to process the rows 
-    
     
     
     if ( count($rows) > 0 ) {
@@ -1006,8 +1007,7 @@ function get_event_program_items( $atts = [] ) {
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
             if ( $num_row_items > 1 ) { $grouped_row = true; }
-                
-            if ( $arr_item_name['program_composer_ids'] ) { $program_composer_ids = $arr_item_name['program_composer_ids']; } // TODO: figure out how to pass program_composer_ids *by reference*
+            
             if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
             //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
