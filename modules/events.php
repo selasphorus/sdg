@@ -785,14 +785,12 @@ function get_event_program_items( $atts = [] ) {
     $ts_info .= "===== get_event_program_items =====<br />";
     
     if ( $display == 'table' ) { $table = ""; }
-    $program_composers = array();
-    //TODO: var to indicate if program as a whole contains grouped rows?
     
     // TODO: deal more thoroughly w/ non-table display option, or eliminate that parameter altogether.
 	
 	if ($post_id == null) { $post_id = get_the_ID(); }
 	$ts_info .= "Event Program Items for post_id: $post_id<br />";
-    //$ts_info .= "<!-- display: $display -->";
+    //$ts_info .= "display: $display<br />";
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
@@ -813,12 +811,36 @@ function get_event_program_items( $atts = [] ) {
             $XXX = get_sub_field('XXX'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
         endwhile;
     } // end if
+    */    
+    if ( empty($rows) ) { $rows = array(); }    
+    $ts_info .= count($rows)." program_items rows<br />"; // tft
+    
+    //TODO: Determine whether program as a whole contains grouped rows
+    /*
+    if ( program_contains_groupings($rows) ) {
+    	//
+    }
     */
     
-    if ( empty($rows) ) { $rows = array(); }
-    //$rows = (!empty(get_field('program_items', $post_id))) ? 'default' : array();
+    // WIP: streamlining
+	// Check to see if ANY of the rows contains items with post_type == 'repertoire'
+	if ( program_contains_repertoire($rows) ) {
+		$ts_info .= "program contains repertoire items<br />";
+		// If so, then get all the program composers
+		$program_item_ids = get_program_item_ids($rows);
+		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
+		$program_composer_ids = get_program_composers($program_item_ids);
+		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
+		
+	} else {
+		$program_composers = array(); // ???
+	}
+	
+	//
+	// WIP: Set date/name display rules based on that overview info
+	// Only then run a loop to process the rows 
     
-    $ts_info .= count($rows)." program_items rows<br />"; // tft
+    
     
     if ( count($rows) > 0 ) {
         
@@ -939,7 +961,7 @@ function get_event_program_items( $atts = [] ) {
             // TODO/WIP: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
             if ( $show_item_label == true && $row_type != 'title_only' ) {
 				$row_info .= "get_program_item_label<br />";
-				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
+				$arr_item_label = get_program_item_label($row);
 				$program_item_label = $arr_item_label['item_label'];
 				$row_info .= $arr_item_label['ts_info'];
             }
@@ -947,7 +969,33 @@ function get_event_program_items( $atts = [] ) {
             // Get the program item name
             // --------------------
             // TODO: figure out how to not need to pass so many parameters?
-            // TODO: figure out how to deal better with multiple program items in a single ACF row            
+            // TODO: figure out how to deal better with multiple program items in a single ACF row
+            // WIP: check to see if more than one item in the row and handle each separately -- rework the get_program_item_name fcn accordingly
+            /*
+            if ( isset($row['program_item']) && is_array($row['program_item']) ) {
+            
+            	$ts_info .= "program_item: ".print_r($row['program_item'], true)."<br />";
+				$num_items = count($row['program_item']);
+				
+				if ( $num_items > 1 ) {
+					// TODO: deal w/ special case of multiple items per program row -- variations per row_type, program_type...
+					$ts_info .= "*** $num_items program_items found for this row! ***<br />";
+				}
+				
+				$ts_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
+				$i = 1; // init counter
+	
+				// Loop through the program items for this row (usually there is only one)
+				foreach ( $row['program_item'] as $program_item ) {
+	
+					$ts_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
+					
+					// Get name according to item type
+					
+				}
+			
+			}
+			*/
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
             
             //if ( $arr_item_name['title_as_label'] != "" ) {
@@ -1146,7 +1194,8 @@ function get_event_program_items( $atts = [] ) {
 	
 }
 
-function get_program_item_label ( $args = array() ) {
+//
+function get_program_item_label ( $row = null ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -1158,21 +1207,6 @@ function get_program_item_label ( $args = array() ) {
 	$ts_info = "";
 	$item_label = "";
 	$placeholder_label = false;
-    
-    //$info .= "args as passed to get_program_item_label: <pre>".print_r($a,true)."</pre>";
-    
-    // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
-    
-    // Defaults
-	$defaults = array(
-		'row'			=> null, // from event ACF repeater row: program_items
-		//
-		'index'   		=> null, // to be passed as arg to match_placeholder -- WIP
-		'post_id' 		=> null, // to be passed as arg to match_placeholder -- WIP
-		'run_updates'   => false, // to be passed as arg to match_placeholder and/or sdg_add_post_term -- WIP
-		'display'    	=> null, // to be passed as arg to match_placeholder -- WIP
-	);
-	//$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 	
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
@@ -1213,7 +1247,7 @@ function get_program_item_label ( $args = array() ) {
 			
 			$label_update_required = true;
 			$item_label = get_the_title($row['item_label_old']);
-			$ts_info .= "<item_label_old: ".print_r($row['item_label_old'], true)."<br />";
+			$ts_info .= "item_label_old: ".print_r($row['item_label_old'], true)."<br />";
 			
 		} else if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" && $row['item_label_txt'] != "x" ) { 
 			
@@ -1233,7 +1267,8 @@ function get_program_item_label ( $args = array() ) {
 	
 }
 
-// 
+// TODO: break this up into several smaller functions -- larger of which will handle repertoire items only
+//function get_program_item_name ( $args = array() ) {
 function get_program_item_name ( $args = array() ) {
     
     // TODO/WIP: revise function to return array of names so that multiple items from a single ACF row can be presented in separate table rows.
@@ -1280,11 +1315,10 @@ function get_program_item_name ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-        
-    // TODO: deal w/ possibility of MULTIPLE program items in a single row -- e.g. "Anthems"
+    
     // TODO: add option to display all movements/sections of a musical work
     
-    $ts_info .= "row: <pre>".print_r($row, true)."</pre>";
+    //$ts_info .= "row: <pre>".print_r($row, true)."</pre>";
     
     $num_items = 0; // init
     
@@ -1556,6 +1590,62 @@ function get_program_item_name ( $args = array() ) {
 
 }
 
+//
+function program_contains_repertoire ( $rows = array() ) {
+	foreach( $rows as $row ) {
+		if ( isset($row['program_item']) && is_array($row['program_item']) ) {
+			// Loop through the program items for this row (usually there is only one)
+			foreach ( $row['program_item'] as $program_item ) {
+				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
+				if ( $program_item_obj_id ) {
+					$item_post_type = get_post_type( $program_item_obj_id );
+					if ( $item_post_type == 'repertoire' ) { return true; }
+				}
+			}
+		}
+	}
+	// If we've gotten this far, then no repertoire items were found
+	return false;
+}
+
+//
+function get_program_item_ids ( $rows = array() ) {
+
+	$arr_ids = array();
+	
+	foreach( $rows as $row ) {
+		if ( isset($row['program_item']) && is_array($row['program_item']) ) {
+			// Loop through the program items for this row (usually there is only one)
+			foreach ( $row['program_item'] as $program_item ) {
+				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
+				if ( $program_item_obj_id ) {
+					$arr_ids[] = $program_item_obj_id;
+				}
+			}
+		}
+	}
+	
+	return $arr_ids;
+
+}
+
+//
+function get_program_composers ( $item_ids = array() ) {
+
+	$arr_ids = array();
+	
+	foreach( $item_ids as $item_id ) {	
+		$item_post_type = get_post_type( $item_id );
+		if ( $item_post_type == 'repertoire' ) {
+			$item_composer_ids = get_composer_ids( $item_id );
+			$arr_ids = array_merge($arr_ids, $item_composer_ids);
+		}
+	}
+	
+	$arr_ids = array_unique($arr_ids);
+	return $arr_ids;	
+
+}
 
 /*********** ADMIN FUNCTIONS ***********/
 
