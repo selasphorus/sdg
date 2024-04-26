@@ -786,7 +786,7 @@ function get_event_program_items( $atts = [] ) {
     
     if ( $display == 'table' ) { $table = ""; }
     $program_composers = array();
-    $groupings = false;
+    //TODO: var to indicate if program as a whole contains grouped rows?
     
     // TODO: deal more thoroughly w/ non-table display option, or eliminate that parameter altogether.
 	
@@ -845,6 +845,7 @@ function get_event_program_items( $atts = [] ) {
             
             // Initialize variables
             $row_info = ""; // Info for troubleshooting
+            $grouped_row = false; // For multiple-item rows
             //
             $placeholder_label = false;
             $placeholder_item = false;
@@ -937,6 +938,7 @@ function get_event_program_items( $atts = [] ) {
             // --------------------
             // TODO/WIP: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
             if ( $show_item_label == true && $row_type != 'title_only' ) {
+				$row_info .= "get_program_item_label<br />";
 				$arr_item_label = get_program_item_label( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_type' => $program_type, 'run_updates' => $run_updates ) );
 				$program_item_label = $arr_item_label['item_label'];
 				$row_info .= $arr_item_label['ts_info'];
@@ -952,11 +954,11 @@ function get_event_program_items( $atts = [] ) {
             if ( $arr_item_name['use_title_as_label'] ) {
                 $use_title_as_label = true;
             	$program_item_label = $arr_item_name['title_as_label'];
-            	$row_info .= "title_as_label<br />";
+            	$row_info .= ">> use title_as_label<br />";
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
-            if ( $num_row_items > 1 ) { $groupings = true; }
+            if ( $num_row_items > 1 ) { $grouped_row = true; }
                 
             if ( $arr_item_name['program_composers'] ) { $program_composers = $arr_item_name['program_composers']; } // TODO: figure out how to pass program_composers *by reference*
             if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
@@ -1045,7 +1047,7 @@ function get_event_program_items( $atts = [] ) {
 				$tr_class = "program_objects";
 				if ( $show_row == '0' || $show_row == 0 ) { $tr_class .= " hidden"; } else { $tr_class .= " show_row"; }
 				if ( $show_person_dates == false ) { $tr_class .= " hide_person_dates"; } else { $tr_class .= " show_person_dates"; }
-                if ( $num_row_items > 1 || $groupings == true ) { $tr_class .= " grouping"; }
+                if ( $num_row_items > 1 || $grouped_row == true ) { $tr_class .= " grouping"; }
 				$table .= '<tr class="'.$tr_class.'">';
 			}
 			
@@ -1179,16 +1181,16 @@ function get_program_item_label ( $args = array() ) {
 	if ( isset($row['item_label'][0]) ) { 
 	
 		$item_label = get_the_title($row['item_label'][0]);
-		$ts_info .= "<!-- program_item_label = row['item_label'][0] -->";
+		$ts_info .= "program_item_label = row['item_label'][0]<br />";
 
 	} else if ( isset($row['item_label']) && !empty($row['item_label']) ) { 
 
 		$term = get_term( $row['item_label'] );
 		if ( !empty($term) ) { 
 			$item_label = $term->name;
-			$ts_info .= "<!-- program_item_label = row['item_label']: ".$row['item_label']." -->";
+			$ts_info .= "program_item_label = row['item_label']: ".$row['item_label']."<br />";
 		} else {
-			$ts_info .= "<!-- no term found for: ".$row['item_label']." -->";
+			$ts_info .= "no term found for: ".$row['item_label']."<br />";
 		}
 	}
     
@@ -1199,25 +1201,25 @@ function get_program_item_label ( $args = array() ) {
 	} else {
 		
 		// Program item label is empty -- look for a placeholder value
-		$ts_info .= "<!-- program_item_label is empty -> use placeholder -->";
+		$ts_info .= "program_item_label is empty -> use placeholder<br />";
 		
 		if ( isset($row['item_label_old'][0]) && $row['item_label_old'][0] != "" ) {
 			
 			$label_update_required = true;
 			$item_label = get_the_title($row['item_label_old'][0]);
-			$ts_info .= "<!-- item_label_old[0]: ".$row['item_label_old'][0]." -->";
+			$ts_info .= "item_label_old[0]: ".$row['item_label_old'][0]."<br />";
 			
 		} else if ( isset($row['item_label_old'] ) && $row['item_label_old'] != "" ) { 
 			
 			$label_update_required = true;
 			$item_label = get_the_title($row['item_label_old']);
-			$ts_info .= "<!-- item_label_old: ".print_r($row['item_label_old'], true)." -->";
+			$ts_info .= "<item_label_old: ".print_r($row['item_label_old'], true)."<br />";
 			
 		} else if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" && $row['item_label_txt'] != "x" ) { 
 			
 			$placeholder_label = true;
 			$item_label = $row['item_label_txt'];
-			$ts_info .= "<!-- item_label_txt: ".print_r($row['item_label_txt'], true)." -->";
+			$ts_info .= "item_label_txt: ".print_r($row['item_label_txt'], true)."<br />";
 			
 		}
 		
@@ -1320,7 +1322,7 @@ function get_program_item_name ( $args = array() ) {
 				$ts_info .= "program_item_obj_id: $program_item_obj_id<br />";
 			
 				$item_post_type = get_post_type( $program_item_obj_id );
-				//$info .= "<!-- item_post_type: $item_post_type -->";
+				//$info .= "item_post_type: $item_post_type<br />";
 				
 				$ts_info .= "get_program_item_name via postmeta<br />";
 				$ts_info .= "item_post_type: $item_post_type<br />";
@@ -1347,12 +1349,12 @@ function get_program_item_name ( $args = array() ) {
 						$composer_ids = array();
 					}
 					$author_ids = get_author_ids( $program_item_obj_id, false );
-					//$ts_info .= "<!-- author_ids: ".print_r($author_ids, true)." -->";
+					//$ts_info .= "author_ids: ".print_r($author_ids, true)."<br />";
 
 					if ( $num_items > 1 ) {
 						if ( $i == 1 ) { // first row item
 							$row_composer_ids = $composer_ids;
-							//if ( !empty($row_composer_ids) ) { $ts_info .= "<!-- row_composer_ids: ".print_r($row_composer_ids, true)." -->"; }
+							//if ( !empty($row_composer_ids) ) { $ts_info .= "row_composer_ids: ".print_r($row_composer_ids, true)."<br />"; }
 						} else { // subsequent row items
 							// TODO: hide authorship after row one if ALL items in the row have the same composer
 							if ( !empty($row_composer_ids) && $composer_ids == $row_composer_ids ) {
