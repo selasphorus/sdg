@@ -831,7 +831,7 @@ function get_event_program_items( $atts = [] ) {
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
 		//
 		$program_composers = get_program_composers($program_item_ids);
-		$ts_info .= "program_composers: ".print_r($program_composers, true)."<br />";
+		$ts_info .= "program_composers: <pre>".print_r($program_composers, true)."</pre><br />";
 		//
 		$program_composer_ids = get_program_composer_ids($program_item_ids);
 		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
