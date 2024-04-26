@@ -829,6 +829,10 @@ function get_event_program_items( $atts = [] ) {
 		// If so, then get all the program composers
 		$program_item_ids = get_program_item_ids($rows);
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
+		//
+		$program_composers = get_program_composers($program_item_ids);
+		$ts_info .= "program_composers: ".print_r($program_composers, true)."<br />";
+		//
 		$program_composer_ids = get_program_composer_ids($program_item_ids);
 		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
 		// WIP: use this program_composer_ids array to be sure to show composer only once per row; composer dates only once per program
@@ -1612,13 +1616,14 @@ function get_program_item_ids ( $rows = array() ) {
 
 	$arr_ids = array();
 	
-	foreach( $rows as $row ) {
+	foreach( $rows as $r => $row ) {
 		if ( isset($row['program_item']) && is_array($row['program_item']) ) {
 			// Loop through the program items for this row (usually there is only one)
-			foreach ( $row['program_item'] as $program_item ) {
+			foreach ( $row['program_item'] as $i => $program_item ) {
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 				if ( $program_item_obj_id ) {
 					$arr_ids[] = $program_item_obj_id;
+					//$arr_ids[] = $program_item_obj_id;
 				}
 			}
 		}
@@ -1627,6 +1632,34 @@ function get_program_item_ids ( $rows = array() ) {
 	return $arr_ids;
 
 }
+
+//
+function get_program_composers ( $item_ids = array() ) {
+
+	$arr = array();
+	
+	foreach( $item_ids as $x => $item_id ) {	
+		$item_post_type = get_post_type( $item_id );
+		if ( $item_post_type == 'repertoire' ) {
+			$item_composer_ids = get_composer_ids( $item_id );
+			if ( count($item_composer_ids) == 1 ) {
+				$composer_id = $item_composer_ids[0];
+				if ( isset($arr_ids[$composer_id]) ) {
+					array_push($arr[$composer_id],$x);
+				} else {
+					$arr[$composer_id] = array($x);
+				}
+			} else {
+				// Multiple composers -- TBD how to handle this
+			}
+			//$arr_ids = array_merge($arr_ids, $item_composer_ids);			
+		}
+	}
+	
+	return $arr;	
+
+}
+
 
 //
 function get_program_composer_ids ( $item_ids = array() ) {
