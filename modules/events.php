@@ -1420,7 +1420,7 @@ function get_program_item_name ( $args = array() ) {
 						$ts_info .= "count(composer_ids): ".count($composer_ids)."<br />";
 						if ( !empty($program_composer_ids) ) { $ts_info .= "START program_composer_ids: ".print_r($program_composer_ids, true)."<br />"; }
 					
-						if ( count($program_composer_ids) > 0 ) {
+						if ( is_array($program_composer_ids) && count($program_composer_ids) > 0 ) {
 
 							if ( count($composer_ids) > 0 ) {
 								$ids_intersect = array_intersect($program_composer_ids, $composer_ids);
