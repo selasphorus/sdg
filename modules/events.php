@@ -833,13 +833,11 @@ function get_event_program_items( $atts = [] ) {
 		$program_composers = get_program_composers($program_item_ids);
 		$ts_info .= "program_composers: <pre>".print_r($program_composers, true)."</pre><br />";
 		//
-		$program_composer_ids = get_program_composer_ids($program_item_ids);
-		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
-		// WIP: use this program_composer_ids array to be sure to show composer only once per row; composer dates only once per program
+		// WIP: use this program_composers array to be sure to show composer only once per row; composer dates only once per program
 		// If there's only one id, then display that person's name and dates once only, in the first row
 		// Consider options for single-composer, multi-item rows, vs. mixed multi-item rows 
 	} else {
-		$program_composer_ids = array(); // ???
+		$program_composers = array(); // ???
 	}
 	
 	//
@@ -974,6 +972,7 @@ function get_event_program_items( $atts = [] ) {
             // --------------------
             // TODO: figure out how to not need to pass so many parameters?
             // TODO: figure out how to deal better with multiple program items in a single ACF row
+            // WIP 04262024
             // WIP: check to see if more than one item in the row and handle each separately -- rework the get_program_item_name fcn accordingly
             /*
             if ( isset($row['program_item']) && is_array($row['program_item']) ) {
@@ -1001,6 +1000,14 @@ function get_event_program_items( $atts = [] ) {
 			}
 			*/
             $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composer_ids' => $program_composer_ids, 'run_updates' => $run_updates ) );
+            
+            // WIP 04262024
+            $item_name_args = array();
+            $item_name_args['show_item_authorship'] = null; // wip -- get value true/false based on $program_composers array
+            //
+            //$arr_item_name = get_program_item_name($item_name_args);
+            
+            
             
             //if ( $arr_item_name['title_as_label'] != "" ) {
             if ( $arr_item_name['use_title_as_label'] ) {
@@ -1303,7 +1310,7 @@ function get_program_item_name ( $args = array() ) {
     
     // Defaults
 	$defaults = array(
-		'index'   		=> null, // needed for checking whether to show person_dates (???) ; also to be passed as arg to match_placeholder -- WIP
+		//'index'   		=> null, // needed for checking whether to show person_dates (???) ; also to be passed as arg to match_placeholder -- WIP
 		'post_id' 		=> null, /// to be passed as arg to match_placeholder -- WIP
 		'row_type'		=> 'default', // other possible values include: "header", ...?
 		'row'			=> null,
@@ -1424,11 +1431,11 @@ function get_program_item_name ( $args = array() ) {
 								$ts_info .= "ids_intersect: ".print_r($ids_intersect, true)."<br />";
 								$ts_info .= "count(ids_intersect): ".count($ids_intersect)."<br />";
 								
-								if ( $num_items == 1 || $index > 1 || $i > 1 ) {
+								/*if ( $num_items == 1 || $index > 1 || $i > 1 ) {
 									// Hide person dates if already shown in this program OR if this is not the first item in a multi-item row
 									$show_person_dates = false;
 									$ts_info .= "count(ids_intersect) is > 0, therefore set show_person_dates to false<br />";
-								}
+								}*/
 							
 							}							
 
@@ -1623,7 +1630,6 @@ function get_program_item_ids ( $rows = array() ) {
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 				if ( $program_item_obj_id ) {
 					$arr_ids[$r.'-'.$i] = $program_item_obj_id;
-					//$arr_ids[] = $program_item_obj_id;
 				}
 			}
 		}
@@ -1665,7 +1671,7 @@ function get_program_composers ( $item_ids = array() ) {
 }
 
 
-//
+/* obsolete -- to be deleted, most likely...
 function get_program_composer_ids ( $item_ids = array() ) {
 
 	$arr_ids = array();
@@ -1682,6 +1688,7 @@ function get_program_composer_ids ( $item_ids = array() ) {
 	return $arr_ids;	
 
 }
+*/
 
 /*********** ADMIN FUNCTIONS ***********/
 
