@@ -829,11 +829,11 @@ function get_event_program_items( $atts = [] ) {
 		// If so, then get all the program composers
 		$program_item_ids = get_program_item_ids($rows);
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
-		$program_composer_ids = get_program_composers($program_item_ids);
+		$program_composer_ids = get_program_composer_ids($program_item_ids);
 		$ts_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
 		
 	} else {
-		$program_composers = array(); // ???
+		$program_composer_ids = array(); // ???
 	}
 	
 	//
@@ -886,7 +886,7 @@ function get_event_program_items( $atts = [] ) {
             $delete_row = false;
         
             //$row_info .= "get_event_program_items ==> program row [$i]: ".print_r($row, true)."<br />";
-            $row_info .= "program_composers: ".print_r($program_composers, true)."<br />";
+            $row_info .= "program_composer_ids: ".print_r($program_composer_ids, true)."<br />";
             
             // Is a row_type set? WIP -- working on phasing out deprecated fields like 'show_item_label' in favor of simple row_types setup
             if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
@@ -996,7 +996,7 @@ function get_event_program_items( $atts = [] ) {
 			
 			}
 			*/
-            $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composers' => $program_composers, 'run_updates' => $run_updates ) );
+            $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composer_ids' => $program_composer_ids, 'run_updates' => $run_updates ) );
             
             //if ( $arr_item_name['title_as_label'] != "" ) {
             if ( $arr_item_name['use_title_as_label'] ) {
@@ -1008,7 +1008,7 @@ function get_event_program_items( $atts = [] ) {
             if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
             if ( $num_row_items > 1 ) { $grouped_row = true; }
                 
-            if ( $arr_item_name['program_composers'] ) { $program_composers = $arr_item_name['program_composers']; } // TODO: figure out how to pass program_composers *by reference*
+            if ( $arr_item_name['program_composer_ids'] ) { $program_composer_ids = $arr_item_name['program_composer_ids']; } // TODO: figure out how to pass program_composer_ids *by reference*
             if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
             //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
@@ -1307,7 +1307,7 @@ function get_program_item_name ( $args = array() ) {
 		//'program_type'	=> 'service_order', // other possible values include: "concert_program", "???"
 		'program_item_label'=> null, // used for match args and to determine use_title_as_label >> do this some other way before calling this fcn?
 		//'show_item_title'	=> null, // don't need to pass this as arg -- it's a row parameter, no?
-		'program_composers'	=> array(),
+		'program_composer_ids'	=> array(),
 		'run_updates'   => false, // related to placeholder fill-in functionality -- move this to some other fcn
 		'display'    	=> null, // arg for get_rep_info
 	);
@@ -1408,14 +1408,14 @@ function get_program_item_name ( $args = array() ) {
 
 						// Don't include composer ids in the array for header rows, because in those cases the program item (if any) is hidden.
 						$ts_info .= "count(composer_ids): ".count($composer_ids)."<br />";
-						if ( !empty($program_composers) ) { $ts_info .= "START program_composers: ".print_r($program_composers, true)."<br />"; }
+						if ( !empty($program_composer_ids) ) { $ts_info .= "START program_composer_ids: ".print_r($program_composer_ids, true)."<br />"; }
 					
-						if ( count($program_composers) > 0 ) {
+						if ( count($program_composer_ids) > 0 ) {
 
 							if ( count($composer_ids) > 0 ) {
-								$ids_intersect = array_intersect($program_composers, $composer_ids);
+								$ids_intersect = array_intersect($program_composer_ids, $composer_ids);
 							} else { // if ( count($author_ids) > 0 )
-								$ids_intersect = array_intersect($program_composers, $author_ids);
+								$ids_intersect = array_intersect($program_composer_ids, $author_ids);
 							}
 							if ( count($ids_intersect) > 0 ) {
 								$ts_info .= "ids_intersect: ".print_r($ids_intersect, true)."<br />";
@@ -1430,23 +1430,23 @@ function get_program_item_name ( $args = array() ) {
 							}							
 
 							if ( count($composer_ids) > 0 ) {
-								$program_composers = array_unique(array_merge($program_composers, $composer_ids));
+								$program_composer_ids = array_unique(array_merge($program_composer_ids, $composer_ids));
 							} else {
-								$program_composers = array_unique(array_merge($program_composers, $author_ids));
+								$program_composer_ids = array_unique(array_merge($program_composer_ids, $author_ids));
 							}
 
 						} else {
 						
-							//$ts_info .= "<!-- count(program_composers) NOT > 0 -->";
+							//$ts_info .= "<!-- count(program_composer_ids) NOT > 0 -->";
 						
 							if ( count($composer_ids) > 0 ) {
-								$program_composers = $composer_ids;
+								$program_composer_ids = $composer_ids;
 							} else {
-								$program_composers = $author_ids;
+								$program_composer_ids = $author_ids;
 							}
 
 						}
-						if ( !empty($program_composers) ) { $ts_info .= "UPDATED program_composers: ".print_r($program_composers, true)."<br />"; }
+						if ( !empty($program_composer_ids) ) { $ts_info .= "UPDATED program_composer_ids: ".print_r($program_composer_ids, true)."<br />"; }
 
 					} else if ( !count($author_ids) > 0 ) {
 
@@ -1582,7 +1582,7 @@ function get_program_item_name ( $args = array() ) {
 	$arr_info['title_as_label'] = $program_title_as_label;
 	$arr_info['item_name'] = $program_item_name;
     $arr_info['num_items'] = $num_items; // wip
-	$arr_info['program_composers'] = $program_composers;
+	$arr_info['program_composer_ids'] = $program_composer_ids;
 	$arr_info['show_person_dates'] = $show_person_dates;
 	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
@@ -1630,7 +1630,7 @@ function get_program_item_ids ( $rows = array() ) {
 }
 
 //
-function get_program_composers ( $item_ids = array() ) {
+function get_program_composer_ids ( $item_ids = array() ) {
 
 	$arr_ids = array();
 	
