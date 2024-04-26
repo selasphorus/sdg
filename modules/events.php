@@ -1642,9 +1642,9 @@ function get_program_item_ids ( $rows = array() ) {
 //
 function get_program_composers ( $item_ids = array() ) {
 
-	$arr = array();
+	//$arr = array();
 	$arr_ids = array();
-	$ts_info = "";
+	//$ts_info = "";
 	
 	foreach( $item_ids as $x => $item_id ) {	
 		$item_post_type = get_post_type( $item_id );
@@ -1664,9 +1664,11 @@ function get_program_composers ( $item_ids = array() ) {
 		}
 	}
 	
-	$arr['ids'] = $arr_ids;
-	$arr['info'] = $ts_info;
-	return $arr;	
+	//$arr['ids'] = $arr_ids;
+	//$arr['info'] = $ts_info;
+	//return $arr;
+	
+	return $arr_ids;
 
 }
 
