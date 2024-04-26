@@ -1622,7 +1622,7 @@ function get_program_item_ids ( $rows = array() ) {
 			foreach ( $row['program_item'] as $i => $program_item ) {
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 				if ( $program_item_obj_id ) {
-					$arr_ids[] = $program_item_obj_id;
+					$arr_ids[$r.'-'$i] = $program_item_obj_id;
 					//$arr_ids[] = $program_item_obj_id;
 				}
 			}
