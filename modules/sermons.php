@@ -198,8 +198,8 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	// Display the sermon author
     $authors = get_field('sermon_author', $post_id);
+	$authorship = "";
 	if ($authors) {
-		$authorship = "";
         foreach( $authors as $author ){
             // TODO: hyperlink author(s)?
             $author = get_the_title( $author->ID );
@@ -627,12 +627,16 @@ function get_author_img_id ( $post_id ) {
 	// Get the sermon author(s)
 	$sermon_author_ids = get_post_meta( $post_id, 'sermon_author', true );
 	
-	// Get the sermon author image for the first author with an image
-	foreach ( $sermon_author_ids as $author_id ) {
-		$img_id = get_post_thumbnail_id($author_id);
-		if ( $img_id ) { break; }
+	if ( is_array($sermon_author_ids) ) {
+		// Get the sermon author image for the first author with an image
+		foreach ( $sermon_author_ids as $author_id ) {
+			$img_id = get_post_thumbnail_id($author_id);
+			if ( $img_id ) { break; }
+		}
+	} else {
+		// 
 	}
-	
+		
 	return $img_id;
 	
 }
