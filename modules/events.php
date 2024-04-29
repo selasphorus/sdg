@@ -1000,10 +1000,9 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "*** $num_items program_items found for this row! ***<br />";
 			
 			$row_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
-			$i = 1; // init counter
 
 			// Loop through the program items for this row (usually there is only one)
-			foreach ( $row['program_item'] as $program_item ) {
+			foreach ( $row['program_item'] as $i => $program_item ) {
 
 				$row_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
 					
@@ -1039,8 +1038,6 @@ function get_event_program_items( $atts = [] ) {
 					$table_rows[] = $tr;
 					
 				}
-				
-				$i++;
 				
 			}
 			
