@@ -1494,42 +1494,41 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	
 	foreach ( $arr_ids as $composer_id => $placements ) {
 	
+		// Set defaults
+		$show_name = false;
+		$show_dates = false;
+		$i = 0;
+		
 		// Determine visibility of composer name/dates
-		if ( count($placements) == 1 ) {
-			// If a composer appears only once in the program, then do show name and dates
-			$show_name = true;
-			$show_dates = true;
+		foreach ( $placements as $x ) {
+		
+			list($row, $num) = explode('-', $x);
+				
+			if ( count($placements) == 1 ) {
+				// If a composer appears only once in the program, then do show name and dates
+				$show_name = true;
+				$show_dates = true;
 			
-		} else {
-		
-			$i = 0;
-			foreach ( $placements as $x ) {
-		
-				list($row, $num) = explode('-', $x);
-				$show_name = false; // default
+			} else {
+				
 				if ( $i == 0 ) {
 					// Show name snd dates for first instance of composer in program
 					$show_name = true;
 					$show_dates = true;
-				} else {
-					$show_dates = false;
-					// If all works in the program are by the same composer, then don't show name for any row after the first instance
-					if ( $num_composers > 1 && ( $prev_row != $row || ( $prev_row == $row && $num != $prev_num+1 ) ) ) {
-						// If it's a mixed-composer program, then show name if this is a new row or non-consecutive in same row
-						$show_name = true;
-					}
+				} else if ( $num_composers > 1 && ( $prev_row != $row || ( $prev_row == $row && $num != $prev_num+1 ) ) ) {
+					// If it's a mixed-composer program, then show name if this is a new row or non-consecutive in same row
+					$show_name = true;
 				}
 				
-				//
-				$arr_row_settings[$x] = array( 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );
-				//$arr_row_settings[$x] = array( 'r' => $row, 'n' => $num, 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );				
-				
-				$prev_row = $row;
-				$prev_num = $num;
-				
-				$i++;
-				
 			}
+			//
+			$arr_row_settings[$x] = array( 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );
+			//$arr_row_settings[$x] = array( 'r' => $row, 'n' => $num, 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );				
+				
+			$prev_row = $row;
+			$prev_num = $num;
+			
+			$i++;
 		
 		}
 		
