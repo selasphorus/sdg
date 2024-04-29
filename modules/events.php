@@ -870,12 +870,6 @@ function get_event_program_items( $atts = [] ) {
         //
         $label_update_required = false;
         $delete_row = false;
-            
-        $display_settings = array();
-        if ( $authorship_display_settings && isset($authorship_display_settings[$x]) ) {
-        	$display_settings = $authorship_display_settings[$x];
-        }
-        $row_info .= "program_row display_settings: ".print_r($display_settings, true)."<br />";
         
         //$row_info .= "get_event_program_items ==> program row [$r]: ".print_r($row, true)."<br />";
             
@@ -969,6 +963,11 @@ function get_event_program_items( $atts = [] ) {
 		
 			// Single-item program_row translates to single table_row
 			$row_info .= 'Single-item program_row translates to single table_row<br />';
+            
+			if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-0']) ) {
+				$display_settings = $authorship_display_settings[$r.'-0'];
+				$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
+			}
 			
 			// WIP
 			$tr = array();
@@ -1007,6 +1006,12 @@ function get_event_program_items( $atts = [] ) {
 			foreach ( $row['program_item'] as $program_item ) {
 
 				$row_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
+				
+				if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
+				$display_settings = $authorship_display_settings[$r.'-'.$i];
+					$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
+				}
+			
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 				if ( $program_item_obj_id ) {
 
