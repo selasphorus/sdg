@@ -827,11 +827,11 @@ function get_event_program_items( $atts = [] ) {
 	$program_composer_ids = array(); // TMP -- deprecated
 	
 	// Check to see if ANY of the rows contains items with post_type == 'repertoire'
-	if ( program_contains_repertoire($rows) ) { // TODO: generalize the following to apply to any items with authorship, not just rep/composers
+	if ( program_contains_repertoire($program_rows) ) { // TODO: generalize the following to apply to any items with authorship, not just rep/composers
 	
 		$ts_info .= "program contains repertoire items<br />";
 		// If so, then get all the program composers
-		$program_item_ids = get_program_item_ids($rows);
+		$program_item_ids = get_program_item_ids($program_rows);
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
 		//
 		$authorship_display_settings = set_row_authorship_display($program_item_ids);
