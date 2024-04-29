@@ -1587,7 +1587,7 @@ function program_contains_repertoire ( $rows = array() ) {
 }
 
 function compile_program_rows () {
-
+	// TBD
 }
 
 //
@@ -1628,10 +1628,11 @@ function set_row_authorship_display ( $item_ids = array() ) {
 			$item_composer_ids = get_composer_ids( $item_id );
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
+				$row_item = $x.'-'.$item_id);
 				if ( isset($arr_items[$composer_id]) ) {
-					array_push( $arr_items[$composer_id], array($x,$item_id) );
+					array_push( $arr_items[$composer_id], $row_item );
 				} else {
-					$arr_items[$composer_id] = array($x,$item_id); //array($x);
+					$arr_items[$composer_id] = $row_item;
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
@@ -1645,12 +1646,9 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	
 		// Determine visibility of composer name/dates
 		$i = 0;
-		foreach ( $placements as $placement ) {
-		
-			$placement[0] = $x;
-			$placement[1] = $item_id;
+		foreach ( $placements as $x ) {
 			
-			list($row, $num) = explode('-', $x);
+			list($row, $num, $item_id) = explode('-', $x);
 			$show_name = false;
 			$show_dates = false;
 				
