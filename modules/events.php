@@ -1656,7 +1656,9 @@ function get_program_composers ( $item_ids = array() ) {
 				if ( isset($arr_ids[$composer_id]) ) {
 					array_push($arr_ids[$composer_id],$x);
 				} else {
-					$arr_ids[$composer_id] = array($x);
+					//$arr_ids[$composer_id] = array($x);
+					$display = 'test';
+					$arr_ids[$composer_id] = array('row-item' => $x, 'display' => $display);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
