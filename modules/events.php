@@ -839,6 +839,7 @@ function get_event_program_items( $atts = [] ) {
 	} else {
 		$program_composers = array(); // ???
 	}
+	$program_composers_ids = array(); // TMP -- deprecated
 	
 	//
 	// WIP: Set date/name display rules based on that overview info
@@ -1219,8 +1220,8 @@ function get_program_item_label ( $row = null ) {
 	$placeholder_label = false;
 	
 	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
+	//$args = wp_parse_args( $args, $defaults );
+	//extract( $args );
 	        
 	if ( isset($row['item_label'][0]) ) { 
 	
