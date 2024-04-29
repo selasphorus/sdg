@@ -968,7 +968,7 @@ function get_event_program_items( $atts = [] ) {
 		if ( $num_items == 1 ) {
 		
 			// Single-item program_row translates to single table_row
-			$ts_info .= 'Single-item program_row translates to single table_row<br />';
+			$row_info .= 'Single-item program_row translates to single table_row<br />';
 			
 			// WIP
 			$tr = array();
@@ -998,21 +998,21 @@ function get_event_program_items( $atts = [] ) {
 		} else if ( $num_items > 1 ) {
 		
 			// Multiple items per program row -- display settings per row_type, program_type... -- WIP
-			$ts_info .= "*** $num_items program_items found for this row! ***<br />";
+			$row_info .= "*** $num_items program_items found for this row! ***<br />";
 			
-			$ts_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
+			$row_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
 			$i = 1; // init counter
 
 			// Loop through the program items for this row (usually there is only one)
 			foreach ( $row['program_item'] as $program_item ) {
 
-				$ts_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
+				$row_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
 				if ( $program_item_obj_id ) {
 
-					$ts_info .= "program_item_obj_id: $program_item_obj_id<br />";
+					$row_info .= "program_item_obj_id: $program_item_obj_id<br />";
 					$item_post_type = get_post_type( $program_item_obj_id );
-					$ts_info .= "item_post_type: $item_post_type<br />";
+					$row_info .= "item_post_type: $item_post_type<br />";
 					
 					$tr = array();
 					$tds = array();
@@ -1158,7 +1158,7 @@ function get_event_program_items( $atts = [] ) {
 				if ( $display == 'table' ) {
 					$table .= '<div class="troubleshooting">'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					$info .= '<div class="troubleshooting">'.$row_info.'</div>'; //$info .= $row_info;
+					$ts_info .= $row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
 				}
 			}
 			
