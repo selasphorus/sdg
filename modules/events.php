@@ -1164,7 +1164,7 @@ function get_event_program_items( $atts = [] ) {
 				} else {
 					//$ts_info .= 'row_info:<br />'.$row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
 				}
-				$ts_info .= 'row_info:<br />'.$row_info;
+				$ts_info .= $row_info; //$ts_info .= 'row_info:<br />'.$row_info;
 			}
 			
 			// Add the table cells and close out the row
