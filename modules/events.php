@@ -1463,7 +1463,9 @@ function get_program_item_name ( $args = array() ) {
 		$item_post_type = get_post_type( $program_item_obj_id );
 		$ts_info .= "item_post_type: $item_post_type<br />";
 		
-		$show_item_authorship = true; // default -- tft?
+		// defaults -- tft?
+		$show_item_authorship = true;
+		$show_item_title = true;
 		
 		if ( $item_post_type == 'repertoire' ) {
 			
@@ -1627,7 +1629,7 @@ function set_row_authorship_display ( $item_ids = array() ) {
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				if ( isset($arr_items[$composer_id]) ) {
-					array_push($arr_items[$composer_id], array($x => $item_id) );
+					array_push( $arr_items[$composer_id], array($x => $item_id) );
 				} else {
 					$arr_items[$composer_id] = array($x => $item_id); //array($x);
 				}
