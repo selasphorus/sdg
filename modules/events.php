@@ -824,14 +824,16 @@ function get_event_program_items( $atts = [] ) {
     
     // WIP: streamlining
 	// Check to see if ANY of the rows contains items with post_type == 'repertoire'
-	if ( program_contains_repertoire($rows) ) {
+	if ( program_contains_repertoire($rows) ) { // TODO: generalize to any items with authorship, not just rep/composers
 		$ts_info .= "program contains repertoire items<br />";
 		// If so, then get all the program composers
 		$program_item_ids = get_program_item_ids($rows);
 		$ts_info .= "program_item_ids: ".print_r($program_item_ids, true)."<br />";
 		//
-		$program_composers = get_program_composers($program_item_ids);
-		$ts_info .= "program_composers: <pre>".print_r($program_composers, true)."</pre><br />";
+		$row_display_settings = set_row_authorship_display($program_item_ids);
+		$ts_info .= "row_display_settings: <pre>".print_r($row_display_settings, true)."</pre><br />";
+		//$program_composers = get_program_composers($program_item_ids);
+		//$ts_info .= "program_composers: <pre>".print_r($program_composers, true)."</pre><br />";
 		//
 		// WIP: use this program_composers array to be sure to show composer only once per row; composer dates only once per program
 		// If there's only one id, then display that person's name and dates once only, in the first row
@@ -1626,6 +1628,10 @@ function program_contains_repertoire ( $rows = array() ) {
 	return false;
 }
 
+function compile_program_rows () {
+
+}
+
 //
 function get_program_item_ids ( $rows = array() ) {
 
@@ -1648,9 +1654,10 @@ function get_program_item_ids ( $rows = array() ) {
 }
 
 //
-function get_program_composers ( $item_ids = array() ) {
+//function get_program_composers ( $item_ids = array() ) {
+function set_row_authorship_display ( $item_ids = array() ) {
 
-	$arr = array();
+	$arr_row_settings = array();
 	$arr_ids = array();
 	//$ts_info = "";
 	
@@ -1668,36 +1675,66 @@ function get_program_composers ( $item_ids = array() ) {
 				} else {
 					$arr_ids[$composer_id] = array($x);
 				}
-				$prev_row = $row;
-				$prev_num = $num;
 			} else {
 				// Multiple composers -- TBD how to handle this
 			}	
 		}
 	}
 	
+	$num_composers = count($arr_ids);
+	
 	foreach ( $arr_ids as $composer_id => $placements ) {
 	
-		/*
-		list($row, $num) = explode('-', $x);
-				if ( $prev_row != $row ) {
+		// Determine visibility of composer name/dates
+		if ( count($placements) == 1 ) {
+			// If a composer appears only once in the program, then do show name and dates
+			$show_name = true;
+			$show_dates = true;
+			
+		} else {
+		
+			$i = 0;
+			foreach ( $placements as $x ) {
+		
+				list($row, $num) = explode('-', $x);
+				$show_name = false; // default
+				if ( $i == 0 ) {
+					// Show name snd dates for first instance of composer in program
 					$show_name = true;
+					$show_dates = true;
 				} else {
-				
+					$show_dates = false;
+					// If all works in the program are by the same composer, then don't show name for any row after the first instance
+					if ( $num_composers > 1 && ( $prev_row != $row || ( $prev_row == $row && $num != $prev_num+1 ) ) ) {
+						// If it's a mixed-composer program, then show name if this is a new row or non-consecutive in same row
+						$show_name = true;
+					}
 				}
-				$show_name = true;
-				$show_dates = true;
-				*/
+				
+				//
+				$arr_row_settings[] = array( 'r' => $row, 'n' => $num, 'show_name' => $show_name, 'show_dates' => $show_dates );				
+				
+				$prev_row = $row;
+				$prev_num = $num;
+				
+				$i++;
+				
+			}
+		
+		}
+		
+		
+		
 	
 	}
-	
-				
-				
+		
 	//$arr['ids'] = $arr_ids;
 	//$arr['info'] = $ts_info;
 	//return $arr;
 	
-	return $arr_ids;
+	//return $arr_ids;
+	
+	return $arr_row_settings;
 
 }
 
