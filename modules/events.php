@@ -1462,16 +1462,11 @@ function get_program_item_name ( $args = array() ) {
 			
 		$item_post_type = get_post_type( $program_item_obj_id );
 		$ts_info .= "item_post_type: $item_post_type<br />";
-
+		
+		$show_item_authorship = true; // default -- tft?
+		
 		if ( $item_post_type == 'repertoire' ) {
-				
-			// Check to see if this is a chant record or other special rep type for which person_dates are NEVER to be shown.
-			// Exclude such records from the following procedures
-			if ( has_term( 'psalms', 'repertoire_category', $program_item_obj_id ) || has_term( 'anglican-chant', 'repertoire_category', $program_item_obj_id ) && ( !has_term( 'motets', 'repertoire_category', $program_item_obj_id ) && !has_term( 'anthems', 'repertoire_category', $program_item_obj_id ) ) ) { 
-				$show_person_dates = false;
-				$ts_info .= "item is in psalms or anglican-chant category, therefore set show_person_dates to false<br />";
-			}
-					
+			
 			// TODO: check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
 					
 			// Get the name of the Musical Work using get_rep_info fcn
@@ -1498,7 +1493,7 @@ function get_program_item_name ( $args = array() ) {
 				$ts_info .= $arr_authorship_info['ts_info'];
 
 			} else {
-
+				
 				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
 				$item_name = $arr_item_name['info'];
 				$ts_info .= $arr_item_name['ts_info'];
@@ -1619,7 +1614,7 @@ function get_program_item_ids ( $rows = array() ) {
 function set_row_authorship_display ( $item_ids = array() ) {
 
 	$arr_row_settings = array();
-	$arr_ids = array();
+	$arr_items = array();
 	//$ts_info = "";
 	
 	$prev_row = null;
@@ -1631,10 +1626,10 @@ function set_row_authorship_display ( $item_ids = array() ) {
 			$item_composer_ids = get_composer_ids( $item_id );
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
-				if ( isset($arr_ids[$composer_id]) ) {
-					array_push($arr_ids[$composer_id],$x);
+				if ( isset($arr_items[$composer_id]) ) {
+					array_push($arr_items[$composer_id], array($x => $item_id) );
 				} else {
-					$arr_ids[$composer_id] = array($x);
+					$arr_items[$composer_id] = array($x => $item_id); //array($x);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
@@ -1642,19 +1637,20 @@ function set_row_authorship_display ( $item_ids = array() ) {
 		}
 	}
 	
-	$num_composers = count($arr_ids);
+	$num_composers = count($arr_items);
 	
-	foreach ( $arr_ids as $composer_id => $placements ) {
+	foreach ( $arr_items as $composer_id => $placements ) {
 	
 		// Determine visibility of composer name/dates
 		$i = 0;
-		foreach ( $placements as $x ) {
+		foreach ( $placements as $x => $item_id ) {
 		
 			list($row, $num) = explode('-', $x);
 			$show_name = false;
 			$show_dates = false;
 				
 			if ( count($placements) == 1 ) {
+			
 				// If a composer appears only once in the program, then do show name and dates
 				$show_name = true;
 				$show_dates = true;
@@ -1671,6 +1667,13 @@ function set_row_authorship_display ( $item_ids = array() ) {
 				}
 				
 			}
+			
+			// Finally, check to see if this is a chant record or other special rep type for which person_dates are NEVER to be shown.
+			if ( has_term( 'psalms', 'repertoire_category', $item_id ) || has_term( 'anglican-chant', 'repertoire_category', $item_id ) && ( !has_term( 'motets', 'repertoire_category', $item_id ) && !has_term( 'anthems', 'repertoire_category', $item_id ) ) ) {			
+				$show_dates = false;
+				//$ts_info .= "item is in psalms or anglican-chant category, therefore set show_person_dates to false<br />";				
+			}
+			
 			//
 			$arr_row_settings[$x] = array( 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );
 			//$arr_row_settings[$x] = array( 'r' => $row, 'n' => $num, 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );				
@@ -1684,11 +1687,11 @@ function set_row_authorship_display ( $item_ids = array() ) {
 		
 	}
 		
-	//$arr['ids'] = $arr_ids;
+	//$arr['ids'] = $arr_items;
 	//$arr['info'] = $ts_info;
 	//return $arr;
 	
-	//return $arr_ids;
+	//return $arr_items;
 	
 	return $arr_row_settings;
 
