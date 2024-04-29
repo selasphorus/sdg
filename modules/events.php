@@ -1034,7 +1034,7 @@ function get_event_program_items( $atts = [] ) {
 					// Get the program item name
 					// --------------------
 					// WIP
-					$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
+					$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_obj_id' => $program_item_obj_id, 'program_item_label' => $program_item_label ) );
 					if ( !empty($arr_item_name['title_as_label']) ) {
 						$use_title_as_label = true;
 						$program_item_label = $arr_item_name['title_as_label'];
@@ -1444,6 +1444,7 @@ function get_program_item_name ( $args = array() ) {
 	$defaults = array(
 		'row_type'		=> 'default', // other possible values include: "header", ...?
 		'row'			=> null,
+		'program_item_obj_id' => null,
 		'program_item_label'=> null, // used for match args and to determine title_as_label >> do this some other way before calling this fcn?
 	);
 	
@@ -1454,13 +1455,6 @@ function get_program_item_name ( $args = array() ) {
     // TODO: add option to display all movements/sections of a musical work
     
     //$ts_info .= "row: <pre>".print_r($row, true)."</pre>";
-    
-	// Init vars
-		
-	$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
-	//$program_item_obj_id = $row['program_item'][0]; // ACF is now set to return ID for relationship field, not object
-	//$program_item_obj = $row['program_item'][0];
-	//$program_item_obj_id = $program_item_obj->ID;
 			
 	if ( $program_item_obj_id ) {
 
