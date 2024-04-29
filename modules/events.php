@@ -1521,7 +1521,8 @@ function set_row_authorship_display ( $item_ids = array() ) {
 				}
 				
 				//
-				$arr_row_settings[$x] = array( 'r' => $row, 'n' => $num, 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );				
+				$arr_row_settings[$x] = array( 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );
+				//$arr_row_settings[$x] = array( 'r' => $row, 'n' => $num, 'composer_id' => $composer_id, 'show_name' => $show_name, 'show_dates' => $show_dates );				
 				
 				$prev_row = $row;
 				$prev_num = $num;
