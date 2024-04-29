@@ -1654,11 +1654,12 @@ function get_program_composers ( $item_ids = array() ) {
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				if ( isset($arr_ids[$composer_id]) ) {
-					array_push($arr_ids[$composer_id],$x);
+					//array_push($arr_ids[$composer_id],$x);
+					array_push($arr_ids[$composer_id],array('row-item' => $x, 'display' => $display));
 				} else {
 					//$arr_ids[$composer_id] = array($x);
 					$display = 'test';
-					$arr_ids[$composer_id] = array('row-item' => $x, 'display' => $display);
+					$arr_ids[$composer_id][] = array('row-item' => $x, 'display' => $display);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
