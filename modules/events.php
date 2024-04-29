@@ -1015,17 +1015,25 @@ function get_event_program_items( $atts = [] ) {
 					$ts_info .= "item_post_type: $item_post_type<br />";
 					
 					$tr = array();
+					$tds = array();
 					$tr_class = "program_objects";
 					$tr['tr_id'] = "tr-".$r.'-'.$i;
 					
 					// Get the program item name
 					// --------------------
 					// WIP
+					$program_item_name = "testing...";
+					$td_class = "test_td_class_2";
+					$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
 					
 					$tr['tr_class'] = $tr_class;
+					$tr['tds'] = $tds;
+					
 					$table_rows[] = $tr;
 					
 				}
+				
+				$i++;
 				
 			}
 			
