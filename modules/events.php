@@ -1391,7 +1391,7 @@ function get_program_item_label ( $row = null ) {
 	} else {
 		
 		// Program item label is empty -- look for a placeholder value
-		$ts_info .= "program_item_label is empty -> use placeholder<br />";
+		$ts_info .= "program_item_label is empty -> look for placeholder<br />";
 		
 		if ( isset($row['item_label_old'][0]) && $row['item_label_old'][0] != "" ) {
 			
@@ -1411,6 +1411,10 @@ function get_program_item_label ( $row = null ) {
 			$item_label = $row['item_label_txt'];
 			$ts_info .= "item_label_txt: ".print_r($row['item_label_txt'], true)."<br />";
 			
+		}
+		
+		if ( empty($item_label)) {
+			$ts_info .= "program_item_label is still empty -- use title as label?<br />";
 		}
 		
 	}
