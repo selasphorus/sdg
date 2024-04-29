@@ -1046,30 +1046,18 @@ function get_event_program_items( $atts = [] ) {
         
             // Get the program item name
             // --------------------
-            // TODO: figure out how to not need to pass so many parameters?
-            // TODO: figure out how to deal better with multiple program items in a single ACF row
-            // WIP 04262024
-            // WIP: check to see if more than one item in the row and handle each separately
-            
-            // WIP 04262024
             //$item_name_args = array();
             //$item_name_args['show_item_authorship'] = null; // wip -- get value true/false based on $program_composers array
             //$arr_item_name = get_program_item_name($item_name_args);
             
-            /*
-            $arr_item_name = get_program_item_name( array( 'index' => $i, 'post_id' => $post_id, 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label, 'show_item_title' => $show_item_title, 'program_type' => $program_type, 'program_composer_ids' => $program_composer_ids, 'run_updates' => $run_updates ) );
-            //if ( $arr_item_name['title_as_label'] != "" ) {
-            if ( $arr_item_name['use_title_as_label'] ) {
+            $arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
+            if ( !empty($arr_item_name['title_as_label']) ) {
                 $use_title_as_label = true;
             	$program_item_label = $arr_item_name['title_as_label'];
             	$row_info .= ">> use title_as_label<br />";
             }
             if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
-            if ( $arr_item_name['num_items'] ) { $num_row_items = $arr_item_name['num_items']; } else { $num_row_items = 1; }
-            if ( $num_row_items > 1 ) { $grouped_row = true; }
             
-            if ( isset($arr_item_name['show_person_dates']) ) { $show_person_dates = $arr_item_name['show_person_dates']; } //else { $show_person_dates = false; }
-            //$row_info .= "<!-- arr_item_name['show_person_dates']: ".print_r($arr_item_name['show_person_dates'],true)."-->";
             
             $row_info .= "START arr_item_name['ts_info']<br />";
             $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
@@ -1079,11 +1067,13 @@ function get_event_program_items( $atts = [] ) {
             //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
             //$row_info .= "<!-- arr_item_name info: ".$arr_item_name['info']." -->";
             
+           
             // Match Placeholders
             //if ( $run_updates == true ) { match_placeholders($row); }
             
             // Cleanup/Deletion of extra/empty program rows
             // --------------------
+            /*
             // Check for extra/empty rows -- prep to delete them
             if ( empty($program_item_label) && empty($program_item_name) ) {
                 // Empty row -- no label, no item
@@ -1105,7 +1095,7 @@ function get_event_program_items( $atts = [] ) {
             if ( $run_updates == true ) { $do_deletions = true; } else { $do_deletions = false; }
             $do_deletions = false; // tft -- failsafe!
             
-            */
+            
             // If the row is empty/x-filled and needs to be deleted, then do so
             if ( $delete_row == true ) {
                 
@@ -1143,6 +1133,7 @@ function get_event_program_items( $atts = [] ) {
                 }
                 
             }
+            */
             
             
             // Display the row if it's a header, or if BOTH item_label and item_name are not empty
@@ -1424,8 +1415,8 @@ function get_program_item_label ( $row = null ) {
 
 //
 function get_program_item_name ( $args = array() ) {
-
-	// TS/logging setup
+    
+    // TS/logging setup
     $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
@@ -1433,6 +1424,149 @@ function get_program_item_name ( $args = array() ) {
 	// Init vars
 	$arr_info = array();
 	$ts_info = "";
+	//
+	$item_name = "";
+	$title_as_label = "";
+    
+    $ts_info .= "******* get_program_item_name *******<br />";
+    //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
+    
+    // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
+    
+    // Defaults
+	$defaults = array(
+		'row_type'		=> 'default', // other possible values include: "header", ...?
+		'row'			=> null,
+		'program_item_label'=> null, // used for match args and to determine title_as_label >> do this some other way before calling this fcn?
+	);
+	
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+    
+    // TODO: add option to display all movements/sections of a musical work
+    
+    //$ts_info .= "row: <pre>".print_r($row, true)."</pre>";
+    
+	// Init vars
+		
+	$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
+	//$program_item_obj_id = $row['program_item'][0]; // ACF is now set to return ID for relationship field, not object
+	//$program_item_obj = $row['program_item'][0];
+	//$program_item_obj_id = $program_item_obj->ID;
+			
+	if ( $program_item_obj_id ) {
+
+		$ts_info .= "program_item_obj_id: $program_item_obj_id<br />";
+			
+		$item_post_type = get_post_type( $program_item_obj_id );
+		$ts_info .= "item_post_type: $item_post_type<br />";
+
+		if ( $item_post_type == 'repertoire' ) {
+				
+			// Check to see if this is a chant record or other special rep type for which person_dates are NEVER to be shown.
+			// Exclude such records from the following procedures
+			if ( has_term( 'psalms', 'repertoire_category', $program_item_obj_id ) || has_term( 'anglican-chant', 'repertoire_category', $program_item_obj_id ) && ( !has_term( 'motets', 'repertoire_category', $program_item_obj_id ) && !has_term( 'anthems', 'repertoire_category', $program_item_obj_id ) ) ) { 
+				$show_person_dates = false;
+				$ts_info .= "item is in psalms or anglican-chant category, therefore set show_person_dates to false<br />";
+			}
+					
+			// TODO: check to see if the work is excerpted from another work. The goal is to show the opus/cat num and composer only once per excerpted work per program.
+					
+			// Get the name of the Musical Work using get_rep_info fcn
+			// (for row_type title_only, get rep info as item_name. For standard two-col, get title as item_label and authorship as item_name)
+				
+			if ( $row_type == 'title_only' ) {
+			
+				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
+				$item_name = $arr_item_name['info'];
+				$ts_info .= $arr_item_name['ts_info'];
+			
+			} else if ( empty($program_item_label) ) {
+
+				$ts_info .= "program_item_label is empty >> use title in left col<br />";
+
+				// If the label is empty, use the title of the musical work in the left-col position and use the composer name/dates in the right-hand column.
+				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', false, true ); // item name WITHOUT authorship info
+				$title_as_label = $arr_item_name['info'];
+				$ts_info .= $arr_item_name['ts_info'];
+										
+				$authorship_args = array( 'data' => array( 'post_id' => $program_item_obj_id ), 'format' => 'concert_item', 'abbr' => false );
+				$arr_authorship_info = get_authorship_info ( $authorship_args );
+				$item_name = $arr_authorship_info['info'];
+				$ts_info .= $arr_authorship_info['ts_info'];
+
+			} else {
+
+				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, $show_item_title );
+				$item_name = $arr_item_name['info'];
+				$ts_info .= $arr_item_name['ts_info'];
+
+			}
+
+			//$ts_info .= "item_name: ".$item_name."<br />";
+
+		} else if ( $item_post_type == 'sermon' ) {
+
+			$sermon_author_ids = get_post_meta( $program_item_obj_id, 'sermon_author', true );
+			$ts_info .= "sermon_author_ids: ".print_r($sermon_author_ids, true)."<br />";
+			// TODO: deal w/ possibility of multiple authors
+		
+			$sermon_author = get_the_title( $sermon_author_ids[0] );
+			if ( $sermon_author ) { $item_name = $sermon_author.": "; }
+			$item_name .= make_link( get_permalink($program_item_obj_id), get_the_title($program_item_obj_id) );
+
+		} else if ( $item_post_type == 'reading' ) {
+
+			$ts_info .= "item_post_type: reading<br />";
+
+			$post_title = get_the_title($program_item_obj_id);
+			if ( preg_match('/\[(.*)\]/',$post_title) ) {
+				$item_name = do_shortcode( $post_title ); // wip
+			} else {
+				$item_name = $post_title;
+			}
+
+			$ts_info .= "post_title: '$post_title'<br />";
+
+		} else { // Not of posttype repertoire, sermon, or reading
+
+			$post_title = get_the_title($program_item_obj_id);
+			if ( preg_match('/\[(.*)\]/',$post_title) ) {
+				$item_name = do_shortcode( $post_title );
+			} else {
+				$item_name = $post_title;
+			}
+
+		}
+
+	}
+	
+	// Is there a program note for this item? If so, append it to the item name
+	if ( isset($row['program_item_note']) && $row['program_item_note'] != "" ) {
+		if ( $title_as_label != "" ) { 
+			$title_as_label .= "<br /><em>".$row['program_item_note']."</em>";
+		} else if ( $item_name != "" ) { 
+			$item_name .= "<br /><em>".$row['program_item_note']."</em>";
+		}            
+	}
+    
+    if ( empty($item_name) ) {        
+        $ts_info .= "item_name is empty >> use placeholder<br />";        
+        if ( isset($row['program_item_txt']) && $row['program_item_txt'] != "" && $row['program_item_txt'] != "x" ) {
+            $item_name = $row['program_item_txt'];
+        }
+    }
+    
+	$ts_info .= "item_name: '$item_name'<br />";
+	$ts_info .= "title_as_label: '$title_as_label'<br />";
+    
+	//
+	$arr_info['title_as_label'] = $title_as_label;
+	$arr_info['item_name'] = $item_name;
+	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
+	
+	return $arr_info;
 
 }
 
