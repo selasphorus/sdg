@@ -1262,7 +1262,13 @@ function get_event_program_items( $atts = [] ) {
         
         foreach( $table_rows as $tr ) {
         
-        	$ts_info .= "tr: <pre>".print_r($tr, true)."</pre><br />";
+        	//$ts_info .= "tr: <pre>".print_r($tr, true)."</pre><br />";
+        	
+        	$table .= '<tr id="'.$tr['tr_id'].'" class="'.$tr['tr_class'].'">';
+        	foreach ( $tr['tds'] as $td ) {
+        		$table .= '<td class="'.$td['td_class'].'">'.$td['td_content'].'</td>';
+        	}
+        	$table .= '</tr>';
         	
         	/*
         
