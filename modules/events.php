@@ -823,7 +823,7 @@ function get_event_program_items( $atts = [] ) {
     */
     
     // WIP: streamlining
-	$row_display_settings = null;
+	$authorship_display_settings = null;
 	$program_composer_ids = array(); // TMP -- deprecated
 	
 	// Check to see if ANY of the rows contains items with post_type == 'repertoire'
