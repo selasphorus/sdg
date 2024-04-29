@@ -1006,10 +1006,17 @@ function get_event_program_items( $atts = [] ) {
 			foreach ( $row['program_item'] as $program_item ) {
 
 				$row_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
+					
+				$tr = array();
+				$tds = array();
+				$tr_class = "program_objects";
+				$tr['tr_id'] = "tr-".$r.'-'.$i;
 				
 				if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
-				$display_settings = $authorship_display_settings[$r.'-'.$i];
+					$display_settings = $authorship_display_settings[$r.'-'.$i];
 					$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
+					if ( $display_settings['show_name'] ) { $tr_class .= "show_authorship"; } else { $tr_class .= "hide_authorship"; }
+					if ( $display_settings['show_dates'] ) { $tr_class .= "show_person_dates"; } else { $tr_class .= "hide_person_dates"; }
 				}
 			
 				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
@@ -1018,11 +1025,6 @@ function get_event_program_items( $atts = [] ) {
 					$row_info .= "program_item_obj_id: $program_item_obj_id<br />";
 					$item_post_type = get_post_type( $program_item_obj_id );
 					$row_info .= "item_post_type: $item_post_type<br />";
-					
-					$tr = array();
-					$tds = array();
-					$tr_class = "program_objects";
-					$tr['tr_id'] = "tr-".$r.'-'.$i;
 					
 					// Get the program item name
 					// --------------------
