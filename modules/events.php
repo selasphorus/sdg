@@ -851,6 +851,7 @@ function get_event_program_items( $atts = [] ) {
         
         // Initialize variables
         $row_info = ""; // Info for troubleshooting
+        $row_info .= "-------------------- [row $r] --------------------<br />";
         
             $grouped_row = false; // For multiple-item rows
             //
@@ -1065,6 +1066,7 @@ function get_event_program_items( $atts = [] ) {
 			
 		}
 			
+        $row_info .= '--------------------<br />';
         
             // Get the program item name
             // --------------------
@@ -1230,6 +1232,7 @@ function get_event_program_items( $atts = [] ) {
 			// --------------------
             
         //$i++;
+        
         
     } // END foreach( $program_rows as $row )
     
