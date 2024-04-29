@@ -839,7 +839,7 @@ function get_event_program_items( $atts = [] ) {
 	} else {
 		$program_composers = array(); // ???
 	}
-	$program_composers_ids = array(); // TMP -- deprecated
+	$program_composer_ids = array(); // TMP -- deprecated
 	
 	//
 	// WIP: Set date/name display rules based on that overview info
