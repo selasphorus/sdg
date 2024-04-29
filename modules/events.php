@@ -1005,6 +1005,13 @@ function get_event_program_items( $atts = [] ) {
             // WIP 04262024
             $item_name_args = array();
             $item_name_args['show_item_authorship'] = null; // wip -- get value true/false based on $program_composers array
+            
+            // WIP program composers display logic
+            /*
+            if program has single composer, only show name and dates for the first row containing rep items
+            if program has multiple composers, show
+    		-- dates only for first appearance of composer PER PROGRAM -- i.e. for row corresponding to 
+    		-- name only for first appearance of composer PER ROW if row is all of one composer, but for first and non-consecutive for mixed composer rows
             //
             //$arr_item_name = get_program_item_name($item_name_args);
             
@@ -1643,9 +1650,12 @@ function get_program_item_ids ( $rows = array() ) {
 //
 function get_program_composers ( $item_ids = array() ) {
 
-	//$arr = array();
+	$arr = array();
 	$arr_ids = array();
 	//$ts_info = "";
+	
+	$prev_row = null;
+	$prev_num = null;
 	
 	foreach( $item_ids as $x => $item_id ) {	
 		$item_post_type = get_post_type( $item_id );
@@ -1654,20 +1664,35 @@ function get_program_composers ( $item_ids = array() ) {
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				if ( isset($arr_ids[$composer_id]) ) {
-					//array_push($arr_ids[$composer_id],$x);
-					array_push($arr_ids[$composer_id],array('row-item' => $x, 'display' => $display));
+					array_push($arr_ids[$composer_id],$x);
 				} else {
-					//$arr_ids[$composer_id] = array($x);
-					$display = 'test';
-					$arr_ids[$composer_id][] = array('row-item' => $x, 'display' => $display);
+					$arr_ids[$composer_id] = array($x);
 				}
+				$prev_row = $row;
+				$prev_num = $num;
 			} else {
 				// Multiple composers -- TBD how to handle this
-			}
-			//$arr_ids = array_merge($arr_ids, $item_composer_ids);			
+			}	
 		}
 	}
 	
+	foreach ( $arr_ids as $composer_id => $placements ) {
+	
+		/*
+		list($row, $num) = explode('-', $x);
+				if ( $prev_row != $row ) {
+					$show_name = true;
+				} else {
+				
+				}
+				$show_name = true;
+				$show_dates = true;
+				*/
+	
+	}
+	
+				
+				
 	//$arr['ids'] = $arr_ids;
 	//$arr['info'] = $ts_info;
 	//return $arr;
