@@ -843,11 +843,10 @@ function get_event_program_items( $atts = [] ) {
     //////
     
     $deletion_count = 0;
-    $i = 0;
     $table_rows = array();
     
-    foreach( $program_rows as $x => $row ) {
-            
+    foreach( $program_rows as $r => $row ) {
+        
         // TODO: check if row is empty >> next
         
         // Initialize variables
@@ -878,7 +877,7 @@ function get_event_program_items( $atts = [] ) {
         }
         $row_info .= "program_row display_settings: ".print_r($display_settings, true)."<br />";
         
-        //$row_info .= "get_event_program_items ==> program row [$i]: ".print_r($row, true)."<br />";
+        //$row_info .= "get_event_program_items ==> program row [$r]: ".print_r($row, true)."<br />";
             
         // Is a row_type set? WIP -- working on phasing out deprecated fields like 'show_item_label' in favor of simple row_types setup
         if ( isset($row['row_type']) ) { $row_type = $row['row_type']; } else { $row_type = null; }
@@ -975,10 +974,11 @@ function get_event_program_items( $atts = [] ) {
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
+			$tr['tr_id'] = "tr-".$r;
 			
 			if ( $program_item_label ) {
 				$td_class = "test_td_class_1";
-				$tr['tds'] = array( 'td_class' => $td_class, 'td_content' => $program_item_label );
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_label );
 			}
 			
 			// Get the program item name
@@ -987,10 +987,11 @@ function get_event_program_items( $atts = [] ) {
 			//
 			$program_item_name = "testing...";
 			$td_class = "test_td_class_2";
-			$tr['tds'] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
+			$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
 			
 			//
 			$tr['tr_class'] = $tr_class;
+			$tr['tds'] = $tds;
 			
 			$table_rows[] = $tr;
 			
@@ -1015,6 +1016,7 @@ function get_event_program_items( $atts = [] ) {
 					
 					$tr = array();
 					$tr_class = "program_objects";
+					$tr['tr_id'] = "tr-".$r.'-'.$i;
 					
 					// Get the program item name
 					// --------------------
@@ -1029,10 +1031,6 @@ function get_event_program_items( $atts = [] ) {
 			
 		}
 			
-			
-            //
-       		//
-        
         
             // Get the program item name
             // --------------------
@@ -1220,7 +1218,7 @@ function get_event_program_items( $atts = [] ) {
 
 			// --------------------
             
-        $i++;
+        //$i++;
         
     } // END foreach( $program_rows as $row )
     
