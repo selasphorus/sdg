@@ -983,8 +983,14 @@ function get_event_program_items( $atts = [] ) {
 			// Get the program item name
             // --------------------
 			// No program_items -- use placeholders
+			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
+			if ( !empty($arr_item_name['title_as_label']) ) {
+				$use_title_as_label = true;
+				$program_item_label = $arr_item_name['title_as_label'];
+				$row_info .= ">> use title_as_label<br />";
+			}
+			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
 			//
-			$program_item_name = "testing...";
 			$td_class = "test_td_class_2";
 			$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
 			
@@ -1028,7 +1034,23 @@ function get_event_program_items( $atts = [] ) {
 					// Get the program item name
 					// --------------------
 					// WIP
-					$program_item_name = "testing...";
+					$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
+					if ( !empty($arr_item_name['title_as_label']) ) {
+						$use_title_as_label = true;
+						$program_item_label = $arr_item_name['title_as_label'];
+						$row_info .= ">> use title_as_label<br />";
+					}
+					if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
+            
+            
+            $row_info .= "START arr_item_name['ts_info']<br />";
+            $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
+            $row_info .= "END arr_item_name['ts_info']<br />";
+            //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
+            //$row_info .= "program_item_name: $program_item_name";
+            //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
+            //$row_info .= "<!-- arr_item_name info: ".$arr_item_name['info']." -->";
+            
 					$td_class = "test_td_class_2";
 					$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
 					
@@ -1050,22 +1072,7 @@ function get_event_program_items( $atts = [] ) {
             //$item_name_args['show_item_authorship'] = null; // wip -- get value true/false based on $program_composers array
             //$arr_item_name = get_program_item_name($item_name_args);
             
-            $arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
-            if ( !empty($arr_item_name['title_as_label']) ) {
-                $use_title_as_label = true;
-            	$program_item_label = $arr_item_name['title_as_label'];
-            	$row_info .= ">> use title_as_label<br />";
-            }
-            if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             
-            
-            $row_info .= "START arr_item_name['ts_info']<br />";
-            $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
-            $row_info .= "END arr_item_name['ts_info']<br />";
-            //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
-            //$row_info .= "program_item_name: $program_item_name";
-            //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
-            //$row_info .= "<!-- arr_item_name info: ".$arr_item_name['info']." -->";
             
            
             // Match Placeholders
