@@ -1629,9 +1629,9 @@ function set_row_authorship_display ( $item_ids = array() ) {
 			if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				if ( isset($arr_items[$composer_id]) ) {
-					array_push( $arr_items[$composer_id], array($x => $item_id) );
+					array_push( $arr_items[$composer_id], array($x,$item_id) );
 				} else {
-					$arr_items[$composer_id] = array($x => $item_id); //array($x);
+					$arr_items[$composer_id] = array($x,$item_id); //array($x);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
@@ -1645,8 +1645,11 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	
 		// Determine visibility of composer name/dates
 		$i = 0;
-		foreach ( $placements as $x => $item_id ) {
+		foreach ( $placements as $placement ) {
 		
+			$placement[0] = $x;
+			$placement[1] = $item_id;
+			
 			list($row, $num) = explode('-', $x);
 			$show_name = false;
 			$show_dates = false;
