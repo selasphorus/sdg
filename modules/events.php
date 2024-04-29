@@ -1494,15 +1494,13 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	
 	foreach ( $arr_ids as $composer_id => $placements ) {
 	
-		// Set defaults
-		$show_name = false;
-		$show_dates = false;
-		$i = 0;
-		
 		// Determine visibility of composer name/dates
+		$i = 0;
 		foreach ( $placements as $x ) {
 		
 			list($row, $num) = explode('-', $x);
+			$show_name = false;
+			$show_dates = false;
 				
 			if ( count($placements) == 1 ) {
 				// If a composer appears only once in the program, then do show name and dates
