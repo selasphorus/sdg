@@ -233,8 +233,10 @@ function get_snippets ( $args = array() ) {
 			$info .= "is_archive<br />";
 			// what kind of archive?
 			$object = get_queried_object();
-			$object_class = get_class($object);
-			$info .= "object_class: ".$object_class."<br />";
+			if ( is_object($object) ) {
+				$object_class = get_class($object);
+				$info .= "object_class: ".$object_class."<br />";
+			}
 			//$info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
 			if ( is_tax() ) {
 				$tax = $object->taxonomy;
@@ -247,7 +249,7 @@ function get_snippets ( $args = array() ) {
 				$info .= "is_post_type_archive: ";
 				$post_archive_title = post_type_archive_title("",false);
 				$info .= $post_archive_title."<br />";
-				if ( $object->name ) {
+				if ( $object && $object->name ) {
 					$object_name = $object->name;
 				} else {
 					$object_name = strtolower($post_archive_title);
