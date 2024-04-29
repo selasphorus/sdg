@@ -1156,9 +1156,9 @@ function get_event_program_items( $atts = [] ) {
 			// Insert row_info for troubleshooting
 			if ( devmode_active() ) {
 				if ( $display == 'table' ) {
-					$table .= '<div class="troubleshooting">'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
+					$table .= '<div class="troubleshooting">row_info:<br />'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					$ts_info .= $row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
+					$ts_info .= 'row_info:<br />'.$row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
 				}
 			}
 			
