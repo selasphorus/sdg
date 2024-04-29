@@ -1632,7 +1632,7 @@ function set_row_authorship_display ( $item_ids = array() ) {
 				if ( isset($arr_items[$composer_id]) ) {
 					array_push( $arr_items[$composer_id], $row_item );
 				} else {
-					$arr_items[$composer_id] = $row_item;
+					$arr_items[$composer_id] = array($row_item);
 				}
 			} else {
 				// Multiple composers -- TBD how to handle this
