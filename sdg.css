@@ -313,15 +313,16 @@ table.program tr td {
     padding: 0.2rem 1rem .5rem 0;
 }
 
-table.program tr.row_group td {
-    padding-bottom: 0.5rem;
-}
-
 .concert_program table.program:not(.personnel) tr td/*,
 table.program tr.grouping td*/ {
     padding-bottom: 2rem;
 }
 
+
+table.program tr.row_group td,
+.concert_program table.program:not(.personnel) tr.row_group td {
+    padding-bottom: 0.5rem;
+}
 
 table.subtle,
 table.subtle tr,
