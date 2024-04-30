@@ -1658,9 +1658,9 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	
 		// Determine visibility of composer name/dates
 		$i = 0;
-		foreach ( $placements as $x ) {
+		foreach ( $placements as $x => $item_id ) {
 			
-			list($row, $num, $item_id) = explode('-', $x);
+			list($row, $num) = explode('-', $x); //list($row, $num, $item_id) = explode('-', $x);
 			$show_name = false;
 			$show_dates = false;
 				
