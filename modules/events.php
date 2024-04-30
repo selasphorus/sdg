@@ -973,6 +973,7 @@ function get_event_program_items( $atts = [] ) {
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
+			$i = 0;
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
 			if ( !empty($program_item_label) ) {
