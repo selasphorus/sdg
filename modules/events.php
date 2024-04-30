@@ -973,9 +973,10 @@ function get_event_program_items( $atts = [] ) {
 			$tr_class = "program_objects";
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
-			if ( $program_item_label ) {
+			if ( !empty($program_item_label) ) {
 				$td_class = "test_td_class_1";
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_label );
+				$td_content = $program_item_label;
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 			}
 			
 			// Get the program item name
@@ -983,14 +984,15 @@ function get_event_program_items( $atts = [] ) {
 			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
 			if ( !empty($arr_item_name['title_as_label']) ) {
 				$use_title_as_label = true;
-				$program_item_label = $arr_item_name['title_as_label'];
+				$td_content = $arr_item_name['title_as_label'];
 				$row_info .= ">> use title_as_label<br />";
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_label );
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 			}
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
 			//
 			$td_class = "test_td_class_2";
-			$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
+			$td_content = $program_item_name;
+			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 			
 			//
 			$tr['tr_class'] = $tr_class;
