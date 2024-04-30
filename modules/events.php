@@ -950,8 +950,8 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
-			$row_info .= ">> program_item_label: $program_item_label<br />";
 			$row_info .= $arr_item_label['ts_info'];
+			$row_info .= ">> program_item_label: $program_item_label<br />";
 		}
         
 		// Does the row contain one or more item objects?
