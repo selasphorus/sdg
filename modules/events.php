@@ -1020,13 +1020,16 @@ function get_event_program_items( $atts = [] ) {
 			} else {
 				$title_as_label = null;
 			}
-			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
-			//
-			$td_class = "test_td_class_2";
-			if ( $title_as_label ) { $td_class .= " authorship"; }
-			$td_content = $program_item_name;
-            $td_colspan = 1;
-			$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
+			
+			// Item Name
+			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }			//
+			if ( !empty($program_item_name) ) {
+				$td_class = "test_td_class_2";
+				if ( $title_as_label ) { $td_class .= " authorship"; }
+				$td_content = $program_item_name;
+				$td_colspan = 1;
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
+			}
 			
 			//
 			$tr['tr_class'] = $tr_class;
@@ -1121,12 +1124,14 @@ function get_event_program_items( $atts = [] ) {
             
 			// Program item_name
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
-            $td_class = "test_td_class_2";
-            if ( $title_as_label ) { $td_class .= " authorship"; }
-			$td_content = $program_item_name;
-			$td_colspan = 1;
-			$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
-					
+            if ( !empty($program_item_name) ) {
+				$td_class = "test_td_class_2";
+				if ( $title_as_label ) { $td_class .= " authorship"; }
+				$td_content = $program_item_name;
+				$td_colspan = 1;
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
+			}
+            
 			$tr['tr_class'] = $tr_class;
 			$tr['tds'] = $tds;
 					
