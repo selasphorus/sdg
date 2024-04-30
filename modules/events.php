@@ -950,6 +950,7 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
+			$row_info .= ">> program_item_label: $program_item_label<br />";
 			$row_info .= $arr_item_label['ts_info'];
 		}
         
@@ -1452,7 +1453,7 @@ function get_program_item_name ( $args = array() ) {
 		'row_type'		=> 'default', // other possible values include: "header", ...?
 		'row'			=> null,
 		'program_item_obj_id' => null,
-		'program_item_label'=> null, // used for match args and to determine title_as_label >> do this some other way before calling this fcn?
+		'program_item_label' => null, // used for match args and to determine title_as_label >> do this some other way before calling this fcn?
 	);
 	
 	// Parse & Extract args
@@ -1483,6 +1484,7 @@ function get_program_item_name ( $args = array() ) {
 				
 			if ( $row_type == 'title_only' ) {
 			
+				//$show_item_authorship = false;
 				$arr_item_name = get_rep_info( $program_item_obj_id, 'display', $show_item_authorship, true );
 				$item_name = $arr_item_name['info'];
 				$ts_info .= $arr_item_name['ts_info'];
