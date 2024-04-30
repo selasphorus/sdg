@@ -952,15 +952,17 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= ">> program_item_label: $program_item_label<br />";
 		}
         
-		// Does the row contain one or more item objects?
-		$num_items = 0; // default
-		//$num_items = 1; // default: Single-item program_row translates to single table_row
-		if ( isset($row['program_item']) && is_array($row['program_item']) ) {
-			//$ts_info .= "program_item: ".print_r($row['program_item'], true)."<br />";
-			$num_items = count($row['program_item']);
-			$program_items = $row['program_item'];
-		} else {
-			$program_items = array();
+        // Program item(s)
+        $program_items = array();
+		$num_items = 0;
+        if ( $show_item_title == true && $row_type != 'header' ) {
+			// Does the row contain one or more item objects?			
+			//$num_items = 1; // default: Single-item program_row translates to single table_row
+			if ( isset($row['program_item']) && is_array($row['program_item']) ) {
+				//$ts_info .= "program_item: ".print_r($row['program_item'], true)."<br />";
+				$num_items = count($row['program_item']);
+				$program_items = $row['program_item'];
+			}
 		}
 		
 		//if ( $num_items == 0 ) {
@@ -979,7 +981,8 @@ function get_event_program_items( $atts = [] ) {
 			if ( !empty($program_item_label) ) {
 				$td_class = "test_td_class_1";
 				$td_content = $program_item_label;
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+				if ( $row_type != 'header' ) { $td_colspan = 2; } else { $td_colspan = 1; }
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			}
 			
 			// Get the program item name
@@ -991,7 +994,8 @@ function get_event_program_items( $atts = [] ) {
 				$title_as_label = $arr_item_name['title_as_label'];
 				$td_content = $title_as_label;
                 $td_class = "title_as_label";
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+                $td_colspan = 1;
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			} else {
 				$title_as_label = null;
 			}
@@ -1000,7 +1004,8 @@ function get_event_program_items( $atts = [] ) {
 			$td_class = "test_td_class_2";
 			if ( $title_as_label ) { $td_class .= " authorship"; }
 			$td_content = $program_item_name;
-			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+            $td_colspan = 1;
+			$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			
 			//
 			$tr['tr_class'] = $tr_class;
@@ -1039,7 +1044,8 @@ function get_event_program_items( $atts = [] ) {
 			if ( $program_item_label ) {
 				$td_class = "test_td_class_1";
 				if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+				if ( $row_type != 'header' ) { $td_colspan = 2; } else { $td_colspan = 1; }
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			}
 				
 			if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
@@ -1059,7 +1065,8 @@ function get_event_program_items( $atts = [] ) {
 				$title_as_label = $arr_item_name['title_as_label'];
 				$td_content = $title_as_label;
                 $td_class = "title_as_label";
-				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+                $td_colspan = 1;
+				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			} else {
 				$title_as_label = null;
 			}
@@ -1074,7 +1081,8 @@ function get_event_program_items( $atts = [] ) {
             $td_class = "test_td_class_2";
             if ( $title_as_label ) { $td_class .= " authorship"; }
 			$td_content = $program_item_name;
-			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+			$td_colspan = 1;
+			$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 					
 			$tr['tr_class'] = $tr_class;
 			$tr['tds'] = $tds;
