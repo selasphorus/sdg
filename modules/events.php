@@ -945,8 +945,9 @@ function get_event_program_items( $atts = [] ) {
         
 		// Get the item label
 		// --------------------
-		// TODO/WIP: figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
+		// TODO/WIP: maybe figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
 		if ( $show_item_label == true && $row_type != 'title_only' ) {
+			
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
@@ -961,21 +962,16 @@ function get_event_program_items( $atts = [] ) {
 			$num_items = count($row['program_item']);
 		} 
 		
-		if ( $num_items == 1 ) {
+		if ( $num_items == 0 ) {
 		
-			// Single-item program_row translates to single table_row
-			$row_info .= 'Single-item program_row translates to single table_row<br />';
-            
-			if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-0']) ) {
-				$display_settings = $authorship_display_settings[$r.'-0'];
-				$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
-			}
+			// TODO: eliminate redundancy
 			
-			// WIP
+			// No actual items in this row -- just placeholders
+			$row_info .= 'Zero-item program_row -- single table_row with placeholders<br />';
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
-			$tr['tr_id'] = "tr-".$r;
+			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
 			if ( $program_item_label ) {
 				$td_class = "test_td_class_1";
@@ -984,12 +980,12 @@ function get_event_program_items( $atts = [] ) {
 			
 			// Get the program item name
             // --------------------
-			// No program_items -- use placeholders
 			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
 			if ( !empty($arr_item_name['title_as_label']) ) {
 				$use_title_as_label = true;
 				$program_item_label = $arr_item_name['title_as_label'];
 				$row_info .= ">> use title_as_label<br />";
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_label );
 			}
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
 			//
@@ -1002,69 +998,75 @@ function get_event_program_items( $atts = [] ) {
 			
 			$table_rows[] = $tr;
 			
+		} else if ( $num_items == 1 ) {
+			// Single-item program_row translates to single table_row
+			$row_info .= 'Single-item program_row -- single table_row<br />';
 		} else if ( $num_items > 1 ) {
-		
 			// Multiple items per program row -- display settings per row_type, program_type... -- WIP
 			$row_info .= "*** $num_items program_items found for this row! ***<br />";
-			
-			$row_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
+		}
+		
+        $row_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
 
-			// Loop through the program items for this row (usually there is only one)
-			foreach ( $row['program_item'] as $i => $program_item ) {
+		// Loop through the program items for this row (usually there is only one)
+		foreach ( $row['program_item'] as $i => $program_item_obj_id ) {
 
-				$row_info .= "+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
+			$row_info .= "<br />+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
 					
-				$tr = array();
-				$tds = array();
-				$tr_class = "program_objects";
-				$tr['tr_id'] = "tr-".$r.'-'.$i;
+			$tr = array();
+			$tds = array();
+			$tr_class = "program_objects";
+			$tr['tr_id'] = "tr-".$r.'-'.$i;
+			
+			//
+			$row_info .= "program_item_obj_id: $program_item_obj_id<br />";
+			$item_post_type = get_post_type( $program_item_obj_id );
+			$row_info .= "item_post_type: $item_post_type<br />";
+			
+			// If there's a program label set for the row, and if this is the first 
+			if ( $program_item_label ) {
+				$td_class = "test_td_class_1";
+				if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+			}
 				
-				if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
-					$display_settings = $authorship_display_settings[$r.'-'.$i];
-					$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
-					if ( $display_settings['show_name'] ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
-					if ( $display_settings['show_dates'] ) { $tr_class .= " show_person_dates"; } else { $tr_class .= " hide_person_dates"; }
-				}
+			if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
+				$display_settings = $authorship_display_settings[$r.'-'.$i];
+				$row_info .= "program_row >> display_settings: ".print_r($display_settings, true)."<br />";
+				if ( $display_settings['show_name'] ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
+				if ( $display_settings['show_dates'] ) { $tr_class .= " show_person_dates"; } else { $tr_class .= " hide_person_dates"; }
+			}
 			
-				$program_item_obj_id = $program_item; // ACF is now set to return ID for relationship field, not object
-				if ( $program_item_obj_id ) {
-
-					$row_info .= "program_item_obj_id: $program_item_obj_id<br />";
-					$item_post_type = get_post_type( $program_item_obj_id );
-					$row_info .= "item_post_type: $item_post_type<br />";
-					
-					// Get the program item name
-					// --------------------
-					// WIP
-					$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_obj_id' => $program_item_obj_id, 'program_item_label' => $program_item_label ) );
-					if ( !empty($arr_item_name['title_as_label']) ) {
-						$use_title_as_label = true;
-						$program_item_label = $arr_item_name['title_as_label'];
-						$row_info .= ">> use title_as_label<br />";
-					}
-					if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
-            
+			// Get the program item name
+			// --------------------
+			// WIP
+			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_obj_id' => $program_item_obj_id, 'program_item_label' => $program_item_label ) );
+			// Title as label?
+			if ( !empty($arr_item_name['title_as_label']) ) {
+				$use_title_as_label = true;
+				$program_item_label = $arr_item_name['title_as_label'];
+				$row_info .= ">> use title_as_label<br />";
+				$td_class = "title_as_label";
+				$td_content = $program_item_label;
+				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+			}
             
             $row_info .= "START arr_item_name['ts_info']<br />";
             $row_info .= $arr_item_name['ts_info']; // ts_info is already commented
             $row_info .= "END arr_item_name['ts_info']<br />";
             //$row_info .= "arr_item_name['info']: <pre>".$arr_item_name['info']."</pre>";
-            //$row_info .= "program_item_name: $program_item_name";
-            //$row_info .= "<!-- program_item_name: ".$program_item_name." -->";
-            //$row_info .= "<!-- arr_item_name info: ".$arr_item_name['info']." -->";
             
-					$td_class = "test_td_class_2";
-					$tds[] = array( 'td_class' => $td_class, 'td_content' => $program_item_name );
+			// Program item_name
+			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
+            $td_class = "test_td_class_2";
+			$td_content = $program_item_name;
+			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 					
-					$tr['tr_class'] = $tr_class;
-					$tr['tds'] = $tds;
+			$tr['tr_class'] = $tr_class;
+			$tr['tds'] = $tds;
 					
-					$table_rows[] = $tr;
-					
-				}
+			$table_rows[] = $tr;
 				
-			}
-			
 		}
 			
         $row_info .= '--------------------<br />';
@@ -1076,8 +1078,6 @@ function get_event_program_items( $atts = [] ) {
             //$arr_item_name = get_program_item_name($item_name_args);
             
             
-            
-           
             // Match Placeholders
             //if ( $run_updates == true ) { match_placeholders($row); }
             
@@ -1443,7 +1443,7 @@ function get_program_item_name ( $args = array() ) {
 	$item_name = "";
 	$title_as_label = "";
     
-    $ts_info .= "******* get_program_item_name *******<br />";
+    $ts_info .= ">>> get_program_item_name <<<<br />";
     //$ts_info .= "args as passed to get_program_item_name: <pre>".print_r($a,true)."</pre>";
     
     // TODO: move placeholder matching outside of this function to a separate fcn for ACF program row updates
