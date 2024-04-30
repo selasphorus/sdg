@@ -953,13 +953,18 @@ function get_event_program_items( $atts = [] ) {
 		}
         
 		// Does the row contain one or more item objects?
-		$num_items = 1; // default: Single-item program_row translates to single table_row
+		$num_items = 0; // default
+		//$num_items = 1; // default: Single-item program_row translates to single table_row
 		if ( isset($row['program_item']) && is_array($row['program_item']) ) {
 			//$ts_info .= "program_item: ".print_r($row['program_item'], true)."<br />";
 			$num_items = count($row['program_item']);
-		} 
+			$program_items = $row['program_item'];
+		} else {
+			$program_items = array();
+		}
 		
-		if ( $num_items == 0 ) {
+		//if ( $num_items == 0 ) {
+		if ( empty($program_items) ) {
 		
 			// TODO: eliminate redundancy
 			
@@ -1013,7 +1018,7 @@ function get_event_program_items( $atts = [] ) {
         $row_info .= " >>>>>>> START foreach program_item <<<<<<<<br />";
 
 		// Loop through the program items for this row (usually there is only one)
-		foreach ( $row['program_item'] as $i => $program_item_obj_id ) {
+		foreach ( $program_items as $i => $program_item_obj_id ) {
 
 			$row_info .= "<br />+~+~+~+~+ program_item #$i +~+~+~+~+<br />";
 					
