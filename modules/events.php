@@ -979,9 +979,30 @@ function get_event_program_items( $atts = [] ) {
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
 			if ( !empty($program_item_label) ) {
-				$td_class = "test_td_class_1";
+				$td_class = "zero_item_row";
 				$td_content = $program_item_label;
-				if ( $row_type != 'header' ) { $td_colspan = 2; } else { $td_colspan = 1; }
+				
+				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
+                    
+					// Single column row
+					$td_colspan = 2;					
+					$row_content = "";
+					
+					if ( $row_type == "header" ) { 
+						$td_class = "header";
+						$td_content = $program_item_label;
+					} else if ( $row_type == "program_note" ) {
+						$td_class = "program_note";
+						$td_content = $program_item_name;
+					} else if ( $row_type == "label_only" ) {
+						$td_class = "label_only";
+						$td_content = $program_item_label;
+					} else if ( $row_type == "title_only" ) {
+						$td_class = "title_only";
+						$td_content = $program_item_name;
+					}
+				}
+				
 				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			}
 			
@@ -1041,10 +1062,32 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "item_post_type: $item_post_type<br />";
 			
 			// If there's a program label set for the row, and if this is the first 
-			if ( $program_item_label ) {
+			if ( !empty($program_item_label) ) {
 				$td_class = "test_td_class_1";
-				if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
-				if ( $row_type != 'header' ) { $td_colspan = 2; } else { $td_colspan = 1; }
+				
+				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
+                    
+					// Single column row
+					$td_colspan = 2;					
+					$row_content = "";
+					
+					if ( $row_type == "header" ) { 
+						$td_class = "header";
+						$td_content = $program_item_label;
+					} else if ( $row_type == "program_note" ) {
+						$td_class = "program_note";
+						$td_content = $program_item_name;
+					} else if ( $row_type == "label_only" ) {
+						$td_class = "label_only";
+						$td_content = $program_item_label;
+					} else if ( $row_type == "title_only" ) {
+						$td_class = "title_only";
+						$td_content = $program_item_name;
+					}
+				} else {
+					if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
+				}			
+				
 				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
 			}
 				
