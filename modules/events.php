@@ -984,7 +984,7 @@ function get_event_program_items( $atts = [] ) {
 				
 				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
                     
-					// Single column row
+					// Single wide column row
 					$td_colspan = 2;					
 					$row_content = "";
 					
@@ -1001,6 +1001,8 @@ function get_event_program_items( $atts = [] ) {
 						$td_class = "title_only";
 						$td_content = $program_item_name;
 					}
+				} else {
+					$td_colspan = 1;
 				}
 				
 				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
@@ -1088,6 +1090,7 @@ function get_event_program_items( $atts = [] ) {
 						$td_content = $program_item_name;
 					}
 				} else {
+					$td_colspan = 1;
 					if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
 				}			
 				
