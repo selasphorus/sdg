@@ -1020,6 +1020,7 @@ function get_event_program_items( $atts = [] ) {
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
+			if ( $num_items > 1 ) { $tr_class .= " row_group"; }
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
 			//

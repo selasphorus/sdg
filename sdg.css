@@ -255,6 +255,23 @@ body.admin-bar .msg_bar_close {
 	display: inline;
 }
 
+code, .code {
+    background-color: transparent;
+    padding: 0 1rem;
+    font-size: 0.8rem;
+    color: #5A5A5A;
+    line-height: normal;
+}
+
+.code table.program tr td {
+    border: 1px solid #cccccc;
+    padding: 0.5rem;
+}
+
+.code table.program:last-child tr:last-child td {
+    padding-bottom: 0.5rem;
+}
+
 /*** Tables ***/
 
 table.program/ {
@@ -296,10 +313,161 @@ table.program tr td {
     padding: 0.2rem 1rem .5rem 0;
 }
 
+table.program tr.row_group td {
+    padding-bottom: 0.5rem;
+}
+
 .concert_program table.program:not(.personnel) tr td/*,
 table.program tr.grouping td*/ {
     padding-bottom: 2rem;
 }
+
+
+table.subtle,
+table.subtle tr,
+table.subtle tr td,
+table.program
+/*table.program tr td*/ {
+	width: auto;
+	border: none;
+}
+
+table.program.draft {
+    border: 1px solid var(--ltgrey);
+    padding: 1rem;
+}
+
+table.subtle tr td {
+	vertical-align: top;
+}
+
+table.cuepoints {
+    border-width: 1px;
+    margin: 1% auto;
+    width: 98%;
+}
+
+table.program {
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+table.program:last-child {
+    /*border-bottom: 1px solid var(--ltgrey);*/
+}
+
+table.program tr
+/*table.cuepoints tr*/ {
+	padding: 0;
+	margin: 0;
+}
+
+table.program:last-child tr:last-child td {
+    padding-bottom: 1.5rem;
+}
+
+.admin-view table.program tr.placeholder,
+.admin-view table.program tr td.placeholder {
+    color: #EE720C;
+}
+
+.admin-view table.program tr.update_required,
+.admin-view table.program tr td.update_required {
+    color: cadetblue;
+}
+
+td.padded {
+	padding: 0.5rem;
+}
+
+.label,
+td.program_label {
+	font-weight: bold;
+}
+
+.concert_program td.program_label.no_label, 
+.concert_program td.title_as_label {
+    font-weight: normal;
+}
+
+.concert_program td.no_label,
+.concert_program td.title_as_label {
+    width: 60%;
+}
+
+td.program_label {
+	/*width: 40%;*/
+}
+
+td.program_item {
+	/*width: 60%;*/
+}
+
+.concert_program td.program_item {
+    text-align: right;
+}
+
+.concert_program td.program_item.authorship {
+    font-style: italic;
+}
+
+.centered td.program_label {
+    text-align: right;
+}
+
+.centered td.program_item {
+    text-align: left;
+}
+
+/*tr.grouping td span.person_dates {
+    display: block;
+}*/
+td span.arranger,
+td span.transcriber,
+td span.translator,
+td span.librettist {
+	display: block;
+}
+
+tr.hide_authorship td span.composer,
+tr.hide_person_dates td span.person_dates {
+    display: none;
+}
+
+table.program tr th {
+    border: none;
+    padding-left: 0;
+}
+
+table.program tr td.header {
+    font-size: 1.3rem;
+    font-weight: 300;
+    padding: 1rem 0 0.7rem 0;
+}
+
+table.program tr td.program_note {
+    font-style: italic;
+}
+
+table tr td.thumb {
+	width: 150px;
+}
+
+.meta-box-sortables td input {
+    width: 100%;
+}
+
+table.pre {
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+table pre {
+    border: none;
+    padding: 1rem;
+    line-height: normal;
+}
+
 
 /*** FORM STYLES ***/
 
