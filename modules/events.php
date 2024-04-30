@@ -864,8 +864,6 @@ function get_event_program_items( $atts = [] ) {
         $program_item_label = null;
         $program_item_name = null;
             //
-        $use_title_as_label = false;
-            //
             $show_person_dates = true;
         
         //
@@ -905,7 +903,6 @@ function get_event_program_items( $atts = [] ) {
 			} else if ( empty($program_item_label) ) {
 
 				$ts_info .= "<!-- program_item_label is empty >> use title in left col -->";
-				$use_title_as_label = true;
 				
 			}
 		*/
@@ -982,15 +979,20 @@ function get_event_program_items( $atts = [] ) {
 			// Get the program item name
             // --------------------
 			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_label' => $program_item_label ) );
+			// Title as label?
 			if ( !empty($arr_item_name['title_as_label']) ) {
-				$use_title_as_label = true;
-				$td_content = $arr_item_name['title_as_label'];
 				$row_info .= ">> use title_as_label<br />";
+				$title_as_label = $arr_item_name['title_as_label'];
+				$td_content = $title_as_label;
+                $td_class = "title_as_label";
 				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+			} else {
+				$title_as_label = null;
 			}
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
 			//
 			$td_class = "test_td_class_2";
+			if ( $title_as_label ) { $td_class .= " authorship"; }
 			$td_content = $program_item_name;
 			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 			
@@ -1045,12 +1047,13 @@ function get_event_program_items( $atts = [] ) {
 			$arr_item_name = get_program_item_name( array( 'row' => $row, 'row_type' => $row_type, 'program_item_obj_id' => $program_item_obj_id, 'program_item_label' => $program_item_label ) );
 			// Title as label?
 			if ( !empty($arr_item_name['title_as_label']) ) {
-				$use_title_as_label = true;
-				$program_item_label = $arr_item_name['title_as_label'];
 				$row_info .= ">> use title_as_label<br />";
-				$td_class = "title_as_label";
-				$td_content = $program_item_label;
+				$title_as_label = $arr_item_name['title_as_label'];
+				$td_content = $title_as_label;
+                $td_class = "title_as_label";
 				$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
+			} else {
+				$title_as_label = null;
 			}
             
             $row_info .= "START arr_item_name['ts_info']<br />";
@@ -1061,6 +1064,7 @@ function get_event_program_items( $atts = [] ) {
 			// Program item_name
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             $td_class = "test_td_class_2";
+            if ( $title_as_label ) { $td_class .= " authorship"; }
 			$td_content = $program_item_name;
 			$tds[] = array( 'td_class' => $td_class, 'td_content' => $td_content );
 					
@@ -1202,12 +1206,10 @@ function get_event_program_items( $atts = [] ) {
 					if ( $show_item_label != true || empty($program_item_label) ) { $td_class .= " no_label"; }
 					if ( $placeholder_label == true ) { $td_class .= " placeholder"; }
 					if ( $label_update_required == true ) { $td_class .= " update_required"; }
-					if ( $use_title_as_label == true ) { $td_class .= " title_as_label"; }
                     
                     $table .= '<td class="'.$td_class.'">'.$program_item_label.'</td>';
                     $td_class = "program_item";
                     if ( $placeholder_item == true ) { $td_class .= " placeholder"; }
-                    if ( $use_title_as_label == true ) { $td_class .= " authorship"; }
                     $table .= '<td class="'.$td_class.'">'.$program_item_name.'</td>';
                     
 				}
@@ -1321,12 +1323,10 @@ function get_event_program_items( $atts = [] ) {
 				if ( $show_item_label != true || empty($program_item_label) ) { $td_class .= " no_label"; }
 				if ( $placeholder_label == true ) { $td_class .= " placeholder"; }
 				if ( $label_update_required == true ) { $td_class .= " update_required"; }
-				if ( $use_title_as_label == true ) { $td_class .= " title_as_label"; }
 				
 				$table .= '<td class="'.$td_class.'">'.$program_item_label.'</td>';
 				$td_class = "program_item";
 				if ( $placeholder_item == true ) { $td_class .= " placeholder"; }
-				if ( $use_title_as_label == true ) { $td_class .= " authorship"; }
 				$table .= '<td class="'.$td_class.'">'.$program_item_name.'</td>';
 				
 			}
