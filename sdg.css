@@ -319,8 +319,8 @@ table.program tr.grouping td*/ {
 }
 
 
-table.program tr.row_group td,
-.concert_program table.program:not(.personnel) tr.row_group td {
+table.program tr.row_group:not(.last_in_group) td,
+.concert_program table.program:not(.personnel) tr.row_group:not(.last_in_group) td {
     padding-bottom: 0.5rem;
 }
 

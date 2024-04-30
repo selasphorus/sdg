@@ -1021,6 +1021,7 @@ function get_event_program_items( $atts = [] ) {
 			$tds = array();
 			$tr_class = "program_objects";
 			if ( $num_items > 1 ) { $tr_class .= " row_group"; }
+			if ( $num_items > 1 && $i == $num_items ) { $tr_class .= " last_in_group"; }
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
 			//
