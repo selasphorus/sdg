@@ -948,6 +948,7 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
+			$placeholder_label = $arr_item_label['placeholder_label'];
 			$row_info .= $arr_item_label['ts_info'];
 			$row_info .= ">> program_item_label: $program_item_label<br />";
 		}
@@ -980,6 +981,7 @@ function get_event_program_items( $atts = [] ) {
 			
 			if ( !empty($program_item_label) ) {
 				$td_class = "zero_item_row";
+				if ( $placeholder_label ) { $td_class .= " placeholder"; }
 				$td_content = $program_item_label;
 				
 				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
@@ -1432,7 +1434,7 @@ function get_program_item_label ( $row = null ) {
 	$arr_info = array();
 	$ts_info = "";
 	$item_label = "";
-	$placeholder_label = false;
+	$placeholder = false;
 	
 	// Parse & Extract args
 	//$args = wp_parse_args( $args, $defaults );
@@ -1477,7 +1479,7 @@ function get_program_item_label ( $row = null ) {
 			
 		} else if ( isset($row['item_label_txt']) && $row['item_label_txt'] != "" && $row['item_label_txt'] != "x" ) { 
 			
-			$placeholder_label = true;
+			$placeholder = true;
 			$item_label = $row['item_label_txt'];
 			$ts_info .= "item_label_txt: ".print_r($row['item_label_txt'], true)."<br />";
 			
@@ -1491,6 +1493,7 @@ function get_program_item_label ( $row = null ) {
     
 	//
 	$arr_info['item_label'] = $item_label;
+	$arr_info['placeholder'] = $placeholder;
 	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
