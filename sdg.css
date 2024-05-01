@@ -408,7 +408,8 @@ td.program_item {
     text-align: right;
 }
 
-.concert_program td.program_item.authorship {
+.concert_program td.program_item.authorship,
+.concert_program td.program_item.placeholder {
     font-style: italic;
 }
 
