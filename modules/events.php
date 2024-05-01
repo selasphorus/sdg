@@ -948,7 +948,7 @@ function get_event_program_items( $atts = [] ) {
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
-			$placeholder_label = $arr_item_label['placeholder_label'];
+			$placeholder_label = $arr_item_label['placeholder'];
 			$row_info .= $arr_item_label['ts_info'];
 			$row_info .= ">> program_item_label: $program_item_label<br />";
 		}
