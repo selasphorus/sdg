@@ -1026,7 +1026,7 @@ function get_event_program_items( $atts = [] ) {
 			// Item Name
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }			//
 			if ( !empty($program_item_name) ) {
-				$td_class = "test_td_class_2";
+				$td_class = "program_item";
 				if ( $title_as_label ) { $td_class .= " authorship"; }
 				$td_content = $program_item_name;
 				$td_colspan = 1;
@@ -1128,7 +1128,7 @@ function get_event_program_items( $atts = [] ) {
 			// Program item_name
 			if ( $arr_item_name['item_name'] ) { $program_item_name = $arr_item_name['item_name']; }
             if ( !empty($program_item_name) ) {
-				$td_class = "test_td_class_2";
+				$td_class = "program_item";
 				if ( $title_as_label ) { $td_class .= " authorship"; }
 				$td_content = $program_item_name;
 				$td_colspan = 1;
