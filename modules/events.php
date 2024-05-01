@@ -1070,7 +1070,9 @@ function get_event_program_items( $atts = [] ) {
 			
 			// If there's a program label set for the row, and if this is the first 
 			if ( !empty($program_item_label) ) {
+				
 				$td_class = "test_td_class_1";
+				if ( $placeholder_label ) { $td_class .= " placeholder"; }
 				
 				if ( $row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only" ) {
                     
