@@ -568,11 +568,11 @@ function get_snippets ( $args = array() ) {
 										if ( substr($url_base, -1) == "/" ) { $url_base = substr($url_base, 0, -1); } // Trim trailing slash, if any
 										$snippet_logic_info .= "url_base: $url_base<br />";
 										$current_path_base = $current_path;
-										if ( substr($current_path_base, 0, 1) == "/" ) { $current_path_base = substr($current_path_base, 1); } // Trim leading slash, if any
-										if ( substr($current_path_base, -1) == "/" ) { $current_path_base = substr($current_path_base, 0, -1); } // Trim trailing slash, if any
+										if ( $current_path_base && substr($current_path_base, 0, 1) == "/" ) { $current_path_base = substr($current_path_base, 1); } // Trim leading slash, if any
+										if ( $current_path_base && substr($current_path_base, -1) == "/" ) { $current_path_base = substr($current_path_base, 0, -1); } // Trim trailing slash, if any
 										$snippet_logic_info .= "current_path_base: $current_path_base<br />";
 										// match to $current_path? true if current_path begins with url_base
-										if ( substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
+										if ( $current_path_base && substr($current_path_base, 0, strlen($url_base)) == $url_base ) {
 											$url_match = true;
 											$snippet_logic_info .= "current_path_base begins with wildcard url_base: $url_base >> url_match = TRUE<br />";
 										}
