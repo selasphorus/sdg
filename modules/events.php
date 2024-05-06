@@ -1095,7 +1095,7 @@ function get_event_program_items( $atts = [] ) {
 					}
 				} else {
 					$td_colspan = 1;
-					if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = "***"; }
+					if ( $i == 0 ) { $td_content = $program_item_label; } else { $td_content = ""; } //$td_content = "***"; }
 				}			
 				
 				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
