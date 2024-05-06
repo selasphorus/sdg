@@ -350,10 +350,10 @@ function get_event_personnel( $atts = [] ) {
             // Should this row be displayed on the front end?
             if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
                 $show_row = $row['show_row'];
-                $row_info .= "<!-- show_row: ".$show_row." -->"; // tft
+                $row_info .= "show_row: ".$show_row."<br />"; // tft
             } else { 
                 $show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
-                $row_info .= "<!-- default: show_row = 1 -->"; // tft
+                $row_info .= "default: show_row = 1<br />"; // tft
             }
             
             if ( $display == 'dev' ) { // || devmode_active()
@@ -914,10 +914,10 @@ function get_event_program_items( $atts = [] ) {
         // TODO: modify to simplify as below -- set to true/false based on stored value, if any
 		if ( isset($row['show_row']) && $row['show_row'] != "" ) { 
 			$show_row = $row['show_row'];
-			//$row_info .= "get_event_program_items ==> show_row = ".$row['show_row']."<br />";
+			$row_info .= "get_event_program_items ==> show_row = '".$row['show_row']."'<br />";
 		} else { 
 			$show_row = 1; // Default to 'Yes'/true/show the row if no zero value has been saved explicitly
-			//$row_info .= "get_event_program_items ==> show_row = 1 (default)<br />";
+			$row_info .= "get_event_program_items ==> show_row = 1 (default)<br />";
 		}
         
 		// Should we display the item label for this row?
@@ -943,8 +943,7 @@ function get_event_program_items( $atts = [] ) {
 		// Get the item label
 		// --------------------
 		// TODO/WIP: maybe figure out how to skip this for rep items in $program_type == "concert_program" where title is used in left col instead of label			
-		if ( $show_item_label == true && $row_type != 'title_only' ) {
-			
+		if ( $show_item_label == true && $row_type != 'title_only' ) {			
 			$row_info .= "get_program_item_label<br />";
 			$arr_item_label = get_program_item_label($row);
 			$program_item_label = $arr_item_label['item_label'];
@@ -976,6 +975,7 @@ function get_event_program_items( $atts = [] ) {
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
+			if ( $show_row == "0" ) { $tr_class .= " hidden"; }
 			$i = 0;
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
 			
@@ -1059,6 +1059,7 @@ function get_event_program_items( $atts = [] ) {
 			$tr = array();
 			$tds = array();
 			$tr_class = "program_objects";
+			if ( $show_row == "0" ) { $tr_class .= " hidden"; }
 			if ( $num_items > 1 ) { $tr_class .= " row_group"; }
 			if ( $num_items > 1 && $i == $num_items-1 ) { $tr_class .= " last_in_group"; }
 			$tr['tr_id'] = "tr-".$r.'-'.$i;
