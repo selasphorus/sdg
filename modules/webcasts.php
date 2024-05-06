@@ -286,9 +286,9 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     // Get the webcast status, Video ID or URL, and format
     $webcast_status = get_webcast_status( $post_id );
     $video_id = get_field('video_id', $post_id);
-    $podbeans_id = get_field('podbeans_id', $post_id);
-    $pb_channel_id = get_field('pb_channel_id', $post_id);
     $audio_file = get_field('audio_file', $post_id);
+    $podbeans_id = get_field('podbeans_id', $post_id); // podbeans -- deprecated
+    $pb_channel_id = get_field('pb_channel_id', $post_id); // podbeans -- deprecated
     $url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     $webcast_format = get_field('webcast_format', $post_id);
     if ( empty($webcast_format) ) { $webcast_format = "audio"; } // Default to audio -- ??
@@ -317,7 +317,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     }
 	
     if ( $status_only == false ) {
-	   $info .= "<!-- post_id: '".$post_id."'; webcast_status: '".$webcast_status."'; webcast_format: '".$webcast_format."'; video_id: '".$video_id."'; webcast_url: '".$url."' -->";
+	   $info .= "<!-- post_id: '".$post_id."'; webcast_status: '".$webcast_status."'; webcast_format: '".$webcast_format."'; video_id: '".$video_id."'; audio_file: '".$audio_file."'; webcast_url: '".$url."' -->";
     }
     
     if ( !empty($video_id) ) { //&& $webcast_format != "video_as_audio_live"
