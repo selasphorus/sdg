@@ -1328,7 +1328,7 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
             }
             
             // Hide everything after and including the colon for events with titles matching the pattern "{Whatever} Eucharist: {xxx}"
-			if (strpos($clean_title, 'Eucharist:') !== false) { 
+			if ( $clean_title && strpos($clean_title, 'Eucharist:') !== false ) { 
 				$clean_title = preg_replace('/(.*) Eucharist: (.*)/', '$1 Eucharist', $clean_title);
 			}
             
