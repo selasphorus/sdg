@@ -3389,7 +3389,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				$ts_info .= "<!-- [sdgp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
 				
 				// If we've got a video_id and the status is live or on demand, then don't show the image		
-				if ( ( !empty($video_id) && 
+				if ( ( !empty($video_id) && $webcast_format != "audio" && $webcast_format != "video_as_audio" &&
 					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
 					|| ( $webcast_format == "video" && ( !empty($url_ondemand) ) ) 
 				   ) { 
