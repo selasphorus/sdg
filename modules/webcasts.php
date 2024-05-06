@@ -320,7 +320,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 	   $info .= "<!-- post_id: '".$post_id."'; webcast_status: '".$webcast_status."'; webcast_format: '".$webcast_format."'; video_id: '".$video_id."'; audio_file: '".$audio_file."'; webcast_url: '".$url."' -->";
     }
     
-    if ( !empty($video_id) ) { //&& $webcast_format != "video_as_audio_live"
+    if ( !empty($video_id) && ( $webcast_format != "audio" && $webcast_format != "video_as_audio" && $webcast_format != "video_as_audio_live" ) ) { //&& $webcast_format != "video_as_audio_live"
         
         if ( $webcast_format == "vimeo" || $webcast_format == "vimeo_recurring" ) {
             
@@ -403,8 +403,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
         
         if ( $webcast_format == "video_as_audio_live" ) {
             
-            $info .= "webcast_format: 'video_as_audio_live'";
-            $info .= "<br />";
+            //$info .= "webcast_format: 'video_as_audio_live'<br />";
             
             //e.g. -- see vimeo-test.php
             
