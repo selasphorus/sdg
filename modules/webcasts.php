@@ -287,8 +287,6 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     $webcast_status = get_webcast_status( $post_id );
     $video_id = get_field('video_id', $post_id);
     $audio_file = get_field('audio_file', $post_id);
-    $podbeans_id = get_field('podbeans_id', $post_id); // podbeans -- deprecated
-    $pb_channel_id = get_field('pb_channel_id', $post_id); // podbeans -- deprecated
     $url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     $webcast_format = get_field('webcast_format', $post_id);
     if ( empty($webcast_format) ) { $webcast_format = "audio"; } // Default to audio -- ??
@@ -300,21 +298,12 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     vimeo : Vimeo Video/One-time Event
     vimeo_recurring : Vimeo Recurring Event
     youtube: YouTube
-    video : Video (Flowplayer)
+    video : Video (formerly: Flowplayer -- future use tbd)
     video_as_audio : Video as Audio
     video_as_audio_live : Video as Audio - Livestream
     audio : Audio Only
     ---
     */
-    
-    if ( !empty($url) && ! ( $webcast_format == "video_as_audio" || $webcast_format == "audio") ) {
-        $flowplayer = true;
-        if ( $status_only === false ) {
-            $info .= "<!-- flowplayer -->";
-        }
-    } else { 
-        $flowplayer = false;
-    }
 	
     if ( $status_only == false ) {
 	   $info .= "<!-- post_id: '".$post_id."'; webcast_status: '".$webcast_status."'; webcast_format: '".$webcast_format."'; video_id: '".$video_id."'; audio_file: '".$audio_file."'; webcast_url: '".$url."' -->";
@@ -367,32 +356,6 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             
         }        
     
-    } else if ( $webcast_format == "podbeans_live" ) {
-        
-        // src="https://www.podbean.com/live-player/?channel_id=L7vRFJrcwN&scode=d4cc62070ff4826cbf396d30b1aaff5f" 
-        $player .= '<div class="podbeans_container">';
-        $src = "https://www.podbean.com/live-player/?channel_id=".$pb_channel_id."&scode=d4cc62070ff4826cbf396d30b1aaff5f";
-        $webcast_title = get_field('webcast_title', $post_id);
-        $webcast_style = 'border: none; min-width: min(100%, 430px);';
-		$player .= '<iframe id="podbeans_live" src="'.$src.'" title="'.$webcast_title.'" style="'.$webcast_style.'" frameborder="0" allowtransparency="true" allowfullscreen="" height="150" width="100%" scrolling="no" data-name="pb-iframe-player" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-		$player .= '</div>';
-        //<iframe height="150" width="100%" style="border: none" scrolling="no" data-name="pb-iframe-player" referrerpolicy="no-referrer-when-downgrade" src="https://www.podbean.com/live-player/?channel_id=L7vRFJrcwN&scode=d4cc62070ff4826cbf396d30b1aaff5f" allowfullscreen=""></iframe>
-    
-    } else if ( !empty($podbeans_id) ) {
-        
-        // DEV WIP
-        if ( $status_only == false ) {
-            $info .= "<!-- podbeans_id: '".$podbeans_id."'-->";
-        }
-
-        $player .= '<div class="podbeans_container">';
-        $src = "https://www.podbean.com/player-v2/?i=".$podbeans_id."-pb&from=pb6admin&pbad=0&share=1&download=1&rtl=0&fonts=Arial&skin=1&font-color=auto&logo_link=episode_page&btn-skin=c73a3a";
-        $webcast_title = get_field('webcast_title', $post_id);
-        $webcast_style = 'border: none; min-width: min(100%, 430px);';
-        $player .= '<iframe id="podbeans" src="'.$src.'" title="'.$webcast_title.'" style="'.$webcast_style.'" frameborder="0" allowtransparency="true" height="150" width="100%" scrolling="no" data-name="pb-iframe-player"></iframe>';
-        $player .= '</div>';
-            
-            
     } else if ( !empty($audio_file) || $webcast_format == "audio" || $webcast_format == "video_as_audio" || $webcast_format == "video_as_audio_live" ) {
         
         // WIP Audio Player: options for live and on-demand
@@ -568,44 +531,6 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
         
         // END WIP experiments for video as audio
         
-    } else if ( $flowplayer == true ) {
-        
-        // Video Player: Flowplayer
-        
-        $player_status = "ready";
-            
-        if ( $status_only == false ) {
-            // Get the poster image
-            $poster_image = get_the_post_thumbnail_url( $post_id );
-            if (! $poster_image ) {
-                $poster_image = "https://www.saintthomaschurch.org/wp-content/uploads/2019/07/Looking-West-to-the-High-Altar-with-a-Lenten-Frontal.jpg"; // default image
-            }
-
-            // Flowplayer container
-            $player .= '<div class="flowplayer_container">';
-            if ( $webcast_format == 'audio' ) {
-                $player .= '<div id="flowplayer" class="audio-player"></div>';
-            } else {
-                $player .= '<div id="flowplayer"></div>';
-            }
-            //
-            $player .= '</div>';
-
-            // Google Analytics for Flowplayer
-            $player .= "<!-- Google Analytics/Flowplayer -->";
-            $player .= "<script>";
-            $player .= "window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;";
-            if ( !is_dev_site() ) {
-                $player .= "ga('create', 'UA-163775836-1', 'auto');";
-            } else {
-                $player .= "ga('create', 'UA-163775836-2', 'auto');";
-            }        
-            $player .= "ga('send', 'pageview');";
-            $player .= "</script>";
-            $player .= "<script async src='//www.google-analytics.com/analytics.js'></script>";
-            $player .= "<!-- End Google Analytics/Flowplayer -->";
-        }
-    
     }
     
     // TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
@@ -666,7 +591,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 		$info .= $player;
         $info .= "<!-- /MEDIA PLAYER -->"; // tft
         
-        // Assemble Cuepoints (for non-Vimeo webcasts only -- Flowplayer; HTML5 Audio-only
+        // Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
         $rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
         /*if ( have_rows('cuepoints', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
             while ( have_rows('cuepoints', $post_id) ) : the_row();
@@ -680,10 +605,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             
             // Cuepoints
             
-            if ( $flowplayer == true ) {
-                $info .= '<!-- Flowplayer Cuepoints -->'; // tft
-            } else {
-                $info .= '<!-- HTML5 Player Cuepoints -->'; // tft
+            $info .= '<!-- HTML5 Player Cuepoints -->'; // tft
                 // TODO: move this to sdg.js?
                 $info .= '<script>';
                 $info .= '  var vid = document.getElementsByClassName("wp-audio-shortcode")[0];';
@@ -691,9 +613,8 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
                 $info .= '    vid.currentTime = seconds;';
                 $info .= '  }';
                 $info .= '</script>';
-            }
 
-            // Flowplayer Cuepoints
+            // Cuepoints
             $seek_buttons = ""; // init
             $button_actions = ""; // init
 
@@ -717,33 +638,12 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
                 $end_time_seconds = xtime_to_seconds($row['end_time']);
 
                 $seek_buttons .= '<div class="cuepoint">';
-
-                if ( $flowplayer == true ) { //if ( !empty($src) ) {
-
-                    // Flowplayer
-                    
-                    $seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" class="cue_button">'.$name.'</button></span>';
-                    /*if ( $start_time ) {
-                        $seek_buttons .= '<span class="cue_time">'.$start_time;
-                        if ( $end_time ) { $seek_buttons .= '-'.$end_time; }
-                        $seek_buttons .= '</span>';
-                    }*/
-                    
-                    $button_actions .= 'document.getElementById("'.$button_id.'").addEventListener("click", function(){ seek_to_cue('.$start_time_seconds.'); });';
-                    
-                } else {
-                    
-                    // HTML5
-                    $seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" onclick="setCurTime('.$start_time_seconds.')" type="button" class="cue_button">'.$name.'</button></span>';
-                    
-                }
-
+                $seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" onclick="setCurTime('.$start_time_seconds.')" type="button" class="cue_button">'.$name.'</button></span>';
                 if ( $start_time ) {
                     $seek_buttons .= '<span class="cue_time">'.$start_time;
                     if ( $end_time ) { $seek_buttons .= '-'.$end_time; }
                     $seek_buttons .= '</span>';
                 }
-                
                 $seek_buttons .= '</div>';
 
             }
@@ -752,40 +652,6 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             $info .= '</div>';
             
         } // END if ($rows) for Cuepoints
-        
-        // If SRC url was found, load Flowplayer JS
-        // TODO: move this to a separate function (?)
-        if ( $flowplayer == true ) {
-            
-            // Embed the JS (Flowplayer)
-            $player_js = '<script>';
-            $player_js .= 'var api = flowplayer("#flowplayer", {';
-            $player_js .= '	src      : "'.$url.'",';
-            if ( $webcast_format != 'audio' ) {
-                $player_js .= '	poster      : "'.$poster_image.'",';
-            }
-            $player_js .= '	autoplay : false, ';
-            $player_js .= '	muted    : false,';
-            $player_js .= '	token    : "eyJraWQiOiJXN1M0V3ZHSjVTMHgiLCJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJjIjoie1wiYWNsXCI6NixcImlkXCI6XCJXN1M0V3ZHSjVTMHhcIn0iLCJpc3MiOiJGbG93cGxheWVyIn0.WK4z3OP4whNB0g4y4EsSHJatsbZu3cT5je4bOUybTIjcDj_9AimhDnIw3sGGZbGfopUwxZ8XlPWKvncpvzUfWg", ';
-            $player_js .= '	ui    : flowplayer.ui.USE_THIN_CONTROLBAR, ';
-            $player_js .= '	ga: {';
-            if ( !is_dev_site() ) { 
-                $player_js .= '	    ga_instances: ["UA-163775836-1"],';
-            } else {
-                $player_js .= '	    ga_instances: ["UA-163775836-2"],';
-            }
-            $player_js .= '	    media_title: "[media_name]",';
-            $player_js .= '	}';        
-            $player_js .= '});';
-
-            // button actions
-            if ( isset ($button_actions) ) { $player_js .= $button_actions; }
-
-            $player_js .= '</script>';
-
-            $info .= $player_js;
-            
-        }
         
         // Add call to action beneath media player
         if ( $player != "" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {

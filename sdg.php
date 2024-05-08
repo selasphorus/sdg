@@ -1985,7 +1985,7 @@ function sdg_debug_to_console($data, $context = 'Debug in Console') {
     echo $output;
 }
 
-// Convert the time string HH:MM:SS to number of seconds (for flowplayer cuepoints &c.)
+// Convert the time string HH:MM:SS to number of seconds (for webcast cuepoints &c.)
 function xtime_to_seconds($str_time){
 
 	$parsed = date_parse($str_time);
