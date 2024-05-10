@@ -413,8 +413,10 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
             }            
         }
         
-        $subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
-        if ( $subdomain == "dev" ) { return true; } // RS dev site
+        if ( isset($_SERVER['HTTP_HOST']) ) {
+        	$subdomain = explode('.', $_SERVER['HTTP_HOST'])[0];
+        	if ( $subdomain == "dev" ) { return true; } // RS dev site
+        }        
         
         return false;
     }
