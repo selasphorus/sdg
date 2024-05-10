@@ -1137,7 +1137,10 @@ function get_event_program_items( $atts = [] ) {
 				if ( $title_as_label ) { $td_class .= " authorship"; }
 				$td_content = $program_item_name;
 				$td_colspan = 1;
-				$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
+				// Add this item as a table cell only for two-column rows -- WIP
+				if ( ! ($row_type == "header" || $row_type == "program_note" || $row_type == "label_only" || $row_type == "title_only") ) {
+					$tds[] = array( 'td_class' => $td_class, 'td_colspan' => $td_colspan, 'td_content' => $td_content );
+				}
 			}
             
 			$tr['tr_class'] = $tr_class;
