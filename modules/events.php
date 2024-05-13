@@ -275,7 +275,7 @@ function get_music_department_info( $post_id = null ) {
     
     // Get overview info
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $staff = get_field( 'music_staff', $post_id ); //$staff = get_post_meta( $post_id, 'music_staff', true );
+    $staff = display_field( 'music_staff', $post_id ); //$staff = get_post_meta( $post_id, 'music_staff', true );
     $groups = get_field( 'participating_groups', $post_id ); //$groups = get_post_meta( $post_id, 'participating_groups', true );
     
     // Roster
