@@ -329,8 +329,11 @@ function get_music_department_info( $post_id = null ) {
 	$info .= '</div>';
     $ts_info .= "===== // get_music_department_info =====<br />";
 	
-	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	$info = $ts_info.$info; // ts_info at the top of the page
+	if ( $do_ts ) {
+		$info = $ts_info.$info; // ts_info at the top of the page
+	} else {
+		$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	}
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
