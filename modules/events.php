@@ -3491,7 +3491,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				$video_id = get_field('video_id', $post_id);
 				if ( $webcast_format == "video" ) {
 					$url_ondemand = get_field('url_ondemand', $post_id);
-				} else if ( $webcast_format == "youtube_playlist" ) {
+				} else if ( $webcast_format == "youtube_list" ) {
 					$yt_series_id = get_field('yt_series_id', $post_id);
 					$yt_list_id = get_field('yt_list_id', $post_id);
 				}
@@ -3502,7 +3502,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				if ( ( !empty($video_id) && $webcast_format != "audio" && $webcast_format != "video_as_audio" &&
 					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
 					|| ( $webcast_format == "video" && !empty($url_ondemand) ) 
-					|| ( $webcast_format == "youtube_playlist" && !empty($yt_series_id) && !empty($yt_list_id) ) 
+					|| ( $webcast_format == "youtube_list" && !empty($yt_series_id) && !empty($yt_list_id) ) 
 				   ) { 
 					$show_image = false;
 					$ts_info = "<!-- [sdgp] show video, not image -->";
