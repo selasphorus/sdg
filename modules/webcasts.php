@@ -361,7 +361,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             
         }        
     
-    } else if ( !empty($yt_series_id) && !empty($yt_list_id) && ( $webcast_format != "youtube_list" ) {
+    } else if ( !empty($yt_series_id) && !empty($yt_list_id) && $webcast_format == "youtube_list" ) {
     
     	$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
     	//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH
@@ -437,7 +437,6 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
                 throw new Error("server error");
             }
             */
-                                     
             
         }
         
