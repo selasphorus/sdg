@@ -273,28 +273,6 @@ function get_music_department_info( $post_id = null ) {
     $ts_info .= "===== get_music_department_info =====<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
-    // Get overview info
-    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $staff = get_field( 'music_staff', $post_id ); //$staff = get_post_meta( $post_id, 'music_staff', true );
-    $groups = get_field( 'participating_groups', $post_id ); //$groups = get_post_meta( $post_id, 'participating_groups', true );
-    
-    // Roster
-    $soprano = get_post_meta( $post_id, 'soprano', true );
-    $alto = get_post_meta( $post_id, 'alto', true );
-    $tenor = get_post_meta( $post_id, 'tenor', true );
-    $bass = get_post_meta( $post_id, 'bass', true );
-    //
-    $absent = get_post_meta( $post_id, 'absent', true );
-    $sick = get_post_meta( $post_id, 'sick', true );
-    //
-    $choir_notes = get_post_meta( $post_id, 'choir_notes', true );
-    
-    // Repertoire
-    $choral_rep = get_post_meta( $post_id, 'choral_rep', true );
-    $opening_voluntary = get_post_meta( $post_id, 'opening_voluntary', true );
-    $closing_voluntary = get_post_meta( $post_id, 'closing_voluntary', true );
-    //
-    
     // Troubleshooting
     $ts_info .= "post_id: $post_id<br />";
     //$ts_info .= "program_type: $program_type<br />";
@@ -307,23 +285,44 @@ function get_music_department_info( $post_id = null ) {
 	
     $info .= '<div class="music_dept_info">';
     
+    // Call Time
+    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
     $info .= "Call Time: ".$call_time."<br />";
+    
+    // Music Staff
     $info .= "<h3>Music Staff:</h3>";
+    $staff = get_field( 'music_staff', $post_id );
     foreach ( $staff as $post ) {
     	$info .= $post->post_title."<br />";
     }
+    
+    // Groups
+    $groups = get_field( 'participating_groups', $post_id );
     $info .= "<h3>Participating Groups:</h3>";
-    foreach ( $group as $post ) {
+    foreach ( $groups as $post ) {
     	$info .= $post->post_title."<br />";
     }
+    
+    // Roster
     $info .= "<h2>Choir Roster</h2>";
-    $roster = array('soprano','alto','tenor','bass');
+    $roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
     	$info .= "<h3>".ucfirst($fieldname).":</h3>";
-    	foreach ( $$fieldname as $post ) {
+    	$posts = get_field( $post_id, $fieldname, true );
+    	foreach ( $posts as $post ) {
 			$info .= $post->post_title."<br />";
 		}
     }
+    $choir_notes = get_post_meta( $post_id, 'choir_notes', true );
+    if ( $choir_notes ) { $info .= $choir_notes; }
+    
+    // Repertoire
+    $info .= "<h2>Repertoire</h2>";
+    $choral_rep = get_post_meta( $post_id, 'choral_rep', true );
+    $opening_voluntary = get_post_meta( $post_id, 'opening_voluntary', true );
+    $closing_voluntary = get_post_meta( $post_id, 'closing_voluntary', true );
+    //
+    
     
 	$info .= '</div>';
     $ts_info .= "===== // get_music_department_info =====<br />";
