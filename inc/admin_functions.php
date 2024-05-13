@@ -713,17 +713,14 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 		if ( $hymn_cat ) {
 			$hymn_cat_id = $hymn_cat['term_id'];
 		}
-		//$hymn_cat_id = "1452"; // "Hymns" -- STC
 		$psalm_cat = term_exists( "psalms", "repertoire_category" );
 		if ( $psalm_cat ) {
 			$psalm_cat_id = $psalm_cat['term_id'];
 		}
-        //$psalm_cat_id = "1461"; // "Psalms" -- STC
         $chant_cat = term_exists( "anglican-chant", "repertoire_category" );
 		if ( $chant_cat ) {
 			$chant_cat_id = $chant_cat['term_id'];
 		}
-        //$chant_cat_id = "1528"; // "Anglican Chant" -- STC
         
         sdg_log( "[btt] title_clean: ".$title_clean, $do_log );
         
