@@ -292,10 +292,8 @@ function get_music_department_info( $post_id = null ) {
     // Music Staff
     $info .= "<h3>Music Staff:</h3>";
     $staff = get_field( 'music_staff', $post_id );
-    if ( $staff ) {
-		foreach ( $staff as $post ) {
-			$info .= $post->post_title."<br />";
-		}
+    foreach ( $staff as $post ) {
+		if ( is_object($post)) { $info .= $post->post_title."<br />"; }
 	}
     
     // Groups
@@ -311,11 +309,9 @@ function get_music_department_info( $post_id = null ) {
     foreach ( $roster as $fieldname ) {
     	$info .= "<h3>".ucfirst($fieldname).":</h3>";
     	$posts = get_field( $fieldname, $post_id );
-    	if ( $posts ) {
-    		foreach ( $posts as $post ) {
-				$info .= $post->post_title."<br />";
-			}
-    	}
+    	foreach ( $posts as $post ) {
+			if ( is_object($post)) { $info .= $post->post_title."<br />"; }
+		}
     }
     $choir_notes = get_field( 'choir_notes', $post_id );
     if ( $choir_notes ) { $info .= $choir_notes; }
