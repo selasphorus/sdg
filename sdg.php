@@ -519,6 +519,54 @@ function sdg_query_vars( $qvars ) {
     return $qvars;
 }
 
+add_filter( 'body_class', 'sdg_body_class' );
+function sdg_body_class( $classes ) {
+	
+	if ( wp_is_mobile() ) { $classes[] = 'mobile'; } else { $classes[] = 'not-mobile'; }
+	
+    // Determine whether to show admin-specific & troublshooting infos
+	$current_user = wp_get_current_user();
+    //if ( user_is_administrator() === true ) { 
+    if ( current_user_can('edit_roles') || current_user_can('publish_events') ) {
+    //if ( in_array( 'stc_administrator', $current_user->roles ) ) {
+        $classes[] = 'admin';
+        $classes[] = 'admin-view';
+    }
+    
+    $devmode = get_query_var( 'dev' ) ? get_query_var( 'dev' ) : false;
+    if ( $devmode ) { $classes[] = 'devmode'; }
+    
+    // Show troubleshooting info only for webdev
+    if ( function_exists( 'queenbee' ) && queenbee() ) {
+        $classes[] = 'queenbee';    
+    }
+	
+	if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $classes[] = 'devsite'; }
+	
+	// Always has_msg_bar(?)
+	$classes[] = 'has_msg_bar';
+    
+	// If post has snippets but no widgets, we need to add a body class for styling to preserve the sidebar layout
+    if ( function_exists( 'get_snippets' ) ) {
+    	
+    	$args = array( 'classes' => $classes, 'return' => 'ids' ); //  
+    	$snippets = get_snippets( $args );
+    	if ( is_array($snippets) && count($snippets) > 0 ) {
+    		if ( !is_page_template( 'page-homepage.php' ) &&
+    			 !is_page_template( 'page-centered.php' ) &&
+    			 !is_page_template( 'page-fullwidth.php' ) ) {
+    			 $classes[] = 'snippets';
+    		}
+    		//if ( array_search('no-sidebar', $classes) == false ) { $classes[] = 'snippets'; }
+    		//if (($key = array_search('no-sidebar', $classes)) !== false) { unset($classes[$key]); }
+    	} else {
+    		$classes[] = 'no-snippets';
+    	}
+    }
+	
+	return $classes;
+}
+
 // Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
 add_filter( 'get_edit_post_link', 'sdg_add_post_type_query_var', 10, 3 );
 function sdg_add_post_type_query_var( $url, $post_id, $context ) {
