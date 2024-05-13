@@ -621,9 +621,9 @@ function devmode_active() {
     }
     
 	$devmode = get_query_var('dev');
-	if ($devmode == "true" || $devmode == "yes") { //if ($devmode != "" && $devmode != "false") {
+	if ( $devmode == "true" || $devmode == "yes" ) {
 		return true;        
-	} else if ( is_dev_site() && function_exists( 'queenbee' ) && queenbee() ) {
+	} else if ( is_dev_site() && queenbee() ) {
         return true;
 	}
 	
