@@ -408,7 +408,7 @@ function get_event_personnel( $atts = [] ) {
 				$person_name = $arr_person['info'];
 				$row_info .= $arr_person['ts_info'];
 			
-				$row_info .= "<!-- person_role: [$person_role]; person_name: [$person_name] -->";
+				$row_info .= "person_role: [$person_role]; person_name: [$person_name]<br />";
             
             }
             
@@ -481,11 +481,21 @@ function get_event_personnel( $atts = [] ) {
 				$table .= '<tr class="'.$tr_class.'">';
 			}
 			
-			if ( $run_updates == true || is_dev_site() || devmode_active() ) {
+			/*if ( $run_updates == true || is_dev_site() || devmode_active() ) {
 				$row_info = "<!-- *** START row_info *** -->".$row_info."<!-- *** END row_info *** -->"; // Display comments w/ in row for ease of parsing dev notes
                 $table .= $row_info;
 			} else {
 				//$ts_info .= $row_info;
+			}*/
+			
+			// Insert row_info for troubleshooting
+			if ( devmode_active() ) {
+				if ( $display == 'table' ) {
+					//$table .= '<div class="troubleshooting">row_info:<br />'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
+				} else {
+					//$ts_info .= 'row_info:<br />'.$row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
+				}
+				$ts_info .= $row_info; //$ts_info .= 'row_info:<br />'.$row_info;
 			}
 			
 			if ( $delete_row != true ) {
