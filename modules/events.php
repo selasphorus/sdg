@@ -307,9 +307,9 @@ function get_music_department_info( $post_id = null ) {
     $info .= "<h2>Choir Roster</h2>";
     $roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
-    	$info .= "<h3>".ucfirst($fieldname).":</h3>";
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
+    		$info .= "<h3>".ucfirst($fieldname).":</h3>";
     		foreach ( $posts as $post ) {
     			$info .= $post->post_title."<br />";
 			}
