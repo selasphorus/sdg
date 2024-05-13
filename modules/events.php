@@ -310,7 +310,7 @@ function get_music_department_info( $post_id = null ) {
     $info .= "Call Time: ".$call_time."<br />";
     $info .= "Music Staff: <br />";
     foreach ( $staff as $person ) {
-    	$info .= $person."<br />";
+    	$info .= $person->post_title."<br />";
     }
     $info .= "Participating Groups: ".$groups."<br />";
     
