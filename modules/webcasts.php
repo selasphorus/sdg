@@ -286,6 +286,10 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     // Get the webcast status, Video ID or URL, and format
     $webcast_status = get_webcast_status( $post_id );
     $video_id = get_field('video_id', $post_id);
+    //
+    $yt_series_id = get_field('yt_series_id', $post_id);
+    $yt_list_id = get_field('yt_list_id', $post_id);
+    //
     $audio_file = get_field('audio_file', $post_id);
     $url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     $webcast_format = get_field('webcast_format', $post_id);
@@ -298,6 +302,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
     vimeo : Vimeo Video/One-time Event
     vimeo_recurring : Vimeo Recurring Event
     youtube: YouTube
+    youtube_list : YouTube Playlist
     video : Video (formerly: Flowplayer -- future use tbd)
     video_as_audio : Video as Audio
     video_as_audio_live : Video as Audio - Livestream
@@ -355,6 +360,14 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
             }
             
         }        
+    
+    } else if ( !empty($yt_series_id) && !empty($yt_list_id) && ( $webcast_format != "youtube_list" ) {
+    
+    	$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
+    	//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH
+    	$player .= '<div class="hero video-container youtube-responsive-container">';
+		$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+		$player .= '</div>';
     
     } else if ( !empty($audio_file) || $webcast_format == "audio" || $webcast_format == "video_as_audio" || $webcast_format == "video_as_audio_live" ) {
         
