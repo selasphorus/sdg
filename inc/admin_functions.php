@@ -709,9 +709,21 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
         // TODO: get these IDs dynamically for portability
         // Check if tax term "Hymns" exists, e.g., and get get id... 240513
-        $hymn_cat_id = "1452"; // "Hymns" -- same id on live and dev
-        $psalm_cat_id = "1461"; // "Psalms" -- same id on live and dev
-        $chant_cat_id = "1528"; // "Anglican Chant" -- same id on live and dev
+        $hymn_cat = term_exists( "hymns", "repertoire_category" );
+		if ( $hymn_cat ) {
+			$hymn_cat_id = $hymn_cat['term_id'];
+		}
+		//$hymn_cat_id = "1452"; // "Hymns" -- STC
+		$psalm_cat = term_exists( "psalms", "repertoire_category" );
+		if ( $psalm_cat ) {
+			$psalm_cat_id = $psalm_cat['term_id'];
+		}
+        //$psalm_cat_id = "1461"; // "Psalms" -- STC
+        $chant_cat = term_exists( "anglican-chant", "repertoire_category" );
+		if ( $chant_cat ) {
+			$chant_cat_id = $chant_cat['term_id'];
+		}
+        //$chant_cat_id = "1528"; // "Anglican Chant" -- STC
         
         sdg_log( "[btt] title_clean: ".$title_clean, $do_log );
         
