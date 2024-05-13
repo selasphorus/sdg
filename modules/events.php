@@ -274,7 +274,7 @@ function get_music_department_info( $post_id = null ) {
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // Get overview info
-    $call_time = get_post_meta( $post_id, 'call_time', true );
+    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
     $staff = get_post_meta( $post_id, 'music_staff', true );
     $groups = get_post_meta( $post_id, 'participating_groups', true );
     
