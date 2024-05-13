@@ -640,7 +640,7 @@ function get_personnel_person ( $args = array() ) {
 
 	// Init vars
 	$arr_info = array();
-	$person_name = "";
+	$person = "";
     $ts_info = "";
     
     // Defaults
@@ -665,6 +665,8 @@ function get_personnel_person ( $args = array() ) {
 	
 		foreach ($row['person'] AS $person_id ) {
 		
+			$person_name = ""; // init
+			
 			// Set up display args to pass to fcn get_person_display_name
 			$name_abbr = "full";
 			$override = "none";
@@ -712,11 +714,13 @@ function get_personnel_person ( $args = array() ) {
         	$arr_person_name = get_person_display_name( $display_args );
         	$person_name = $arr_person_name['info']."<br />";
         	$ts_info .= $arr_person_name['ts_info'];
+        	
+        	$person .= $person_name;
         
 		}
 	
 		// Trim trailing <br />
-		$person_name = substr($person_name, 0, -6);
+		$person = substr($person, 0, -6);
 		
 	}
 	
