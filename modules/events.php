@@ -309,9 +309,11 @@ function get_music_department_info( $post_id = null ) {
     foreach ( $roster as $fieldname ) {
     	$info .= "<h3>".ucfirst($fieldname).":</h3>";
     	$posts = get_field( $fieldname, $post_id );
-    	foreach ( $posts as $post ) {
-			if ( is_object($post)) { $info .= $post->post_title."<br />"; }
-		}
+    	if ( $posts ) {
+    		foreach ( $posts as $post ) {
+    			$info .= $post->post_title."<br />";
+			}
+    	}    	
     }
     $choir_notes = get_field( 'choir_notes', $post_id );
     if ( $choir_notes ) { $info .= $choir_notes; }
