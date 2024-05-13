@@ -1127,7 +1127,7 @@ function get_rep_meta_info ( $post_id = null ) {
 	if ( count($rep_categories) > 0 ) {
 		foreach ( $rep_categories as $category ) {
 			if ( $category != "Choral Works" ) {
-				$info .= '<span class="category">';
+				$info .= '<span class="category rep_category">';
 				$info .= $category;
 				$info .= '</span>';
 			}                
