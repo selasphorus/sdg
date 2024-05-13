@@ -612,7 +612,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
         } // end if
         */
             
-            // Loop through rows and assemble cuepoints
+        // Loop through rows and assemble cuepoints
         if ($rows) {
             
             // Cuepoints
