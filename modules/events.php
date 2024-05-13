@@ -301,10 +301,8 @@ function get_music_department_info( $post_id = null ) {
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
     $info .= "<h3>Participating Groups:</h3>";
-    if ( $groups ) {
-		foreach ( $groups as $post ) {
-			$info .= $post->post_title."<br />";
-		}
+    foreach ( $groups as $post ) {
+		if ( is_object($post)) { $info .= $post->post_title."<br />"; }
 	}
     
     // Roster
