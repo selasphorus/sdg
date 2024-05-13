@@ -480,7 +480,6 @@ if ( in_array('music', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Occasion
 	function register_taxonomy_occasion() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Occasions', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Occasion', 'taxonomy singular name' ),
@@ -501,15 +500,19 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'occasion' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'occasion' ],
-		);
+			);
+		}
+		
 		register_taxonomy( 'occasion', [ 'repertoire' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_occasion' );
