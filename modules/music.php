@@ -1203,33 +1203,6 @@ function get_rep_meta_info ( $post_id = null ) {
 		}
 	}
 	
-	// Get and display note of num event programs which include this work, if any
-	// Get Related Events        
-	// New way
-	$repertoire_events = get_field('repertoire_events', $post_id, false);
-	if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
-		$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
-	} else {
-		// Field repertoire_events is empty -> check to see if updates are in order
-		if ( is_dev_site() ) {
-			$info .= '<p class="troubleshooting">';
-			$info .= update_repertoire_events( $post_id, false );
-			$info .= '</p>';
-		} else if ( $i < 5 ) {  // On live site, for now, limit number of records that are processed, because the queries may be slow
-			$info .= '<p class="troubleshooting">{'.$i.'}'.update_repertoire_events( $post_id, false ).'</p>';
-		}			
-	}
-	
-	// Old way
-	/*
-	$related_events = get_related_events ( "program_item", $post_id );
-	$event_post_ids = $related_events['event_posts'];
-
-	if ( $event_post_ids ) {
-		$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
-	}
-	*/
-	
 	return $info;
 		
 }
@@ -2674,7 +2647,34 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         // Get rep-specific info: rep categories, etc
         $rep_info = get_rep_meta_info($post_id);
 		if ( $rep_info != "" ) { $info .= "<br />".$rep_info; }
+		
+		// Get and display note of num event programs which include this work, if any
+		// Get Related Events        
+		// New way
+		$repertoire_events = get_field('repertoire_events', $post_id, false);
+		if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
+			$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
+		} else {
+			// Field repertoire_events is empty -> check to see if updates are in order
+			if ( is_dev_site() ) {
+				$info .= '<p class="troubleshooting">';
+				$info .= update_repertoire_events( $post_id, false );
+				$info .= '</p>';
+			} else if ( $i < 5 ) {  // On live site, for now, limit number of records that are processed, because the queries may be slow
+				$info .= '<p class="troubleshooting">{'.$i.'}'.update_repertoire_events( $post_id, false ).'</p>';
+			}			
+		}
+	
+		// Old way
+		/*
+		$related_events = get_related_events ( "program_item", $post_id );
+		$event_post_ids = $related_events['event_posts'];
 
+		if ( $event_post_ids ) {
+			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
+		}
+		*/
+	
         $info .= '</td>';
 
         // Related Editions
