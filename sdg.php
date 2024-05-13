@@ -287,7 +287,7 @@ function sdg_modules_field_cb( $args ) {
 		'sermons' => __( 'Sermons' ), 
 		'lectionary' => __( 'Lectionary' ), 
 		//
-		'organizations' => __( 'Organizations' ), 
+		'organizations' => __( 'Organizations (deprecated)' ),
 		'projects' => __( 'Projects' ), 
 		'press' => __( 'Press' ), 
 		//'recordings' => __( 'Recordings' ),
