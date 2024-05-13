@@ -619,7 +619,7 @@ span.instrumentation,
 span.keys,
 span.publisher, 
 span.publication {
-	margin: 0 0.3rem;
+	margin-right: 0.3rem;
     border: 1px solid lightgrey;
     padding: 0.2rem;
 }
