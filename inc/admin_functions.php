@@ -1491,7 +1491,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
-    $do_log = false;
+    $do_log = devmode_active();
     sdg_log( "divline1", $do_log );
     //sdg_log( "action: save_post", $do_log );
     //sdg_log( "action: save_post_event", $do_log );
