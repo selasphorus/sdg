@@ -323,7 +323,7 @@ function get_music_department_info( $post_id = null ) {
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
     	$tmp_id = $post->ID;
-    	$info .= $post->post_title;
+    	$info .= $post->post_title."<br />";
     	$info .= get_rep_meta_info($tmp_id);
     	$info .= "<br />";
     	// TODO: link to PDF, YT search, IMSLP search, CPDL search
