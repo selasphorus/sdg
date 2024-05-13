@@ -550,6 +550,17 @@ td.editions div.edition_info span {
     line-height: 2;
 }
 
+span.rep_category, 
+span.season, 
+span.liturgical_date, 
+span.occasion, 
+span.choir_forces, 
+span.voicing, 
+span.soloists, 
+span.instrumentation, 
+span.keys,
+span.publisher, 
+span.publication,
 table.choirplanner span.category, 
 table.choirplanner span.season, 
 table.choirplanner span.liturgical_date, 
@@ -564,6 +575,15 @@ table.choirplanner span.publication {
     white-space: nowrap;
 }
 
+span.rep_category, 
+span.season, 
+span.liturgical_date, 
+span.occasion, 
+span.choir_forces, 
+span.voicing, 
+span.soloists, 
+span.instrumentation, 
+span.keys,
 table.choirplanner span.category, 
 table.choirplanner span.season, 
 table.choirplanner span.liturgical_date, 
@@ -583,10 +603,15 @@ td.editions div.edition_info span.counter {
     padding-right: 0;
 }
 
+span.rep_category,
 table.choirplanner span.category {
     background-color: #e6f2ff;/*#EEC;*/
 }
 
+span.composer,
+span.anon_info,
+span.arranger,
+span.person_dates,
 table.choirplanner span.composer,
 table.choirplanner span.anon_info,
 table.choirplanner span.arranger,
