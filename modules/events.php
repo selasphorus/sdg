@@ -258,6 +258,72 @@ function get_event_ticketing_info( $post_id = null ) {
 	
 }
 
+add_shortcode('display_music_info', 'get_music_department_info');
+// Get music department info per ACF fields -- for internal use only
+function get_music_department_info( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+	
+	// Init vars
+	$info = "";
+	$ts_info = "";
+    $ts_info .= "===== get_music_department_info =====<br />";
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
+    
+    // Get overview info
+    $call_time = get_post_meta( $post_id, 'call_time', true );
+    $staff = get_post_meta( $post_id, 'music_staff', true );
+    $groups = get_post_meta( $post_id, 'participating_groups', true );
+    
+    // Roster
+    $soprano = get_post_meta( $post_id, 'soprano', true );
+    $alto = get_post_meta( $post_id, 'alto', true );
+    $tenor = get_post_meta( $post_id, 'tenor', true );
+    $bass = get_post_meta( $post_id, 'bass', true );
+    //
+    $absent = get_post_meta( $post_id, 'absent', true );
+    $sick = get_post_meta( $post_id, 'sick', true );
+    //
+    $choir_notes = get_post_meta( $post_id, 'choir_notes', true );
+    
+    // Repertoire
+    $choral_rep = get_post_meta( $post_id, 'choral_rep', true );
+    $opening_voluntary = get_post_meta( $post_id, 'opening_voluntary', true );
+    $closing_voluntary = get_post_meta( $post_id, 'closing_voluntary', true );
+    //
+    
+    // Troubleshooting
+    $ts_info .= "post_id: $post_id<br />";
+    //$ts_info .= "program_type: $program_type<br />";
+    //$ts_info .= "program_order: $program_order<br />";
+    
+    // Get and display any admin_tags for the post
+    $admin_tags = wp_get_post_terms( $post_id, 'admin_tag', array( 'fields' => 'slugs' ) );
+    if ( $admin_tags ) { $admin_tags_str = implode(", ", $admin_tags); } else { $admin_tags_str = ""; }
+    $ts_info .= "admin_tags: ".$admin_tags_str."<br /><br />";
+	
+    $info .= '<div class="music_dept_info">';
+    
+    $info .= "Call Time: ".$call_time."<br />";
+    
+	$info .= '</div>';
+    $ts_info .= "===== // get_music_department_info =====<br />";
+	
+	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	$info = $ts_info.$info; // ts_info at the top of the page
+	
+    // TODO: get and display program_pdf?
+	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
+	
+	return $info;
+	
+}
+
+//
+
 
 /***  Program/Event personnel via Event CPT & ACF ***/
 //
