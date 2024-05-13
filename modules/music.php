@@ -961,7 +961,7 @@ function get_excerpted_from( $post_id = null ) {
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
 	
 	// TS/logging setup
-	$do_ts = true; 
+	$do_ts = devmode_active(); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_rep_info", $do_log );
@@ -1107,6 +1107,133 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
 	return $arr_info;
 	
 } // END function get_rep_info
+
+function get_rep_meta_info ( $post_id = null ) {
+
+	// TS/logging setup
+	$do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_rep_meta_info", $do_log );
+    
+	// Init vars
+    $arr_info = array();
+    $info = "";
+    $ts_info = "";    
+	if ( $post_id === null ) { $post_id = get_the_ID(); }
+	
+	// Get and display term names for "repertoire_category".
+	$rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
+	if ( count($rep_categories) > 0 ) {
+		foreach ( $rep_categories as $category ) {
+			if ( $category != "Choral Works" ) {
+				$info .= '<span class="category">';
+				$info .= $category;
+				$info .= '</span>';
+			}                
+		}
+		//$info .= "Categories: ";
+		//$info .= implode(", ",$rep_categories);
+		//$info .= "<br />";
+	}
+
+	// Get and display term names for "season".
+	//$seasons = wp_get_post_terms( $post_id, 'season', array( 'fields' => 'names' ) );
+	$seasons = get_field('season', $post_id, false); // returns array of IDs
+	if ( is_array($seasons) && count($seasons) > 0 ) {
+		foreach ( $seasons as $season ) {
+			$info .= '<span class="season">';
+			$info .= ucfirst($season);
+			$info .= '</span>';
+		}
+		//$info .= implode(", ",$seasons);
+	}
+	
+	// Get and display post titles for "related_liturgical_dates".
+	$repertoire_litdates = get_field('repertoire_litdates', $post_id, false); // returns array of IDs
+	if ( $repertoire_litdates ) {
+
+		foreach ($repertoire_litdates AS $litdate_id) {
+			$info .= '<span class="liturgical_date">';
+			$info .= get_the_title($litdate_id);
+			$info .= '</span>';
+		}
+
+	}
+	// Old version of field.
+	$related_liturgical_dates = get_field('related_liturgical_dates', $post_id, false);
+	if ( $related_liturgical_dates ) {
+
+		foreach ($related_liturgical_dates AS $litdate_id) {
+			$info .= '<span class="liturgical_date_old devinfo">';
+			$info .= get_the_title($litdate_id);
+			$info .= '</span>';
+		}
+
+	}
+	
+	// Get and display term names for "occasion".
+	$occasions = wp_get_post_terms( $post_id, 'occasion', array( 'fields' => 'names' ) );
+	if ( count($occasions) > 0 ) {
+		foreach ( $occasions as $occasion ) {
+			$info .= '<span class="occasion">';
+			$info .= $occasion;
+			$info .= '</span>';
+		}
+		//$info .= implode(", ",$occasions);
+	}
+
+	// Get and display term names for "voicing".
+	$voicings = wp_get_post_terms( $post_id, 'voicing', array( 'fields' => 'names' ) );
+	if ( count($voicings) > 0 ) {
+		foreach ( $voicings as $voicing ) {
+			$info .= '<span class="voicing devinfo">';
+			$info .= $voicing;
+			$info .= '</span>';
+		}
+	}
+
+	// Get and display term names for "instrument".
+	$instruments = wp_get_post_terms( $post_id, 'instrument', array( 'fields' => 'names' ) );
+	if ( count($instruments) > 0 ) {
+		foreach ( $instruments as $instrument ) {
+			$info .= '<span class="instrumentation devinfo">';
+			$info .= $instrument;
+			$info .= '</span>';
+		}
+	}
+	
+	// Get and display note of num event programs which include this work, if any
+	// Get Related Events        
+	// New way
+	$repertoire_events = get_field('repertoire_events', $post_id, false);
+	if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
+		$info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
+	} else {
+		// Field repertoire_events is empty -> check to see if updates are in order
+		if ( is_dev_site() ) {
+			$info .= '<p class="troubleshooting">';
+			$info .= update_repertoire_events( $post_id, false );
+			$info .= '</p>';
+		} else if ( $i < 5 ) {  // On live site, for now, limit number of records that are processed, because the queries may be slow
+			$info .= '<p class="troubleshooting">{'.$i.'}'.update_repertoire_events( $post_id, false ).'</p>';
+		}			
+	}
+	
+	// Old way
+	/*
+	$related_events = get_related_events ( "program_item", $post_id );
+	$event_post_ids = $related_events['event_posts'];
+
+	if ( $event_post_ids ) {
+		$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
+	}
+	*/
+	
+	return $info;
+		
+}
+
 
 function get_author_ids ( $post_id = null, $include_composers = true ) {
     
@@ -2544,120 +2671,9 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
         
         $info .= '</div>';
 
-        // Get rep-specific info: rep categories, 
-        $rep_info = "";
-
-        // Get and display term names for "repertoire_category".
-        $rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
-        if ( count($rep_categories) > 0 ) {
-            foreach ( $rep_categories as $category ) {
-                if ( $category != "Choral Works" ) {
-                    $rep_info .= '<span class="category">';
-                    $rep_info .= $category;
-                    $rep_info .= '</span>';
-                }                
-            }
-            //$rep_info .= "Categories: ";
-            //$rep_info .= implode(", ",$rep_categories);
-            //$rep_info .= "<br />";
-        }
-
-        // Get and display term names for "season".
-        //$seasons = wp_get_post_terms( $post_id, 'season', array( 'fields' => 'names' ) );
-        $seasons = get_field('season', $post_id, false); // returns array of IDs
-        if ( is_array($seasons) && count($seasons) > 0 ) {
-            foreach ( $seasons as $season ) {
-                $rep_info .= '<span class="season">';
-                $rep_info .= ucfirst($season);
-                $rep_info .= '</span>';
-            }
-            //$rep_info .= implode(", ",$seasons);
-        }
-        
-        // Get and display post titles for "related_liturgical_dates".
-        $repertoire_litdates = get_field('repertoire_litdates', $post_id, false); // returns array of IDs
-        if ( $repertoire_litdates ) {
-
-            foreach ($repertoire_litdates AS $litdate_id) {
-                $rep_info .= '<span class="liturgical_date">';
-                $rep_info .= get_the_title($litdate_id);
-                $rep_info .= '</span>';
-            }
-
-        }
-        // Old version of field.
-        $related_liturgical_dates = get_field('related_liturgical_dates', $post_id, false);
-        if ( $related_liturgical_dates ) {
-
-            foreach ($related_liturgical_dates AS $litdate_id) {
-                $rep_info .= '<span class="liturgical_date_old devinfo">';
-                $rep_info .= get_the_title($litdate_id);
-                $rep_info .= '</span>';
-            }
-
-        }
-        
-        // Get and display term names for "occasion".
-        $occasions = wp_get_post_terms( $post_id, 'occasion', array( 'fields' => 'names' ) );
-        if ( count($occasions) > 0 ) {
-            foreach ( $occasions as $occasion ) {
-                $rep_info .= '<span class="occasion">';
-                $rep_info .= $occasion;
-                $rep_info .= '</span>';
-            }
-            //$rep_info .= implode(", ",$occasions);
-        }
-
-        // Get and display term names for "voicing".
-        $voicings = wp_get_post_terms( $post_id, 'voicing', array( 'fields' => 'names' ) );
-        if ( count($voicings) > 0 ) {
-            foreach ( $voicings as $voicing ) {
-                $rep_info .= '<span class="voicing devinfo">';
-                $rep_info .= $voicing;
-                $rep_info .= '</span>';
-            }
-        }
-
-        // Get and display term names for "instrument".
-        $instruments = wp_get_post_terms( $post_id, 'instrument', array( 'fields' => 'names' ) );
-        if ( count($instruments) > 0 ) {
-            foreach ( $instruments as $instrument ) {
-                $rep_info .= '<span class="instrumentation devinfo">';
-                $rep_info .= $instrument;
-                $rep_info .= '</span>';
-            }
-        }
-        
-        // Get and display note of num event programs which include this work, if any
-        // Get Related Events        
-		// New way
-		$repertoire_events = get_field('repertoire_events', $post_id, false);
-		if ( is_array($repertoire_events) && count($repertoire_events) > 0 ) {
-			$rep_info .= '<br /><span class="nb orange">This work appears in ['.count($repertoire_events).'] event program(s).</span>';
-		} else {
-			// Field repertoire_events is empty -> check to see if updates are in order
-			if ( is_dev_site() ) {
-				$rep_info .= '<p class="troubleshooting">';
-				$rep_info .= update_repertoire_events( $post_id, false );
-				$rep_info .= '</p>';
-			} else if ( $i < 5 ) {  // On live site, for now, limit number of records that are processed, because the queries may be slow
-				$rep_info .= '<p class="troubleshooting">{'.$i.'}'.update_repertoire_events( $post_id, false ).'</p>';
-			}			
-		}
-		
-		// Old way
-		/*
-		$related_events = get_related_events ( "program_item", $post_id );
-		$event_post_ids = $related_events['event_posts'];
-
-		if ( $event_post_ids ) {
-			$info .= '<br /><span class="nb orange">This work appears in ['.count($event_post_ids).'] event program(s).</span>';
-		}
-		*/
-		
-		if ( $rep_info != "" ) {
-			$info .= "<br />".$rep_info;
-		}
+        // Get rep-specific info: rep categories, etc
+        $rep_info = get_rep_meta_info($post_id);
+		if ( $rep_info != "" ) { $info .= "<br />".$rep_info; }
 
         $info .= '</td>';
 

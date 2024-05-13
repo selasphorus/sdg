@@ -323,6 +323,9 @@ function get_music_department_info( $post_id = null ) {
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
     	$info .= $post->post_title."<br />";
+    	// TODO: link to PDF, YT search, IMSLP search, CPDL search
+    	// TODO: show tags -- voicing etc.
+    	$tmp_id = $post->ID;
 	}
     $opening_voluntary = get_field( 'opening_voluntary', $post_id );
     $closing_voluntary = get_field( 'closing_voluntary', $post_id );
