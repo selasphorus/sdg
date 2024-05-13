@@ -308,19 +308,19 @@ function get_music_department_info( $post_id = null ) {
     $roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
     	$info .= "<h3>".ucfirst($fieldname).":</h3>";
-    	$posts = get_field( $post_id, $fieldname, true );
+    	$posts = get_field( $fieldname, $post_id );
     	foreach ( $posts as $post ) {
 			$info .= $post->post_title."<br />";
 		}
     }
-    $choir_notes = get_post_meta( $post_id, 'choir_notes', true );
+    $choir_notes = get_field( 'choir_notes', $post_id );
     if ( $choir_notes ) { $info .= $choir_notes; }
     
     // Repertoire
     $info .= "<h2>Repertoire</h2>";
-    $choral_rep = get_post_meta( $post_id, 'choral_rep', true );
-    $opening_voluntary = get_post_meta( $post_id, 'opening_voluntary', true );
-    $closing_voluntary = get_post_meta( $post_id, 'closing_voluntary', true );
+    $choral_rep = get_field( 'choral_rep', $post_id );
+    $opening_voluntary = get_field( 'opening_voluntary', $post_id );
+    $closing_voluntary = get_field( 'closing_voluntary', $post_id );
     //
     
     
