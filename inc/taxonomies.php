@@ -46,7 +46,6 @@ function register_taxonomy_color() {
 // NB: taxonomy is registered for 'collection' which is posttype defined via display-content plugin
 // TODO: figure out how to correctly apply taxonomy -- redeclare via display-content, perhaps?
 function register_taxonomy_admin_tag() {
-    //$cap = 'event_program';
     $labels = array(
         'name'              => _x( 'Admin Tags', 'taxonomy general name' ),
         'singular_name'     => _x( 'Admin Tag', 'taxonomy singular name' ),
@@ -68,15 +67,18 @@ function register_taxonomy_admin_tag() {
         'show_ui'           => true,
         'show_admin_column' => true,
         'show_in_rest'      => true,
-        /*'capabilities'         => array(
-            'manage_terms'  =>   'manage_'.$cap.'_terms',
-            'edit_terms'    =>   'edit_'.$cap.'_terms',
-            'delete_terms'  =>   'delete_'.$cap.'_terms',
-            'assign_terms'  =>   'assign_'.$cap.'_terms',
-        ),*/
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'admin_tag' ],
     );
+	/*if ( custom_caps() ) {
+		$cap = 'music';
+		$args['capabilities'] = array(
+			'manage_terms'  =>   'manage_'.$cap.'_terms',
+			'edit_terms'    =>   'edit_'.$cap.'_terms',
+			'delete_terms'  =>   'delete_'.$cap.'_terms',
+			'assign_terms'  =>   'assign_'.$cap.'_terms',
+		);
+	}*/
     register_taxonomy( 'admin_tag', [ 'admin_note', 'attachment', 'bible_book', 'collect', 'collection', 'data_table', 'edition', 'ensemble', 'event', 'event-recurring', 'event_series', 'lectionary', 'liturgical_date', 'liturgical_date_calc', 'location', 'music_list', 'page', 'person', 'post', 'product', 'psalms_of_the_day', 'publication', 'publisher', 'reading', 'repertoire', 'sermon', 'sermon_series', 'snippet', 'venue' ], $args );
 }
 add_action( 'init', 'register_taxonomy_admin_tag' );
@@ -105,15 +107,18 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'adminnote_category' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'adminnote_category' ],
-		);
+			);
+		}*/
 		register_taxonomy( 'adminnote_category', [ 'admin_note' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_adminnote_category' );
@@ -122,7 +127,6 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 if ( in_array('data_tables', $sdg_modules ) ) {
 	// Custom Taxonomy: Data Table
 	function register_taxonomy_data_table() {
-		//$cap = 'XXX';
 		$labels = array(
 			'name'              => _x( 'Data Tables', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Data Table', 'taxonomy singular name' ),
@@ -143,15 +147,18 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'data_table' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'data_table' ],
-		);
+			);
+		}*/
 		register_taxonomy( 'data_table', [ 'admin_note' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_data_table' );
@@ -159,7 +166,6 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 
 // Custom Taxonomy: Query Tag
 function register_taxonomy_query_tag() {
-    //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Query Tags', 'taxonomy general name' ),
         'singular_name'     => _x( 'Query Tag', 'taxonomy singular name' ),
@@ -180,15 +186,18 @@ function register_taxonomy_query_tag() {
         'hierarchical'      => true,
         'show_ui'           => true,
         'show_admin_column' => true,
-        /*'capabilities'         => array(
-            'manage_terms'  =>   'manage_'.$cap.'_terms',
-            'edit_terms'    =>   'edit_'.$cap.'_terms',
-            'delete_terms'  =>   'delete_'.$cap.'_terms',
-            'assign_terms'  =>   'assign_'.$cap.'_terms',
-        ),*/
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'query_tag' ],
     );
+	/*if ( custom_caps() ) {
+		$cap = 'XXX';
+		$args['capabilities'] = array(
+			'manage_terms'  =>   'manage_'.$cap.'_terms',
+			'edit_terms'    =>   'edit_'.$cap.'_terms',
+			'delete_terms'  =>   'delete_'.$cap.'_terms',
+			'assign_terms'  =>   'assign_'.$cap.'_terms',
+		);
+	}*/
     register_taxonomy( 'query_tag', [ 'admin_note' ], $args );
 }
 add_action( 'init', 'register_taxonomy_query_tag' );
@@ -197,7 +206,6 @@ add_action( 'init', 'register_taxonomy_query_tag' );
 
 // Custom Taxonomy: Media Category
 function register_taxonomy_media_category() {
-    //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Media Categories', 'taxonomy general name' ),
         'singular_name'     => _x( 'Media Category', 'taxonomy singular name' ),
@@ -219,22 +227,24 @@ function register_taxonomy_media_category() {
         'show_ui'           => true,
         'show_admin_column' => true,
         'show_in_rest'      => true,
-        /*'capabilities'         => array(
-            'manage_terms'  =>   'manage_'.$cap.'_terms',
-            'edit_terms'    =>   'edit_'.$cap.'_terms',
-            'delete_terms'  =>   'delete_'.$cap.'_terms',
-            'assign_terms'  =>   'assign_'.$cap.'_terms',
-        ),*/
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'media_category' ],
     );
+    /*if ( custom_caps() ) {
+		$cap = 'XXX';
+		$args['capabilities'] = array(
+			'manage_terms'  =>   'manage_'.$cap.'_terms',
+			'edit_terms'    =>   'edit_'.$cap.'_terms',
+			'delete_terms'  =>   'delete_'.$cap.'_terms',
+			'assign_terms'  =>   'assign_'.$cap.'_terms',
+		);
+	}*/	
     register_taxonomy( 'media_category', [ 'attachment' ], $args );
 }
 add_action( 'init', 'register_taxonomy_media_category' );
 
 // Custom Taxonomy: Media Tag
 function register_taxonomy_media_tag() {
-    //$cap = 'XXX';
     $labels = array(
         'name'              => _x( 'Media Tags', 'taxonomy general name' ),
         'singular_name'     => _x( 'Media Tag', 'taxonomy singular name' ),
@@ -256,15 +266,18 @@ function register_taxonomy_media_tag() {
         'show_ui'           => true,
         'show_admin_column' => true,
         'show_in_rest'      => true,
-        /*'capabilities'         => array(
-            'manage_terms'  =>   'manage_'.$cap.'_terms',
-            'edit_terms'    =>   'edit_'.$cap.'_terms',
-            'delete_terms'  =>   'delete_'.$cap.'_terms',
-            'assign_terms'  =>   'assign_'.$cap.'_terms',
-        ),*/
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'media_tag' ],
     );
+    /*if ( custom_caps() ) {
+		$cap = 'XXX';
+		$args['capabilities'] = array(
+			'manage_terms'  =>   'manage_'.$cap.'_terms',
+			'edit_terms'    =>   'edit_'.$cap.'_terms',
+			'delete_terms'  =>   'delete_'.$cap.'_terms',
+			'assign_terms'  =>   'assign_'.$cap.'_terms',
+		);
+	}*/	
     register_taxonomy( 'media_tag', [ 'attachment' ], $args );
 }
 add_action( 'init', 'register_taxonomy_media_tag' );
@@ -314,7 +327,6 @@ if ( in_array('people', $sdg_modules ) ) {
 
 	// Custom Taxonomy: People Category
 	function register_taxonomy_person_category() {
-		//$cap = 'person'; // WIP
 		$labels = array(
 			'name'              => _x( 'Person Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Person Category', 'taxonomy singular name' ),
@@ -336,23 +348,24 @@ if ( in_array('people', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-            // CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'person_category' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'person';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'person_category' ],
-		);
+			);
+		}*/	
 		register_taxonomy( 'person_category', [ 'person' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_person_category' );
 	
 	// Custom Taxonomy: Person Title
 	function register_taxonomy_person_title() {
-		//$cap = 'person'; // WIP
 		$labels = array(
 			'name'              => _x( 'Person Titles', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Person Title', 'taxonomy singular name' ),
@@ -374,16 +387,18 @@ if ( in_array('people', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-            // CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'person_title' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'person';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'person_title' ],
-		);
+			);
+		}*/	
 		register_taxonomy( 'person_title', [ 'person' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_person_title' );
@@ -394,7 +409,6 @@ if ( in_array('people', $sdg_modules ) ) {
 if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules ) || in_array('ensembles', $sdg_modules ) ) {
 	// Custom Taxonomy: Group Category
 	function register_taxonomy_group_category() {
-		//$cap = 'group'; // WIP
 		$labels = array(
 			'name'              => _x( 'Group Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Group Category', 'taxonomy singular name' ),
@@ -416,16 +430,18 @@ if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-            // CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'group_category' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'group';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'group_category' ],
-		);
+			);
+		}*/	
 		register_taxonomy( 'group_category', [ 'group', 'organization', 'ensemble' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_group_category' );
@@ -437,7 +453,6 @@ if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules
 if ( in_array('projects', $sdg_modules ) ) {
 	// Custom Taxonomy: Project Category
 	function register_taxonomy_project_category() {
-		//$cap = 'project'; // WIP
 		$labels = array(
 			'name'              => _x( 'Project Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Project Category', 'taxonomy singular name' ),
@@ -459,16 +474,18 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-            // CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'project_category' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'project';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'project_category' ],
-		);
+			);
+		}*/	
 		register_taxonomy( 'project_category', [ 'project' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_project_category' );
@@ -512,14 +529,12 @@ if ( in_array('music', $sdg_modules ) ) {
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
 			);
 		}
-		
 		register_taxonomy( 'occasion', [ 'repertoire' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_occasion' );
 
 	// Custom Taxonomy: Repertoire Category
 	function register_taxonomy_repertoire_category() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Rep Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Repertoire Category', 'taxonomy singular name' ),
@@ -540,15 +555,18 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'repertoire_category' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'repertoire_category' ],
-		);
+			);
+		}
 		register_taxonomy( 'repertoire_category', [ 'repertoire' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_repertoire_category' );
@@ -558,7 +576,6 @@ if ( in_array('music', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Instrument
 	function register_taxonomy_instrument() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Instruments', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Instrument', 'taxonomy singular name' ),
@@ -580,23 +597,25 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true, // make it hierarchical (like categories)
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
-				'manage_terms'  =>   'manage_'.$cap.'_terms',
-				'edit_terms'    =>   'edit_'.$cap.'_terms',
-				'delete_terms'  =>   'delete_'.$cap.'_terms',
-				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'instrument' ],
 			//'default_term'         => array( 'name', 'slug', 'description' ),
 		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			);
+		}
 		register_taxonomy( 'instrument', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_instrument' );
 
 	// Custom Taxonomy: Key
 	function register_taxonomy_key() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Keys', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Key', 'taxonomy singular name' ),
@@ -617,22 +636,24 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'key' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'key' ],
-		);
+			);
+		}
 		register_taxonomy( 'key', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_key' );
 
 	// Custom Taxonomy: Soloist
 	function register_taxonomy_soloist() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Soloists', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Soloist', 'taxonomy singular name' ),
@@ -653,22 +674,24 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'soloist' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'soloist' ],
-		);
+			);
+		}
 		register_taxonomy( 'soloist', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_soloist' ); // TMP disabled until I figure out how to add fields: Abbreviation (abbr) & Sort Num (sort_num)
 
 	// Custom Taxonomy: Voicing
 	function register_taxonomy_voicing() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Voicings', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Voicing', 'taxonomy singular name' ),
@@ -689,22 +712,24 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'voicing' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'voicing' ],
-		);
+			);
+		}
 		register_taxonomy( 'voicing', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_voicing' );
 
 	// Custom Taxonomy: Library Tag
-	function register_taxonomy_library_tag() {
-	
+	function register_taxonomy_library_tag() {	
 		$labels = array(
 			'name'              => _x( 'Library Tags', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Library Tag', 'taxonomy singular name' ),
@@ -718,9 +743,6 @@ if ( in_array('music', $sdg_modules ) ) {
 			'new_item_name'     => __( 'New Library Tag Name' ),
 			'menu_name'         => __( 'Library Tags' ),
 		);
-	
-		$cap = 'music';
-	
 		$args = array(
 			'labels'            => $labels,
 			'description'          => '',
@@ -729,26 +751,26 @@ if ( in_array('music', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_in_menu'      => 'edit.php?post_type=repertoire',
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'library_tag' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'library_tag' ],
-		);
-	
+			);
+		}	
 		register_taxonomy( 'library_tag', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_library_tag' );
 
-
-	/*** Taxonomies for PUBLICATIONS ***/
+/*** Taxonomies for PUBLICATIONS ***/
 
 	// Custom Taxonomy: Publication Category
 	function register_taxonomy_publication_category() {
-		$cap = 'music';
 		$labels = array(
 			'name'              => _x( 'Publication Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Publication Category', 'taxonomy singular name' ),
@@ -769,15 +791,18 @@ if ( in_array('music', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'publication_category' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'music';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'publication_category' ],
-		);
+			);
+		}
 		register_taxonomy( 'publication_category', [ 'publication' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_publication_category' );
@@ -790,7 +815,6 @@ if ( in_array('events', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Person Role
 	function register_taxonomy_person_role() {
-		$cap = 'event_program';
 		$labels = array(
 			'name'              => _x( 'Personnel Roles', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Personnel Role', 'taxonomy singular name' ),
@@ -813,22 +837,24 @@ if ( in_array('events', $sdg_modules ) ) {
 			'show_in_menu'      => true,
 			'show_admin_column' => true,
 			'meta_box_cb'       => false,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'person_role' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'event_program';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'person_role' ],
-		);
+			);
+		}
 		register_taxonomy( 'person_role', [ 'event', 'event_program' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_person_role' );
 
 	// Custom Taxonomy: Program Label
 	function register_taxonomy_program_label() {
-		$cap = 'event_program';
 		$labels = array(
 			'name'              => _x( 'Program Labels', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Program Label', 'taxonomy singular name' ),
@@ -851,15 +877,18 @@ if ( in_array('events', $sdg_modules ) ) {
 			'show_in_menu'      => true,
 			'show_admin_column' => true,
 			'meta_box_cb'       => false,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'program_label' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'event_program';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'program_label' ],
-		);
+			);
+		}
 		register_taxonomy( 'program_label', [ 'event', 'event_program' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_program_label' );
@@ -872,7 +901,6 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Liturgical Date Category
 	function register_taxonomy_liturgical_date_category() {
-		$cap = 'lectionary';
 		$labels = array(
 			'name'              => _x( 'Lit Date Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Lit Date Category', 'taxonomy singular name' ),
@@ -894,22 +922,24 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_in_menu'      => 'edit.php?post_type=liturgical_date',
 			//'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'lectionary';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
-		);
+			);
+		}
 		register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args ); // 'lectionary', 
 	}
 	add_action( 'init', 'register_taxonomy_liturgical_date_category' );
 
 	// Custom Taxonomy: Service Type -- Obsolete?
 	function register_taxonomy_service_type() {
-		$cap = 'lectionary';
 		$labels = array(
 			'name'              => _x( 'Service Types', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Service Type', 'taxonomy singular name' ),
@@ -930,22 +960,24 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'service_type' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'lectionary';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'service_type' ],
-		);
+			);
+		}
 		register_taxonomy( 'service_type', [ 'lectionary' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_service_type' );
 	
 	// Custom Taxonomy: Season -- DISABLED! Obsolete?
-	function allsouls_register_taxonomy_season() {
-		//$cap = 'lectionary';
+	/*function egister_taxonomy_season() {
 		$labels = array(
 			'name'              => _x( 'Seasons', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Season', 'taxonomy singular name' ),
@@ -967,17 +999,20 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'season' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'XXX';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'season' ],
-		);
+			);
+		}
 		register_taxonomy( 'season', [ 'collect', 'liturgical_date', 'repertoire' ], $args );
-	}
+	}*/
 	//add_action( 'init', 'allsouls_register_taxonomy_season' );
 
 }
@@ -988,7 +1023,6 @@ if ( in_array('sermons', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Sermon Topic
 	function register_taxonomy_sermon_topic() {
-		$cap = 'sermon';
 		$labels = array(
 			'name'              => _x( 'Sermon Topics', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Sermon Topic', 'taxonomy singular name' ),
@@ -1009,15 +1043,18 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'hierarchical'      => false, // changed from true 11/17/22 because no topics had parents and AG wanted to be able to search
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'sermon_topic' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'sermon';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'sermon_topic' ],
-		);
+			);
+		}
 		register_taxonomy( 'sermon_topic', [ 'sermon' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_sermon_topic' );
@@ -1029,7 +1066,6 @@ if ( in_array('sermons', $sdg_modules ) ) {
 if ( in_array('venues', $sdg_modules ) ) {
 	// Custom Taxonomy: Venue Category
 	function register_taxonomy_venue_category() {
-		$cap = 'venue';
 		$labels = array(
 			'name'              => _x( 'Venue Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Venue Category', 'taxonomy singular name' ),
@@ -1050,15 +1086,18 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'venue_category' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'venue';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'venue_category' ],
-		);
+			);
+		}
 		register_taxonomy( 'venue_category', [ 'venue' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_venue_category' );
@@ -1069,7 +1108,6 @@ if ( in_array('venues', $sdg_modules ) ) {
 if ( in_array('organs', $sdg_modules ) ) {
 	// Custom Taxonomy: Action Type
 	function register_taxonomy_action_type() {
-		$cap = 'organ';
 		$labels = array(
 			'name'              => _x( 'Action Types', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Action Type', 'taxonomy singular name' ),
@@ -1090,15 +1128,18 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'hierarchical'      => true,
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'action_type' ],
+		);
+		if ( custom_caps() ) {
+			$cap = 'organ';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'action_type' ],
-		);
+			);
+		}
 		register_taxonomy( 'action_type', [ 'organ' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_action_type' );
@@ -1110,7 +1151,6 @@ if ( in_array('links', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Link Category WIP
 	function register_taxonomy_link_category() {
-		//$cap = 'link'; // WIP
 		$labels = array(
 			'name'              => _x( 'Link Categories', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Link Category', 'taxonomy singular name' ),
@@ -1132,23 +1172,24 @@ if ( in_array('links', $sdg_modules ) ) {
 			'show_ui'           => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
-            // CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'link_category' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'link';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'link_category' ],
-		);
+			);
+		}*/
 		register_taxonomy( 'link_category', [ 'link' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_link_category' );
 	
 	// Custom Taxonomy: Link Tag (WIP ??? does it need to be that specific, or would generic tags do just as well?)
 	function register_taxonomy_link_tag() {
-		//$cap = 'link';
 		$labels = array(
 			'name'              => _x( 'Link Tags', 'taxonomy general name' ),
 			'singular_name'     => _x( 'Link Tag', 'taxonomy singular name' ),
@@ -1169,16 +1210,18 @@ if ( in_array('links', $sdg_modules ) ) {
 			'hierarchical'      => false, // changed from true 11/17/22 because no topics had parents and AG wanted to be able to search
 			'show_ui'           => true,
 			'show_admin_column' => true,
-			// CAPS WIP -- make this not dependent on Members plugin
-			/*'capabilities'         => array(
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'link_tag' ],
+		);
+		/*if ( custom_caps() ) {
+			$cap = 'link';
+			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
 				'edit_terms'    =>   'edit_'.$cap.'_terms',
 				'delete_terms'  =>   'delete_'.$cap.'_terms',
 				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			),*/
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'link_tag' ],
-		);
+			);
+		}*/
 		register_taxonomy( 'link_tag', [ 'link' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_link_tag' );
