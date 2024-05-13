@@ -329,10 +329,11 @@ function get_music_department_info( $post_id = null ) {
 	$info .= '</div>';
     $ts_info .= "===== // get_music_department_info =====<br />";
 	
+	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	if ( $do_ts ) {
 		$info = $ts_info.$info; // ts_info at the top of the page
 	} else {
-		$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+		$info .= $ts_info;
 	}
 	
     // TODO: get and display program_pdf?
