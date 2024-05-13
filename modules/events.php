@@ -724,20 +724,20 @@ function get_personnel_person ( $args = array() ) {
 		
 	}
 	
-	if ( empty($person_name) ) {
+	if ( empty($person) ) {
 		
 		if ( isset($row['group'][0]) ) { 
 			$group_obj = $row['group'][0];
 			if ($group_obj) { 
-				$person_name = $group_obj->post_title;
+				$person = $group_obj->post_title;
 			}
 		}
 		
-		if ( empty($person_name) ) {
+		if ( empty($person) ) {
 			if ( isset($row['person_txt']) && $row['person_txt'] != "" && $row['person_txt'] != "x" ) { 
 				
 				$ts_info .= "person is empty -> use placeholder person_txt";
-				$person_name = $row['person_txt'];
+				$person = $row['person_txt'];
 				
 				// Fill in Placeholder -- see if a matching record can be found to fill in a proper person_name
 				// TMP(?) disabled to avoid redundancy with event_program_row_cleanup function
@@ -756,7 +756,7 @@ function get_personnel_person ( $args = array() ) {
 			
 	}
 	
-	$arr_info['info'] = $person_name;
+	$arr_info['info'] = $person;
 	if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
 	
 	return $arr_info;
