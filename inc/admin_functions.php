@@ -322,7 +322,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     
     // TS/logging setup
     $do_ts = devmode_active(); 
-    $do_log = false;
+    $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: build_the_title", $do_log );
     
@@ -337,6 +337,10 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     sdg_log( "[btt] abbr: ".(int)$abbr, $do_log );
     $post_type = get_post_type( $post_id );
     
+    // Get current (old) post_title and t4m (or uid?)
+    $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
+    $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
+    
     // Check for CPT-specific build_the_title function
     // WIP
     $function_name = "build_".$post_type."_title";
@@ -348,18 +352,14 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
     //build_edition_title
     
     // If this is a repertoire record, check for a title_clean value
-    // If there is no title_clean, abort -- there's a problem!
+    // If there is no title_clean, abort -- there's a problem! -- except for Hymns (etc?) -- WIP! 240513
     if ( $post_type == 'repertoire' ) {
     	if ( isset($arr['title_clean']) ) { $title_clean = $arr['title_clean']; } else { $title_clean = get_field('title_clean', $post_id); }
     	if ( empty($title_clean) ) { 
     		sdg_log( "[btt] Problem! title_clean is empty for repertoire record ID: ".$post_id, $do_log );
-    		return null;
+    		//return null;
     	}
     }
-    
-    //
-    $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
-    $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
     
     // Set var values
     if ( !empty($arr) ) {
@@ -707,6 +707,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         // TITLE_CLEAN, from EXCERPTED_FROM, CATALOG_NUMBER, OPUS_NUMBER -- COMPOSER (COMPOSER DATES) *OR* (ANON_INFO) / arr. ARRANGER / transcr. TRANSCRIBER -- in KEY_NAME
         // In case of Psalms, prepend "Psalm"/"Psalms" as needed
         
+        // TODO: get these IDs dynamically for portability
+        // Check if tax term "Hymns" exists, e.g., and get get id... 240513
         $hymn_cat_id = "1452"; // "Hymns" -- same id on live and dev
         $psalm_cat_id = "1461"; // "Psalms" -- same id on live and dev
         $chant_cat_id = "1528"; // "Anglican Chant" -- same id on live and dev
