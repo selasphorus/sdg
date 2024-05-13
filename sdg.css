@@ -495,6 +495,250 @@ input[type="text"].merge-input {
 	width: 7rem;
 }
 
+
+/***** MUSIC LIBRARY *****/
+
+table.choirplanner {
+	font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+}
+
+td.repertoire {
+}
+
+td.editions {
+    text-align: right;
+}
+
+td.repertoire div.rep_item,
+td.editions div.edition_info,
+td.editions div.box_num  {
+    display: inline-block;
+    margin-bottom: 0.2rem;
+}
+
+td.editions div.edition_info,
+td.editions div.box_num {
+    padding: 0.4rem 0;
+}
+
+td.editions div.edition_info {
+    width: 80%;
+    float: left;
+    text-align: left;
+    font-size: 0.9rem;
+    color: var(--mddkgrey);
+}
+
+td.repertoire span,
+td.editions div.edition_info span,
+td.editions div.box_num {
+    font-size: inherit;
+    font-weight: normal;
+}
+
+td.editions div.box_num {
+    width: 20%;
+    float: right;
+    text-align: center;
+    font-weight: 600;
+}
+
+td.repertoire span,
+td.editions div.edition_info span {
+    margin: 0.5rem 0.2rem 0.2rem 0;
+    padding: 0.2rem 0.4rem;
+    line-height: 2;
+}
+
+table.choirplanner span.category, 
+table.choirplanner span.season, 
+table.choirplanner span.liturgical_date, 
+table.choirplanner span.occasion, 
+table.choirplanner span.choir_forces, 
+table.choirplanner span.voicing, 
+table.choirplanner span.soloists, 
+table.choirplanner span.instrumentation, 
+table.choirplanner span.keys,
+table.choirplanner span.publisher, 
+table.choirplanner span.publication {
+    white-space: nowrap;
+}
+
+table.choirplanner span.category, 
+table.choirplanner span.season, 
+table.choirplanner span.liturgical_date, 
+table.choirplanner span.occasion, 
+table.choirplanner span.choir_forces, 
+table.choirplanner span.voicing, 
+table.choirplanner span.soloists, 
+table.choirplanner span.instrumentation, 
+table.choirplanner span.keys {
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.3) inset;
+}
+
+.counter,
+td.editions div.edition_info span.counter {
+    padding-right: 0;
+}
+
+table.choirplanner span.category {
+    background-color: #e6f2ff;/*#EEC;*/
+}
+
+table.choirplanner span.composer,
+table.choirplanner span.anon_info,
+table.choirplanner span.arranger,
+table.choirplanner span.person_dates {
+	margin: 0;
+	padding: 0;
+}
+
+table.choirplanner span.person_dates {
+	display: none;
+}
+
+table.choirplanner span.arranger {
+	display: inline;
+}
+
+table.choirplanner span.excerpted_from {
+	font-style: italic;
+}
+
+/** Edition Info -- single edition template **/
+
+.edition_info td.label {
+    width: 25%;
+}
+
+/** Edition Tags **/
+
+span.season {
+    background-color: var(--minty);
+}
+
+span.liturgical_date {
+    background-color: var(--glacier);
+}
+
+span.occasion {
+    background-color: #ffffcc;
+}
+
+span.choir_forces {
+    background-color: #d4dbf7;
+}
+
+span.voicing {
+    background-color: #ddccff;
+}
+
+span.soloists {
+    background-color: #e6f9ff;
+}
+
+span.instrumentation {
+    background-color: #ffebcc;
+}
+
+span.keys {
+    background-color: #ffe6ee;
+}
+
+span.publisher {
+    
+}
+
+span.publication {
+    font-style: italic;
+}
+
+span.box_num {
+    background-color: var(--ltgrey);
+    -webkit-border-radius: 3px;
+}
+
+
+/*** CHOIRPLANNER ***/
+
+.atc_search_form {
+    margin-bottom: 1.5rem;
+}
+
+.atc_search_form input[type="text"],
+.atc_search_form select,
+.atc_search_form .custom-combobox input {
+    background: #f7f7f7;
+    background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) !important;
+    border: 1px solid #d1d1d1;
+    border-radius: 2px;
+    color: var(--mddkgrey);
+    line-height: normal;
+    padding: 0.5rem 0.5rem;
+    margin-bottom: 0.3rem;
+    width: 280px;
+}
+
+.atc_search_form input[type="submit"] {
+    margin: 1rem 0.3rem 0 0;
+}
+
+.atc_search_form ui-button,
+.atc_search_form a.ui-button {
+    height: 2rem;
+}
+
+select.advanced_search
+select.advanced_search {
+    max-width: 300px;
+}
+
+.ui-state-default, 
+.ui-widget-content .ui-state-default, 
+.ui-widget-header .ui-state-default {
+    background: inherit;
+}
+
+.ui-autocomplete {
+    max-height: 250px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+  }
+  /* IE 6 doesn't support max-height
+   * we use height instead, but this forces the menu to always be this tall
+   */
+  * html .ui-autocomplete {
+    height: 250px;
+  }
+
+.ui-menu .ui-menu-item-wrapper {
+    font-size: 0.9rem;
+}
+
+/***/
+
+label.advanced_search,
+label.advanced_search {
+    width: 150px;
+    display: inline-block;
+}
+
+input.simple_search,
+input.advanced_search {
+    width: 280px;
+}
+
+input.simple_search,
+label.advanced_search {
+    margin-right: 5px;
+}
+
+
+/*** Media Queries ***/
+
 @media screen and (max-width: 600px) {
 
 	.msg_bar p {
