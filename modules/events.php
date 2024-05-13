@@ -308,11 +308,22 @@ function get_music_department_info( $post_id = null ) {
     $info .= '<div class="music_dept_info">';
     
     $info .= "Call Time: ".$call_time."<br />";
-    $info .= "Music Staff: <br />";
-    foreach ( $staff as $person ) {
-    	$info .= $person->post_title."<br />";
+    $info .= "<h3>Music Staff:</h3>";
+    foreach ( $staff as $post ) {
+    	$info .= $post->post_title."<br />";
     }
-    $info .= "Participating Groups: ".$groups."<br />";
+    $info .= "<h3>Participating Groups:</h3>";
+    foreach ( $group as $post ) {
+    	$info .= $post->post_title."<br />";
+    }
+    $info .= "<h2>Choir Roster</h2>";
+    $roster = array('soprano','alto','tenor','bass');
+    foreach ( $roster as $fieldname ) {
+    	$info .= "<h3>".ucfirst($fieldname).":</h3>";
+    	foreach ( $$fieldname as $post ) {
+			$info .= $post->post_title."<br />";
+		}
+    }
     
 	$info .= '</div>';
     $ts_info .= "===== // get_music_department_info =====<br />";
