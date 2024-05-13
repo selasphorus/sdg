@@ -264,7 +264,7 @@ function get_music_department_info( $post_id = null ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
-    $do_log = false;
+    $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
 	
 	// Init vars
