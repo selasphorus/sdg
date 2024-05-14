@@ -339,20 +339,23 @@ function get_music_department_info( $post_id = null ) {
     }
     
     // Repertoire
-    $info .= "<h2>Repertoire</h2>";
+    $item_text = "";
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
     	$tmp_id = $post->ID;
-    	$info .= $post->post_title."<br />";
-    	$info .= get_rep_meta_info($tmp_id);
-    	$info .= "<br />";
+    	$item_text .= $post->post_title."<br />";
+    	$item_text .= get_rep_meta_info($tmp_id);
+    	$item_text .= "<br />";
     	// TODO: link to PDF, YT search, IMSLP search, CPDL search
     	// TODO: show tags -- voicing etc.
 	}
     $opening_voluntary = get_field( 'opening_voluntary', $post_id );
     $closing_voluntary = get_field( 'closing_voluntary', $post_id );
     //
-    
+    $item = array( 'item_title' => "Repertoire", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
+	$grid_item = build_item_arr($item);
+    $info .= display_grid_item($grid_item);
+    //    
     
 	$info .= '</div>';
     $ts_info .= "===== // get_music_department_info =====<br />";
