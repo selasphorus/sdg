@@ -283,7 +283,7 @@ function get_music_department_info( $post_id = null ) {
     if ( $admin_tags ) { $admin_tags_str = implode(", ", $admin_tags); } else { $admin_tags_str = ""; }
     $ts_info .= "admin_tags: ".$admin_tags_str."<br /><br />";
 	
-    $info .= '<div class="music_dept_info">';
+    $info .= '<div class="music_dept_info flex-container">';
     
     // Overview content init
     $item_text = "";
