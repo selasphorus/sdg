@@ -285,7 +285,7 @@ function get_music_department_info( $post_id = null ) {
 	
     $info .= '<div class="music_dept_info">';
     
-    //
+    // Overview content init
     $item_text = "";
     
     // Call Time
@@ -306,27 +306,37 @@ function get_music_department_info( $post_id = null ) {
 		$item_text .= $group['label']."<br />";
 	}
 	
-	$item = array();
-	$item['item_title'] = "Music Department Info";
-	$item['item_text'] = $item_text;
-	$item['item_type'] = 'custom_item';
-	$arr_overview = build_item_arr($item);
-    $info .= display_grid_item($arr_overview);
+	$item = array( 'item_title' => "Music Department Info", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
+	$grid_item = build_item_arr($item);
+    $info .= display_grid_item($grid_item);
     
     // Roster
-    $info .= "<h2>Choir Roster</h2>";
+    $item_text = "";
+    //$item_text .= "<h2>Choir Roster</h2>";
     $roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
     		$info .= "<h3>".ucfirst($fieldname).":</h3>";
     		foreach ( $posts as $post ) {
-    			$info .= $post->post_title."<br />";
+    			$item_text .= $post->post_title."<br />";
 			}
     	}    	
     }
+    $item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
+	$grid_item = build_item_arr($item);
+    $info .= display_grid_item($grid_item);
+    
+    // Notes
     $choir_notes = get_field( 'choir_notes', $post_id );
-    if ( $choir_notes ) { $info .= $choir_notes; }
+    if ( $choir_notes ) {
+    	$item_text = $choir_notes;
+    	$item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+    	$grid_item = build_item_arr($item);
+    	$info .= display_grid_item($grid_item);
+    }
     
     // Repertoire
     $info .= "<h2>Repertoire</h2>";
