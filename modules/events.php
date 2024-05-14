@@ -344,8 +344,9 @@ function get_music_department_info( $post_id = null ) {
     foreach ( $choral_rep as $post ) {
     	$tmp_id = $post->ID;
     	$item_text .= $post->post_title."<br />";
-    	$item_text .= get_rep_meta_info($tmp_id);
+    	//$item_text .= get_rep_meta_info($tmp_id);
     	$item_text .= "<br />";
+    	// TODO: link to individual work record for more info -- or:
     	// TODO: link to PDF, YT search, IMSLP search, CPDL search
     	// TODO: show tags -- voicing etc.
 	}
