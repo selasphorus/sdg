@@ -306,7 +306,7 @@ function get_music_department_info( $post_id = null ) {
 		$item_text .= $group['label']."<br />";
 	}
 	
-	$item = array( 'item_title' => "Music Department Info", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+	$item = array( 'item_title' => "Music Department Info", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
 	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
 	$grid_item = build_item_arr($item);
     $info .= display_grid_item($grid_item);
@@ -324,7 +324,7 @@ function get_music_department_info( $post_id = null ) {
 			}
     	}    	
     }
-    $item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+    $item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
 	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
 	$grid_item = build_item_arr($item);
     $info .= display_grid_item($grid_item);
