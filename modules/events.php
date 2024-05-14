@@ -285,37 +285,30 @@ function get_music_department_info( $post_id = null ) {
 	
     $info .= '<div class="music_dept_info">';
     
-    
-    $overview = "";
+    $item = array();    
+    $item_text = "";
     
     // Call Time
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $overview .= "Call Time: ".$call_time."<br />";
+    $item_text .= "Call Time: ".$call_time."<br />";
     
     // Music Staff
-    $overview .= "<h3>Music Staff:</h3>";
+    $item_text .= "<h3>Music Staff:</h3>";
     $staff = get_field( 'music_staff', $post_id );
     foreach ( $staff as $post ) {
-    	$overview .= $post->post_title."<br />";
+    	$item_text .= $post->post_title."<br />";
 	}
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
-    $overview .= "<h3>Participating Groups:</h3>";
+    $item_text .= "<h3>Participating Groups:</h3>";
     foreach ( $groups as $group ) {
-		$overview .= $group['label']."<br />";
+		$item_text .= $group['label']."<br />";
 	}
 	
-	$arr_overview = array();
-	//$arr_item['post_id'] = $post_id;
-	//$arr_item['show_content'] = $show_content;
-	$arr_overview['item_title'] = "Music Department Info";
-	//$arr_item['item_subtitle'] = $item_subtitle;
-	$arr_overview['item_text'] = $item_text;
-	//$arr_item['item_image'] = $item_image;
-	//$arr_item['item_date_str'] = $item_date_str;
-	//$arr_item['ts_info'] = $ts_info;
-	//$arr_item['field_values'] = $field_values;
+	$item['item_title'] = "Music Department Info";
+	$item['item_text'] = $item_text;	
+	$arr_overview = build_item_arr($item);
     $info .= display_grid_item($arr_overview);
     
     // Roster
