@@ -318,7 +318,7 @@ function get_music_department_info( $post_id = null ) {
     foreach ( $roster as $fieldname ) {
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
-    		$info .= "<h3>".ucfirst($fieldname).":</h3>";
+    		$item_text .= "<h3>".ucfirst($fieldname).":</h3>";
     		foreach ( $posts as $post ) {
     			$item_text .= $post->post_title."<br />";
 			}
