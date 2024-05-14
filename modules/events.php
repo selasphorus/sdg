@@ -342,8 +342,9 @@ function get_music_department_info( $post_id = null ) {
     $item_text = "";
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
-    	$tmp_id = $post->ID;
-    	$item_text .= $post->post_title."<br />";
+    	$rep_id = $post->ID;
+    	$item_text = get_rep_info( $rep_id, 'display', true, true );
+    	//$item_text .= $post->post_title."<br />";
     	//$item_text .= get_rep_meta_info($tmp_id);
     	//$item_text .= "<br />";
     	// TODO: link to individual work record for more info -- or:
