@@ -343,7 +343,8 @@ function get_music_department_info( $post_id = null ) {
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
     	$rep_id = $post->ID;
-    	$item_text = get_rep_info( $rep_id, 'display', true, true );
+    	$rep_info = get_rep_info( $rep_id, 'display', true, true );
+    	$item_text = $repInfo['info'];
     	//$item_text .= $post->post_title."<br />";
     	//$item_text .= get_rep_meta_info($tmp_id);
     	//$item_text .= "<br />";
