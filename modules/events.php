@@ -306,9 +306,9 @@ function get_music_department_info( $post_id = null ) {
 		$item_text .= $group['label']."<br />";
 	}
 	
+	$item['item_type'] = 'content';
 	$item['item_title'] = "Music Department Info";
 	$item['item_text'] = $item_text;
-	$item['item_type'] = 'content';
 	$arr_overview = build_item_arr($item);
     $info .= display_grid_item($arr_overview);
     
