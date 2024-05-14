@@ -333,7 +333,7 @@ function get_music_department_info( $post_id = null ) {
     $choir_notes = get_field( 'choir_notes', $post_id );
     if ( $choir_notes ) {
     	$item_text = $choir_notes;
-    	$item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item' );
+    	$item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
     	$grid_item = build_item_arr($item);
     	$info .= display_grid_item($grid_item);
     }
