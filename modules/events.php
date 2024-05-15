@@ -294,6 +294,8 @@ function get_music_dept_overview( $atts = [] ) {
     	$info .= $post->post_title;
     	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
+	// Trim trailing semicolon and space
+    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
@@ -302,6 +304,8 @@ function get_music_dept_overview( $atts = [] ) {
 		$info .= $group['label'];
     	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
+	// Trim trailing semicolon and space
+    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
     
     $ts_info .= "===== // get_music_dept_overview =====<br />";
 	
@@ -353,6 +357,8 @@ function get_event_roster( $atts = [] ) {
     	} else {
     		//$info .= "No ".$fieldname."s found for this event.";
     	}
+    	// Trim trailing semicolon and space
+    	if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
     	$info .= '</div>'; 	
     }
     $info .= '</div>';
