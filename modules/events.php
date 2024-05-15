@@ -297,7 +297,7 @@ function get_music_dept_overview( $atts = [] ) {
     	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
 	// Trim trailing semicolon and space
-    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
+    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
@@ -307,7 +307,7 @@ function get_music_dept_overview( $atts = [] ) {
     	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
 	// Trim trailing semicolon and space
-    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
+    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
     
     $ts_info .= "===== // get_music_dept_overview =====<br />";
 	
