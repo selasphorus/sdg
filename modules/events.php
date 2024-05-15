@@ -350,7 +350,7 @@ function get_event_roster( $atts = [] ) {
     			$info .= $post->post_title."<br />";
 			}
     	} else {
-    		$info .= "No ".$fieldname."s found for this event.";
+    		//$info .= "No ".$fieldname."s found for this event.";
     	}
     	$info .= '</div>'; 	
     }
