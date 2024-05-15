@@ -2270,13 +2270,13 @@ function sdg_selectmenu ( $args = '' ) {
 		
 		// Loop through the array of select options
 		foreach ($arr_values as $key => $value) {
-		//foreach ($arr_values as $key => $obj) {
 			
 			if (is_object($value)) {
 				$obj = $value;
 				if ($obj->ID) { 
 					$value = $obj->ID;
 				}
+				// TODO: add option to display a meta_value instead of the post_title
 				if ($obj->post_title) { 
 					$display_value = $obj->post_title; 
 				}
@@ -2284,7 +2284,6 @@ function sdg_selectmenu ( $args = '' ) {
 				//$value = $key;
 				$display_value = $value; 
 			}
-            
 			
 			// Check to see if the obj is an optgroup label
 			if ( substr( $value, 0, 8 ) === "optgroup" ) {
