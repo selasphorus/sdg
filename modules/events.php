@@ -360,7 +360,7 @@ function get_event_roster( $atts = [] ) {
     		//$info .= "No ".$fieldname."s found for this event.";
     	}
     	// Trim trailing semicolon and space
-    	if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
+    	if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
     	if ( $format != "short" ) { $info .= '</div>'; }
     }
     if ( $format != "short" ) { $info .= '</div>'; }
