@@ -337,6 +337,8 @@ function get_event_roster( $post_id = null ) {
     		foreach ( $posts as $post ) {
     			$info .= $post->post_title."<br />";
 			}
+    	} else {
+    		$info .= "No ".$fieldname."s found for this event.";
     	}
     	$info .= '</div>'; 	
     }
