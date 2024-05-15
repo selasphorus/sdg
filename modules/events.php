@@ -345,10 +345,10 @@ function get_event_roster( $atts = [] ) {
     
     if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3 class="'.$hclass.'">Roster</h2>'; }
 	
-	$info .= '<div class="roster flex-container">';
+	if ( $format != "short" ) { $info .= '<div class="roster flex-container">'; }
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
-    	$info .= '<div class="roster-section '.$fieldname.' flex-box mini alignleft">';
+    	if ( $format != "short" ) { $info .= '<div class="roster-section '.$fieldname.' flex-box mini alignleft">'; }
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
     		$info .= '<h3 class="'.$hclass.'">'.ucfirst($fieldname).':</h3>';
@@ -361,9 +361,9 @@ function get_event_roster( $atts = [] ) {
     	}
     	// Trim trailing semicolon and space
     	if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2); }
-    	$info .= '</div>'; 	
+    	if ( $format != "short" ) { $info .= '</div>'; }
     }
-    $info .= '</div>';
+    if ( $format != "short" ) { $info .= '</div>'; }
     
     $ts_info .= "===== // get_roster =====<br />";
 	
