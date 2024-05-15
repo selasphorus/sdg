@@ -343,7 +343,7 @@ function get_event_roster( $atts = [] ) {
     $ts_info .= "post_id: $post_id<br />";
     if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
     
-    if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3 class="'.$hclass.'">Roster</h2>'; }
+    if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3>Roster</h3>'; }
 	
 	if ( $format != "short" ) { $info .= '<div class="roster flex-container">'; }
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
