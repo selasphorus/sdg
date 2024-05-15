@@ -367,6 +367,9 @@ function get_event_roster( $atts = [] ) {
     
     $ts_info .= "===== // get_roster =====<br />";
 	
+	$choir_notes = get_field( 'choir_notes', $post_id );
+	if ( $choir_notes ) { $info .= $choir_notes; }
+	
 	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	if ( $do_ts ) {
 		$info = $ts_info.$info; // ts_info at the top of the page
