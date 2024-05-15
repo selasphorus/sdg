@@ -327,16 +327,20 @@ function get_event_roster( $post_id = null ) {
     
 	$info .= "<h2>Roster</h2>";
 	
+	$info .= '<div class="roster flex-container">';
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
+    	$info .= '<div class="roster-section flex-box">';
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
     		$info .= "<h3>".ucfirst($fieldname).":</h3>";
     		foreach ( $posts as $post ) {
     			$info .= $post->post_title."<br />";
 			}
-    	}    	
+    	}
+    	$info .= '</div>'; 	
     }
+    $info .= '</div>';
     
     $ts_info .= "===== // get_roster =====<br />";
 	
