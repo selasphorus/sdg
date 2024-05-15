@@ -330,7 +330,7 @@ function get_event_roster( $post_id = null ) {
 	$info .= '<div class="roster flex-container">';
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
     foreach ( $roster as $fieldname ) {
-    	$info .= '<div class="roster-section flex-box">';
+    	$info .= '<div class="roster-section flex-box mini alignleft">';
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
     		$info .= "<h3>".ucfirst($fieldname).":</h3>";
