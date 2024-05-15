@@ -258,13 +258,22 @@ function get_event_ticketing_info( $post_id = null ) {
 	
 }
 
+// Music Department infos
+
 add_shortcode('display_md_overview', 'get_music_dept_overview' );
-function get_music_dept_overview( $post_id = null ) {
+function get_music_dept_overview( $atts = [] ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
     $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
+	
+	// Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+        'format' => 'long'    
+    ), $atts );
+	extract( $args );
 	
 	// Init vars
 	$info = "";
@@ -307,12 +316,19 @@ function get_music_dept_overview( $post_id = null ) {
 }
 
 add_shortcode('display_roster', 'get_event_roster' );
-function get_event_roster( $post_id = null ) {
+function get_event_roster( $atts = [] ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
     $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
+	
+	// Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+        'format' => 'long'    
+    ), $atts );
+	extract( $args );
 	
 	// Init vars
 	$info = "";
@@ -354,12 +370,19 @@ function get_event_roster( $post_id = null ) {
 }
 
 add_shortcode('display_repertoire', 'get_event_rep');
-function get_event_rep( $post_id = null ) {
+function get_event_rep( $atts = [] ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
     $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
+	
+	// Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+        'format' => 'long'    
+    ), $atts );
+	extract( $args );
 	
 	// Init vars
 	$info = "";
@@ -423,7 +446,6 @@ function get_event_personnel( $atts = [] ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
-    // TODO: rename ast $args for consistency across fcns
     $args = shortcode_atts( array(
 		'post_id'	=> get_the_ID(),
         'run_updates' => false,
