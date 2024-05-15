@@ -343,7 +343,7 @@ function get_event_roster( $atts = [] ) {
     $ts_info .= "===== get_roster =====<br />";
     $ts_info .= "post_id: $post_id<br />";
     
-	$info .= "<h2>Roster</h2>";
+    if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3 class="'.$hclass.'">Roster</h2>'; }
 	
 	$info .= '<div class="roster flex-container">';
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
@@ -351,7 +351,7 @@ function get_event_roster( $atts = [] ) {
     	$info .= '<div class="roster-section '.$fieldname.' flex-box mini alignleft">';
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
-    		$info .= "<h3>".ucfirst($fieldname).":</h3>";
+    		$info .= '<h3 class="'.$hclass.'">'.ucfirst($fieldname).':</h3>';
     		foreach ( $posts as $post ) {
     			$info .= $post->post_title;
     			if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
