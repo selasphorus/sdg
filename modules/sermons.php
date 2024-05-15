@@ -657,18 +657,6 @@ function build_sermon_filters() {
 	// Preachers menu
     // Get featured_preachers as designated via the CPT options page
     $author_ids = get_field('featured_preachers', 'option');
-    /*
-    $featured_preachers = get_field('featured_preachers', 'option');
-    if ( !empty($featured_preachers) ) { 
-    	$author_ids = $featured_preachers;
-    } else if ( !is_dev_site() ) {
-        // Fr. Turner 15012, Fr. Brown 14984, Fr. Cheng 143207, Fr. Gioia 305654, Mo. Lee-Pae 284270, Fr. Moretz 15001, Sr. Promise 246039, Fr. Shultz 282498, Mo. Turner 15022 -- LIVE SITE
-        $author_ids = array(15012, 14984, 143207, 305654, 284270, 15001, 246039, 282498, 15022); // Fr. Bennett: 123941
-    } else {
-        // Fr. Turner, Fr. Moretz, Fr. Brown, Fr. Cheng, Mo. Turner, Sr. Promise -- DEV SITE
-        $author_ids = array(15012, 15001, 14984, 143207, 15022, 147858); // Fr. Bennett:
-    }
-    */
     $wp_args = array(
         'post_type'   => 'person',
         'post_status' => 'publish',
@@ -677,9 +665,6 @@ function build_sermon_filters() {
     );
     $sermon_authors = get_posts($wp_args);
     //$info .= print_r($sermon_authors, true);
-    
-    // Given that the number of ids included is so limited, the select_distinct query isn't currently necessary. Use get_posts instead.
-	//$author_values = sdg_select_distinct( array ( 'post_type' => 'person', 'meta_key' => 'sermon_author', 'arr_include' => $author_ids ) ); 
     
 	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true ) ) ;
 	$info .= '<br />';
