@@ -281,6 +281,8 @@ function get_music_dept_overview( $atts = [] ) {
     $ts_info .= "===== get_music_dept_overview =====<br />";
     $ts_info .= "post_id: $post_id<br />";
     
+    if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
+    //
 	if ( $format != "short" ) { $info .= "<h2>Overview</h2>"; }
 	
 	// Call Time
@@ -288,7 +290,7 @@ function get_music_dept_overview( $atts = [] ) {
     $info .= "Call Time: ".$call_time."<br />";
     
     // Music Staff
-    $info .= "<h3>Music Staff:</h3>";
+    $info .= '<h3 class="'.$hclass.'">Music Staff:</h3>';
     $staff = get_field( 'music_staff', $post_id );
     foreach ( $staff as $post ) {
     	$info .= $post->post_title;
@@ -299,7 +301,7 @@ function get_music_dept_overview( $atts = [] ) {
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
-    $info .= "<h3>Participating Groups:</h3>";
+    $info .= '<h3 class="'.$hclass.'">Participating Groups:</h3>';
     foreach ( $groups as $group ) {
 		$info .= $group['label'];
     	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
