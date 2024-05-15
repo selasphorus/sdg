@@ -281,7 +281,7 @@ function get_music_dept_overview( $atts = [] ) {
     $ts_info .= "===== get_music_dept_overview =====<br />";
     $ts_info .= "post_id: $post_id<br />";
     
-	$info .= "<h2>Overview</h2>";
+	if ( $format != "short" ) { $info .= "<h2>Overview</h2>"; }
 	
 	// Call Time
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
@@ -291,14 +291,16 @@ function get_music_dept_overview( $atts = [] ) {
     $info .= "<h3>Music Staff:</h3>";
     $staff = get_field( 'music_staff', $post_id );
     foreach ( $staff as $post ) {
-    	$info .= $post->post_title."<br />";
+    	$info .= $post->post_title;
+    	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
     $info .= "<h3>Participating Groups:</h3>";
     foreach ( $groups as $group ) {
-		$info .= $group['label']."<br />";
+		$info .= $group['label'];
+    	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 	}
     
     $ts_info .= "===== // get_music_dept_overview =====<br />";
@@ -345,7 +347,8 @@ function get_event_roster( $atts = [] ) {
     	if ( $posts ) {
     		$info .= "<h3>".ucfirst($fieldname).":</h3>";
     		foreach ( $posts as $post ) {
-    			$info .= $post->post_title."<br />";
+    			$info .= $post->post_title;
+    			if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
 			}
     	} else {
     		//$info .= "No ".$fieldname."s found for this event.";
