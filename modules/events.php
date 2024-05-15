@@ -258,9 +258,8 @@ function get_event_ticketing_info( $post_id = null ) {
 	
 }
 
-add_shortcode('display_music_info', 'get_music_department_info');
-// Get music department info per ACF fields -- for internal use only
-function get_music_department_info( $post_id = null ) {
+add_shortcode('display_md_overview', 'get_music_dept_overview' );
+function get_music_dept_overview( $post_id = null ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -270,7 +269,100 @@ function get_music_department_info( $post_id = null ) {
 	// Init vars
 	$info = "";
 	$ts_info = "";
-    $ts_info .= "===== get_music_department_info =====<br />";
+    $ts_info .= "===== get_music_dept_overview =====<br />";
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
+	
+	// Troubleshooting
+    $ts_info .= "post_id: $post_id<br />";
+    
+	$info .= "<h2>Overview</h2>";
+	
+	// Call Time
+    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
+    $info .= "Call Time: ".$call_time."<br />";
+    
+    // Music Staff
+    $info .= "<h3>Music Staff:</h3>";
+    $staff = get_field( 'music_staff', $post_id );
+    foreach ( $staff as $post ) {
+    	$info .= $post->post_title."<br />";
+	}
+    
+    // Groups
+    $groups = get_field( 'participating_groups', $post_id );
+    $info .= "<h3>Participating Groups:</h3>";
+    foreach ( $groups as $group ) {
+		$info .= $group['label']."<br />";
+	}
+    
+    $ts_info .= "===== // get_music_dept_overview =====<br />";
+	
+	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	if ( $do_ts ) {
+		$info = $ts_info.$info; // ts_info at the top of the page
+	} else {
+		$info .= $ts_info;
+	}
+	
+	return $info;
+
+}
+
+add_shortcode('display_roster', 'get_event_roster' );
+function get_event_roster( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = devmode_active();
+    sdg_log( "divline2", $do_log );
+	
+	// Init vars
+	$info = "";
+	$ts_info = "";
+    $ts_info .= "===== get_roster =====<br />";
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
+	
+	// Troubleshooting
+    $ts_info .= "post_id: $post_id<br />";
+    
+	$info .= "<h2>Roster</h2>";
+	
+	$roster = array('soprano','alto','tenor','bass','absent','sick');
+    foreach ( $roster as $fieldname ) {
+    	$posts = get_field( $fieldname, $post_id );
+    	if ( $posts ) {
+    		$info .= "<h3>".ucfirst($fieldname).":</h3>";
+    		foreach ( $posts as $post ) {
+    			$info .= $post->post_title."<br />";
+			}
+    	}    	
+    }
+    
+    $ts_info .= "===== // get_roster =====<br />";
+	
+	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	if ( $do_ts ) {
+		$info = $ts_info.$info; // ts_info at the top of the page
+	} else {
+		$info .= $ts_info;
+	}
+	
+	return $info;
+
+}
+
+add_shortcode('display_repertoire', 'get_event_rep');
+function get_event_rep( $post_id = null ) {
+    
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = devmode_active();
+    sdg_log( "divline2", $do_log );
+	
+	// Init vars
+	$info = "";
+	$ts_info = "";
+    $ts_info .= "===== get_event_rep =====<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // Troubleshooting
@@ -283,85 +375,24 @@ function get_music_department_info( $post_id = null ) {
     if ( $admin_tags ) { $admin_tags_str = implode(", ", $admin_tags); } else { $admin_tags_str = ""; }
     $ts_info .= "admin_tags: ".$admin_tags_str."<br /><br />";
 	
-    $info .= '<div class="music_dept_info flex-container">';
+    $info .= "<h2>Repertoire</h2>";
     
-    // Overview content init
-    $item_text = "";
-    
-    // Call Time
-    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $item_text .= "Call Time: ".$call_time."<br />";
-    
-    // Music Staff
-    $item_text .= "<h3>Music Staff:</h3>";
-    $staff = get_field( 'music_staff', $post_id );
-    foreach ( $staff as $post ) {
-    	$item_text .= $post->post_title."<br />";
-	}
-    
-    // Groups
-    $groups = get_field( 'participating_groups', $post_id );
-    $item_text .= "<h3>Participating Groups:</h3>";
-    foreach ( $groups as $group ) {
-		$item_text .= $group['label']."<br />";
-	}
-	
-	$item = array( 'item_title' => "Music Department Info", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
-	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
-	$grid_item = build_item_arr($item);
-    $info .= display_grid_item($grid_item);
-    
-    // Roster
-    $item_text = "";
-    //$item_text .= "<h2>Choir Roster</h2>";
-    $roster = array('soprano','alto','tenor','bass','absent','sick');
-    foreach ( $roster as $fieldname ) {
-    	$posts = get_field( $fieldname, $post_id );
-    	if ( $posts ) {
-    		$item_text .= "<h3>".ucfirst($fieldname).":</h3>";
-    		foreach ( $posts as $post ) {
-    			$item_text .= $post->post_title."<br />";
-			}
-    	}    	
-    }
-    $item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
-	//$item['item_title'] = "Music Department Info"; //$item['item_text'] = $item_text; //$item['item_type'] = 'custom_item';
-	$grid_item = build_item_arr($item);
-    $info .= display_grid_item($grid_item);
-    
-    // Notes
-    $choir_notes = get_field( 'choir_notes', $post_id );
-    if ( $choir_notes ) {
-    	$item_text = $choir_notes;
-    	$item = array( 'item_title' => "Choir Roster", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
-    	$grid_item = build_item_arr($item);
-    	$info .= display_grid_item($grid_item);
-    }
-    
-    // Repertoire
-    $item_text = "";
     $choral_rep = get_field( 'choral_rep', $post_id );
     foreach ( $choral_rep as $post ) {
     	$rep_id = $post->ID;
     	$rep_info = get_rep_info( $rep_id, 'display', true, true );
-    	$item_text = $rep_info['info'];
-    	//$item_text .= $post->post_title."<br />";
-    	//$item_text .= get_rep_meta_info($tmp_id);
-    	//$item_text .= "<br />";
+    	$info = $rep_info['info'];
+    	//$info .= $post->post_title."<br />";
+    	//$info .= get_rep_meta_info($tmp_id);
+    	//$info .= "<br />";
     	// TODO: link to individual work record for more info -- or:
     	// TODO: link to PDF, YT search, IMSLP search, CPDL search
     	// TODO: show tags -- voicing etc.
 	}
     $opening_voluntary = get_field( 'opening_voluntary', $post_id );
     $closing_voluntary = get_field( 'closing_voluntary', $post_id );
-    //
-    $item = array( 'item_title' => "Repertoire", 'item_text' => $item_text, 'item_type' => 'custom_item', 'hlevel' => 2 );
-	$grid_item = build_item_arr($item);
-    $info .= display_grid_item($grid_item);
-    //    
     
-	$info .= '</div>';
-    $ts_info .= "===== // get_music_department_info =====<br />";
+    $ts_info .= "===== // get_event_rep =====<br />";
 	
 	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	if ( $do_ts ) {
