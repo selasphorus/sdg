@@ -271,8 +271,6 @@ function get_music_dept_overview( $post_id = null ) {
 	$ts_info = "";
     $ts_info .= "===== get_music_dept_overview =====<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
-	
-	// Troubleshooting
     $ts_info .= "post_id: $post_id<br />";
     
 	$info .= "<h2>Overview</h2>";
@@ -321,8 +319,6 @@ function get_event_roster( $post_id = null ) {
 	$ts_info = "";
     $ts_info .= "===== get_roster =====<br />";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
-	
-	// Troubleshooting
     $ts_info .= "post_id: $post_id<br />";
     
 	$info .= "<h2>Roster</h2>";
