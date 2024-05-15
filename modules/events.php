@@ -280,7 +280,6 @@ function get_music_dept_overview( $atts = [] ) {
 	$ts_info = "";
     $ts_info .= "===== get_music_dept_overview =====<br />";
     $ts_info .= "post_id: $post_id<br />";
-    
     if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
     //
 	if ( $format != "short" ) { $info .= "<h2>Overview</h2>"; }
@@ -342,6 +341,7 @@ function get_event_roster( $atts = [] ) {
 	$ts_info = "";
     $ts_info .= "===== get_roster =====<br />";
     $ts_info .= "post_id: $post_id<br />";
+    if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
     
     if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3 class="'.$hclass.'">Roster</h2>'; }
 	
