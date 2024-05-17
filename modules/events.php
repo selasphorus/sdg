@@ -470,11 +470,13 @@ function get_event_rep( $atts = [] ) {
 			$rep_id = $post->ID;
 			$rep_info = get_rep_info( $rep_id, 'display', true, true );
 			$info .= $rep_info['info'];
-			$scores = get_field( 'scores', $post_id );
+			$scores = get_field( 'scores', $rep_id );
 			if ( $scores ) { 
 				foreach ( $scores as $score ) {
 					$info .= $score; //."<br />";
 				}
+    		} else {
+    			$info .= "No scores available for this work.<br />";
     		}
 			//$info .= $post->post_title."<br />";
 			//$info .= get_rep_meta_info($tmp_id);
