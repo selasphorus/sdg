@@ -354,7 +354,7 @@ function get_event_roster( $atts = [] ) {
     		$info .= '<h3 class="'.$hclass.'">'.ucfirst($fieldname).':</h3>';
     		foreach ( $posts as $post ) {
     			if ( $format == "short" ) {
-    				$info .= get_field( 'initials', $post->ID )."; ";
+    				$info .= get_field( 'initials', $post->ID ).", ";
     			} else { 
     				$info .= $post->post_title;
     				$info .= "<br />";
@@ -364,7 +364,7 @@ function get_event_roster( $atts = [] ) {
     		//$info .= "No ".$fieldname."s found for this event.";
     	}
     	// Trim trailing semicolon and space
-    	if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
+    	if ( substr($info, -2) == ', ' ) { $info = substr($info, 0, -2)."<br />"; }
     	if ( $format != "short" ) { $info .= '</div>'; }
     }
     if ( $format != "short" ) { $info .= '</div>'; }
