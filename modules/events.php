@@ -473,7 +473,8 @@ function get_event_rep( $atts = [] ) {
 			$scores = get_field( 'scores', $rep_id );
 			if ( $scores ) { 
 				foreach ( $scores as $score ) {
-					$info .= print_r($score,true); //."<br />";
+					//$info .= print_r($score,true); //."<br />";
+					$info .= make_link( $score['url'], 'PDF', null, null, "_blank"); // make_link( $url, $text, $title = null, $class = null, $target = null)
 				}
     		} else {
     			$info .= "No scores available for this work.<br />";
