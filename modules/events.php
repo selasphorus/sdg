@@ -335,7 +335,7 @@ function get_music_dept_overview( $atts = [] ) {
 		}
 	}
 	// Trim trailing semicolon and space
-    if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
+    if ( substr($info, -2) == ', ' ) { $info = substr($info, 0, -2)."<br />"; }
     
     // Groups
     $groups = get_field( 'participating_groups', $post_id );
