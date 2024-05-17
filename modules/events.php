@@ -473,7 +473,7 @@ function get_event_rep( $atts = [] ) {
 			$scores = get_field( 'scores', $rep_id );
 			if ( $scores ) { 
 				foreach ( $scores as $score ) {
-					$info .= $score; //."<br />";
+					$info .= print_r($score,true); //."<br />";
 				}
     		} else {
     			$info .= "No scores available for this work.<br />";
