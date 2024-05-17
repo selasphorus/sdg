@@ -457,7 +457,7 @@ function get_event_rep( $atts = [] ) {
     foreach ( $choral_rep as $post ) {
     	$rep_id = $post->ID;
     	$rep_info = get_rep_info( $rep_id, 'display', true, true );
-    	$info .= $rep_info['info'];
+    	$info .= $rep_info['info']."<br />";
     	//$info .= $post->post_title."<br />";
     	//$info .= get_rep_meta_info($tmp_id);
     	//$info .= "<br />";
