@@ -472,8 +472,9 @@ function get_event_rep( $atts = [] ) {
 			$info .= $rep_info['info'];
 			$scores = get_field( 'scores', $post_id );
 			if ( $scores ) { 
-    		foreach ( $scores as $score ) {
-    			$info .= $score; //."<br />";
+				foreach ( $scores as $score ) {
+					$info .= $score; //."<br />";
+				}
     		}
 			//$info .= $post->post_title."<br />";
 			//$info .= get_rep_meta_info($tmp_id);
