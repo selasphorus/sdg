@@ -454,7 +454,11 @@ function get_event_rep( $atts = [] ) {
     if ( $admin_tags ) { $admin_tags_str = implode(", ", $admin_tags); } else { $admin_tags_str = ""; }
     $ts_info .= "admin_tags: ".$admin_tags_str."<br /><br />";
 	
-    $info .= "<h2>Repertoire</h2>";
+	if ( $format == "short" ) {
+		$info .= "<h3>Repertoire</h3>";
+	} else {
+		$info .= "<h2>Repertoire</h2>";
+	}
     
     $choral_rep = get_field( 'choral_rep', $post_id );
     if ( $choral_rep ) { 
