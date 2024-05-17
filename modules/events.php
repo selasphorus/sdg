@@ -386,7 +386,7 @@ function get_event_roster( $atts = [] ) {
     	if ( $format != "short" ) { $info .= '<div class="roster-section '.$fieldname.' flex-box mini alignleft">'; }
     	$posts = get_field( $fieldname, $post_id );
     	if ( $posts ) {
-    		if ( $fieldname == "absent" ) { $info .= "<hr />"; } // break between roster and absences
+    		if ( $fieldname == "absent" ) { $info .= "-----<br />"; } // break between roster and absences
     		$info .= '<h3 class="'.$hclass.'">'.ucfirst($fieldname).':</h3>';
     		foreach ( $posts as $post ) {
     			if ( $format == "short" ) {
