@@ -321,7 +321,7 @@ function get_music_dept_overview( $atts = [] ) {
 
 }
 
-add_shortcode('display_roster', 'get_event_roster' );
+add_shortcode('roster', 'get_event_roster' );
 function get_event_roster( $atts = [] ) {
     
     // TS/logging setup
@@ -353,8 +353,12 @@ function get_event_roster( $atts = [] ) {
     	if ( $posts ) {
     		$info .= '<h3 class="'.$hclass.'">'.ucfirst($fieldname).':</h3>';
     		foreach ( $posts as $post ) {
-    			$info .= $post->post_title;
-    			if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
+    			if ( $format == "short" ) {
+    				$info .= get_field( 'initials', $post->ID )."; ";
+    			} else { 
+    				$info .= $post->post_title;
+    				$info .= "<br />";
+    			}
 			}
     	} else {
     		//$info .= "No ".$fieldname."s found for this event.";
