@@ -459,7 +459,7 @@ function get_event_rep( $atts = [] ) {
     $ts_info .= "admin_tags: ".$admin_tags_str."<br /><br />";
 	
 	if ( $format == "short" ) {
-		$info .= "<h3>Repertoire</h3>";
+		$info .= '<h3>Repertoire</h3>';
 	} else {
 		$info .= "<h2>Repertoire</h2>";
 	}
@@ -469,10 +469,15 @@ function get_event_rep( $atts = [] ) {
     	foreach ( $choral_rep as $post ) {
 			$rep_id = $post->ID;
 			$rep_info = get_rep_info( $rep_id, 'display', true, true );
-			$info .= $rep_info['info']."<br />";
+			$info .= $rep_info['info'];
+			$scores = get_field( 'scores', $post_id );
+			if ( $scores ) { 
+    		foreach ( $scores as $score ) {
+    			$info .= $score; //."<br />";
+    		}
 			//$info .= $post->post_title."<br />";
 			//$info .= get_rep_meta_info($tmp_id);
-			//$info .= "<br />";
+			$info .= "<br />";
 			// TODO: link to individual work record for more info -- or:
 			// TODO: link to PDF, YT search, IMSLP search, CPDL search
 			// TODO: show tags -- voicing etc.
