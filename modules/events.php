@@ -286,7 +286,7 @@ function get_call_time( $atts = [] ) {
 	
 	// Call Time
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $info .= '<h3 class="'.$hclass.'">Call Time: '.$call_time.'</h3>';
+    $info .= '<h3 class="'.$hclass.'">Call Time:</h3>'.$call_time.'<br />';
     
     $ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
 	if ( $do_ts ) {
