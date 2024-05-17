@@ -260,7 +260,46 @@ function get_event_ticketing_info( $post_id = null ) {
 
 // Music Department infos
 
-add_shortcode('display_md_overview', 'get_music_dept_overview' );
+add_shortcode('call_time', 'get_call_time' );
+function get_call_time( $atts = [] ) {
+    
+    // TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = devmode_active();
+    sdg_log( "divline2", $do_log );
+	
+	// Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+        'format' => 'long'    
+    ), $atts );
+	extract( $args );
+	
+	// Init vars
+	$info = "";
+	$ts_info = "";
+    //$ts_info .= "===== get_call_time =====<br />";
+    //$ts_info .= "post_id: $post_id<br />";
+	
+	$hclass = 'call_time';
+	if ( $format == "short" ) { $hclass .= "inline"; }
+	
+	// Call Time
+    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
+    $info .= '<h3 class="'.$hclass.'">Call Time: '.$call_time.'</h3>';
+    
+    $ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
+	if ( $do_ts ) {
+		$info = $ts_info.$info; // ts_info at the top of the page
+	} else {
+		$info .= $ts_info;
+	}
+	
+	return $info;
+    
+}
+
+add_shortcode('md_overview', 'get_music_dept_overview' );
 function get_music_dept_overview( $atts = [] ) {
     
     // TS/logging setup
@@ -283,10 +322,6 @@ function get_music_dept_overview( $atts = [] ) {
     if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
     //
 	if ( $format != "short" ) { $info .= "<h2>Overview</h2>"; }
-	
-	// Call Time
-    $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
-    $info .= "Call Time: ".$call_time."<br />";
     
     // Music Staff
     $info .= '<h3 class="'.$hclass.'">Music Staff:</h3>';
@@ -343,7 +378,7 @@ function get_event_roster( $atts = [] ) {
     $ts_info .= "post_id: $post_id<br />";
     if ( $format == "short" ) { $hclass = "inline"; } else { $hclass = ""; }
     
-    if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } else { $info .= '<h3>Roster</h3>'; }
+    if ( $format != "short" ) { $info .= "<h2>Roster</h2>"; } //else { $info .= '<h3>Roster</h3>'; }
 	
 	if ( $format != "short" ) { $info .= '<div class="roster flex-container">'; }
 	$roster = array('soprano','alto','tenor','bass','absent','sick');
