@@ -327,8 +327,12 @@ function get_music_dept_overview( $atts = [] ) {
     $info .= '<h3 class="'.$hclass.'">Music Staff:</h3>';
     $staff = get_field( 'music_staff', $post_id );
     foreach ( $staff as $post ) {
-    	$info .= $post->post_title;
-    	if ( $format == "short" ) { $info .= "; "; } else { $info .= "<br />"; }
+    	if ( $format == "short" ) {
+			$info .= get_field( 'initials', $post->ID ).", ";
+		} else { 
+			$info .= $post->post_title;
+			$info .= "<br />";
+		}
 	}
 	// Trim trailing semicolon and space
     if ( substr($info, -2) == '; ' ) { $info = substr($info, 0, -2)."<br />"; }
