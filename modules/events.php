@@ -457,17 +457,22 @@ function get_event_rep( $atts = [] ) {
     $info .= "<h2>Repertoire</h2>";
     
     $choral_rep = get_field( 'choral_rep', $post_id );
-    foreach ( $choral_rep as $post ) {
-    	$rep_id = $post->ID;
-    	$rep_info = get_rep_info( $rep_id, 'display', true, true );
-    	$info .= $rep_info['info']."<br />";
-    	//$info .= $post->post_title."<br />";
-    	//$info .= get_rep_meta_info($tmp_id);
-    	//$info .= "<br />";
-    	// TODO: link to individual work record for more info -- or:
-    	// TODO: link to PDF, YT search, IMSLP search, CPDL search
-    	// TODO: show tags -- voicing etc.
-	}
+    if ( $choral_rep ) { 
+    	foreach ( $choral_rep as $post ) {
+			$rep_id = $post->ID;
+			$rep_info = get_rep_info( $rep_id, 'display', true, true );
+			$info .= $rep_info['info']."<br />";
+			//$info .= $post->post_title."<br />";
+			//$info .= get_rep_meta_info($tmp_id);
+			//$info .= "<br />";
+			// TODO: link to individual work record for more info -- or:
+			// TODO: link to PDF, YT search, IMSLP search, CPDL search
+			// TODO: show tags -- voicing etc.
+		}
+    } else {
+    	$info .= "No choral rep found for this event.<br />";
+    }
+    
     $opening_voluntary = get_field( 'opening_voluntary', $post_id );
     $closing_voluntary = get_field( 'closing_voluntary', $post_id );
     
