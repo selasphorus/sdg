@@ -281,8 +281,8 @@ function get_call_time( $atts = [] ) {
     //$ts_info .= "===== get_call_time =====<br />";
     //$ts_info .= "post_id: $post_id<br />";
 	
-	$hclass = 'call_time';
-	if ( $format == "short" ) { $hclass .= "inline"; }
+	$hclass = 'call_time inline';
+	//if ( $format == "short" ) { $hclass .= "inline"; }
 	
 	// Call Time
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
