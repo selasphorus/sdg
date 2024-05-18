@@ -469,7 +469,7 @@ function get_event_rep( $atts = [] ) {
     	$info .= "<ul>";
     	foreach ( $choral_rep as $i => $post ) {
 			$rep_id = $post->ID;
-			$rep_info = get_rep_info( $rep_id, 'display', true, true, true );
+			$rep_info = get_rep_info( $rep_id, 'display', true, true, true ); // get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true, $full_title = false ) {
 			$info .= "<li>";
 			$info .= $rep_info['info'];
 			$scores = get_field( 'scores', $rep_id );

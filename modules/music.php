@@ -958,6 +958,7 @@ function get_excerpted_from( $post_id = null ) {
 
 // Retrieve full rep title and associated info. 
 // Return formats include 'display' (for front end), 'txt' (for back end(, and 'sanitized' (for DB matching)
+// TODO: streamline, pass args instead of separate parameters, build in more formatting options
 function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true, $full_title = false ) {
 	
 	// TS/logging setup
