@@ -465,10 +465,12 @@ function get_event_rep( $atts = [] ) {
 	}
     
     $choral_rep = get_field( 'choral_rep', $post_id );
-    if ( $choral_rep ) { 
-    	foreach ( $choral_rep as $post ) {
+    if ( $choral_rep ) {
+    	$info .= "<ul>";
+    	foreach ( $choral_rep as $i => $post ) {
 			$rep_id = $post->ID;
 			$rep_info = get_rep_info( $rep_id, 'display', true, true, true );
+			$info .= "<li>";
 			$info .= $rep_info['info'];
 			$scores = get_field( 'scores', $rep_id );
 			if ( $scores ) { 
@@ -480,13 +482,15 @@ function get_event_rep( $atts = [] ) {
     		} else {
     			$info .= "No scores available for this work.<br />";
     		}
+    		$info .= "</li>";
 			//$info .= $post->post_title."<br />";
 			//$info .= get_rep_meta_info($tmp_id);
-			$info .= "<br />";
+			//$info .= "<br />";
 			// TODO: link to individual work record for more info -- or:
 			// TODO: link to PDF, YT search, IMSLP search, CPDL search
 			// TODO: show tags -- voicing etc.
 		}
+		$info .= "</ul>";
     } else {
     	$info .= "No choral rep found for this event.<br />";
     }
