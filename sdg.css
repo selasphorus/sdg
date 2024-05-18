@@ -80,6 +80,10 @@ a.action {
     font-family: var(--global--font-monospace);
 }
 
+.important {
+	font-weight: bold;
+}
+
 /** START WIP ***/
 span.t1 {
 	display: block;
