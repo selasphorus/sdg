@@ -468,7 +468,7 @@ function get_event_rep( $atts = [] ) {
     if ( $choral_rep ) { 
     	foreach ( $choral_rep as $post ) {
 			$rep_id = $post->ID;
-			$rep_info = get_rep_info( $rep_id, 'display', true, true );
+			$rep_info = get_rep_info( $rep_id, 'display', true, true, true );
 			$info .= $rep_info['info'];
 			$scores = get_field( 'scores', $rep_id );
 			if ( $scores ) { 

@@ -958,7 +958,7 @@ function get_excerpted_from( $post_id = null ) {
 
 // Retrieve full rep title and associated info. 
 // Return formats include 'display' (for front end), 'txt' (for back end(, and 'sanitized' (for DB matching)
-function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true ) {
+function get_rep_info( $post_id = null, $format = 'display', $show_authorship = true, $show_title = true, $full_title = false ) {
 	
 	// TS/logging setup
 	$do_ts = devmode_active(); 
@@ -1002,7 +1002,7 @@ function get_rep_info( $post_id = null, $format = 'display', $show_authorship = 
     }
     
     // Psalms
-    if ( $is_single_work == false ) {
+    if ( $is_single_work == false && $full_title == false ) {
         
         if (substr($title,0,6) == "Psalm ") {
             $title = substr($title,6);
