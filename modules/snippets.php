@@ -431,14 +431,14 @@ function get_snippets ( $args = array() ) {
 							$snippet_logic_info .= "current post_type is in target post_types array<br />";//$snippet_logic_info .= "current post_type [".$post_type."] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
 							// TODO: figure out whether to do the any/all check now, or 
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
-							if ( $snippet_display == "selected" && $any_all == "any" ) {
+							if ( $snippet_display == "selected" && $any_all == "any" ) { // WIP: this ignores the "exclude by post" and "exclude by url" fields
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 								//$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
 								$snippet_logic_info .= ">> ADDED TO ARRAY<br />";
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
-								$snippet_logic_info .= "=> BREAK<br />";
-								break;
+								//$snippet_logic_info .= "=> BREAK<br />";
+								//break;
 							} else if ( $snippet_display == "notselected" ) {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
@@ -713,8 +713,8 @@ function get_snippets ( $args = array() ) {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_logic_info .= ">> ADDED TO ARRAY<br />";
 								$snippet_status = "active";
-								$snippet_logic_info .= "=> BREAK<br />";
-								break;
+								//$snippet_logic_info .= "=> BREAK<br />";
+								//break;
 							} else {
 								$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 								$snippet_status = "inactive";
