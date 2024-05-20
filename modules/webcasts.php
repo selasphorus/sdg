@@ -673,7 +673,7 @@ function get_media_player ( $post_id = null, $status_only = false, $url = null )
 		
 	} else {
 		
-        // No $src or $vimeo_id or $audio_file? Don't show anything.
+        // No $src or $video_id or $audio_file? Don't show anything.
         $player_status = "unavailable";
 	
 	}
