@@ -666,7 +666,7 @@ function build_sermon_filters() {
     $sermon_authors = get_posts($wp_args);
     //$info .= print_r($sermon_authors, true);
     
-	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true ) ) ;
+	$info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true, 'display_format' => 'person_medium' ) ) ;
 	$info .= '<br />';
 	
 	// Bible Books menu

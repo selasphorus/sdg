@@ -453,16 +453,56 @@ if ( function_exists('acf_add_options_page') ) {
     
     foreach ( $modules as $module ) {
     
-    	$cpt_name = $module;
-    	// Make it singular -- remove trailing "s"
-    	if ( substr($cpt_name, -1) == "s" ) { $cpt_name = substr($cpt_name, 0, -1); }
+    	$cpt_names = array(); // array because some modules include multiple post types
+    	
+    	// Deal w/ modules whose names don't perfectly match their CPT names
+    	if ( $module == "people" ) {
+    		$cpt_names[] = "person";
+    	} else if ( $module == "music" ) {
+    		$cpt_names[] = "repertoire";
+    		//$cpt_names[] = "edition";
+    		//$cpt_names[] = "publisher";
+    		//$cpt_names[] = "publication";
+    		//$cpt_names[] = "music_list";
+    	} else if ( $module == "lectionary" ) {
+    		//$cpt_names[] = "bible_book";
+    		//$cpt_names[] = "reading";
+    		//$cpt_names[] = "lectionary";
+    		$cpt_names[] = "liturgical_date";
+    		//$cpt_names[] = "liturgical_date_calc";
+    		//$cpt_names[] = "collect";
+    		//$cpt_names[] = "psalms_of_the_day";
+    	} else if ( $module == "sermons" ) {
+    		$cpt_names[] = "sermon";
+    		$cpt_names[] = "sermon_series";
+    	} else if ( $module == "events" ) {
+    		$cpt_names[] = "event";
+    		$cpt_names[] = "event_series";
+    	} else if ( $module == "organs" ) {
+    		$cpt_names[] = "organ";
+    		//$cpt_names[] = "builder"; // division, manual, stop
+    	} else if ( $module == "venues" ) {
+    		$cpt_names[] = "venue";
+    		//$cpt_names[] = "address";
+    	} else {
+    		$cpt_name = $module;
+    		// Make it singular -- remove trailing "s"
+    		if ( substr($cpt_name, -1) == "s" && $cpt_name != "press" ) { $cpt_name = substr($cpt_name, 0, -1); }
+    		$cpt_names[] = $cpt_name;
+    	}
+    	
+    	// Add options pages per cpt
+		foreach ( $cpt_names as $cpt ) {
 		
-		acf_add_options_sub_page(array(
-			'page_title'     => ucfirst($cpt_name).' CPT Options',
-			'menu_title'    => 'Archive Options', //ucfirst($cpt_name).
-			'menu_slug' 	=> $module.'-cpt-options',
-			'parent_slug'    => 'edit.php?post_type='.$cpt_name,
-		));
+			acf_add_options_sub_page(array(
+				'page_title'     => ucfirst($cpt).' CPT Options',
+				'menu_title'    => 'Archive Options', //ucfirst($cpt_name).
+				'menu_slug' 	=> $cpt.'-cpt-options',
+				'parent_slug'    => 'edit.php?post_type='.$cpt,
+			));
+		
+		}
+		
 		
 	}
 
