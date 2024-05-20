@@ -2301,7 +2301,7 @@ function sdg_selectmenu ( $args = array() ) {
 		//$ts_info .= '<pre>'.print_r($arr_values, true).'</pre>';
 		
 		// Set up the select menu
-		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform">';
+		$dropdown_menu .= '<select name="'.$select_name.'" id="'.$select_name.'" class="postform '.$display_formula.'">';
 		
 		// Add the "Any" option at the top of the list
 		if ($selected == 'any') { $selection = ' selected="selected"'; } else { $selection = ''; }
