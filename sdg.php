@@ -2310,6 +2310,10 @@ function sdg_selectmenu ( $args = array() ) {
 		
 		$count_optgroups = 0; // init
 		
+		if ( $display_formula != 'post_title' ) {
+			$display_formula = get_field($display_formula, 'option');
+		}
+		
 		// Loop through the array of select options
 		foreach ($arr_values as $key => $value) {
 			
@@ -2318,17 +2322,16 @@ function sdg_selectmenu ( $args = array() ) {
 				if ($obj->ID) {
 					$obj_id = $obj->ID;
 					$value = $obj_id;
-					//
+					$display_value = "";
 					// TODO: add option to display a meta_value instead of the post_title
 					if ( $display_formula != 'post_title' ) {
-						$display_value = "";
-						$display_formula = get_field($display_formula, 'option');
 						$fields = explode( " ",$display_formula );
 						foreach ( $fields as $field ) {
 							$fv = get_field($field, $obj_id, false);
 							$display_value .= $fv." ";
 						}
-					} else if ($obj->post_title) { 
+					}
+					if ( empty($display_value) && $obj->post_title ) { 
 						$display_value = $obj->post_title; 
 					}
 				}
