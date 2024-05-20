@@ -2259,7 +2259,7 @@ function sdg_select_distinct ( $args = '' ) {
 }
 
 // TODO: document params &c.
-function sdg_selectmenu ( $args = '' ) {
+function sdg_selectmenu ( $args = array() ) {
 	
 	$info = "";
 	$ts_info = "";
@@ -2276,21 +2276,12 @@ function sdg_selectmenu ( $args = '' ) {
 		'tax'   		=> '',
 		'orderby'   	=> '',
 		'value_field'   => 'term_id',
+		'display_formula' => 'post_title',
 	);
 	
-	// Parse incoming $args into an array and merge it with $defaults
-	$r = wp_parse_args( $args, $defaults );
-	
-	$label = $r['label'];
-	$arr_values = $r['arr_values'];
-	//$arr_type = $r['arr_type']; // wip
-	$select_name = $r['select_name'];
-	//$meta_key = $r['meta_key'];
-	$show_other = $r['show_other'];
-	$show_any = $r['show_any'];
-	$tax = $r['tax'];
-	$orderby = $r['orderby'];
-	$value_field = $r['value_field'];
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
 	
 	if ( isset($_GET[$select_name]) ) { 
 		$selected = $_GET[$select_name]; 
@@ -2324,13 +2315,24 @@ function sdg_selectmenu ( $args = '' ) {
 			
 			if (is_object($value)) {
 				$obj = $value;
-				if ($obj->ID) { 
-					$value = $obj->ID;
+				if ($obj->ID) {
+					$obj_id = $obj->ID;
+					$value = $obj_id;
+					//
+					// TODO: add option to display a meta_value instead of the post_title
+					if ( $display_formula != 'post_title' ) {
+						$display_value = "";
+						$display_formula = get_field($display_formula, 'option');
+						$fields = explode( " ",$display_formula );
+						foreach ( $fields as $field ) {
+							$fv = get_field($field, $obj_id, false);
+							$display_value .= $fv." ";
+						}
+					} else if ($obj->post_title) { 
+						$display_value = $obj->post_title; 
+					}
 				}
-				// TODO: add option to display a meta_value instead of the post_title
-				if ($obj->post_title) { 
-					$display_value = $obj->post_title; 
-				}
+				
 			} else {
 				//$value = $key;
 				$display_value = $value; 
