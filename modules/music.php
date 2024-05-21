@@ -2839,8 +2839,11 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "</table>";
     
-    $info .= '<input type="submit" value="Merge Selected">';
-    //if ( is_dev_site() ) { $info .= '<input type="submit" value="Merge Selected">'; }
+    // Users with the appropriate permissions can merge duplicate records
+    if ( current_user_can('read_repertoire') ) || current_user_can('read_music') ) {
+    	$info .= '<input type="submit" value="Merge Selected">';
+    }
+    
 	$info .= "</form>";
     
     $info .= '<div class="troubleshooting">';
