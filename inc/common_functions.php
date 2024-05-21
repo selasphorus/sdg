@@ -302,7 +302,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
         //return;
     } else if ( has_term( 'video-webcasts', 'category' ) ) {        
-        $player_status = get_media_player( $post_id, null, null, true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+        $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
         if ( $player_status == "ready" ) {
             return;
         }        
