@@ -876,6 +876,8 @@ function sdg_merge_form ($atts = [], $content = null, $tag = '') {
     $ts_info = "";
     $form_action = null;
     
+    // TODO: abort if user is not logged in!
+    
     // Retrieve any data submitted via forms or query vars
     if ( !empty($_GET) ) { $ts_info .= '<pre>_GET: '.print_r($_GET,true).'</pre>'; }
     if ( !empty($_POST) ) {
