@@ -2840,7 +2840,8 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= "</table>";
     
     // Users with the appropriate permissions can merge duplicate records
-    if ( current_user_can('read_repertoire') || current_user_can('read_music') ) {
+    // Also check to see if there are at least two records -- otherwise there's nothing to merge!
+    if ( count($rep_ids) > 2 && ( current_user_can('read_repertoire') || current_user_can('read_music') ) ) {
     	$info .= '<input type="submit" value="Merge Selected">';
     }
     
