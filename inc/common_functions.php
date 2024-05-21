@@ -302,7 +302,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
         //return;
     } else if ( has_term( 'video-webcasts', 'category' ) ) {        
-        $player_status = get_media_player( $post_id, true ); // get_media_player ( $post_id = null, $status_only = false, $url = null )
+        $player_status = get_media_player( $post_id, null, null, true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
         if ( $player_status == "ready" ) {
             return;
         }        
@@ -1653,6 +1653,300 @@ function display_postmeta( $args = array() ) {
 }
 
 /*********** MEDIA ***********/
+
+// Get Media Player -- Based on contents of ACF A/V Info fields
+function get_media_player ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
+	
+    // Init vars
+    $arr_info = array(); // return info and status, or status only, depending on options selected
+	$info = "";
+    $player = "";
+    $player_status = "unknown";
+    
+    if ( $post_id == null ) { $post_id = get_the_ID(); } 
+    $info .= "<!-- post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."' -->";
+    // If it's not a webcast-eligible post, then abort
+    //if ( !post_is_webcast_eligible( $post_id ) ) { return false;  }
+    
+    // Get the basic media info
+    $featured_AV = get_field('featured_AV', $post_id); // array of options (checkboxes field) including: featured_video, featured_audio, webcast (WIP)
+    $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
+    $info .= "<!-- featured_AV: ".print_r($featured_AV, true)." -->";
+	$info .= "<!-- media_format: ".print_r($media_format, true)." -->";
+    
+    $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
+    $audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
+    $info .= "<!-- video_player_position: '".$video_player_position."' -->";
+    $info .= "<!-- audio_player_position: '".$audio_player_position."' -->";
+    
+    if ( empty($media_type) ) {
+    	if ( $video_player_position == $position ) {
+    		$media_type = 'video';
+    	} else if ( $audio_player_position == $position ) {
+    		$media_type = 'audio';
+    	}
+    	$info .= "<!-- media_type REVISED: '".$media_type."' -->";
+    }
+    
+	//
+    if ( $media_type == "video" ) {
+    
+    	$video_id = get_field('video_id', $post_id);
+    	$yt_ts = get_field('yt_ts', $post_id); // YT timestamp
+    	$yt_series_id = get_field('yt_series_id', $post_id);
+    	$yt_list_id = get_field('yt_list_id', $post_id);
+    	
+    	// Mobile or desktop? If mobile, check to see if a smaller version is available -- WIP
+		if ( wp_is_mobile() ) {
+			$video_file = get_field('video_file_mobile'); //$video_file = get_field('featured_video_mobile');
+		}
+		if (empty($video_file) ) {
+			$video_file = get_field('video_file'); //$video_file = get_field('featured_video');
+		}
+		
+		$info .= "<!-- video_id: '".$video_id."'; video_file: '".$video_file." -->";
+		
+		if ( $video_file && in_array( 'video', $media_format) ) {
+			$media_format = "video";
+		} else if ( $video_id && in_array( 'vimeo', $media_format) ) {
+			$media_format = "vimeo";
+		} else {
+			$media_format = "youtube";
+		}
+		
+    } else if ( $media_type == "audio" ) {
+    	
+    	$audio_file = get_field('audio_file', $post_id);
+    	$info .= "<!-- audio_file: '".$audio_file." -->";
+    	if ( $audio_file ) { $media_format = "audio"; }
+    	
+    }
+
+	$info .= "<!-- media_format REVISED: '".$media_format."' -->";
+    
+    // Webcast?
+    if ( in_array( 'webcast', $featured_AV) ) {
+    	$webcast_status = get_webcast_status( $post_id );
+    	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
+    	$info .= "<!-- webcast_status: '".$webcast_status."'; webcast_url: '".$url."' -->";
+    }
+    
+    /*
+    DEPRECATED:
+    ---
+    Webcast Format Options:
+    ---
+    vimeo : Vimeo Video/One-time Event
+    vimeo_recurring : Vimeo Recurring Event
+    youtube: YouTube
+    youtube_list : YouTube Playlist
+    video : Video (formerly: Flowplayer -- future use tbd)
+    video_as_audio : Video as Audio
+    video_as_audio_live : Video as Audio - Livestream
+    audio : Audio Only
+    ---
+    */
+	
+	if ( $media_format == "audio" ) {
+	
+		// Media Player for vid file from Media Library
+		$video .= '<div class="hero vidfile video-container">';
+		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+		$video .= '</div>';
+		
+	} else if ( $media_format == "video" ) {
+	
+		// Video Player for vid file from Media Library
+		$video .= '<div class="hero vidfile video-container">';
+		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+		$video .= '</div>';
+		
+	} else if ( $media_format == "vimeo" ) {
+            
+		// Video Player: Vimeo iframe embed code
+		
+		$src = 'https://player.vimeo.com/video/'.$video_id;
+		$player_status = "ready";
+			
+		if ( $status_only == false ) {
+			$class = "vimeo_container";
+			if ( $video_player_position == "banner" ) { $class .= " hero vimeo video-container"; }
+			$player .= '<div class="'.$class.'">';
+			if ( $video_player_position == "banner" ) { 
+				$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline" controls></video>';
+			} else {
+				$player .= '<iframe id="vimeo" src="'.$src.'" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>';
+			}
+			$player .= '</div>';
+		}
+		
+	} else if ( $media_format == "youtube" ) {		
+		//&& ( !has_post_thumbnail( $post_id ) || ( $webcast_status == "live" || $webcast_status == "on_demand" ) )
+		
+		// WIP
+		
+		$player_status = "ready";
+		if ( $status_only == false ) {
+		
+			// Get SRC
+			if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
+				$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
+				//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH	
+			} else {
+				$src = 'https://www.youtube.com/embed/'.$video_id.'?&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
+				//$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
+				//$src = 'https://www.youtube.com/watch?v='.$video_id;
+			}
+			// Timestamp?
+			if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
+			
+			// Assemble media player iframe
+			$player .= '<div class="hero video-container youtube-responsive-container">';
+			$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+			$player .= '</div>';
+		}
+		
+	}
+    
+    // CTA
+    // TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
+    // post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
+    // -- or by special category of content associated w/ CPTs?
+    if ( $status_only == false ) {
+
+        $status_message = get_status_message ( $post_id, 'webcast_status' );
+        $show_cta = get_post_meta( $post_id, 'show_cta', true );
+        if ( $show_cta == "0" ) { 
+            $show_cta = false;
+            $info .= '<!-- show_cta: FALSE -->';
+        } else { 
+            $show_cta = true;
+            $info .= '<!-- show_cta: TRUE -->';
+        }
+        $cta = "";
+        if ( $show_cta ) {
+        	$cta .= '<div class="cta">';
+			$cta .= '<h2>Support Our Ministry</h2>';
+			//$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a donation for the work of the Episcopal Church in the Holy Land on Good Friday</a>';
+			$cta .= '<a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank" class="button">Pledge to our Annual Appeal</a>&nbsp;';
+			$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a Donation</a>';
+			$cta .= '<a href="https://www.saintthomaschurch.org/product/make-a-payment-on-your-annual-appeal-pledge/" target="_blank" class="button">Make an Annual Appeal Pledge Payment</a>';
+			$cta .= '<br />';
+			//cta .= '<h3>You can also text "give" to (855) 938-2085</h3>';
+			$cta .= '<h3>You can also text "give" to <a href="sms://+18559382085">(855) 938-2085</a></h3>';
+			//$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
+			$cta .= '</div>';
+        }
+
+        if ($status_message !== "") {
+            $info .= '<p class="message-info">'.$status_message.'</p>';
+            if ( !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
+                    && $show_cta !== false
+                    && get_post_type($post_id) != 'sermon' ) { // Also don't show CTA for sermons
+                $info .= $cta;
+            }
+            //return $info; // tmp disabled because it made "before" Vimeo vids not show up
+        }
+    }
+    
+    // If there's a webcast to display, show the player
+    if ( $player != "" && $status_only == false ) { // !empty($vimeo_id) || !empty($audio_file) || !empty($url)
+        
+        $player_status = "ready";
+        
+        $info .= "<!-- MEDIA PLAYER -->"; // tft
+		$info .= $player;
+        $info .= "<!-- /MEDIA PLAYER -->"; // tft
+        
+        // Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
+        $rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
+        /*if ( have_rows('cuepoints', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+            while ( have_rows('cuepoints', $post_id) ) : the_row();
+                $XXX = get_sub_field('XXX'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+            endwhile;
+        } // end if
+        */
+            
+        // Loop through rows and assemble cuepoints
+        if ($rows) {
+            
+            // Cuepoints
+            
+            $info .= '<!-- HTML5 Player Cuepoints -->'; // tft
+			// TODO: move this to sdg.js?
+			$info .= '<script>';
+			$info .= '  var vid = document.getElementsByClassName("wp-audio-shortcode")[0];';
+			$info .= '  function setCurTime( seconds ) {';
+			$info .= '    vid.currentTime = seconds;';
+			$info .= '  }';
+			$info .= '</script>';
+
+            // Cuepoints
+            $seek_buttons = ""; // init
+            $button_actions = ""; // init
+
+            $info .= '<div id="cuepoints" class="cuepoints scroll">';
+
+            foreach( $rows as $row ) {
+
+                //print_r($row); // tft
+                $name = ucwords(strtolower($row['name'])); // Deal w/ the fact that many cuepoint labels were entered in UPPERCASE... :-[
+                $start_time = $row['start_time'];
+                $end_time = $row['end_time'];
+                $button_id = $name.'-'.str_replace(':','',$start_time);
+
+                // If the start_time is < 1hr, don't show the initial pair of zeros
+                if ( substr( $start_time, 0, 3 ) === "00:" ) { $start_time = substr( $start_time, 3 ); }
+                // Likewise, if the end_time is < 1hr, don't show the initial pair of zeros
+                if ( substr( $end_time, 0, 3 ) === "00:" ) { $end_time = substr( $end_time, 3 ); }
+
+                // Convert cuepoints to number of seconds for use in player
+                $start_time_seconds = xtime_to_seconds($row['start_time']);
+                $end_time_seconds = xtime_to_seconds($row['end_time']);
+
+                $seek_buttons .= '<div class="cuepoint">';
+                $seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" onclick="setCurTime('.$start_time_seconds.')" type="button" class="cue_button">'.$name.'</button></span>';
+                if ( $start_time ) {
+                    $seek_buttons .= '<span class="cue_time">'.$start_time;
+                    if ( $end_time ) { $seek_buttons .= '-'.$end_time; }
+                    $seek_buttons .= '</span>';
+                }
+                $seek_buttons .= '</div>';
+
+            }
+
+            $info .= $seek_buttons;
+            $info .= '</div>';
+            
+        } // END if ($rows) for Cuepoints
+        
+        // Add call to action beneath media player
+        if ( $player != "" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
+        //if ( (!empty($vimeo_id) || !empty($src)) && !is_dev_site() && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {    
+            $info .= $cta;
+        }
+		
+	} else {
+		
+        // No $src or $video_id or $audio_file? Don't show anything.
+        $player_status = "unavailable";
+	
+	}
+	
+    if ( $status_only == false ) {
+        
+        $arr_info['info'] = $info;
+        $arr_info['player_status'] = $player_status;
+    
+        return $arr_info;
+        
+    } else {
+        return $player_status;
+    }
+	
+    return null; // if all else fails...
+	
+}
 
 // Get a linked list of Media Items
 add_shortcode('list_media_items', 'sdg_list_media_items');
