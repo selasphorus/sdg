@@ -1718,11 +1718,16 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     	
     	$audio_file = get_field('audio_file', $post_id);
     	$info .= "<!-- audio_file: '".$audio_file." -->";
-    	if ( $audio_file ) { $media_format = "audio"; }
+    	if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
     	
-    }
+    } else {
+		$media_format = "unknown";
+	}
 
 	$info .= "<!-- media_format REVISED: '".$media_format."' -->";
+	if ( $media_format != 'unknown' ) {
+		$player_status = "ready";
+	}
     
     // Webcast?
     if ( in_array( 'webcast', $featured_AV) ) {
@@ -1755,7 +1760,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		$video .= '</div>';
 		
 	} else if ( $media_format == "video" ) {
-	
+		
 		// Video Player for vid file from Media Library
 		$video .= '<div class="hero vidfile video-container">';
 		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
@@ -1766,7 +1771,6 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		// Video Player: Vimeo iframe embed code
 		
 		$src = 'https://player.vimeo.com/video/'.$video_id;
-		$player_status = "ready";
 			
 		if ( $status_only == false ) {
 			$class = "vimeo_container";
@@ -1783,9 +1787,8 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	} else if ( $media_format == "youtube" ) {		
 		//&& ( !has_post_thumbnail( $post_id ) || ( $webcast_status == "live" || $webcast_status == "on_demand" ) )
 		
-		// WIP
+		// WIP -- deal w/ webcasts w/ status other than live/on_demand
 		
-		$player_status = "ready";
 		if ( $status_only == false ) {
 		
 			// Get SRC
@@ -1808,12 +1811,13 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 	}
     
-    // CTA
-    // TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
-    // post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
-    // -- or by special category of content associated w/ CPTs?
-    if ( $status_only == false ) {
-
+    // If there's media to display, show the player
+    if ( $player != "" && $status_only == false ) { // !empty($vimeo_id) || !empty($audio_file) || !empty($url)
+        
+         // CTA
+		// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
+		// post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
+		// -- or by special category of content associated w/ CPTs?
         $status_message = get_status_message ( $post_id, 'webcast_status' );
         $show_cta = get_post_meta( $post_id, 'show_cta', true );
         if ( $show_cta == "0" ) { 
@@ -1837,7 +1841,8 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 			//$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
 			$cta .= '</div>';
         }
-
+        
+        //
         if ($status_message !== "") {
             $info .= '<p class="message-info">'.$status_message.'</p>';
             if ( !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
@@ -1847,12 +1852,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             }
             //return $info; // tmp disabled because it made "before" Vimeo vids not show up
         }
-    }
-    
-    // If there's a webcast to display, show the player
-    if ( $player != "" && $status_only == false ) { // !empty($vimeo_id) || !empty($audio_file) || !empty($url)
         
-        $player_status = "ready";
         
         $info .= "<!-- MEDIA PLAYER -->"; // tft
 		$info .= $player;
