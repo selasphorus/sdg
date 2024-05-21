@@ -1734,7 +1734,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	}
     
     // Webcast?
-    if ( in_array( 'webcast', $featured_AV) ) {
+    if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
     	$webcast_status = get_webcast_status( $post_id );
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     	$info .= "<!-- webcast_status: '".$webcast_status."'; webcast_url: '".$url."' -->";
