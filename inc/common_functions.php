@@ -305,7 +305,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
         if ( $player_status == "ready" ) {
             return;
-        }        
+        }
     } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
 		return;
 	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
