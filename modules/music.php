@@ -2840,7 +2840,7 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     $info .= "</table>";
     
     // Users with the appropriate permissions can merge duplicate records
-    if ( current_user_can('read_repertoire') ) || current_user_can('read_music') ) {
+    if ( current_user_can('read_repertoire') || current_user_can('read_music') ) {
     	$info .= '<input type="submit" value="Merge Selected">';
     }
     
