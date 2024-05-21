@@ -2376,8 +2376,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     $ts_info .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
 
-                    $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
-					$info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>';
+                    if ( isset($related_posts_info['info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>'; }
+					if ( isset($related_posts_info['ts_info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>'; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
