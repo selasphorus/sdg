@@ -268,7 +268,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	extract( $args );
 	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
-    if ( $post_id === null ) { $post_id = get_the_ID(); }
+    if ( $post_id == null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
     $img_id = null;
     if ( $return == "html" ) {
