@@ -3656,24 +3656,9 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				
 				$ts_info .= "<!-- [sdgp] is_singular('event') -->";
 				
-				$webcast_status = get_webcast_status( $post_id );
-				$webcast_format = get_field('webcast_format', $post_id);
-				$video_id = get_field('video_id', $post_id);
-				if ( $webcast_format == "video" ) {
-					$url_ondemand = get_field('url_ondemand', $post_id);
-				} else if ( $webcast_format == "youtube_list" ) {
-					$yt_series_id = get_field('yt_series_id', $post_id);
-					$yt_list_id = get_field('yt_list_id', $post_id);
-				}
-				
-				$ts_info .= "<!-- [sdgp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
-				
-				// If we've got a video_id and the status is live or on demand, then don't show the image		
-				if ( ( !empty($video_id) && $webcast_format != "audio" && $webcast_format != "video_as_audio" &&
-					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
-					|| ( $webcast_format == "video" && !empty($url_ondemand) ) 
-					|| ( $webcast_format == "youtube_list" && !empty($yt_series_id) && !empty($yt_list_id) ) 
-				   ) { 
+				$player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+				$ts_info .= "player_status: ".$player_status."<br />";
+				if ( $player_status == "ready" ) {
 					$show_image = false;
 					$ts_info = "<!-- [sdgp] show video, not image -->";
 				}
