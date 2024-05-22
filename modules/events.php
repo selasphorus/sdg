@@ -4166,8 +4166,14 @@ add_filter('em_cp_event_recurring_public','__return_true');
 
 // Special Date Content
 function get_special_date_content( $the_date = null ) {
-
+	
+	// TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
 	$info = "";
+	$ts_info = "";
 	
 	if ( empty($the_date) ) { return null; }
 	
@@ -4209,7 +4215,6 @@ function get_special_date_content( $the_date = null ) {
     	$timestamp = strtotime($the_date);
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
         $ts_info .= "timestamp: '$timestamp'<br />";
-        $info .= $ts_info;
         
         $info .= '<div class="message centered special-notice scalloped">';
     	foreach ( $posts as $post ) {
@@ -4224,10 +4229,12 @@ function get_special_date_content( $the_date = null ) {
         
     } else {
     
-    	$ts_info .= "No posts found by fcn get_special_date_content for date $the_date<br />";    	
-    	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= $ts_info;
+    	$ts_info .= "No posts found by fcn get_special_date_content for date $the_date<br />";
     	
     }
+    
+    if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= $ts_info;
+    	
 	return $info;
 	
 }
