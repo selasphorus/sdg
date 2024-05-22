@@ -1168,7 +1168,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
 	$arr_info['player'] = $info;
 	$arr_info['ts_info'] = $ts_info;
-	$arr_info['position'] = $info;
+	$arr_info['position'] = $position;
 	$arr_info['status'] = $player_status;
 
 	return $arr_info;
