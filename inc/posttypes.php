@@ -1486,10 +1486,16 @@ if ( in_array('venues', $sdg_modules ) ) {
 	}
 	add_action( 'init', 'register_post_type_venue' );
 
+}
+
+/*** ADDRESSES ***/
+// TODO: rename as locations? for use when EM is not active? TBD...
+if ( in_array('addresses', $sdg_modules ) ) {
+
 	// Address
 	function register_post_type_address() {
 
-		if ( custom_caps() ) { $caps = array('venue', 'venues'); } else { $caps = "post"; }
+		if ( custom_caps() ) { $caps = array('location', 'locations'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Addresses', 'sdg' ),
@@ -1526,7 +1532,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 		register_post_type( 'address', $args );
 	
 	}
-	//add_action( 'init', 'register_post_type_address' ); // disabled as redundant w/ EM locations 08/20/22
+	add_action( 'init', 'register_post_type_address' ); // NB: redundant w/ EM locations -- disabled for venues module 08/20/22
 	// Fields to add via ACF to EM location: cross_street, neighborhood, location_status, notes... related_entities....
 	
 	// Building
