@@ -850,9 +850,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     $ts_info .= "video_player_position: '".$video_player_position."'<br />";
     $ts_info .= "audio_player_position: '".$audio_player_position."'<br />";
     
-    
-	
-    
+    //
     if ( $media_type == "unknown" ) {
     	if ( $video_player_position == $position ) {
     		$media_type = 'video';
@@ -902,7 +900,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 	}
 
-	$info .= "media_format REVISED: '".$media_format."'<br />";
+	$ts_info .= "media_format REVISED: '".$media_format."'<br />";
 	if ( $media_format != 'unknown' ) {
 		$player_status = "ready";
 	}
