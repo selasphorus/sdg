@@ -3759,8 +3759,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 		
 		$info .= '</div>';
 		
-		
-    
     	$replace = $info;
     
     } else {
@@ -4233,7 +4231,7 @@ function get_special_date_content( $the_date = null ) {
     	
     }
     
-    if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info .= $ts_info;
+    if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     	
 	return $info;
 	
