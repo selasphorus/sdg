@@ -1116,6 +1116,32 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	
 }
 
+// Display 
+add_shortcode('display_media_player', 'display_media_player');
+function display_media_player( $post_id = null ) {
+	
+	if ( $post_id == null ) { $post_id = get_the_ID(); }
+    
+    $info = ""; // init
+    
+    // TODO: handle webcast status considerations
+    if ( post_is_webcast_eligible( $post_id ) ) {
+        //        
+    } else {
+        //            
+    }
+    
+    $media_info = get_media_player( $post_id );
+	$player_status = $media_info['player_status'];
+	
+	$info .= "<!-- Audio/Video for post_id: $post_id -->";
+	$info .= $media_info['info'];
+	$info .= "<!-- player_status: $player_status -->";
+	$info .= '<!-- /Audio/Video -->';
+    
+    return $info;
+}
+
 // Get a linked list of Media Items
 add_shortcode('list_media_items', 'sdg_list_media_items');
 function sdg_list_media_items ($atts = [] ) {

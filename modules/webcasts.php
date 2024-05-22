@@ -30,6 +30,7 @@ function post_is_webcast_eligible( $post_id = null ) {
     
 }
 
+// Obsolete(?)
 add_shortcode('display_webcast', 'display_webcast');
 function display_webcast( $post_id = null ) {
 	
