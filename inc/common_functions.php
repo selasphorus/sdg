@@ -1121,9 +1121,22 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 
 // Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
-function display_media_player( $post_id = null, $position = 'above' ) {
+//function display_media_player( $post_id = null, $position = 'above' ) {
+function display_media_player( $atts = array() ) {
+
+	// Normalize attribute keys by making them all lowercase
+	$atts = array_change_key_case( (array) $atts, CASE_LOWER );
 	
-	if ( $post_id == null ) { $post_id = get_the_ID(); }
+	// Override default attributes with user attributes
+	$args = shortcode_atts(
+		array(
+			'post_id' => get_the_ID(),
+			'position' => 'above',
+		), $atts
+	);
+	
+	// Extract args as vars
+	extract( $args );
     
     $info = ""; // init
     
@@ -1134,7 +1147,7 @@ function display_media_player( $post_id = null, $position = 'above' ) {
         //            
     }
     
-    $media_info = get_media_player( $post_id ); // parameters: ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
+    $media_info = get_media_player( $post_id, $position ); // parameters: ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
 	$player_status = $media_info['status'];
 	
 	$info .= "<!-- Audio/Video for post_id: $post_id -->";
