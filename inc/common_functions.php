@@ -911,8 +911,6 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     	$ts_info .= "webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
     }
-	
-	$ts_info .= "[gmp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id<br />";
     
     /*
     DEPRECATED:
@@ -1013,19 +1011,23 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 		// WIP -- deal w/ webcasts w/ status other than live/on_demand
 		
-		$player_status = "ready";
+		// Get SRC
+		if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
+			$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
+			//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH	
+		} else if ( !empty($video_id) ) {
+			$src = 'https://www.youtube.com/embed/'.$video_id.'?&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
+			//$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
+			//$src = 'https://www.youtube.com/watch?v='.$video_id;
+		} else {
+			$src = null;
+		}
+			
+		if ( $src ) { $player_status = "ready"; }
 		
 		if ( $status_only == false ) {
 		
-			// Get SRC
-			if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
-				$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
-				//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH	
-			} else {
-				$src = 'https://www.youtube.com/embed/'.$video_id.'?&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
-				//$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
-				//$src = 'https://www.youtube.com/watch?v='.$video_id;
-			}
+			
 			// Timestamp?
 			if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
 			
@@ -1037,8 +1039,12 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 	}
     
+    if ( $status_only == true ) {
+    	return $player_status;
+    }
+    
     // If there's media to display, show the player
-    if ( $player != "" && $status_only == false ) { // !empty($vimeo_id) || !empty($audio_file) || !empty($url)
+    if ( $player_status = "ready" ) {
         
          // CTA
 		// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
@@ -1158,31 +1164,15 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             $info .= $cta;
         }
 		
-	} else {
-		
-        // No $src or $video_id or $audio_file? Don't show anything.
-        $player_status = "unavailable";
-	
 	}
 	
-    if ( $status_only == false ) {
-        
-        //if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
-        $arr_info['player'] = $info;
-        $arr_info['ts_info'] = $ts_info;
-        $arr_info['position'] = $info;
-        $arr_info['status'] = $player_status;
-    
-        return $arr_info;
-        
-    } else {
-    
-    	// status_only == true
-        return $player_status;
-        
-    }
-	
-    return null; // if all else fails...
+	//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
+	$arr_info['player'] = $info;
+	$arr_info['ts_info'] = $ts_info;
+	$arr_info['position'] = $info;
+	$arr_info['status'] = $player_status;
+
+	return $arr_info;
 	
 }
 
