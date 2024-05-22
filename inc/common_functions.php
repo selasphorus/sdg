@@ -922,12 +922,55 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     ---
     */
 	
-	if ( $media_format == "audio" || $media_format == "video") {
+	if ( $media_format == "audio" ) {
 	
-		// Media Player for file from Media Library
-		$player .= '<div class="hero vidfile video-container">';
-		$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
-		$player .= '</div>';
+		$type = wp_check_filetype( $src, wp_get_mime_types() ); // tft
+        $ext = $type['ext'];
+        $info .= "<!-- audio_file ext: ".$ext." -->"; // tft
+        $atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
+        $player .= "<!-- audio_player atts: ".print_r($atts,true)." -->";
+        
+        if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
+            
+        	$player_status = "ready";
+            
+            if ( $status_only == false ) {
+                // Audio Player: HTML5 'generic' player via WP audio shortcode (summons mejs -- https://www.mediaelementjs.com/ -- stylable player)
+                // NB default browser player has VERY limited styling options, which is why we're using the shortcode
+                $player .= '<div class="audio_player">'; // media_player
+                $player .= wp_audio_shortcode( $atts );
+                $player .= '</div>';
+            }
+            
+        } else if ( !empty($url) ) {
+            
+            $player_status = "ready";
+            
+            if ( $status_only == false ) {
+                
+                // For m3u8 files, use generic HTML5 player for now, even though the styling is lousy. Can't get it to work yet via WP shortcode.
+                $player .= '<div class="audio_player video_as_audio">';
+                $player .= '<audio id="'.$player_id.'" class="masked" style="height: 3.5rem; width: 100%;" controls="controls" width="300" height="150">';
+                $player .= 'Your browser does not support the audio element.';
+                $player .= '</audio>';
+                $player .= '</div>';
+
+                // Create array of necessary attributes for HLS JS
+                $atts = array('src' => $src, 'player_id' => $player_id ); // other options: $masked
+                // Load HLS JS
+                $player .= "<!-- Load HLS JS -->";
+                $player .= load_hls_js( $atts );
+            }
+            
+        }
+        
+		
+	} else if ( $media_format == "video" ) {
+		
+		// Video Player for vid file from Media Library
+		$video .= '<div class="hero vidfile video-container">';
+		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+		$video .= '</div>';
 		
 	} else if ( $media_format == "vimeo" ) {
             
