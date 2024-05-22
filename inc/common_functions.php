@@ -296,16 +296,17 @@ function sdg_post_thumbnail ( $args = array() ) {
     //
     
     // Make sure this is a proper context for display of the featured image
+    $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+	if ( $player_status == "ready" ) {
+		return;
+	}
     if ( post_password_required($post_id) || is_attachment($post_id) ) {
         return;
     } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
         // featured images for events are handled via Events > Settings > Formatting AND via events.php (#_EVENTIMAGE)
         //return;
     } else if ( has_term( 'video-webcasts', 'category' ) ) {        
-        $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
-        if ( $player_status == "ready" ) {
-            return;
-        }
+        //
     } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
 		return;
 	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
