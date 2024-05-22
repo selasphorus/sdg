@@ -1078,7 +1078,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
         }
         
         //
-        if ( $status_message !== "" && $video_player_position != "banner" && $audio_player_position != "banner" ) {
+        if ( $status_message !== "" && $position != "banner" ) {
             $info .= '<p class="message-info">'.$status_message.'</p>';
             if ( !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
                     && $show_cta !== false
