@@ -1188,7 +1188,7 @@ function sdg_att_explode( $string = '' ) {
 
 // Get a linked list of Terms
 add_shortcode('list_terms', 'sdg_list_terms');
-function sdg_list_terms ($atts = [], $content = null, $tag = '') {
+function sdg_list_terms ( $atts = array(), $content = null, $tag = '' ) {
 
 	$info = "";
 	
@@ -2136,7 +2136,7 @@ add_filter( 'document_title_parts', function( $title_parts_array ) {
 // Get Image URL from ID
 // [image_url_from_id id='#_ATT{landing_page_image}']
 add_shortcode('image_url_from_id', 'get_image_url_from_id');
-function get_image_url_from_id( $atts = [] ) {
+function get_image_url_from_id( $atts = array() ) {
     
     $args = shortcode_atts( array(
 		'id'   => null
@@ -2412,7 +2412,7 @@ function get_post_type_str( $type = "" ) {
 // Add shortcode for display of search filter links
 add_shortcode('display_search_filters', 'sdg_search_filter_links');
 // Get a linked list of Terms
-function sdg_search_filter_links ($atts = [], $content = null, $tag = '') {
+function sdg_search_filter_links ( $atts = array(), $content = null, $tag = '' ) {
 
 	//global $wp;
 	//esc_url( remove_query_arg( 'type' ) ); // this doesn't seem to work

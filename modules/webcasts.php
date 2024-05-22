@@ -395,7 +395,7 @@ function vimeo_player_js_test() {
 /*** ***/
 
 add_shortcode('video_player_test', 'load_hls_js');
-function load_hls_js( $atts = [] ) {
+function load_hls_js( $atts = array() ) {
 
 	$info = "";
 

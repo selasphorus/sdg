@@ -1322,7 +1322,7 @@ function match_group_field ( $field_groups, $field_name ) {
 
 // TODO: make this function less STC-specific?
 add_shortcode('sdg_search_form', 'sdg_search_form');
-function sdg_search_form ($atts = [], $content = null, $tag = '') {
+function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 	
 	$info = "";
     $ts_info = "";

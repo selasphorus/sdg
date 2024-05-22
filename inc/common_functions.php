@@ -1121,7 +1121,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 
 // Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
-function display_media_player( $post_id = null ) {
+function display_media_player( $post_id = null, $position = 'above' ) {
 	
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
@@ -1147,7 +1147,7 @@ function display_media_player( $post_id = null ) {
 
 // Get a linked list of Media Items
 add_shortcode('list_media_items', 'sdg_list_media_items');
-function sdg_list_media_items ($atts = [] ) {
+function sdg_list_media_items ( $atts = array() ) {
 
     global $wpdb;
     

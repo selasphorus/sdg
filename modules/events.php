@@ -261,7 +261,7 @@ function get_event_ticketing_info( $post_id = null ) {
 // Music Department infos
 
 add_shortcode('call_time', 'get_call_time' );
-function get_call_time( $atts = [] ) {
+function get_call_time( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -300,7 +300,7 @@ function get_call_time( $atts = [] ) {
 }
 
 add_shortcode('md_overview', 'get_music_dept_overview' );
-function get_music_dept_overview( $atts = [] ) {
+function get_music_dept_overview( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -361,7 +361,7 @@ function get_music_dept_overview( $atts = [] ) {
 }
 
 add_shortcode('roster', 'get_event_roster' );
-function get_event_roster( $atts = [] ) {
+function get_event_roster( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -429,7 +429,7 @@ function get_event_roster( $atts = [] ) {
 }
 
 add_shortcode('repertoire', 'get_event_rep');
-function get_event_rep( $atts = [] ) {
+function get_event_rep( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -520,7 +520,7 @@ function get_event_rep( $atts = [] ) {
 /***  Program/Event personnel via Event CPT & ACF ***/
 //
 add_shortcode('display_event_personnel', 'get_event_personnel');
-function get_event_personnel( $atts = [] ) {
+function get_event_personnel( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -1033,7 +1033,7 @@ function get_personnel_person ( $args = array() ) {
 
 //
 add_shortcode('display_event_program_items', 'get_event_program_items');
-function get_event_program_items( $atts = [] ) {
+function get_event_program_items( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active();
@@ -2572,7 +2572,7 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 // Phasing this out in favor of the subsequent more general fcn
 // Clean up Event Personnel: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_personnel_cleanup', 'event_personnel_cleanup');
-function event_personnel_cleanup( $atts = [] ) {
+function event_personnel_cleanup( $atts = array() ) {
 	
     // Not an admin? Don't touch my database!
     if ( !current_user_can('administrator') ) { return false; }
@@ -2731,7 +2731,7 @@ function event_personnel_cleanup( $atts = [] ) {
 
 // Clean up Event Program Items: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_program_cleanup', 'event_program_cleanup');
-function event_program_cleanup( $atts = [] ) {
+function event_program_cleanup( $atts = array() ) {
 
 	// Not an admin? Don't touch my database!
     if ( !current_user_can('administrator') ) { return false; }

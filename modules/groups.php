@@ -173,7 +173,7 @@ function display_group_personnel ( $args = array() ) {
 
 
 add_shortcode('group_personnel', 'sdg_group_personnel');
-function sdg_group_personnel ( $atts = [] ) {
+function sdg_group_personnel ( $atts = array() ) {
 
 	$info = "";
 	$ts_info = "";

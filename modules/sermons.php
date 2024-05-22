@@ -367,7 +367,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 }
 
 add_shortcode( 'sermon_transcript_pdf', 'get_cpt_sermon_transcript' );
-function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
+function get_cpt_sermon_transcript( $atts = array(), $content = null, $tag = '' ) {
 		
 	$info = "";
 	
@@ -392,7 +392,7 @@ function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
 }
 
 add_shortcode( 'sermon_event_link', 'get_cpt_sermon_event' );
-function get_cpt_sermon_event ( $atts = [] ) {
+function get_cpt_sermon_event ( $atts = array() ) {
 	
     $info = ""; // init
     

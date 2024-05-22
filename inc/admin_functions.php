@@ -1552,7 +1552,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         //$post = get_post( $post_id );
 
         // TODO: consolidate this w/ run_post_updates function -- too much redundancy!
-        //sdg_run_post_updates( $atts = [] )
+        //sdg_run_post_updates( $atts = array() )
         //$info = sdg_run_post_updates( array ( 'post_id' => $post_id ) )
 
         /*** POST SLUG ***/
@@ -1727,7 +1727,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 // Bulk updates to titles and title_for_matching postmeta values
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
 add_shortcode('title_updates', 'run_title_updates');
-function run_title_updates ($atts = [], $content = null, $tag = '') {
+function run_title_updates ($atts = array(), $content = null, $tag = '') {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -1999,7 +1999,7 @@ function run_title_updates ($atts = [], $content = null, $tag = '') {
 // Function(s) to clean up titles/slugs/UIDs
 ///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'posts_cleanup'); } 
 //add_shortcode('run_posts_cleanup', 'posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
-function posts_cleanup( $atts = [] ) {
+function posts_cleanup( $atts = array() ) {
 
 	$info = ""; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -2155,7 +2155,7 @@ function posts_cleanup( $atts = [] ) {
 // Shortcode currently in use on dev site event pages
 ///if ( is_dev_site() ) { add_shortcode('run_post_updates', 'run_post_updates'); }
 //add_shortcode('run_post_updates', 'run_post_updates');
-function run_post_updates( $atts = [] ) {
+function run_post_updates( $atts = array() ) {
 
 	$args = shortcode_atts( array(
         'post_id' => get_the_ID()
@@ -2279,7 +2279,7 @@ function run_post_updates( $atts = [] ) {
 
 // Sermon updates - add related_event info
 add_shortcode( 'run_sermon_updates_fcn', 'sermon_updates' );
-function sermon_updates ( $atts = [] ) {
+function sermon_updates ( $atts = array() ) {
 
 	$info = "";
 
