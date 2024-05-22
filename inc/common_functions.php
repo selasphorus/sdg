@@ -843,7 +843,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
     $ts_info .= "featured_AV: ".print_r($featured_AV, true)."<br />";
 	$ts_info .= "media_format: ".print_r($media_format, true)."<br />";
-	if ( count($media_format) > 1 ) { $multimedia = true; } else { $multimedia = false; }
+	if ( is_array($media_format) && count($media_format) > 1 ) { $multimedia = true; } else { $multimedia = false; }
     
     $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
     $audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
