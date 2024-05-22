@@ -299,6 +299,8 @@ function sdg_post_thumbnail ( $args = array() ) {
     $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
 	if ( $player_status == "ready" ) {
 		return;
+	} else {
+		$ts_info .= "player_status: ".$player_status."<br />";
 	}
     if ( post_password_required($post_id) || is_attachment($post_id) ) {
         return;
@@ -548,7 +550,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		echo $info;    
 	} else {
-		//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		return $info;
 	}
 
