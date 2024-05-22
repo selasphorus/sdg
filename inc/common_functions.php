@@ -1088,7 +1088,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             //return $info; // tmp disabled because it made "before" Vimeo vids not show up
         }
         
-        if ( is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" ) { 
+        if ( $player != "" && is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" && $position != "banner" ) { 
             $player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
         }
         
