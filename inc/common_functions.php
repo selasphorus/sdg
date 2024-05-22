@@ -1021,10 +1021,13 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             //return $info; // tmp disabled because it made "before" Vimeo vids not show up
         }
         
+        if ( is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" ) { 
+            $player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
+        }
         
-        $info .= "<!-- MEDIA PLAYER -->"; // tft
+        $info .= "<!-- MEDIA_PLAYER -->";
 		$info .= $player;
-        $info .= "<!-- /MEDIA PLAYER -->"; // tft
+        $info .= "<!-- /MEDIA_PLAYER -->";
         
         // Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
         $rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -1090,7 +1093,6 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
         
         // Add call to action beneath media player
         if ( $player != "" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
-        //if ( (!empty($vimeo_id) || !empty($src)) && !is_dev_site() && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {    
             $info .= $cta;
         }
 		
@@ -1103,8 +1105,9 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	
     if ( $status_only == false ) {
         
-        $arr_info['info'] = $info;
-        $arr_info['player_status'] = $player_status;
+        $arr_info['player'] = $info;
+        $arr_info['position'] = $info;
+        $arr_info['status'] = $player_status;
     
         return $arr_info;
         
@@ -1116,7 +1119,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	
 }
 
-// Display 
+// Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
 function display_media_player( $post_id = null ) {
 	
@@ -1131,11 +1134,11 @@ function display_media_player( $post_id = null ) {
         //            
     }
     
-    $media_info = get_media_player( $post_id );
-	$player_status = $media_info['player_status'];
+    $media_info = get_media_player( $post_id ); // parameters: ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
+	$player_status = $media_info['status'];
 	
 	$info .= "<!-- Audio/Video for post_id: $post_id -->";
-	$info .= $media_info['info'];
+	$info .= $media_info['player'];
 	$info .= "<!-- player_status: $player_status -->";
 	$info .= '<!-- /Audio/Video -->';
     

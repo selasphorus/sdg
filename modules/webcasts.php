@@ -41,12 +41,11 @@ function display_webcast( $post_id = null ) {
     if ( post_is_webcast_eligible( $post_id ) ) {
         
         $media_info = get_media_player( $post_id );
-        $player_status = $media_info['player_status'];
+        $player_status = $media_info['status'];
         
         $info .= "<!-- Webcast Audio/Video Player for post_id: $post_id -->";
-        $info .= $media_info['info'];
+        $info .= $media_info['player'];
         $info .= "<!-- player_status: $player_status -->";
-        //$info .= get_media_player( $post_id );
         $info .= '<!-- /Webcast Audio/Video Player -->'; 
         
     } else {
