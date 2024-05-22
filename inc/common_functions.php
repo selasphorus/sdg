@@ -879,9 +879,9 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 		$ts_info .= "video_id: '".$video_id."'; video_file src: '".$src."<br />";
 		
-		if ( $src && in_array( 'video', $media_format) ) {
+		if ( $src && is_array($media_format) && in_array( 'video', $media_format) ) {
 			$media_format = "video";
-		} else if ( $video_id && in_array( 'vimeo', $media_format) ) {
+		} else if ( $video_id && is_array($media_format) && in_array( 'vimeo', $media_format) ) {
 			$media_format = "vimeo";
 		} else {
 			$media_format = "youtube";
