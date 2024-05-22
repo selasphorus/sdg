@@ -3651,7 +3651,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				} else {
 					// If player_status is NOT ready, get some TS info -- tft
 					$media_info = get_media_player( $post_id, 'above' );
-					$ts_info .= $media_info['player'];
+					$ts_info .= $media_info['ts_info'];
 				}
 								
 			}
