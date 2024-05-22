@@ -869,10 +869,11 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		if (empty($video_file) ) {
 			$video_file = get_field('video_file'); //$video_file = get_field('featured_video');
 		}
+    	if ( is_array($video_file) ) { $src = $video_file['url']; } else { $src = $video_file; }
 		
-		$info .= "<!-- video_id: '".$video_id."'; video_file: '".$video_file." -->";
+		$info .= "<!-- video_id: '".$video_id."'; video_file src: '".$src." -->";
 		
-		if ( $video_file && in_array( 'video', $media_format) ) {
+		if ( $src && in_array( 'video', $media_format) ) {
 			$media_format = "video";
 		} else if ( $video_id && in_array( 'vimeo', $media_format) ) {
 			$media_format = "vimeo";
@@ -885,6 +886,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     	$audio_file = get_field('audio_file', $post_id);
     	$info .= "<!-- audio_file: '".$audio_file." -->";
     	if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
+    	if ( is_array($audio_file) ) { $src = $audio_file['url']; } else { $src = $audio_file; }
     	
     } else {
     
@@ -920,18 +922,11 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     ---
     */
 	
-	if ( $media_format == "audio" ) {
+	if ( $media_format == "audio" || $media_format == "video") {
 	
-		// Media Player for vid file from Media Library
+		// Media Player for file from Media Library
 		$video .= '<div class="hero vidfile video-container">';
-		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$audio_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
-		$video .= '</div>';
-		
-	} else if ( $media_format == "video" ) {
-		
-		// Video Player for vid file from Media Library
-		$video .= '<div class="hero vidfile video-container">';
-		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
 		$video .= '</div>';
 		
 	} else if ( $media_format == "vimeo" ) {
