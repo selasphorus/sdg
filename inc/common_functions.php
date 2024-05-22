@@ -830,7 +830,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     $player_status = "unknown";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
-    $info .= "<!-- post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."' -->";
+    $info .= "<!-- post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]' -->";
     // If it's not a webcast-eligible post, then abort
     //if ( !post_is_webcast_eligible( $post_id ) ) { return false;  }
     
