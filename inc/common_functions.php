@@ -550,7 +550,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		echo $info;    
 	} else {
-		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+		//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		return $info;
 	}
 
@@ -829,25 +829,29 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
 	$info = "";
+	$ts_info = "";
     $player = "";
     $player_status = "unknown";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
-    $info .= "<!-- post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]' -->";
+    $ts_info .= "[gmp] post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
     // If it's not a webcast-eligible post, then abort
     //if ( !post_is_webcast_eligible( $post_id ) ) { return false;  }
     
     // Get the basic media info
     $featured_AV = get_field('featured_AV', $post_id); // array of options (checkboxes field) including: featured_video, featured_audio, webcast (WIP)
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
-    $info .= "<!-- featured_AV: ".print_r($featured_AV, true)." -->";
-	$info .= "<!-- media_format: ".print_r($media_format, true)." -->";
+    $ts_info .= "featured_AV: ".print_r($featured_AV, true)."<br />";
+	$ts_info .= "media_format: ".print_r($media_format, true)."<br />";
 	if ( count($media_format) > 1 ) { $multimedia = true; } else { $multimedia = false; }
     
     $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
     $audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    $info .= "<!-- video_player_position: '".$video_player_position."' -->";
-    $info .= "<!-- audio_player_position: '".$audio_player_position."' -->";
+    $ts_info .= "video_player_position: '".$video_player_position."'<br />";
+    $ts_info .= "audio_player_position: '".$audio_player_position."'<br />";
+    
+    
+	
     
     if ( $media_type == "unknown" ) {
     	if ( $video_player_position == $position ) {
@@ -855,7 +859,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     	} else if ( $audio_player_position == $position ) {
     		$media_type = 'audio';
     	}
-    	$info .= "<!-- media_type REVISED: '".$media_type."' -->";
+    	$ts_info .= "media_type REVISED: '".$media_type."'<br />";
     }
     
 	//
@@ -875,7 +879,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		}
     	if ( is_array($video_file) ) { $src = $video_file['url']; } else { $src = $video_file; }
 		
-		$info .= "<!-- video_id: '".$video_id."'; video_file src: '".$src." -->";
+		$ts_info .= "video_id: '".$video_id."'; video_file src: '".$src."<br />";
 		
 		if ( $src && in_array( 'video', $media_format) ) {
 			$media_format = "video";
@@ -888,7 +892,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     } else if ( $media_type == "audio" ) {
     	
     	$audio_file = get_field('audio_file', $post_id);
-    	$info .= "<!-- audio_file: '".$audio_file." -->";
+    	$ts_info .= "audio_file: '".$audio_file."<br />";
     	if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
     	if ( is_array($audio_file) ) { $src = $audio_file['url']; } else { $src = $audio_file; }
     	
@@ -898,17 +902,21 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 	}
 
-	$info .= "<!-- media_format REVISED: '".$media_format."' -->";
+	$info .= "media_format REVISED: '".$media_format."'<br />";
 	if ( $media_format != 'unknown' ) {
 		$player_status = "ready";
 	}
     
     // Webcast?
+    ///function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) 
     if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
     	$webcast_status = get_webcast_status( $post_id );
+    	//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
-    	$info .= "<!-- webcast_status: '".$webcast_status."'; webcast_url: '".$url."' -->";
+    	$ts_info .= "webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
     }
+	
+	$ts_info .= "[gmp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id<br />";
     
     /*
     DEPRECATED:
@@ -930,9 +938,9 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	
 		$type = wp_check_filetype( $src, wp_get_mime_types() ); // tft
         $ext = $type['ext'];
-        $info .= "<!-- audio_file ext: ".$ext." -->"; // tft
+        $ts_info .= "audio_file ext: ".$ext."<br />"; // tft
         $atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
-        $player .= "<!-- audio_player atts: ".print_r($atts,true)." -->";
+        $player .= "audio_player atts: ".print_r($atts,true)."<br />";
         
         if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
             
@@ -962,12 +970,11 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
                 // Create array of necessary attributes for HLS JS
                 $atts = array('src' => $src, 'player_id' => $player_id ); // other options: $masked
                 // Load HLS JS
-                $player .= "<!-- Load HLS JS -->";
+                $player .= "Load HLS JS<br />";
                 $player .= load_hls_js( $atts );
             }
             
         }
-        
 		
 	} else if ( $media_format == "video" ) {
 		
@@ -1032,10 +1039,10 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
         $show_cta = get_post_meta( $post_id, 'show_cta', true );
         if ( $show_cta == "0" ) { 
             $show_cta = false;
-            $info .= '<!-- show_cta: FALSE -->';
+            $ts_info .= 'show_cta: FALSE<br />';
         } else { 
             $show_cta = true;
-            $info .= '<!-- show_cta: TRUE -->';
+            $ts_info .= 'show_cta: TRUE<br />';
         }
         // WIP -- don't show the CTA twice...
         if ( $multimedia && $media_format == "audio" ) {
@@ -1150,6 +1157,8 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	}
 	
     if ( $status_only == false ) {
+        
+        if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         
         $arr_info['player'] = $info;
         $arr_info['position'] = $info;
