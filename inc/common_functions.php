@@ -925,9 +925,9 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	if ( $media_format == "audio" || $media_format == "video") {
 	
 		// Media Player for file from Media Library
-		$video .= '<div class="hero vidfile video-container">';
-		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
-		$video .= '</div>';
+		$player .= '<div class="hero vidfile video-container">';
+		$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+		$player .= '</div>';
 		
 	} else if ( $media_format == "vimeo" ) {
             
