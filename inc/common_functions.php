@@ -901,9 +901,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 	}
 
 	$ts_info .= "media_format REVISED: '".$media_format."'<br />";
-	if ( $media_format != 'unknown' ) {
-		$player_status = "ready";
-	}
+	//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
     
     // Webcast?
     ///function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) 
@@ -938,9 +936,11 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
         $ext = $type['ext'];
         $ts_info .= "audio_file ext: ".$ext."<br />"; // tft
         $atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
-        $player .= "audio_player atts: ".print_r($atts,true)."<br />";
+        $ts_info .= "audio_player atts: ".print_r($atts,true)."<br />";
         
         if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
+            
+            // Audio file from Media Library
             
         	$player_status = "ready";
             
@@ -953,6 +953,8 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             }
             
         } else if ( !empty($url) ) {
+            
+            // Audio file by URL
             
             $player_status = "ready";
             
@@ -974,16 +976,23 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             
         }
 		
-	} else if ( $media_format == "video" ) {
+	} else if ( $media_format == "video" && isset($video_file['url']) ) {
 		
-		// Video Player for vid file from Media Library
-		$video .= '<div class="hero vidfile video-container">';
-		$video .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
-		$video .= '</div>';
+		// Video file from Media Library
 		
-	} else if ( $media_format == "vimeo" ) {
+		$player_status = "ready";
+		
+		if ( $status_only == false ) {
+			$player .= '<div class="hero vidfile video-container">';
+			$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+			$player .= '</div>';
+		}
+		
+	} else if ( $media_format == "vimeo" && $video_id ) {
             
-		// Video Player: Vimeo iframe embed code
+		// Vimeo iframe embed
+		
+		$player_status = "ready";
 		
 		$src = 'https://player.vimeo.com/video/'.$video_id;
 			
@@ -1003,6 +1012,8 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		//&& ( !has_post_thumbnail( $post_id ) || ( $webcast_status == "live" || $webcast_status == "on_demand" ) )
 		
 		// WIP -- deal w/ webcasts w/ status other than live/on_demand
+		
+		$player_status = "ready";
 		
 		if ( $status_only == false ) {
 		
@@ -1165,7 +1176,10 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
         return $arr_info;
         
     } else {
+    
+    	// status_only == true
         return $player_status;
+        
     }
 	
     return null; // if all else fails...
