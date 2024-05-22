@@ -974,7 +974,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
             
         }
 		
-	} else if ( $media_format == "video" && isset($video_file['url']) ) {
+	} else if ( $media_format == "video" && $src ) { //} else if ( $media_format == "video" && isset($video_file['url']) ) {
 		
 		// Video file from Media Library
 		
@@ -982,7 +982,7 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		
 		if ( $status_only == false ) {
 			$player .= '<div class="hero vidfile video-container">';
-			$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$video_file['url'].'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+			$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
 			$player .= '</div>';
 		}
 		
@@ -1026,7 +1026,6 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
 		if ( $src ) { $player_status = "ready"; }
 		
 		if ( $status_only == false ) {
-		
 			
 			// Timestamp?
 			if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
