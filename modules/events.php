@@ -3648,6 +3648,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				if ( $player_status == "ready" ) {
 					$show_image = false;
 					$ts_info = "[sdgp] show video, not image<br />";
+				} else {
+					// If player_status is NOT ready, get some TS info -- tft
+					$media_info = get_media_player( $post_id, 'above' );
+					$ts_info .= $media_info['player'];
 				}
 								
 			}
@@ -3702,8 +3706,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             
         }
         
-        if ( $do_ts ) { $replace .= $ts_info; }
-        
     } else if ( $result == '#_DAYTITLE' ) {
         
         //$replace = "day_title for".$EM_Event->start_date; // tft
@@ -3757,7 +3759,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 		
 		$info .= '</div>';
 		
-		if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+		
     
     	$replace = $info;
     
@@ -3766,6 +3768,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	//$replace .= "result: ".print_r($result,true)."<br />";
     	
     }
+    
+    if ( $do_ts ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $replace;
 }
