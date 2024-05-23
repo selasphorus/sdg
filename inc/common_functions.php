@@ -296,7 +296,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     //
     
     // Make sure this is a proper context for display of the featured image
-    $player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+    $player_status = get_media_player( $post_id, true, 'above', 'video' );
 	if ( $player_status == "ready" ) {
 		return;
 	} else {
@@ -824,7 +824,7 @@ function display_postmeta( $args = array() ) {
 /*********** MEDIA ***********/
 
 // Get Media Player -- Based on contents of ACF A/V Info fields
-function get_media_player ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
+function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null ) {
 	
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
@@ -854,10 +854,11 @@ function get_media_player ( $post_id = null, $position = 'above', $media_type = 
     if ( $media_type == "unknown" ) {
     	if ( $video_player_position == $position ) {
     		$media_type = 'video';
+    		$ts_info .= "media_type REVISED: '".$media_type."'<br />";
     	} else if ( $audio_player_position == $position ) {
     		$media_type = 'audio';
-    	}
-    	$ts_info .= "media_type REVISED: '".$media_type."'<br />";
+    		$ts_info .= "media_type REVISED: '".$media_type."'<br />";
+    	}    	
     }
     
 	//
