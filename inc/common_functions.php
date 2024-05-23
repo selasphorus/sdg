@@ -1178,7 +1178,6 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 
 // Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
-//function display_media_player( $post_id = null, $position = 'above' ) {
 function display_media_player( $atts = array() ) {
 
 	// Normalize attribute keys by making them all lowercase
@@ -1205,12 +1204,16 @@ function display_media_player( $atts = array() ) {
     }
     
     $media_info = get_media_player( $post_id, false, $position );
-	$player_status = $media_info['status'];
-	
-	$info .= "<!-- Audio/Video for post_id: $post_id -->";
-	$info .= $media_info['player'];
-	$info .= "<!-- player_status: $player_status -->";
-	$info .= '<!-- /Audio/Video -->';
+    if ( is_array($media_info) ) {
+    	$player_status = $media_info['status'];
+		//
+		$info .= "<!-- Audio/Video for post_id: $post_id -->";
+		$info .= $media_info['player'];
+		$info .= "<!-- player_status: $player_status -->";
+		$info .= '<!-- /Audio/Video -->';
+    } else {
+    	$info .= "<!-- ".print_r($media_info,true)." -->";
+    }	
     
     return $info;
 }
