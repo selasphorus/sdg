@@ -1039,12 +1039,12 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		
 	}
     
-    if ( $status_only == true ) {
+    if ( $status_only === true ) {
     	return $player_status;
     }
     
     // If there's media to display, show the player
-    if ( $player_status = "ready" ) {
+    if ( $player_status == "ready" ) {
         
          // CTA
 		// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
