@@ -3643,14 +3643,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				
 				$ts_info .= "[sdgp] is_singular('event')<br />";
 				
-				$player_status = get_media_player( $post_id, 'above', 'video', true ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+				$player_status = get_media_player( $post_id, true, 'above', 'video' ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
 				$ts_info .= "player_status: ".$player_status."<br />";
 				if ( $player_status == "ready" ) {
 					$show_image = false;
 					$ts_info = "[sdgp] show video, not image<br />";
 				} else {
 					// If player_status is NOT ready, get some TS info -- tft
-					$media_info = get_media_player( $post_id, 'above' );
+					$media_info = get_media_player( $post_id, false, 'above' );
 					$ts_info .= $media_info['ts_info'];
 				}
 								

@@ -1204,7 +1204,7 @@ function display_media_player( $atts = array() ) {
         //            
     }
     
-    $media_info = get_media_player( $post_id, $position ); // parameters: ( $post_id = null, $position = 'above', $media_type = 'unknown', $status_only = false, $url = null ) {
+    $media_info = get_media_player( $post_id, false, $position );
 	$player_status = $media_info['status'];
 	
 	$info .= "<!-- Audio/Video for post_id: $post_id -->";
