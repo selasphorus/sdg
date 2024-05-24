@@ -297,7 +297,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // Make sure this is a proper context for display of the featured image
     $player_status = get_media_player( $post_id, true, 'above', 'video' );
-	if ( $player_status == "ready" ) {
+	if ( is_singular() && $player_status == "ready" ) {
 		return;
 	} else {
 		$ts_info .= "player_status: ".$player_status."<br />";
