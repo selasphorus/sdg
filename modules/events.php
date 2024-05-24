@@ -3702,7 +3702,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         	$ts_info .= "[sdgp] show_image is FALSE<br />";
         	        	
             $replace = "<br />"; // If there's no featured image, add a line break to keep the spacing
-            $ts_info .= "[sdgp] sdg-calendar >> sdg_placeholders<br />";
+            //$ts_info .= "[sdgp] sdg-calendar >> sdg_placeholders<br />";
             
         }
         
@@ -3767,7 +3767,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	
     }
     
-    //if ( $do_ts ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $replace;
 }
