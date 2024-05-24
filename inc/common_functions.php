@@ -197,7 +197,7 @@ function sdg_post_title ( $args = array() ) {
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
-	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
@@ -546,12 +546,12 @@ function sdg_post_thumbnail ( $args = array() ) {
     	//$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
 	
-	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	if ( $echo == true ) {
-		//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+		//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		echo $info;    
 	} else {
-		//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+		//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 		return $info;
 	}
 
@@ -816,7 +816,7 @@ function display_postmeta( $args = array() ) {
     }
     $info .= "</pre>";
     
-    if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
 	
@@ -1167,7 +1167,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		
 	}
 	
-	//if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
+	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
 	$arr_info['player'] = $info;
 	$arr_info['ts_info'] = $ts_info;
 	$arr_info['position'] = $position;
