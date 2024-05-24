@@ -4315,8 +4315,10 @@ function display_event_stats( $post_id = null ) {
     $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
     if ( $recurrence_id ) { $info .= 'RID: <span class="nb">'.$recurrence_id.'</span>; '; }
     
-    $parent_id = $post->post_parent;
-    if ( $parent_id ) { $info .= 'parent_id: <span class="nb">'.$parent_id.'</span>; '; }
+    if ( $post ) {
+    	$parent_id = $post->post_parent;
+    	if ( $parent_id ) { $info .= 'parent_id: <span class="nb">'.$parent_id.'</span>; '; }
+    }
     
 	// Get the personnel & program_items repeater field values (ACF)
 	$personnel = get_field('personnel', $post_id);
