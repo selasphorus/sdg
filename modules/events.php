@@ -4327,12 +4327,14 @@ function display_event_stats( $post_id = null ) {
 	$program_items = get_field('program_items', $post_id);
     if ( $program_items && count($program_items) > 0 ) { $info .= '<span class="nb">'.count($program_items).'</span>'." prog.; "; }
 	
-    //Variable: Additional characters which will be considered as a 'word'
-    $char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
-    //$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
-    //$char_list = '&@'; /** If you want count certain symbols as 'words' **/
-    $word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
-    $info .= '[<span class="nb">'.$word_count.'</span> words]';
+	if ( $post ) {
+		//Variable: Additional characters which will be considered as a 'word'
+		$char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
+		//$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
+		//$char_list = '&@'; /** If you want count certain symbols as 'words' **/
+		$word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
+		$info .= '[<span class="nb">'.$word_count.'</span> words]';
+    }
     
     //$info .= "<pre>".print_r($post,true)."</pre>";
     //$info .= "<pre>".print_r($post_meta,true)."</pre>";    
