@@ -3557,11 +3557,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
-    // Init vars    
+    // Init vars
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "[sdgp] EM post_id: $post_id;<br />";
+    $ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />";
     //$ts_info .= "EM result: $result<br />";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
@@ -3578,14 +3578,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     } else if ( $result == '#_EVENTNAME' ) {
     
     	$replace = $event_title;
-    	//$replace .= " [_EVENTNAME] >> ".$event_title." << ";
-    	//$replace .= $ts_info;
+    	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
     
     } else if ( $result == '#_EVENTLINK' ) {
         
         $replace = $event_title;
-        //$replace .= " [_EVENTLINK] >> ".$event_title." << ";
-        //$replace .= $ts_info;
+        //$ts_info .= " [_EVENTLINK] >> ".$event_title." << ";
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
@@ -3621,16 +3619,13 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
-        //if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
-        
-        // Modified version of default to actually show image & caption only under certain circumstances
-        
+        // Modified version of default to actually show image & caption only under certain circumstances        
         $show_image = true;
         
         $featured_image_display = get_field('featured_image_display', $post_id);
         $ts_info .= "[sdgp] featured_image_display: ".$featured_image_display."<br />";
         
-        if ( !is_archive() && !is_page() ) { //&& ! ( is_page() && $post_id == get_the_ID() )
+        if ( !is_archive() && !is_page() ) {
         
         	$ts_info .= "[sdgp] !is_archive() && !is_page()<br />";
         	
@@ -3651,7 +3646,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				} else {
 					// If player_status is NOT ready, get some TS info -- tft
 					$media_info = get_media_player( $post_id, false, 'above' );
-					$ts_info .= $media_info['ts_info'];
+					$ts_info .= "media_player ts: ".$media_info['ts_info'];
 				}
 								
 			}
@@ -3757,7 +3752,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 			
 		}
 		
-		$info .= '</div>';
+		$info .= '</div>'; // div class="single_event_registration"
 		
     	$replace = $info;
     
