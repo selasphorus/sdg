@@ -4297,17 +4297,16 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
 
 // Program/Event info via Event CPT & ACF -- for Admin use/Troubleshooting
 add_shortcode('display_event_stats', 'display_event_stats');
-function display_event_stats( $post_id = null ) {
+function display_event_stats( $atts = array() ) {
 	
 	$info = ""; // init
     
-    // TODO: determine whether this is somehow better than the usual extra($args) approach...
-    extract( shortcode_atts( 
-        array( 
-            'post_id' => 'post_id'
-         ), $post_id ) ); 
+    // Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+    ), $atts );
+	extract( $args );
     
-	if ( $post_id == null ) { $post_id = get_the_ID(); }
     $info .= 'ID: <span class="nb">'.$post_id.'</span>; ';
 	$post   = get_post( $post_id );
     $post_meta = get_post_meta( $post_id );
@@ -4315,10 +4314,8 @@ function display_event_stats( $post_id = null ) {
     $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
     if ( $recurrence_id ) { $info .= 'RID: <span class="nb">'.$recurrence_id.'</span>; '; }
     
-    if ( $post ) {
-    	$parent_id = $post->post_parent;
-    	if ( $parent_id ) { $info .= 'parent_id: <span class="nb">'.$parent_id.'</span>; '; }
-    }
+    $parent_id = $post->post_parent;
+    if ( $parent_id ) { $info .= 'parent_id: <span class="nb">'.$parent_id.'</span>; '; }
     
 	// Get the personnel & program_items repeater field values (ACF)
 	$personnel = get_field('personnel', $post_id);
@@ -4327,14 +4324,12 @@ function display_event_stats( $post_id = null ) {
 	$program_items = get_field('program_items', $post_id);
     if ( $program_items && count($program_items) > 0 ) { $info .= '<span class="nb">'.count($program_items).'</span>'." prog.; "; }
 	
-	if ( $post ) {
-		//Variable: Additional characters which will be considered as a 'word'
-		$char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
-		//$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
-		//$char_list = '&@'; /** If you want count certain symbols as 'words' **/
-		$word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
-		$info .= '[<span class="nb">'.$word_count.'</span> words]';
-    }
+	//Variable: Additional characters which will be considered as a 'word'
+	$char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
+	//$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
+	//$char_list = '&@'; /** If you want count certain symbols as 'words' **/
+	$word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
+	$info .= '[<span class="nb">'.$word_count.'</span> words]';
     
     //$info .= "<pre>".print_r($post,true)."</pre>";
     //$info .= "<pre>".print_r($post_meta,true)."</pre>";    
