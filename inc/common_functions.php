@@ -72,7 +72,7 @@ function sdg_post_title ( $args = array() ) {
 	
 	// If both title and post_id are empty, abort
 	if ( strlen( $title ) == 0 || $post_id == 0) {
-		if ( $do_ts ) { return $ts_info; }
+		if ( $do_ts && !empty($ts_info) ) { return $ts_info; }
 		return;
 	}
 	

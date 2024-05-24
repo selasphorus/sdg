@@ -3761,7 +3761,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	
     }
     
-    if ( $do_ts ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts && !empty($ts_info) ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $replace;
 }

@@ -213,7 +213,7 @@ function get_snippets ( $args = array() ) {
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
 	}*/
-	//if ( $do_ts ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
+	//if ( $do_ts && !empty($ts_info) ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
     
@@ -2707,7 +2707,7 @@ function update_snippet_logic ( $atts = array() ) {
 	$snippet_priority = get_field( 'snippet_priority', $snippet_id );
 	if ( empty($snippet_priority) ) { update_field( 'snippet_priority', 2, $snippet_id ); }
 	
-	if ( $do_ts ) { $info .= $ts_info; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= $ts_info; }
 	
 	$info .= '</div>';
 	
