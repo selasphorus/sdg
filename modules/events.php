@@ -3560,14 +3560,14 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    //$ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />"; // don't do this -- breaks layout
+    //$ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />"; // breaks layout?
     //$ts_info .= "EM result: $result<br />";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title
 	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
-    $ts_info .= "[sdgp] title_args: ".print_r($title_args,true)."<br />";
+    //$ts_info .= "[sdgp] title_args: ".print_r($title_args,true)."<br />"; // breaks layout?
     $event_title = sdg_post_title( $title_args );
     
     if ( $result == '#_EVENT_LIST_ITEM' ) {
