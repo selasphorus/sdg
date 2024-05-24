@@ -259,7 +259,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		'img_size'	=> "thumbnail",
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
-		'return'  	=> 'html',
+		'return_value'  	=> 'html',
 		'do_ts'  	=> false,
 	);
 
@@ -271,7 +271,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( $post_id == null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
     $img_id = null;
-    if ( $return == "html" ) {
+    if ( $return_value == "html" ) {
     	$img_html = "";
     	$caption_html = "";
     }
@@ -292,7 +292,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     $ts_info .= "get_the_ID(): ".get_the_ID()."<br />";
     $ts_info .= "img_size: ".print_r($img_size, true)."<br />";
     $ts_info .= "sources: ".print_r($sources, true)."<br />";
-    $ts_info .= "return: $return<br />";
+    $ts_info .= "return_value: $return_value<br />";
     //
     
     // Make sure this is a proper context for display of the featured image
@@ -448,7 +448,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         }
     }
     
-    if ( $return == "html" && !empty($img_id ) ) {
+    if ( $return_value == "html" && !empty($img_id ) ) {
     
 		// For html return format, add caption, if there is one
         
@@ -475,25 +475,23 @@ function sdg_post_thumbnail ( $args = array() ) {
 			$ts_info .= "post format is_singular<br />";
 			if ( has_post_thumbnail($post_id) ) {
 			
-				if ( $return == "html" ) {
-					if ( is_singular('person') ) {
-						$img_size = "medium"; // portrait
-						$classes .= " float-left";
-					}
-			
-					$classes .= " is_singular";
-			
-					$img_html .= '<div class="'.$classes.'">';
-					$img_html .= get_the_post_thumbnail( $post_id, $img_size );
-					$img_html .= $caption_html;
-					$img_html .= '</div><!-- .post-thumbnail -->';
+				if ( is_singular('person') ) {
+					$img_size = "medium"; // portrait
+					$classes .= " float-left";
 				}
+		
+				$classes .= " is_singular";
+		
+				$img_html .= '<div class="'.$classes.'">';
+				$img_html .= get_the_post_thumbnail( $post_id, $img_size );
+				$img_html .= $caption_html;
+				$img_html .= '</div><!-- .post-thumbnail -->';
 
 			} else {
 		
 				// If an image_gallery was found, show one image as the featured image
 				// TODO: streamline this
-				if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 && $return == "html" ) {
+				if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
 					$ts_info .= "image_gallery image<br />";
 					$img_html .= '<div class="'.$classes.'">';
 					$img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
@@ -527,7 +525,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 				}
 			}
 		
-			if ( !empty($img_tag) && $return == "html" ) {
+			if ( !empty($img_tag) ) {
 				$classes .= " float-left"; //$classes .= " NOT_is_singular";
 				$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
 				$img_html .= $img_tag;
@@ -535,13 +533,13 @@ function sdg_post_thumbnail ( $args = array() ) {
 			}
 		
 		} // END if is_singular()
-	} // END if ( $return == "html" && !empty($img_id )
+	} // END if ( $return_value == "html" && !empty($img_id )
 	    
     //$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
-    if ( $return == "html" ) {
+    if ( $return_value == "html" ) {
     	$info .= $img_html;
-    } else { // $return == "id"
+    } else { // $return_value == "id"
     	$info = $img_id;
     	//$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
@@ -684,7 +682,7 @@ function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
 /*********** POST RELATIONSHIPS ***********/
 
 // The following function is the replacement for the old get_related_podposts fcn
-function get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' ) {
+function get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $single = false ) {
 
 	$info = null; // init
 	
@@ -692,7 +690,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
 	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
 	
 	$related_id = null; // init
-    if ( $return == 'single' ) {
+    if ( $single ) {
         $limit = 1;
     } else {
         $limit = -1;
@@ -718,7 +716,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
     // Loop through the records returned 
     if ( $related_posts ) {
         
-        if ( $return == 'single' ) {
+        if ( $single ) {
             // TODO: simplify -- shouldn't really need a loop here...
             while ( $related_posts->have_posts() ) {            
                 $related_posts->the_post();
@@ -764,7 +762,7 @@ function display_postmeta( $args = array() ) {
 		'img_size'	=> "thumbnail",
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
-		'return'  	=> 'html',
+		'return_value'  	=> 'html',
 		'do_ts'  	=> false,*/
 	);
 
