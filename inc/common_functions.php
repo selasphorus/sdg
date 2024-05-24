@@ -259,8 +259,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 		'img_size'	=> "thumbnail",
 		'sources'	=> array("featured_image", "gallery"),
 		'echo'		=> true,
-		'return_value'  	=> 'html',
-		'do_ts'  	=> false,
+		'return_value' => 'html',
+		//'do_ts'  	=> false,
 	);
 
 	// Parse & Extract args
@@ -297,7 +297,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // Make sure this is a proper context for display of the featured image
     $player_status = get_media_player( $post_id, true, 'above', 'video' );
-	if ( is_singular() && $player_status == "ready" ) {
+	if ( $format == "singular" && $player_status == "ready" ) {
 		return;
 	} else {
 		$ts_info .= "player_status: ".$player_status."<br />";
