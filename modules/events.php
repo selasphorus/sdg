@@ -3560,7 +3560,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />";
+    //$ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />"; // don't do this -- breaks layout
     //$ts_info .= "EM result: $result<br />";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
