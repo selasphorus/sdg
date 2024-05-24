@@ -401,9 +401,9 @@ function get_event_roster( $atts = array() ) {
     	}
     	// Trim trailing semicolon and space
     	if ( substr($info, -2) == ', ' ) { $info = substr($info, 0, -2)."<br />"; }
-    	if ( $format != "short" ) { $info .= '</div>'; }
+    	if ( $format != "short" ) { $info .= '</div>'; } // roster-section
     }
-    if ( $format != "short" ) { $info .= '</div>'; }
+    if ( $format != "short" ) { $info .= '</div>'; } // roster
     
     $ts_info .= "===== // get_roster =====<br />";
 	
@@ -533,7 +533,6 @@ function get_event_personnel( $atts = array() ) {
     //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
     $ts_info .= "Event Personnel for post_id: $post_id<br />";
-	//if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
@@ -2679,7 +2678,7 @@ function event_personnel_cleanup( $atts = array() ) {
             }
                     
                 // Remove row via ACF function -- ???
-                    /*if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
+                /*if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
                         $row_info .= "[personnel row $i deleted]<br />";
                         $deletion_count++;
                         sdg_log( "[personnel row $i deleted successfully]", $do_log );
@@ -2699,7 +2698,7 @@ function event_personnel_cleanup( $atts = array() ) {
             //$arr_program_items .= get_event_program_items( $post_id, true, 'dev' );
             
             $info .= $post_info;
-            $info .= '</div>';
+            $info .= '</div>'; // class="code"
             
         }
         
@@ -2934,7 +2933,7 @@ function event_program_cleanup( $atts = array() ) {
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
 						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } //else { $post_info .= "( no row_errors )<br />"; }
-						$post_info .= '</div>';
+						$post_info .= '</div>'; // program_row
 						$i++;				
 					}
 				} else {
@@ -2954,7 +2953,7 @@ function event_program_cleanup( $atts = array() ) {
 				}
 		
 				$info .= $post_info;
-				$info .= '</div>';
+				$info .= '</div>'; // post
 			
 			}
 			
