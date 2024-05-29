@@ -1057,12 +1057,13 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		// post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
 		// -- or by special category of content associated w/ CPTs?
         $status_message = get_status_message ( $post_id, 'webcast_status' );
-        $show_cta = false; // default
         $show_cta = get_post_meta( $post_id, 'show_cta', true );
-        if ( $show_cta == "1" ) { $show_cta = true; }
+        if ( $show_cta == "1" ) { $show_cta = true; } else { $show_cta = false; }
         // WIP -- don't show the CTA twice...
         if ( $multimedia && $media_format == "audio" ) {
         	$show_cta = false;
+        } else {
+        	$ts_info .= 'multimedia: '.$multimedia.'/ media_format: '.$media_format.'<br />';
         }
         $cta = "";
         if ( $show_cta ) {
