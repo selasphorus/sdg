@@ -1051,20 +1051,16 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		// post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
 		// -- or by special category of content associated w/ CPTs?
         $status_message = get_status_message ( $post_id, 'webcast_status' );
+        $show_cta = false; // default
         $show_cta = get_post_meta( $post_id, 'show_cta', true );
-        if ( $show_cta == "0" ) { 
-            $show_cta = false;
-            $ts_info .= 'show_cta: FALSE<br />';
-        } else { 
-            $show_cta = true;
-            $ts_info .= 'show_cta: TRUE<br />';
-        }
+        if ( $show_cta == "1" ) { $show_cta = true; }
         // WIP -- don't show the CTA twice...
         if ( $multimedia && $media_format == "audio" ) {
         	$show_cta = false;
         }
         $cta = "";
         if ( $show_cta ) {
+        	$ts_info .= 'show_cta: TRUE<br />';
         	$cta .= '<div class="cta">';
 			$cta .= '<h2>Support Our Ministry</h2>';
 			//$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a donation for the work of the Episcopal Church in the Holy Land on Good Friday</a>';
@@ -1076,6 +1072,8 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			$cta .= '<h3>You can also text "give" to <a href="sms://+18559382085">(855) 938-2085</a></h3>';
 			//$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
 			$cta .= '</div>';
+        } else {
+        	$ts_info .= 'show_cta: FALSE<br />';
         }
         
         //
