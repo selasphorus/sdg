@@ -831,6 +831,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	$ts_info = "";
     $player = "";
     $player_status = "unknown";
+    $multimedia = false; // does the post have both featured audio and video?
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
     $ts_info .= "[gmp] post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
@@ -842,7 +843,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
     $ts_info .= "featured_AV: ".print_r($featured_AV, true)."<br />";
 	$ts_info .= "media_format: ".print_r($media_format, true)."<br />";
-	if ( is_array($media_format) && count($media_format) > 1 ) { $multimedia = true; } else { $multimedia = false; }
+	if ( is_array($media_format) && count($media_format) > 1 ) { $multimedia = true; }
     
     $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
     $audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
@@ -1165,6 +1166,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		
 	}
 	
+	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+"; }
 	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
 	$arr_info['player'] = $info;
 	$arr_info['ts_info'] = $ts_info;
