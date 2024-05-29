@@ -198,7 +198,7 @@ function get_snippets ( $args = array() ) {
 		'limit'   => -1,
         'run_updates'  => false,
         'devmode' => false,
-        'return_value' => 'info',
+        'return' => 'info',
         'snippet_position' => 'side', // other option: bottom
         'sidebar_id' => 'sidebar-1', // default sidebar -- phase this out in favor position var?
         'classes' => array(), // for use when called by stc_body_class fcn
@@ -1317,7 +1317,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 								
 								//
 								// Determine revised value based on new and existing values for field
-								$update_args = array( 'post_id' => $snippet_id, 'key' => 'cs_post_ids', 'arr_additions' => $cs_post_ids, 'return_value'  => 'info', 'field_type' => 'serialized' );
+								$update_args = array( 'post_id' => $snippet_id, 'key' => 'cs_post_ids', 'arr_additions' => $cs_post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
 								$updates = get_updated_arr_field_value( $update_args );
 								$info .= $updates['info'];
 								$updated_value = $updates['updated_value'];
@@ -1707,7 +1707,7 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 		if ( $snippet_id ) {
 			
 			// Determine revised value based on new and existing values for field
-			$update_args = array( 'post_id' => $snippet_id, 'key' => 'post_ids', 'arr_additions' => $post_ids, 'return_value'  => 'info', 'field_type' => 'serialized' );
+			$update_args = array( 'post_id' => $snippet_id, 'key' => 'post_ids', 'arr_additions' => $post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
 			$updates = get_updated_arr_field_value( $update_args );
 			$info .= $updates['info'];
 			$updated_value = $updates['updated_value'];
@@ -1751,7 +1751,7 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 			$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";	
 						
 			// Update snippet logic to add post from which sidebar content this snippet was created
-			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return_value' => 'info', 'field_type' => 'relationship', );
+			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return' => 'info', 'field_type' => 'relationship', );
 			$info .= sdg_update_custom_field( $update_args );
 			
 			/*
@@ -2149,7 +2149,7 @@ function update_snippet_logic ( $atts = array() ) {
 					if ( $reverse == "true" ) { $update_key = 'exclude_by_url';  } else { $update_key = 'target_by_url'; }
 					
 					// Run the update
-					$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $wildcard_urls, 'return_value' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				$key_ts_info .= "<hr />";
@@ -2162,7 +2162,7 @@ function update_snippet_logic ( $atts = array() ) {
 				
 				// Update field with revised value based on new and existing values for field
 				if ( $reverse == "true" ) { $update_key = 'exclude_by_post';  } else { $update_key = 'target_by_post'; }
-				$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return_value' => 'info', 'field_type' => 'relationship' );
+				$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return' => 'info', 'field_type' => 'relationship' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
 				
 				//
@@ -2243,7 +2243,7 @@ function update_snippet_logic ( $atts = array() ) {
 							}
 							$key_ts_info .= $i.") id: ".$snip_id." <em>".get_the_title($snip_id)."</em> [snip_sidebar_id: ".$snip_sidebar_id."/snippet_display: ".$snippet_display."/update_key: ".$update_key."]<br />";
 							//
-							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return_value' => 'info', 'field_type' => 'relationship' );
+							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
 							//$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
 							
@@ -2528,7 +2528,7 @@ function update_snippet_logic ( $atts = array() ) {
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
 				if ( count($wildcard_urls) > 0 ) {				
 					// Run the update
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return_value' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				*/
@@ -2541,13 +2541,13 @@ function update_snippet_logic ( $atts = array() ) {
 				
 				// Save the matched posts to the snippet field
 				if ( $matched_posts ) {
-					$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return_value' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
+					$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
 					$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 					// WIP Update the original $key field to clear it out, having xferred those values to the target_key field
 					if ( $reverse == "true" && ( $key == 'target_by_post' || $key == 'exclude_by_post' )  ) {
-						$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $matched_posts, 'return_value' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
+						$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
 						$key_ts_info .= "REVERSE update_args: <pre>".print_r($update_args, true)."</pre>";
 						$key_ts_info .= sdg_update_custom_field( $update_args );
 					}
@@ -2555,12 +2555,12 @@ function update_snippet_logic ( $atts = array() ) {
 				
 				// Update the associated repeater field as needed
 				if ( $repeater_additions || $repeater_removals ) {
-					$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions, 'arr_removals' => $repeater_removals, 'return_value' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions, 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
 					$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					if ( $reverse == "true" && ( $key == 'target_by_url' || $key == 'exclude_by_url' )  ) {
 						//remove repeater data from original key field, having xferred those values to the repeater_key field
-						$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $repeater_additions, 'return_value' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
+						$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $repeater_additions, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
 						$key_ts_info .= "REVERSE update_args: <pre>".print_r($update_args, true)."</pre>";
 						$key_ts_info .= sdg_update_custom_field( $update_args );
 					}
@@ -2604,19 +2604,19 @@ function update_snippet_logic ( $atts = array() ) {
 					
 					// CPT conditions
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return_value' => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
 					
 					// CPT Archive conditions
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return_value' => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
 					
 					// Taxonomy Archive Conditions
 					// Update field with revised value based on new and existing values for field				
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return_value' => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
 				}
@@ -2645,7 +2645,7 @@ function update_snippet_logic ( $atts = array() ) {
 							$key_ts_info .= "special case: is_single<br />";
 							
 							// Update field with revised value based on new and existing values for field				
-							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return_value' => 'info', 'field_type' => 'array' );
+							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return' => 'info', 'field_type' => 'array' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
 							$key_ts_info .= "<hr />";							
 							///
@@ -2655,7 +2655,7 @@ function update_snippet_logic ( $atts = array() ) {
 					}
 					
 					// Update field with revised value based on new and existing values for field
-					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return_value' => 'info', 'field_type' => 'array' );
+					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					
 				}
@@ -2930,7 +2930,7 @@ function sdg_update_custom_field ( $args = array() ) {
 		'value' => null,
         'arr_additions' => array(),
         'arr_removals' => array(),
-		'return_value'  => 'bool',
+		'return'  => 'bool',
 	);
 
 	// Parse & Extract args
@@ -3702,7 +3702,7 @@ function show_widgets_and_snippets ( $atts = array() ) {
 	*/
 	// Get snippets
 	// -------
-	$snippets = get_snippets ( array( 'post_id' => $post_id, 'return_value' => 'ids', 'sidebar_id' => $sidebar_id ) );
+	$snippets = get_snippets ( array( 'post_id' => $post_id, 'return' => 'ids', 'sidebar_id' => $sidebar_id ) );
 	
 	if ( $snippets ) {
 		$info .= '<div class="code">'; // float-left" style="width: 49%;

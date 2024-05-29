@@ -600,7 +600,7 @@ function sdg_body_class( $classes ) {
 	// If post has snippets but no widgets, we need to add a body class for styling to preserve the sidebar layout
     if ( function_exists( 'get_snippets' ) ) {
     	
-    	$args = array( 'classes' => $classes, 'return_value' => 'ids' ); //  
+    	$args = array( 'classes' => $classes, 'return' => 'ids' ); //  
     	$snippets = get_snippets( $args );
     	if ( is_array($snippets) && count($snippets) > 0 ) {
     		if ( !is_page_template( 'page-homepage.php' ) &&
