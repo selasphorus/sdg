@@ -831,6 +831,8 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	$ts_info = "";
     $player = "";
     $player_status = "unknown";
+    $featured_video = false;
+    $featured_audio = false;
     $multimedia = false; // does the post have both featured audio and video?
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
@@ -849,22 +851,27 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		$ts_info .= "MULTIPLE FEATURED A/V MEDIA FOUND<br />";
 	} else {
 		$ts_info .= "Multimedia FALSE<br />";
+		
 	}
     
-    $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
-    $audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    $ts_info .= "video_player_position: '".$video_player_position."'<br />";
-    $ts_info .= "audio_player_position: '".$audio_player_position."'<br />";
-    
-    //
-    if ( $media_type == "unknown" ) {
-    	if ( $video_player_position == $position ) {
+    // Get additional vars based on presence of featured audio/video
+    if ( is_array($featured_AV) && in_array( 'video', $featured_AV) ) {
+    	$featured_video = true;
+    	$video_player_position = get_field('video_player_position', $post_id); // above/below/banner
+    	$ts_info .= "video_player_position: '".$video_player_position."'<br />";
+    	if ( $media_type == "unknown" && $video_player_position == $position ) {
     		$media_type = 'video';
     		$ts_info .= "media_type REVISED: '".$media_type."'<br />";
-    	} else if ( $audio_player_position == $position ) {
+    	}
+    }
+    if ( is_array($featured_AV) && in_array( 'audio', $featured_AV) ) {
+    	$featured_audio = true;
+    	$audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
+    	$ts_info .= "audio_player_position: '".$audio_player_position."'<br />";
+    	if ( $media_type == "unknown" && $audio_player_position == $position ) {
     		$media_type = 'audio';
     		$ts_info .= "media_type REVISED: '".$media_type."'<br />";
-    	}    	
+    	}
     }
     
 	//
