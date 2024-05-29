@@ -843,10 +843,12 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
     $ts_info .= "featured_AV: ".print_r($featured_AV, true)."<br />";
 	$ts_info .= "media_format: ".print_r($media_format, true)."<br />";
-	if ( is_array($featured_AV) && count($featured_AV) > 1 ) {
 	//if ( is_array($media_format) && count($media_format) > 1 ) {
+	if ( is_array($featured_AV) && count($featured_AV) > 1 ) {
 		$multimedia = true;
 		$ts_info .= "MULTIPLE FEATURED A/V MEDIA FOUND<br />";
+	} else {
+		$ts_info .= "Multimedia FALSE<br />";
 	}
     
     $video_player_position = get_field('video_player_position', $post_id); // above/below/banner
