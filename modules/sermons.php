@@ -91,7 +91,8 @@ function sdg_sermons_settings_section_callback( $args ) {
  * Display callback for the submenu page.
  */
 
-/* function sermons_options_page_callback() { 
+/*
+function sermons_options_page_callback() { 
     
     // check user capabilities
 	if ( ! current_user_can( 'manage_options' ) ) {
@@ -132,7 +133,8 @@ function sdg_sermons_settings_section_callback( $args ) {
 	</div>
 	<?php
 	
-} */
+}
+*/
 
 /*
 // Render a text field
@@ -301,7 +303,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         
     }
 	
-    // Sermon Webcast (Audio)
+    // Sermon Audio (from Webcast)
     if ( is_singular('sermon') 
         && has_term( 'webcasts', 'admin_tag', $post_id ) 
         && get_post_meta( $post_id, 'audio_file', true ) != "" ) { 
@@ -365,7 +367,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 }
 
 add_shortcode( 'sermon_transcript_pdf', 'get_cpt_sermon_transcript' );
-function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
+function get_cpt_sermon_transcript( $atts = array(), $content = null, $tag = '' ) {
 		
 	$info = "";
 	
@@ -390,7 +392,7 @@ function get_cpt_sermon_transcript( $atts = [], $content = null, $tag = '' ) {
 }
 
 add_shortcode( 'sermon_event_link', 'get_cpt_sermon_event' );
-function get_cpt_sermon_event ( $atts = [] ) {
+function get_cpt_sermon_event ( $atts = array() ) {
 	
     $info = ""; // init
     

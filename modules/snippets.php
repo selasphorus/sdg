@@ -3,7 +3,7 @@
 
 // Prior to deactivating/deleting the Custom Sidebars plugin, save the cs sidebar_id to all posts for which they were active
 add_shortcode('cs_sidebars_xfer', 'cs_sidebars_xfer');
-function cs_sidebars_xfer ( $atts = [] ) {
+function cs_sidebars_xfer ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -84,7 +84,7 @@ function cs_sidebars_xfer ( $atts = [] ) {
 
 //
 add_shortcode('snippets', 'display_snippets');
-function display_snippets ( $atts = [] ) {
+function display_snippets ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -102,7 +102,7 @@ function display_snippets ( $atts = [] ) {
 		'limit'   => -1,
         'run_updates'  => false,
         'devmode' => false,
-        //'return' => 'info',
+        //'return_value' => 'info',
         'snippet_position' => 'side', // other option: 'bottom'
         'sidebar_id' => 'sidebar-1', // default -- phase out in favor of position(?)
     ), $atts );
@@ -213,7 +213,7 @@ function get_snippets ( $args = array() ) {
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
 	}*/
-	//if ( $do_ts ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
+	//if ( $do_ts && !empty($ts_info) ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
     
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
     
@@ -922,7 +922,7 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 
 // Display (and optionally convert/update) widgets and snippets
 add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
-function widgets_and_snippets ( $atts = [] ) { //function convert_widgets_to_snippets ( $atts = [] ) {
+function widgets_and_snippets ( $atts = array() ) { //function convert_widgets_to_snippets ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -1544,7 +1544,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 
 // WIP
 add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
-function convert_post_widgets_to_snippets ( $atts = [] ) {
+function convert_post_widgets_to_snippets ( $atts = array() ) {
 	
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -1792,7 +1792,7 @@ function convert_post_widgets_to_snippets ( $atts = [] ) {
 
 // WIP
 add_shortcode('delete_widgets', 'delete_widgets');
-function delete_widgets ( $atts = [] ) {
+function delete_widgets ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -1902,7 +1902,7 @@ function delete_widgets ( $atts = [] ) {
 }
 
 add_shortcode('update_snippets', 'update_snippets');
-function update_snippets ( $atts = [] ) {
+function update_snippets ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 
@@ -1949,7 +1949,7 @@ function update_snippets ( $atts = [] ) {
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
 add_shortcode('update_snippet_logic', 'update_snippet_logic');
-function update_snippet_logic ( $atts = [] ) {
+function update_snippet_logic ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = true; 
@@ -2707,7 +2707,7 @@ function update_snippet_logic ( $atts = [] ) {
 	$snippet_priority = get_field( 'snippet_priority', $snippet_id );
 	if ( empty($snippet_priority) ) { update_field( 'snippet_priority', 2, $snippet_id ); }
 	
-	if ( $do_ts ) { $info .= $ts_info; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= $ts_info; }
 	
 	$info .= '</div>';
 	
@@ -3594,7 +3594,7 @@ function get_sidebar_id( $uid_to_match = null) {
 
 // WIP
 add_shortcode('show_widgets_and_snippets', 'show_widgets_and_snippets');
-function show_widgets_and_snippets ( $atts = [] ) {
+function show_widgets_and_snippets ( $atts = array() ) {
 
 	// TS/logging setup
     $do_ts = devmode_active(); 

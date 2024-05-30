@@ -164,7 +164,7 @@ function display_group_personnel ( $args = array() ) {
 		
 	}
 	
-	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Return info for display
 	return $info;
@@ -173,7 +173,7 @@ function display_group_personnel ( $args = array() ) {
 
 
 add_shortcode('group_personnel', 'sdg_group_personnel');
-function sdg_group_personnel ( $atts = [] ) {
+function sdg_group_personnel ( $atts = array() ) {
 
 	$info = "";
 	$ts_info = "";

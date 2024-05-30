@@ -249,7 +249,7 @@ function get_lit_dates ( $args ) {
 
 // Lit Dates overview
 add_shortcode('list_lit_dates', 'get_lit_dates_list');
-function get_lit_dates_list( $atts = [], $content = null, $tag = '' ) {
+function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
 
 	$info = "\n<!-- get_lit_dates_list -->\n";
     
@@ -503,7 +503,7 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO 
 
 // Day Titles
 add_shortcode('day_title', 'get_day_title');
-function get_day_title( $atts = [], $content = null, $tag = '' ) {
+function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
@@ -857,7 +857,7 @@ function get_day_title( $atts = [], $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( $do_ts ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -1486,7 +1486,7 @@ function calc_date_from_components ( $args = array() ) {
 
 
 add_shortcode('calculate_variable_dates', 'calc_litdates');
-function calc_litdates( $atts = [] ) {
+function calc_litdates( $atts = array() ) {
 
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !queenbee() ) { return "You are not authorized to run this operation.<br />"; }
@@ -1762,7 +1762,7 @@ function get_cpt_psalms_of_the_day_content() {
 
 // att service: "morning_prayer" or "evening_prayer"
 add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
-function get_psalms_of_the_day( $atts = [], $content = null, $tag = '' ) {
+function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
 	
     // init vars
     $info = "";

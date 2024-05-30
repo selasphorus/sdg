@@ -1322,7 +1322,7 @@ function match_group_field ( $field_groups, $field_name ) {
 
 // TODO: make this function less STC-specific?
 add_shortcode('sdg_search_form', 'sdg_search_form');
-function sdg_search_form ($atts = [], $content = null, $tag = '') {
+function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 	
 	$info = "";
     $ts_info = "";
@@ -2376,8 +2376,8 @@ function sdg_search_form ($atts = [], $content = null, $tag = '') {
                     $ts_info .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
 
-                    $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>';
-					$info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>';
+                    if ( isset($related_posts_info['info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>'; }
+					if ( isset($related_posts_info['ts_info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>'; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
@@ -2839,8 +2839,12 @@ function format_search_results ( $post_ids, $search_type = "choirplanner" ) {
     
     $info .= "</table>";
     
-    $info .= '<input type="submit" value="Merge Selected">';
-    //if ( is_dev_site() ) { $info .= '<input type="submit" value="Merge Selected">'; }
+    // Users with the appropriate permissions can merge duplicate records
+    // Also check to see if there are at least two records -- otherwise there's nothing to merge!
+    if ( count($rep_ids) > 2 && ( current_user_can('read_repertoire') || current_user_can('read_music') ) ) {
+    	$info .= '<input type="submit" value="Merge Selected">';
+    }
+    
 	$info .= "</form>";
     
     $info .= '<div class="troubleshooting">';

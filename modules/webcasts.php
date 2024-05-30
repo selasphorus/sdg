@@ -30,6 +30,7 @@ function post_is_webcast_eligible( $post_id = null ) {
     
 }
 
+// Obsolete(?)
 add_shortcode('display_webcast', 'display_webcast');
 function display_webcast( $post_id = null ) {
 	
@@ -40,12 +41,11 @@ function display_webcast( $post_id = null ) {
     if ( post_is_webcast_eligible( $post_id ) ) {
         
         $media_info = get_media_player( $post_id );
-        $player_status = $media_info['player_status'];
+        $player_status = $media_info['status'];
         
         $info .= "<!-- Webcast Audio/Video Player for post_id: $post_id -->";
-        $info .= $media_info['info'];
+        $info .= $media_info['player'];
         $info .= "<!-- player_status: $player_status -->";
-        //$info .= get_media_player( $post_id );
         $info .= '<!-- /Webcast Audio/Video Player -->'; 
         
     } else {
@@ -124,25 +124,13 @@ function get_webcast_status( $post_id = null ) {
     if ( empty($webcast_status) || $webcast_status == "tbd" ) {
     
         $url_live = get_field('url_live', $post_id);
-        $live_start = get_field('live_start', $post_id);
-        //if ( $live_start == false && is_singular('event') ) { $live_start = get_post_meta( $post_id, '_event_start_date', true ); }
         $url_ondemand = get_field('url_ondemand', $post_id);
         
         // before, live, after, on_demand, technical_difficulties
         if ( !empty( $url_ondemand ) ) { 
             $webcast_status = 'on_demand';
         } elseif ( !empty( $url_live ) ) { 
-            if ( !empty ($live_start) ) {
-                if ( $live_start < $now ) {
-                    $webcast_status = 'live';
-                } else {
-                    $webcast_status = 'before';
-                }
-            } else {
-                $webcast_status = 'live';
-            }
-        } elseif ( !empty ($live_start) && $live_start < $now ) {
-            $webcast_status = 'after';
+            $webcast_status = 'live';
         } else {
             $webcast_status = 'unknown';
         }
@@ -177,7 +165,7 @@ function get_status_message ( $post_id = null, $message_type = 'webcast_status' 
         if ( $webcast_status === "before" ) {
             if ( empty( $video_id ) || $media_format == "vimeo_recurring" ) {
                 // If live_start is set, display message saying that the webcast will be available on that date/time
-                $live_start = get_field('live_start', $post_id);
+                //$live_start = get_field('live_start', $post_id); // deprecated -- leaving this here in case it becomes useful again -- for streaming on non-event posts
                 if ( $live_start == false && is_singular('event') ) { $live_start = get_post_meta( $post_id, '_event_start_local', true ); }
                 if ( $live_start != "" ) {
 
@@ -395,7 +383,7 @@ function vimeo_player_js_test() {
 /*** ***/
 
 add_shortcode('video_player_test', 'load_hls_js');
-function load_hls_js( $atts = [] ) {
+function load_hls_js( $atts = array() ) {
 
 	$info = "";
 

@@ -13,6 +13,7 @@ if ( !function_exists( 'add_action' ) ) {
 function get_related_event( $post_id = null, $post_type = null, $link = true, $link_text = null ) {
 	
 	$info = ""; // init
+	$ts_info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
 	
 	// If we don't have actual values for both parameters, there's not enough info to proceed
@@ -20,7 +21,7 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 	
 	$event_id = get_related_posts( $post_id, $post_type, 'event', 'single' ); // get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $return = 'all' )
 	//echo "event_id: $event_id; post_id: $post_id"; // tft
-	//$info .= "<!-- event_id: $event_id; post_id: post_id -->"; // tft
+	//$ts_info .= "event_id: $event_id; post_id: post_id<br />"; // tft
 	
 	if ($event_id && $event_id !== "no posts") {
 		if ($link === true) { 
@@ -32,10 +33,13 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 		}
 		//$info .= '<a href="'. esc_url(get_the_permalink($event_id)) . '" title="event_id: '.$event_id.'/post_id: '.$post_id.'">' . get_the_title($event_id) . '</a>';
 	} else {
-		//$info .= "<!-- event_id: $event_id; post_id: post_id -->";
+		//$ts_info .= "event_id: $event_id; post_id: post_id<br />";
 		return null;
 	}
+	
 	//$info .= '<a href="'. esc_url(get_permalink($event_id)) . '">' . get_the_title($event_id) . '</a>';
+	
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -165,8 +169,7 @@ function get_event_program_content( $post_id = null ) {
 	$info .= '</div>';
     $ts_info .= "===== // get_event_program_content =====<br />";
 	
-	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	$info = $ts_info.$info; // ts_info at the top of the page
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info = $ts_info.$info; // ts_info at the top of the page
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
@@ -184,7 +187,8 @@ function get_event_ticketing_info( $post_id = null ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
-	$info = ""; // init
+	$info = "";
+	$ts_info = "";
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
     
     // Get ticket header and info
@@ -204,7 +208,7 @@ function get_event_ticketing_info( $post_id = null ) {
     
     // Ticket URLs
     $show_ticket_urls = get_post_meta( $post_id, 'show_ticketing_urls', true );
-    //$info .= "<!-- show_ticket_urls: ".$show_ticket_urls." -->\n"; // tft
+    $ts_info .= "show_ticket_urls: ".$show_ticket_urls."<br />"; // tft
     if ( $show_ticket_urls != "1" ) { $ticket_div_class = " devinfo"; } else { $ticket_div_class = ""; }
     //
     $rows = get_field('ticket_urls', $post_id);
@@ -212,7 +216,7 @@ function get_event_ticketing_info( $post_id = null ) {
     
     if ( empty($rows) ) { $rows = array(); }
     if ( is_array($rows)) { $num_rows = count($rows); } else { $num_rows = 0; }
-    $info .= "<!-- ".$num_rows." ticket url rows -->\n"; // tft
+    $ts_info .= "".$num_rows." ticket url rows<br />\n"; // tft
     
     // Loop through the ticket url rows and accumulate data for display
 	if ( $num_rows > 0 ) {
@@ -231,7 +235,7 @@ function get_event_ticketing_info( $post_id = null ) {
             } else {
                 $link_text = "Buy Tickets";
             }
-            $info .= "<!-- link_text: $link_text -->";
+            $ts_info .= "link_text: $link_text<br />";
             
             if ( isset($row['ovationtix_id']) && $row['ovationtix_id'] != "" ) { 
                 $ticket_url = "https://ci.ovationtix.com/35174/production/".$row['ovationtix_id'];
@@ -240,12 +244,12 @@ function get_event_ticketing_info( $post_id = null ) {
             } else {
                 $ticket_url = null;
             }
-            $info .= "<!-- ticket_url: $ticket_url -->";
+            $ts_info .= "ticket_url: $ticket_url<br />";
             
             if ( $ticket_url) { 
                 $info .= make_link( $ticket_url, $link_text, $link_text, "button", "_blank")."<br />";
             } else {
-                $info .= "No ticket_url for link_text ".$link_text."<br />";
+                $ts_info .= "No ticket_url for link_text ".$link_text."<br />";
             }
         }
         
@@ -254,6 +258,8 @@ function get_event_ticketing_info( $post_id = null ) {
     
 	$info .= '</div>';
 	
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	
 	return $info;
 	
 }
@@ -261,7 +267,7 @@ function get_event_ticketing_info( $post_id = null ) {
 // Music Department infos
 
 add_shortcode('call_time', 'get_call_time' );
-function get_call_time( $atts = [] ) {
+function get_call_time( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -288,19 +294,14 @@ function get_call_time( $atts = [] ) {
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
     $info .= '<h3 class="'.$hclass.'">Call Time:</h3>'.$call_time.'<br />';
     
-    $ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	if ( $do_ts ) {
-		$info = $ts_info.$info; // ts_info at the top of the page
-	} else {
-		$info .= $ts_info;
-	}
+    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
     
 }
 
 add_shortcode('md_overview', 'get_music_dept_overview' );
-function get_music_dept_overview( $atts = [] ) {
+function get_music_dept_overview( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -349,19 +350,14 @@ function get_music_dept_overview( $atts = [] ) {
     
     $ts_info .= "===== // get_music_dept_overview =====<br />";
 	
-	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	if ( $do_ts ) {
-		$info = $ts_info.$info; // ts_info at the top of the page
-	} else {
-		$info .= $ts_info;
-	}
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 
 }
 
 add_shortcode('roster', 'get_event_roster' );
-function get_event_roster( $atts = [] ) {
+function get_event_roster( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -405,9 +401,9 @@ function get_event_roster( $atts = [] ) {
     	}
     	// Trim trailing semicolon and space
     	if ( substr($info, -2) == ', ' ) { $info = substr($info, 0, -2)."<br />"; }
-    	if ( $format != "short" ) { $info .= '</div>'; }
+    	if ( $format != "short" ) { $info .= '</div>'; } // roster-section
     }
-    if ( $format != "short" ) { $info .= '</div>'; }
+    if ( $format != "short" ) { $info .= '</div>'; } // roster
     
     $ts_info .= "===== // get_roster =====<br />";
 	
@@ -417,19 +413,14 @@ function get_event_roster( $atts = [] ) {
 		$info .= $choir_notes;
 	}
 	
-	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	if ( $do_ts ) {
-		$info = $ts_info.$info; // ts_info at the top of the page
-	} else {
-		$info .= $ts_info;
-	}
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 
 }
 
 add_shortcode('repertoire', 'get_event_rep');
-function get_event_rep( $atts = [] ) {
+function get_event_rep( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -500,12 +491,7 @@ function get_event_rep( $atts = [] ) {
     
     $ts_info .= "===== // get_event_rep =====<br />";
 	
-	$ts_info = '<div class="troubleshooting">'.$ts_info.'</div>'; 
-	if ( $do_ts ) {
-		$info = $ts_info.$info; // ts_info at the top of the page
-	} else {
-		$info .= $ts_info;
-	}
+	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
@@ -520,7 +506,7 @@ function get_event_rep( $atts = [] ) {
 /***  Program/Event personnel via Event CPT & ACF ***/
 //
 add_shortcode('display_event_personnel', 'get_event_personnel');
-function get_event_personnel( $atts = [] ) {
+function get_event_personnel( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
@@ -547,7 +533,6 @@ function get_event_personnel( $atts = [] ) {
     //if ( devmode_active() || ( is_dev_site() && devmode_active() )  ) { $run_updates = true; } // ???
     
     $ts_info .= "Event Personnel for post_id: $post_id<br />";
-	//if ( $display == 'dev' ) { $info .= '<div>'; } //$info .= '<div class="code">'; }
     
     // What type of program is this? Service order or concert program?
     $program_type = get_post_meta( $post_id, 'program_type', true );
@@ -556,7 +541,7 @@ function get_event_personnel( $atts = [] ) {
     $program_layout = get_post_meta( $post_id, 'program_layout', true );
     
     $ts_info .= "run_updates: $run_updates<br />";
-    //$ts_info .= "<!-- display: $display -->";
+    //$ts_info .= "display: $display<br />";
     
 	// Get the program personnel repeater field values (ACF)
     $rows = get_field('personnel', $post_id);  // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -634,13 +619,13 @@ function get_event_personnel( $atts = [] ) {
                 */
                 $row_info .= "</code><hr />";
             } else {
-                //$row_info .= "<!-- personnel row [$i]: ".print_r($row, true)." -->";
-                //$row_info .= "<!-- personnel row [$i]: <pre>".print_r($row, true)."</pre> -->";
+                //$row_info .= "personnel row [$i]: ".print_r($row, true)."<br />";
+                //$row_info .= "personnel row [$i]: <pre>".print_r($row, true)."</pre><br />";
             }
             
             // Troubleshooting
-            $row_info .= "<!-- i: [$i]; post_id: [$post_id]; program_type: [$program_type]; display: [$display]; run_updates: [$run_updates] -->";
-            //$row_info .= "<!-- personnel row [$i]: <pre>".print_r($row, true)."</pre> -->";
+            $row_info .= "i: [$i]; post_id: [$post_id]; program_type: [$program_type]; display: [$display]; run_updates: [$run_updates]<br />";
+            //$row_info .= "personnel row [$i]: <pre>".print_r($row, true)."</pre>";
             
             if ( $row_type == "header" ) {
             
@@ -655,7 +640,7 @@ function get_event_personnel( $atts = [] ) {
 				// Get the person role
 				// --------------------
 				$arr_person_role = get_personnel_role( $personnel_args );
-				//$row_info .= "<!-- arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre> -->"; // tft
+				//$row_info .= "arr_person_role row [$i]: <pre>".print_r($arr_person_role, true)."</pre>";
 				$person_role = $arr_person_role['info'];
 				$row_info .= $arr_person_role['ts_info'];
 			
@@ -675,7 +660,7 @@ function get_event_personnel( $atts = [] ) {
                 || ( ( $person_role == "x" || $person_role == "MATCH_DOUBLE (( post_title :: " ) && ( $person_name == "x" || empty($person_name) ) )
                 ) {
                 $delete_row = true;
-                $row_info .= "<!-- row $i to be deleted! [person_role: $person_role; person_name: $person_name] -->";
+                $row_info .= "row $i to be deleted! [person_role: $person_role; person_name: $person_name]<br />";
             }
             
             if ( $run_updates == true ) { 
@@ -693,7 +678,7 @@ function get_event_personnel( $atts = [] ) {
                 //sdg_log( "divline1", $do_log );
                 //sdg_log( "personnel row to be deleted:", $do_log );
                 //sdg_log( print_r($row, true), $do_log );
-                //$row_info .= "<!-- <pre>".print_r($row, true)."</pre> -->"; // tft
+                //$row_info .= "<pre>".print_r($row, true)."</pre>"; // tft
                 
                 // ... but only run the action if this is the first deletion for this post_id in this round
                 // ... because if a row has already been deleted then the row indexes will have changed for all the personnel rows
@@ -701,21 +686,21 @@ function get_event_personnel( $atts = [] ) {
                 if ( $deletion_count == 0 && $do_deletions == true) {
 
                     if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
-                        $row_info .= "<!-- [personnel row $i deleted] -->";
+                        $row_info .= "[personnel row $i deleted]<br />";
                         $deletion_count++;
                         //sdg_log( "[personnel row $i deleted successfully]", $do_log );
                     } else {
-                        $row_info .= "<!-- [deletion failed for personnel row $i] -->";
+                        $row_info .= "[deletion failed for personnel row $i]<br />";
                         //sdg_log( "[failed to delete personnel row $i]", $do_log );
                     }
                     
                 } else {
                     
                     if ( $do_deletions == true ) {
-                        $row_info .= "<!-- [$i] row to be deleted on next round due to row_index issues. -->";
+                        $row_info .= "[$i] row to be deleted on next round due to row_index issues.<br />";
                         //sdg_log( "row to be deleted on next round due to row_index issues.", $do_log );
                     } else {
-                        $row_info .= "<!-- [$i] row to be deleted when do_deletions is re-enabled. -->";
+                        $row_info .= "[$i] row to be deleted when do_deletions is re-enabled.<br />";
                         //sdg_log( "row to be deleted when do_deletions is re-enabled.", $do_log );
                     }
                     
@@ -739,7 +724,7 @@ function get_event_personnel( $atts = [] ) {
 			}
 			
 			/*if ( $run_updates == true || is_dev_site() || devmode_active() ) {
-				$row_info = "<!-- *** START row_info *** -->".$row_info."<!-- *** END row_info *** -->"; // Display comments w/ in row for ease of parsing dev notes
+				$row_info = "*** START row_info ***<br />".$row_info."*** END row_info ***<br />"; // Display comments w/ in row for ease of parsing dev notes
                 $table .= $row_info;
 			} else {
 				//$ts_info .= $row_info;
@@ -841,7 +826,7 @@ function get_personnel_role ( $args = array() ) {
 	$person_role = "";
     //$placeholder_label = false;
 	
-	//$info .= "<!-- get_personnel_role -->"; // tft
+	//$ts_info .= "get_personnel_role<br />"; // tft
     
     // Defaults
 	$defaults = array(
@@ -1033,7 +1018,7 @@ function get_personnel_person ( $args = array() ) {
 
 //
 add_shortcode('display_event_program_items', 'get_event_program_items');
-function get_event_program_items( $atts = [] ) {
+function get_event_program_items( $atts = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active();
@@ -1173,7 +1158,7 @@ function get_event_program_items( $atts = [] ) {
 			
 			} else if ( empty($program_item_label) ) {
 
-				$ts_info .= "<!-- program_item_label is empty >> use title in left col -->";
+				$ts_info .= "program_item_label is empty >> use title in left col<br />";
 				
 			}
 		*/
@@ -1443,14 +1428,14 @@ function get_event_program_items( $atts = [] ) {
             if ( empty($program_item_label) && empty($program_item_name) ) {
                 // Empty row -- no label, no item
                 $delete_row = true;
-                $row_info .= "<!-- [$i] delete the row, because everything is empty. -->";
+                $row_info .= "[$i] delete the row, because everything is empty.<br />";
             } else if ( ( $program_item_label == "x" || $program_item_label == "")
                 && ( $program_item_label == "x" || $program_item_label == "*NULL*" || $program_item_label == "" ) 
                 && ( $program_item_name == "x" || $program_item_name == "*NULL*" || $program_item_name == "" ) 
                ) {
                 // Both label and item are either placeholder junk or empty
                 $delete_row = true;
-                $row_info .= "<!-- [$i] delete the row, because everything is meaningless. -->";
+                $row_info .= "[$i] delete the row, because everything is meaningless.<br />";
             } else if ( $program_item_label == "*NULL*" || $program_item_name == "*NULL*" ) {
                 // TODO: ???
                 if ( $program_item_label == "*NULL*" ) { $program_item_label = ""; }
@@ -1467,10 +1452,10 @@ function get_event_program_items( $atts = [] ) {
                 //sdg_log( "divline1", $do_log );
                 //sdg_log( "program row to be deleted:", $do_log );
                 //sdg_log( print_r($row, true), $do_log );
-                $row_info .= "<!-- row: ".print_r($row, true)." -->";
-                $row_info .= "<!-- [$i] program row to be deleted -->";
-                $row_info .= "<!-- [$i] program row: item_label_txt='".$row['item_label_txt']."'; item_label='".$row['item_label']."'; program_item_txt='".$row['program_item_txt']."' -->";
-                //$row_info .= "<!-- [$i] program row: program_item='".print_r($row['program_item'], true)."' -->";
+                $row_info .= "row: ".print_r($row, true)."<br />";
+                $row_info .= "[$i] program row to be deleted<br />";
+                $row_info .= "[$i] program row: item_label_txt='".$row['item_label_txt']."'; item_label='".$row['item_label']."'; program_item_txt='".$row['program_item_txt']."'<br />";
+                //$row_info .= "[$i] program row: program_item='".print_r($row['program_item'], true)."'<br />";
                 
                 // ... but only run the action if this is the first deletion for this post_id in this round
                 // ... because if a row has already been deleted then the row indexes will have changed for all the personnel rows
@@ -1478,21 +1463,21 @@ function get_event_program_items( $atts = [] ) {
                 if ( $deletion_count == 0 && $do_deletions == true ) {
 
                     if ( delete_row('program_items', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
-                        $row_info .= "<!-- [program row $i deleted] -->";
+                        $row_info .= "[program row $i deleted]<br />";
                         $deletion_count++;
                         //sdg_log( "[program row $i deleted successfully]", $do_log );
                     } else {
-                        $row_info .= "<!-- [deletion failed for program row $i] -->";
+                        $row_info .= "[deletion failed for program row $i]<br />";
                         //sdg_log( "[failed to delete program row $i]", $do_log );
                     }
                     
                 } else {
                     
                     if ( $do_deletions == true ) {
-                        $row_info .= "<!-- [$i] row to be deleted on next round due to row_index issues. -->";
+                        $row_info .= "[$i] row to be deleted on next round due to row_index issues.<br />";
                         //sdg_log( "row to be deleted on next round due to row_index issues.", $do_log );
                     } else {
-                        $row_info .= "<!-- [$i] row to be deleted when do_deletions is re-enabled. -->";
+                        $row_info .= "[$i] row to be deleted when do_deletions is re-enabled.<br />";
                         //sdg_log( "row to be deleted when do_deletions is re-enabled.", $do_log );
                     }
                 }
@@ -2112,7 +2097,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	//$ts_info .= expandable_text( $exp_args ); // Not working yet
 	//
 	//$ts_info .= ": <pre>".print_r($row, true)."</pre>";
-	//$ts_info .= "<!-- <pre>".print_r($row, true)."</pre> -->";
+	//$ts_info .= "<pre>".print_r($row, true)."</pre>";
 						
 	// Is a row_type set?
 	if ( isset($row['row_type']) && $row['row_type'] != "" ) {	
@@ -2430,7 +2415,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	if ( ! ($row_type_update || $arr_field_updates || $arr_field_deletions ) ) {
 		
 		$ts_info .= "No updates required for this row.<br />";
-		$ts_info .= "<!-- ".$row_as_txt." -->"; // tft
+		$ts_info .= $row_as_txt."<br />";
 		
 	} else {
 	
@@ -2517,24 +2502,24 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 
 		$label_update_required = true;
 		$item_label = get_the_title($row['item_label_old'][0]);
-		$ts_info .= "<!-- item_label_old[0]: ".$row['item_label_old'][0]." -->";
+		$ts_info .= "item_label_old[0]: ".$row['item_label_old'][0]."<br />";
 
 	} else if ( isset($row['item_label_old'] ) && $row['item_label_old'] != "" ) { 
 
 		$label_update_required = true;
 		$item_label = get_the_title($row['item_label_old']);
-		$ts_info .= "<!-- item_label_old: ".print_r($row['item_label_old'], true)." -->";
+		$ts_info .= "item_label_old: ".print_r($row['item_label_old'], true)."<br />";
 
 	}
 	// Fill in Placeholder -- see if a matching record can be found to fill in a proper item_label
 	if ( ($label_update_required == true || $placeholder_label == true) && $run_updates == true ) {
 		$title_to_match = $item_label;
-		$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+		$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'repeater_name' => 'program_items', 'field_name' => 'item_label', 'taxonomy' => true, 'display' => $display );
 		$match_result = match_placeholder( $match_args );
 		$ts_info .= $match_result;
 	} else {
-		$ts_info .= "<!-- NO match_placeholder for program_item_label -->";
+		$ts_info .= "NO match_placeholder for program_item_label<br />";
 		$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 	}
 	
@@ -2545,14 +2530,14 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 
 		if ( isset($row['program_item_title_for_matching']) && $row['program_item_title_for_matching'] != "" ) {
 			$title_to_match = $row['program_item_title_for_matching'];
-			//$row_info .= "<!-- title_to_match = program_item_title_for_matching -->";
+			//$row_info .= "title_to_match = program_item_title_for_matching<br />";
 		} else {
 			$title_to_match = $program_item_name;
-			//$row_info .= "<!-- title_to_match = program_item_name -->";
+			//$row_info .= "title_to_match = program_item_name<br />";
 		}
-		//$row_info .= "<!-- title_to_match: [$title_to_match] -->";
+		//$row_info .= "title_to_match: [$title_to_match]<br />";
 
-		$ts_info .= "<!-- seeking match for placeholder value: '$title_to_match' -->";
+		$ts_info .= "seeking match for placeholder value: '$title_to_match'<br />";
 		$match_args = array('index' => $i, 'post_id' => $post_id, 'item_title' => $title_to_match, 'item_label' => $program_item_label, 'repeater_name' => 'program_items', 'field_name' => 'program_item' ); // , 'display' => $display
 		$match_result = match_placeholder( $match_args );
 		$ts_info .= $match_result;
@@ -2561,7 +2546,7 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 	if ( $match_result == true ) {
 		//
 	} else {
-		$ts_info .= "<!-- NO match_placeholder for program_item_name -->";
+		$ts_info .= "NO match_placeholder for program_item_name<br />";
 		$ts_info .= sdg_add_post_term( $post_id, 'program-item-placeholders', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
 	}
 	*/
@@ -2572,7 +2557,7 @@ function match_program_placeholders( $row_category = null, $row = null ) { // ma
 // Phasing this out in favor of the subsequent more general fcn
 // Clean up Event Personnel: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_personnel_cleanup', 'event_personnel_cleanup');
-function event_personnel_cleanup( $atts = [] ) {
+function event_personnel_cleanup( $atts = array() ) {
 	
     // Not an admin? Don't touch my database!
     if ( !current_user_can('administrator') ) { return false; }
@@ -2693,12 +2678,12 @@ function event_personnel_cleanup( $atts = [] ) {
             }
                     
                 // Remove row via ACF function -- ???
-                    /*if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
-                        $row_info .= "<!-- [personnel row $i deleted] -->";
+                /*if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
+                        $row_info .= "[personnel row $i deleted]<br />";
                         $deletion_count++;
                         sdg_log( "[personnel row $i deleted successfully]", $do_log );
                     } else {
-                        $row_info .= "<!-- [deletion failed for personnel row $i] -->";
+                        $row_info .= "[deletion failed for personnel row $i]<br />";
                         sdg_log( "[failed to delete personnel row $i]", $do_log );
                     }*/
             
@@ -2713,7 +2698,7 @@ function event_personnel_cleanup( $atts = [] ) {
             //$arr_program_items .= get_event_program_items( $post_id, true, 'dev' );
             
             $info .= $post_info;
-            $info .= '</div>';
+            $info .= '</div>'; // class="code"
             
         }
         
@@ -2731,7 +2716,7 @@ function event_personnel_cleanup( $atts = [] ) {
 
 // Clean up Event Program Items: update row_type; fill in real values from placeholders; remove obsolete/orphaned postmeta
 add_shortcode('event_program_cleanup', 'event_program_cleanup');
-function event_program_cleanup( $atts = [] ) {
+function event_program_cleanup( $atts = array() ) {
 
 	// Not an admin? Don't touch my database!
     if ( !current_user_can('administrator') ) { return false; }
@@ -2799,7 +2784,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
-			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
+			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			
 		}
 		
@@ -2903,7 +2888,7 @@ function event_program_cleanup( $atts = [] ) {
 			
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
-			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
+			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 		
 		}
 		
@@ -2948,7 +2933,7 @@ function event_program_cleanup( $atts = [] ) {
 						$post_info .= $arr_row_info['info'];
 						$row_errors = $arr_row_info['errors'];
 						if ( $row_errors ) { $post_errors = true; $post_info .= "row_errors!<br />"; } //else { $post_info .= "( no row_errors )<br />"; }
-						$post_info .= '</div>';
+						$post_info .= '</div>'; // program_row
 						$i++;				
 					}
 				} else {
@@ -2968,7 +2953,7 @@ function event_program_cleanup( $atts = [] ) {
 				}
 		
 				$info .= $post_info;
-				$info .= '</div>';
+				$info .= '</div>'; // post
 			
 			}
 			
@@ -3032,11 +3017,11 @@ function event_program_cleanup( $atts = [] ) {
 					
 					// Remove row via ACF function -- ???
 						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
-						//	$row_info .= "<!-- [personnel row $i deleted] -->";
+						//	$row_info .= "[personnel row $i deleted]<br />";
 						//	$deletion_count++;
 						//	sdg_log( "[personnel row $i deleted successfully]", $do_log );
 						//} else {
-						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
+						//	$row_info .= "[deletion failed for personnel row $i]<br />";
 						//	sdg_log( "[failed to delete personnel row $i]", $do_log );
 						//}
 			
@@ -3102,7 +3087,7 @@ function event_program_cleanup( $atts = [] ) {
 		
 				$result = new WP_Query( $wp_args );
 				$posts = $result->posts;
-				$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
+				$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			
 			}
 		
@@ -3229,7 +3214,7 @@ function event_program_cleanup( $atts = [] ) {
 			
 			$result = new WP_Query( $wp_args );
 			$posts = $result->posts;
-			$info .= "<!-- wp_args: <pre>".print_r($wp_args, true)."</pre> -->";
+			$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			
 		}
 		
@@ -3347,11 +3332,11 @@ function event_program_cleanup( $atts = [] ) {
 					
 					// Remove row via ACF function -- ???
 						//if ( delete_row('personnel', $i, $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/delete_row/ -- syntax: delete_row($selector, $row_num, $post_id) 
-						//	$row_info .= "<!-- [personnel row $i deleted] -->";
+						//	$row_info .= "[personnel row $i deleted]<br />";
 						//	$deletion_count++;
 						//	sdg_log( "[personnel row $i deleted successfully]", $do_log );
 						//} else {
-						//	$row_info .= "<!-- [deletion failed for personnel row $i] -->";
+						//	$row_info .= "[deletion failed for personnel row $i]<br />";
 						//	sdg_log( "[failed to delete personnel row $i]", $do_log );
 						//}
 			
@@ -3385,6 +3370,7 @@ function event_program_cleanup( $atts = [] ) {
     // .....
     
     $info = '<div class="info">'.$info.'</div>';
+    //if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     return $info;
     
 }
@@ -3570,18 +3556,18 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
-    // Init vars    
+    // Init vars
     $ts_info = "";
     $post_id = $EM_Event->post_id;
     //$event_id = $EM_Event->ID;
-    $ts_info .= "<!-- [sdgp] EM post_id: $post_id; -->";
-    //$ts_info .= "<!-- EM result: $result -->";
+    //$ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />"; // breaks layout?
+    //$ts_info .= "EM result: $result<br />";
     
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
     
     // Get the formatted event title
 	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
-    $ts_info .= "<!-- [sdgp] title_args: ".print_r($title_args,true)." -->";
+    //$ts_info .= "[sdgp] title_args: ".print_r($title_args,true)."<br />"; // breaks layout?
     $event_title = sdg_post_title( $title_args );
     
     if ( $result == '#_EVENT_LIST_ITEM' ) {
@@ -3591,14 +3577,12 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     } else if ( $result == '#_EVENTNAME' ) {
     
     	$replace = $event_title;
-    	//$replace .= " [_EVENTNAME] >> ".$event_title." << ";
-    	//$replace .= $ts_info;
+    	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
     
     } else if ( $result == '#_EVENTLINK' ) {
         
         $replace = $event_title;
-        //$replace .= " [_EVENTLINK] >> ".$event_title." << ";
-        //$replace .= $ts_info;
+        //$ts_info .= " [_EVENTLINK] >> ".$event_title." << ";
         
     } else if ( $result == '#_EDITEVENTLINK' ) {
         
@@ -3634,48 +3618,34 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
     } else if ( $result == '#_EVENTIMAGE' || $result == '#_EVENTIMAGE{250,250}' ) {
         
-        //if ( is_singular('event') ) { $replace .= $ts_info; return $replace; } // tft
-        
-        // Modified version of default to actually show image & caption only under certain circumstances
-        
+        // Modified version of default to actually show image & caption only under certain circumstances        
         $show_image = true;
         
         $featured_image_display = get_field('featured_image_display', $post_id);
-        $ts_info .= "<!-- [sdgp] featured_image_display: ".$featured_image_display." -->";
+        $ts_info .= "[sdgp] featured_image_display: ".$featured_image_display."<br />";
         
-        if ( !is_archive() && !is_page() ) { //&& ! ( is_page() && $post_id == get_the_ID() )
+        if ( !is_archive() && !is_page() ) {
         
-        	$ts_info .= "<!-- [sdgp] !is_archive() && !is_page() -->";
+        	$ts_info .= "[sdgp] !is_archive() && !is_page()<br />";
         	
         	if ( $featured_image_display == "thumbnail" ) {
         	
         		$show_image = false;
-        		$ts_info = "<!-- [sdgp] featured_image_display: $featured_image_display -->";
+        		$ts_info = "[sdgp] featured_image_display: $featured_image_display<br />";
         		
-        	} else if ( is_singular('event') && function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) ) {
+        	} else if ( is_singular('event') ) { //&& function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id )
 				
-				$ts_info .= "<!-- [sdgp] is_singular('event') -->";
+				$ts_info .= "[sdgp] is_singular('event')<br />";
 				
-				$webcast_status = get_webcast_status( $post_id );
-				$webcast_format = get_field('webcast_format', $post_id);
-				$video_id = get_field('video_id', $post_id);
-				if ( $webcast_format == "video" ) {
-					$url_ondemand = get_field('url_ondemand', $post_id);
-				} else if ( $webcast_format == "youtube_list" ) {
-					$yt_series_id = get_field('yt_series_id', $post_id);
-					$yt_list_id = get_field('yt_list_id', $post_id);
-				}
-				
-				$ts_info .= "<!-- [sdgp] webcast_status: $webcast_status; webcast_format: $webcast_format; video_id: $video_id -->";
-				
-				// If we've got a video_id and the status is live or on demand, then don't show the image		
-				if ( ( !empty($video_id) && $webcast_format != "audio" && $webcast_format != "video_as_audio" &&
-					( $webcast_status == "live" || $webcast_status == "on_demand" || $webcast_format == "vimeo" ) ) 
-					|| ( $webcast_format == "video" && !empty($url_ondemand) ) 
-					|| ( $webcast_format == "youtube_list" && !empty($yt_series_id) && !empty($yt_list_id) ) 
-				   ) { 
+				$player_status = get_media_player( $post_id, true, 'above', 'video' ); // get_media_player ( $post_id = null, $position = 'above', $media_type = 'video', $status_only = false, $url = null )
+				$ts_info .= "player_status: ".$player_status."<br />";
+				if ( $player_status == "ready" ) {
 					$show_image = false;
-					$ts_info = "<!-- [sdgp] show video, not image -->";
+					$ts_info = "[sdgp] show video, not image<br />";
+				} else {
+					// If player_status is NOT ready, get some TS info -- tft
+					$media_info = get_media_player( $post_id, false, 'above' );
+					$ts_info .= "media_player ts: ".$media_info['ts_info'];
 				}
 								
 			}
@@ -3683,13 +3653,13 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         
         if ( $show_image == true ) {
             
-            $ts_info .= "<!-- [sdgp] show_image is TRUE -->";
+            $ts_info .= "[sdgp] show_image is TRUE<br />";
             
             // Is there in fact an image? If not, try to find one some other way
             // TODO: generalize from STC to something more widely applicable
             if ( function_exists('sdg_post_thumbnail') ) { // empty($replace) && 
             	
-            	$ts_info .= "<!-- [sdgp] get image using sdg_post_thumbnail -->";
+            	$ts_info .= "[sdgp] get image using sdg_post_thumbnail<br />";
             	
             	if ( is_singular('event') ) {
             		$img_size = "full";
@@ -3702,8 +3672,8 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             	$img_args = array( 'post_id' => $post_id, 'format' => $format, 'img_size' => $img_size, 'sources' => "all", 'echo' => false );
             	$img_tag = sdg_post_thumbnail ( $img_args );
             	
-            	//if ( empty($img_tag) ) { $ts_info .= "<!-- img_tag is EMPTY! for post_id: $post_id: format: $format; img_size: $img_size; sources: all; echo: false -->"; }
-            	if ( empty($img_tag) ) { $ts_info .= "<!-- [sdgp] img_tag is EMPTY! for img_args: ".print_r($img_args, true)." -->"; } else { $ts_info .= "<!-- [sdgp] img_tag found -->"; }
+            	//if ( empty($img_tag) ) { $ts_info .= "img_tag is EMPTY! for post_id: $post_id: format: $format; img_size: $img_size; sources: all; echo: false<br />"; }
+            	if ( empty($img_tag) ) { $ts_info .= "[sdgp] img_tag is EMPTY! for img_args: ".print_r($img_args, true)."<br />"; } else { $ts_info .= "[sdgp] img_tag found<br />"; }
             	
             	//if ( !empty($img_tag) && $result == '#_EVENTIMAGE{250,250}' ) { $classes .= " float-left"; }
             	
@@ -3719,18 +3689,16 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $replace = $img_tag;
             //$replace = '<div class="'.$classes.'">'.$img_tag.'</div>';
             //$replace .= $caption;
-            //$replace .= "<!-- [sdgp] sdg_placeholders -->";
+            //$replace .= "[sdgp] sdg_placeholders<br />";
             
         } else {
         	
-        	$ts_info .= "<!-- [sdgp] show_image is FALSE -->";
+        	$ts_info .= "[sdgp] show_image is FALSE<br />";
         	        	
             $replace = "<br />"; // If there's no featured image, add a line break to keep the spacing
-            $ts_info .= "<!-- [sdgp] sdg-calendar >> sdg_placeholders -->";
+            //$ts_info .= "[sdgp] sdg-calendar >> sdg_placeholders<br />";
             
         }
-        
-        if ( $do_ts ) { $replace .= $ts_info; }
         
     } else if ( $result == '#_DAYTITLE' ) {
         
@@ -3783,15 +3751,17 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 			
 		}
 		
-		$info .= '</div>';
-    
+		$info .= '</div>'; // div class="single_event_registration"
+		
     	$replace = $info;
     
     } else {
     
-    	//$replace .= "result: ".print_r($result,true)." -->";
+    	//$replace .= "result: ".print_r($result,true)."<br />";
     	
     }
+    
+    if ( $do_ts && !empty($ts_info) ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $replace;
 }
@@ -3941,7 +3911,7 @@ function em_args_mod($args){
     
     if ( isset($args['header_format']) ) { // && ! is_page('events')
               
-        //$args['header_format'] = str_replace('[day_title the_date="#s"]', '<!-- TBD: day_title -->', $args['header_format']); // ok for testing
+        //$args['header_format'] = str_replace('[day_title the_date="#s"]', 'TBD: day_title<br />', $args['header_format']); // ok for testing
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', do_shortcode('[day_title the_date="2020-11-22"]'), $args['header_format']); // tft -- ok -- but not very useful
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', "do_shortcode('[day_title the_date=\"#s\"]')", $args['header_format']); // nope
         //$args['header_format'] = str_replace('[day_title the_date="#s"]', do_shortcode('[day_title the_date="#s"]'), $args['header_format']); // almost -- but shortcode can't get actual val of #s
@@ -4188,8 +4158,14 @@ add_filter('em_cp_event_recurring_public','__return_true');
 
 // Special Date Content
 function get_special_date_content( $the_date = null ) {
-
+	
+	// TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
 	$info = "";
+	$ts_info = "";
 	
 	if ( empty($the_date) ) { return null; }
 	
@@ -4198,9 +4174,9 @@ function get_special_date_content( $the_date = null ) {
 	}
 	
 	//
-	$ts_info = "<!-- get_special_date_content -->";
-    $ts_info .= "<!-- the_date: '$the_date' -->";
-    $ts_info .= "<!-- print_r the_date: '".print_r($the_date, true)."' -->"; // tft
+	$ts_info = "get_special_date_content<br />";
+    $ts_info .= "the_date: '$the_date'<br />";
+    $ts_info .= "print_r the_date: '".print_r($the_date, true)."'<br />"; // tft
     
     // NB: set event record to "All day" and assign 'special-notice' event category
     
@@ -4230,8 +4206,7 @@ function get_special_date_content( $the_date = null ) {
     	
     	$timestamp = strtotime($the_date);
         $fixed_date_str = date("F d", $timestamp ); // day w/ leading zeros
-        $ts_info .= "<!-- timestamp: '$timestamp' -->\n";
-        $info .= $ts_info;
+        $ts_info .= "timestamp: '$timestamp'<br />";
         
         $info .= '<div class="message centered special-notice scalloped">';
     	foreach ( $posts as $post ) {
@@ -4245,11 +4220,13 @@ function get_special_date_content( $the_date = null ) {
         $info .= '</div>';
         
     } else {
-    	
-    	$info .= $ts_info;
-    	$info .= "<!-- No posts found by fcn get_special_date_content for date $the_date -->";
+    
+    	$ts_info .= "No posts found by fcn get_special_date_content for date $the_date<br />";
     	
     }
+    
+    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    	
 	return $info;
 	
 }
@@ -4320,17 +4297,16 @@ function sdg_custom_event_search_build_sql_conditions($conditions, $args){
 
 // Program/Event info via Event CPT & ACF -- for Admin use/Troubleshooting
 add_shortcode('display_event_stats', 'display_event_stats');
-function display_event_stats( $post_id = null ) {
+function display_event_stats( $atts = array() ) {
 	
 	$info = ""; // init
     
-    // TODO: determine whether this is somehow better than the usual extra($args) approach...
-    extract( shortcode_atts( 
-        array( 
-            'post_id' => 'post_id'
-         ), $post_id ) ); 
+    // Extract args
+	$args = shortcode_atts( array(
+		'post_id'	=> get_the_ID(),
+    ), $atts );
+	extract( $args );
     
-	if ( $post_id == null ) { $post_id = get_the_ID(); }
     $info .= 'ID: <span class="nb">'.$post_id.'</span>; ';
 	$post   = get_post( $post_id );
     $post_meta = get_post_meta( $post_id );
@@ -4348,12 +4324,12 @@ function display_event_stats( $post_id = null ) {
 	$program_items = get_field('program_items', $post_id);
     if ( $program_items && count($program_items) > 0 ) { $info .= '<span class="nb">'.count($program_items).'</span>'." prog.; "; }
 	
-    //Variable: Additional characters which will be considered as a 'word'
-    $char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
-    //$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
-    //$char_list = '&@'; /** If you want count certain symbols as 'words' **/
-    $word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
-    $info .= '[<span class="nb">'.$word_count.'</span> words]';
+	//Variable: Additional characters which will be considered as a 'word'
+	$char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
+	//$char_list = '0123456789'; /** If you want to count numbers as 'words' **/
+	//$char_list = '&@'; /** If you want count certain symbols as 'words' **/
+	$word_count = str_word_count(strip_tags($post->post_content), 0, $char_list);
+	$info .= '[<span class="nb">'.$word_count.'</span> words]';
     
     //$info .= "<pre>".print_r($post,true)."</pre>";
     //$info .= "<pre>".print_r($post_meta,true)."</pre>";    
