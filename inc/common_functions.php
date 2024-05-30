@@ -918,12 +918,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
     
     // Webcast?
-<<<<<<< HEAD
-    if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV ) ) {
-=======
-    ///function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) 
     if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
->>>>>>> dev
     	$webcast_status = get_webcast_status( $post_id );
     	//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
