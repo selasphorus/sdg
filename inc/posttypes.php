@@ -204,7 +204,10 @@ if ( in_array('snippets', $sdg_modules ) ) {
 /*** PEOPLE & ENSEMBLES ***/
 
 // TODO: change "person" to "individual", to better include plants and animals? w/ ACF field groups based on category/species
-if ( in_array('people', $sdg_modules ) ) {
+//if ( is_plugin_active( 'plugin-directory/plugin-file.php' ) ) {
+//if ( post_type_exists('person') ) {}
+// WIP -- transition to separate plugins including WHx4
+if ( in_array('people', $sdg_modules ) && !post_type_exists('person') ) {
 	// Person
 	function register_post_type_person() {
 
@@ -253,7 +256,7 @@ if ( in_array('people', $sdg_modules ) ) {
 // TODO/WIP: merge Ensemble/Organization/Group into a single post type
 // TODO: Figure out how to allow for individual sites to set labels to customize -- e.g. "Ensembles" for STC
 
-if ( in_array('groups', $sdg_modules ) ) {
+if ( in_array('groups', $sdg_modules ) && !post_type_exists('group') ) {
 	// Group
 	function register_post_type_group() {
 

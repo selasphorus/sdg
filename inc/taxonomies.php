@@ -346,6 +346,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			'public'               => true,
 			'hierarchical'      => true,
 			'show_ui'           => true,
+			//'show_in_menu' => true,
 			'show_admin_column' => true,
 			'show_in_rest'      => true,
 			'query_var'         => true,
@@ -361,6 +362,7 @@ if ( in_array('people', $sdg_modules ) ) {
 			);
 		}*/	
 		register_taxonomy( 'person_category', [ 'person' ], $args );
+		//register_taxonomy( 'test_tax', array( 0 => 'person' ), $args ),
 	}
 	add_action( 'init', 'register_taxonomy_person_category' );
 	
