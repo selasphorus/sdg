@@ -209,6 +209,7 @@ if ( in_array('snippets', $sdg_modules ) ) {
 // WIP -- transition to separate plugins including WHx4
 //if ( in_array('people', $sdg_modules ) && !post_type_exists('person') ) {
 if ( in_array('people', $sdg_modules ) 
+&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
 && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
 //&& !is_plugin_active( WP_PLUGIN_DIR . '/whx4/whx4.php' ) 
 ) {
