@@ -208,7 +208,10 @@ if ( in_array('snippets', $sdg_modules ) ) {
 //if ( post_type_exists('person') ) {}
 // WIP -- transition to separate plugins including WHx4
 //if ( in_array('people', $sdg_modules ) && !post_type_exists('person') ) {
-if ( in_array('people', $sdg_modules ) && !is_plugin_active( WP_PLUGIN_DIR . '/whx4/whx4.php' ) ) {
+if ( in_array('people', $sdg_modules ) 
+&& in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
+//&& !is_plugin_active( WP_PLUGIN_DIR . '/whx4/whx4.php' 
+) ) {
 	// Person
 	function register_post_type_person() {
 
