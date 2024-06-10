@@ -215,7 +215,7 @@ if ( in_array('people', $sdg_modules ) && !post_type_exists('person') ) {
 		if ( custom_caps() ) { $caps = "person"; } else { $caps = "post"; }
 		
 		$labels = array(
-			'name' => __( 'People', 'sdg' ),
+			'name' => __( 'People [sdg]', 'sdg' ),
 			'singular_name' => __( 'Person', 'sdg' ),
 			'add_new' => __( 'New Person', 'sdg' ),
 			'add_new_item' => __( 'Add New Person', 'sdg' ),
@@ -263,7 +263,7 @@ if ( in_array('groups', $sdg_modules ) && !post_type_exists('group') ) {
 		if ( custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
 		
 		$labels = array(
-			'name' => __( 'Groups', 'sdg' ),
+			'name' => __( 'Groups [sdg]', 'sdg' ),
 			'singular_name' => __( 'Group', 'sdg' ),
 			'add_new' => __( 'New Group', 'sdg' ),
 			'add_new_item' => __( 'Add New Group', 'sdg' ),
