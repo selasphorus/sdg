@@ -261,7 +261,10 @@ if ( in_array('people', $sdg_modules )
 // TODO/WIP: merge Ensemble/Organization/Group into a single post type
 // TODO: Figure out how to allow for individual sites to set labels to customize -- e.g. "Ensembles" for STC
 
-if ( in_array('groups', $sdg_modules ) && !post_type_exists('group') ) {
+if ( in_array('groups', $sdg_modules ) 
+&& !post_type_exists('group') 
+&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
+) {
 	// Group
 	function register_post_type_group() {
 
