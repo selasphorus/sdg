@@ -341,7 +341,9 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( $format != "singular" && $post_type == "sermon" ) {
     	if ( get_field('author_image_for_archive') ) {
     		$img_id = get_author_img_id ( $post_id );
-    	}    	
+    	} else {
+    		$ts_info .= "author_image_for_archive set to false<br />";
+    	}
     }
 
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
