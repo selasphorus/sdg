@@ -1812,7 +1812,8 @@ if ( in_array('music', $sdg_modules ) ) {
 // ACF Bi-directional fields
 // WIP!
 // https://www.advancedcustomfields.com/resources/bidirectional-relationships/
-if ( !function_exists( 'bidirectional_acf_update_value' ) ) {
+if ( !function_exists( 'bidirectional_acf_update_value' ) 
+ && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) ) {
 	function bidirectional_acf_update_value( $value, $post_id, $field  ) {	
 	
 		// vars
@@ -1895,7 +1896,8 @@ if ( !function_exists( 'bidirectional_acf_update_value' ) ) {
 }
 
 // WIP!
-if ( !function_exists( 'acf_update_related_field_on_save' ) ) {
+if ( !function_exists( 'acf_update_related_field_on_save' ) 
+ && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) ) {
 	function acf_update_related_field_on_save ( $post_id ) {	
 	
 		// TODO: figure out how to handle repeater field sub_fields -- e.g. repertoire_events << event program_items
