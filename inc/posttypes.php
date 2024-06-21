@@ -1812,7 +1812,6 @@ if ( in_array('music', $sdg_modules ) ) {
 // ACF Bi-directional fields
 // WIP!
 // https://www.advancedcustomfields.com/resources/bidirectional-relationships/
-
 if ( !function_exists( 'bidirectional_acf_update_value' ) ) {
 	function bidirectional_acf_update_value( $value, $post_id, $field  ) {	
 	
