@@ -12,12 +12,14 @@ if ( !function_exists( 'add_action' ) ) {
 $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
 
-function custom_caps() {
-	$use_custom_caps = false;
-	if ( isset($options['use_custom_caps']) && !empty($options['use_custom_caps']) ) {
-		$use_custom_caps = true;
+if ( !function_exists( 'custom_caps' ) ) {
+	function custom_caps() {
+		$use_custom_caps = false;
+		if ( isset($options['use_custom_caps']) && !empty($options['use_custom_caps']) ) {
+			$use_custom_caps = true;
+		}
+		return $use_custom_caps;
 	}
-	return $use_custom_caps;
 }
 
 // TODO: review and revise capabilities to make sure they'll be compatible for sites with and without sophisticated permissions management (e.g. Members plugin)
