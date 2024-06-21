@@ -12,7 +12,7 @@ if ( !function_exists( 'add_action' ) ) {
 $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
 
-if ( !function_exists( 'custom_caps' ) ) {
+if ( !function_exists( 'custom_caps' && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) ) {
 	function custom_caps() {
 		$use_custom_caps = false;
 		if ( isset($options['use_custom_caps']) && !empty($options['use_custom_caps']) ) {
