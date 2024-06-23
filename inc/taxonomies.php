@@ -323,7 +323,10 @@ add_action( 'init', 'register_taxonomy_page_tag' );
 
 /*** Taxonomies for PEOPLE ***/
 
-if ( in_array('people', $sdg_modules ) ) {
+if ( in_array('people', $sdg_modules )
+	&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
+	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) 
+	) {
 
 	// Custom Taxonomy: People Category
 	function register_taxonomy_person_category() {
@@ -408,7 +411,11 @@ if ( in_array('people', $sdg_modules ) ) {
 
 /*** Taxonomies for GROUPS (ORGS/ENSEMBLES) ***/
 
-if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules ) || in_array('ensembles', $sdg_modules ) ) {
+if ( in_array('groups', $sdg_modules ) || in_array('organizations', $sdg_modules ) || in_array('ensembles', $sdg_modules )
+	&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
+	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) 
+	) {
+
 	// Custom Taxonomy: Group Category
 	function register_taxonomy_group_category() {
 		$labels = array(
