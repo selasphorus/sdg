@@ -553,10 +553,10 @@ function get_event_personnel( $atts = array() ) {
     } // end if
     */
     if ( empty($rows) ) { $rows = array(); } //$rows = (!empty(get_field('personnel', $post_id))) ? 'default' : array();
-    $ts_info .= count($rows)." personnel row(s)<br />"; // tft
+    if ( is_array($rows) ) { $ts_info .= count($rows)." personnel row(s)<br />"; }
     
     // Loop through the personnel rows and accumulate data for display
-	if ( count($rows) > 0 ) {
+	if ( is_array($rows) && count($rows) > 0 ) {
         
         $table_classes = "event_program program personnel ".$program_layout;
         
