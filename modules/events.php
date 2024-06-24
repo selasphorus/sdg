@@ -4319,10 +4319,10 @@ function display_event_stats( $atts = array() ) {
     
 	// Get the personnel & program_items repeater field values (ACF)
 	$personnel = get_field('personnel', $post_id);
-    if ( $personnel && count($personnel) > 0 ) { $info .= '<span class="nb">'.count($personnel).'</span>'." pers.; "; }
+    if ( is_array($personnel) && count($personnel) > 0 ) { $info .= '<span class="nb">'.count($personnel).'</span>'." pers.; "; }
 	
 	$program_items = get_field('program_items', $post_id);
-    if ( $program_items && count($program_items) > 0 ) { $info .= '<span class="nb">'.count($program_items).'</span>'." prog.; "; }
+    if ( is_array($program_items) && count($program_items) > 0 ) { $info .= '<span class="nb">'.count($program_items).'</span>'." prog.; "; }
 	
 	//Variable: Additional characters which will be considered as a 'word'
 	$char_list = ""; /** MODIFY IF YOU LIKE.  Add characters inside the single quotes. **/
