@@ -820,7 +820,11 @@ if ( in_array('music', $sdg_modules ) ) {
 
 /*** Taxonomies for EVENT PROGRAMS ***/
 
-if ( in_array('events', $sdg_modules ) ) {
+if ( in_array('events', $sdg_modules )
+	&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
+	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
+	) 
+	{
 
 	// Custom Taxonomy: Person Role
 	function register_taxonomy_person_role() {
