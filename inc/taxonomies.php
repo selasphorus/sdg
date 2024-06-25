@@ -1118,7 +1118,9 @@ if ( in_array('venues', $sdg_modules ) ) {
 
 /*** Taxonomies for ORGANS ***/
 
+// TODO: generalize as instrument/instrument_tag
 if ( in_array('organs', $sdg_modules ) ) {
+
 	// Custom Taxonomy: Action Type
 	function register_taxonomy_action_type() {
 		$labels = array(
@@ -1156,6 +1158,43 @@ if ( in_array('organs', $sdg_modules ) ) {
 		register_taxonomy( 'action_type', [ 'organ' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_action_type' );
+	
+	// Custom Taxonomy: Organ Tag
+	function nycago_register_taxonomy_organ_tag() {
+		$cap = 'organ';
+		$labels = array(
+			'name'              => _x( 'Organ Tags', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Organ Tag', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Organ Tags' ),
+			'all_items'         => __( 'All Organ Tags' ),
+			'parent_item'       => __( 'Parent Organ Tag' ),
+			'parent_item_colon' => __( 'Parent Organ Tag:' ),
+			'edit_item'         => __( 'Edit Organ Tag' ),
+			'update_item'       => __( 'Update Organ Tag' ),
+			'add_new_item'      => __( 'Add New Organ Tag' ),
+			'new_item_name'     => __( 'New Organ Tag Name' ),
+			'menu_name'         => __( 'Organ Tags' ),
+		);
+		$args = array(
+			'labels'            => $labels,
+			'description'          => '',
+			'public'               => true,
+			'hierarchical'      => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'capabilities'         => array(
+				'manage_terms'  =>   'manage_'.$cap.'_terms',
+				'edit_terms'    =>   'edit_'.$cap.'_terms',
+				'delete_terms'  =>   'delete_'.$cap.'_terms',
+				'assign_terms'  =>   'assign_'.$cap.'_terms',
+			),
+			'query_var'         => true,
+			'rewrite'           => [ 'slug' => 'organ_tag' ],
+		);
+		register_taxonomy( 'action_type', [ 'organ' ], $args );
+	}
+	add_action( 'init', 'nycago_register_taxonomy_organ_tag' );
+	
 }
 
 /*** Taxonomies for LINKS ***/

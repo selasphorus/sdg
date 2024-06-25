@@ -1280,7 +1280,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'menu_icon'			=> 'dashicons-playlist-audio',
 			'menu_position'		=> null,
 			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-			'taxonomies'		=> array( 'admin_tag' ),
+			'taxonomies'		=> array( 'action_type', 'organ_tag', 'admin_tag' ),
 			'show_in_rest'		=> false, // i.e. false = use classic, not block editor
 		);
 
@@ -1456,6 +1456,8 @@ if ( in_array('organs', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'register_post_type_stop' );
+	
+	// Rank -- TBD
 
 }
 
