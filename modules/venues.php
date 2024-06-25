@@ -89,17 +89,17 @@ function get_cpt_venue_content( $post_id = null ) {
     	// WIP
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
     	$venue_info_ip = get_post_meta( $post_id, 'venue_info_ip', true );
-    	$info .= "venue_info_ip: ".$venue_info_ip."<br />";
+    	$info .= "<strong>venue_info_ip</strong>: ".$venue_info_ip."<br />";
     	$venue_info_vp = get_post_meta( $post_id, 'venue_info_vp', true );
-    	$info .= "venue_info_vp: ".$venue_info_vp."<br />";
+    	$info .= "<strong>venue_info_vp</strong>: ".$venue_info_vp."<br />";
     	$venue_sources = get_post_meta( $post_id, 'venue_sources', true );
-    	$info .= "venue_sources: ".$venue_sources."<br />";
+    	$info .= "<strong>venue_sources</strong>: ".$venue_sources."<br />";
     	$venue_html_ip = get_post_meta( $post_id, 'venue_html_ip', true );
-    	$info .= "venue_html_ip: ".$venue_html_ip."<br />";
+    	$info .= "<strong>venue_html_ip</strong>: ".$venue_html_ip."<br />";
     	$organs_html_ip = get_post_meta( $post_id, 'organs_html_ip', true );
-    	$info .= "organs_html_ip: ".$organs_html_ip."<br />";
+    	$info .= "<strong>organs_html_ip</strong>: ".$organs_html_ip."<br />";
     	$organs_html_vp = get_post_meta( $post_id, 'organs_html_vp', true );
-    	$info .= "organs_html_vp: ".$organs_html_vp."<br />";
+    	$info .= "<strong>organs_html_vp</strong>: ".$organs_html_vp."<br />";
     }
     
     return $info;
