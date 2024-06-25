@@ -82,7 +82,7 @@ function get_cpt_venue_content( $post_id = null ) {
     //$info .= display_postmeta( array('post_id' => $post_id) );
     
     $venue_filename = get_post_meta( $post_id, 'venue_filename', true );
-    $info .= "venue_filename: ".print_r($venue_filename, true)."<br />";
+    $info .= "<strong>venue_filename</strong>: ".print_r($venue_filename, true)."<br />";
     
     if ( !queenbee() ) {
     	// If not queenbee, show content instead of acf_form
