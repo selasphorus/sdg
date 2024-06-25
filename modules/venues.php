@@ -10,6 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** Functions pertaining to CPT: VENUE ***********/
 
+// TODO: generalize beyond NYCAGO-specific usage
 function get_cpt_venue_content( $post_id = null ) {
 	
 	// This function retrieves supplementary info -- the regular content template (content.php) handles title, content, featured image
@@ -82,6 +83,14 @@ function get_cpt_venue_content( $post_id = null ) {
     
     $venue_filename = get_post_meta( $post_id, 'venue_filename', true );
     $info .= "venue_filename: ".print_r($venue_filename, true)."<br />";
+    
+    if ( !queenbee() ) {
+    	// If not queenbee, show content instead of acf_form
+    	// WIP
+    	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
+    	$venue_info_ip = get_post_meta( $post_id, 'venue_info_ip', true );
+    	$info .= "venue_info_ip: ".$venue_info_ip."<br />";
+    }
     
     return $info;
     
