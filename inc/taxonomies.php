@@ -1191,7 +1191,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'organ_tag' ],
 		);
-		register_taxonomy( 'action_type', [ 'organ' ], $args );
+		register_taxonomy( 'organ_tag', [ 'organ' ], $args );
 	}
 	add_action( 'init', 'nycago_register_taxonomy_organ_tag' );
 	
