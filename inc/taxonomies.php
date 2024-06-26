@@ -70,7 +70,7 @@ function register_taxonomy_admin_tag() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'admin_tag' ],
     );
-	/*if ( custom_caps() ) {
+	/*if ( sdg_custom_caps() ) {
 		$cap = 'music';
 		$args['capabilities'] = array(
 			'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -110,7 +110,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'adminnote_category' ],
 		);
-		/*if ( custom_caps() ) {
+		/*if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -150,7 +150,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'data_table' ],
 		);
-		/*if ( custom_caps() ) {
+		/*if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -189,7 +189,7 @@ function register_taxonomy_query_tag() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'query_tag' ],
     );
-	/*if ( custom_caps() ) {
+	/*if ( sdg_custom_caps() ) {
 		$cap = 'XXX';
 		$args['capabilities'] = array(
 			'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -230,7 +230,7 @@ function register_taxonomy_media_category() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'media_category' ],
     );
-    /*if ( custom_caps() ) {
+    /*if ( sdg_custom_caps() ) {
 		$cap = 'XXX';
 		$args['capabilities'] = array(
 			'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -269,7 +269,7 @@ function register_taxonomy_media_tag() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'media_tag' ],
     );
-    /*if ( custom_caps() ) {
+    /*if ( sdg_custom_caps() ) {
 		$cap = 'XXX';
 		$args['capabilities'] = array(
 			'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -358,7 +358,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'project_category' ],
 		);
-		/*if ( custom_caps() ) {
+		/*if ( sdg_custom_caps() ) {
 			$cap = 'project';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -401,7 +401,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'occasion' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -439,7 +439,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'repertoire_category' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -482,7 +482,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'rewrite'           => [ 'slug' => 'instrument' ],
 			//'default_term'         => array( 'name', 'slug', 'description' ),
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -520,7 +520,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'key' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -558,7 +558,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'soloist' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -596,7 +596,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'voicing' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -635,7 +635,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'library_tag' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -675,7 +675,7 @@ if ( in_array('music', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'publication_category' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'music';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -722,7 +722,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'lectionary';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -760,7 +760,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'service_type' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'lectionary';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -799,7 +799,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'season' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'XXX';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -843,7 +843,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'sermon_topic' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'sermon';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -886,7 +886,7 @@ if ( in_array('venues', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'venue_category' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'venue';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -930,7 +930,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'action_type' ],
 		);
-		if ( custom_caps() ) {
+		if ( sdg_custom_caps() ) {
 			$cap = 'organ';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -1011,7 +1011,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'link_category' ],
 		);
-		/*if ( custom_caps() ) {
+		/*if ( sdg_custom_caps() ) {
 			$cap = 'link';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
@@ -1049,7 +1049,7 @@ if ( in_array('links', $sdg_modules ) ) {
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'link_tag' ],
 		);
-		/*if ( custom_caps() ) {
+		/*if ( sdg_custom_caps() ) {
 			$cap = 'link';
 			$args['capabilities'] = array(
 				'manage_terms'  =>   'manage_'.$cap.'_terms',
