@@ -859,46 +859,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 }
 
 /*** Taxonomies for VENUES ***/
-
-if ( in_array('venues', $sdg_modules ) ) {
-	// Custom Taxonomy: Venue Category
-	function register_taxonomy_venue_category() {
-		$labels = array(
-			'name'              => _x( 'Venue Categories', 'taxonomy general name' ),
-			'singular_name'     => _x( 'Venue Category', 'taxonomy singular name' ),
-			'search_items'      => __( 'Search Venue Categories' ),
-			'all_items'         => __( 'All Venue Categories' ),
-			'parent_item'       => __( 'Parent Venue Category' ),
-			'parent_item_colon' => __( 'Parent Venue Category:' ),
-			'edit_item'         => __( 'Edit Venue Category' ),
-			'update_item'       => __( 'Update Venue Category' ),
-			'add_new_item'      => __( 'Add New Venue Category' ),
-			'new_item_name'     => __( 'New Venue Category Name' ),
-			'menu_name'         => __( 'Venue Categories' ),
-		);
-		$args = array(
-			'labels'            => $labels,
-			'description'          => '',
-			'public'               => true,
-			'hierarchical'      => true,
-			'show_ui'           => true,
-			'show_admin_column' => true,
-			'query_var'         => true,
-			'rewrite'           => [ 'slug' => 'venue_category' ],
-		);
-		if ( sdg_custom_caps() ) {
-			$cap = 'venue';
-			$args['capabilities'] = array(
-				'manage_terms'  =>   'manage_'.$cap.'_terms',
-				'edit_terms'    =>   'edit_'.$cap.'_terms',
-				'delete_terms'  =>   'delete_'.$cap.'_terms',
-				'assign_terms'  =>   'assign_'.$cap.'_terms',
-			);
-		}
-		register_taxonomy( 'venue_category', [ 'venue' ], $args );
-	}
-	add_action( 'init', 'register_taxonomy_venue_category' );
-}
+// >>>> WHX4
 
 /*** Taxonomies for ORGANS ***/
 
