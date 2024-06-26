@@ -204,113 +204,9 @@ if ( in_array('snippets', $sdg_modules ) ) {
 }
 
 /*** PEOPLE & ENSEMBLES ***/
-
-// TODO: change "person" to "individual", to better include plants and animals? w/ ACF field groups based on category/species
-//if ( is_plugin_active( 'plugin-directory/plugin-file.php' ) ) {
-//if ( post_type_exists('person') ) {}
-// WIP -- transition to separate plugins including WHx4
-//if ( in_array('people', $sdg_modules ) && !post_type_exists('person') ) {
-if ( in_array('people', $sdg_modules ) 
-	&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
-	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
-	//&& !is_plugin_active( WP_PLUGIN_DIR . '/whx4/whx4.php' ) 
-	) 
-{
-	// Person
-	function register_post_type_person() {
-
-		//if ( custom_caps() ) { $caps = array('person', 'people'); } else { $caps = "post"; }
-		if ( custom_caps() ) { $caps = "person"; } else { $caps = "post"; }
-		
-		$labels = array(
-			'name' => __( 'People [sdg]', 'sdg' ),
-			'singular_name' => __( 'Person', 'sdg' ),
-			'add_new' => __( 'New Person', 'sdg' ),
-			'add_new_item' => __( 'Add New Person', 'sdg' ),
-			'edit_item' => __( 'Edit Person', 'sdg' ),
-			'new_item' => __( 'New Person', 'sdg' ),
-			'view_item' => __( 'View Person', 'sdg' ),
-			'search_items' => __( 'Search People', 'sdg' ),
-			'not_found' =>  __( 'No People Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No People found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable'=> true,
-			'show_ui' 			=> true,
-			'show_in_menu'     	=> true,
-			'query_var'        	=> true,
-			'rewrite'			=> array( 'slug' => 'people' ), // permalink structure slug
-			'capability_type'	=> $caps,
-			'map_meta_cap'		=> true,
-			'has_archive' 		=> true,
-			'hierarchical'		=> false,
-			'menu_icon'			=> 'dashicons-groups',
-			'menu_position'		=> null,
-			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-			'taxonomies'		=> array( 'person_category', 'person_title', 'admin_tag' ), //, 'person_tag'
-			'show_in_rest'		=> false, // false = use classic, not block editor
-		);
-
-		register_post_type( 'person', $args );
-	
-	}
-	add_action( 'init', 'register_post_type_person' );
-	
-}
+// >>>> See WHX4 for person/group CPTs <<<< //
 
 // TODO/WIP: merge Ensemble/Organization/Group into a single post type
-// TODO: Figure out how to allow for individual sites to set labels to customize -- e.g. "Ensembles" for STC
-
-if ( in_array('groups', $sdg_modules ) 
-	&& !post_type_exists('group') 
-	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
-	) 
-	{
-	// Group
-	function register_post_type_group() {
-
-		if ( custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
-		
-		$labels = array(
-			'name' => __( 'Groups [sdg]', 'sdg' ),
-			'singular_name' => __( 'Group', 'sdg' ),
-			'add_new' => __( 'New Group', 'sdg' ),
-			'add_new_item' => __( 'Add New Group', 'sdg' ),
-			'edit_item' => __( 'Edit Group', 'sdg' ),
-			'new_item' => __( 'New Group', 'sdg' ),
-			'view_item' => __( 'View Group', 'sdg' ),
-			'search_items' => __( 'Search Groups', 'sdg' ),
-			'not_found' =>  __( 'No Groups Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No Group found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable'=> true,
-			'show_ui' 			=> true,
-			'show_in_menu'     	=> true,
-			'query_var'        	=> true,
-			'rewrite'			=> array( 'slug' => 'groups' ), // permalink structure slug
-			'capability_type'	=> $caps,
-			'map_meta_cap' 		=> true,
-			'has_archive'  		=> true,
-			'hierarchical' 		=> true,
-			//'menu_icon'			=> 'dashicons-groups',
-			'menu_position'		=> null,
-			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
-			'taxonomies'		=> array( 'admin_tag', 'group_category' ),
-			'show_in_rest'		=> false,    
-		);
-
-		register_post_type( 'group', $args );
-	
-	}
-	add_action( 'init', 'register_post_type_group' );
-}
 
 if ( in_array('ensembles', $sdg_modules ) ) {
 	// Ensemble
@@ -1191,56 +1087,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 }
 
 /*** EVENTS (extended EM) ***/
-
-if ( in_array('events', $sdg_modules )
-	&& !file_exists( WP_PLUGIN_DIR . '/whx4/whx4.php' )
-	&& !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() )
-	) 
-	{
-
-	// Event Series
-	function register_post_type_event_series() {
-
-		if ( custom_caps() ) { $caps = array('event', 'events'); } else { $caps = "post"; }
-		
-		$labels = array(
-			'name' => __( 'Event Series', 'sdg' ),
-			'singular_name' => __( 'Event Series', 'sdg' ),
-			'add_new' => __( 'New Event Series', 'sdg' ),
-			'add_new_item' => __( 'Add New Event Series', 'sdg' ),
-			'edit_item' => __( 'Edit Event Series', 'sdg' ),
-			'new_item' => __( 'New Event Series', 'sdg' ),
-			'view_item' => __( 'View Event Series', 'sdg' ),
-			'search_items' => __( 'Search Event Series', 'sdg' ),
-			'not_found' =>  __( 'No Event Series Found', 'sdg' ),
-			'not_found_in_trash' => __( 'No Event Series found in Trash', 'sdg' ),
-		);
-	
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable'=> true,
-			'show_ui'  			=> true,
-			'show_in_menu' 		=> 'edit.php?post_type=event',
-			'query_var'			=> true,
-			'rewrite'			=> array( 'slug' => 'event-series' ), // permalink structure slug
-			'capability_type'	=> $caps,
-			'map_meta_cap'		=> true,
-			'has_archive' 		=> true,
-			'hierarchical'		=> false,
-			//'menu_icon'			=> 'dashicons-book',
-			'menu_position'		=> null,
-			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-			'taxonomies'		=> array( 'admin_tag' ),
-			'show_in_rest'		=> false,
-		);
-
-		register_post_type( 'event_series', $args );
-	
-	}
-	add_action( 'init', 'register_post_type_event_series' );
-
-}
+// >>>> See WHX4 for event_series CPT <<<< //
 
 /*** ORGANS ***/
 
