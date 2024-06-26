@@ -1211,11 +1211,11 @@ function display_media_player( $atts = array() ) {
     $info = ""; // init
     
     // TODO: handle webcast status considerations
-    if ( post_is_webcast_eligible( $post_id ) ) {
+    /*if ( function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) ) {
         //        
     } else {
         //            
-    }
+    }*/
     
     $media_info = get_media_player( $post_id, false, $position );
     if ( is_array($media_info) ) {
