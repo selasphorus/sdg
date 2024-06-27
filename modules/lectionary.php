@@ -1489,7 +1489,7 @@ add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = array() ) {
 
     // Failsafe -- run this fcn ONLY if logged in as webdev
-    if ( !queenbee() ) { return "You are not authorized to run this operation.<br />"; }
+    if ( !sdg_queenbee() ) { return "You are not authorized to run this operation.<br />"; }
     
 	$info = "";
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";

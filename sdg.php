@@ -31,7 +31,7 @@ $plugin_path = plugin_dir_path( __FILE__ );
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 // Function to check for dev/admin user
-function queenbee() {
+function sdg_queenbee() {
 	$current_user = wp_get_current_user();
 	$username = $current_user->user_login;
 	$useremail = $current_user->user_email;
@@ -588,7 +588,7 @@ function sdg_body_class( $classes ) {
     if ( $devmode ) { $classes[] = 'devmode'; }
     
     // Show troubleshooting info only for webdev
-    if ( function_exists( 'queenbee' ) && queenbee() ) {
+    if ( function_exists( 'queenbee' ) && sdg_queenbee() ) {
         $classes[] = 'queenbee';    
     }
 	
@@ -722,7 +722,7 @@ function devmode_active() {
 	$devmode = get_query_var('dev');
 	if ( $devmode == "true" || $devmode == "yes" ) {
 		return true;        
-	} else if ( is_dev_site() && queenbee() ) {
+	} else if ( is_dev_site() && sdg_queenbee() ) {
         return true;
 	}
 	

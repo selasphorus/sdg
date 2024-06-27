@@ -84,7 +84,7 @@ function get_cpt_venue_content( $post_id = null ) {
     $venue_filename = get_post_meta( $post_id, 'venue_filename', true );
     $info .= '<strong>venue_filename</strong>: <div class="xxx wip">'.print_r($venue_filename, true)."</div>";
     
-    if ( !queenbee() ) {
+    if ( !sdg_queenbee() ) {
     	// If not queenbee, show content instead of acf_form
     	// WIP
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
