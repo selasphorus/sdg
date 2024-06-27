@@ -3644,7 +3644,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
 				$ts_info .= "player_status: ".$player_status."<br />";
 				if ( $player_status == "ready" ) {
 					$show_image = false;
-					$ts_info = "[sdgp] show video, not image<br />";
+					$ts_info .= "[sdgp] show video, not image<br />";
 				} else {
 					// If player_status is NOT ready, get some TS info -- tft
 					$media_info = get_media_player( $post_id, false, 'above' );
