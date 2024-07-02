@@ -22,6 +22,12 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+// Define our handy constants.
+define( 'SDG_VERSION', '0.1.5' );
+define( 'SDG_PLUGIN_DIR', __DIR__ );
+define( 'SDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+define( 'SDG_PLUGIN_BLOCKS', SDG_PLUGIN_DIR . '/blocks/' );
+//
 $plugin_path = plugin_dir_path( __FILE__ );
 
 // TODO: Deal w/ plugin dependencies -- Display Content; ACF; EM; &c.?
@@ -47,6 +53,28 @@ function sdg_queenbee() {
 if ( ! is_admin() ) {
     require_once( ABSPATH . 'wp-admin/includes/post.php' ); // so that we can run functions like post_exists on the front end
 }
+
+/* +~+~+ ACF +~+~+ */
+
+// Set custom load & save JSON points for ACF sync
+require 'includes/acf-json.php';
+
+// Register blocks and other handy ACF Block helpers
+//require 'includes/acf-blocks.php';
+
+// Register a default "Site Settings" Options Page
+//require 'includes/acf-settings-page.php';
+
+// Restrict access to ACF Admin screens
+require 'includes/acf-restrict-access.php';
+
+// Display and template helpers
+require 'includes/template-tags.php';
+	
+// Load ACF field groups hard-coded as PHP
+require 'includes/acf-field-groups.php';
+
+/* +~+~+ *** +~+~+ */
 
 // Register our sdg_settings_init to the admin_init action hook.
 add_action( 'admin_init', 'sdg_settings_init' );
@@ -428,14 +456,14 @@ if ( isset($options['sdg_modules']) ) { $modules = $options['sdg_modules']; } el
 // TODO: maybe: split this into several separate plugins -- SDG WooCommerce; SDG Developer Functions; &c. -- ?!? WIP ?!?
 
 $includes = array( 'posttypes', 'taxonomies' );
-$admin_functions_filepath = $plugin_path . 'inc/'.'admin_functions.php';
-$common_functions_filepath = $plugin_path . 'inc/'.'common_functions.php';
+$admin_functions_filepath = $plugin_path . 'includes/'.'admin_functions.php';
+$common_functions_filepath = $plugin_path . 'includes/'.'common_functions.php';
 
 if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "file $admin_functions_filepath not found"; }
 if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "file $common_functions_filepath not found"; }
 
 foreach ( $includes as $inc ) {
-    $filepath = $plugin_path . 'inc/'.$inc.'.php'; 
+    $filepath = $plugin_path . 'includes/'.$inc.'.php'; 
     if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "inc file $filepath not found"; }
 }
 
