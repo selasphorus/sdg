@@ -19,7 +19,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628e71c21c36c',
-		'title' => '* Admin Notes: DB Queries',
+		'title' => 'Admin Notes: DB Queries',
 		'fields' => array(
 			array(
 				'key' => 'field_628e74aa9c34a',
@@ -318,7 +318,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62718c3e09678',
-		'title' => '* Book of the Bible: Additional Fields',
+		'title' => 'Book of the Bible: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_62718c5245299',
@@ -460,7 +460,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628e677e24730',
-		'title' => '* Collect: Additional Fields',
+		'title' => 'Collect: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628e67b09ad4b',
@@ -693,7 +693,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_6244d25e31afa',
-		'title' => '* Edition: Additional Fields',
+		'title' => 'Edition: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_626816f45f102',
@@ -1212,7 +1212,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62742fabcbba5',
-		'title' => '* Lectionary: Additional Fields',
+		'title' => 'Lectionary: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_627438d2209cd',
@@ -1755,7 +1755,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628d051f03d18',
-		'title' => '* Lit Date Category: Additional Fields',
+		'title' => 'Lit Date Category: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628d05300d2d9',
@@ -1802,7 +1802,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_5d5e918d0eba2',
-		'title' => '* Liturgical Date Assignments',
+		'title' => 'Liturgical Date Assignments',
 		'fields' => array(
 			array(
 				'key' => 'field_5d5e9196cf5e7',
@@ -1892,7 +1892,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62742b110baed',
-		'title' => '* Liturgical Date Calc: Additional Fields',
+		'title' => 'Liturgical Date Calc: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_62742b26c8073',
@@ -2161,7 +2161,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_63b5e9e574912',
-		'title' => '* Liturgical Date Calculations',
+		'title' => 'Liturgical Date Calculations',
 		'fields' => array(
 			array(
 				'key' => 'field_63b5e9e71d3aa',
@@ -2254,7 +2254,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_6274283e53cd1',
-		'title' => '* Liturgical Date: Additional Fields',
+		'title' => 'Liturgical Date: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_6274284f2ef48',
@@ -2629,7 +2629,7 @@ function sdg_register_field_groups() {
 
 		acf_add_local_field_group( array(
 		'key' => 'group_628e832908174',
-		'title' => '* Music List: Additional Fields',
+		'title' => 'Music List: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628e833e61e72',
@@ -2744,7 +2744,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_6240a70370889',
-		'title' => '* Musical Work: Additional Fields',
+		'title' => 'Musical Work: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_6240a7037b567',
@@ -3774,7 +3774,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628e8fba3cf6c',
-		'title' => '* Psalms of the Day: Additional Fields',
+		'title' => 'Psalms of the Day: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628e8fc757c82',
@@ -3861,7 +3861,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_6273eb6a92ef9',
-		'title' => '* Publication: Additional Fields',
+		'title' => 'Publication: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_6275293e0732e',
@@ -4247,7 +4247,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_6273e873c1e43',
-		'title' => '* Publisher: Additional Fields',
+		'title' => 'Publisher: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_6273e88296e13',
@@ -4319,7 +4319,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62718b45a09df',
-		'title' => '* Reading: Additional Fields',
+		'title' => 'Reading: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_62718b8b97a1c',
@@ -4432,7 +4432,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628d06fba02be',
-		'title' => '* Season: Additional Fields',
+		'title' => 'Season: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628d070d106ac',
@@ -4479,7 +4479,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628e863e6c22c',
-		'title' => '* Sermon Series: Additional Fields',
+		'title' => 'Sermon Series: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628e866a9f7e9',
@@ -4609,7 +4609,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628d1b1ae3d2e',
-		'title' => '* Sermon Topic: Legacy Data',
+		'title' => 'Sermon Topic: Legacy Data',
 		'fields' => array(
 			array(
 				'key' => 'field_628d1b37dfcf0',
@@ -4656,7 +4656,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628d219d26000',
-		'title' => '* Sermon: Additional Fields',
+		'title' => 'Sermon: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_62bdde0aac636',
@@ -5065,7 +5065,7 @@ function sdg_register_field_groups() {
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628d19b6ea024',
-		'title' => '* Soloist: Additional Fields',
+		'title' => 'Soloist: Additional Fields',
 		'fields' => array(
 			array(
 				'key' => 'field_628d19ce5ccf0',
