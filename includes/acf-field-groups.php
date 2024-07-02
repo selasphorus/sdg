@@ -12839,7 +12839,6 @@ function sdg_register_field_groups() {
 		'show_in_rest' => false,
 	) );
 	
-} );
-
+}
 
 ?>
