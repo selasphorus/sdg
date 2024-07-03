@@ -666,6 +666,8 @@ function sdg_body_class( $classes ) {
     //$options = get_option( 'sdg_settings' );
 	if ( isset($options['show_ts']) && !empty($options['show_ts']) ) {
 		$classes[] = 'devmode';
+	} else {
+		$classes[] = 'TSET';
 	}
 	
 	if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $classes[] = 'devsite'; }
