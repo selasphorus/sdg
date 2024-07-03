@@ -1249,6 +1249,7 @@ function get_composer_ids ( $post_id = null ) {
     if ( $post_id === null || get_post_type( $post_id ) != 'repertoire' ) { return "no post_id"; } //return null; }
 	
     $composers = get_field('composer', $post_id, false);
+    if ( !is_array($composers) ) { return null; }
     foreach ($composers AS $composer_id) {
         $arr_ids[] = $composer_id;
     }
