@@ -139,6 +139,26 @@ function sdg_settings_init() {
             )
     );
     
+    // Checkbox to show/hide troubleshooting messages
+	add_settings_field(
+        'show_ts',
+        esc_attr__('Dev Site', 'sdg'),
+        'sdg_ts_field_cb',
+        'sdg',
+        'sdg_settings',
+        array( 
+            'type'         => 'checkbox',
+            //'option_group' => 'sdg_settings', 
+            'name'         => 'show_ts',
+            'label_for'    => 'show_ts',
+            'value'        => (empty(get_option('sdg_settings')['show_ts'])) ? 0 : get_option('sdg_settings')['show_ts'],
+            'description'  => __( 'Show troubleshooting info.', 'sdg' ),
+            'checked'      => (!isset(get_option('sdg_settings')['show_ts'])) ? 0 : get_option('sdg_settings')['show_ts'],
+            // Used 0 in this case but will still return Boolean not[see notes below] 
+            ///'tip'          => esc_attr__( 'Use if plugin fields drastically changed when installing this plugin.', 'wpdevref' ) 
+            )
+    );
+    
     // Checkbox to determine whether or not to use custom capabilities
 	add_settings_field(
         'use_custom_caps',
@@ -262,6 +282,28 @@ function sdg_select_field_cb( $args ) {
  */
 // TODO: make this a radio button instead?
 function sdg_devsite_field_cb( $args ) { 
+
+	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
+	
+    $checked = '';
+    $options = get_option( 'sdg_settings' );
+	//echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
+    
+    $value   = ( !isset( $options[$args['name']] ) ) 
+                ? null : $options[$args['name']];
+    if ($value) { $checked = ' checked="checked" '; }
+        // Could use ob_start.
+        $html  = '';
+        $html .= '<input id="' . esc_attr( $args['name'] ) . '" 
+        name="sdg_settings' . esc_attr('['.$args['name'].']') .'" 
+        type="checkbox" ' . $checked . '/>';
+        $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
+        //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
+
+        echo $html;
+}
+
+function sdg_ts_field_cb( $args ) { 
 
 	//echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 	
