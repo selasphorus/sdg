@@ -663,7 +663,7 @@ function sdg_body_class( $classes ) {
     }
     
     // Show TS?
-    //$options = get_option( 'sdg_settings' );
+    $options = get_option( 'sdg_settings' );
 	if ( isset($options['show_ts']) && !empty($options['show_ts']) ) {
 		$classes[] = 'devmode';
 	} else {
