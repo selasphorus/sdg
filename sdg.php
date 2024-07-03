@@ -1130,7 +1130,7 @@ function anchor_link_top() {
 }
 
 // Function to determine default taxonomy for a given post_type, for use with display_posts shortcode, &c.
-function get_default_taxonomy ( $post_type = null ) {
+function get_default_taxonomy( $post_type = null ) {
     switch ($post_type) {
         case "post":
             return "category";
@@ -1152,7 +1152,7 @@ function get_default_taxonomy ( $post_type = null ) {
 }
 
 // Function to determine default category for given page, for purposes of Recent Posts &c.
-function get_default_category () {
+function get_default_category() {
 	
 	$default_cat = "";
 	
@@ -1180,7 +1180,7 @@ function get_default_category () {
 	return $default_cat;
 }
 
-function sdg_digit_to_word($number){
+function sdg_digit_to_word( $number ) {
     switch($number){
         case 0:$word = "zero";break;
         case 1:$word = "one";break;
@@ -1264,7 +1264,7 @@ function sdg_att_explode( $string = '' ) {
 
 // Get a linked list of Terms
 add_shortcode('list_terms', 'sdg_list_terms');
-function sdg_list_terms ( $atts = array(), $content = null, $tag = '' ) {
+function sdg_list_terms( $atts = array(), $content = null, $tag = '' ) {
 
 	$info = "";
 	
@@ -1876,7 +1876,7 @@ function sdg_remove_empty_p( $content ) {
 /*** MATCH PLACEHOLDERS ***/
 
 /*** Match placeholders to real post objects; return id (single match) or posts array (multiple matches) ***/
-function match_placeholder ( $args = array() ) {
+function match_placeholder( $args = array() ) {
     
     // TS/logging setup
     $do_ts = devmode_active(); 
