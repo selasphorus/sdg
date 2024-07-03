@@ -236,7 +236,7 @@ body.admin-bar .msg_bar_close {
 	font-family: monospace;
 }
 
-.devsite .troubleshooting,
+/*.devsite .troubleshooting,*/
 .devmode .troubleshooting,
 .queenbee .devinfo,
 .queenbee .devview {
@@ -252,7 +252,7 @@ body.admin-bar .msg_bar_close {
 	margin-bottom: 0;
 }
 
-.devsite .troubleshooting.inline,
+/*.devsite .troubleshooting.inline,*/
 .devmode .troubleshooting.inline,
 .queenbee span.devinfo,
 .queenbee span.devview
