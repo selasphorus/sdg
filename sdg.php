@@ -142,7 +142,7 @@ function sdg_settings_init() {
     // Checkbox to show/hide troubleshooting messages
 	add_settings_field(
         'show_ts',
-        esc_attr__('Dev Site', 'sdg'),
+        esc_attr__('Show TS', 'sdg'),
         'sdg_ts_field_cb',
         'sdg',
         'sdg_settings',
@@ -661,6 +661,12 @@ function sdg_body_class( $classes ) {
     if ( function_exists( 'queenbee' ) && sdg_queenbee() ) {
         $classes[] = 'queenbee';    
     }
+    
+    // Show TS?
+    //$options = get_option( 'sdg_settings' );
+	if ( isset($options['show_ts']) && !empty($options['show_ts']) ) {
+		$classes[] = 'devmode';
+	}
 	
 	if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $classes[] = 'devsite'; }
 	
