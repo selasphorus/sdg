@@ -668,7 +668,7 @@ function sdg_body_class( $classes ) {
 		$classes[] = 'devmode';
 	}
 	
-	if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $classes[] = 'devsite'; }
+	if ( is_dev_site() ) { $classes[] = 'devsite'; }
 	
 	// Always has_msg_bar(?)
 	$classes[] = 'has_msg_bar';
@@ -775,7 +775,7 @@ function sdg_selectively_dequeue_admin_scripts_and_styles() {
 // Enable shortcodes in sidebar widgets
 add_filter( 'widget_text', 'do_shortcode' );
 //
-if ( function_exists('is_dev_site') && is_dev_site() ) {
+if ( is_dev_site() ) {
 	add_filter( 'widget_text', 'shortcode_unautop' );
 }
 
