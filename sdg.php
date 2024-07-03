@@ -7,7 +7,7 @@
 Plugin Name: SDG
 Plugin URI: 
 Description: Custom post types, taxonomies and functions for music and more
-Version: 1.042424.1
+Version: 1.070324.1
 Author: atc
 Author URI: 
 License: 
