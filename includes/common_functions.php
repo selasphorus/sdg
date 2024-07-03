@@ -1202,13 +1202,18 @@ function display_media_player( $atts = array() ) {
 		array(
 			'post_id' => get_the_ID(),
 			'position' => 'above',
+			'return' => 'info',
 		), $atts
 	);
 	
 	// Extract args as vars
 	extract( $args );
     
-    $info = ""; // init
+    // init
+    $info = "";
+    if ( $return == "array" ) {
+    	$arr_info = array();
+    }    
     
     // TODO: handle webcast status considerations
     /*if ( function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id ) ) {
@@ -1229,7 +1234,13 @@ function display_media_player( $atts = array() ) {
     	$info .= "<!-- ".print_r($media_info,true)." -->";
     }	
     
-    return $info;
+    if ( $return == "array" ) {
+		$arr_info['info'] = $info;
+		$arr_info['player_status'] = $player_status;
+		return $arr_info;
+    } else {
+    	return $info;
+    }
 }
 
 // Get a linked list of Media Items
