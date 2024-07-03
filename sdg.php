@@ -59,24 +59,20 @@ if ( ! is_admin() ) {
 // Set custom load & save JSON points for ACF sync
 require 'includes/acf-json.php';
 
-if ( is_dev_site() ) {
+// Register blocks and other handy ACF Block helpers
+//require 'includes/acf-blocks.php';
 
-	// Register blocks and other handy ACF Block helpers
-	//require 'includes/acf-blocks.php';
+// Register a default "Site Settings" Options Page
+//require 'includes/acf-settings-page.php';
 
-	// Register a default "Site Settings" Options Page
-	//require 'includes/acf-settings-page.php';
+// Restrict access to ACF Admin screens
+require 'includes/acf-restrict-access.php';
 
-	// Restrict access to ACF Admin screens
-	require 'includes/acf-restrict-access.php';
+// Display and template helpers
+require 'includes/template-tags.php';
 
-	// Display and template helpers
-	require 'includes/template-tags.php';
-	
-	// Load ACF field groups hard-coded as PHP
-	require 'includes/acf-field-groups.php';
-
-}
+// Load ACF field groups hard-coded as PHP
+require 'includes/acf-field-groups.php';
 
 /* +~+~+ *** +~+~+ */
 
