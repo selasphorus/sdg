@@ -1366,7 +1366,7 @@ function get_event_program_items( $atts = array() ) {
 				if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
 					$display_settings = $authorship_display_settings[$r.'-'.$i];
 					$row_info .= "[".$r.'-'.$i."] program_row >> display_settings: ".print_r($display_settings, true)."<br />";
-					if ( isset($display_settings['show_name']) && $display_settings['show_name'] ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
+					if ( !isset($display_settings['show_name']) || ( isset($display_settings['show_name']) && $display_settings['show_name'] ) ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
 					if ( isset($display_settings['show_dates']) && $display_settings['show_dates'] ) { $tr_class .= " show_person_dates"; } else { $tr_class .= " hide_person_dates"; }
 				} else {
 					$row_info .= "[".$r.'-'.$i."] program_row >> display_settings not set<br />";
