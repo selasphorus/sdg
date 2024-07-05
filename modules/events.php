@@ -1955,6 +1955,8 @@ function get_program_item_ids ( $rows = array() ) {
 					$arr_ids[$r.'-'.$i] = $program_item_obj_id;
 				}
 			}
+		} else {
+			$arr_ids[$r] = null;
 		}
 	}
 	
@@ -1983,6 +1985,8 @@ function set_row_authorship_display ( $item_ids = array() ) {
 			} else {
 				// Multiple composers -- TBD how to handle this
 			}	
+		} else {
+			$arr_row_settings[$x] = array('not_rep');
 		}
 	}
 	
