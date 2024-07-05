@@ -1987,7 +1987,7 @@ function set_row_authorship_display ( $item_ids = array() ) {
 				// Multiple composers -- TBD how to handle this
 			}	
 		} else {
-			$arr_row_settings[$x] = array('['.$item_id.'] not_rep');
+			$arr_row_settings[$x][$item_id] = array('['.$item_id.'] not_rep');
 		}
 	}
 	
