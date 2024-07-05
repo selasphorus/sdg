@@ -1976,7 +1976,7 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	$prev_num = null;
 	
 	foreach( $item_ids as $x => $item_id ) {
-		$arr_row_settings[$x] = array($item_id);
+		//$arr_row_settings[$x] = array($item_id);
 		$item_post_type = get_post_type( $item_id );
 		if ( $item_post_type == 'repertoire' ) {
 			$item_composer_ids = get_composer_ids( $item_id );
@@ -1987,7 +1987,7 @@ function set_row_authorship_display ( $item_ids = array() ) {
 				// Multiple composers -- TBD how to handle this
 			}	
 		} else {
-			//$arr_row_settings[$x] = array('not_rep');
+			$arr_row_settings[$x] = array('['.$item_id.'] not_rep');
 		}
 	}
 	
