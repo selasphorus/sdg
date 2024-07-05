@@ -1980,14 +1980,20 @@ function set_row_authorship_display ( $item_ids = array() ) {
 		$item_post_type = get_post_type( $item_id );
 		if ( $item_post_type == 'repertoire' ) {
 			$item_composer_ids = get_composer_ids( $item_id );
-			if ( count($item_composer_ids) == 1 ) {
+			foreach ( $item_composer_ids as $composer_id ) {
+				$arr_items[$composer_id][$x] = $item_id;
+			}
+			/*if ( count($item_composer_ids) == 1 ) {
 				$composer_id = $item_composer_ids[0];
 				$arr_items[$composer_id][$x] = $item_id;
 			} else {
 				// Multiple composers -- TBD how to handle this
-			}	
+				foreach ( $item_composer_ids as $composer_id ) {
+					$arr_items[$composer_id][$x] = $item_id;
+				}
+			}*/	
 		} else {
-			$arr_row_settings[$x][$item_id] = array('['.$item_id.'] not_rep');
+			//$arr_row_settings[$x][$item_id] = array('['.$item_id.'] not_rep');
 		}
 	}
 	
