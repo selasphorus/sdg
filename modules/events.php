@@ -1366,7 +1366,7 @@ function get_event_program_items( $atts = array() ) {
 				if ( $authorship_display_settings && isset($authorship_display_settings[$r.'-'.$i]) ) {
 					$display_settings = $authorship_display_settings[$r.'-'.$i];
 					$row_info .= "[".$r.'-'.$i."] program_row >> display_settings: ".print_r($display_settings, true)."<br />";
-					if ( !isset($display_settings['show_name']) || ( isset($display_settings['show_name']) && $display_settings['show_name'] ) ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
+					if ( isset($display_settings['show_name']) && $display_settings['show_name'] ) { $tr_class .= " show_authorship"; } else { $tr_class .= " hide_authorship"; }
 					if ( isset($display_settings['show_dates']) && $display_settings['show_dates'] ) { $tr_class .= " show_person_dates"; } else { $tr_class .= " hide_person_dates"; }
 				} else {
 					$row_info .= "[".$r.'-'.$i."] program_row >> display_settings not set<br />";
@@ -1976,24 +1976,12 @@ function set_row_authorship_display ( $item_ids = array() ) {
 	$prev_num = null;
 	
 	foreach( $item_ids as $x => $item_id ) {
-		//$arr_row_settings[$x] = array($item_id);
 		$item_post_type = get_post_type( $item_id );
 		if ( $item_post_type == 'repertoire' ) {
 			$item_composer_ids = get_composer_ids( $item_id );
 			foreach ( $item_composer_ids as $composer_id ) {
 				$arr_items[$composer_id][$x] = $item_id;
 			}
-			/*if ( count($item_composer_ids) == 1 ) {
-				$composer_id = $item_composer_ids[0];
-				$arr_items[$composer_id][$x] = $item_id;
-			} else {
-				// Multiple composers -- TBD how to handle this
-				foreach ( $item_composer_ids as $composer_id ) {
-					$arr_items[$composer_id][$x] = $item_id;
-				}
-			}*/	
-		} else {
-			//$arr_row_settings[$x][$item_id] = array('['.$item_id.'] not_rep');
 		}
 	}
 	
