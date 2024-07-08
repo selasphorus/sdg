@@ -3569,9 +3569,10 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     // Get the formatted event title
     if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
-    if ( $result == '#_EVENTNAMETXT' ) { $show_subtitle = false; $hlevel = null; $hlevel_sub = null; } else { $show_subtitle = true; $hlevel = 0; $hlevel_sub = 0; }
+    // Make sure not to include any extra info -- this is for the mini-cal
+    if ( $result == '#_EVENTNAMETXT' ) { $do_ts = false; $show_subtitle = false; $hlevel = null; $hlevel_sub = null; } else { $show_subtitle = true; $hlevel = 0; $hlevel_sub = 0; }
     //
-	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => $show_subtitle, 'echo' => false, 'hlevel' => $hlevel, 'hlevel_sub' => $hlevel_sub );
+	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => $show_subtitle, 'echo' => false, 'hlevel' => $hlevel, 'hlevel_sub' => $hlevel_sub, 'do_ts' => $do_ts );
     //$ts_info .= "[sdgp] title_args: ".print_r($title_args,true)."<br />"; // breaks layout?
     $event_title = sdg_post_title( $title_args );
     
@@ -3587,8 +3588,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     } else if ( $result == '#_EVENTNAMETXT' ) {
     
     	$replace = $event_title;
-    	$do_ts = false; // Make sure not to include any extra info -- this is for the mini-cal
-    	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
     
     } else if ( $result == '#_EVENTNAMESHORT' ) {
         
@@ -3704,8 +3703,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             
         } else {
         	
-        	$ts_info .= "[sdgp] show_image is FALSE<br />";
-        	        	
+        	$ts_info .= "[sdgp] show_image is FALSE<br />";        	        	
             $replace = "<br />"; // If there's no featured image, add a line break to keep the spacing
             //$ts_info .= "[sdgp] sdg-calendar >> sdg_placeholders<br />";
             

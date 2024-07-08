@@ -40,6 +40,7 @@ function sdg_post_title ( $args = array() ) {
 		'hclass_sub'  	=> 'subtitle',
 		'before'  		=> '',
 		'after'  		=> '',
+		'do_ts'			=> devmode_active(),
 	);
 
 	// Parse & Extract args
