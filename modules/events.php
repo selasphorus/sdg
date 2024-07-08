@@ -3587,6 +3587,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     } else if ( $result == '#_EVENTNAMETXT' ) {
     
     	$replace = $event_title;
+    	$do_ts = false; // Make sure not to include any extra info -- this is for the mini-cal
     	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
     
     } else if ( $result == '#_EVENTNAMESHORT' ) {
