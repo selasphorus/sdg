@@ -3567,10 +3567,11 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     //$ts_info .= "[sdgp] EM  $result for post_id: $post_id<br />"; // breaks layout?
     //$ts_info .= "EM result: $result<br />";
     
-    if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
-    
     // Get the formatted event title
-	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => true, 'echo' => false, 'hlevel' => 0, 'hlevel_sub' => 0 );
+    if ( $result == '#_EVENTLINK' ) { $make_link = true; } else { $make_link = false; }
+    if ( $result == '#_EVENTNAMETXT' ) { $show_subtitle = false; $hlevel = null; $hlevel_sub = null; } else { $show_subtitle = true; $hlevel = 0; $hlevel_sub = 0; }
+    //
+	$title_args = array( 'post' => $post_id, 'link' => $make_link, 'line_breaks' => false, 'show_subtitle' => $show_subtitle, 'echo' => false, 'hlevel' => $hlevel, 'hlevel_sub' => $hlevel_sub );
     //$ts_info .= "[sdgp] title_args: ".print_r($title_args,true)."<br />"; // breaks layout?
     $event_title = sdg_post_title( $title_args );
     
@@ -3583,6 +3584,21 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	$replace = $event_title;
     	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
     
+    } else if ( $result == '#_EVENTNAMETXT' ) {
+    
+    	$replace = $event_title;
+    	//$ts_info .= " [_EVENTNAME] >> ".$event_title." << ";
+    
+    } else if ( $result == '#_EVENTNAMESHORT' ) {
+        
+        // Get the short_title, if any
+        if ( $post_id && $post_id != "" ) { 
+            $short_title = get_post_meta( $post_id, 'short_title', true );
+            // If a short_title is set, use it
+            if ( $short_title ) { $event_title = $short_title; }
+        }
+        $replace = $event_title;
+        
     } else if ( $result == '#_EVENTLINK' ) {
         
         $replace = $event_title;
@@ -3595,16 +3611,6 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
             $link .= "&post_type=event";
             $replace = '<a href="'.$link.'">'.esc_html(sprintf(__('Edit Event','events-manager'))).'</a>';
         }
-        
-    } else if ( $result == '#_EVENTNAMESHORT' ) {
-        
-        // Get the short_title, if any
-        if ( $post_id && $post_id != "" ) { 
-            $short_title = get_post_meta( $post_id, 'short_title', true );
-            // If a short_title is set, use it
-            if ( $short_title ) { $event_title = $short_title; }
-        }
-        $replace = $event_title;
         
     } else if ( $result == '#_EVENTTIMES' || $result == '#_12HSTARTTIME' ) {
         
