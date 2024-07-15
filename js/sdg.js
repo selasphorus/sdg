@@ -97,112 +97,6 @@ jQuery(document).ready(function($) {
         
     }
     
-    // Webcasts
-    
-    if ( $("article.type-event.event-categories-webcasts")[0] || $("article.type-sermon")[0] || $("article.type-post.category-webcasts")[0] || $("article.type-page.page_tag-webcasts")[0] ) {
-        
-        //console.log('found webcast event'); // tft
-        
-        // Check cookie
-        var cname = 'email_capture_attempted';
-        var cvalue = getCookie(cname);
-        //let cname = 'email_capture_attempted';
-        //let cvalue = getCookie(cname);
-        
-        //var handle_id = "#"+$(this).attr('id');
-        //var dialog_id = handle_id.replace(/handle/g, "content");
-        var handle_id = "#nf_dialog"; // ???
-        var dialog_id = "#nf_dialog";
-        //console.log('handle_id: '+handle_id);
-    	//console.log('dialog_id: '+dialog_id);
-        
-        if (cvalue != "") {
-        
-            //console.log('cvalue of "'+cvalue+'" found for '+cname); // tft
-            //alert("cookie '" + cname+"' = '" + cvalue + "'");
-            
-            // Hide the div
-            if($(dialog_id)[0] ) {
-                //console.log('hide the div: "'+dialog_id+'"'); // tft
-                $(dialog_id).hide();
-            }
-            
-        } else {
-            
-            //console.log('NO cvalue found for '+cname);
-            
-            if($(dialog_id)[0] ) {
-                
-                //console.log( 'Dialog content found.' ); // tft
-                
-                var theDialog = prepDialog( handle_id, dialog_id );
-                theDialog.dialog("open");
-            
-                if ($(dialog_id).dialog('isOpen') === true) {
-                    cvalue = 'true';
-                    //alert("about to set cookie '" + cname+"' = '" + cvalue + "'");
-                    //console.log("about to set cookie '" + cname+"' = '" + cvalue + "'"); // tft
-                    setCookie(cname, cvalue, 365);
-                } else {
-                    console.log( 'found webcast event' ); // tft
-                    console.log( 'Uh oh! Failed to open dialog.' );
-                }
-                
-            } else {
-                //console.log( 'No dialog content found.' ); // tft
-            }
-            
-            
-            /*if ( theDialog.dialog("open") ) {
-                //alert("about to set cookie '" + cname+"' = '" + cvalue + "'");
-  			   setCookie(cname, 'true', 365);
-            } else {
-                console.log( 'Failed to open dialog' );
-            }*/
-         
-        }
-        
-    }
-    
-    // Security Cookie
-    if ( username == 'queenbee' || username == 'avery' ) {
-        
-        //console.log('found event');
-        
-        // Check cookie
-        var cname = 'human_verified';
-        var cvalue = getCookie(cname);
-        var handle_id = "#nf_dialog"; // ???
-        var dialog_id = "#nf_dialog";
-        
-        if (cvalue != "") {
-        
-            console.log('cvalue of "'+cvalue+'" found for '+cname);
-            //alert("cookie '" + cname+"' = '" + cvalue + "'");
-            
-            // Hide the div
-            console.log('hide the div: "'+dialog_id);
-            $(dialog_id).hide();
-            
-        } else {
-            
-            console.log('NO cvalue found for '+cname);
-            
-            var theDialog = prepDialog( handle_id, dialog_id );
-            
-            theDialog.dialog("open");
-            
-            if ($(dialog_id).dialog('isOpen') === true) {
-                //alert("about to set cookie '" + cname+"' = '" + cvalue + "'");
-                setCookie(cname, 'true', 365);
-            } else {
-                console.log( 'Failed to open dialog' );
-            }
-         
-        }
-        
-    }
-    
     // Flex Grid images -- Responsive dimensions -- preserve 1:1 aspect ratio while maximizing width.
     //if ($(".flex-container")[0]){
     /*if ($(".flex-container.squares")[0]){
@@ -365,7 +259,7 @@ jQuery(document).ready(function($) {
     });
 	
 	
-    // EM Datepicker
+    // EM Datepicker -- Customizations
     
     if($('.widget_em_calendar')) {
         
@@ -410,113 +304,6 @@ jQuery(document).ready(function($) {
       }
     });
 
-    // NINJA FORMS?
-                                   
-	//jQuery(document).on( 'nfFormReady', function( e ) {
-	jQuery(document).on( 'nfFormReady', function( e, layoutView ) {
-	
-		// Get the container element
-		var form_container = document.getElementById('nf-form-17_1-cont');
-		if (form_container) { 
-
-			console.log('form_container is a: '+form_container.tagName);
-
-			//var the_divs = form_container.getElementsByTagName("div");
-			//console.log('form_container contains: '+the_divs.length+" divs");
-
-			var the_forms = form_container.getElementsByTagName("form");
-			console.log('form_container contains: '+the_forms.length+" forms");
-			
-			var the_form = form_container.getElementsByTagName("form")[0];
-			//console.log('the_form: '+the_form);
-			
-			
-			/*$(document).on("wheel", "input[type=text]", function (e) {
-				$(this).blur();
-			});*/
-			
-			// https://stackoverflow.com/questions/9712295/disable-scrolling-on-input-type-number
-			
-			// This version has no apparent effect
-			/*$(the_form).on('focus', 'input[type=text]', function (e) {
-			  $(this).on('wheel.disableScroll', function (e) {
-				e.preventDefault();
-			  });
-			});
-			
-			$('form').on('blur', 'input[type=text]', function (e) {
-			  $(this).off('wheel.disableScroll');
-			});
-			*/
-            
-			var the_inputs = the_form.getElementsByTagName("input");
-			//var the_inputs = the_form.getElementsByTagName('input[type="text"]');
-			console.log('form_container contains: '+the_inputs.length+" inputs");
-
-			if (the_inputs.length > 0) {
-				fix_inputs(the_inputs);
-			}
-
-		}
-
-		function fix_inputs(inputs) {
-
-			console.log('about to try to fix_inputs');
-
-			for (var i = 0; i < inputs.length; i++) {
-				var input = inputs[i];
-				//var input_name = input.name;
-				var input_id = input.id;
-				var input_type = input.type;
-
-				//console.log('input_name: '+input_name);
-				if (input_type === "text") { 
-					console.log('[text] input_id: '+input_id);
-					//input.addEventListener('wheel', stopWheel, {passive: false});
-					input.addEventListener('wheel', stopWheel, false);
-					//input.addEventListener('wheel', do_not_wheel);
-				}
-				//console.log('input_type: '+input_type);
-				
-			}
-
-		}
-
-		function stopWheel(e){
-			if(!e){ e = window.event; } /* IE7, IE8, Chrome, Safari */
-			if(e.preventDefault) { e.preventDefault(); } /* Chrome, Safari, Firefox */
-			e.returnValue = false; /* IE7, IE8 */
-			
-			console.log(e);
-			console.log("tried to stop the wheel");
-		}
-
-	});
-	
-
-	/*** V1 ***/
-	
-	function handleinputs(items) {
-		
-		console.log('testing function: '+handleinputs);
-		
-		for (var i = 0; i < items.length; i++) {
-			
-			var item = items[i];
-			var item_name = item.name;
-			var item_id = item.id;
-			//var item_name = item.getAttribute('name');
-			
-			console.log('input_name: '+input_name);
-			console.log('input_id: '+input_id);
-			
-			console.log('item: '+item.getAttribute('name'));
-
-			item.addEventListener('wheel', do_not_wheel);
-		}
-	}
-	
-	/*** END V1 ***/
 
     /*** FORM FUNCTIONS ***/
     
@@ -579,16 +366,22 @@ jQuery(document).ready(function($) {
         //
         var modalwidth;
         var modalheight;
+        //var modal_at;
+        //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
         
         // Width
         if ( winwidth > 1300) {
             modalwidth = winwidth * 0.6;
+            //modal_at = "center top+25%";
         } else if ( winwidth > 800) {
             modalwidth = winwidth * 0.8;
+            //modal_at = "center top+25%";
         } else if ( winwidth > 400) {
             modalwidth = winwidth * 0.75;
+            //modal_at = "center top+25%";
         } else {
             modalwidth = winwidth * 0.99;
+            //modal_at = "center top+10%";
         }
         
         // Height
@@ -614,9 +407,11 @@ jQuery(document).ready(function($) {
         if ( modalheight > 500 ) { modalheight = 500; }
         //console.log("window dimensions: "+winwidth+" x "+winheight);
         //console.log("modal dimensions: "+modalwidth+" x "+modalheight);
+        //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")"); 
 
         var dimensions = { height:modalheight, width:modalwidth };
-
+        //var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
+        
         return dimensions;
 
     }
@@ -629,6 +424,7 @@ jQuery(document).ready(function($) {
         var modalDimensions = getModalDimensions();
         var modal_height = modalDimensions["height"];
         var modal_width = modalDimensions["width"];
+        //var modal_at = modalDimensions["modal_at"];
         
 		// Determine positioning for modal window
 		// --------------------------------------
@@ -697,8 +493,8 @@ jQuery(document).ready(function($) {
     //var handle_id;
 	//var dialog_id;
 	
-	$('body').on('click','.dialog_handle',function(){
 	//$("a.dialog_handle").on("click", function() {
+	$('body').on('click','.dialog_handle',function(){
 	
 		console.log('click registered on a dialog_handle link');
 		
@@ -752,9 +548,7 @@ jQuery(document).ready(function($) {
 	});
 	
     $(function() {
-        
-        
-        
+                
     });
 	
 });
