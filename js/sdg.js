@@ -488,10 +488,6 @@ jQuery(document).ready(function($) {
         return theDialog;
 
     }
-    
-    // Pop-up dialog for Day Titles and other modal content
-    //var handle_id;
-	//var dialog_id;
 	
 	//$("a.dialog_handle").on("click", function() {
 	$('body').on('click','.dialog_handle',function(){
@@ -546,9 +542,5 @@ jQuery(document).ready(function($) {
 		});
 		
 	});
-	
-    $(function() {
-                
-    });
 	
 });
