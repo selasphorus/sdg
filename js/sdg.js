@@ -375,7 +375,7 @@ jQuery(document).ready(function($) {
         var winheight = window.innerHeight; //$(window).height();
         var emwidth = winwidth/parseFloat($("body").css("font-size"));
         var scroll = $(window).scrollTop(); //var scroll = window.scrollTop();
-        var offset = handle_id.offset(); //var offset = $(handle_id).offset();
+        var offset = $(handle_id).offset(); //var offset = handle_id.offset();
         //if ( winheight < 400) { modal_at = "center bottom+10%"; }
         
         // Adjust defaults as needed based on screen size, scroll position, etc.
