@@ -352,70 +352,6 @@ jQuery(document).ready(function($) {
 	
     /**** Modal PopUp Windows ***/
 
-	// Determine modal dimensions (width, height0 based on width and height of dinwo)
-    function getModalDimensions() {
-    
-    	console.log('about to getModalDimensions'); // tft
-    	
-		// TODO: build in option to set dimensions based on content?
-		
-        var winwidth = $(window).width();
-        var winheight = $(window).height();
-        var bodywidth = $(document.body).width();
-        var bodyheight = $(document.body).height();
-        //
-        var modalwidth;
-        var modalheight;
-        //var modal_at;
-        //console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
-        
-        // Width
-        if ( winwidth > 1300) {
-            modalwidth = winwidth * 0.6;
-            //modal_at = "center top+25%";
-        } else if ( winwidth > 800) {
-            modalwidth = winwidth * 0.8;
-            //modal_at = "center top+25%";
-        } else if ( winwidth > 400) {
-            modalwidth = winwidth * 0.75;
-            //modal_at = "center top+25%";
-        } else {
-            modalwidth = winwidth * 0.99;
-            //modal_at = "center top+10%";
-        }
-        
-        // Height
-        if ( winheight > 1200) {
-            modalheight = winheight * 0.7;
-        } else if ( winheight > 800) {
-            modalheight = winheight * 0.75;
-        } else if ( winheight > 400) {
-            modalheight = winheight * 0.75;
-        } else {
-            modalheight = winheight * 0.8;
-        }
-        
-        //console.log('winheight: '+winheight);
-        //console.log('winwidth: '+winwidth);
-        //console.log('modalheight: '+modalheight);
-        //console.log('modalwidth: '+modalwidth);
-        
-		// Round the numbers
-        modalwidth = Math.round(modalwidth);
-        modalheight = Math.round(modalheight);
-
-        if ( modalheight > 500 ) { modalheight = 500; }
-        //console.log("window dimensions: "+winwidth+" x "+winheight);
-        //console.log("modal dimensions: "+modalwidth+" x "+modalheight);
-        //alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")"); 
-
-        var dimensions = { height:modalheight, width:modalwidth };
-        //var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
-        
-        return dimensions;
-
-    }
-
     function prepDialog( handle_id, dialog_id ) {
 
 		console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
@@ -435,10 +371,11 @@ jQuery(document).ready(function($) {
 		var modal_at = "center"; //var modal_at = "center bottom+50px"; // Defines which position on the target element to align the positioned element against
 
 		//
-		var winheight = $(window).height();
-		var emwidth = $(window).width()/parseFloat($("body").css("font-size"));
-        var scroll = $(window).scrollTop();
-        var offset = $(handle_id).offset();
+		var winwidth = window.innerWidth; //$(window).width();
+        var winheight = window.innerHeight; //$(window).height();
+        var emwidth = winwidth/parseFloat($("body").css("font-size"));
+        var scroll = window.scrollTop(); //var scroll = $(window).scrollTop();
+        var offset = handle_id.offset(); //var offset = $(handle_id).offset();
         //if ( winheight < 400) { modal_at = "center bottom+10%"; }
         
         // Adjust defaults as needed based on screen size, scroll position, etc.
@@ -544,3 +481,69 @@ jQuery(document).ready(function($) {
 	});
 	
 });
+
+/**** Modal PopUp Windows ***/
+
+// Determine modal dimensions (width, height0 based on width and height of dinwo)
+function getModalDimensions() {
+
+	console.log('about to getModalDimensions'); // tft
+	
+	// TODO: build in option to set dimensions based on content?
+	
+	var winwidth = window.innerWidth; //$(window).width();
+	var winheight = window.innerHeight; //$(window).height();
+	var bodywidth = document.body.clientWidth; // $(document.body).width();
+	var bodyheight = document.body.clientHeight; // $(document.body).height();
+	//
+	var modalwidth;
+	var modalheight;
+	//var modal_at;
+	//console.log('winwidth: '+winwidth+'; winheight: '+winheight+'; bodywidth: '+bodywidth+'; bodyheight: '+bodyheight);
+	
+	// Width
+	if ( winwidth > 1300) {
+		modalwidth = winwidth * 0.6;
+		//modal_at = "center top+25%";
+	} else if ( winwidth > 800) {
+		modalwidth = winwidth * 0.8;
+		//modal_at = "center top+25%";
+	} else if ( winwidth > 400) {
+		modalwidth = winwidth * 0.75;
+		//modal_at = "center top+25%";
+	} else {
+		modalwidth = winwidth * 0.99;
+		//modal_at = "center top+10%";
+	}
+	
+	// Height
+	if ( winheight > 1200) {
+		modalheight = winheight * 0.7;
+	} else if ( winheight > 800) {
+		modalheight = winheight * 0.75;
+	} else if ( winheight > 400) {
+		modalheight = winheight * 0.75;
+	} else {
+		modalheight = winheight * 0.8;
+	}
+	
+	//console.log('winheight: '+winheight);
+	//console.log('winwidth: '+winwidth);
+	//console.log('modalheight: '+modalheight);
+	//console.log('modalwidth: '+modalwidth);
+	
+	// Round the numbers
+	modalwidth = Math.round(modalwidth);
+	modalheight = Math.round(modalheight);
+
+	if ( modalheight > 500 ) { modalheight = 500; }
+	//console.log("window dimensions: "+winwidth+" x "+winheight);
+	//console.log("modal dimensions: "+modalwidth+" x "+modalheight);
+	//alert ("modal_at: "+modal_at+" ("+modalwidth+" x "+modalheight+")"); 
+
+	var dimensions = { height:modalheight, width:modalwidth };
+	//var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
+	
+	return dimensions;
+
+}
