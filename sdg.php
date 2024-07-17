@@ -1702,21 +1702,30 @@ function sdg_pre_get_posts( $query ) {
 	if ( is_archive() && $query->is_main_query() ) {
 		
 		// Custom CPT ORDER
+		// NB: default order is DESC by post publication date (TBC)
         if ( isset($query->query_vars['post_type']) ) {
             $post_type = $query->query_vars['post_type'];
-            if ($post_type === 'bible_book') {
+            if ( $post_type === 'bible_book' ) {
                 $query->set('orderby', 'meta_value');
                 $query->set('meta_key', 'sort_num');
                 $query->set('order', 'ASC');
-            } else if ($post_type === 'sermon') {
+            } else if ( $post_type === 'sermon' ) {
                 $query->set('orderby', 'meta_value');
                 $query->set('meta_key', 'sermon_date');
                 $query->set('order', 'DESC');
-            } else if ($post_type === 'person') {
-                $query->set('orderby', 'meta_value');
+            } else if ( $post_type === 'person' ) {
+            	$query->set('orderby', 'meta_value');
                 $query->set('meta_key', 'last_name');
                 $query->set('order', 'ASC');
-            } else if ($post_type === 'newsletter') {
+            } else if ( $post_type === 'organ' ) { // TODO: change to 'instrument'?
+                // borough, post_title
+            	$query->set('orderby', 'meta_value title');
+                $query->set('meta_key', 'borough');
+                $query->set('order', 'ASC');                
+            } else if ( $post_type === 'builder' ) {
+                $query->set('orderby', 'title');
+                $query->set('order', 'ASC');                
+            } else if ( $post_type === 'newsletter' ) {
                 $meta_query = array(
 					'relation' => 'AND',
 					'volume' => array(
