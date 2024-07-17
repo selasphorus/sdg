@@ -1117,7 +1117,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 			'show_ui' 			=> true,
 			'show_in_menu'     	=> true,
 			'query_var'        	=> true,
-			'rewrite'			=> array( 'slug' => 'organs' ), // permalink structure slug
+			'rewrite'			=> array( 'slug' => 'dborgans' ), // permalink structure slug
 			'capability_type'	=> $caps,
 			'map_meta_cap'		=> true,
 			'has_archive' 		=> true,
