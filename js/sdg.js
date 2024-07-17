@@ -351,72 +351,6 @@ jQuery(document).ready(function($) {
     
 	
     /**** Modal PopUp Windows ***/
-    
-    // Pop-up dialog for Day Titles and other modal content
-    //var handle_id;
-	//var dialog_id;
-	
-	//$("a.dialog_handle").on("click", function() {
-	$('body').on('click','.dialog_handle',function(){
-	
-		console.log('click registered on a dialog_handle link');
-		
-		//var isOpen = false, dialogOpen = false;
-		
-		// Get the handle_id so as to open the correct dialog -- there may be multiple instances per page (e.g. day title links in event/sermon lists)
-		var handle_id = "#"+$(this).attr('id');
-		var dialog_id = handle_id.replace(/handle/g, "content");
-		//var item_id = handle_id.substr(14); // e.g. dialog_handle_35381
-		//var dialog_id = "#dialog_content_"+item_id;
-		//dialog_id = "#day_title_"+handle_id; // old
-		console.log('handle_id: '+handle_id);
-		console.log('dialog_id: '+dialog_id);
-		
-		var theDialog = prepDialog( handle_id, dialog_id );
-		
-		theDialog.dialog("open");
-		
-	});
-	
-	$(document.body).on("click", ".ui-widget-overlay", function() {
-	
-		console.log('click registered on a widget overlay element');
-		
-		$.each($(".ui-dialog"), function() {
-			var $dialog;
-			$dialog = $(this).children(".ui-dialog-content");
-			if($dialog.dialog("option", "modal")) {
-				$dialog.dialog("close");
-			}
-		});
-	});
-	
-	$(window).resize(function() {
-		
-		var modalDimensions = getModalDimensions();
-		var modalwidth = modalDimensions["width"];
-		var modalheight = modalDimensions["height"];
-		//var modal_at = modalDimensions["modal_at"];
-		
-		$.each($(".ui-dialog"), function() {
-			var $dialog;
-			$dialog = $(this).children(".ui-dialog-content");
-			if ($dialog.dialog("option", "modal")) {
-				$dialog.dialog( "option", "width", modalwidth );
-				$dialog.dialog( "option", "height", modalheight );
-				//$dialog.dialog("close");
-			}
-		});
-		
-	});
-	
-    $(function() {
-                
-    });
-	
-});
-
-/**** Modal PopUp Windows ***/
 
 	// Determine modal dimensions (width, height0 based on width and height of dinwo)
     function getModalDimensions() {
@@ -554,3 +488,67 @@ jQuery(document).ready(function($) {
         return theDialog;
 
     }
+    
+    // Pop-up dialog for Day Titles and other modal content
+    //var handle_id;
+	//var dialog_id;
+	
+	//$("a.dialog_handle").on("click", function() {
+	$('body').on('click','.dialog_handle',function(){
+	
+		console.log('click registered on a dialog_handle link');
+		
+		//var isOpen = false, dialogOpen = false;
+		
+		// Get the handle_id so as to open the correct dialog -- there may be multiple instances per page (e.g. day title links in event/sermon lists)
+		var handle_id = "#"+$(this).attr('id');
+		var dialog_id = handle_id.replace(/handle/g, "content");
+		//var item_id = handle_id.substr(14); // e.g. dialog_handle_35381
+		//var dialog_id = "#dialog_content_"+item_id;
+		//dialog_id = "#day_title_"+handle_id; // old
+		console.log('handle_id: '+handle_id);
+		console.log('dialog_id: '+dialog_id);
+		
+		var theDialog = prepDialog( handle_id, dialog_id );
+		
+		theDialog.dialog("open");
+		
+	});
+	
+	$(document.body).on("click", ".ui-widget-overlay", function() {
+	
+		console.log('click registered on a widget overlay element');
+		
+		$.each($(".ui-dialog"), function() {
+			var $dialog;
+			$dialog = $(this).children(".ui-dialog-content");
+			if($dialog.dialog("option", "modal")) {
+				$dialog.dialog("close");
+			}
+		});
+	});
+	
+	$(window).resize(function() {
+		
+		var modalDimensions = getModalDimensions();
+		var modalwidth = modalDimensions["width"];
+		var modalheight = modalDimensions["height"];
+		//var modal_at = modalDimensions["modal_at"];
+		
+		$.each($(".ui-dialog"), function() {
+			var $dialog;
+			$dialog = $(this).children(".ui-dialog-content");
+			if ($dialog.dialog("option", "modal")) {
+				$dialog.dialog( "option", "width", modalwidth );
+				$dialog.dialog( "option", "height", modalheight );
+				//$dialog.dialog("close");
+			}
+		});
+		
+	});
+	
+    $(function() {
+                
+    });
+	
+});
