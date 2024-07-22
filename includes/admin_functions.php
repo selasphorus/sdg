@@ -860,7 +860,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         // Choir Forces -- if no Voicings or Soloists
         if ( $choir_forces_str != "" & $voicings_str == "" && $soloists_str == "" && $uid_field == 'title_for_matching' ) {
             sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".$choir_forces_str, $do_log );
-            $new_title .= " / for ".$choir_forces_str;
+            $new_title .= " / for [cf] ".$choir_forces_str;
+            //$new_title .= " / for ".$choir_forces_str;
         } else {
             sdg_log( "[btt/edition] choir_forces: ".$choir_forces_str, $do_log );
         }
