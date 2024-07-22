@@ -25,9 +25,10 @@ function get_cpt_organ_content( $post_id = null ) {
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
     	$builder = get_post_meta( $post_id, 'builder', true ); //$builder = get_field( 'builder', $post_id ); //
     	
+    	// TODO: generalize this fcn for dealing w/ array vals -- for posts, tax terms
 		if ( is_array($builder) ) {
 			foreach ( $builder as $id ) {
-				$builder_str .= get_post_title($id);
+				$builder_str .= get_the_title($id);
 				if ( count($builder) > 1 ) {
 					$builder_str .= ", ";
 				}
