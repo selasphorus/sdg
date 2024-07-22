@@ -475,13 +475,13 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
             
-            $soloists_str = get_arr_str($soloists, "terms");
+            $soloists_str = "[gas] ".get_arr_str($soloists, "terms");
             if ( $soloists_str == "" && $arr['soloists_txt'] != "" ) {
                 $soloists_str = $arr['soloists_txt'];
                 sdg_log( "[btt/arr] using backup txt field for soloists_str", $do_log );
             }
             
-            $instruments_str = get_arr_str($instruments, "terms");
+            $instruments_str = "[gas] ".get_arr_str($instruments, "terms");
             if ( $instruments_str == "" && $arr['instrumentation_txt'] != "" ) {
                 $instruments_str = $arr['instrumentation_txt'];
                 sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str, $do_log );
