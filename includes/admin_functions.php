@@ -466,7 +466,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             
             // TODO: streamline this string construction process for all the taxonomies
             
-            $voicings_str = "";
+            $voicings_str = get_arr_str($voicings, "terms");
+            /*$voicings_str = "";
             if ( is_array($voicings) && count($voicings) > 0 ) {
                 //sdg_log( "[btt/arr] voicings: ".print_r($voicings, true), $do_log );
                 foreach ( $voicings as $voicing_id ) {
@@ -486,7 +487,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                     $voicings_str = substr($voicings_str, 0, -2);
                 }
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
-            }
+            }*/
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {

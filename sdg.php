@@ -2200,16 +2200,16 @@ function sdg_array_sorter( $key, $key_type = 'array_key' ) {
 }
 
 // Function to create string from array of meta or taxonomy values
-function get_arr_str( $arr, $type = 'post' ) {
+function get_arr_str( $arr, $type = 'posts' ) {
 
 	$str = "";
 	
 	// TODO: consider possibility of array of values that are NOT ids?
 	foreach ( $arr as $id ) {
 		if ( $id != 0) {
-			if ( $type == "post" ) {
+			if ( $type == "posts" ) {
 				$substr = get_the_title( $id );
-			} else if ( $type == "term" ) {
+			} else if ( $type == "terms" ) {
 				$term = get_term( $id );
 				$substr = $term->name;
 			}
