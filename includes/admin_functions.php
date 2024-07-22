@@ -836,8 +836,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str == "Array" ) {
             	$voicings_str = "str: Array";
             }
-            $new_title .= " / for ".$voicings_str;
-            //$new_title .= " / for [voicings] ".$voicings_str; // tft
+            //$new_title .= " / for ".$voicings_str;
+            $new_title .= " / for [voicings] ".$voicings_str; // tft
         }
         //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
         
