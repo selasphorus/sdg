@@ -2206,7 +2206,7 @@ function get_arr_str( $arr, $type = 'posts' ) {
 	
 	// TODO: consider possibility of array of values that are NOT ids?
 	foreach ( $arr as $id ) {
-		if ( $id != 0) {
+		if ( !empty($id) ) {
 			if ( $type == "posts" ) {
 				$substr = get_the_title( $id );
 			} else if ( $type == "terms" ) {

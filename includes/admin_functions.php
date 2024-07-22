@@ -610,7 +610,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
             // Get term names for "voicing".
             $voicings = wp_get_post_terms( $post_id, 'voicing', array( 'fields' => 'names' ) );
-            if ( $voicings ) { $voicings_str = "[terms]".implode(", ", $voicings); } else { $voicings_str = ""; }
+            if ( $voicings ) { $voicings_str = implode(", ", $voicings); } else { $voicings_str = ""; }
             sdg_log( "[btt] voicings_str: ".$voicings_str, $do_log );
 
             // Get term names for "soloist".
