@@ -470,7 +470,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {
-                    $voicings_str = $arr['voicing_txt'];
+                    $voicings_str = "[txt] ".$arr['voicing_txt'];
                     sdg_log( "[btt/arr] using backup txt field for voicings_str", $do_log );
                 }
             } else {
@@ -823,7 +823,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         if ( $voicings_str == "" ) { 
             //sdg_log( "[btt/edition] voicings_str is empty >> try voicing_txt.", $do_log );
             if ( $voicing_txt != "" ) {
-                $voicings_str = $voicing_txt;
+                $voicings_str = "[txt] ".$voicing_txt;
                 //sdg_log( "[btt/edition] voicings_str from voicing_txt: ".$voicings_str, $do_log );
             } else {
                 //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]", $do_log );

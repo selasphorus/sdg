@@ -2203,7 +2203,7 @@ function sdg_array_sorter( $key, $key_type = 'array_key' ) {
 function get_arr_str( $arr, $type = 'posts' ) {
 
 	$str = "";
-	if ( empty($arr) ) { return $str; }
+	if ( empty($arr) || !is_array($arr) ) { return $str; }
 	
 	// TODO: consider possibility of array of values that are NOT ids?
 	foreach ( $arr as $id ) {
