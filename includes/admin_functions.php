@@ -450,7 +450,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             //
             $publisher_id = $arr['publisher']; // single id
             //sdg_log( "[btt/arr] publisher_id: ".$publisher_id, $do_log );
-            if ( $publisher_id ) {
+            if ( is_array($publisher_id) ) {
+                $publisher = "publisher-array"; // tft
+            } elseif ( $publisher_id ) {
                 $publisher = get_post_field( 'post_title', $publisher_id, 'raw' );
             } else {
                 $publisher = "";
