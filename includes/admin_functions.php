@@ -464,7 +464,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $soloists        = $arr['soloists']; // array of ids
             $instruments     = $arr['instruments']; // array of ids
             
-            $voicings_str = get_arr_str($voicings, "terms");
+            $voicings_str = "[gas] ".get_arr_str($voicings, "terms");
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {
