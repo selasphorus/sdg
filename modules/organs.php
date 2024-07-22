@@ -23,8 +23,32 @@ function get_cpt_organ_content( $post_id = null ) {
     	// If not queenbee, show content instead of acf_form
     	// WIP
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
-    	$builder = get_field( 'builder', $post_id ); //$builder = get_post_meta( $post_id, 'builder', true );
-    	$info .= '<strong>builder(s)</strong>: <div class="xxx wip">'.$builder."</div>";
+    	$builder = get_post_meta( $post_id, 'builder', true ); //$builder = get_field( 'builder', $post_id ); //
+    	
+		if ( is_array($builder) ) {
+			foreach ( $builder as $tmp ) {
+				$builder_str .= $tmp;
+				if ( count($builder) > 1 ) {
+					$builder_str .= ", ";
+				}
+				/*if ( $instrument_id != 0) {
+					$term = get_term( $instrument_id );
+					if ($term) { 
+						$instruments_str .= $term->name;
+						if ( count($instruments) > 1 ) {
+							$instruments_str .= ", ";
+						}
+					}
+				}*/
+			}
+			if ( count($builder) > 1 && substr($builder_str, -2) == ', ' ) {
+				// Trim trailing comma and space
+				$builder_str = substr($builder_str, 0, -2);
+			}
+		} else {
+			$builder_str = $builder;
+		}
+    	$info .= '<strong>builder(s)</strong>: <div class="xxx wip">'.$builder_str."</div>";
     	
     	/*
     	//<div class="source venue_source wip">
