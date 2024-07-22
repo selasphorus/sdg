@@ -576,7 +576,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $publication_date = get_field('publication_date', $post_id);
             $box_num = get_field('box_num', $post_id);
             $old_t4m = get_field('title_for_matching', $post_id);
-            $choir_forces_str = get_field('choir_forces', $post_id);       
+            $choir_forces_str = get_arr_str(get_field('choir_forces', $post_id));       
             $voicing_txt = get_field('voicing_txt', $post_id);
             $soloists_txt = get_field('soloists_txt', $post_id);
             $instrumentation_txt = get_field('instrumentation_txt', $post_id);
