@@ -26,11 +26,18 @@ function get_cpt_organ_content( $post_id = null ) {
     	$builder_str = get_arr_str(get_post_meta( $post_id, 'builder', true )); //$builder = get_field( 'builder', $post_id ); //
     	$info .= '<strong>builder(s)</strong>: <div class="xxx wip">'.$builder_str."</div>";
     	
-    	/*
     	//<div class="source venue_source wip">
-    	$venue_info_vp = get_post_meta( $post_id, 'venue_info_vp', true );
-    	$info .= '<strong>venue_info_vp</strong>: <div class="xxx wip">'.$venue_info_vp."</div>";
     	
+    	$model = get_post_meta( $post_id, 'model', true );
+    	if ( $model ) { $info .= '<strong>Model</strong>: <div class="xxx wip">'.$model."</div>"; }
+    	
+    	$build_year = get_post_meta( $post_id, 'build_year', true );
+    	if ( $build_year ) { $info .= '<strong>Build Year:</strong>: <div class="xxx wip">'.$build_year."</div>"; }
+    	
+    	$opus_num = get_post_meta( $post_id, 'opus_num', true );
+    	if ( $opus_num ) { $info .= '<strong>Opus Num.</strong>: <div class="xxx wip">'.$opus_num."</div>"; }
+    	
+    	/*
     	$venue_sources = get_post_meta( $post_id, 'venue_sources', true );
     	$info .= '<strong>venue_sources</strong>: <div class="xxx wip">'.$venue_sources."</div>";
     	
