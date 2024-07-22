@@ -24,7 +24,7 @@ function get_cpt_organ_content( $post_id = null ) {
     	// WIP
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
     	$builder = get_field( 'builder', $post_id ); //$builder = get_post_meta( $post_id, 'builder', true );
-    	$info .= '<strong>builder</strong>: <div class="xxx wip">'.$builder."</div>";
+    	$info .= '<strong>builder(s)</strong>: <div class="xxx wip">'.$builder."</div>";
     	
     	/*
     	//<div class="source venue_source wip">
