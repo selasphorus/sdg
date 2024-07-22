@@ -348,11 +348,11 @@ function sdg_modules_field_cb( $args ) {
 	
 	$options = get_option( 'sdg_settings' );
 	$modules = array( 
-		'events' => __( 'Events' ), 
-		'people' => __( 'People' ), 
-		'groups' => __( 'Groups' ), 
+		///'events' => __( 'Events' ), // >>> WHx4
+		///'people' => __( 'People' ), // >>> WHx4
+		///'groups' => __( 'Groups' ), // >>> WHx4
 		//'ensembles' => __( 'Ensembles' ), 
-		'music' => __( 'Music Library' ), 
+		///'music' => __( 'Music Library' ), // >>> MLib
 		'webcasts' => __( 'Webcasts' ), 
 		'sermons' => __( 'Sermons' ), 
 		'lectionary' => __( 'Lectionary' ), 
@@ -366,9 +366,9 @@ function sdg_modules_field_cb( $args ) {
 		'newsletters' => __( 'Newsletters' ),
 		//'sources' => __( 'Sources' ),
 		//
-		'organs' => __( 'Organs' ), 
+		'organs' => __( 'Organs' ), // >>> MLib
 		//
-		'venues' => __( 'Venues' ), 
+		'venues' => __( 'Venues' ), // >>> WHx4
 		//
 		'slider' => __( 'Slider' ), 
 		'ninjaforms' => __( 'Ninja Forms' ), 
@@ -511,7 +511,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'organs', 'press', 'projects', 'sources' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 'venues', 
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'press', 'projects', 'sources' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 'venues', 'organs' 
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
     	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
     }
@@ -526,7 +526,7 @@ if ( function_exists('acf_add_options_page') ) {
     	$cpt_names = array(); // array because some modules include multiple post types
     	
     	// Deal w/ modules whose names don't perfectly match their CPT names
-    	if ( $module == "people" ) {
+    	/*if ( $module == "people" ) {
     		$primary_cpt = "person";
     		$cpt_names[] = "person";
     	} else if ( $module == "music" ) {
@@ -536,7 +536,7 @@ if ( function_exists('acf_add_options_page') ) {
     		//$cpt_names[] = "publisher";
     		//$cpt_names[] = "publication";
     		//$cpt_names[] = "music_list";
-    	} else if ( $module == "lectionary" ) {
+    	} else */if ( $module == "lectionary" ) {
     		$primary_cpt = "lectionary";
     		//$cpt_names[] = "bible_book";
     		//$cpt_names[] = "reading";
@@ -549,7 +549,7 @@ if ( function_exists('acf_add_options_page') ) {
     		$primary_cpt = "sermon";
     		$cpt_names[] = "sermon";
     		$cpt_names[] = "sermon_series";
-    	} else if ( $module == "events" ) {
+    	}/* else if ( $module == "events" ) {
     		$primary_cpt = "event";
     		$cpt_names[] = "event";
     		$cpt_names[] = "event_series";
@@ -557,7 +557,7 @@ if ( function_exists('acf_add_options_page') ) {
     		$primary_cpt = "organ";
     		$cpt_names[] = "organ";
     		//$cpt_names[] = "builder"; // division, manual, stop
-    	} else {
+    	} */else {
     		$cpt_name = $module;
     		// Make it singular -- remove trailing "s"
     		if ( substr($cpt_name, -1) == "s" && $cpt_name != "press" ) { $cpt_name = substr($cpt_name, 0, -1); }

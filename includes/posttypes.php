@@ -477,9 +477,9 @@ if ( in_array('newsletters', $sdg_modules ) ) {
 }
 
 /*** MUSIC LIBRARY ***/
-
+// >>> MLIB
 // TODO: generalize as "library" w/ sub-options for music?
-if ( in_array('music', $sdg_modules ) ) {
+/*if ( in_array('music', $sdg_modules ) ) {
 
 	// Repertoire, aka Musical Work
 	function register_post_type_repertoire() {
@@ -691,7 +691,7 @@ if ( in_array('music', $sdg_modules ) ) {
 	}
 	//add_action( 'init', 'register_post_type_music_list' );
 
-}
+}*/
 
 /*** LECTIONARY ***/
 
@@ -1088,8 +1088,9 @@ if ( in_array('sermons', $sdg_modules ) ) {
 // >>>> See WHX4 for event_series CPT <<<< //
 
 /*** ORGANS ***/
-
+// >>> MLIB
 // TODO: generalize as "instruments"?
+/*
 if ( in_array('organs', $sdg_modules ) ) {
 
 	// Organ
@@ -1305,6 +1306,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Rank -- TBD
 
 }
+*/
 
 /*** VENUES ***/
 /*** ADDRESSES ***/

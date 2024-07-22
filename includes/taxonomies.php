@@ -328,7 +328,6 @@ add_action( 'init', 'register_taxonomy_page_tag' );
 // >>>> See WHX4 for person, group, event-program-related taxonomies <<<< //
 
 
-
 /*** Taxonomies for PROJECTS ***/
 
 if ( in_array('projects', $sdg_modules ) ) {
@@ -373,9 +372,11 @@ if ( in_array('projects', $sdg_modules ) ) {
 }
 
 /*** Taxonomies for REPERTOIRE ***/
-
+// >>>> MLIB
 if ( in_array('music', $sdg_modules ) ) {
 
+	/*** Taxonomies for REPERTOIRE ***/
+	/*
 	// Custom Taxonomy: Occasion
 	function register_taxonomy_occasion() {
 		$labels = array(
@@ -451,10 +452,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_taxonomy( 'repertoire_category', [ 'repertoire' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_repertoire_category' );
-
+	*/
 
 	/*** Taxonomies for EDITIONS ***/
-
+	/*
 	// Custom Taxonomy: Instrument
 	function register_taxonomy_instrument() {
 		$labels = array(
@@ -647,9 +648,10 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_taxonomy( 'library_tag', [ 'edition' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_library_tag' );
+	*/
 
-/*** Taxonomies for PUBLICATIONS ***/
-
+	/*** Taxonomies for PUBLICATIONS ***/
+	/*
 	// Custom Taxonomy: Publication Category
 	function register_taxonomy_publication_category() {
 		$labels = array(
@@ -687,10 +689,8 @@ if ( in_array('music', $sdg_modules ) ) {
 		register_taxonomy( 'publication_category', [ 'publication' ], $args );
 	}
 	add_action( 'init', 'register_taxonomy_publication_category' );
-
+	*/
 }
-
-
 
 /*** Taxonomies for LECTIONARY ***/
 
@@ -862,8 +862,9 @@ if ( in_array('sermons', $sdg_modules ) ) {
 // >>>> WHX4
 
 /*** Taxonomies for ORGANS ***/
-
+// >>>> MLIB
 // TODO: generalize as instrument/instrument_tag
+/*
 if ( in_array('organs', $sdg_modules ) ) {
 
 	// Custom Taxonomy: Action Type
@@ -905,7 +906,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 	add_action( 'init', 'register_taxonomy_action_type' );
 	
 	// Custom Taxonomy: Organ Tag
-	function nycago_register_taxonomy_organ_tag() {
+	function register_taxonomy_organ_tag() {
 		$cap = 'organ';
 		$labels = array(
 			'name'              => _x( 'Organ Tags', 'taxonomy general name' ),
@@ -938,10 +939,10 @@ if ( in_array('organs', $sdg_modules ) ) {
 		);
 		register_taxonomy( 'organ_tag', [ 'organ' ], $args );
 	}
-	add_action( 'init', 'nycago_register_taxonomy_organ_tag' );
+	add_action( 'init', 'register_taxonomy_organ_tag' );
 	
 }
-
+*/
 /*** Taxonomies for LINKS ***/
 
 if ( in_array('links', $sdg_modules ) ) {
