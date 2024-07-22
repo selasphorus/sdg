@@ -443,7 +443,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $publication_id = $arr['publication']; // single id
             //sdg_log( "[btt/arr] publication_id: ".$publication_id, $do_log );
             if ( $publication_id ) {
-                $publication = get_post_field( 'post_title', $publication_id, 'raw' );
+                $publication = "[pub]".get_post_field( 'post_title', $publication_id, 'raw' );
             } else {
                 $publication = "";
             }
@@ -829,8 +829,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         }
         if ( $voicings_str != "" && $uid_field == 'title_for_matching' ) { 
             //sdg_log( "[btt/edition] add voicings_str to new_title.", $do_log );
-            $new_title .= " / for [voicings] ".$voicings_str;
-            //$new_title .= " / for ".$voicings_str;
+            $new_title .= " / for ".$voicings_str;
+            //$new_title .= " / for [voicings] ".$voicings_str; // tft
         }
         //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
         
@@ -844,8 +844,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             if ( $voicings_str != "" ) { 
                 $new_title .= " + ".$soloists_str;
             } else {
-                $new_title .= " / for [soloists] ".$soloists_str;
                 //$new_title .= " / for ".$soloists_str;
+                $new_title .= " / for [soloists] ".$soloists_str; // tft
             }
         }
         //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title, $do_log );
@@ -870,8 +870,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str != "" || $soloists_str != "" || $choir_forces_str != "" ) {
                 $new_title .= " with ".$instruments_str;
             } else {
-                $new_title .= " for [instr] ".$instruments_str;
                 //$new_title .= " for ".$instruments_str; 
+                $new_title .= " for [instr] ".$instruments_str; // tft
             }
         }
         //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title, $do_log );
