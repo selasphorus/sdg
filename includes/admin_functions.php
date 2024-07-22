@@ -466,24 +466,24 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $soloists        = $arr['soloists']; // array of ids
             $instruments     = $arr['instruments']; // array of ids
             
-            $voicings_str = "[gas] ".get_arr_str($voicings, "terms");
+            $voicings_str = get_arr_str($voicings, "terms");
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {
-                    $voicings_str = "[txt] ".$arr['voicing_txt'];
+                    $voicings_str = $arr['voicing_txt'];
                     sdg_log( "[btt/arr] using backup txt field for voicings_str", $do_log );
                 }
             } else {
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
             
-            $soloists_str = "[gas] ".get_arr_str($soloists, "terms");
+            $soloists_str = get_arr_str($soloists, "terms");
             if ( $soloists_str == "" && $arr['soloists_txt'] != "" ) {
                 $soloists_str = $arr['soloists_txt'];
                 sdg_log( "[btt/arr] using backup txt field for soloists_str", $do_log );
             }
             
-            $instruments_str = "[gas] ".get_arr_str($instruments, "terms");
+            $instruments_str = get_arr_str($instruments, "terms");
             if ( $instruments_str == "" && $arr['instrumentation_txt'] != "" ) {
                 $instruments_str = $arr['instrumentation_txt'];
                 sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str, $do_log );
@@ -823,7 +823,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         if ( $voicings_str == "" ) { 
             //sdg_log( "[btt/edition] voicings_str is empty >> try voicing_txt.", $do_log );
             if ( $voicing_txt != "" ) {
-                $voicings_str = "[txt] ".$voicing_txt;
+                $voicings_str = $voicing_txt;
                 //sdg_log( "[btt/edition] voicings_str from voicing_txt: ".$voicings_str, $do_log );
             } else {
                 //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]", $do_log );
@@ -836,8 +836,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str == "Array" ) {
             	$voicings_str = "str: Array";
             }
-            //$new_title .= " / for ".$voicings_str;
-            $new_title .= " / for [voicings] ".$voicings_str; // tft
+            $new_title .= " / for ".$voicings_str;
+            //$new_title .= " / for [voicings] ".$voicings_str; // tft
         }
         //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
         
@@ -851,8 +851,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             if ( $voicings_str != "" ) { 
                 $new_title .= " + ".$soloists_str;
             } else {
-                //$new_title .= " / for ".$soloists_str;
-                $new_title .= " / for [soloists] ".$soloists_str; // tft
+                $new_title .= " / for ".$soloists_str;
+                //$new_title .= " / for [soloists] ".$soloists_str; // tft
             }
         }
         //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title, $do_log );
@@ -860,8 +860,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         // Choir Forces -- if no Voicings or Soloists
         if ( $choir_forces_str != "" & $voicings_str == "" && $soloists_str == "" && $uid_field == 'title_for_matching' ) {
             sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".$choir_forces_str, $do_log );
-            $new_title .= " / for [cf] ".$choir_forces_str;
-            //$new_title .= " / for ".$choir_forces_str;
+            $new_title .= " / for ".$choir_forces_str;
+            //$new_title .= " / for [cf] ".$choir_forces_str; // tft
         } else {
             sdg_log( "[btt/edition] choir_forces: ".$choir_forces_str, $do_log );
         }
@@ -878,8 +878,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str != "" || $soloists_str != "" || $choir_forces_str != "" ) {
                 $new_title .= " with ".$instruments_str;
             } else {
-                //$new_title .= " for ".$instruments_str; 
-                $new_title .= " for [instr] ".$instruments_str; // tft
+                $new_title .= " for ".$instruments_str; 
+                //$new_title .= " for [instr] ".$instruments_str; // tft
             }
         }
         //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title, $do_log );
