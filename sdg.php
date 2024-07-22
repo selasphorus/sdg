@@ -513,7 +513,7 @@ foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
     $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'press', 'projects', 'sources' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 'venues', 'organs' 
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
-    	if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "module file $filepath not found"; }
+    	if ( file_exists($filepath) ) { include_once( $filepath ); } //else { echo "module file $filepath not found"; }
     }
 }
 
