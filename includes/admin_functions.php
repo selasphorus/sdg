@@ -759,7 +759,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // ltrim punctuation so as to avoid failed replacement if work, e.g., has no arranger but no composer listed -- TODO: integrate this into get_authorship_info fcn?
             $rep_authorship_short = ltrim( $rep_authorship_short, ', ' );
             $rep_authorship_short = ltrim( $rep_authorship_short, '-- ' );
-            //$rep_authorship_short = trim( $rep_authorship_short, '()' );
+            //$rep_authorship_short = trim( $rep_authorship_short, '()' ); // nope
             sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short, $do_log );
             
             // B. Long version
