@@ -467,27 +467,6 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             // TODO: streamline this string construction process for all the taxonomies
             
             $voicings_str = get_arr_str($voicings, "terms");
-            /*$voicings_str = "";
-            if ( is_array($voicings) && count($voicings) > 0 ) {
-                //sdg_log( "[btt/arr] voicings: ".print_r($voicings, true), $do_log );
-                foreach ( $voicings as $voicing_id ) {
-                    if ( $voicing_id != 0) {
-                        $term = get_term( $voicing_id );
-                        if ($term) { 
-                            //sdg_log( "[btt] voicing_id: $voicing_id/ term->name: ".$term->name, $do_log );
-                            $voicings_str .= $term->name;
-                            if ( count($voicings) > 1 ) {
-                                $voicings_str .= ", ";
-                            }
-                        }
-                    }
-                }
-                if ( count($voicings) > 1 && substr($voicings_str, -2) == ', ' ) {
-                    // Trim trailing comma and space
-                    $voicings_str = substr($voicings_str, 0, -2);
-                }
-                //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
-            }*/
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
                 if ( $arr['voicing_txt'] != "" ) {
@@ -498,47 +477,13 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
             
-            $soloists_str = "";
-            if ( is_array($soloists) && count($soloists) > 0 ) {
-                foreach ( $soloists as $soloist_id ) {
-                    if ( $soloist_id != 0) {
-                        $term = get_term( $soloist_id );
-                        if ($term) { 
-                            $soloists_str .= $term->name;
-                            if ( count($soloists) > 1 ) {
-                                $soloists_str .= ", ";
-                            }
-                        }
-                    }
-                }
-                if ( count($soloists) > 1 && substr($soloists_str, -2) == ', ' ) {
-                    // Trim trailing comma and space
-                    $soloists_str = substr($soloists_str, 0, -2);
-                }
-            }
+            $soloists_str = get_arr_str($soloists, "terms");
             if ( $soloists_str == "" && $arr['soloists_txt'] != "" ) {
                 $soloists_str = $arr['soloists_txt'];
                 sdg_log( "[btt/arr] using backup txt field for soloists_str", $do_log );
             }
             
-            $instruments_str = "";
-            if ( is_array($instruments) && count($instruments) > 0 ) {
-                foreach ( $instruments as $instrument_id ) {
-                    if ( $instrument_id != 0) {
-                        $term = get_term( $instrument_id );
-                        if ($term) { 
-                            $instruments_str .= $term->name;
-                            if ( count($instruments) > 1 ) {
-                                $instruments_str .= ", ";
-                            }
-                        }
-                    }
-                }
-                if ( count($instruments) > 1 && substr($instruments_str, -2) == ', ' ) {
-                    // Trim trailing comma and space
-                    $instruments_str = substr($instruments_str, 0, -2);
-                }
-            }
+            $instruments_str = get_arr_str($instruments, "terms");
             if ( $instruments_str == "" && $arr['instrumentation_txt'] != "" ) {
                 $instruments_str = $arr['instrumentation_txt'];
                 sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str, $do_log );
@@ -549,24 +494,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         
         // For both rep & editions, handle key names
         $keys = $arr['keys']; // array of ids
-        $keys_str = "";
-        if ( is_array($keys) && count($keys) > 0 ) {
-            foreach ( $keys as $key_id ) {
-                if ( $key_id != 0) {
-                    $term = get_term( $key_id );
-                    if ($term) { 
-                        $keys_str .= $term->name;
-                        if ( count($keys) > 1 ) {
-                            $keys_str .= ", ";
-                        }
-                    }
-                }
-            }
-            if ( count($keys) > 1 && substr($keys_str, -2) == ', ' ) {
-                // Trim trailing comma and space
-                $keys_str = substr($keys_str, 0, -2);
-            }
-        }
+        $keys_str = get_arr_str($keys, "terms");
         if ( $keys_str == "" && $arr['key_name_txt'] != "" ) {
             $keys_str = $arr['key_name_txt'];
             sdg_log( "[btt/arr] using backup txt field for keys_str", $do_log );
