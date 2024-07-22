@@ -829,7 +829,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         }
         if ( $voicings_str != "" && $uid_field == 'title_for_matching' ) { 
             //sdg_log( "[btt/edition] add voicings_str to new_title.", $do_log );
-            $new_title .= " / for ".$voicings_str;
+            $new_title .= " / for [voicings] ".$voicings_str;
+            //$new_title .= " / for ".$voicings_str;
         }
         //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
         
@@ -843,7 +844,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             if ( $voicings_str != "" ) { 
                 $new_title .= " + ".$soloists_str;
             } else {
-                $new_title .= " / for ".$soloists_str;
+                $new_title .= " / for [soloists] ".$soloists_str;
+                //$new_title .= " / for ".$soloists_str;
             }
         }
         //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title, $do_log );
@@ -868,7 +870,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str != "" || $soloists_str != "" || $choir_forces_str != "" ) {
                 $new_title .= " with ".$instruments_str;
             } else {
-                $new_title .= " for ".$instruments_str; 
+                $new_title .= " for [instr] ".$instruments_str;
+                //$new_title .= " for ".$instruments_str; 
             }
         }
         //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title, $do_log );
