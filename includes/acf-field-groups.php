@@ -690,8 +690,9 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
-	acf_add_local_field_group( array(
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_6244d25e31afa',
 		'title' => 'Edition: Additional Fields',
 		'fields' => array(
@@ -1208,7 +1209,7 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
+	) );*/
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62742fabcbba5',
@@ -2626,8 +2627,9 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
-		acf_add_local_field_group( array(
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_628e832908174',
 		'title' => 'Music List: Additional Fields',
 		'fields' => array(
@@ -2740,9 +2742,10 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
-
-	acf_add_local_field_group( array(
+	) );*/
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_6240a70370889',
 		'title' => 'Musical Work: Additional Fields',
 		'fields' => array(
@@ -3770,7 +3773,7 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
+	) );*/
 
 	acf_add_local_field_group( array(
 		'key' => 'group_628e8fba3cf6c',
@@ -3858,8 +3861,9 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
-	acf_add_local_field_group( array(
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_6273eb6a92ef9',
 		'title' => 'Publication: Additional Fields',
 		'fields' => array(
@@ -4243,9 +4247,10 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
-
-	acf_add_local_field_group( array(
+	) );*/
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_6273e873c1e43',
 		'title' => 'Publisher: Additional Fields',
 		'fields' => array(
@@ -4315,7 +4320,7 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
+	) );*/
 
 	acf_add_local_field_group( array(
 		'key' => 'group_62718b45a09df',
@@ -5062,8 +5067,9 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
-	acf_add_local_field_group( array(
+	
+	// >> MLib
+	/*acf_add_local_field_group( array(
 		'key' => 'group_628d19b6ea024',
 		'title' => 'Soloist: Additional Fields',
 		'fields' => array(
@@ -5135,7 +5141,7 @@ function sdg_register_field_groups() {
 		'active' => true,
 		'description' => '',
 		'show_in_rest' => 0,
-	) );
+	) );*/
 
 	acf_add_local_field_group( array(
 		'key' => 'group_61ae39b4a8f58',
@@ -7322,7 +7328,8 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
+	
+	// >> MLib
 	acf_add_local_field_group( array(
 		'key' => 'group_605e8d3ade2c0',
 		'title' => 'Legacy & Admin Fields: Editions',
@@ -7635,7 +7642,8 @@ function sdg_register_field_groups() {
 		'show_in_rest' => false,
 	) );
 
-		acf_add_local_field_group( array(
+	// >> WHx4
+	acf_add_local_field_group( array(
 		'key' => 'group_5de541e8a5411',
 		'title' => 'Legacy & Admin Fields: Events',
 		'fields' => array(
@@ -7968,7 +7976,8 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
+	
+	// >> MLib
 	acf_add_local_field_group( array(
 		'key' => 'group_5eecbb51a40b3',
 		'title' => 'Legacy & Admin Fields: Repertoire',
@@ -9764,7 +9773,8 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
+	
+	// >> WHx4
 	acf_add_local_field_group( array(
 		'key' => 'group_664b76ebf3872',
 		'title' => 'People Module Options',
@@ -10581,7 +10591,8 @@ function sdg_register_field_groups() {
 		'description' => '',
 		'show_in_rest' => 0,
 	) );
-
+	
+	// >> Snippets plugin
 	acf_add_local_field_group( array(
 		'key' => 'group_651dab1c9a033',
 		'title' => 'Snippet Logic',

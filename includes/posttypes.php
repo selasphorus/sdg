@@ -1090,7 +1090,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
 /*** ORGANS ***/
 // >>> MLIB
 // TODO: generalize as "instruments"?
-
+/*
 if ( in_array('organs', $sdg_modules ) ) {
 
 	// Organ
@@ -1306,7 +1306,7 @@ if ( in_array('organs', $sdg_modules ) ) {
 	// Rank -- TBD
 
 }
-
+*/
 
 /*** VENUES ***/
 /*** ADDRESSES ***/
