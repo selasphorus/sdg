@@ -464,8 +464,6 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $soloists        = $arr['soloists']; // array of ids
             $instruments     = $arr['instruments']; // array of ids
             
-            // TODO: streamline this string construction process for all the taxonomies
-            
             $voicings_str = get_arr_str($voicings, "terms");
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
@@ -829,7 +827,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]", $do_log );
             }
         }
-        if ( $voicings_str !== "" && $uid_field == 'title_for_matching' ) { 
+        if ( $voicings_str != "" && $uid_field == 'title_for_matching' ) { 
             //sdg_log( "[btt/edition] add voicings_str to new_title.", $do_log );
             $new_title .= " / for ".$voicings_str;
         }
