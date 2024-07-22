@@ -19,6 +19,8 @@ function get_cpt_organ_content( $post_id = null ) {
     
     if ( $post_id === null ) { return false; }
     
+    $info .= "TESTING...<br />";
+    
     if ( !sdg_queenbee() ) {
     	// If not queenbee, show content instead of acf_form
     	// WIP
