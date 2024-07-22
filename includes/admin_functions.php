@@ -571,7 +571,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             
             // get ACF fields
             // use the_field instead?
-            $publisher = get_field('publisher', $post_id);
+            $publisher = get_arr_str(get_field('publisher', $post_id));
             $publication = get_field('publication', $post_id);
             $publication_date = get_field('publication_date', $post_id);
             $box_num = get_field('box_num', $post_id);
