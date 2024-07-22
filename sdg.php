@@ -2199,6 +2199,36 @@ function sdg_array_sorter( $key, $key_type = 'array_key' ) {
     };
 }
 
+// Function to create string from array of meta or taxonomy values
+function get_arr_str( $arr, $type = 'post' ) {
+
+	$str = "";
+	
+	// TODO: consider possibility of array of values that are NOT ids?
+	foreach ( $arr as $id ) {
+		if ( $id != 0) {
+			if ( $type == "post" ) {
+				$substr = get_the_title( $id );
+			} else if ( $type == "term" ) {
+				$term = get_term( $id );
+				$substr = $term->name;
+			}
+			if ($substr) { 
+				$str .= $substr;
+				if ( count($arr) > 1 ) {
+					$str .= ", ";
+				}
+			}
+		}
+	}
+	if ( count($arr) > 1 && substr($str, -2) == ', ' ) {
+		$str = substr($str, 0, -2); // Trim trailing comma and space
+	}
+	
+	return $str;
+
+}
+
 // https://developer.wordpress.org/reference/hooks/document_title_parts/
 // Filters the parts of the document title.
 add_filter( 'document_title_parts', function( $title_parts_array ) {
