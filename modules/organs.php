@@ -19,13 +19,11 @@ function get_cpt_organ_content( $post_id = null ) {
     
     if ( $post_id === null ) { return false; }
     
-    $info .= "TESTING...<br />";
-    
     if ( !sdg_queenbee() ) {
     	// If not queenbee, show content instead of acf_form
     	// WIP
     	//$settings = array( 'fields' => array( 'venue_info_ip', 'venue_info_vp', 'venue_sources', 'venue_html_ip', 'organs_html_ip', 'organs_html_vp' ) );
-    	$builder = get_post_meta( $post_id, 'builder', true );
+    	$builder = get_field( 'builder', $post_id ); //$builder = get_post_meta( $post_id, 'builder', true );
     	$info .= '<strong>builder</strong>: <div class="xxx wip">'.$builder."</div>";
     	
     	/*
