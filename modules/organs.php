@@ -26,8 +26,8 @@ function get_cpt_organ_content( $post_id = null ) {
     	$builder = get_post_meta( $post_id, 'builder', true ); //$builder = get_field( 'builder', $post_id ); //
     	
 		if ( is_array($builder) ) {
-			foreach ( $builder as $tmp ) {
-				$builder_str .= $tmp;
+			foreach ( $builder as $id ) {
+				$builder_str .= get_post_title($id);
 				if ( count($builder) > 1 ) {
 					$builder_str .= ", ";
 				}
