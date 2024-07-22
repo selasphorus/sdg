@@ -617,11 +617,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
             // Get term names for "soloist".
             $soloists = wp_get_post_terms( $post_id, 'soloist', array( 'fields' => 'names' ) );
-            $soloists_str = implode(", ", $soloists);
+            if ( $soloists ) { $soloists_str = implode(", ", $soloists); } else { $soloists_str = ""; }
 
             // Get term names for "instrument".
             $instruments = wp_get_post_terms( $post_id, 'instrument', array( 'fields' => 'names' ) );
-            $instruments_str = implode(", ", $instruments);
+            if ( $instruments ) { $instruments_str = implode(", ", $instruments); } else { $instruments_str = ""; }
         }
         
     }
