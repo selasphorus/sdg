@@ -366,9 +366,9 @@ function sdg_modules_field_cb( $args ) {
 		'newsletters' => __( 'Newsletters' ),
 		//'sources' => __( 'Sources' ),
 		//
-		'organs' => __( 'Organs' ), // >>> MLib
+		///'organs' => __( 'Organs' ), // >>> MLib
 		//
-		'venues' => __( 'Venues' ), // >>> WHx4
+		///'venues' => __( 'Venues' ), // >>> WHx4
 		//
 		'slider' => __( 'Slider' ), 
 		'ninjaforms' => __( 'Ninja Forms' ), 
