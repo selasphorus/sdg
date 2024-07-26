@@ -530,7 +530,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	$info .= "\n<!-- get_day_title -->\n";
 
     if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $ts_info .= "post_id: ".$post_id."<br />"; // tft
+    $ts_info .= "[gds] post_id: ".$post_id."<br />";
     if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
     
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
