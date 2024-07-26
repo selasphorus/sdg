@@ -857,7 +857,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$do_ts && 
 	
 	return $info;
 	
