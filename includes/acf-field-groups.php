@@ -7084,7 +7084,7 @@ function sdg_register_field_groups() {
 		'show_in_rest' => 0,
 	) );
 	
-	// >> Snippets plugin
+	// >> TODO: move to new Snippets plugin
 	acf_add_local_field_group( array(
 		'key' => 'group_651dab1c9a033',
 		'title' => 'Snippet Logic',
