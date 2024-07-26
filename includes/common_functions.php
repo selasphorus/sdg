@@ -54,7 +54,7 @@ function sdg_post_title ( $args = array() ) {
 		//$ts_info .= "Not is_numeric: ".$post."<br />";
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
-	$ts_info .= "post_id: ".$post_id."<br />";
+	$ts_info .= "[sdg-pt] post_id: ".$post_id."<br />";
 	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
 	if ( !$show_subtitle ) {
     	//$ts_info .= "[sdgpt] show_subtitles: false<br />";
