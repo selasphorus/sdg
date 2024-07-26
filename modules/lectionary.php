@@ -604,6 +604,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     if ( $hide_day_titles == 1 ) { 
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
+        $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
         return $info;
     } else {
         //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
@@ -858,6 +859,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	
 	$info .= get_special_date_content( $the_date );
 	if ( !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$do_ts && 
+	$info .= "\n<!-- /get_day_title -->\n";
 	
 	return $info;
 	
