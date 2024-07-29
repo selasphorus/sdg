@@ -199,7 +199,6 @@ function sdg_post_title ( $args = array() ) {
 	//$ts_info .= "END sdg_post_title<br />";
 	
 	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
@@ -546,7 +545,6 @@ function sdg_post_thumbnail ( $args = array() ) {
     }
 	
 	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return info
 	if ( $echo == true ) { echo $info; } else { return $info; }
@@ -813,7 +811,6 @@ function display_postmeta( $args = array() ) {
     $info .= "</pre>";
     
     if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
 	
@@ -1177,7 +1174,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	}
 	
 	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
-	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }        
+	//if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
 	$arr_info['ts_info'] = $ts_info;
 	$arr_info['position'] = $position;
@@ -2639,14 +2636,13 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 				
 						$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
 						$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
 				
-						$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
+						$ts_info .= $posts_info['ts_info'];
 				
 						// Print last SQL query string
 						//global $wpdb;
-						//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
 				
 					}
 				}			
@@ -2654,19 +2650,19 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
             
             if ( $search_related_post_type == true && $bgp_args_related && $default_query == false ) {
                 
-                $ts_info .= "About to pass bgp_args_related to birdhive_get_posts: <pre>".print_r($bgp_args_related,true)."</pre>"; // tft
+                $ts_info .= "About to pass bgp_args_related to birdhive_get_posts: <pre>".print_r($bgp_args_related,true)."</pre>";
                 
-                //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
+                //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array();
                 $related_posts_info = birdhive_get_posts( $bgp_args_related );
                 
                 if ( isset($related_posts_info['arr_posts']) ) {
                 
                     $arr_related_post_ids = $related_posts_info['arr_posts']->posts;
                     $ts_info .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
-                    //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
+                    //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>";
 
-                    if ( isset($related_posts_info['info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>'; }
-					if ( isset($related_posts_info['ts_info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>'; }
+                    if ( isset($related_posts_info['info']) ) { $ts_info .= $related_posts_info['info']; }
+					if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
@@ -2749,7 +2745,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
             if ( !empty($arr_post_ids) ) {
                     
                 //$ts_info .= "Num matching posts found (raw results): [".count($arr_post_ids)."]"; 
-                $info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_post_ids)."]".'</div>'; // tft -- if there are both rep and editions, it will likely be an overcount
+                $info .= '<div class="troubleshooting">'."Num matching posts found (raw results): [".count($arr_post_ids)."]".'</div>'; // if there are both rep and editions, it will likely be an overcount
                 $info .= format_search_results($arr_post_ids);
 
             } else {
@@ -3835,7 +3831,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
 					$ts_info .= "Default query -- no need to run a search<br />";
 				} else {
 					if ( $form_type == "advanced_search" ) {
-						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
+						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array();
 						$posts_info = birdhive_get_posts( $bgp_args );
 					} else {
 						$posts_info = birdhive_get_posts( $bgp_args );
@@ -3845,14 +3841,13 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
 				
 						$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
 						$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>"; // tft
+						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
 				
-						$info .= '<div class="troubleshooting">'.$posts_info['ts_info'].'</div>';
+						$ts_info .= $posts_info['ts_info'];
 				
 						// Print last SQL query string
 						//global $wpdb;
-						//$info .= '<div class="troubleshooting">'."last_query:<pre>".$wpdb->last_query."</pre>".'</div>'; // tft
-						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>"; // tft
+						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
 				
 					}
 				}			
@@ -3860,7 +3855,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
             
             if ( $search_related_post_type == true && $bgp_args_related && $default_query == false ) {
                 
-                $ts_info .= "About to pass bgp_args_related to birdhive_get_posts: <pre>".print_r($bgp_args_related,true)."</pre>"; // tft
+                $ts_info .= "About to pass bgp_args_related to birdhive_get_posts: <pre>".print_r($bgp_args_related,true)."</pre>";
                 
                 //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $related_posts_info = array(); // tft
                 $related_posts_info = birdhive_get_posts( $bgp_args_related );
@@ -3869,10 +3864,10 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                 
                     $arr_related_post_ids = $related_posts_info['arr_posts']->posts;
                     $ts_info .= "Num arr_related_post_ids: [".count($arr_related_post_ids)."]<br />";
-                    //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>"; // tft
+                    //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>";
 
-                    if ( isset($related_posts_info['info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['info'].'</div>'; }
-					if ( isset($related_posts_info['ts_info']) ) { $info .= '<div class="troubleshooting">'.$related_posts_info['ts_info'].'</div>'; }
+                    if ( isset($related_posts_info['info']) ) { $ts_info .= $related_posts_info['info']; }
+					if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {

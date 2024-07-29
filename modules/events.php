@@ -39,7 +39,7 @@ function get_related_event( $post_id = null, $post_type = null, $link = true, $l
 	
 	//$info .= '<a href="'. esc_url(get_permalink($event_id)) . '">' . get_the_title($event_id) . '</a>';
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -169,7 +169,7 @@ function get_event_program_content( $post_id = null ) {
 	$info .= '</div>';
     $ts_info .= "===== // get_event_program_content =====<br />";
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info = $ts_info.$info; // ts_info at the top of the page
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$info = $ts_info.$info; // ts_info at the top of the page
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
@@ -258,7 +258,7 @@ function get_event_ticketing_info( $post_id = null ) {
     
 	$info .= '</div>';
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -294,7 +294,7 @@ function get_call_time( $atts = array() ) {
     $call_time = get_field( 'call_time', $post_id ); //$call_time = get_post_meta( $post_id, 'call_time', true );
     $info .= '<h3 class="'.$hclass.'">Call Time:</h3>'.$call_time.'<br />';
     
-    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
     
@@ -350,7 +350,7 @@ function get_music_dept_overview( $atts = array() ) {
     
     $ts_info .= "===== // get_music_dept_overview =====<br />";
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 
@@ -413,7 +413,7 @@ function get_event_roster( $atts = array() ) {
 		$info .= $choir_notes;
 	}
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 
@@ -491,7 +491,7 @@ function get_event_rep( $atts = array() ) {
     
     $ts_info .= "===== // get_event_rep =====<br />";
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
     // TODO: get and display program_pdf?
 	//$info .= make_link($program_pdf,"Download Leaflet PDF", null, null, "_blank");
@@ -735,7 +735,7 @@ function get_event_personnel( $atts = array() ) {
 				if ( $display == 'table' ) {
 					//$table .= '<div class="troubleshooting">row_info:<br />'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
 				} else {
-					//$ts_info .= 'row_info:<br />'.$row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
+					//$ts_info .= 'row_info:<br />'.$row_info;
 				}
 				$ts_info .= $row_info; //$ts_info .= 'row_info:<br />'.$row_info;
 			}
@@ -1507,7 +1507,7 @@ function get_event_program_items( $atts = array() ) {
 					if ( $display == 'table' ) {
 						//$table .= '<div class="troubleshooting">row_info:<br />'.$row_info.'</div>'; //$row_info; // Display comments w/ in row for ease of parsing dev notes
 					} else {
-						//$ts_info .= 'row_info:<br />'.$row_info; //$info .= '<div class="troubleshooting">'.$row_info.'</div>';
+						//$ts_info .= 'row_info:<br />'.$row_info;
 					}
 					$ts_info .= $row_info; //$ts_info .= 'row_info:<br />'.$row_info;
 				}
@@ -2096,7 +2096,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	$ts_info .= "repeater_name: ".$repeater_name."<br />";
 	
 	$row_as_txt = "<pre>".print_r($row, true)."</pre>";
-	//$ts_info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+	//$ts_info .= $row_as_txt;
 	//$exp_args = array( 'text' => $row_as_txt, 'preview_text' => "Show row..." );
 	//$ts_info .= expandable_text( $exp_args ); // Not working yet
 	//
@@ -2424,7 +2424,7 @@ function event_program_row_cleanup ( $post_id = null, $i = null, $row = null, $r
 	} else {
 	
 		// Display the original row info if we're making changes
-		$ts_info .= $row_as_txt; //$info .= '<div class="troubleshooting">'.$row_as_txt.'</div>';
+		$ts_info .= $row_as_txt;
 		
 		// Prepare to do the updates and deletions
 
@@ -2907,7 +2907,7 @@ function event_program_cleanup( $atts = array() ) {
 			//$ts_info_personnel .= "Found ".count($posts)." event post(s) with program postmeta.<br /><br />"; //$info .= "Found ".count($posts)." event post(s) with personnel postmeta.<br /><br />";
 			//$ts_info_personnel .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 			//$ts_info_personnel .= "Last SQL-Query: <pre>".$result->request."</pre>";
-			//$info .= '<div class="troubleshooting">'.$ts_info_personnel.'</div>';
+			//$ts_info .= $ts_info_personnel;
 			//
 			$info .= "---------------------<br />";
 			
@@ -3374,7 +3374,7 @@ function event_program_cleanup( $atts = array() ) {
     // .....
     
     $info = '<div class="info">'.$info.'</div>';
-    //if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    //if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     return $info;
     
 }
@@ -3770,7 +3770,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
     	
     }
     
-    if ( $do_ts && !empty($ts_info) ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts === true || $do_ts == "events" ) { $replace .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $replace;
 }
@@ -4234,7 +4234,7 @@ function get_special_date_content( $the_date = null ) {
     	
     }
     
-    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     	
 	return $info;
 	
