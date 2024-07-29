@@ -2791,9 +2791,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
         
     } // END if ( $fields )
 
-    $info .= '<div class="troubleshooting">';
-    $info .= $ts_info;
-    $info .= '</div>';
+    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
     
@@ -4024,9 +4022,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
         
     } // END if ( $fields )
 
-    $info .= '<div class="troubleshooting">';
-    $info .= $ts_info;
-    $info .= '</div>';
+    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
     
