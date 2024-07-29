@@ -821,6 +821,9 @@ function display_postmeta( $args = array() ) {
 // Get Media Player -- Based on contents of ACF A/V Info fields
 function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null ) {
 	
+	// TS/logging setup
+    $do_ts = devmode_active();
+    
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
 	$info = "";
@@ -1176,7 +1179,9 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
 	//if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
-	$arr_info['ts_info'] = $ts_info;
+	
+	if ( $do_ts === true || $do_ts == "sdg" ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
+	
 	$arr_info['position'] = $position;
 	$arr_info['status'] = $player_status;
 
