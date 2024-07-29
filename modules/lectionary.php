@@ -509,7 +509,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     // TODO: add option to return day title only -- just the text, with no link or other formatting
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -604,7 +604,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     if ( $hide_day_titles == 1 ) { 
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
-        $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+        if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $info;
     } else {
         //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
@@ -612,7 +612,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
 	if ( $the_date == null ) {
         
-        $ts_info .= "the_date is null -- get the_date<br />"; // tft
+        $ts_info .= "the_date is null -- get the_date<br />";
 		
         // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
         if ( $post_id === null ) {
@@ -623,7 +623,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
             
             $post = get_post( $post_id );
             $post_type = $post->post_type;
-            $ts_info .= "post_type: ".$post_type."<br />"; // tft
+            $ts_info .= "post_type: ".$post_type."<br />";
 
             if ( $post_type == 'event' ) {
                 
@@ -636,8 +636,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
                 //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
                 
             } else {
-                //$ts_info .= "post_id: ".$post_id."<br />"; // tft
-                //$ts_info .= "post_type: ".$post_type."<br />"; // tft
+                //$ts_info .= "post_id: ".$post_id."<br />";
+                //$ts_info .= "post_type: ".$post_type."<br />";
             }
         }
         
@@ -646,8 +646,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     if ( $the_date == null ) {
         
         // If still no date has been found, give up.
-        $ts_info .= "no date available for which to find day_title<br />"; // tft
-        $info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+        $ts_info .= "no date available for which to find day_title<br />";
+        if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $info;
         
     }
@@ -858,7 +858,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //$do_ts && 
+	if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$info .= "\n<!-- /get_day_title -->\n";
 	
 	return $info;

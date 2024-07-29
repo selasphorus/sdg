@@ -3363,7 +3363,7 @@ function event_program_cleanup( $atts = array() ) {
 				$ts_info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
 				$ts_info .= "Last SQL-Query: <pre>".$result->request."</pre>";
 				*/
-				$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
+				if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 			}
 		
 		}
@@ -3373,8 +3373,8 @@ function event_program_cleanup( $atts = array() ) {
     
     // .....
     
+    
     $info = '<div class="info">'.$info.'</div>';
-    //if ( $do_ts === true || $do_ts == "events" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     return $info;
     
 }

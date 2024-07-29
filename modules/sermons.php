@@ -167,6 +167,9 @@ function sdg_archive_content_field_cb( $args ) {
  */
 function get_cpt_sermon_meta( $post_id = null ) {
 	
+	// TS/logging setup
+    $do_ts = devmode_active();
+    
 	/* 
 	// Model from old site for archive listing:
 	Sunday, July 14, 2019 	-- Date sermon delivered
@@ -184,11 +187,12 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
     // init
 	$info = "";
+	$ts_info = "";
     $sermon_date = "";
     $arr_posts = array();
     
 	if ($post_id === null) { $post_id = get_the_ID(); }
-	//$info .= "sermon post_id: $post_id<br />";
+	//$ts_info .= "sermon post_id: $post_id<br />";
     
 	$post = get_post( $post_id ); // Is this necessary?
 	
@@ -225,7 +229,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 		$event_info_print = "";
 		foreach( $related_events as $related_event ){
 			$event_info .= make_link( get_the_permalink( $related_event->ID ), get_the_title( $related_event->ID ) );
-			$event_info .= '<!-- related_event->ID: '.$related_event->ID.' -->';
+			$ts_info .= 'related_event->ID: '.$related_event->ID.'<br />';
 			$event_info_print .= get_the_title( $related_event->ID );
 		}
 		// Screen version
@@ -309,7 +313,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         && get_post_meta( $post_id, 'audio_file', true ) != "" ) { 
         $sermon_audio = true;
         $info .= '<a href="#sermon-audio" class="screen-only">Listen to the sermon</a>';
-        $info .= "<!-- audio_file: ".get_post_meta( $post_id, 'audio_file', true )." -->";
+        $ts_info .= "audio_file: ".get_post_meta( $post_id, 'audio_file', true )."<br />";
     } else {
         $sermon_audio = false;
     }
@@ -362,6 +366,8 @@ function get_cpt_sermon_meta( $post_id = null ) {
     $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
 	
 	$info .= '<!-- /cpt_sermon_meta -->';
+	
+	if ( $do_ts === true || $do_ts == "sermons" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 }
