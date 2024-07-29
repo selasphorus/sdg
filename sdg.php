@@ -798,6 +798,8 @@ function devmode_active() {
 	$devmode = get_query_var('dev');
 	if ( $devmode == "true" || $devmode == "yes" ) {
 		return true;        
+	} else if ( $devmode != "" ) {
+		return $devmode;        
 	} else if ( is_dev_site() && sdg_queenbee() ) {
         return true;
 	}

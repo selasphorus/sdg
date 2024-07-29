@@ -198,7 +198,8 @@ function sdg_post_title ( $args = array() ) {
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
@@ -537,24 +538,18 @@ function sdg_post_thumbnail ( $args = array() ) {
 		
 		} // END if is_singular()
 	} // END if ( $return_value == "html" && !empty($img_id )
-	    
-    //$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     
     if ( $return_value == "html" ) {
     	$info .= $img_html;
     } else { // $return_value == "id"
     	$info = $img_id;
-    	//$info .= '<div class="troubleshooting">'.$ts_info.'</div>';
     }
 	
-	if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	if ( $echo == true ) {
-		//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-		echo $info;    
-	} else {
-		//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-		return $info;
-	}
+	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	
+	// Echo or return info
+	if ( $echo == true ) { echo $info; } else { return $info; }
 
 }
 
@@ -817,7 +812,8 @@ function display_postmeta( $args = array() ) {
     }
     $info .= "</pre>";
     
-    if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	//if ( $do_ts && !empty($ts_info) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
 	
