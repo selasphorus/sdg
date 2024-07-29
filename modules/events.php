@@ -304,7 +304,7 @@ add_shortcode('md_overview', 'get_music_dept_overview' );
 function get_music_dept_overview( $atts = array() ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active();
     $do_log = devmode_active();
     sdg_log( "divline2", $do_log );
 	
