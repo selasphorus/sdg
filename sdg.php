@@ -2237,7 +2237,7 @@ function get_arr_str( $arr, $type = 'posts' ) {
 add_filter( 'document_title_parts', function( $title_parts_array ) {
     
     // TS/logging setup
-    $do_ts = true; 
+    $do_ts = devmode_active();
     $do_log = false;
     if ( get_post_type( get_the_ID() ) == 'event' ) { $do_log = true; }
     sdg_log( "divline2", $do_log );

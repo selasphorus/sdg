@@ -1952,7 +1952,7 @@ add_shortcode('update_snippet_logic', 'update_snippet_logic');
 function update_snippet_logic ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = true; 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
     

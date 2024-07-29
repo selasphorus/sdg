@@ -3556,7 +3556,7 @@ add_filter('em_event_output_placeholder','sdg_placeholders',1,3);
 function sdg_placeholders( $replace, $EM_Event, $result ) {
     
     // TS/logging setup
-    $do_ts = true; 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -3641,7 +3641,7 @@ function sdg_placeholders( $replace, $EM_Event, $result ) {
         	if ( $featured_image_display == "thumbnail" ) {
         	
         		$show_image = false;
-        		$ts_info = "[sdgp] featured_image_display: $featured_image_display<br />";
+        		//$ts_info .= "[sdgp] featured_image_display: $featured_image_display<br />";
         		
         	} else if ( is_singular('event') ) { //&& function_exists('post_is_webcast_eligible') && post_is_webcast_eligible( $post_id )
 				

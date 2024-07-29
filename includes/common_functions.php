@@ -741,7 +741,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
 function display_postmeta( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = true; // default to true tft 
+    $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
