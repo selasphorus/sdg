@@ -367,7 +367,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
 	
 	$info .= '<!-- /cpt_sermon_meta -->';
 	
-	if ( $do_ts === true || $do_ts == "sermons" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 }

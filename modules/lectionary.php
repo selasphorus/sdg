@@ -604,7 +604,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     if ( $hide_day_titles == 1 ) { 
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
-        if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $info;
     } else {
         //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
@@ -647,7 +647,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
         
         // If still no date has been found, give up.
         $ts_info .= "no date available for which to find day_title<br />";
-        if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $info;
         
     }
@@ -858,7 +858,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( $do_ts === true || $do_ts == "lectionary" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$info .= "\n<!-- /get_day_title -->\n";
 	
 	return $info;

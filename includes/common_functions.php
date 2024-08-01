@@ -198,7 +198,7 @@ function sdg_post_title ( $args = array() ) {
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
-	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
@@ -544,7 +544,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     	$info = $img_id;
     }
 	
-	if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return info
 	if ( $echo == true ) { echo $info; } else { return $info; }
@@ -810,7 +810,7 @@ function display_postmeta( $args = array() ) {
     }
     $info .= "</pre>";
     
-    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
 	
@@ -1177,10 +1177,10 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	}
 	
 	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
-	//if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
 	
-	if ( $do_ts === true || $do_ts == "sdg" ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
 	
 	$arr_info['position'] = $position;
 	$arr_info['status'] = $player_status;
@@ -2796,7 +2796,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
         
     } // END if ( $fields )
 
-    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
     
@@ -4027,7 +4027,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
         
     } // END if ( $fields )
 
-    if ( $do_ts === true || $do_ts == "sdg" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
     
