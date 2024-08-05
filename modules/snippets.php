@@ -3464,10 +3464,12 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 //
 function process_tax_pair($rule) {
 	
-	if ( function_exists('sdg_log') ) { 
-		sdg_log("function called: process_tax_pair");
-		sdg_log("rule: ".$rule); 
-	}
+	// TS/logging setup
+    $do_ts = devmode_active(); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: process_tax_pair", $do_log );
+    sdg_log( "rule: ".$rule, $do_log );
 	
 	$arr = array();
 
