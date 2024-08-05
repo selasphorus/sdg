@@ -189,6 +189,7 @@ function get_snippets ( $args = array() ) {
     // Init vars
     $arr_result = array();
     $info = "";
+    $ts_info = "";
     $post_type = null;
 	$active_snippets = array(); // this array will containing snippets matched for display on the given post
     
