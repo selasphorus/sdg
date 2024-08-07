@@ -512,6 +512,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     $do_ts = devmode_active();
     $do_log = false;
     sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_day_title", $do_log );
     
 	$info = "";
 	$ts_info = "";
@@ -530,7 +531,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	$info .= "\n<!-- get_day_title -->\n";
 
     if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $ts_info .= "[gds] post_id: ".$post_id."<br />";
+    $ts_info .= "[get_day_title] post_id: ".$post_id."<br />";
     if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
     
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
@@ -858,7 +859,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
 	$info .= get_special_date_content( $the_date );
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$info .= "\n<!-- /get_day_title -->\n";
 	
 	return $info;
