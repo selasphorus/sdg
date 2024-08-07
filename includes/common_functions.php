@@ -544,7 +544,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     	$info = $img_id;
     }
 	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return info
 	if ( $echo == true ) { echo $info; } else { return $info; }
