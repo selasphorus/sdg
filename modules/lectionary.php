@@ -858,7 +858,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
-	$info .= get_special_date_content( $the_date );
+	if ( function_exists('get_special_date_content') ) { $info .= get_special_date_content( $the_date ); }
 	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$info .= "\n<!-- /get_day_title -->\n";
 	
