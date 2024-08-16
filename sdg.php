@@ -1350,11 +1350,12 @@ function sdg_list_terms( $atts = array(), $content = null, $tag = '' ) {
 		foreach ( $terms as $term ) {
 			if ( !in_array($term->name, $term_names_to_skip) ) {
 			//if ($term->name != 'Featured Events' AND $term->name != 'Featured Events (2)') {
-				if ( $tax === "event-categories" ) {
-                    $term_link = "/events/?category=".$term->slug;
+				$term_link = get_term_link( $term );
+				/*if ( $tax === "event-categories" ) {
+                    $term_link = "/events/?category=".$term->slug; // old way of doing things for EM
                 } else {
                     $term_link = get_term_link( $term );
-                }
+                }*/
                 $term_name = $term->name;
 				//if ($term_name === "Worship Services") { $term_name = "All Worship Services"; }
 				$info .= '<li>';
