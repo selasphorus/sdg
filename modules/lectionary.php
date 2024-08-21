@@ -1518,19 +1518,20 @@ function calc_litdates( $atts = array() ) {
     $info .= "&gt;&gt;&gt; calc_litdates &lt;&lt;&lt;<br />";
     $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     $info .= "years: $years<br />";
+    
     // Turn years var into array, in case of multiple years
+    $arr_years = array(); // init
     if ( strpos($years, ',') !== false ) {
     	// comma-separated values
     	$arr_years = explode(",",$years);
+    	$info .= "arr_years: ".print_r($arr_years,true)."<br />";
     } else if ( strpos($years, '-') !== false ) {
     	// date range
-    	$arr_years = array(); // init
     	$start_year = trim(substr($years, 0, strpos($years, "-") ));
     	$end_year = trim(substr($years, strpos($years, "-") ));
     	$info .= "start_year: $start_year<br />";
     	$info .= "end_year: $end_year<br />";
-    } 
-    
+    }    
     
     // Set up the WP query args
 	$wp_args = array(
