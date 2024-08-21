@@ -1528,7 +1528,9 @@ function calc_litdates( $atts = array() ) {
     } else if ( strpos($years, '-') !== false ) {
     	// date range
     	$start_year = trim(substr($years, 0, strpos($years, "-") ));
-    	$end_year = trim(substr($years, strpos($years, "-") ));
+    	$end_year = trim(substr($years, strpos($years, "-")+1 ));
+    	//if (strlen($start_year) == 2 ) { }
+    	if (strlen($end_year) == 2 ) { $end_year = "20".$end_year; }
     	$info .= "start_year: $start_year<br />";
     	$info .= "end_year: $end_year<br />";
     }    
