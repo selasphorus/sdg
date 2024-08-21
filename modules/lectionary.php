@@ -1524,7 +1524,6 @@ function calc_litdates( $atts = array() ) {
     if ( strpos($years, ',') !== false ) {
     	// comma-separated values
     	$arr_years = explode(",",$years);
-    	$info .= "arr_years: ".print_r($arr_years,true)."<br />";
     } else if ( strpos($years, '-') !== false ) {
     	// date range
     	$start_year = trim(substr($years, 0, strpos($years, "-") ));
@@ -1535,7 +1534,11 @@ function calc_litdates( $atts = array() ) {
     	$info .= "start_year: $start_year<br />";
     	$info .= "end_year: $end_year<br />";
     	$info .= "range: $range<br />";
-    }    
+    	for ( $i=0; $i<=$range; $i++ ) {
+    		$arr_years[] = $start_year + $i;
+    	}
+    }
+    $info .= "arr_years: ".print_r($arr_years,true)."<br />";
     
     // Set up the WP query args
 	$wp_args = array(
