@@ -1531,8 +1531,10 @@ function calc_litdates( $atts = array() ) {
     	$end_year = trim(substr($years, strpos($years, "-")+1 ));
     	//if (strlen($start_year) == 2 ) { }
     	if (strlen($end_year) == 2 ) { $end_year = "20".$end_year; }
+    	$range = $end_year - $start_year;
     	$info .= "start_year: $start_year<br />";
     	$info .= "end_year: $end_year<br />";
+    	$info .= "range: $range<br />";
     }    
     
     // Set up the WP query args
