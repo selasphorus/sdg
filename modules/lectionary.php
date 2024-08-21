@@ -1348,7 +1348,7 @@ function calc_date_from_components ( $args = array() ) {
 			
 			if ( $verbose == "true" ) { $info .= "About to build calc_formula...<br />"; }
 			
-			if ( strpos(strtolower($calc_interval), 'days') !== false ) {
+			if ( !empty($calc_interval) && strpos(strtolower($calc_interval), 'days') !== false ) {
 			
 				if ( $verbose == "true" ) { $info .= "Calc by days +/-...<br />"; }
 				
