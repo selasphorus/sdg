@@ -1501,7 +1501,7 @@ function calc_litdates( $atts = array() ) {
         'testing' => true,
         'verbose' => false,
         'ids' => null,
-        'year' => date('Y'),
+        'years' => date('Y'),
         'num_posts' => 10,
         'admin_tag_slug' => 'dates-calculated', // 'programmatically-updated'
         'orderby' => 'title',
@@ -1517,7 +1517,9 @@ function calc_litdates( $atts = array() ) {
     
     $info .= "&gt;&gt;&gt; calc_litdates &lt;&lt;&lt;<br />";
     $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
-    $info .= "year: $year<br />";
+    $info .= "years: $years<br />";
+    // Turn years var into array, in case of multiple years
+    $arr_years = explode(",",$years);
     
     // Set up the WP query args
 	$wp_args = array(
@@ -1576,67 +1578,73 @@ function calc_litdates( $atts = array() ) {
         $date_calculation_str = str_replace('the epiphany', 'epiphany', strtolower($date_calculation_str) );
         //$date_calculation_str = str_replace(['the', 'day'], '', strtolower($date_calculation_str) );
         
-        if ( !empty($date_calculation_str) ) {
-        	$calc_info .= "date_calculation_str: $date_calculation_str<br />"; // tft
-			$calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
-			if ( $calc ) {
-				$calc_date = $calc['calc_date'];
-				$calc_info .= $calc['calc_info'];
+        foreach ( $arr_years as $year ) {
+        
+        	$calc_info .= "About to do calc for year: $year<br />";
+        	
+			if ( !empty($date_calculation_str) ) {
+				$calc_info .= "date_calculation_str: $date_calculation_str<br />"; // tft
+				$calc = calc_date_from_str( $year, $date_calculation_str, $verbose );
+				if ( $calc ) {
+					$calc_date = $calc['calc_date'];
+					$calc_info .= $calc['calc_info'];
+				} else {
+					$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
+				}
 			} else {
-				$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
+				$calc_info .= "date_calculation_str is empty<br />"; // tft
+				//$calc = null;
+			}   
+			
+			if ( !empty($calc_date) && $calc_date != "N/A" ) {
+				$calc_date_str = date('Y-m-d', $calc_date);
+				//$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
+				$calc_info .= "calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
+			} else {
+				$calc_info .= "calc_date N/A<br />"; // tft            
 			}
-    	} else {
-    		$calc_info .= "date_calculation_str is empty<br />"; // tft
-    		//$calc = null;
-    	}   
+			
+			// 3. Save dates to ACF repeater field row for date_calculatedday_
+			// DB: date_calculations >> date_calculated -- date_calculations_[#]_date_calculated
+			
+			if ( $calc_date_str != "" ) {
+				
+				$newrow = true;
+				
+				if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+					while ( have_rows('date_calculations', $post_id) ) : the_row();
+						$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+						if ( $date_calculated == $calc_date_str ) {
+							// Already in there
+							$newrow = false;
+							$calc_info .= "+++ Old news. This date_calculated ($calc_date_str) is already in the database. +++<br />"; // tft
+						} else {
+							//$calc_info .= "Old date_calculated: $date_calculated.<br />"; // tft
+						}
+					endwhile;
+				} // end if
+	
+				if ( $newrow == true ) {
+	
+					$row = array(
+						'date_calculated' => $calc_date_str
+					);
+	
+					$calc_info .= "About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
+					if ( $testing != "true" ) {
+						if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
+							$calc_info .= "ACF row added for post_id: $post_id<br />";
+						} else {
+							$calc_info .= "ACF add row FAILED for post_id: $post_id<br />";
+						}
+					}
+	
+				}
+			} else {
+				$calc_info .= "calc_date_str is empty.<br />";
+			}
         
-        if ( !empty($calc_date) && $calc_date != "N/A" ) {
-            $calc_date_str = date('Y-m-d', $calc_date);
-            //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
-            $calc_info .= "calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
-        } else {
-            $calc_info .= "calc_date N/A<br />"; // tft            
-        }
-        
-        // 3. Save dates to ACF repeater field row for date_calculatedday_
-        // DB: date_calculations >> date_calculated -- date_calculations_[#]_date_calculated
-        
-        if ( $calc_date_str != "" ) {
-            
-            $newrow = true;
-            
-            if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-                while ( have_rows('date_calculations', $post_id) ) : the_row();
-                    $date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-                    if ( $date_calculated == $calc_date_str ) {
-                        // Already in there
-                        $newrow = false;
-                        $calc_info .= "+++ Old news. This date_calculated ($calc_date_str) is already in the database. +++<br />"; // tft
-                    } else {
-                    	//$calc_info .= "Old date_calculated: $date_calculated.<br />"; // tft
-                    }
-                endwhile;
-            } // end if
-
-            if ( $newrow == true ) {
-
-                $row = array(
-                    'date_calculated' => $calc_date_str
-                );
-
-                $calc_info .= "About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
-                if ( $testing != "true" ) {
-                    if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
-                        $calc_info .= "ACF row added for post_id: $post_id<br />";
-                    } else {
-                    	$calc_info .= "ACF add row FAILED for post_id: $post_id<br />";
-                    }
-                }
-
-            }
-        } else {
-        	$calc_info .= "calc_date_str is empty.<br />";
-        }
+        } // END foreach arr_years
         
         $info .= $calc_info;    
     	$info .= '</div>';
