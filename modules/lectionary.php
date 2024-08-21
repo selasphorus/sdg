@@ -25,7 +25,7 @@ function get_lit_dates ( $args ) {
 	$start_date = null;
 	$end_date = null;
 	
-	$ts_info = "--- get_lit_dates ---<br />";
+	$ts_info .= "&gt;&gt;&gt; get_lit_dates &lt;&lt;&lt;<br />";
 	
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
@@ -1537,6 +1537,8 @@ function calc_litdates( $atts = array() ) {
     	for ( $i=0; $i<=$range; $i++ ) {
     		$arr_years[] = $start_year + $i;
     	}
+    } else {
+    	$arr_years[] = $years;
     }
     $info .= "arr_years: ".print_r($arr_years,true)."<br />";
     
