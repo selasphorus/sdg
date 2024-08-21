@@ -1565,8 +1565,8 @@ function calc_litdates( $atts = array() ) {
 	);
     
     // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
-    if ( $ids !== null ) { $wp_args['post__in'] = explode(', ', $ids); }
-    if ( $meta_key !== null ) { $wp_args['meta_key'] = $meta_key; }
+    if ( !empty($ids) ) { $wp_args['post__in'] = explode(', ', $ids); }
+    if ( !empty($meta_key) ) { $wp_args['meta_key'] = $meta_key; }
     
     // Run the query
 	$arr_posts = new WP_Query( $wp_args );
