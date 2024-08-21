@@ -1662,6 +1662,8 @@ function calc_litdates( $atts = array() ) {
 			} else {
 				$calc_info .= "calc_date_str is empty.<br />";
 			}
+			
+			if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
         
         } // END foreach arr_years
         
