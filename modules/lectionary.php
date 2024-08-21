@@ -1599,7 +1599,7 @@ function calc_litdates( $atts = array() ) {
         
         foreach ( $arr_years as $year ) {
         
-        	$calc_info .= "About to do calc for year: $year<br />";
+        	$calc_info .= "<hr />About to do calc for year: $year<hr /><br />";
         	
 			if ( !empty($date_calculation_str) ) {
 				$calc_info .= "date_calculation_str: $date_calculation_str<br />"; // tft
@@ -1663,7 +1663,7 @@ function calc_litdates( $atts = array() ) {
 				$calc_info .= "calc_date_str is empty.<br />";
 			}
 			
-			if ( count($arr_years) > 1 ) { $calc_info .= "<hr /><hr /><br />"; }
+			if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
         
         } // END foreach arr_years
         
