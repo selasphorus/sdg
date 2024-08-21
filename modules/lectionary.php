@@ -1599,7 +1599,7 @@ function calc_litdates( $atts = array() ) {
         
         foreach ( $arr_years as $year ) {
         
-        	$calc_info .= "<hr />About to do calc for year: $year<hr /><br />";
+        	$calc_info .= "About to do calc for year: $year<hr /><hr />";
         	
 			if ( !empty($date_calculation_str) ) {
 				$calc_info .= "date_calculation_str: $date_calculation_str<br />"; // tft
