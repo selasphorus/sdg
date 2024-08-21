@@ -15,6 +15,8 @@ function get_lit_dates ( $args ) {
 
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	
+	$ts_info = "";
+	
 	// init
 	$litdates = array();
 	$litdate_posts = array();
