@@ -1055,6 +1055,8 @@ function parse_date_str ( $args = array() ) {
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
 				$calc_basis = $previous_component." ".$component;
+			} else {
+				$component_info .= $indent."... and previous_component '".$previous_component."' is a ".$previous_component_type."<br />";
 			}
 		} else if ($component == "the" ) { // wip
 			$previous_component_type = "expendable";
