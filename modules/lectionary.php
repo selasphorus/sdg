@@ -1128,14 +1128,13 @@ function parse_date_str ( $args = array() ) {
 	// TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
 	
 	// 1. Liturgical calc basis (calc_basis)
-	/*if ( $calc_basis ) {
+	if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
+	if ( $calc_basis ) {
 		$calc_bases_info = get_calc_bases_from_str($calc_basis);
 	} else {
 		$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
-	}*/
-	if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
-	
-	$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
+	}
+	//$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
 	$calc_bases = $calc_bases_info['calc_bases'];
 	if ( $verbose == "true" ) {
 		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
