@@ -308,23 +308,24 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
         	$litdate_id = $lit_date->ID;
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
-        	$secondary = get_post_meta($litdate_id, 'secondary', true);
         	if ( $day_title == "1" ) { 
         		$classes .= " nb";
         		$num_day_titles++;
-        		if ( $num_day_titles > 1 ) {
-					//$classes .= " conflict";
-				}
+        		//if ( $num_day_titles > 1 ) { $classes .= " conflict"; }
         	}
-        	if ( $secondary == "1" ) {
-        		$classes .= " secondary";
-        	}
-        	
         	//
+        	$classes = "litdate";
+        	$secondary = get_post_meta($litdate_id, 'secondary', true);
 			$info .= '<span class="'.$classes.'">';
 			$info .= '<a href="'.get_permalink($litdate_id).'" class="smaller" target="_blank">';
 			$info .= "[".$litdate_id."] ";
 			$info .= '</a>';
+			$info .= '</span>';
+			//
+        	if ( $secondary == "1" ) {
+        		$classes .= " secondary";
+        	}
+			$info .= '<span class="'.$classes.'">';
 			$info .= $lit_date->post_title;
 			$info .= '</span>';		
 			$info .= ' >> <a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">Edit</a> << ';
