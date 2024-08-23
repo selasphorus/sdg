@@ -1304,7 +1304,7 @@ function calc_date_from_components ( $args = array() ) {
 	// Defaults
 	$defaults = array(
 		'year'				=> null,
-		'liturgical_date_id'=> null,
+		'liturgical_date_calc_id'=> null,
 		'date_calculation_str'=> null,
 		'calc_basis'		=> null,
 		'calc_basis_field'	=> null,
