@@ -1716,7 +1716,7 @@ function calc_litdates( $atts = array() ) {
         $complex_formula = false;
         
         // Get date_calculation info & break it down
-        $date_calc_str = get_post_meta( $post_id, 'date_calculation', true );
+        $date_calc_str = strtolower(get_post_meta( $post_id, 'date_calculation', true ));
         $date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
         $date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
         //$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
