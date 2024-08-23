@@ -1024,37 +1024,49 @@ function parse_date_str ( $args = array() ) {
 	$calc_components = explode(" ", $date_calculation_str);
 	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
 	$component_info = "";
+	$previous_component = "";
+	$previous_component_type = null;
 	foreach ( $calc_components as $component ) {
 		// First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
 		if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
+			$previous_component_type = "date";
 			$component_info .= $indent."component '".$component."' is a date<br />";
 		} else if ( array_key_exists($component, $liturgical_bases) ) {
+			$previous_component_type = "liturgical_base";
 			$component_info .= $indent."component '".$component."' is a liturgical_base<br />";
 			// >> save as calc_basis, replacing loop below?
 			// WIP
 			// if multiple bases are found, proceed with the core subclause and then repeat calc...
 			//
 		} else if ( in_array(ucfirst($component), $months) ) {
+			$previous_component_type = "month";
 			$component_info .= $indent."component '".$component."' is a month<br />";
 		} else if ( in_array($component, $weekdays) ) {
+			$previous_component_type = "weekday";
 			$component_info .= $indent."component '".$component."' is a weekday<br />";
 		} else if ( in_array($component, $boias) ) {
+			$previous_component_type = "boia";
 			$component_info .= $indent."component '".$component."' is a boia<br />";
-		} else if ( preg_match('/first|second|[0-9]+/', $component) ) {
+		} else if ( preg_match('/first|second|[0-9]+/', $component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
+			$previous_component_type = "numeric";
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
-		//} else if () { // first, last, second....
+			if ( $previous_component_type == "month" ) { $calc_basis = $previous_component." ".$component; } // wip
 		} else if ($component == "the" ) { // wip
+			$previous_component_type = "expendable";
 			$component_info .= $indent."component '".$component."' is expendable<br />";
 		} else {
+			$previous_component_type = "unknown";
 			$component_info .= $indent."component '".$component."' is ???<br />";
 		}
+		$previous_component = $component;
 	}
 	if ( $verbose == "true" ) { $info .= "component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	
 	
 	// Determine the calc components
 	// WIP!!!
+	// TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
 	
 	// 1. Liturgical calc basis (calc_basis)
 	$calc_bases = get_calc_bases_from_str($date_calculation_str);
@@ -1062,7 +1074,7 @@ function parse_date_str ( $args = array() ) {
 		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	} else if ( count($calc_bases) > 1 ) {
 		$complex_formula = true;
-		$info .= '<span class="notice">More than one calc_basis found!</span><br />';
+		$info .= '<span class="notice">More than one liturgical calc_basis found!</span><br />';
 		$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
@@ -1074,10 +1086,10 @@ function parse_date_str ( $args = array() ) {
 		$calc_basis = array_key_first($cb);
 		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
-		if ( $verbose == "true" ) { $info .= "liturgical calc_basis: $calc_basis // $calc_basis_field<br />"; }
-		$components['calc_basis'] = $calc_basis;
-		$components['calc_basis_field'] = $calc_basis_field;
 	}
+	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
+	if ( $calc_basis_field ) { $components['calc_basis_field'] = $calc_basis_field; }
+	if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis // $calc_basis_field<br />"; }
 	
 	// 2. BOIAs
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
@@ -1373,7 +1385,7 @@ function calc_date_from_components ( $args = array() ) {
 				if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
 					$first_sunday = strtotime("next Sunday", $basis_date);
 					//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
-					if ( $calc_interval ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
+					if ( $calc_interval && is_int($calc_interval) ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
 					if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
 				} else if ( $basis_date ) {
 					$first_sunday = $basis_date;
