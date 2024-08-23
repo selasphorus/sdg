@@ -1356,7 +1356,11 @@ function calc_date_from_components ( $args = array() ) {
 			}
 			
 			//if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
-			if ( !empty($calc_interval) && ( ( $calc_basis == "advent" && $calc_boia != "before" ) || ( $calc_basis == "easter" && $calc_boia == "of" ) ) ) {
+			if ( !empty($calc_interval) && ( 
+				( $calc_basis == "advent" && $calc_boia != "before" ) 
+				|| ( $calc_basis == "easter" && $calc_boia == "of" )
+				|| ( strtolower(date('F d',strtotime($calc_basis))) == strtolower($calc_basis) )
+				) ) {
 				$calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
 			}
 			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
