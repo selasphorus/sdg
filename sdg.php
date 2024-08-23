@@ -1205,8 +1205,9 @@ function sdg_posts_where( $where, $wp_query ) {
     
     if ( $search_term = $wp_query->get( '_search_title' ) ) {
         $search_term = $wpdb->esc_like( $search_term );
-        $search_term = '\'%' . $search_term . '%\'';
-        $where .= ' AND ' . $wpdb->posts . '.post_title LIKE ' . $search_term;
+        $search_term = esc_sql($search_term);
+        //$search_term = '\'%' . $search_term . '%\'';
+        $where .= ' AND ' . $wpdb->posts . '.post_title LIKE \'%' . $search_term. '%\'';
         //$where .= " AND " . $wpdb->posts . ".post_title LIKE '" . esc_sql( $wpdb->esc_like( $title ) ) . "%'";
     }
     
@@ -1236,13 +1237,20 @@ function sdg_posts_where( $where, $wp_query ) {
     
     // Filter query results to enable searching per ACF repeater fields
     // See https://www.advancedcustomfields.com/resources/repeater/#faq "How is the data saved"
-	// meta_keys for repeater fields are named according to the number of rows, e.g. item_0_description, item_1_description, so we need to adjust the search to use a wildcard for matching
+	// meta_keys for repeater fields are named according to the number of rows
+	// ... e.g. item_0_description, item_1_description, so we need to adjust the search to use a wildcard for matching
 	// Replace comparision operator "=" with "LIKE" and replace the wildcard placeholder "XYZ" with the actual wildcard character "%"
 	//$where = str_replace("meta_key = 'program_items_XYZ", "meta_key LIKE 'program_items_%", $where);
-    $where = str_replace("meta_key = 'program_items_XYZ", "meta_key LIKE 'program_items_%", $where);
+    /*$where = str_replace("meta_key = 'program_items_XYZ", "meta_key LIKE 'program_items_%", $where);
     $where = str_replace("meta_key = 'personnel_XYZ", "meta_key LIKE 'personnel_%", $where);
 	$where = str_replace("meta_key = 'date_calculations_XYZ", "meta_key LIKE 'date_calculations_%", $where);
 	$where = str_replace("meta_key = 'date_assignments_XYZ", "meta_key LIKE 'date_assignments_%", $where);
+	*/
+	
+	$pattern = '/meta_key = \'([A-Za-z_]+)_XYZ/i';
+	if ( preg_match("/meta_key = '[A-Za-z_]+_XYZ/i", $where) ) {
+		$where = preg_replace($pattern, "meta_key LIKE '$1_%", $where); //$where = str_replace("meta_key = 'program_items_XYZ", "meta_key LIKE 'program_items_%", $where);
+	}
 	
 	// TODO: do a similar replacement for meta VALUES so as to ignore punctuation -- e.g. compare LIKE value veni_XYZ_redemptor => veni%redemptor
 	$where = str_replace("XXX", "%", $where);
