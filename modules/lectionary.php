@@ -1051,7 +1051,11 @@ function parse_date_str ( $args = array() ) {
 			$previous_component_type = "numeric";
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
-			if ( $previous_component_type == "month" ) { $calc_basis = $previous_component." ".$component; } // wip
+			// WIP...
+			if ( $previous_component_type == "month" ) {
+				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
+				$calc_basis = $previous_component." ".$component;
+			}
 		} else if ($component == "the" ) { // wip
 			$previous_component_type = "expendable";
 			$component_info .= $indent."component '".$component."' is expendable<br />";
