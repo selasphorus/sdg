@@ -955,7 +955,9 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
     $info .= "[".count($arr_posts->posts)."] posts found matching date_calculation_str.<br />";
     $info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
-		$calc_bases = $arr_posts->posts;
+		foreach ( $arr_posts->posts AS $post ) {
+			$calc_bases[] = $post->post_title;
+		}
 	} else {
 		// if not...
 		// lit basis foiund in $date_calculation_str?
@@ -1158,9 +1160,13 @@ function parse_date_str ( $args = array() ) {
 	} else if ( count($calc_bases) == 1 ) {
 		if ( $verbose == "true" ) { $info .= "Single liturgical calc_basis found.<br />"; }
 		$cb = $calc_bases[0];
-		$calc_basis_field = array_values($cb)[0];
-		$calc_basis = array_key_first($cb);
-		//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
+		if ( is_array($cb) ) {
+			$calc_basis_field = array_values($cb)[0];
+			$calc_basis = array_key_first($cb);
+			//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
+		} else {
+			$calc_basis = $cb;
+		}
 	}
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
 	if ( $calc_basis_field ) { $components['calc_basis_field'] = $calc_basis_field; }
