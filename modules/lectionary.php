@@ -934,6 +934,7 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 	
 	// litdate found in $date_calculation_str?
 	// query titles of  litdates to see if any are found in $date_calculation_str (complete)
+	// hm as it currently is, it's looking for entire $date_calculation_str in title -- but what we need is to look for titles within date_calculation_str...
 	// wip
 	// Set up query args
     $wp_args = array(
