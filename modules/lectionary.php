@@ -927,7 +927,10 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 
 function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 	
+	// Init vars
+	$arr_info = array();
 	$calc_bases = array();
+	$info = "";
 	
 	// litdate found in $date_calculation_str?
 	// query titles of  litdates to see if any are found in $date_calculation_str (complete)
@@ -946,9 +949,9 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
     // Run the query
 	$arr_posts = new WP_Query( $wp_args );
     
-    //$ts_info .= "[bgp] WP_Query run as follows:";
-    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
-    //$ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
+    $info .= "WP_Query run as follows:";
+    $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    $info .= "[".count($arr_posts->posts)."] posts found matching date_calculation_str.<br />";
 	if ( count($arr_posts->posts) > 0 ) {
 		$calc_bases = $arr_posts->posts;
 	} else {
@@ -965,7 +968,13 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 		}
 	}
 	
-	return $calc_bases;
+	//return $calc_bases;
+	
+	$arr_info['info'] = $info;
+	$arr_info['calc_bases'] = $calc_bases;
+	//
+	
+	return $arr_info;
 	
 }
 
@@ -1115,8 +1124,12 @@ function parse_date_str ( $args = array() ) {
 	// TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
 	
 	// 1. Liturgical calc basis (calc_basis)
-	$calc_bases = get_calc_bases_from_str($date_calculation_str);
-	if ( $verbose == "true" ) { $info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>"; }
+	$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
+	$calc_bases = $calc_bases_info['calc_bases'];
+	if ( $verbose == "true" ) {
+		$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
+		$info .= $calc_bases_info['info']."<br />";
+	}
 	if ( empty($calc_bases) ) {
 		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	} else if ( count($calc_bases) > 1 ) {
