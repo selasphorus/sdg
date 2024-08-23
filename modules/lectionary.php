@@ -1344,8 +1344,9 @@ function calc_date_from_components ( $args = array() ) {
 		$calc_date = $basis_date;
 		$info .= "date to be calculated is same as basis_date.<br />";
 		
-	//} else if ( $calc_basis is a date... ) {
+	} else if ( is_numeric($basis_date) ) {
 	
+		$info .= "basis_date is a timestamp.<br />";
 	
 	} else {
         
