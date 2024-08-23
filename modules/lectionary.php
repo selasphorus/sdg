@@ -929,6 +929,32 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 	
 	$calc_bases = array();
 	
+	// litdate found in $date_calculation_str?
+	// query titles of  litdates to see if any are found in $date_calculation_str (complete)
+	// wip
+	// Set up query args
+    $wp_args = array(
+		'post_type'		=> array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+		'post_status'   => 'publish',
+		'posts_per_page'=> $limit, //-1, //$posts_per_page,
+        'orderby'       => 'title',
+        'order'         => 'ASC',
+        'return_fields' => 'ids',
+        '_search_title'	=> $date_calculation_str,
+	);
+
+    // Run the query
+	$arr_posts = new WP_Query( $wp_args );
+    
+    //$ts_info .= "[bgp] WP_Query run as follows:";
+    //$ts_info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
+    //$ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
+	if ( count($arr_posts->posts) > 0 ) {
+		$calc_bases = $arr_posts->posts;
+	}
+	
+	// if not...
+	// lit basis foiund in $date_calculation_str?
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
 	
 	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
@@ -1101,6 +1127,7 @@ function parse_date_str ( $args = array() ) {
 		//return $calc; // abort early -- we don't know what to do with this date_calculation_str
 		//
 	} else if ( count($calc_bases) == 1 ) {
+		if ( $verbose == "true" ) { $info .= "Single liturgical calc_basis found.<br />"; }
 		$cb = $calc_bases[0];
 		$calc_basis_field = array_values($cb)[0];
 		$calc_basis = array_key_first($cb);
