@@ -603,7 +603,7 @@ function sdg_scripts_method() {
     $current_user = wp_get_current_user();
     
     $fpath = WP_PLUGIN_DIR . '/sdg/sdg.css';
-    if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "230628"; }  
+    if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "240823"; }  
     wp_enqueue_style( 'sdg-style', plugins_url( 'sdg.css', __FILE__ ), $ver );
     //wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', $ver );
     
