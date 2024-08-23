@@ -325,8 +325,8 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
 			$info .= '<a href="'.get_permalink($litdate_id).'" class="smaller" target="_blank">';
 			$info .= "[".$litdate_id."] ";
 			$info .= '</a>';
-			$info .= '</span>';
-			$info .= $lit_date->post_title;			
+			$info .= $lit_date->post_title;
+			$info .= '</span>';		
 			$info .= ' >> <a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">Edit</a> << ';
 			//$info .=" (".print_r($day_title, true).")";
 			// TODO: determine/show if this is calc date, override date, &c.
