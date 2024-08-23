@@ -594,7 +594,7 @@ if ( function_exists('acf_add_options_page') ) {
 //wp_enqueue_script('sdg_js_script', plugins_url('sdg.js', __FILE__), array('json_settings'), true );
 
 /**
- * Enqueue a script with jQuery as a dependency.
+ * Enqueue scripts and styles
  */
 add_action( 'wp_enqueue_scripts', 'sdg_scripts_method' );
 function sdg_scripts_method() {
@@ -628,7 +628,6 @@ function sdg_scripts_method() {
     //wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-autocomplete']->ver . '/themes/smoothness/jquery-ui.css', false, null, false );
     
     // Font Awesome 5 (Free)
-    
     
 }
 
