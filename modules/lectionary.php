@@ -1029,26 +1029,25 @@ function parse_date_str ( $args = array() ) {
 	foreach ( $calc_components as $component ) {
 		// First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
 		if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
-			$previous_component_type = "date";
 			$component_info .= $indent."component '".$component."' is a date<br />";
+			$previous_component_type = "date";
 		} else if ( array_key_exists($component, $liturgical_bases) ) {
-			$previous_component_type = "liturgical_base";
 			$component_info .= $indent."component '".$component."' is a liturgical_base<br />";
+			$previous_component_type = "liturgical_base";
 			// >> save as calc_basis, replacing loop below?
 			// WIP
 			// if multiple bases are found, proceed with the core subclause and then repeat calc...
 			//
 		} else if ( in_array(ucfirst($component), $months) ) {
-			$previous_component_type = "month";
 			$component_info .= $indent."component '".$component."' is a month<br />";
+			$previous_component_type = "month";
 		} else if ( in_array($component, $weekdays) ) {
-			$previous_component_type = "weekday";
 			$component_info .= $indent."component '".$component."' is a weekday<br />";
+			$previous_component_type = "weekday";
 		} else if ( in_array($component, $boias) ) {
-			$previous_component_type = "boia";
 			$component_info .= $indent."component '".$component."' is a boia<br />";
+			$previous_component_type = "boia";
 		} else if ( preg_match('/first|second|[0-9]+/', $component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
-			$previous_component_type = "numeric";
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 			// WIP...
@@ -1058,12 +1057,13 @@ function parse_date_str ( $args = array() ) {
 			} else {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a ".$previous_component_type."<br />";
 			}
+			$previous_component_type = "numeric";
 		} else if ($component == "the" ) { // wip
-			$previous_component_type = "expendable";
 			$component_info .= $indent."component '".$component."' is expendable<br />";
+			$previous_component_type = "expendable";
 		} else {
-			$previous_component_type = "unknown";
 			$component_info .= $indent."component '".$component."' is ???<br />";
+			$previous_component_type = "unknown";
 		}
 		$previous_component = $component;
 	}
