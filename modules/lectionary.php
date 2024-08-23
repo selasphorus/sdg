@@ -308,12 +308,16 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
         	$litdate_id = $lit_date->ID;
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
+        	$secondary = get_post_meta($litdate_id, 'secondary', true);
         	if ( $day_title == "1" ) { 
         		$classes .= " nb";
         		$num_day_titles++;
         		if ( $num_day_titles > 1 ) {
 					//$classes .= " conflict";
 				}
+        	}
+        	if ( $secondary == "1" ) {
+        		$classes .= " secondary";
         	}
         	
         	//
