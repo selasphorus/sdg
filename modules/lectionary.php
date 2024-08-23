@@ -1344,15 +1344,15 @@ function calc_date_from_components ( $args = array() ) {
 		$calc_date = $basis_date;
 		$info .= "date to be calculated is same as basis_date.<br />";
 		
-	} else if ( is_numeric($basis_date) ) {
-	
-		$info .= "basis_date is a timestamp.<br />";
-	
 	} else {
         
 		$calc_formula = null;
 		$calc_interval = null;
 		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
+		
+		if ( is_numeric($basis_date) ) {
+			$info .= "basis_date is a timestamp.<br />";
+		}
 		
         // ** Extract components of date_calculation_str & calculate date for $year
 		// ** Determine the calc_interval -- number of days/weeks...
@@ -1362,11 +1362,13 @@ function calc_date_from_components ( $args = array() ) {
 			if ( $verbose == "true" ) { $info .= "date_calculation_str contains numbers.<br />"; }
 			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre>"; } //
 			
-			// Extract the calc_interval integer from the string by getting rid of everything else
+			// Determine the calc_interval
 			// WIP deal w/ multiple value possibilities for weekday, boia
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
-				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia, 'the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
+				
+				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia], '', strtolower($date_calculation_str) );
+				$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calculation_str) );
 				$calc_interval = trim( $calc_interval );
 			}
 			
