@@ -1006,7 +1006,7 @@ function parse_date_str ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	//
-	//$info .= "args: <pre>".print_r($args, true)."</pre>";
+	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
 	//
@@ -1028,10 +1028,11 @@ function parse_date_str ( $args = array() ) {
 	// if str contains either multiple calc_bases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
 	
 	$calc_components = explode(" ", $date_calculation_str);
-	if ( $verbose == "true" ) { $info .= "calc_components: ".print_r($calc_components,true)."<br />"; }
+	if ( $verbose == "true" ) { $info .= "[".count($calc_components)."] calc_components: ".print_r($calc_components,true)."<br />"; }
 	$component_info = "";
 	$previous_component = "";
 	$previous_component_type = null;
+	$i = 1;
 	foreach ( $calc_components as $component ) {
 		// First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
 		if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
@@ -1060,6 +1061,9 @@ function parse_date_str ( $args = array() ) {
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
 				$calc_basis = $previous_component." ".$component;
+				// if not folloewd by year, add year wip...
+				// only if last component?...
+				if ( $i == count($calc_components) ) { $calc_basis .= " ".$year; }
 			} else {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a ".$previous_component_type."<br />";
 			}
@@ -1072,6 +1076,7 @@ function parse_date_str ( $args = array() ) {
 			$previous_component_type = "unknown";
 		}
 		$previous_component = $component;
+		$i++;
 	}
 	if ( $verbose == "true" ) { $info .= "component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	
