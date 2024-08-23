@@ -1094,7 +1094,7 @@ function parse_date_str ( $args = array() ) {
 			$component_info .= $indent."component '".$component."' is a boia<br />";
 			$previous_component_type = "boia";
 			// Potential calc_basis?
-			$calc_basis = substr($date_calculation_str,strpos($date_calculation_str,$component));
+			$calc_basis = substr($date_calculation_str,strpos($date_calculation_str,$component)+strlen($component));
 			$component_info .= $indent.'calc_basis: '.$calc_basis."<br />";
 		} else if ( preg_match('/first|second|[0-9]+/', $component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
