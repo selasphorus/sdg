@@ -934,12 +934,12 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
 	// wip
 	// Set up query args
     $wp_args = array(
-		'post_type'		=> array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+		'post_type'		=> 'liturgical_date',
 		'post_status'   => 'publish',
-		'posts_per_page'=> $limit, //-1, //$posts_per_page,
+		'posts_per_page'=> -1,
         'orderby'       => 'title',
         'order'         => 'ASC',
-        'return_fields' => 'ids',
+        //'return_fields' => 'ids',
         '_search_title'	=> $date_calculation_str,
 	);
 
