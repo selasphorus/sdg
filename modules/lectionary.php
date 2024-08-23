@@ -897,7 +897,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		) {
 		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
 		// If the calc_basis date includes month/day only, then add the year
-		if ( date('F d',strtotime($calc_basis)) == $calc_basis ) {
+		if ( strtolower(date('F d',strtotime($calc_basis))) == $calc_basis ) {
 			$calc_basis = $calc_basis." ". $year;
 			// Then convert it to Y-m-d format
 			$calc_basis = date('Y-m-d',strtotime($calc_basis));
