@@ -953,7 +953,7 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
     $info .= "WP_Query run as follows:";
     $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($arr_posts->posts)."] posts found matching date_calculation_str.<br />";
-    $info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
+    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		foreach ( $arr_posts->posts AS $post ) {
 			$calc_bases[] = $post->post_title;
