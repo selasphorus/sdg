@@ -1206,8 +1206,9 @@ function sdg_posts_where( $where, $wp_query ) {
     if ( $search_term = $wp_query->get( '_search_title' ) ) {
         $search_term = $wpdb->esc_like( $search_term );
         $search_term = esc_sql($search_term);
+        $search_term = strtolower($search_term);
         //$search_term = '\'%' . $search_term . '%\'';
-        $where .= ' AND ' . $wpdb->posts . '.post_title LIKE \'%' . $search_term. '%\'';
+        $where .= ' AND LOWER(' . $wpdb->posts . '.post_title) LIKE \'%' . $search_term. '%\'';
         //$where .= " AND " . $wpdb->posts . ".post_title LIKE '" . esc_sql( $wpdb->esc_like( $title ) ) . "%'";
     }
     
