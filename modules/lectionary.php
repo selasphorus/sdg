@@ -891,7 +891,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
-	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis || date('F d',strtotime($calc_basis)) == $calc_basis ) {
+	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis || strtolower(date('F d',strtotime($calc_basis))) == strtolower($calc_basis) ) {
 		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
 		// If the calc_basis date includes month/day only, then add the year
 		if ( date('F d',strtotime($calc_basis)) == $calc_basis ) {
