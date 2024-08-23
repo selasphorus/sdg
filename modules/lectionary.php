@@ -1066,7 +1066,7 @@ function parse_date_str ( $args = array() ) {
 				$calc_basis = $previous_component." ".$component;
 				// if not folloewd by year, add year wip...
 				// only if last component?...
-				if ( $i == count($calc_components) ) { $calc_basis .= " ".$year; }
+				//if ( $i == count($calc_components) ) { $calc_basis .= " ".$year; } // do this later via get_basis_date
 			} else {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a ".$previous_component_type."<br />";
 			}
