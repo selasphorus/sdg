@@ -1116,6 +1116,7 @@ function parse_date_str ( $args = array() ) {
 	
 	// 1. Liturgical calc basis (calc_basis)
 	$calc_bases = get_calc_bases_from_str($date_calculation_str);
+	if ( $verbose == "true" ) { $info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>"; }
 	if ( empty($calc_bases) ) {
 		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
 	} else if ( count($calc_bases) > 1 ) {
@@ -1131,7 +1132,6 @@ function parse_date_str ( $args = array() ) {
 		$cb = $calc_bases[0];
 		$calc_basis_field = array_values($cb)[0];
 		$calc_basis = array_key_first($cb);
-		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
 	}
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
