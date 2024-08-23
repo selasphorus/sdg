@@ -953,6 +953,7 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
     $info .= "WP_Query run as follows:";
     $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($arr_posts->posts)."] posts found matching date_calculation_str.<br />";
+    $info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		$calc_bases = $arr_posts->posts;
 	} else {
@@ -1679,7 +1680,7 @@ function calc_litdates( $atts = array() ) {
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
     $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
-    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>"; // tft
+    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
     $info .= "<br />";
     
     // Loop through the posts and calculate the variable dates for the given year
