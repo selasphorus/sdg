@@ -1093,13 +1093,15 @@ function parse_date_str ( $args = array() ) {
 		} else if ( in_array($component, $boias) ) {
 			$component_info .= $indent."component '".$component."' is a boia<br />";
 			$previous_component_type = "boia";
+			// Potential calc_basis?
+			$calc_basis = substr($date_calculation_str,strpos($date_calculation_str,$component));
 		} else if ( preg_match('/first|second|[0-9]+/', $component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 			// WIP...
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
-				$calc_basis = $previous_component." ".$component;
+				if ( empty($calc_basis)) { $calc_basis = $previous_component." ".$component; }
 				// if not folloewd by year, add year wip...
 				// only if last component?...
 				//if ( $i == count($calc_components) ) { $calc_basis .= " ".$year; } // do this later via get_basis_date
@@ -1125,17 +1127,24 @@ function parse_date_str ( $args = array() ) {
 	// TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
 	
 	// 1. Liturgical calc basis (calc_basis)
+	/*if ( $calc_basis ) {
+		$calc_bases_info = get_calc_bases_from_str($calc_basis);
+	} else {
+		$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
+	}*/
+	if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
+	
 	$calc_bases_info = get_calc_bases_from_str($date_calculation_str);
 	$calc_bases = $calc_bases_info['calc_bases'];
 	if ( $verbose == "true" ) {
-		$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
+		//$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		$info .= $calc_bases_info['info']."<br />";
 	}
 	if ( empty($calc_bases) ) {
-		if ( $verbose == "true" ) { $info .= "No liturgical calc_basis found.<br />"; }
+		if ( $verbose == "true" ) { $info .= "No calc_basis found.<br />"; }
 	} else if ( count($calc_bases) > 1 ) {
 		$complex_formula = true;
-		$info .= '<span class="notice">More than one liturgical calc_basis found!</span><br />';
+		$info .= '<span class="notice">More than one calc_basis found!</span><br />';
 		$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
