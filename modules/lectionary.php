@@ -951,17 +951,17 @@ function get_calc_bases_from_str ( $date_calculation_str = "" ) {
     //$ts_info .= "[".count($arr_posts->posts)."] posts found.<br />";
 	if ( count($arr_posts->posts) > 0 ) {
 		$calc_bases = $arr_posts->posts;
-	}
-	
-	// if not...
-	// lit basis foiund in $date_calculation_str?
-	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
-	
-	// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
-	foreach ( $liturgical_bases AS $basis => $basis_field ) {
-		if (stripos($date_calculation_str, $basis) !== false) {
-			$calc_bases[] = array( $basis => $basis_field );
-			//if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+	} else {
+		// if not...
+		// lit basis foiund in $date_calculation_str?
+		$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
+		
+		// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calculation_str)
+		foreach ( $liturgical_bases AS $basis => $basis_field ) {
+			if (stripos($date_calculation_str, $basis) !== false) {
+				$calc_bases[] = array( $basis => $basis_field );
+				//if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calculation_str.<br />"; }
+			}
 		}
 	}
 	
