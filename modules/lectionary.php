@@ -1177,6 +1177,7 @@ function parse_date_str ( $args = array() ) {
 	if ( $calc_basis ) {
 		// get the calc_str without the already determined calc_basis
 		$date_calc_str_mod = str_replace($calc_basis,"",$date_calc_str);
+		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from date_calc_str_mod: $date_calc_str_mod<br />"; }
 		$calc_boias = get_calc_boias_from_str($date_calc_str_mod);
 	} else {
 		$calc_boias = get_calc_boias_from_str($date_calc_str);
