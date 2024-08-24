@@ -958,6 +958,8 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
 		foreach ( $arr_posts->posts AS $post ) {
 			$calc_bases[] = strtolower($post->post_title);
 		}
+		// Assuming there's just one, go ahead and get the basis_date...
+		// TODO/WIP 240823: rejigger structure of calc_bases array to pass basis_date where applicable instead of basis_field
 	} else {
 		// if not...
 		// lit basis foiund in $date_calc_str?
