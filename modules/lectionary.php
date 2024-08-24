@@ -956,7 +956,7 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		foreach ( $arr_posts->posts AS $post ) {
-			$calc_bases[] = $post->post_title;
+			$calc_bases[] = strtolower($post->post_title);
 		}
 	} else {
 		// if not...
