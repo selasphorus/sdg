@@ -1069,7 +1069,7 @@ function parse_date_str ( $args = array() ) {
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
 	//
     //$numbers = array('one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => 5, 'six' => 6, 'seven' => 7, 'eight' => 8, 'nine' => 9); // WIP
-    $months = array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+    $months = array('january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december');
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season?
 	//
@@ -1093,7 +1093,7 @@ function parse_date_str ( $args = array() ) {
 	$previous_component = "";
 	$previous_component_type = null;
 	$i = 1;
-	foreach ( $calc_components as $component ) {
+	foreach ( $calc_components as strtolower($component) ) {
 		// First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
 		if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
 			$component_info .= $indent."component '".$component."' is a date<br />";
@@ -1105,7 +1105,7 @@ function parse_date_str ( $args = array() ) {
 			// WIP
 			// if multiple bases are found, proceed with the core subclause and then repeat calc...
 			//
-		} else if ( in_array(ucfirst($component), $months) ) {
+		} else if ( in_array($component, $months) ) {
 			$component_info .= $indent."component '".$component."' is a month<br />";
 			$previous_component_type = "month";
 		} else if ( in_array($component, $weekdays) || in_array(substr($component, 0, strlen($component)-1), $weekdays) ) {
