@@ -1093,7 +1093,10 @@ function parse_date_str ( $args = array() ) {
 	$previous_component = "";
 	$previous_component_type = null;
 	$i = 1;
-	foreach ( $calc_components as strtolower($component) ) {
+	foreach ( $calc_components as $component ) {
+		
+		$component = strtolower($component);
+		
 		// First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
 		if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
 			$component_info .= $indent."component '".$component."' is a date<br />";
