@@ -891,10 +891,26 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
+	} else if ( is_int($calc_basis) ) {
+	
+		// If the $calc_basis is a post_id, get the corresponding date_calculation for the given year
+		$post_id = $calc_basis;
+		// TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
+		if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+			while ( have_rows('date_calculations', $post_id) ) : the_row();
+				$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+				$year_calculated = substr($date_calculated, 0, 4);
+				if ( $year_calculated == $year ) {
+					$basis_date_str = $date_calculated;
+				}
+			endwhile;
+		} // end if
+	
 	} else if ( date('Y-m-d',strtotime($calc_basis)) == $calc_basis 
 				|| strtolower(date('F d',strtotime($calc_basis))) == strtolower($calc_basis) 
 				|| strtolower(date('F d Y',strtotime($calc_basis))) == strtolower($calc_basis) 
 		) {
+		
 		// WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
 		// If the calc_basis date includes month/day only, then add the year
 		if ( strtolower(date('F d',strtotime($calc_basis))) == $calc_basis ) {
@@ -903,6 +919,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 			$calc_basis = date('Y-m-d',strtotime($calc_basis));
 		}
 		$basis_date_str = $calc_basis;
+		
 	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	}
@@ -956,10 +973,8 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		foreach ( $arr_posts->posts AS $post ) {
-			$calc_bases[] = strtolower($post->post_title);
+			$calc_bases[] = strtolower($post->ID); // originally retrieved the post_title
 		}
-		// Assuming there's just one, go ahead and get the basis_date...
-		// TODO/WIP 240823: rejigger structure of calc_bases array to pass basis_date where applicable instead of basis_field
 	} else {
 		// if not...
 		// lit basis foiund in $date_calc_str?
@@ -1160,7 +1175,7 @@ function parse_date_str ( $args = array() ) {
 		//return $calc; // abort early -- we don't know what to do with this date_calc_str
 		//
 	} else if ( count($calc_bases) == 1 ) {
-		if ( $verbose == "true" ) { $info .= "Single liturgical calc_basis found.<br />"; }
+		if ( $verbose == "true" ) { $info .= "Single calc_basis found.<br />"; }
 		$cb = $calc_bases[0];
 		if ( is_array($cb) ) {
 			$calc_basis_field = array_values($cb)[0];
@@ -1170,6 +1185,7 @@ function parse_date_str ( $args = array() ) {
 			$calc_basis = $cb;
 		}
 	}
+			
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
 	if ( $calc_basis_field ) { $components['calc_basis_field'] = $calc_basis_field; }
 	if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis // $calc_basis_field<br />"; }
