@@ -1129,14 +1129,14 @@ function parse_date_str ( $args = array() ) {
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 			// WIP...
 			// Translate words to digits as needed
-			if ( !is_int($component) ) {
+			/*if ( !is_int($component) ) {
 				$component_translated = word_to_digit($component);
 				if ( !is_int($component_translated) ) {
 					// wip
 				}
-				$date_calc_str = str_replace($component, $component_translated, $date_calc_str);
+				//$date_calc_str = str_replace($component, $component_translated, $date_calc_str);
 				$component_info .= $indent."component_translated: '".$component_translated."'<br />";
-			}
+			}*/
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
 				if ( empty($calc_basis)) { $calc_basis = $previous_component." ".$component; }
