@@ -10,6 +10,51 @@ if ( !function_exists( 'add_action' ) ) {
 
 /* **************************************************************************************************** */
 
+/**
+ * Explode list using "," and ", ".
+ *
+ * @param string $string String to split up.
+ * @return array Array of string parts.
+ */
+function birdhive_att_explode( $string = '' ) {
+	$string = str_replace( ', ', ',', $string );
+	return explode( ',', $string );
+}
+
+function digit_to_word( $number ){
+    switch($number){
+        case 0:$word = "zero";break;
+        case 1:$word = "one";break;
+        case 2:$word = "two";break;
+        case 3:$word = "three";break;
+        case 4:$word = "four";break;
+        case 5:$word = "five";break;
+        case 6:$word = "six";break;
+        case 7:$word = "seven";break;
+        case 8:$word = "eight";break;
+        case 9:$word = "nine";break;
+    }
+    return $word;
+}
+
+function word_to_digit($word) {
+    $words_to_digits = [
+        'zero' => 0,
+        'one' => 1,
+        'two' => 2,
+        'three' => 3,
+        'four' => 4,
+        'five' => 5,
+        'six' => 6,
+        'seven' => 7,
+        'eight' => 8,
+        'nine' => 9,
+        'ten' => 10,
+    ];
+
+    return isset($words_to_digits[$word]) ? $words_to_digits[$word] : null;
+}
+
 /*** POST TITLE/SLUG FUNCTIONS ***/
 
 /*function remove_accents ( $str ) {
