@@ -891,7 +891,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
-	} else if ( $calc_basis_id ) ) {
+	} else if ( $calc_basis_id ) {
 	
 		// If the $calc_basis is a post_id, get the corresponding date_calculation for the given year
 		// TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
