@@ -1134,7 +1134,7 @@ function parse_date_str ( $args = array() ) {
 				if ( !is_int($component_translated) ) {
 					// wip
 				}
-				$date_calc_str = str_replace($component, $component_translated, $date_calc_str)
+				$date_calc_str = str_replace($component, $component_translated, $date_calc_str);
 				$component_info .= $indent."component_translated: '".$component_translated."'<br />";
 			}
 			if ( $previous_component_type == "month" ) {
