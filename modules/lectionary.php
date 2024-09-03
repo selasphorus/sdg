@@ -1215,16 +1215,8 @@ function parse_date_str ( $args = array() ) {
 	if ( $calc_basis ) {
 		// get the calc_str without the already determined calc_basis
 		$date_calc_str = trim(str_replace($calc_basis,"",$date_calc_str));
-		if ( strtotime($date_calc_str) ) {
-			$info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime<br />';
-		} else {
-			$info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime<br />';
-		}
-		if ( strtotime($date_calc_str."today") ) {
-			$info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime with the addition of the word "today"<br />';
-		} else {
-			$info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime with the addition of the word "today"<br />';
-		}
+		if ( strtotime($date_calc_str) ) { $info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime<br />'; } //else { $info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime<br />'; }
+		if ( strtotime($date_calc_str."today") ) { $info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime with the addition of the word "today"<br />'; } //else { $info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime with the addition of the word "today"<br />'; }
 		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from modified date_calc_str: $date_calc_str<br />"; }
 	} else {
 		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from unmodified date_calc_str<br />"; }
