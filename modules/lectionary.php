@@ -1055,9 +1055,9 @@ function parse_date_str ( $args = array() ) {
 	
 	// Defaults
 	$defaults = array(
-		'year'						=> null,
+		'year'				=> null,
 		'date_calc_str'		=> null,
-		'verbose'					=> true, // tft
+		'verbose'			=> true,
 	);
 
 	// Parse & Extract args
@@ -1065,6 +1065,7 @@ function parse_date_str ( $args = array() ) {
 	extract( $args );
 	//
 	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
+	$date_calc_str_wip = $date_calc_str; // copy the $date_calc_str to a new variable so we can preserve the original while making mods as needed
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
 	//
@@ -1126,6 +1127,15 @@ function parse_date_str ( $args = array() ) {
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 			// WIP...
+			// Translate words to digits as needed
+			if ( !is_int($component) ) {
+				$component_translated = word_to_digit($component);
+				if ( !is_int($component_translated) ) {
+					// wip
+				}
+				$component_info .= $indent."component_translated: '".$component_translated."'<br />";
+			}
+			//$date_calc_str_wip 
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
 				if ( empty($calc_basis)) { $calc_basis = $previous_component." ".$component; }
@@ -1209,7 +1219,7 @@ function parse_date_str ( $args = array() ) {
 		} else {
 			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is NOT parseable by strtotime<br />';
 		}
-		if ( strtotime($date_calc_str_mod." today") ) {
+		if ( strtotime($date_calc_str_mod."today") ) {
 			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is parseable by strtotime with the addition of the word "today"<br />';
 		} else {
 			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is NOT parseable by strtotime with the addition of the word "today"<br />';
