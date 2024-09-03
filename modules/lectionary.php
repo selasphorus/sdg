@@ -1065,7 +1065,7 @@ function parse_date_str ( $args = array() ) {
 	extract( $args );
 	//
 	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
-	$date_calc_str_wip = $date_calc_str; // copy the $date_calc_str to a new variable so we can preserve the original while making mods as needed
+	$date_calc_str_bk = $date_calc_str; // copy the $date_calc_str to a new variable so we can preserve the original while making mods as needed
 	//
 	$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
 	//
@@ -1134,9 +1134,9 @@ function parse_date_str ( $args = array() ) {
 				if ( !is_int($component_translated) ) {
 					// wip
 				}
+				$date_calc_str = str_replace($component, $component_translated, $date_calc_str)
 				$component_info .= $indent."component_translated: '".$component_translated."'<br />";
 			}
-			//$date_calc_str_wip 
 			if ( $previous_component_type == "month" ) {
 				$component_info .= $indent."... and previous_component '".$previous_component."' is a month<br />";
 				if ( empty($calc_basis)) { $calc_basis = $previous_component." ".$component; }
@@ -1214,23 +1214,22 @@ function parse_date_str ( $args = array() ) {
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
 	if ( $calc_basis ) {
 		// get the calc_str without the already determined calc_basis
-		$date_calc_str_mod = str_replace($calc_basis,"",$date_calc_str);
-		if ( strtotime($date_calc_str_mod) ) {
-			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is parseable by strtotime<br />';
+		$date_calc_str = str_replace($calc_basis,"",$date_calc_str);
+		if ( strtotime($date_calc_str) ) {
+			$info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime<br />';
 		} else {
-			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is NOT parseable by strtotime<br />';
+			$info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime<br />';
 		}
-		if ( strtotime($date_calc_str_mod."today") ) {
-			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is parseable by strtotime with the addition of the word "today"<br />';
+		if ( strtotime($date_calc_str."today") ) {
+			$info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime with the addition of the word "today"<br />';
 		} else {
-			$info .= 'date_calc_str_mod: "'.$date_calc_str_mod.'" is NOT parseable by strtotime with the addition of the word "today"<br />';
+			$info .= 'date_calc_str: "'.$date_calc_str.'" is NOT parseable by strtotime with the addition of the word "today"<br />';
 		}
-		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from date_calc_str_mod: $date_calc_str_mod<br />"; }
-		$calc_boias = get_calc_boias_from_str($date_calc_str_mod);
+		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from modified date_calc_str: $date_calc_str<br />"; }
 	} else {
 		if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from unmodified date_calc_str<br />"; }
-		$calc_boias = get_calc_boias_from_str($date_calc_str);
 	}
+	$calc_boias = get_calc_boias_from_str($date_calc_str);
 	if ( empty($calc_boias) ) {
 		if ( $verbose == "true" ) { $info .= "No boias found.<br />"; }
 	} else if ( count($calc_boias) > 1 ) {
