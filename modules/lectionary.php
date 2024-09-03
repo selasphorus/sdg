@@ -879,7 +879,7 @@ function get_liturgical_date_calc_id ( $year = null ) {
 	// WIP
 }
 
-function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null, $calc_basis_field = null ) {
+function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_basis = null, $calc_basis_id = null, $calc_basis_field = null ) {
 
 	//if ( empty($calc_basis) ) { return null; }
 	
@@ -891,13 +891,12 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
 		$basis_date_str = $year."-01-06";
-	} else if ( is_int($calc_basis) ) {
+	} else if ( $calc_basis_id ) ) {
 	
 		// If the $calc_basis is a post_id, get the corresponding date_calculation for the given year
-		$post_id = $calc_basis;
 		// TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
-		if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-			while ( have_rows('date_calculations', $post_id) ) : the_row();
+		if ( have_rows('date_calculations', $calc_basis_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+			while ( have_rows('date_calculations', $calc_basis_id) ) : the_row();
 				$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
 				$year_calculated = substr($date_calculated, 0, 4);
 				if ( $year_calculated == $year ) {
@@ -973,7 +972,7 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		foreach ( $arr_posts->posts AS $post ) {
-			$calc_bases[] = strtolower($post->ID); // originally retrieved the post_title
+			$calc_bases[] = array( 'post_id' => $post->ID, 'basis' => strtolower($post->post_title) ); // originally retrieved just the post_title
 		}
 	} else {
 		// if not...
@@ -983,7 +982,7 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
 		// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calc_str)
 		foreach ( $liturgical_bases AS $basis => $basis_field ) {
 			if (stripos($date_calc_str, $basis) !== false) {
-				$calc_bases[] = array( $basis => $basis_field );
+				$calc_bases[] = array( 'basis' => $basis, 'basis_field' => $basis_field );
 				//if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calc_str.<br />"; }
 			}
 		}
@@ -1076,6 +1075,7 @@ function parse_date_str ( $args = array() ) {
 	$components = array();
 	$calc_basis = null;
 	$calc_basis_field = null;
+	$calc_basis_id = null;
 	$calc_boia = null;
 	$calc_weekday = null;
 	//
@@ -1178,8 +1178,12 @@ function parse_date_str ( $args = array() ) {
 		if ( $verbose == "true" ) { $info .= "Single calc_basis found.<br />"; }
 		$cb = $calc_bases[0];
 		if ( is_array($cb) ) {
-			$calc_basis_field = array_values($cb)[0];
-			$calc_basis = array_key_first($cb);
+			$calc_basis = $cb['basis'];
+			if ( isset($cb['post_id']) ) {
+				$calc_basis_id = $cb['post_id'];
+			} else if ( isset($cb['basis_field']) ) {
+				$calc_basis_field = $cb['basis_field'];
+			}
 			//$info .= "cb: <pre>".print_r($cb, true)."</pre>";
 		} else {
 			$calc_basis = $cb;
@@ -1187,8 +1191,9 @@ function parse_date_str ( $args = array() ) {
 	}
 			
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
+	if ( $calc_basis_id ) { $components['calc_basis_id'] = $calc_basis_id; }
 	if ( $calc_basis_field ) { $components['calc_basis_field'] = $calc_basis_field; }
-	if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis // $calc_basis_field<br />"; }
+	if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis // calc_basis_id: $calc_basis_id // calc_basis_field: $calc_basis_field<br />"; }
 	
 	// 2. BOIAs
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
@@ -1417,7 +1422,7 @@ function calc_date_from_components ( $args = array() ) {
 	if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 	  
 	// Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_field );
+	$basis_date = get_basis_date( $year, $liturgical_date_calc_id, $calc_basis, $calc_basis_id, $calc_basis_field );
 	if ( $calc_basis == "epiphany" ) {
 		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
 	}
