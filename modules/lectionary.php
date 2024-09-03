@@ -1108,7 +1108,7 @@ function parse_date_str ( $args = array() ) {
 		} else if ( in_array(ucfirst($component), $months) ) {
 			$component_info .= $indent."component '".$component."' is a month<br />";
 			$previous_component_type = "month";
-		} else if ( in_array($component, $weekdays) ) {
+		} else if ( in_array($component, $weekdays) || in_array(substr($component, 0, strlen($component)-1), $weekdays) ) {
 			$component_info .= $indent."component '".$component."' is a weekday<br />";
 			$previous_component_type = "weekday";
 		} else if ( in_array($component, $boias) ) {
