@@ -1214,7 +1214,7 @@ function parse_date_str ( $args = array() ) {
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
 	if ( $calc_basis ) {
 		// get the calc_str without the already determined calc_basis
-		$date_calc_str = str_replace($calc_basis,"",$date_calc_str);
+		$date_calc_str = trim(str_replace($calc_basis,"",$date_calc_str));
 		if ( strtotime($date_calc_str) ) {
 			$info .= 'date_calc_str: "'.$date_calc_str.'" is parseable by strtotime<br />';
 		} else {
