@@ -1080,6 +1080,7 @@ function parse_date_str ( $args = array() ) {
 	$calc_basis_id = null;
 	$calc_boia = null;
 	$calc_weekday = null;
+	$calc_interval = null;
 	//
 	
 	// Loop through all the components of the exploded date_calc_str and determine component type
@@ -1253,8 +1254,16 @@ function parse_date_str ( $args = array() ) {
 		$components['calc_weekday'] = $calc_weekday;
 		if ( $verbose == "true" ) { $info .= "calc_weekday: $calc_weekday<br />"; }
 	}
-	// 
+	//
 	
+	// 4. Calc interval(s)
+	// WIP 240903
+	// translate words to digits etc -- move some functionality from calc_date_from_components
+	// $calc_interval
+	// in combo with calc_boia and calc_weekday, translate date_calc_str into something that can be handled by php strtotime
+	// e.g. two sundays before >> 2 sundays previous >> previous sunday - 6 days >>> previous sunday - X weeks + 1 day
+	
+	// phase this out? or generalize?
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
 		$sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
@@ -1524,9 +1533,10 @@ function calc_date_from_components ( $args = array() ) {
 			
 				// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
 				$basis_date_weekday = strtolower( date('l', $basis_date) );
+				
 				if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
 					$first_sunday = strtotime("next Sunday", $basis_date);
-					//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; // tft                    
+					//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />";
 					if ( $calc_interval && is_int($calc_interval) ) { $calc_interval = $calc_interval - 1; } // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
 					if ( $calc_interval === 0 ) { $calc_date = $first_sunday; }
 				} else if ( $basis_date ) {
@@ -1541,7 +1551,7 @@ function calc_date_from_components ( $args = array() ) {
 						$basis_date = $first_sunday;                    
 					} else if ( $calc_boia == "before" ) { 
 						$calc_formula = "previous Sunday";
-					} else if ( $calc_boia == "after" ) { 
+					} else if ( $calc_boia == "after" ) {
 						$calc_formula = "next Sunday";
 					} else if ( $first_sunday ) {
 						$calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"

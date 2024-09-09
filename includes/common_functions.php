@@ -137,7 +137,7 @@ function sdg_post_title ( $args = array() ) {
 		
 		// Determine the series type
 		if ( $post->post_type == "event" ) {
-			$series_field = 'events_series';
+			$series_field = 'series_events'; //$series_field = 'events_series';
 		} else if ( $post->post_type == "sermon" ) {
 			$series_field = 'sermons_series';
 		}
@@ -169,7 +169,7 @@ function sdg_post_title ( $args = array() ) {
         $series_id = null;
         $series_title = "";
 
-        $event_series = get_post_meta( $post_id, 'events_series', true );
+        $event_series = get_post_meta( $post_id, 'series_events', true );
         if ( isset($event_series['ID']) ) { 
             $series_id = $event_series['ID'];
             $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
@@ -1485,7 +1485,7 @@ function sdg_scope_dates( $scope = null ) {
         $start_date = date_i18n($date_format); // today
         $end_date = $start_date;
     
-    } else if ( $scope == 'today_onward' ){ // if ( $scope == 'today-onward' ){
+    } else if ( $scope == 'today_onward' || $scope == 'today-onward' ){
         
         $start_date = date_i18n($date_format); // today
         $decade = strtotime($start_date." +10 years");
