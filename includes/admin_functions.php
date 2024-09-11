@@ -1208,15 +1208,21 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-function remove_bracketed_info ( $str ) { //function sdg_remove_bracketed_info ( $str ) {
+function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg_remove_bracketed_info ( $str ) {
 
 	//sdg_log( "function: remove_bracketed_info", $do_log );
 
-	if (strpos($str, '[') !== false) { 
+	if ( strpos($str, '[') !== false ) { 
 		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str);
 		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str);
 	}
-
+	
+	// Optionally, also remove everything within and includes parentheses
+	if ( $remove_parens && strpos($str, '(') !== false ) { 
+		$str = preg_replace('/\([^\)]*\]([^\)]*)/', trim('$1'), $str);
+		$str = preg_replace('/([^\]]*)\([^\)]*\]/', trim('$1'), $str);
+	}
+	
 	return $str;
 }
 
