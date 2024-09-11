@@ -1204,6 +1204,11 @@ function parse_date_str ( $args = array() ) {
 		} else {
 			$calc_basis = $cb;
 		}
+		
+		// clean up the calc_basis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
+		// Remove anything in parentheses or brackets
+		$calc_basis = remove_bracketed_info($calc_basis,true);
+		
 	}
 			
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
@@ -1214,10 +1219,6 @@ function parse_date_str ( $args = array() ) {
 	// 2. BOIAs
 	// Does the date to be calculated fall before/after/of/in the basis_date/season?
 	if ( $calc_basis ) {
-		
-		// clean up the calc basis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
-		// Remove anything in parentheses or brackets
-		$calc_basis = remove_bracketed_info($calc_basis,true);
 		
 		// get the calc_str without the already determined calc_basis
 		$date_calc_str = trim(str_replace($calc_basis,"",$date_calc_str));
