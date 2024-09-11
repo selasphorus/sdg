@@ -1234,6 +1234,8 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 		//$str = preg_replace('/([^\)]*)\([^\)]*\)/', trim('$1'), $str);
 	}
 	
+	$str = trim($str);
+	
 	return $str;
 }
 
