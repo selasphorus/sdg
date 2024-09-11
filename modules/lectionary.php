@@ -1486,7 +1486,7 @@ function calc_date_from_components ( $args = array() ) {
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
 				$numbers = extract_numbers($date_calc_str);
-				if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; }
+				if ( $verbose == "true" ) { $info .= "numbers: <pre>".print_r($numbers,true)."</pre>"; }
 				if ( count($numbers) == 1 ) {
 					//$calc_interval = $numbers[0];
 					$calc_interval = "";
