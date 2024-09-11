@@ -1486,10 +1486,10 @@ function calc_date_from_components ( $args = array() ) {
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
 				$numbers = extract_numbers($date_calc_str);
+				if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; }
 				if ( count($numbers) == 1 ) {
 					$calc_interval = $numbers[0];
 				} else {
-					if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; }
 					$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia], '', strtolower($date_calc_str) );
 					$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calc_str) );
 				}
