@@ -73,8 +73,8 @@ function extract_numbers ( $string ) {
 	
 	// Make sure the numbers are digits -- convert them as needed
 	foreach ( $matches as $match ) {
-		$num = word_to_digit ( $match );
-		if ( $num ) { $numbers[]= $num; } else { $numbers[]= $match; }
+		$num = word_to_digit ( $match[0] );
+		if ( $num ) { $numbers[]= $num; } else { $numbers[]= $match[0]; }
 	}
 	return $numbers;
 	
