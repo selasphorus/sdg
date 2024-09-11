@@ -1493,7 +1493,7 @@ function calc_date_from_components ( $args = array() ) {
 					$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia], '', strtolower($date_calc_str) );
 					$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calc_str) );
 				}
-				$calc_interval = trim( $calc_interval );
+				//$calc_interval = trim( $calc_interval );
 			}
 			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
 			
