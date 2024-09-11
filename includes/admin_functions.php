@@ -67,7 +67,7 @@ function contains_numbers ( $string ) {
 
 function extract_numbers ( $string ) {
 
-	preg_match_all('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $string, $matches, PREG_OFFSET_CAPTURE);
+	preg_match_all('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $string, $matches); //PREG_OFFSET_CAPTURE
 	
 	return $matches;
 	
