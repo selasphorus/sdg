@@ -1485,9 +1485,14 @@ function calc_date_from_components ( $args = array() ) {
 			// WIP deal w/ multiple value possibilities for weekday, boia
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
-				
-				$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia], '', strtolower($date_calc_str) );
-				$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calc_str) );
+				$numbers = extract_numbers($date_calc_str);
+				if ( count($numbers) == 1 ) {
+					$calc_interval = $numbers[0];
+				} else {
+					if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; }
+					$calc_interval = str_replace([$calc_basis, $calc_weekday, $calc_boia], '', strtolower($date_calc_str) );
+					$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calc_str) );
+				}
 				$calc_interval = trim( $calc_interval );
 			}
 			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
