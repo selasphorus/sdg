@@ -1207,6 +1207,7 @@ function parse_date_str ( $args = array() ) {
 		
 		// clean up the calc_basis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
 		// Remove anything in parentheses or brackets
+		if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calc_basis.<br />"; }
 		$calc_basis = remove_bracketed_info($calc_basis,true);
 		
 	}
