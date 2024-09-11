@@ -16,12 +16,12 @@ if ( !function_exists( 'add_action' ) ) {
  * @param string $string String to split up.
  * @return array Array of string parts.
  */
-function birdhive_att_explode( $string = '' ) {
+function birdhive_att_explode ( $string = '' ) {
 	$string = str_replace( ', ', ',', $string );
 	return explode( ',', $string );
 }
 
-function digit_to_word( $number ){
+function digit_to_word ( $number ) {
     switch($number){
         case 0:$word = "zero";break;
         case 1:$word = "one";break;
@@ -37,7 +37,7 @@ function digit_to_word( $number ){
     return $word;
 }
 
-function word_to_digit($word) {
+function word_to_digit ( $word ) {
     $words_to_digits = [
         'zero' => 0,
         'one' => 1,
@@ -53,6 +53,16 @@ function word_to_digit($word) {
     ];
 
     return isset($words_to_digits[$word]) ? $words_to_digits[$word] : null;
+}
+
+function contains_numbers ( $string ) {
+
+	if ( preg_match('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $string) ) {
+		return true;
+	}
+	
+	return false;
+	
 }
 
 /*** POST TITLE/SLUG FUNCTIONS ***/
