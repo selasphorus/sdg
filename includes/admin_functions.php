@@ -1224,14 +1224,14 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 	//sdg_log( "function: remove_bracketed_info", $do_log );
 
 	if ( strpos($str, '[') !== false ) { 
-		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str);
-		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str);
+		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str); // Bracketed info at end of string
+		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str); // Bracketed info at start of string?
 	}
 	
 	// Optionally, also remove everything within and includes parentheses
 	if ( $remove_parens && strpos($str, '(') !== false ) { 
 		$str = preg_replace('/\([^\)]*\)([^\)]*)/', trim('$1'), $str);
-		$str = preg_replace('/([^\)]*)\([^\)]*\]/', trim('$1'), $str);
+		//$str = preg_replace('/([^\)]*)\([^\)]*\)/', trim('$1'), $str);
 	}
 	
 	return $str;
