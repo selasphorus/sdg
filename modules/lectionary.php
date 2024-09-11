@@ -1125,7 +1125,7 @@ function parse_date_str ( $args = array() ) {
 				$calc_basis = trim(substr($date_calc_str,strpos($date_calc_str,$component)+strlen($component)));
 				$component_info .= $indent.'calc_basis: '.$calc_basis."<br />";
 			}
-		} else if ( preg_match('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
+		} else if ( contains_numbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
 			$component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
 			//$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
 			// WIP...
@@ -1473,9 +1473,11 @@ function calc_date_from_components ( $args = array() ) {
 		
         // ** Extract components of date_calc_str & calculate date for $year
 		// ** Determine the calc_interval -- number of days/weeks...
+        if ( contains_numbers($date_calc_str) ) {
         //if ( preg_match('/([0-9]+)/', $date_calc_str) ) {
-		if ( preg_match_all('/[0-9]+/', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
+		//if ( preg_match_all('/[0-9]+/', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
+			// TODO/wip: also check for "two" etc
 			if ( $verbose == "true" ) { $info .= "date_calc_str contains numbers.<br />"; }
 			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre>"; } //
 			
@@ -1488,6 +1490,7 @@ function calc_date_from_components ( $args = array() ) {
 				$calc_interval = str_replace(['the', 'th', 'nd', 'rd', 'st'], '', strtolower($date_calc_str) );
 				$calc_interval = trim( $calc_interval );
 			}
+			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
 			
 			//if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
 			if ( !empty($calc_interval) && ( 
@@ -1497,7 +1500,7 @@ function calc_date_from_components ( $args = array() ) {
 				) ) {
 				$calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
 			}
-			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
+			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval (final): $calc_interval<br />"; }
 			
 		} else if ( strpos(strtolower($date_calc_str), 'last') !== false ) {
 			
@@ -1548,7 +1551,10 @@ function calc_date_from_components ( $args = array() ) {
 
 					if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
 						$calc_formula = "+".$calc_interval." weeks";
-						$basis_date = $first_sunday;                    
+						$basis_date = $first_sunday;
+					} else if ( ($calc_interval > 1 && $calc_boia == "before" ) ) {
+						$calc_formula = "-".$calc_interval." weeks";
+						$basis_date = $first_sunday;
 					} else if ( $calc_boia == "before" ) { 
 						$calc_formula = "previous Sunday";
 					} else if ( $calc_boia == "after" ) {
