@@ -1230,8 +1230,8 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 	
 	// Optionally, also remove everything within and includes parentheses
 	if ( $remove_parens && strpos($str, '(') !== false ) { 
-		$str = preg_replace('/\([^\)]*\]([^\)]*)/', trim('$1'), $str);
-		$str = preg_replace('/([^\]]*)\([^\)]*\]/', trim('$1'), $str);
+		$str = preg_replace('/\([^\)]*\)([^\)]*)/', trim('$1'), $str);
+		$str = preg_replace('/([^\)]*)\([^\)]*\]/', trim('$1'), $str);
 	}
 	
 	return $str;
