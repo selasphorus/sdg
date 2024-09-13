@@ -54,8 +54,14 @@ function sdg_post_title ( $args = array() ) {
 		//$ts_info .= "Not is_numeric: ".$post."<br />";
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
-	$ts_info .= "[sdg-pt] post_id: ".$post_id."<br />";
-	//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
+	if ( $post ) {
+		$ts_info .= "[sdg-pt] post_id: ".$post_id."<br />";
+		//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
+		$post_type = $post->post_type;
+	} else {
+		$post_type = null;
+	}
+	
 	if ( !$show_subtitle ) {
     	//$ts_info .= "[sdgpt] show_subtitles: false<br />";
     } else {
@@ -67,6 +73,12 @@ function sdg_post_title ( $args = array() ) {
 		$title = $the_title;
 	} else if ( is_object($post) ) {
 		$title = $post->post_title;
+		// WIP: maybe not practical to build in all args for person title display in this function -- use get_person_display_name directly instead
+		/*if ( $post_type == "person" ) {
+			$title = get_person_display_name($post_id);
+		} else {
+			$title = $post->post_title;
+		}*/		
 	} else {
 		$title = "";
 	}
