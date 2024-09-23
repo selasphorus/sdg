@@ -4045,4 +4045,37 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
     
 }
 
+/**
+* Ninja Forms - Required Field Text Broken Code Fix
+* @package Ninja Forms
+* @author Faisal Ahammad
+* // SEE https://gist.github.com/faisalahammad/599771146f05817d1901af811f24b859
+*/
+
+/**
+ * @param  $settings
+ * @param  $form_id
+ * @return mixed
+ */
+function decode_ninja_forms_display_form_settings( $settings, $form_id ) {
+	$settings[ 'fieldsMarkedRequired' ] = html_entity_decode( $settings[ 'fieldsMarkedRequired' ] );
+	return $settings;
+}
+add_filter( 'ninja_forms_display_form_settings', 'decode_ninja_forms_display_form_settings', 10, 2 );
+
+// Alternative Code //
+
+/**
+ * @param  $strings
+ * @return mixed
+ */
+ /*
+function fix_ninja_forms_i18n_front_end( $strings ) {
+	$strings[ 'fieldsMarkedRequired' ] = 'Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required';
+	return $strings;
+}
+add_filter( 'ninja_forms_i18n_front_end', 'fix_ninja_forms_i18n_front_end' );
+*/
+
+
 ?>
