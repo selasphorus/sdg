@@ -783,7 +783,7 @@ add_filter('acf/settings/row_index_offset', '__return_zero');
 // TODO: update other calls to ACF functions in case this screws them up?
 
 // Certain operations should only be run in devmode
-function devmode_active() {
+function devmode_active( $arr_qvar_vals = array() ) {
 	
 	$devmode = false; // init
 	
@@ -794,11 +794,13 @@ function devmode_active() {
     	$username = null;
     }
     
-	$devmode = get_query_var('dev');
-	if ( $devmode == "true" || $devmode == "yes" ) {
-		return true;        
-	} else if ( $devmode != "" ) {
-		return $devmode;        
+	if ( empty($arr_qvar_vals) ) { $arr_qvar_vals = array("true","yes"); } else { array_push($arr_qvar_vals,"true","yes"); }
+	$qvar_val = get_query_var('dev');	
+	
+	if ( in_array($qvar_val, $arr_qvar_vals) ) {
+		return true;
+	} else if ( $qvar_val != "" ) {
+		return $qvar_val;        
 	} else if ( is_dev_site() && sdg_queenbee() ) {
         return true;
 	}
@@ -824,7 +826,7 @@ function sdg_show_troubleshooting_info ( ) {
         return false;
     }
 	
-	$devmode = devmode_active();
+	$devmode = devmode_active( array("sdg") );
 	
 	$info = '<div class="troubleshooting">';
 	
@@ -1405,7 +1407,7 @@ function sdg_get_terms_orderby( $orderby, $args ) {
 function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonomy = "", $return_info = false ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "updates") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1477,7 +1479,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "updates") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1661,7 +1663,7 @@ add_action( 'admin_init', function () {
 function sdg_custom_post_content() {
 	
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -1901,7 +1903,7 @@ function sdg_remove_empty_p( $content ) {
 function match_placeholder( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "updates") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -2246,7 +2248,7 @@ function get_arr_str( $arr, $type = 'posts' ) {
 add_filter( 'document_title_parts', function( $title_parts_array ) {
     
     // TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg") );
     $do_log = false;
     if ( get_post_type( get_the_ID() ) == 'event' ) { $do_log = true; }
     sdg_log( "divline2", $do_log );
