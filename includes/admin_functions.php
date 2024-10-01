@@ -2292,7 +2292,7 @@ function run_post_updates( $atts = array() ) {
 
     }
     
-    if ( devmode_active( array("sdg", "updates") ); ) {
+    if ( devmode_active( array("sdg", "updates") ) ) {
         $info = str_replace('<!-- ','<code>',$info);
         $info = str_replace(' -->','</code><br />',$info);
         $info = str_replace("\n",'<br />',$info);
