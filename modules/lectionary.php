@@ -516,7 +516,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     // TODO: add option to return day title only -- just the text, with no link or other formatting
     
     // TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "lectionary") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_day_title", $do_log );

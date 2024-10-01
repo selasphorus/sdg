@@ -168,7 +168,7 @@ function sdg_archive_content_field_cb( $args ) {
 function get_cpt_sermon_meta( $post_id = null ) {
 	
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "sermons") );
     
 	/* 
 	// Model from old site for archive listing:

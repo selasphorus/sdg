@@ -6,7 +6,7 @@ add_shortcode('cs_sidebars_xfer', 'cs_sidebars_xfer');
 function cs_sidebars_xfer ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: cs_sidebars_xfer", $do_log );
@@ -87,7 +87,7 @@ add_shortcode('snippets', 'display_snippets');
 function display_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
@@ -171,7 +171,7 @@ function display_snippets ( $atts = array() ) {
 		$info .= '</section>';
 	}
 	// 
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "snippets" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	return $info;
 	
@@ -181,7 +181,7 @@ function display_snippets ( $atts = array() ) {
 function get_snippets ( $args = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
@@ -747,7 +747,7 @@ function get_snippets ( $args = array() ) {
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 		//
-		if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $snippet_info = '<div class="troubleshooting">'.$snippet_info.'</div>'; }
+		if ( $ts_info != "" && $do_ts === true ) { $snippet_info = '<div class="troubleshooting">'.$snippet_info.'</div>'; }
 		$info .= $snippet_info;
     }
     
@@ -926,7 +926,7 @@ add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
 function widgets_and_snippets ( $atts = array() ) { //function convert_widgets_to_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: widget_and_snippets", $do_log );
@@ -1548,7 +1548,7 @@ add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
 function convert_post_widgets_to_snippets ( $atts = array() ) {
 	
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: convert_post_widgets_to_snippets", $do_log );
@@ -1796,7 +1796,7 @@ add_shortcode('delete_widgets', 'delete_widgets');
 function delete_widgets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: delete_widgets", $do_log );
@@ -1906,7 +1906,7 @@ add_shortcode('update_snippets', 'update_snippets');
 function update_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: update_snippets", $do_log );
@@ -1953,7 +1953,7 @@ add_shortcode('update_snippet_logic', 'update_snippet_logic');
 function update_snippet_logic ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -3465,7 +3465,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 function process_tax_pair($rule) {
 	
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: process_tax_pair", $do_log );
@@ -3600,7 +3600,7 @@ add_shortcode('show_widgets_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "snippets") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_widgets_and_snippets", $do_log );

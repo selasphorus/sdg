@@ -13,7 +13,7 @@ if ( !function_exists( 'add_action' ) ) {
 function sdg_post_title ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "titles") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -40,7 +40,7 @@ function sdg_post_title ( $args = array() ) {
 		'hclass_sub'  	=> 'subtitle',
 		'before'  		=> '',
 		'after'  		=> '',
-		'do_ts'			=> devmode_active(),
+		'do_ts'			=> devmode_active( array("sdg", "titles") ),
 	);
 
 	// Parse & Extract args
@@ -255,7 +255,7 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 function sdg_post_thumbnail ( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "images") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -753,7 +753,7 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
 function display_postmeta( $args = array() ) {
     
     // TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "meta") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
@@ -834,7 +834,7 @@ function display_postmeta( $args = array() ) {
 function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null ) {
 	
 	// TS/logging setup
-    $do_ts = devmode_active();
+    $do_ts = devmode_active( array("sdg", "media") );
     
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
@@ -1472,7 +1472,7 @@ function sdg_list_media_items ( $atts = array() ) {
 function sdg_scope_dates( $scope = null ) {
     
     // TS/logging setup
-    $do_ts = devmode_active(); 
+    $do_ts = devmode_active( array("sdg", "events") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
 	
