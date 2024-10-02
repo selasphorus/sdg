@@ -921,6 +921,8 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 		
 	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
+	} else {
+		$basis_date_str = date('Y-m-d',strtotime($calc_basis));
 	}
 
 	// If no basis date string has yet been established, then default to January first of the designated year
