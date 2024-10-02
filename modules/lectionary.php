@@ -922,6 +922,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	} else {
+		if ( substr($calc_basis,0,4) == "the ") { $calc_basis = substr($calc_basis,4); }
 		$basis_date_str = date('Y-m-d',strtotime($calc_basis));
 	}
 
