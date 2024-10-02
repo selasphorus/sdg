@@ -922,7 +922,10 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 	} else if ( $liturgical_date_calc_id && $calc_basis_field ) {
 		$basis_date_str = get_post_meta( $liturgical_date_calc_id, $calc_basis_field, true);
 	} else {
+		// If the calc_basis starts with a "the ", trim that off
 		if ( substr($calc_basis,0,4) == "the ") { $calc_basis = substr($calc_basis,4); }
+		// Append four-digit year (TODO: check first to see if it's already there? though when would that be the case...)
+		$calc_basis .= " ".$year;
 		$basis_date_str = date('Y-m-d',strtotime($calc_basis));
 	}
 
