@@ -165,8 +165,9 @@ function get_status_message ( $post_id = null, $message_type = 'webcast_status' 
         if ( $webcast_status === "before" ) {
             if ( empty( $video_id ) || $media_format == "vimeo_recurring" ) {
                 // If live_start is set, display message saying that the webcast will be available on that date/time
+                $live_start = null;
                 //$live_start = get_field('live_start', $post_id); // deprecated -- leaving this here in case it becomes useful again -- for streaming on non-event posts
-                if ( $live_start == false && is_singular('event') ) { $live_start = get_post_meta( $post_id, '_event_start_local', true ); }
+                if ( $live_start == null && is_singular('event') ) { $live_start = get_post_meta( $post_id, '_event_start_local', true ); }
                 if ( $live_start != "" ) {
 
                     $start_timestamp = strtotime($live_start);
