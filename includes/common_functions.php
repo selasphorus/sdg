@@ -1195,6 +1195,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		
 	}
 	
+	$ts_info .= "player_status: ".$player_status."<br />";
 	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
 	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
