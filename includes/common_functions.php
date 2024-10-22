@@ -937,9 +937,6 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     	//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     	$ts_info .= "webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
-    	if ( $webcast_status == "before" && $player_status == "unknown" ) {
-    		$player_status = "before";
-    	}
     }
     
     /*
@@ -1004,7 +1001,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
             
         }
 		
-	} else if ( $media_format == "video" && $src ) { //} else if ( $media_format == "video" && isset($video_file['url']) ) {
+	} else if ( $media_format == "video" && !empty($src) ) { //} else if ( $media_format == "video" && isset($video_file['url']) ) {
 		
 		// Video file from Media Library
 		
@@ -1066,6 +1063,10 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			$player .= '</div>';
 		}
 		
+	}
+	
+	if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) {
+		$player_status = "before";
 	}
     
     if ( $status_only === true ) {
