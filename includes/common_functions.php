@@ -929,11 +929,16 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
     
     // Webcast?
-    if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
+    $webcast = get_field('webcast', $post_id);
+    //if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
+    if ( $webcast ) {
     	$webcast_status = get_webcast_status( $post_id );
     	//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
     	$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
     	$ts_info .= "webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
+    	if ( $webcast_status == "before" && $player_status == "unknown" ) {
+    		$player_status = "before";
+    	}
     }
     
     /*
