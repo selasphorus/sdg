@@ -1828,7 +1828,7 @@ function sdg_register_field_groups() {
 			),
 			array(
 				'key' => 'field_627428922ef4b',
-				'label' => 'Fixed Date of Observance (TXT)',
+				'label' => 'Fixed Date(s) of Observance (TXT)',
 				'name' => 'fixed_date_str',
 				'aria-label' => '',
 				'type' => 'text',
