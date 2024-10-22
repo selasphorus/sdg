@@ -842,6 +842,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	$ts_info = "";
     $player = "";
     $player_status = "unknown";
+    $src = null;
     $featured_video = false;
     $featured_audio = false;
     $multimedia = false; // does the post have both featured audio and video?
@@ -900,7 +901,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		if (empty($video_file) ) {
 			$video_file = get_field('video_file'); //$video_file = get_field('featured_video');
 		}
-    	if ( is_array($video_file) ) { $src = $video_file['url']; } else { $src = $video_file; }
+    	if ( is_array($video_file) ) { $src = $video_file['url']; } else if ( !empty($video_file) ) { $src = $video_file; }
 		
 		$ts_info .= "video_id: '".$video_id."'; video_file src: '".$src."<br />";
 		
