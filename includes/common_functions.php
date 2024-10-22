@@ -1187,7 +1187,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
         } // END if ($rows) for Cuepoints
         
         // Add call to action beneath media player
-        if ( $player != "" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
+        if ( $player != "" && $player_status != "before" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
             $info .= $cta;
         }
 		
