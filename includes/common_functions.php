@@ -855,6 +855,8 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     // Get the basic media info
     $featured_AV = get_field('featured_AV', $post_id); // array of options (checkboxes field) including: featured_video, featured_audio, webcast (WIP)
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
+    if ( empty($media_format) ) { $media_format = null; }
+    //
     $ts_info .= "featured_AV: ".print_r($featured_AV, true)."<br />";
 	$ts_info .= "media_format: ".print_r($media_format, true)."<br />";
 	//if ( is_array($media_format) && count($media_format) > 1 ) {
