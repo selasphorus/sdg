@@ -1112,9 +1112,10 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
         //
         if ( $status_message !== "" && $position != "banner" ) {
             $info .= '<p class="message-info">'.$status_message.'</p>';
-            if ( !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
-                    && $show_cta !== false
-                    && get_post_type($post_id) != 'sermon' ) { // Also don't show CTA for sermons
+            if ( $show_cta !== false
+                && get_post_type($post_id) != 'sermon' // Don't show CTA for sermons
+                //&& !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
+                ) { 
                 $info .= $cta;
             }
             //return $info; // tmp disabled because it made "before" Vimeo vids not show up
@@ -1124,9 +1125,13 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
             $player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
         }
         
-        $info .= "<!-- MEDIA_PLAYER -->";
-		$info .= $player;
-        $info .= "<!-- /MEDIA_PLAYER -->";
+        if ( !empty($player) ) {
+        	$info .= "<!-- MEDIA_PLAYER -->";
+			$info .= $player;
+        	$info .= "<!-- /MEDIA_PLAYER -->";
+        } else {
+        	$info .= "<!-- NO MEDIA_PLAYER AVAILABLE -->";
+        }
         
         // Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
         $rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
@@ -1191,7 +1196,12 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
         } // END if ($rows) for Cuepoints
         
         // Add call to action beneath media player
-        if ( $player != "" && $player_status != "before" && !is_dev_site() && $show_cta !== false && $post_id != 232540 && get_post_type($post_id) != 'sermon' ) {
+        if ( !empty($player)
+        	&& $player_status != "before" 
+        	//&& !is_dev_site() 
+        	&& $show_cta !== false 
+        	&& $post_id != 232540 
+        	&& get_post_type($post_id) != 'sermon' ) {
             $info .= $cta;
         }
 		
