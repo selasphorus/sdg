@@ -905,13 +905,13 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		}
     	if ( is_array($video_file) ) { $src = $video_file['url']; } else if ( !empty($video_file) ) { $src = $video_file; }
 		
-		$ts_info .= "video_id: '".$video_id."'; video_file src: '".$src."<br />";
+		$ts_info .= "video_id: '".$video_id."'; video_file src: '".$src."'<br />";
 		
 		if ( $src && is_array($media_format) && in_array( 'video', $media_format) ) {
 			$media_format = "video";
 		} else if ( $video_id && is_array($media_format) && in_array( 'vimeo', $media_format) ) {
 			$media_format = "vimeo";
-		} else {
+		} else if ( !empty($video_id) || !empty($src)){ 
 			$media_format = "youtube";
 		}
 		
@@ -1065,6 +1065,8 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			$player .= '</div>';
 		}
 		
+	} else {
+	
 	}
 	
 	if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) {
@@ -1234,6 +1236,7 @@ function display_media_player( $atts = array() ) {
 			'post_id' => get_the_ID(),
 			'position' => 'above',
 			'return' => 'info',
+			'context' => 'unknown'
 		), $atts
 	);
 	
@@ -1259,6 +1262,7 @@ function display_media_player( $atts = array() ) {
 		//
 		$info .= "<!-- Audio/Video for post_id: $post_id -->";
 		$info .= $media_info['player'];
+		$info .= "<!-- context: $context -->";
 		$info .= "<!-- player_status: $player_status -->";
 		$info .= '<!-- /Audio/Video -->';
     } else {
