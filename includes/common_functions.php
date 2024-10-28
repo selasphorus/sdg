@@ -1135,7 +1135,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 				$info .= $player;
         		$info .= "<!-- /MEDIA_PLAYER -->";
 			} else {
-				$ts_info .= "NB: player_position != $position ==> don't show the player, even though there is one.<br />"
+				$ts_info .= "NB: player_position != $position ==> don't show the player, even though there is one.<br />";
 			}
         	
         } else {
