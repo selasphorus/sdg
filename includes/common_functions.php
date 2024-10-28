@@ -210,7 +210,7 @@ function sdg_post_title ( $args = array() ) {
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "basics" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return, as requested via $echo arg.
 	if ( $echo ) {
@@ -1235,7 +1235,16 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 // Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
 function display_media_player( $atts = array() ) {
-
+	
+	// TS/logging setup
+    $do_ts = devmode_active( array("sdg", "media") ); 
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
+    $info = "";
+	$ts_info = "";
+	
 	// Normalize attribute keys by making them all lowercase
 	$atts = array_change_key_case( (array) $atts, CASE_LOWER );
 	
@@ -1251,9 +1260,7 @@ function display_media_player( $atts = array() ) {
 	
 	// Extract args as vars
 	extract( $args );
-    
-    // init
-    $info = "";
+	
     if ( $return == "array" ) {
     	$arr_info = array();
     }    
