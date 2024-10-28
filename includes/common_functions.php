@@ -874,7 +874,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     if ( is_array($featured_AV) && in_array( 'video', $featured_AV) ) {
     	$featured_video = true;
     	$player_position = get_field('video_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] video_player_position: '".$player_position."'<br />";
+    	$ts_info .= "[gmp] player_position: '".$player_position."' / position: '".$player_position."'<br />";
     	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'video';
     		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
@@ -883,7 +883,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     if ( is_array($featured_AV) && in_array( 'audio', $featured_AV) ) {
     	$featured_audio = true;
     	$player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] audio_player_position: '".$player_position."'<br />";
+    	$ts_info .= "[gmp] player_position: '".$player_position."'<br />";
     	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'audio';
     		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
