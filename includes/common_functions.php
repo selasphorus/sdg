@@ -872,18 +872,18 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     // Get additional vars based on presence of featured audio/video
     if ( is_array($featured_AV) && in_array( 'video', $featured_AV) ) {
     	$featured_video = true;
-    	$video_player_position = get_field('video_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] video_player_position: '".$video_player_position."'<br />";
-    	if ( $media_type == "unknown" && $video_player_position == $position ) {
+    	$player_position = get_field('video_player_position', $post_id); // above/below/banner
+    	$ts_info .= "[gmp] video_player_position: '".$player_position."'<br />";
+    	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'video';
     		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
     	}
     }
     if ( is_array($featured_AV) && in_array( 'audio', $featured_AV) ) {
     	$featured_audio = true;
-    	$audio_player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] audio_player_position: '".$audio_player_position."'<br />";
-    	if ( $media_type == "unknown" && $audio_player_position == $position ) {
+    	$player_position = get_field('audio_player_position', $post_id); // above/below/banner
+    	$ts_info .= "[gmp] audio_player_position: '".$player_position."'<br />";
+    	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'audio';
     		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
     	}
@@ -1026,9 +1026,9 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			
 		if ( $status_only == false ) {
 			$class = "vimeo_container";
-			if ( $video_player_position == "banner" ) { $class .= " hero vimeo video-container"; }
+			if ( $player_position == "banner" ) { $class .= " hero vimeo video-container"; }
 			$player .= '<div class="'.$class.'">';
-			if ( $video_player_position == "banner" ) { 
+			if ( $player_position == "banner" ) { 
 				$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline" controls></video>';
 			} else {
 				$player .= '<iframe id="vimeo" src="'.$src.'" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>';
@@ -1129,9 +1129,14 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
         }
         
         if ( !empty($player) ) {
-        	$info .= "<!-- MEDIA_PLAYER -->";
-			$info .= $player;
-        	$info .= "<!-- /MEDIA_PLAYER -->";
+			if ( $player_position == $position ) {
+				$info .= "<!-- MEDIA_PLAYER -->";
+				$info .= $player;
+        		$info .= "<!-- /MEDIA_PLAYER -->";
+			} else {
+				$ts_info .= "NB: player_position != $position ==> don't show the player, even though there is one.<br />"
+			}
+        	
         } else {
         	$info .= "<!-- NO MEDIA_PLAYER AVAILABLE -->";
         }
@@ -1200,6 +1205,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
         
         // Add call to action beneath media player
         if ( !empty($player)
+        	&& $player_position == $position
         	&& $player_status == "ready"
         	//&& $player_status != "before" 
         	//&& !is_dev_site() 
