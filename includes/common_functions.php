@@ -843,6 +843,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 	$ts_info = "";
     $player = "";
     $player_status = "unknown";
+    $player_position = "unknown";
     $src = null;
     $featured_video = false;
     $featured_audio = false;
