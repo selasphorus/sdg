@@ -335,7 +335,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     $classes = "post-thumbnail sdg";
     //$classes .= " zoom-fade"; //if ( is_dev_site() ) { $classes .= " zoom-fade"; }
     if ( is_singular('event') ) { $classes .= " event-image"; }
-    if ( is_archive() || is_post_type_archive() ) { $classes .= " float-left"; }
+    if ( $img_size != "full" && ( is_archive() || is_post_type_archive() ) ) { $classes .= " float-left"; }
     //
     
     // Are we using the custom image, if any is set?
@@ -932,7 +932,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			
 		}
 	
-		$ts_info .= "[gmp] media_format REVISED: '".$media_format."'<br />";
+		$ts_info .= "[gmp] media_format REVISED: '".print_r($media_format,true)."'<br />";
 		//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
 		
 		// Webcast?
