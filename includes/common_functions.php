@@ -257,6 +257,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "images") ); 
     $do_log = false;
+    $fcn_id = "[sdg-pt] ";
     sdg_log( "divline2", $do_log );
     
     // Init vars
@@ -279,7 +280,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+	$ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     if ( $post_id == null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
@@ -300,7 +301,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         $img_size = "full";
     }
     
-    $ts_info .= "[sdpt] vars:<br/>";
+    $ts_info .= $fcn_id."vars:<br/>";
     $ts_info .= "&emsp; post_id: $post_id<br />";
     $ts_info .= "&emsp; format: $format<br />";
     $ts_info .= "&emsp; get_the_ID(): ".get_the_ID()."<br />";
@@ -314,7 +315,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	if ( $format == "singular" && $player_status == "ready" ) {
 		return;
 	} else {
-		$ts_info .= "[sdpt] player_status: ".print_r($player_status,true)."<br />";
+		$ts_info .= $fcn_id."player_status: ".print_r($player_status,true)."<br />";
 	}
     if ( post_password_required($post_id) || is_attachment($post_id) ) {
         return;
@@ -341,11 +342,11 @@ function sdg_post_thumbnail ( $args = array() ) {
     // Are we using the custom image, if any is set?
     // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
     if ( $format != "singular" && in_array("custom_thumb", $sources ) ) {
-    	$ts_info .= "Check for custom_thumb<br />";
+    	$ts_info .= $fcn_id."Check for custom_thumb<br />";
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
         if ( $custom_thumb_id ) {
-        	$ts_info .= "custom_thumb_id found: $custom_thumb_id<br />";
+        	$ts_info .= $fcn_id."custom_thumb_id found: $custom_thumb_id<br />";
             $img_id = $custom_thumb_id;
         }
     }
@@ -356,7 +357,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     	if ( get_field('author_image_for_archive') ) {
     		$img_id = get_author_img_id ( $post_id );
     	} else {
-    		$ts_info .= "author_image_for_archive set to false<br />";
+    		$ts_info .= $fcn_id."author_image_for_archive set to false<br />";
     	}
     }
 
@@ -367,11 +368,11 @@ function sdg_post_thumbnail ( $args = array() ) {
         if ( has_post_thumbnail( $post_id ) ) {
 
             $img_id = get_post_thumbnail_id( $post_id );
-            $ts_info .= "post has a featured image.<br />";
+            $ts_info .= $fcn_id."post has a featured image.<br />";
 
         } else {
 
-            $ts_info .= "post has NO featured image.<br />";
+            $ts_info .= $fcn_id."post has NO featured image.<br />";
 
             // If there's no featured image, see if there are any other images that we can use instead
             
@@ -380,8 +381,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 				// get image gallery images and select one at random
 				$image_gallery = get_post_meta( $post_id, 'image_gallery', true );
 				if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
-					$ts_info .= "Found an image_gallery array.<br />";
-					$ts_info .= "image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
+					$ts_info .= $fcn_id."Found an image_gallery array.<br />";
+					$ts_info .= $fcn_id."image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
 					$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
 					// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
 					/*
@@ -423,10 +424,10 @@ function sdg_post_thumbnail ( $args = array() ) {
 					}
 					*/
 					$img_id = $image_gallery[$i];
-					$img_type = "attachment_image";
-					$ts_info .= "Random thumbnail ID: $img_id<br />";
+					$img_type = $fcn_id."attachment_image";
+					$ts_info .= $fcn_id."Random thumbnail ID: $img_id<br />";
 				} else {
-					$ts_info .= "No image_gallery found.<br />";
+					$ts_info .= $fcn_id."No image_gallery found.<br />";
 				}
             }
             
@@ -472,10 +473,10 @@ function sdg_post_thumbnail ( $args = array() ) {
 		$caption = get_post( $img_id )->post_excerpt;
 		if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
 			$classes .= " has-caption";
-			$ts_info .= "Caption found for img_id $img_id: '$caption'<br />";
+			$ts_info .= $fcn_id."Caption found for img_id $img_id: '$caption'<br />";
 		} else {
 			$classes .= " no-caption";
-			$ts_info .= "No caption found for img_id $img_id<br />";
+			$ts_info .= $fcn_id."No caption found for img_id $img_id<br />";
 		}
 		
 		if ( $caption != "" ) {
@@ -488,7 +489,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		// Set up the img_html
 		if ( $format == "singular" && !( is_page('events') ) ) {
 		
-			$ts_info .= "post format is_singular<br />";
+			$ts_info .= $fcn_id."post format is_singular<br />";
 			if ( has_post_thumbnail($post_id) ) {
 			
 				if ( is_singular('person') ) {
@@ -508,7 +509,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 				// If an image_gallery was found, show one image as the featured image
 				// TODO: streamline this
 				if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
-					$ts_info .= "image_gallery image<br />";
+					$ts_info .= $fcn_id."image_gallery image<br />";
 					$img_html .= '<div class="'.$classes.'">';
 					$img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
 					$img_html .= $caption_html;
@@ -519,7 +520,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		
 		} else if ( !( $format == "singular" && is_page('events') ) ) {
 		
-			$ts_info .= "NOT is_singular<br />";
+			$ts_info .= $fcn_id."NOT is_singular<br />";
 		
 			// NOT singular -- aka archives, search results, &c.
 			$img_tag = "";
@@ -529,8 +530,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 				// display attachment via thumbnail_id
 				$img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
 			
-				$ts_info .= 'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
-				if ( isset($images)) { $ts_info .= '<pre>'.print_r($images,true).'</pre>'; }
+				$ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
+				if ( isset($images)) { $ts_info .= $fcn_id.'<pre>'.print_r($images,true).'</pre>'; }
 			
 			} else {
 			
@@ -756,6 +757,7 @@ function display_postmeta( $args = array() ) {
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "meta") );
     $do_log = false;
+    $fcn_id = "[sdg-dpm] ";
     sdg_log( "divline2", $do_log );
     
     // Init vars
@@ -778,7 +780,7 @@ function display_postmeta( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	$ts_info .= "sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+	$ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     
@@ -823,7 +825,7 @@ function display_postmeta( $args = array() ) {
     }
     $info .= "</pre>";
     
-    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
 	
