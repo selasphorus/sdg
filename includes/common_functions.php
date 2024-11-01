@@ -314,7 +314,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 	if ( $format == "singular" && $player_status == "ready" ) {
 		return;
 	} else {
-		$ts_info .= "[sdpt] player_status: ".$player_status."<br />";
+		$ts_info .= "[sdpt] player_status: ".print_r($player_status,true)."<br />";
 	}
     if ( post_password_required($post_id) || is_attachment($post_id) ) {
         return;
@@ -557,7 +557,7 @@ function sdg_post_thumbnail ( $args = array() ) {
     	$info = $img_id;
     }
 	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" || $do_ts == "media" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	// Echo or return info
 	if ( $echo == true ) { echo $info; } else { return $info; }
