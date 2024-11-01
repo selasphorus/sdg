@@ -1103,7 +1103,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			if ( $show_cta ) {
 				$ts_info .= 'show_cta: TRUE<br />';
 				$cta .= '<div class="cta">';
-				$cta .= '<h2>Support Saint Thomas</h2>';
+				$cta .= '<h2>Support Saint Thomas Church</h2>';
 				//$cta .= '<h2>Support Our Ministry</h2>';
 				////$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a donation for the work of the Episcopal Church in the Holy Land on Good Friday</a>';
 				//$cta .= '<a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank" class="button">Pledge to our Annual Appeal</a>&nbsp;';
