@@ -1067,7 +1067,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 				
 				// Assemble media player iframe
 				$player .= '<div class="hero video-container youtube-responsive-container">';
-				$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+				$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" enablejsapi="true" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
 				$player .= '</div>';
 			}
 			
