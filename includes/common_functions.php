@@ -1250,8 +1250,8 @@ function get_media_player( $args = array() ) {
 	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
 	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "media" || $do_ts == "events" ) ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
-	
+	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "media" || $do_ts == "events" ) ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
+	$arr_info['ts_info'] = $ts_info;
 	$arr_info['position'] = $position;
 	$arr_info['status'] = $player_status;
 
