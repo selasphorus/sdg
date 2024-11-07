@@ -917,6 +917,8 @@ function get_media_player( $args = array() ) {
 	
 		if ( $media_type == "video" ) {
 		
+			//$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
+			$video_file = null;
 			$video_id = get_field('video_id', $post_id);
 			$yt_ts = get_field('yt_ts', $post_id); // YT timestamp
 			$yt_series_id = get_field('yt_series_id', $post_id);
@@ -929,7 +931,11 @@ function get_media_player( $args = array() ) {
 			if (empty($video_file) ) {
 				$video_file = get_field('video_file'); //$video_file = get_field('featured_video');
 			}
-			if ( is_array($video_file) ) { $src = $video_file['url']; } else if ( !empty($video_file) ) { $src = $video_file; }
+			if ( is_array($video_file) ) {
+				$src = $video_file['url'];
+			} else if ( !empty($video_file) ) {
+				$src = $video_file;
+			}
 			
 			$ts_info .= $fcn_id."video_id: '".$video_id."'; video_file src: '".$src."'<br />";
 			
@@ -937,7 +943,7 @@ function get_media_player( $args = array() ) {
 				$media_format = "video";
 			} else if ( $video_id && is_array($media_format) && in_array( 'vimeo', $media_format) ) {
 				$media_format = "vimeo";
-			} else if ( !empty($video_id) || !empty($src)){ 
+			} else if ( empty($src) && !empty($video_id) ){ 
 				$media_format = "youtube";
 			}
 			
