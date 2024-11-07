@@ -764,7 +764,7 @@ function display_postmeta( $args = array() ) {
     $info = "";
 	$ts_info = "";
 	
-	//$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+	//$ts_info .= "<pre>display_postmeta args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -780,7 +780,7 @@ function display_postmeta( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	$ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+	$ts_info .= $fcn_id."display_postmeta parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     
@@ -834,11 +834,31 @@ function display_postmeta( $args = array() ) {
 /*********** MEDIA ***********/
 
 // Get Media Player -- Based on contents of ACF A/V Info fields
-function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null ) {
+function get_media_player( $args = array() ) {
+//function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null, $called_by = null ) {
 	
 	// TS/logging setup
     $do_ts = devmode_active( array("sdg", "media") );
+    $do_log = false;
+    $fcn_id = "[sdg-gmp] ";
+    sdg_log( "divline2", $do_log );
     
+    // Defaults
+	$defaults = array(
+		'post_id'		=> null,
+		'status_only'	=> false,
+		'position'		=> null,
+		'media_type'	=> 'unknown',
+		'url'			=> null,
+		'called_by'  	=> null, // option for TS to indicate origin of function call -- e.g. theme header
+		'do_ts'  		=> false,
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+	
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
 	$info = "";
@@ -852,43 +872,43 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
     $multimedia = false; // does the post have both featured audio and video?
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
-    $ts_info .= "[gmp] atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
+    $ts_info .= $fcn_id."atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
     // If it's not a webcast-eligible post, then abort
     //if ( !post_is_webcast_eligible( $post_id ) ) { return false;  }
     
     // Get the basic media info
     $featured_AV = get_field('featured_AV', $post_id); // array of options (checkboxes field) including: featured_video, featured_audio, webcast (WIP)
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
-    if ( empty($media_format) ) { $media_format = null; } else if ( is_array($media_format) && count($media_format) == 1 ) { $media_format = $media_format[0]; }
     //
-    $ts_info .= "[gmp] featured_AV: ".print_r($featured_AV, true)."<br />";
-	$ts_info .= "[gmp] media_format: ".print_r($media_format, true)."<br />";
+    $ts_info .= $fcn_id."featured_AV: ".print_r($featured_AV, true)."<br />";
+	$ts_info .= $fcn_id."media_format: ".print_r($media_format, true)."<br />";
 	
 	if ( is_array($featured_AV) && count($featured_AV) > 1 ) {
 		$multimedia = true;
-		$ts_info .= "[gmp] MULTIPLE FEATURED A/V MEDIA FOUND<br />";
+		$ts_info .= $fcn_id."MULTIPLE FEATURED A/V MEDIA FOUND<br />";
 	} else {
-		$ts_info .= "[gmp] Multimedia FALSE<br />";
-		
+		$ts_info .= $fcn_id."Multimedia FALSE<br />";		
 	}
+	
+    if ( empty($media_format) ) { $media_format = null; } else if ( is_array($media_format) && count($media_format) == 1 ) { $media_format = $media_format[0]; }
     
     // Get additional vars based on presence of featured audio and/or video
     if ( is_array($featured_AV) && in_array( 'video', $featured_AV) ) {
     	$featured_video = true;
     	$player_position = get_field('video_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] player_position: '".$player_position."' / position: '".$position."'<br />";
+    	$ts_info .= $fcn_id."player_position: '".$player_position."' / position: '".$position."'<br />";
     	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'video';
-    		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
+    		$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
     	}
     }
     if ( is_array($featured_AV) && in_array( 'audio', $featured_AV) ) {
     	$featured_audio = true;
     	$player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    	$ts_info .= "[gmp] player_position: '".$player_position."'<br />";
+    	$ts_info .= $fcn_id."player_position: '".$player_position."'<br />";
     	if ( $media_type == "unknown" && $player_position == $position ) {
     		$media_type = 'audio';
-    		$ts_info .= "[gmp] media_type REVISED: '".$media_type."'<br />";
+    		$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
     	}
     }
     
@@ -911,7 +931,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			}
 			if ( is_array($video_file) ) { $src = $video_file['url']; } else if ( !empty($video_file) ) { $src = $video_file; }
 			
-			$ts_info .= "[gmp] video_id: '".$video_id."'; video_file src: '".$src."'<br />";
+			$ts_info .= $fcn_id."video_id: '".$video_id."'; video_file src: '".$src."'<br />";
 			
 			if ( $src && is_array($media_format) && in_array( 'video', $media_format) ) {
 				$media_format = "video";
@@ -924,7 +944,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		} else if ( $media_type == "audio" ) {
 			
 			$audio_file = get_field('audio_file', $post_id);
-			$ts_info .= "[gmp] audio_file: '".$audio_file."<br />";
+			$ts_info .= $fcn_id."audio_file: '".$audio_file."<br />";
 			if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
 			if ( is_array($audio_file) ) { $src = $audio_file['url']; } else { $src = $audio_file; }
 			
@@ -934,7 +954,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			
 		}
 	
-		$ts_info .= "[gmp] media_format REVISED: '".print_r($media_format,true)."'<br />";
+		$ts_info .= $fcn_id."media_format REVISED: '".print_r($media_format,true)."'<br />";
 		//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
 		
 		// Webcast?
@@ -944,7 +964,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			$webcast_status = get_webcast_status( $post_id );
 			//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
 			$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
-			$ts_info .= "[gmp] webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
+			$ts_info .= $fcn_id."webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
 		}
 		
 		/*
@@ -969,7 +989,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 			$ext = $type['ext'];
 			$ts_info .= "audio_file ext: ".$ext."<br />"; // tft
 			$atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
-			$ts_info .= "[gmp] audio_player atts: ".print_r($atts,true)."<br />";
+			$ts_info .= $fcn_id."audio_player atts: ".print_r($atts,true)."<br />";
 			
 			if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
 				
@@ -1115,7 +1135,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 				//$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
 				$cta .= '</div>';
 			} else {
-				$ts_info .= '[gmp] show_cta: FALSE<br />';
+				$ts_info .= $fcn_id."show_cta: FALSE<br />";
 			}
 			
 			//
@@ -1225,7 +1245,7 @@ function get_media_player ( $post_id = null, $status_only = false, $position = n
 		
 	} else { $player_status = "N/A for this position"; }
 	
-	$ts_info .= "[gmp] player_status: ".$player_status."<br />";
+	$ts_info .= $fcn_id."player_status: ".$player_status."<br />";
 	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
 	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$arr_info['player'] = $info;
