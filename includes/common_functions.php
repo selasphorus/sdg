@@ -311,7 +311,10 @@ function sdg_post_thumbnail ( $args = array() ) {
     //
     
     // Make sure this is a proper context for display of the featured image
-    $player_status = get_media_player( $post_id, true, 'above', 'video' );
+    
+    $mp_args = array('post_id' => $post_id, 'status_only' => true, 'position' => 'above', 'media_type' => 'video' );
+	$player_status = get_media_player( $mp_args );
+    
 	if ( $format == "singular" && $player_status == "ready" ) {
 		return;
 	} else {
@@ -1305,7 +1308,9 @@ function display_media_player( $atts = array() ) {
         //            
     }*/
     
-    $media_info = get_media_player( $post_id, false, $position );
+    $mp_args = array('post_id' => $post_id, 'position' => $position );
+	$media_info = get_media_player( $mp_args );
+    //$media_info = get_media_player( $post_id, false, $position );
     if ( is_array($media_info) ) {
     	$player_status = $media_info['status'];
 		//
