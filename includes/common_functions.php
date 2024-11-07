@@ -853,11 +853,6 @@ function get_media_player( $args = array() ) {
 		'called_by'  	=> null, // option for TS to indicate origin of function call -- e.g. theme header
 		'do_ts'  		=> false,
 	);
-
-	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 	
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
@@ -870,6 +865,11 @@ function get_media_player( $args = array() ) {
     $featured_video = false;
     $featured_audio = false;
     $multimedia = false; // does the post have both featured audio and video?
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
     $ts_info .= $fcn_id."atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
