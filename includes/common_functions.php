@@ -875,7 +875,7 @@ function get_media_player( $args = array() ) {
 	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
-    $ts_info .= $fcn_id."atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
+    //$ts_info .= $fcn_id."atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
     // If it's not a webcast-eligible post, then abort
     //if ( !post_is_webcast_eligible( $post_id ) ) { return false;  }
     
