@@ -1086,10 +1086,14 @@ function get_media_player( $args = array() ) {
 			} else {
 				$src = null;
 			}
-				
-			if ( $src ) { $player_status = "ready"; }
 			
-			if ( $status_only == false ) {
+			$ts_info .= $fcn_id."src: '".$src."'<br />";
+				
+			//if ( $src ) { $player_status = "ready"; }
+			
+			if ( !empty($src) && $status_only == false ) {
+				
+				$player_status = "ready";
 				
 				// Timestamp?
 				if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
@@ -1100,8 +1104,6 @@ function get_media_player( $args = array() ) {
 				$player .= '</div>';
 			}
 			
-		} else {
-		
 		}
 		
 		if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) {
@@ -1126,7 +1128,7 @@ function get_media_player( $args = array() ) {
 			if ( $multimedia && $media_format == "audio" ) {
 				$show_cta = false;
 			} else {
-				$ts_info .= '[gmp] multimedia: '.$multimedia.'/ media_format: '.$media_format.'<br />';
+				$ts_info .= $fcn_id."multimedia: ".$multimedia.'/ media_format: '.$media_format.'<br />';
 			}
 			$cta = "";
 			if ( $show_cta ) {
