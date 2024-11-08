@@ -12,7 +12,7 @@ if ( !function_exists( 'add_action' ) ) {
 function sdg_flush_rewrite_rules() {
     flush_rewrite_rules();
 }
-add_action( 'init', 'sdg_flush_rewrite_rules' );
+//add_action( 'init', 'sdg_flush_rewrite_rules' );
 
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
