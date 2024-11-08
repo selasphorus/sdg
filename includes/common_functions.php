@@ -314,6 +314,11 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     $mp_args = array('post_id' => $post_id, 'status_only' => true, 'position' => 'above', 'media_type' => 'video' );
 	$player_status = get_media_player( $mp_args );
+	
+	$mp_args = array('post_id' => $post_id, 'position' => 'above', 'media_type' => 'video' );
+	$mp_info = get_media_player( $mp_args );
+	$player_status = $mp_info['status'];
+	$ts_info .= $fcn_id.$mp_info['ts_info'];
     
 	if ( $format == "singular" && $player_status == "ready" ) {
 		return;
@@ -1317,19 +1322,19 @@ function display_media_player( $atts = array() ) {
     }*/
     
     $mp_args = array('post_id' => $post_id, 'position' => $position );
-	$media_info = get_media_player( $mp_args );
-    //$media_info = get_media_player( $post_id, false, $position );
-    if ( is_array($media_info) ) {
-    	$player_status = $media_info['status'];
+	$mp_info = get_media_player( $mp_args );
+    //$mp_info = get_media_player( $post_id, false, $position );
+    if ( is_array($mp_info) ) {
+    	$player_status = $mp_info['status'];
 		//
 		$info .= "<!-- Audio/Video for post_id: $post_id -->";
-		$info .= $media_info['player'];
+		$info .= $mp_info['player'];
 		$info .= "<!-- context: $context -->";
 		$info .= "<!-- player_status: $player_status -->";
 		$info .= '<!-- /Audio/Video -->';
-		if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$media_info['ts_info'].'</div>'; }
+		if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$mp_info['ts_info'].'</div>'; }
     } else {
-    	$info .= "<!-- ".print_r($media_info,true)." -->";
+    	$info .= "<!-- ".print_r($mp_info,true)." -->";
     }	
     
     if ( $return == "array" ) {
