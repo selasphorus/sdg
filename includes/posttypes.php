@@ -60,7 +60,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_ui' 			=> true,
 			'show_in_menu'     	=> true,
 			'query_var'        	=> true,
-			'rewrite' 			=> array( 'slug' => 'owls' ), // permalink structure slug
+			'rewrite' 			=> array( 'slug' => 'admin_notes' ), // permalink structure slug
 			'capability_type' 	=> $caps,
 			'map_meta_cap'		=> true,
 			'has_archive' 		=> true,
