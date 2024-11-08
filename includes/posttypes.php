@@ -8,6 +8,12 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
+// Flush rewrite rules -- to be activated only temporarily for TS of CPT 404s
+function sdg_flush_rewrite_rules() {
+    flush_rewrite_rules();
+}
+add_action( 'init', 'sdg_flush_rewrite_rules' );
+
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
 if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
@@ -31,6 +37,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 	// Admin Note
 	function register_post_type_admin_note() {
 
+		//if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
 		if ( sdg_custom_caps() ) { $caps = "admin_note"; } else { $caps = "post"; }
 		
 		$labels = array(
@@ -53,7 +60,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 			'show_ui' 			=> true,
 			'show_in_menu'     	=> true,
 			'query_var'        	=> true,
-			'rewrite' 			=> array( 'slug' => 'admin_notes' ), // permalink structure slug
+			'rewrite' 			=> array( 'slug' => 'notes' ), // permalink structure slug
 			'capability_type' 	=> $caps,
 			'map_meta_cap'		=> true,
 			'has_archive' 		=> true,
