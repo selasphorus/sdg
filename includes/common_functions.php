@@ -861,6 +861,8 @@ function get_media_player( $args = array() ) {
     $arr_info = array(); // return info and status, or status only, depending on options selected
 	$info = "";
 	$ts_info = "";
+	//
+	$media_player_active = false;
     $player = "";
     $player_status = "unknown";
     $player_position = "unknown";
@@ -882,6 +884,7 @@ function get_media_player( $args = array() ) {
     // Get the basic media info
     $featured_AV = get_field('featured_AV', $post_id); // array of options (checkboxes field) including: featured_video, featured_audio, webcast (WIP)
     $media_format = get_field('media_format', $post_id); // array of options (checkboxes) including: youtube, vimeo, video, audio -- // formerly: $webcast_format = get_field('webcast_format', $post_id);
+    if ( !empty($featured_AV) ) { $media_player_active = true; }
     //
     $ts_info .= $fcn_id."featured_AV: ".print_r($featured_AV, true)."<br />";
 	$ts_info .= $fcn_id."media_format: ".print_r($media_format, true)."<br />";
@@ -1106,23 +1109,23 @@ function get_media_player( $args = array() ) {
 			
 		}
 		
-		if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) {
-			$player_status = "before";
-		}
+		//if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) { $player_status = "before"; }
 		
 		if ( $status_only === true ) {
 			return $player_status;
 		}
 		
-		// If there's media to display, show the player
-		if ( $player_status == "ready" || $player_status == "before" ) {
+		// CTA?
+		$show_cta = get_post_meta( $post_id, 'show_cta', true );
+		$cta = "";
+		
+		// If show_cta is true and the Media player is active for this post, regardless of player or webcast status, show the CTA
+		if ( $media_player_active && $show_cta ) {
 			
-			 // CTA
-			// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts'
+			// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts')
 			// post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
 			// -- or by special category of content associated w/ CPTs?
 			$status_message = get_status_message ( $post_id, 'webcast_status' );
-			$show_cta = get_post_meta( $post_id, 'show_cta', true );
 			if ( $show_cta == "1" ) { $show_cta = true; } else { $show_cta = false; }
 			// WIP -- don't show the CTA twice...
 			if ( $multimedia && $media_format == "audio" ) {
@@ -1130,7 +1133,6 @@ function get_media_player( $args = array() ) {
 			} else {
 				$ts_info .= $fcn_id."multimedia: ".$multimedia.'/ media_format: '.$media_format.'<br />';
 			}
-			$cta = "";
 			if ( $show_cta ) {
 				$ts_info .= 'show_cta: TRUE<br />';
 				$cta .= '<div class="cta">';
@@ -1160,6 +1162,10 @@ function get_media_player( $args = array() ) {
 				}
 				//return $info; // tmp disabled because it made "before" Vimeo vids not show up
 			}
+		}
+		
+		// If there's media to display, show the player
+		if ( $player_status == "ready" ) {
 			
 			if ( $player != "" && is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" && $position != "banner" ) { 
 				$player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
