@@ -1327,6 +1327,7 @@ function display_media_player( $atts = array() ) {
 		$info .= "<!-- context: $context -->";
 		$info .= "<!-- player_status: $player_status -->";
 		$info .= '<!-- /Audio/Video -->';
+		if ( $context == "EM-settings" ) { $info .= $media_info['ts_info']; } // '<div class="troubleshooting sdgp">'.$ts_info.'</div>';
     } else {
     	$info .= "<!-- ".print_r($media_info,true)." -->";
     }	
