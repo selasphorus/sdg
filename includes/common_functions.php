@@ -1085,10 +1085,10 @@ function get_media_player( $args = array() ) {
 			
 			// Get SRC
 			if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
-				$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1&enablejsapi=1';
+				$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?enablejsapi=1&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
 				//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH	
 			} else if ( !empty($video_id) ) {
-				$src = 'https://www.youtube.com/embed/'.$video_id.'?&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1&enablejsapi=1';
+				$src = 'https://www.youtube.com/embed/'.$video_id.'?enablejsapi=1&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
 				//$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
 				//$src = 'https://www.youtube.com/watch?v='.$video_id;
 			} else {
