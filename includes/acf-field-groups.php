@@ -5117,6 +5117,13 @@ function sdg_register_field_groups() {
 					'value' => 'sermon',
 				),
 			),
+			array(
+				array(
+					'param' => 'post_type',
+					'operator' => '==',
+					'value' => 'person', // TBD: what happens if WHx4 plugin is not installed with People module active?
+				),
+			),
 		),
 		'menu_order' => 0,
 		'position' => 'normal',
