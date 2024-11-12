@@ -2672,6 +2672,29 @@ function sdg_post_type_access_limiter(){
 
 /*** MISC ***/
 
+// Function to delete capabilities
+// Based on http://chrisburbridge.com/delete-unwanted-wordpress-custom-capabilities/
+add_action( 'admin_init', 'clean_unwanted_caps' ); // tmp disabled -- this function need only ever run once per site per set of caps
+function clean_unwanted_caps() {
+	global $wp_roles;
+	$delete_caps = array(
+		
+        'edit_ensembles', 'edit_others_ensembles', 'delete_ensembles', 'publish_ensembles', 'read_private_ensembles',
+        'edit_lectionary', 'edit_others_lectionary', 'delete_lectionary', 'publish_lectionary', 'read_private_lectionary',
+        'edit_lectionarys', 'edit_others_lectionarys', 'delete_lectionarys', 'publish_lectionarys', 'read_private_lectionarys',
+        'edit_lectionary_days', 'edit_others_lectionary_days', 'delete_lectionary_days', 'publish_lectionary_days', 'read_private_lectionary_days',
+        'edit_music', 'edit_others_music', 'delete_music', 'publish_music', 'read_private_music',
+        'edit_musics', 'edit_others_musics', 'delete_musics', 'publish_musics', 'read_private_musics',
+        //'edit_dinosaurs', 'edit_others_dinosaurs', 'delete_dinosaurs', 'publish_dinosaurs', 'read_private_dinosaurs',
+        
+	 );
+	foreach ($delete_caps as $cap) {
+		foreach (array_keys($wp_roles->roles) as $role) {
+			$wp_roles->remove_cap($role, $cap);
+		}
+	}
+}
+
 function surprise() {
 
 	// Set up an array of fun words and things...
