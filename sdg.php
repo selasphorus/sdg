@@ -2674,7 +2674,7 @@ function sdg_post_type_access_limiter(){
 
 // Function to delete capabilities
 // Based on http://chrisburbridge.com/delete-unwanted-wordpress-custom-capabilities/
-add_action( 'admin_init', 'sdg_clean_unwanted_caps' ); // tmp disabled -- this function need only ever run once per site per set of caps
+//add_action( 'admin_init', 'sdg_clean_unwanted_caps' ); // tmp disabled -- this function need only ever run once per site per set of caps
 function sdg_clean_unwanted_caps() {
 	global $wp_roles;
 	$delete_caps = array(
