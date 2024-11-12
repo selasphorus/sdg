@@ -2679,13 +2679,13 @@ function sdg_clean_unwanted_caps() {
 	global $wp_roles;
 	$delete_caps = array(
 		
-        'edit_ensembles', 'edit_others_ensembles', 'delete_ensembles', 'publish_ensembles', 'read_private_ensembles',
-        'edit_lectionary', 'edit_others_lectionary', 'delete_lectionary', 'publish_lectionary', 'read_private_lectionary',
-        'edit_lectionarys', 'edit_others_lectionarys', 'delete_lectionarys', 'publish_lectionarys', 'read_private_lectionarys',
-        'edit_lectionary_days', 'edit_others_lectionary_days', 'delete_lectionary_days', 'publish_lectionary_days', 'read_private_lectionary_days',
-        'edit_music', 'edit_others_music', 'delete_music', 'publish_music', 'read_private_music',
-        'edit_musics', 'edit_others_musics', 'delete_musics', 'publish_musics', 'read_private_musics',
-        //'edit_dinosaurs', 'edit_others_dinosaurs', 'delete_dinosaurs', 'publish_dinosaurs', 'read_private_dinosaurs',
+        'edit_ensembles', 'edit_others_ensembles', 'delete_ensembles', 'delete_others_ensembles', 'publish_ensembles', 'read_private_ensembles',
+        'edit_lectionary', 'edit_others_lectionary', 'delete_lectionary', 'delete_others_lectionary', 'publish_lectionary', 'read_private_lectionary',
+        'edit_lectionarys', 'edit_others_lectionarys', 'delete_lectionarys', 'delete_others_lectionarys', 'publish_lectionarys', 'read_private_lectionarys',
+        'edit_lectionary_days', 'edit_others_lectionary_days', 'delete_lectionary_days' 'delete_others_lectionary_days', 'publish_lectionary_days', 'read_private_lectionary_days',
+        'edit_music', 'edit_others_music', 'delete_music', 'delete_others_music', 'publish_music', 'read_private_music',
+        'edit_musics', 'edit_others_musics', 'delete_musics', 'delete_others_musics', 'publish_musics', 'read_private_musics',
+        //'edit_dinosaurs', 'edit_others_dinosaurs', 'delete_dinosaurs', 'delete_others_dinosaurs', 'publish_dinosaurs', 'read_private_dinosaurs',
         
 	 );
 	foreach ($delete_caps as $cap) {
