@@ -493,7 +493,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Bible Book
 	function register_post_type_bible_book() {
 
-		if ( sdg_custom_caps() ) { $caps = array('bible_book', 'bible_books'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "bible_book"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('bible_book', 'bible_books'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Books of the Bible', 'sdg' ),
@@ -535,7 +536,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Reading
 	function register_post_type_reading() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Readings', 'sdg' ),
@@ -577,7 +579,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Lectionary Day
 	function register_post_type_lectionary() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Lectionary', 'sdg' ),
@@ -619,7 +622,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Liturgical Date
 	function register_post_type_liturgical_date() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Liturgical Calendar', 'sdg' ),
@@ -661,7 +665,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Liturgical Date Calculation
 	function register_post_type_liturgical_date_calc() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Liturgical Date Calculations', 'sdg' ),
@@ -703,7 +708,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Collect
 	function register_post_type_collect() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Collects', 'sdg' ),
@@ -745,7 +751,8 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Psalms of the Day
 	function register_post_type_psalms_of_the_day() {
 
-		if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Psalms of the Day', 'sdg' ),
