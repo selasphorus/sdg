@@ -741,8 +741,11 @@ function sdg_meta_tags() {
         
     }
     
-    // Default to site description
-    if ( empty($og_description) ) { $og_description = get_bloginfo( 'description' ); }
+    // Default description
+    if ( empty($og_description) ) {
+    	$og_description = 'Saint Thomas Fifth Avenue offers at least one mass every single day of the year. On Sundays there is a 9am service suitable for children and families, an 11am High Mass and, during the academic year, a 4pm service of Choral Evensong. Also during the academic term, there are 5:30pm services with our Choir of Men and Boys on most Tuesdays, Wednesdays, and Thursdays.';
+    	//$og_description = get_bloginfo( 'description' );
+    }
 
     echo '<meta property="og:url" content="'.$og_url.'" />';
     echo '<meta property="og:type" content="'.$og_type.'" />';
