@@ -733,10 +733,8 @@ function sdg_meta_tags() {
         }
                 
         if ( empty($og_description) ) {
-        	$post_type = ucfirst(get_post_type($post_id));
-        	if ( $post_type == "location" && $og_title == "Saint Thomas Church" ) {
-        		// ???
-        	} else {
+        	if ( $og_title != "Saint Thomas Church" ) {
+        		$post_type = ucfirst(get_post_type($post_id));
         		$og_description = $og_title." (".$post_type.")";
         	}        	
         }
