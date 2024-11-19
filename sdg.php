@@ -722,13 +722,16 @@ function sdg_meta_tags() {
         $og_title = get_the_title( $post_id );
         
         // Get the featured image URL, if there is one
+        // TODO: get image from content if no featured image?
         if ( get_the_post_thumbnail_url( $post_id ) ) { $og_image = get_the_post_thumbnail_url( $post_id ); }
         
         // Get and clean up the excerpt for use in the description meta tag
         $excerpt = get_the_excerpt( $post_id );
-        $excerpt = str_replace('&nbsp;Read more...','...',$excerpt); // Remove the "read more" tag from auto-excerpts
-        $og_description = wp_strip_all_tags( $excerpt, true );
-        
+        if ( !empty($excerpt) ) {
+        	$excerpt = str_replace('&nbsp;Read more...','...',$excerpt); // Remove the "read more" tag from auto-excerpts
+        	$og_description = wp_strip_all_tags( $excerpt, true );
+        }
+                
         if ( empty($og_description) ) {
         	$post_type = ucfirst(get_post_type($post_id));
         	if ( $post_type == "location" && $og_title = "Saint Thomas Church" ) {
