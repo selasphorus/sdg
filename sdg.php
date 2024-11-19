@@ -712,8 +712,7 @@ function sdg_meta_tags() {
     $og_url = get_bloginfo( 'url' ); //get_site_url();
     $og_type = "website";
     $og_title = get_bloginfo( 'name' );
-    $og_image = get_option( 'og_image', '' );    
-    $og_description = get_bloginfo( 'description' );
+    $og_image = get_option( 'og_image', '' );
     
     if ( is_page() || is_single() || is_singular() ) {
         
@@ -730,7 +729,19 @@ function sdg_meta_tags() {
         $excerpt = str_replace('&nbsp;Read more...','...',$excerpt); // Remove the "read more" tag from auto-excerpts
         $og_description = wp_strip_all_tags( $excerpt, true );
         
+        if ( empty($og_description) ) {
+        	$post_type = ucfirst(get_post_type($post_id));
+        	if ( $post_type == "location" && $og_title = "Saint Thomas Church" ) {
+        		// ???
+        	} else {
+        		$og_description = $og_title." (".$post_type.")";
+        	}        	
+        }
+        
     }
+    
+    // Default to site description
+    if ( empty($og_description) ) { $og_description = get_bloginfo( 'description' ); }
 
     echo '<meta property="og:url" content="'.$og_url.'" />';
     echo '<meta property="og:type" content="'.$og_type.'" />';
