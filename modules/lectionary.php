@@ -524,6 +524,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	$info = "";
 	$ts_info = "";
 	$hide_day_titles = 0;
+	$hide_special_notices = 0;
     
     $args = shortcode_atts( array(
 		'post_id'   => get_the_ID(),
