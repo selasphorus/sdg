@@ -599,6 +599,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     //$info .= $ts_info; // tft
     
+    // Show or Hide Day Titles?
+    // +~+~+~+~+~+~+~+~+~+~+
     // Check to see if day titles are to be hidden for the entire event series, if any
     if ( $series_id ) { 
     	$hide_day_titles = get_post_meta( $series_id, 'hide_day_titles', true );
@@ -614,9 +616,25 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
         if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $info;
-    } else {
-        //$ts_info .= "<!-- hide_day_titles is not set or set to zero for this post/event -->";
     }
+    
+    // Show or Hide Special Notices?
+    // +~+~+~+~+~+~+~+~+~+~+
+    // Check to see if special notices are to be hidden for the entire event series, if any
+    if ( $series_id ) { 
+    	$hide_special_notices = get_post_meta( $series_id, 'hide_special_notices', true );
+    }
+    
+    // If there is no series-wide ban on displaying the notices, then should we display them for this particular post?
+    if ( $hide_special_notices == 0 ) {
+    	$hide_special_notices = get_post_meta( $post_id, 'hide_special_notices', true );
+    }
+    
+    if ( $hide_special_notices == 1 ) { 
+        $ts_info .= "hide_special_notices is set to true for this post/event<br />";
+    }
+    
+    //
     
 	if ( $the_date == null ) {
         
@@ -865,7 +883,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
-	if ( function_exists('get_special_date_content') ) { $info .= get_special_date_content( $the_date ); }
+	if ( function_exists('get_special_date_content') && !$hide_special_notices ) { $info .= get_special_date_content( $the_date ); }
 	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	$info .= "\n<!-- /get_day_title -->\n";
 	
