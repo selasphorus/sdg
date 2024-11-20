@@ -743,6 +743,15 @@ function get_snippets ( $args = array() ) {
 			}
 		
 		}
+		
+		// If snippet has been deemed active, but this is a search page and NOT if ( in_array('is_search', $target_locations) ) { -- then remove from active -- WIP -- TBD if this is right approach
+		If ( is_search() && $snippet_status == "active" && !in_array('is_search', $target_locations) ) {
+			$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
+			$snippet_status = "inactive";
+			$snippet_logic_info .= " *** This is a search page and is_search is NOT a targeted location ***<br />";
+			$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
+		}
+		
 		$snippet_logic_info .= "<hr />";
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
