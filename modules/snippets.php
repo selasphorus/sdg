@@ -745,9 +745,10 @@ function get_snippets ( $args = array() ) {
 		}
 		
 		// If snippet has been deemed active, but this is a search page we don't want to show the snippet on search pages, then remove it from the active array
-		if ( is_search() ) { // && $snippet_status == "active"
+		if ( is_search() && $snippet_status == "active" ) {
 			$snippet_logic_info .= " *** This is a search page *** <br />";
-			$snippet_logic_info .= "snippet_status: ".$snippet_status;
+			$snippet_logic_info .= "snippet_display: ".$snippet_display;
+			$snippet_logic_info .= "any_all: ".$any_all;
 			if ( !isset($target_locations) ) { $target_locations = array(); }
 			if ( ( !in_array('is_search', $target_locations) && ( $snippet_display == "selected" && $any_all == "all" ) ) || 
 				 ( in_array('is_search', $target_locations) && ( $snippet_display == "notselected" && $any_all == "all" )) 
