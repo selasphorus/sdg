@@ -618,7 +618,10 @@ function get_snippets ( $args = array() ) {
 							
 						} // if ( is_array($target_urls) && !empty($target_urls) ) {
 						
-					} else if ( $key == 'target_by_taxonomy' && !is_page_template('search.php') ) { //  || $key == 'widget_logic_taxonomy'
+					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
+						
+						// WIP -- how to skip this logic for search results
+						if ( is_search() || is_page_template('search.php') ) { $snippet_logic_info .= "search results(?)<br />"; }
 						
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						//$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
