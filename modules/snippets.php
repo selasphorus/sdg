@@ -621,7 +621,10 @@ function get_snippets ( $args = array() ) {
 					} else if ( $key == 'target_by_taxonomy' ) { //  || $key == 'widget_logic_taxonomy'
 						
 						// WIP -- how to skip this logic for search results
-						if ( is_search() || is_page_template('search.php') ) { $snippet_logic_info .= "search results(?)<br />"; }
+						if ( is_search() || is_page_template('search.php') ) { 
+							$snippet_logic_info .= "search results(?)<br />";
+							$snippet_logic_info .= "template: ".get_page_template()."<br />";
+						}
 						
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						//$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
