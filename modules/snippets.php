@@ -534,7 +534,7 @@ function get_snippets ( $args = array() ) {
 							foreach ( $target_urls as $k => $v ) {
 								
 								$url_match = false; // init
-								$snippet_logic_info .= "target_url (v): ".print_r($v, true)."<br />";
+								$snippet_logic_info .= "target_url (v): ".print_r($v, true)." (k: ".print_r($k, true).")<br />";
 								
 								// WIP/TODO: get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
