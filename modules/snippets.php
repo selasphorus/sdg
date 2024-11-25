@@ -745,7 +745,7 @@ function get_snippets ( $args = array() ) {
 		}
 		
 		// If snippet has been deemed active, but this is a search page we don't want to show the snippet on search pages, then remove it from the active array
-		if ( is_search() && !is_category() && $snippet_status == "active" ) {
+		if ( is_search() && !is_category() && !is_archive() && $snippet_status == "active" ) {
 			$snippet_logic_info .= " *** This is a search page *** <br />";
 			$snippet_logic_info .= "snippet_display: ".$snippet_display." / any_all: ".$any_all;
 			if ( !isset($target_locations) ) { $target_locations = array(); }
