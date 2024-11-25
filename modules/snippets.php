@@ -517,8 +517,8 @@ function get_snippets ( $args = array() ) {
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
 						
-							//$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
-							//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
+							$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
+							$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
 						
 							// Get current page path and/or slug
 							global $wp;
