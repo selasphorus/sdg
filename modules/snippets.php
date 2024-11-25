@@ -3373,14 +3373,14 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'no' ) {
-						$ts_info .= "Match found (single rule; has_term; exclusion false) >> return true<br />";
+						$ts_info .= "Match found (single rule; has_term ($term); exclusion false) >> return true<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion false) >> return true"); }
 						//return $ts_info; //
 						//return true; // post has term for single rule AND term is not negated, therefore it is a match
 						$match = true;
 						break;
 					} else {
-						$ts_info .= "Match found (single rule; has_term; exclusion TRUE) >> return false<br />";
+						$ts_info .= "Match found (single rule; has_term ($term); exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (single rule; has_term; exclusion TRUE) >> return false"); }
 						//return false;
 						$match = false;
@@ -3396,7 +3396,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) { 
 				
-				$ts_info .= "Match found (match_type 'any'; has_term; exclusion false) >> return true<br />";
+				$ts_info .= "Match found (match_type 'any'; has_term ($term); exclusion false) >> return true<br />";
 				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
 				//return true; // Match any => match found (no need to check remaining rules, if any)
 				$match = true;
@@ -3406,16 +3406,16 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
-						$ts_info .= "Match found (match_type 'all'; has_term; exclusion TRUE) >> return false<br />";
+						$ts_info .= "Match found (match_type 'all'; has_term ($term); exclusion TRUE) >> return false<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Match found (match_type 'all'; has_term; exclusion TRUE) >> return false"); }
 						//return false; // post has the term but rules say it must NOT have this term
 						$match = false;
 						break;
 					} else {
 						if ( $snippet_display == "notselected" ) {
-							$ts_info .= "Match found (match_type 'all'; has_term; exclusion TRUE; snippet_display NOTselected)... WIP<br />";
+							$ts_info .= "Match found (match_type 'all'; has_term ($term); exclusion TRUE; snippet_display NOTselected)... WIP<br />";
 						} else {
-							$ts_info .= "Ok so far! (match_type 'all'; has_term; exclusion false) >> continue<br />";
+							$ts_info .= "Ok so far! (match_type 'all'; has_term ($term); exclusion false) >> continue<br />";
 							//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'all'; has_term; exclusion false) >> continue"); }
 						}
 					}
@@ -3432,15 +3432,15 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
 						if ( $snippet_display == "selected" ) {
-							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE) >> return false<br />";
+							$ts_info .= "Match found (match_type 'complex'; has_term ($term); exclusion TRUE) >> return false<br />";
 							$match = false; // post has the term but rules say it must NOT have this term	
 						} else if ( $snippet_display == "notselected" ) {
-							$ts_info .= "Match found (match_type 'complex'; has_term; exclusion TRUE; snippet_display NOTselected) >> return TRUE<br />";
+							$ts_info .= "Match found (match_type 'complex'; has_term ($term); exclusion TRUE; snippet_display NOTselected) >> return TRUE<br />";
 							$match = "exception"; // post has the term so it excluded from being hidden
 						}					
 						break;
 					} else {
-						$ts_info .= "Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue<br />";
+						$ts_info .= "Ok so far! (match_type 'complex'; has_term ($term); exclusion false) >> continue<br />";
 						//if ( function_exists('sdg_log') ) { sdg_log("Ok so far! (match_type 'complex'; has_term; exclusion false) >> continue"); }
 						$num_matches++;
 					}
