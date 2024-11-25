@@ -517,8 +517,8 @@ function get_snippets ( $args = array() ) {
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
 						
-							$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
-							$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
+							//$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
+							//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
 						
 							// Get current page path and/or slug
 							global $wp;
@@ -534,7 +534,7 @@ function get_snippets ( $args = array() ) {
 							foreach ( $target_urls as $k => $v ) {
 								
 								$url_match = false; // init
-								$snippet_logic_info .= "target_url (v): ".print_r($v, true)." (k: ".print_r($k, true).")<br />";
+								//$snippet_logic_info .= "target_url (v): ".print_r($v, true)." (k: ".print_r($k, true).")<br />";
 								
 								// WIP/TODO: get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
