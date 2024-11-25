@@ -579,7 +579,7 @@ function get_snippets ( $args = array() ) {
 										}
 										$snippet_logic_info .= "---<br />";
 									} else {
-										//$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
+										$snippet_logic_info .= "target_url $url does not match current_path $current_path<br />";
 										//$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />";
 									}
 								} else {
