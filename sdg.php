@@ -2649,14 +2649,20 @@ function sdg_log( $log_msg, $do_log = true ) {
 	// Generate a new log file name based on the date
 	//$datestamp = current_time('Ymd'); // date('d-M-Y') // Old version -- daily logs
 	// New version -- monthly logs
-	$this_year = current_time('Y');
-	$this_month = current_time('m');
-    $log_file = $log_filename.'/'.$this_year.$this_month.'-sdg_dev.log';
+	$this_month = current_time('Ym');
+    $log_file = $log_filename.'/'.$this_month.'-sdg_dev.log';
 	
 	// TODO/WIP: check server for past months' logs and delete them if they're more than one month old
-	//$last_month = date("Ym", strtotime("first day of previous month"));
-	$two_months_ago = $this_month-2;
-	$stale_log_file = $log_filename.'/'.$this_year.$two_months_ago.'-sdg_dev.log';
+	$last_month = date("Ym", strtotime("first day of previous month"));
+	//$two_months_ago = $this_month-2;
+	$two_months_ago = date("Ym", strtotime("-2 months"));
+	if ( $last_month != $two_months_ago ) {
+		$stale_log_file = $log_filename.'/'.$two_months_ago.'-sdg_dev.log';
+	} else {
+		$two_months_ago = date("Ym", strtotime("-3 months"));
+		// wip deal w/ possible issue with date math if month has 31 days...
+		$stale_log_file = $log_filename.'/'.$two_months_ago.'-sdg_dev.log';
+	}	
 	if (file_exists($stale_log_file)) {
 		$log_msg .= "\nsdg_log fcn unlinked stale_log_file: $stale_log_file";
 		unlink($stale_log_file);
