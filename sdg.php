@@ -2664,10 +2664,10 @@ function sdg_log( $log_msg, $do_log = true ) {
 		$stale_log_file = $log_filename.'/'.$two_months_ago.'-sdg_dev.log';
 	}	
 	if (file_exists($stale_log_file)) {
-		$log_msg .= "\nsdg_log fcn unlinked stale_log_file: $stale_log_file";
+		$log_msg .= "\n>>>sdg_log<<< unlinked stale_log_file: $stale_log_file";
 		unlink($stale_log_file);
 	} else {
-		$log_msg .= "\nNo match found for stale_log_file: $stale_log_file";
+		$log_msg .= "\n>>>sdg_log<<< No match found for stale_log_file: $stale_log_file";
 	}
 	
 	// Syntax: file_put_contents(filename, data, mode, context)
