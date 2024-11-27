@@ -2667,7 +2667,7 @@ function sdg_log( $log_msg, $do_log = true ) {
 		$log_msg .= "\n>>>sdg_log<<< unlinked stale_log_file: $stale_log_file";
 		unlink($stale_log_file);
 	} else {
-		$log_msg .= "\n>>>sdg_log<<< No match found for stale_log_file: $stale_log_file";
+		//$log_msg .= "\n>>>sdg_log<<< No match found for stale_log_file: $stale_log_file"; // tft
 	}
 	
 	// Syntax: file_put_contents(filename, data, mode, context)
