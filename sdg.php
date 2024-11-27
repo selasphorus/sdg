@@ -2648,13 +2648,25 @@ function sdg_log( $log_msg, $do_log = true ) {
 	
 	// Generate a new log file name based on the date
 	//$datestamp = current_time('Ymd'); // date('d-M-Y') // Old version -- daily logs
-	$datestamp = current_time('Ym'); // New version -- monthly logs
-    $log_file = $log_filename.'/' . $datestamp . '-sdg_dev.log';
+	// New version -- monthly logs
+	$this_year = current_time('Y');
+	$this_month = current_time('m');
+    $log_file = $log_filename.'/'.$this_year.$this_month.'-sdg_dev.log';
+	
+	// TODO/WIP: check server for past months' logs and delete them if they're more than one month old
+	//$last_month = date("Ym", strtotime("first day of previous month"));
+	$two_months_ago = $this_month-2;
+	$stale_log_file = $log_filename.'/'.$this_year.$two_months_ago.'-sdg_dev.log';
+	if (file_exists($stale_log_file)) {
+		$log_msg .= "\nsdg_log fcn unlinked stale_log_file: $stale_log_file";
+		unlink($stale_log_file);
+	} else {
+		$log_msg .= "\nNo match found for stale_log_file: $stale_log_file";
+	}
+	
 	// Syntax: file_put_contents(filename, data, mode, context)
 	// (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
 	file_put_contents($log_file, $log_msg . "\n", FILE_APPEND); 
-	
-	// TODO: check server for past months' logs and delete them if they're more than one month old
 	
 }
 
