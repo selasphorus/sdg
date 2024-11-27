@@ -2636,8 +2636,6 @@ function sdg_log( $log_msg, $do_log = true ) {
     }
 	
 	$timestamp = current_time('mysql'); // use WordPress function instead of straight PHP so that timezone is correct -- see https://codex.wordpress.org/Function_Reference/current_time
-	$datestamp = current_time('Ymd'); // date('d-M-Y')
-	
 	//sdg_log( "loop_item_divider", $do_log );
 	if ($log_msg == "divline1") {
 		$log_msg = "\n=================================================================================\n";
@@ -2649,10 +2647,15 @@ function sdg_log( $log_msg, $do_log = true ) {
 	}
 	
 	// Generate a new log file name based on the date
-	// (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
+	//$datestamp = current_time('Ymd'); // date('d-M-Y') // Old version -- daily logs
+	$datestamp = current_time('Ym'); // New version -- monthly logs
     $log_file = $log_filename.'/' . $datestamp . '-sdg_dev.log';
 	// Syntax: file_put_contents(filename, data, mode, context)
+	// (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
 	file_put_contents($log_file, $log_msg . "\n", FILE_APPEND); 
+	
+	// TODO: check server for past months' logs and delete them if they're more than one month old
+	
 }
 
 /*** Archive Pages ***/
