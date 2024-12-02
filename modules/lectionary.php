@@ -517,6 +517,9 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	$propers = false;
 	$ts_info = "";
 	
+	$ts_info .= "litdate_id: ".$litdate_id."<br />";
+	$ts_info .= "date_str: ".$date_str."<br />";
+	
 	if ( $litdate_id ) {
 	
 		$collect_args = array(
