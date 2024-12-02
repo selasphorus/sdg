@@ -541,13 +541,13 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			$ts_info .= "litdate date Y-m-d:".date('Y-m-d',$date)."<br />";
 			
 			// Get the month of the date_str
-			$month = date('M',$date);
+			$month = date('F',$date);
 			$year = date('Y',$date);
 			
 			$collect_args['meta_query'] = array(
 				'key'     => 'date_calc',
-				'compare' 	=> 'LIKE',
 				'value' 	=> $month,
+				'compare' 	=> 'LIKE',
 			);
 						
 		} else {
@@ -557,8 +557,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			// All other collects match by litdate
 			$collect_args['meta_query'] = array(
 				'key'     => 'related_liturgical_date',
-				'compare' 	=> 'LIKE',
 				'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+				'compare' 	=> 'LIKE',
 			);
 			
 		}
