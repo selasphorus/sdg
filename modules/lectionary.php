@@ -580,9 +580,12 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			foreach ( $collect_posts as $post ) {
 				
 				$date_calc = get_post_meta( $post->ID, 'date_calc', true );
-				$date_calc = str_replace($date_calc,"Week of the Sunday closest to ","");
-				$ref_date = strtotime($date_calc." ".$year);
+				$ts_info .= "date_calc: ".$date_calc."<br />";
 				
+				$date_calc = str_replace($date_calc,"Week of the Sunday closest to ","")." ".$year;
+				$ts_info .= "date_calc mod: ".$date_calc."<br />";
+				
+				$ref_date = strtotime($date_calc);				
 				$ts_info .= "ref_date Y-m-d:".date('Y-m-d',$ref_date)."<br />";
 				
 				// Get dates for Sundays preceding and following collect reference date
