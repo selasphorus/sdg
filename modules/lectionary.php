@@ -525,7 +525,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		$collect_args = array(
 			'post_type'   => 'collect',
 			'post_status' => 'publish',
-			'posts_per_page' => 1,
+			//'posts_per_page' => 1,
 			);
 			
 		$litdate_title = get_the_title( $litdate_id );
