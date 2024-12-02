@@ -545,9 +545,16 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			$year = date('Y',$date);
 			
 			$collect_args['meta_query'] = array(
-				'key'     => 'date_calc',
-				'value' 	=> $month,
-				'compare' 	=> 'LIKE',
+				'relation' => 'AND',
+				'first_clause' => array(
+					'key' => 'date_calc',
+					'value' => $month,
+					'compare' 	=> 'LIKE',
+				),
+				'second_clause' => array(
+					'key' => 'date_calc',
+					'compare' 	=> 'EXISTS',
+				),
 			);
 						
 		} else {
@@ -563,7 +570,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			
 		}
 		
-		$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+		//$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
 		
 		$collects = new WP_Query( $collect_args );
 		$collect_posts = $collects->posts;    
