@@ -582,10 +582,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	}
 	
 	if ( $collect ) {
-	
-		if ( !empty($collect->posts) ) { $collect_post = $collect->posts[0]; } else { $collect_post = null; }
-		if ( $collect_post ) { $collect_text = $collect_post->post_content; }
-	
+		$collect_text = $collect->post_content;
 	}
 	
 	return $collect_text;
