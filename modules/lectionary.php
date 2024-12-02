@@ -547,7 +547,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			$collect_args['meta_query'] = array(
 				'key'     => 'date_calc',
 				'compare' 	=> 'LIKE',
-				'value' 	=> '"' . $month . '"',
+				'value' 	=> $month,
 			);
 						
 		} else {
