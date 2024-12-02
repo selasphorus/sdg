@@ -514,6 +514,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	// Init
 	$collect = null;
 	$collect_text = "";
+	$propers = false;
+	$ts_info = "";
 	
 	if ( $litdate_id ) {
 	
@@ -526,8 +528,13 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		$litdate_title = get_the_title( $litdate_id );
 		if ( strpos($litdate_title, 'Sunday after Pentecost') !== false ) {
 			
+			$propers = true;
+			$ts_info .= "propers...<br />";
+			
 			// For season after pentecost, match by date
 			$date = strtotime($date_str);
+			$ts_info .= "litdate date Y-m-d:".date('Y-m-d',$date)."<br />";
+			
 			// Get the month of the date_str
 			$month = date('M',$date);
 			$year = date('Y',$date);
@@ -554,9 +561,12 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		
 		if ( count($collect_posts) == 1 ) {
 		
+			$ts_info .= "single matching collect post found<br />";
 			$collect = $collect_posts[0];
 			
 		} else if ( count($collect_posts) > 1 ) {
+			
+			$ts_info .= "multiple matching collect posts found<br />";
 			
 			foreach ( $collect_posts as $post ) {
 				
@@ -564,12 +574,15 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 				$date_calc = str_replace($date_calc,"Week of the Sunday closest to ","");
 				$ref_date = strtotime($date_calc." ".$year);
 				
+				$ts_info .= "ref_date Y-m-d:".date('Y-m-d',$ref_date)."<br />";
+				
 				// Get dates for Sundays preceding and following collect reference date
 				$prev_sunday = strtotime('previous sunday',$ref_date);
 				$next_sunday = strtotime('next sunday',$ref_date);
 				
 				// Which Sunday is closest to the ref_date?
 				$closest_sunday = min($prev_sunday,$next_sunday);
+				$ts_info .= "closest_sunday Y-m-d:".date('Y-m-d',$closest_sunday)."<br />";
 				
 				// Does that closest Sunday date match our litdate date?
 				if ( $closest_sunday == $date ) {
@@ -584,6 +597,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	if ( $collect ) {
 		$collect_text = $collect->post_content;
 	}
+	
+	$collect_text .= $ts_info; // tft
 	
 	return $collect_text;
 
