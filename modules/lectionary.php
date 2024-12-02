@@ -563,6 +563,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			
 		}
 		
+		$ts_info .= "collect_args: ".print_r($collect_args, true)."<br />";
+		
 		$collects = new WP_Query( $collect_args );
 		$collect_posts = $collects->posts;    
 		
@@ -602,6 +604,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	}
 	
 	if ( $collect ) {
+		$ts_info .= "collect id: ".$collect->ID."<br />";
 		$collect_text = $collect->post_content;
 	}
 	
