@@ -538,7 +538,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			
 			// For season after pentecost, match by date
 			$date = strtotime($date_str);
-			$ts_info .= "litdate date Y-m-d:".date('Y-m-d',$date)."<br />";
+			$ts_info .= "litdate date Y-m-d: ".date('Y-m-d',$date)."<br />";
 			
 			// Get the month of the date_str
 			$month = date('F',$date);
@@ -593,7 +593,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 				$ts_info .= "date_calc mod: ".$date_calc."<br />";
 				
 				$ref_date = strtotime($date_calc);				
-				$ts_info .= "ref_date Y-m-d:".date('Y-m-d',$ref_date)."<br />";
+				$ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
 				
 				// Get dates for Sundays preceding and following collect reference date
 				$prev_sunday = strtotime('previous sunday',$ref_date);
@@ -601,7 +601,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 				
 				// Which Sunday is closest to the ref_date?
 				$closest_sunday = min($prev_sunday,$next_sunday);
-				$ts_info .= "closest_sunday Y-m-d:".date('Y-m-d',$closest_sunday)."<br />";
+				$ts_info .= "closest_sunday Y-m-d: ".date('Y-m-d',$closest_sunday)."<br />";
 				
 				// Does that closest Sunday date match our litdate date?
 				if ( $closest_sunday == $date ) {
