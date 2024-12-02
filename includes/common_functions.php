@@ -361,9 +361,10 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // WIP: order?
     // If this is a sermon, are we using the author image
-    if ( $format != "singular" && $post_type == "sermon" ) {
+    if ( $format != "singular" && $post_type == "sermon" && !is_singular('sermon') ) {
     	if ( get_field('author_image_for_archive') ) {
     		$img_id = get_author_img_id ( $post_id );
+    		$classes .= " author_img_for_archive";
     	} else {
     		$ts_info .= $fcn_id."author_image_for_archive set to false<br />";
     	}
