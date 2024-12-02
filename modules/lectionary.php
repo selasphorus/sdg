@@ -617,7 +617,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		$ts_info .= "collect id: ".$collect->ID."<br />";
 		$collect_text = $collect->post_content;
 		if ( $propers ) {
-			$collect_text .= "&nbsp;<em>".$collect->post_title."</em>";
+			$collect_text .= "&nbsp;<em>(".$collect->post_title.")</em>";
 		}
 	}
 	
