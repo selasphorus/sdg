@@ -526,6 +526,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			);
 			
 		$litdate_title = get_the_title( $litdate_id );
+		$ts_info .= "litdate_title: ".$litdate_title."<br />";
+		
 		if ( strpos($litdate_title, 'Sunday after Pentecost') !== false ) {
 			
 			$propers = true;
