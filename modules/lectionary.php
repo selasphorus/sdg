@@ -589,7 +589,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 				$date_calc = get_post_meta( $post->ID, 'date_calc', true );
 				$ts_info .= "date_calc: ".$date_calc."<br />";
 				
-				$date_calc = str_replace($date_calc,"Week of the Sunday closest to ","")." ".$year;
+				$date_calc = str_replace("Week of the Sunday closest to ","",$date_calc)." ".$year;
 				$ts_info .= "date_calc mod: ".$date_calc."<br />";
 				
 				$ref_date = strtotime($date_calc);				
