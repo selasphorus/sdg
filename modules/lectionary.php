@@ -531,7 +531,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		$litdate_title = get_the_title( $litdate_id );
 		$ts_info .= "litdate_title: ".$litdate_title."<br />";
 		
-		if ( strpos($litdate_title, 'Sunday after Pentecost') !== false ) {
+		if ( strpos(strtolower($litdate_title), 'sunday after pentecost') !== false ) {
 			
 			$propers = true;
 			$ts_info .= "propers...<br />";
@@ -552,6 +552,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 						
 		} else {
 		
+			$ts_info .= "NOT propers...<br />";
+			
 			// All other collects match by litdate
 			$collect_args['meta_query'] = array(
 				'key'     => 'related_liturgical_date',
@@ -603,7 +605,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		$collect_text = $collect->post_content;
 	}
 	
-	$collect_text .= $ts_info; // tft
+	$collect_text .= "<br /><hr />".$ts_info; // tft
 	
 	return $collect_text;
 
