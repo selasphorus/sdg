@@ -508,7 +508,92 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO 
 	return true;
 }
 
+// Collects -- get collect to match litdate (or calendar date? wip)
+function get_collect_text( $litdate_id = null, $date_str = null ) {
+
+	// Init
+	$collect = null;
+	$collect_text = "";
+	
+	if ( $litdate_id ) {
+	
+		$collect_args = array(
+			'post_type'   => 'collect',
+			'post_status' => 'publish',
+			'posts_per_page' => 1,
+			);
+			
+		$litdate_title = get_the_title( $litdate_id );
+		if ( strpos($litdate_title, 'Sunday after Pentecost') !== false ) {
+			
+			// For season after pentecost, match by date
+			$date = strtotime($date_str);
+			// Get the month of the date_str
+			$month = date('M',$date);
+			$year = date('Y',$date);
+			
+			$collect_args['meta_query'] = array(
+				'key'     => 'date_calc',
+				'compare' 	=> 'LIKE',
+				'value' 	=> '"' . $month . '"',
+			);
+						
+		} else {
+		
+			// All other collects match by litdate
+			$collect_args['meta_query'] = array(
+				'key'     => 'related_liturgical_date',
+				'compare' 	=> 'LIKE',
+				'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+			);
+			
+		}
+		
+		$collects = new WP_Query( $collect_args );
+		$collect_posts = $collects->posts;    
+		
+		if ( count($collect_posts) == 1 ) {
+		
+			$collect = $collect_posts[0];
+			
+		} else if ( count($collect_posts) > 1 ) {
+			
+			foreach ( $collect_posts as $post ) {
+				
+				$date_calc = get_post_meta( $post->ID, 'date_calc', true );
+				$date_calc = str_replace($date_calc,"Week of the Sunday closest to ","");
+				$ref_date = strtotime($date_calc." ".$year);
+				
+				// Get dates for Sundays preceding and following collect reference date
+				$prev_sunday = strtotime('previous sunday',$ref_date);
+				$next_sunday = strtotime('next sunday',$ref_date);
+				
+				// Which Sunday is closest to the ref_date?
+				$closest_sunday = min($prev_sunday,$next_sunday);
+				
+				// Does that closest Sunday date match our litdate date?
+				if ( $closest_sunday == $date ) {
+					$collect = $post;
+					break;
+				}
+			}
+		}
+		
+	}
+	
+	if ( $collect ) {
+	
+		if ( !empty($collect->posts) ) { $collect_post = $collect->posts[0]; } else { $collect_post = null; }
+		if ( $collect_post ) { $collect_text = $collect_post->post_content; }
+	
+	}
+	
+	return $collect_text;
+
+}
+
 // Day Titles
+// TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
 add_shortcode('day_title', 'get_day_title');
 function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 
@@ -541,6 +626,50 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "[get_day_title] post_id: ".$post_id."<br />";
     if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
+    
+    // If no date has yet been set, try to find one
+	if ( $the_date == null ) {
+        
+        $ts_info .= "the_date is null -- get the_date<br />";
+		
+        // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
+        if ( $post_id === null ) {
+            
+            return "<!-- no post -->";
+            
+        } else {
+            
+            $post = get_post( $post_id );
+            $post_type = $post->post_type;
+            $ts_info .= "post_type: ".$post_type."<br />";
+
+            if ( $post_type == 'event' ) {
+                
+                $date_str = get_post_meta( $post_id, '_event_start_date', true );
+                $the_date = strtotime($date_str);
+                
+            } else if ( $post_type == 'sermon' ) {
+                
+                $the_date = the_field( 'sermon_date', $post_id );
+                //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
+                
+            } else {
+                //$ts_info .= "post_id: ".$post_id."<br />";
+                //$ts_info .= "post_type: ".$post_type."<br />";
+            }
+        }
+        
+	}    
+    
+    // If the date is still null, give up and go
+    if ( $the_date == null ) {
+        
+        // If still no date has been found, give up.
+        $ts_info .= "no date available for which to find day_title<br />";
+        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        return $info;
+        
+    }
     
     // PROBLEM! TODO/WIP -- figure out why event listings accessed via pagination links send un-parseable date string to this function. It LOOKS like a string, but commas aren't recognized as commas, &c.
     // Make sure the date hasn't been returned enclosed in quotation marks
@@ -594,11 +723,12 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     } else {
     	
-    	//the_date is NOT a string?!?
+    	//the_date is NOT a string?!? hm...
+    	$date_str = "";
     
     }
     
-    //$info .= $ts_info; // tft
+    //$ts_info .= "date_str: ".$date_str."<br />";
     
     // Show or Hide Day Titles?
     // +~+~+~+~+~+~+~+~+~+~+
@@ -635,52 +765,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
         $ts_info .= "hide_special_notices is set to true for this post/event<br />";
     }
     
-    //
-    
-	if ( $the_date == null ) {
-        
-        $ts_info .= "the_date is null -- get the_date<br />";
-		
-        // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
-        if ( $post_id === null ) {
-            
-            return "<!-- no post -->";
-            
-        } else {
-            
-            $post = get_post( $post_id );
-            $post_type = $post->post_type;
-            $ts_info .= "post_type: ".$post_type."<br />";
-
-            if ( $post_type == 'event' ) {
-                
-                $date_str = get_post_meta( $post_id, '_event_start_date', true );
-                $the_date = strtotime($date_str);
-                
-            } else if ( $post_type == 'sermon' ) {
-                
-                $the_date = the_field( 'sermon_date', $post_id );
-                //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
-                
-            } else {
-                //$ts_info .= "post_id: ".$post_id."<br />";
-                //$ts_info .= "post_type: ".$post_type."<br />";
-            }
-        }
-        
-	}    
-    
-    if ( $the_date == null ) {
-        
-        // If still no date has been found, give up.
-        $ts_info .= "no date available for which to find day_title<br />";
-        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-        return $info;
-        
-    }
-    
     // Get litdate posts according to date
-    //$ts_info .= "date_str: ".$date_str."<br />";
     
     $litdate_args = array( 'date' => $date_str, 'day_titles_only' => true); //$litdate_args = array( 'date' => $the_date, 'day_titles_only' => true);
     $litdates = get_lit_dates( $litdate_args );
@@ -813,24 +898,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 			if ( $formatted == true ) {
 			
 				$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
-				$collect_text = ""; // init
+				$collect_text = get_collect_text($litdate_id, $date_str);
 
-				$collect_args = array(
-					'post_type'   => 'collect',
-					'post_status' => 'publish',
-					'posts_per_page' => 1,
-					'meta_query' => array(
-						array(
-							'key'     => 'related_liturgical_date',
-							'compare' 	=> 'LIKE',
-							'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
-						)
-					)
-				);
-				$collect = new WP_Query( $collect_args );
-				if ( !empty($collect->posts) ) { $collect_post = $collect->posts[0]; } else { $collect_post = null; }
-				if ( $collect_post ) { $collect_text = $collect_post->post_content; }
-			
 				// TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
 		
 				// If there's something other than the title available to display, then display the popup link
@@ -839,7 +908,9 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 				$height = '450';
 			
 				if ( !empty($collect_text) ) {
-
+				
+					// TODO: modify title in case of Propers?
+					
 					$info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
 					$info .= $litdate_title;
 					$info .= '</a>';
@@ -884,8 +955,12 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	
 	/*if ( $litdate_id_secondary ) { $info .= '<p class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</p>'; }*/
 	
+	// Append Event Special Notices content, as applicable
 	if ( function_exists('get_special_date_content') && !$hide_special_notices ) { $info .= get_special_date_content( $the_date ); }
+	
+	// TS Info
 	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	
 	$info .= "\n<!-- /get_day_title -->\n";
 	
 	return $info;
