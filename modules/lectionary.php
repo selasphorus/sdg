@@ -616,9 +616,12 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	if ( $collect ) {
 		$ts_info .= "collect id: ".$collect->ID."<br />";
 		$collect_text = $collect->post_content;
+		if ( $propers ) {
+			$collect_text .= "&nbsp;<em>".$collect->post_title."</em>";
+		}
 	}
 	
-	$collect_text .= "<br /><hr />".$ts_info; // tft
+	//$collect_text .= "<br /><hr />".$ts_info; // tft
 	
 	return $collect_text;
 
