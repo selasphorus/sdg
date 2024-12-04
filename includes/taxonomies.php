@@ -717,7 +717,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 			'public'               => true,
 			'hierarchical'      => true,
 			'show_ui'           => true,
-			'show_in_menu'      => 'edit.php?post_type=liturgical_date',
+			'show_in_menu'      => 'edit.php?post_type=lectionary',
 			//'show_admin_column' => true,
 			'query_var'         => true,
 			'rewrite'           => [ 'slug' => 'liturgical_date_category' ],
