@@ -1365,11 +1365,11 @@ function sdg_register_field_groups() {
 						'relevanssi_exclude' => 0,
 						'message' => '',
 						'choices' => array(
-							null => 'None (default)',
+							'default' => 'None (default)',
 							'replacement_date' => 'Replacement Date',
 							'exclusion_date' => 'Exclusion Date',
 						),
-						'default_value' => null,
+						'default_value' => 'default',
 						'return_format' => 'value',
 						'allow_null' => 0,
 						'other_choice' => 0,
