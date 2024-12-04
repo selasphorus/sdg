@@ -519,7 +519,12 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	
 	$ts_info .= "litdate_id: ".$litdate_id."<br />";
 	$ts_info .= "date_str: ".$date_str."<br />";
-	
+	$date = strtotime($date_str);
+	$ts_info .= "litdate date Y-m-d: ".date('Y-m-d',$date)."<br />";
+	// Get the month and year of the date_str for use in matching by date, as needed
+	$month = date('F',$date);
+	$year = date('Y',$date);
+			
 	if ( $litdate_id ) {
 	
 		$collect_args = array(
@@ -537,12 +542,6 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			$ts_info .= "propers...<br />";
 			
 			// For season after pentecost, match by date
-			$date = strtotime($date_str);
-			$ts_info .= "litdate date Y-m-d: ".date('Y-m-d',$date)."<br />";
-			
-			// Get the month of the date_str
-			$month = date('F',$date);
-			$year = date('Y',$date);
 			
 			$collect_args['meta_query'] = array(
 				'relation' => 'AND',
