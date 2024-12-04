@@ -1575,6 +1575,7 @@ function calc_date_from_components ( $args = array() ) {
 		'liturgical_date_calc_id'=> null,
 		'date_calc_str'=> null,
 		'calc_basis'		=> null,
+		'calc_basis_id'		=> null,
 		'calc_basis_field'	=> null,
         'calc_boia'			=> null,
         'calc_weekday'		=> null,
