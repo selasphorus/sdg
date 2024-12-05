@@ -517,6 +517,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	$propers = false;
 	$ts_info = "";
 	
+	$ts_info .= ">>> get_collect_text <<<<br />";
 	$ts_info .= "litdate_id: ".$litdate_id."<br />";
 	$ts_info .= "date_str: ".$date_str."<br />";
 	$date = strtotime($date_str);
@@ -621,6 +622,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	}
 	
 	//$collect_text .= "<br /><hr />".$ts_info; // tft
+	$collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
 	
 	return $collect_text;
 
@@ -965,7 +967,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 
 				} else {
 					$ts_info .= "no collect_text found<br />";
-					$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+					//$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
 					//$ts_info .= "collect_post: <pre>".print_r($collect_post, true)."</pre>";
 					
 					// If no content or collect, just show the day title
