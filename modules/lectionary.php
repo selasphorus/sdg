@@ -762,7 +762,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
     
     }
     
-    //$ts_info .= "date_str: ".$date_str."<br />";
+    $ts_info .= "date_str: ".$date_str."<br />";
     
     // Show or Hide Day Titles?
     // +~+~+~+~+~+~+~+~+~+~+
@@ -964,9 +964,10 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 					$info .= '</div>'; ///calendar-day-desc<br />
 
 				} else {
-					//$ts_info .= "no collect_text found<br />";
-					//$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+					$ts_info .= "no collect_text found<br />";
+					$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
 					//$ts_info .= "collect_post: <pre>".print_r($collect_post, true)."</pre>";
+					
 					// If no content or collect, just show the day title
 					$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
 					if ( $litdate_id_secondary ) { $info .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
