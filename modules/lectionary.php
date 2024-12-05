@@ -563,14 +563,21 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			
 			// All other collects match by litdate
 			$collect_args['meta_query'] = array(
-				'key'     => 'related_liturgical_date',
-				'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
-				'compare' 	=> 'LIKE',
+				'relation' => 'AND',
+				'first_clause' => array(
+					'key'     => 'related_liturgical_date',
+					'value' 	=> '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+					'compare' 	=> 'LIKE',
+				),
+				'second_clause' => array(
+					'key' => 'related_liturgical_date',
+					'compare' 	=> 'EXISTS',
+				),
 			);
 			
 		}
 		
-		//$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+		$ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
 		
 		$collects = new WP_Query( $collect_args );
 		$collect_posts = $collects->posts;    
