@@ -511,6 +511,12 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO 
 // Collects -- get collect to match litdate (or calendar date? wip)
 function get_collect_text( $litdate_id = null, $date_str = null ) {
 
+	// TS/logging setup
+    $do_ts = devmode_active( array("sdg", "lectionary") );
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_day_title", $do_log );
+    
 	// Init
 	$collect = null;
 	$collect_text = "";
@@ -625,6 +631,11 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 				}
 				
 			}
+		} else {
+			
+			// No matching collects found
+			// ...
+			
 		}
 		
 	}
@@ -638,7 +649,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 	}
 	
 	//$collect_text .= "<br /><hr />".$ts_info; // tft
-	$collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; // tft
+	if ( $do_ts ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 	
 	return $collect_text;
 
