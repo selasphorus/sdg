@@ -586,28 +586,37 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 			
 			foreach ( $collect_posts as $post ) {
 				
-				$date_calc = get_post_meta( $post->ID, 'date_calc', true );
-				$ts_info .= "date_calc: ".$date_calc."<br />";
+				if ( $propers ) {
+					
+					$date_calc = get_post_meta( $post->ID, 'date_calc', true );
+					$ts_info .= "date_calc: ".$date_calc."<br />";
+					
+					$date_calc = str_replace("Week of the Sunday closest to ","",$date_calc)." ".$year;
+					$ts_info .= "date_calc mod: ".$date_calc."<br />";
+					
+					$ref_date = strtotime($date_calc);				
+					$ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
+					
+					// Get dates for Sundays preceding and following collect reference date
+					$prev_sunday = strtotime('previous sunday',$ref_date);
+					$next_sunday = strtotime('next sunday',$ref_date);
+					
+					// Which Sunday is closest to the ref_date?
+					$closest_sunday = min($prev_sunday,$next_sunday);
+					$ts_info .= "closest_sunday Y-m-d: ".date('Y-m-d',$closest_sunday)."<br />";
+					
+					// Does that closest Sunday date match our litdate date?
+					if ( $closest_sunday == $date ) {
+						$collect = $post;
+						break;
+					}
+					
+				} else {
 				
-				$date_calc = str_replace("Week of the Sunday closest to ","",$date_calc)." ".$year;
-				$ts_info .= "date_calc mod: ".$date_calc."<br />";
+					$ts_info .= "collect post ID: ".$post->ID."<br />";
 				
-				$ref_date = strtotime($date_calc);				
-				$ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
-				
-				// Get dates for Sundays preceding and following collect reference date
-				$prev_sunday = strtotime('previous sunday',$ref_date);
-				$next_sunday = strtotime('next sunday',$ref_date);
-				
-				// Which Sunday is closest to the ref_date?
-				$closest_sunday = min($prev_sunday,$next_sunday);
-				$ts_info .= "closest_sunday Y-m-d: ".date('Y-m-d',$closest_sunday)."<br />";
-				
-				// Does that closest Sunday date match our litdate date?
-				if ( $closest_sunday == $date ) {
-					$collect = $post;
-					break;
 				}
+				
 			}
 		}
 		
