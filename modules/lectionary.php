@@ -387,7 +387,7 @@ function get_cpt_liturgical_date_content( $post_id = null ) {
 			$date_assigned = get_sub_field('date_assigned');
 			$date_exception = get_sub_field('date_exception'); 
 			//$info .= "<!-- date_exception: ".$date_exception." -->";
-			//if ( $date_exception == "replacement_date" ) { }
+			//if ( $date_exception == "replacement_date" || $replacement_date == "1" ) { }
 		endwhile;
 	} // end if
 	
@@ -444,11 +444,12 @@ function get_display_dates ( $post_id = null, $year = null ) {
 		while ( have_rows('date_assignments', $post_id) ) : the_row();
 			$date_assigned = get_sub_field('date_assigned');
 			$date_exception = get_sub_field('date_exception'); 
+			$replacement_date = get_sub_field('replacement_date'); // deprecated
 			//$info .= "<!-- date_exception: ".$date_exception." -->";			
 			$year_assigned = substr($date_assigned, 0, 4);
 			$info .= "date_assigned: ".$date_assigned." (".$year_assigned.")<br />";
 			if ( $year_assigned == $year ) {
-				if ( $date_exception == "replacement_date" ) {
+				if ( $date_exception == "replacement_date" || $replacement_date == "1" ) {
 					if ( $date_assigned != $fixed_date_str ) {
 						$info .= "replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year."<br />";
 						$fixed_date_str = $date_assigned;
@@ -482,7 +483,8 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO 
 	if ( have_rows('date_assignments', $litdate_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
 		while ( have_rows('date_assignments', $litdate_id) ) : the_row();
 		
-			$date_exception = get_sub_field('date_exception'); 
+			$date_exception = get_sub_field('date_exception');
+			$replacement_date = get_sub_field('replacement_date'); // deprecated
 			$info .= "<!-- date_exception: ".$date_exception." -->";
 				
 			// TODO: get year of date_assigned and check it against full_date_str only if years match
@@ -492,7 +494,7 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO 
 			$info .= "<!-- date_assigned: ".$date_assigned."; date_str: ".$date_str." -->";
 			
 			// Are we dealing with a date exception?
-			if ( $date_exception != "default" ) {
+			if ( $date_exception != "default" || $replacement_date == "1" ) {
 				if ( $date_assigned == $year_to_match ) { // Does the assigned date fall in the applicable calendar year?					
 					// If this is a replacement_date assignment in the relevant year, then check to see if it matches the event calendar display date
 					if ( $date_assigned != $date_str ) {
