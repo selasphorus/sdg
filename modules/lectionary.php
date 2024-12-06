@@ -449,12 +449,15 @@ function get_display_dates ( $post_id = null, $year = null ) {
 			$year_assigned = substr($date_assigned, 0, 4);
 			$info .= "date_assigned: ".$date_assigned." (".$year_assigned.")<br />";
 			if ( $year_assigned == $year ) {
-				if ( $date_exception == "replacement_date" || $replacement_date == "1" ) {
-					if ( $date_assigned != $fixed_date_str ) {
+				if ( $date_exception != "default" ) {
+					if ( $date_assigned != $fixed_date_str && ( $date_exception == "replacement_date" || $replacement_date == "1" ) ) {
 						$info .= "replacement_date date_assigned: ".$date_assigned." overrides fixed_date_str ".$fixed_date_str." for year ".$year."<br />";
 						$fixed_date_str = $date_assigned;
 						$dates = array($fixed_date_str); // Since this is a replacement_date it should be the only one displayed in the given year -- don't add it to array; replace the array
 						break;
+					} else if ( $date_exception == "exclusion_date" ) { //$date_assigned != $fixed_date_str && 
+						// Remove the exclusion date from the array of dates
+						$dates = array_diff($dates, [$date_assigned]);
 					}
 				} else {
 					$dates[] = $date_assigned;
