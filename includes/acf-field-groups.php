@@ -1328,7 +1328,7 @@ function sdg_register_field_groups() {
 					),
 					array(
 						'key' => 'field_sdg_date_exception',
-						'label' => 'Date Exception? *** WIP ***',
+						'label' => 'Date Exception?',
 						'name' => 'date_exception',
 						'aria-label' => '',
 						'type' => 'radio',
