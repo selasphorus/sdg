@@ -493,8 +493,9 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	// Bible Book
 	function register_post_type_bible_book() {
 
-		if ( sdg_custom_caps() ) { $caps = "bible_book"; } else { $caps = "post"; }
+		//if ( sdg_custom_caps() ) { $caps = "bible_book"; } else { $caps = "post"; }
 		//if ( sdg_custom_caps() ) { $caps = array('bible_book', 'bible_books'); } else { $caps = "post"; }
+		if ( sdg_custom_caps() ) { $caps = array('scripture', 'scripture'); } else { $caps = "post"; }
 		
 		$labels = array(
 			'name' => __( 'Books of the Bible', 'sdg' ),
@@ -532,8 +533,50 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 	
 	}
 	add_action( 'init', 'register_post_type_bible_book' );
+	
+	// Verse -- WIP
+	function register_post_type_verse() {
 
-	// Reading
+		if ( sdg_custom_caps() ) { $caps = array('scripture', 'scripture'); } else { $caps = "post"; } // TODO: modify caps to prevent editing?
+		
+		$labels = array(
+			'name' => __( 'Bible Verses', 'sdg' ),
+			'singular_name' => __( 'Bible Verse', 'sdg' ),
+			'add_new' => __( 'New Verse', 'sdg' ),
+			'add_new_item' => __( 'Add New Verse', 'sdg' ),
+			'edit_item' => __( 'Edit Verse', 'sdg' ),
+			'new_item' => __( 'New Verse', 'sdg' ),
+			'view_item' => __( 'View Verse', 'sdg' ),
+			'search_items' => __( 'Search Bible Verses', 'sdg' ),
+			'not_found' =>  __( 'No Bible Verses Found', 'sdg' ),
+			'not_found_in_trash' => __( 'No Bible Verses found in Trash', 'sdg' ),
+		);
+	
+		$args = array(
+			'labels' => $labels,
+			'public' => true,
+			'publicly_queryable'=> true,
+			'show_ui'  			=> true,
+			'show_in_menu' 		=> 'edit.php?post_type=lectionary',
+			'query_var'			=> true,
+			'rewrite'			=> array( 'slug' => 'verses' ), // permalink structure slug
+			'capability_type'	=> $caps,
+			'map_meta_cap'		=> true,
+			'has_archive' 		=> true,
+			'hierarchical'		=> false,
+			//'menu_icon'			=> 'dashicons-book',
+			'menu_position'		=> null,
+			'supports' 			=> array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+			'taxonomies'		=> array( 'admin_tag' ),
+			'show_in_rest'		=> true,
+		);
+
+		register_post_type( 'verse', $args );
+	
+	}
+	add_action( 'init', 'register_post_type_verse' );
+	
+	// Reading (chapter:verse pairs or ranges of pairs)
 	function register_post_type_reading() {
 
 		if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
