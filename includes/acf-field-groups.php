@@ -509,7 +509,7 @@ function sdg_register_field_groups() {
 		'title' => 'Verse Fields',
 		'fields' => array(
 			array(
-				'key' => 'field_sdg_book_id',
+				'key' => 'field_sdg_verse_book_id',
 				'label' => 'Book',
 				'name' => 'book_id',
 				'aria-label' => '',
@@ -518,7 +518,7 @@ function sdg_register_field_groups() {
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '25',
+					'width' => '20',
 					'class' => '',
 					'id' => '',
 				),
@@ -531,7 +531,27 @@ function sdg_register_field_groups() {
 				'step' => '',
 			),
 			array(
-				'key' => 'field_sdg_chapter_id',
+				'key' => 'field_sdg_verse_book_name',
+				'label' => 'Book Name',
+				'name' => 'verse_text',
+				'aria-label' => '',
+				'type' => 'text',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => '',
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'maxlength' => '',
+			),
+			array(
+				'key' => 'field_sdg_verse_chapter_id',
 				'label' => 'Chapter',
 				'name' => 'chapter_id',
 				'aria-label' => '',
@@ -540,7 +560,7 @@ function sdg_register_field_groups() {
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '25',
+					'width' => '20',
 					'class' => '',
 					'id' => '',
 				),
@@ -562,7 +582,7 @@ function sdg_register_field_groups() {
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '25',
+					'width' => '20',
 					'class' => '',
 					'id' => '',
 				),
@@ -575,7 +595,7 @@ function sdg_register_field_groups() {
 				'step' => '',
 			),
 			array(
-				'key' => 'field_sdg_biblecorpus_id',
+				'key' => 'field_sdg_verse_biblecorpus_id',
 				'label' => 'Bible Corpus ID (TMP/WIP)',
 				'name' => 'biblecorpus_id',
 				'aria-label' => '',
@@ -584,7 +604,7 @@ function sdg_register_field_groups() {
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '25',
+					'width' => '20',
 					'class' => '',
 					'id' => '',
 				),
