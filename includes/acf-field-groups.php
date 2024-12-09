@@ -618,7 +618,7 @@ function sdg_register_field_groups() {
 			),
 			array(
 				'key' => 'field_sdg_verse_text',
-				'label' => 'Text',
+				'label' => 'Text (WIP/KJV)',
 				'name' => 'verse_text',
 				'aria-label' => '',
 				'type' => 'text',
