@@ -508,10 +508,9 @@ function sdg_register_field_groups() {
 		'key' => 'group_sdg_bible_verse_fields',
 		'title' => 'Verse Fields',
 		'fields' => array(
-			/*
 			array(
 				'key' => 'field_sdg_biblecorpus_id',
-				'label' => 'Bible Corpus ID',
+				'label' => 'Bible Corpus ID (TMP/WIP)',
 				'name' => 'biblecorpus_id',
 				'aria-label' => '',
 				'type' => 'number',
@@ -531,7 +530,6 @@ function sdg_register_field_groups() {
 				'max' => '',
 				'step' => '',
 			),
-			*/
 			array(
 				'key' => 'field_sdg_book_id',
 				'label' => 'Book',
