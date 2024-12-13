@@ -533,7 +533,7 @@ function sdg_register_field_groups() {
 			array(
 				'key' => 'field_sdg_verse_book_name',
 				'label' => 'Book Name',
-				'name' => 'verse_text',
+				'name' => 'book_name',
 				'aria-label' => '',
 				'type' => 'text',
 				'instructions' => '',
