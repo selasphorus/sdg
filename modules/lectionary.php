@@ -2085,7 +2085,15 @@ function liturgical_date_meta_box_callback( $post ) {
 /*********** CPT: READING ***********/
 function get_cpt_reading_content( $post_id = null ) {
 	
+    // TS/logging setup
+    $do_ts = devmode_active( array("sdg", "lectionary") ); 
+    $do_log = false;
+    //$fcn_id = "[sdg-pt] ";
+    sdg_log( "divline2", $do_log );
+    
+    // Init vars
     $info = "";
+    $ts_info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
     
     // Get the CPT object
@@ -2094,11 +2102,11 @@ function get_cpt_reading_content( $post_id = null ) {
     // Link to text of Bible Verses -- WIP
     $bible_book_id = get_post_meta( $post_id, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $post_id );
     if ( is_array($bible_book_id) ) {
-    	$info .= "bible_book_id is array: ".print_r($bible_book_id, true)."<br />";
+    	$ts_info .= "bible_book_id is array: ".print_r($bible_book_id, true)."<br />";
     } else {
-    	$info .= "bible_book_id: '".$bible_book_id."'<br />";
+    	$ts_info .= "bible_book_id: '".$bible_book_id."'<br />";
     	$bible_corpus_id = get_post_meta( $bible_book_id, 'bible_corpus_id', true );
-    	$info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
+    	$ts_info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
     }
     
     $chapterverses = get_field( 'chapterverses', $post_id );
@@ -2118,7 +2126,7 @@ function get_cpt_reading_content( $post_id = null ) {
     // 49:29-50:14
     // If the string contains one or more hyphens, or more than one colon, then multiple chapters are involved
     if ( strpos($chapterverses,"-") || substr_count($chapterverses, ':') > 1 ) {
-        $info .= "The string '".$chapterverses."' contains information about more than one chapter.<br />";
+        $ts_info .= "The string '".$chapterverses."' contains information about more than one chapter.<br />";
         
         $first = substr( $chapterverses, 0, strpos($chapterverses,"-") );
         if ( substr_count($chapterverses, '-') == 1 ) {
@@ -2126,8 +2134,8 @@ function get_cpt_reading_content( $post_id = null ) {
         } else {
             $last = "not sure!";
         }
-        $info .= "first: ".$first."; last: ".$last;
-        $info .= "<br />";
+        $ts_info .= "first: ".$first."; last: ".$last;
+        $ts_info .= "<br />";
         //
     }
     // Determine all individual chapterverses contained w/in range
@@ -2143,8 +2151,8 @@ function get_cpt_reading_content( $post_id = null ) {
         $info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
         $info .= "<br />";
     }*/
-    $info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
-    $info .= "<br />";
+    $ts_info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
+    $ts_info .= "<br />";
     
     //$pieces = explode("-", $chapterverses);
     //$chapter = substr( $chapterverses,0,strpos($chapterverses,":") );
@@ -2152,6 +2160,8 @@ function get_cpt_reading_content( $post_id = null ) {
     //$row_info .= "<!-- chapter: '$chapter'; verses: 'verses' -->"; // tft
     
     //$info .= "chapter: '".$chapter."'; verses: '".$verses."'"; // tft
+    
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "lectionary" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
     
