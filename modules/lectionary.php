@@ -2125,7 +2125,7 @@ function get_cpt_reading_content( $post_id = null ) {
     // 27:46-28:4, 10-22
     // 49:29-50:14
     // If the string contains one or more hyphens, or more than one colon, then multiple chapters are involved
-    if ( strpos($chapterverses,"-") || substr_count($chapterverses, ':') > 1 ) {
+    if ( ( strpos($chapterverses,"-") && substr_count($chapterverses, ':') > 1 ) || strpos($chapterverses,"-") && substr_count($chapterverses, ':') == 0 ) {
         $ts_info .= "The string '".$chapterverses."' contains information about more than one chapter.<br />";
         
         $first = substr( $chapterverses, 0, strpos($chapterverses,"-") );
