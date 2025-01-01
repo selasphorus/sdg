@@ -7141,6 +7141,13 @@ function sdg_register_field_groups() {
 				array(
 					'param' => 'post_type',
 					'operator' => '==',
+					'value' => 'event_series',
+				),
+			),
+			array(
+				array(
+					'param' => 'post_type',
+					'operator' => '==',
 					'value' => 'repertoire',
 				),
 			),
