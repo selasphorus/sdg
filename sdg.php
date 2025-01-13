@@ -2767,7 +2767,7 @@ function debug_pending_updates() {
 
     wp_die( $output );
 }
-add_action( 'init', 'debug_pending_updates' );
+//add_action( 'init', 'debug_pending_updates' ); // activate as needed
 
 /*******/
 function surprise() {
