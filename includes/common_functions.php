@@ -1720,6 +1720,12 @@ function sdg_scope_dates( $scope = null ) {
 add_shortcode('sdg_search_form', 'sdg_search_form');
 function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 
+	// TS/logging setup
+    $do_ts = devmode_active( array("sdg") );
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+
+	// Init vars
 	$info = "";
     $ts_info = "";
     //$search_values = false; // var to track whether any search values have been submitted on which to base the search
