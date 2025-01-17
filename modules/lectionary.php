@@ -972,9 +972,12 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
         if ( $show_title == true ) {
         
         	$litdate_title = get_the_title( $litdate_id );
+			$ts_info .= "litdate_title: ".$litdate_title."<br />";
 			
 			if ( $formatted == true ) {
 			
+				$ts_info .= "about to look for content and collect<br />";
+				
 				$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
 				$collect_text = get_collect_text($litdate_id, $date_str);
 
