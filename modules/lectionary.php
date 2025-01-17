@@ -623,6 +623,12 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 					$ref_date = strtotime($date_calc);				
 					$ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
 					
+					if ( $ref_date == $date ) {
+						$ts_info .= "date matches ref_date<br />";
+						$collect = $post;
+						break;
+					}
+					
 					// Get dates for Sundays preceding and following collect reference date
 					$prev_sunday = strtotime('previous sunday',$ref_date);
 					$next_sunday = strtotime('next sunday',$ref_date);
@@ -633,6 +639,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 					
 					// Does that closest Sunday date match our litdate date?
 					if ( $closest_sunday == $date ) {
+						$ts_info .= "date matches closest_sunday<br />";
 						$collect = $post;
 						break;
 					}
