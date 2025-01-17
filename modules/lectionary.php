@@ -528,7 +528,7 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
     $do_ts = devmode_active( array("sdg", "lectionary") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_day_title", $do_log );
+    sdg_log( "function called: get_collect_text", $do_log );
     
 	// Init
 	$collect = null;
@@ -661,7 +661,8 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 		}
 	}
 	
-	//$collect_text .= "<br /><hr />".$ts_info; // tft
+	// TS Info
+	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	if ( $do_ts ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 	
 	return $collect_text;
