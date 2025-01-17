@@ -699,7 +699,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	extract( $args );
 	
 	$info .= "\n<!-- get_day_title -->\n";
-
+	$ts_info .= ">>> get_day_title <<<<br />";
+	
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     $ts_info .= "[get_day_title] post_id: ".$post_id."<br />";
     if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
@@ -1037,7 +1038,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	if ( function_exists('get_special_date_content') && !$hide_special_notices ) { $info .= get_special_date_content( $the_date ); }
 	
 	// TS Info
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != "" && $do_ts === true ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	$info .= "\n<!-- /get_day_title -->\n";
 	
