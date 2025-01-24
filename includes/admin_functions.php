@@ -21,7 +21,7 @@ function birdhive_att_explode ( $string = '' ) {
 	return explode( ',', $string );
 }
 
-function digit_to_word ( $number ) {
+function sdg_digit_to_word ( $number ) {
     switch($number){
         case 0:$word = "zero";break;
         case 1:$word = "one";break;
@@ -37,7 +37,7 @@ function digit_to_word ( $number ) {
     return $word;
 }
 
-function word_to_digit ( $word ) {
+function sdg_word_to_digit ( $word ) {
     $words_to_digits = [
         'zero' => 0,
         'one' => 1,
@@ -84,7 +84,7 @@ function extract_numbers ( $string ) {
 	// Make sure the numbers are digits -- convert them as needed
 	foreach ( $matches as $match ) {
 		$word = $match[0];
-		$num = word_to_digit ( $word );
+		$num = sdg_word_to_digit ( $word );
 		if ( $num ) { $numbers[]= $num; } else { $numbers[]= $word; }
 	}
 	return $numbers;
