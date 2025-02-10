@@ -479,7 +479,7 @@ function sdg_post_thumbnail ( $args = array() ) {
 		// For html return format, add caption, if there is one
         
         // Retrieve the caption
-		$caption = get_post( $img_id )->post_excerpt;
+		if ( get_post( $img_id ) ) { $caption = get_post( $img_id )->post_excerpt; } else { $caption = null; }
 		if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
 			$classes .= " has-caption";
 			$ts_info .= $fcn_id."Caption found for img_id $img_id: '$caption'<br />";
