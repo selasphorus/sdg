@@ -209,7 +209,7 @@ jQuery(document).ready(function($) {
     	
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
-    	if ( post_id ) { console.log('post_id: '+post_id); } else { post_id = null; console.log('no post_id defined'; }
+    	if ( post_id ) { console.log('post_id: '+post_id); } else { post_id = null; console.log('no post_id defined'); }
 		
 		// Check cookie
 		var sdg_featured_post = getCookie('sdg_featured_post');
