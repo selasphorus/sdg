@@ -202,17 +202,19 @@ jQuery(document).ready(function($) {
     
     if ( $('#msg_bar') ) {
     	
+    	console.log('>> msg_bar <<<');
+    	
     	var show_msg_bar = false;
     	$("#msg_bar").hide();
     	
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
-    	console.log('post_id: '+post_id);
+    	if ( post_id ) { console.log('post_id: '+post_id); } else { post_id = null; console.log('no post_id defined'; }
 		
 		// Check cookie
 		var sdg_featured_post = getCookie('sdg_featured_post');
 		
-		if (sdg_featured_post ) {
+		if ( !empty(sdg_featured_post) ) {
 	
 			console.log('sdg_featured_post: '+sdg_featured_post);
 			
