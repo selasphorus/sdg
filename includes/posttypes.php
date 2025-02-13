@@ -339,7 +339,7 @@ if ( in_array('projects', $sdg_modules ) ) {
 			'menu_position'		=> null,
 			'supports' 			=> array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
 			'taxonomies'		=> array( 'admin_tag', 'project_category' ),
-			'show_in_rest'		=> false, // false = use classic, not block editor
+			'show_in_rest'		=> true, // false = use classic, not block editor
 		);
 
 		register_post_type( 'project', $args );
