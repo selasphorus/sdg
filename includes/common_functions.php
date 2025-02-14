@@ -101,6 +101,21 @@ function sdg_post_title ( $args = array() ) {
     */
     
     // Clean it up
+    
+    // Italicize info contained w/in double brackets
+    if (! is_admin()) {
+		$find = array('[[', ']]');
+        //$find = array('<<', '>>');
+		//$find = array("&ldquo;", "&rdquo;");
+		$replace   = array('<span class="emtitle">', '</span>');
+		$title = str_replace($find, $replace, $title);
+		//
+		$find = array('//', '//');
+		$replace   = array('<span class="emtitle">', '</span>');
+		$title = str_replace($find, $replace, $title);
+	}
+	
+	// Remove legacy UID info (STC)
 	if ( preg_match('/([0-9]+)_(.*)/', $title) ) {
         $title = preg_replace('/([0-9]+)_(.*)/', '$2', $title);
         $title = str_replace("_", " ", $title);
