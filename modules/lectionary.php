@@ -1378,6 +1378,13 @@ function parse_date_str ( $args = array() ) {
 		//$info .= '</div>';
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calc_str
+		foreach ( $calc_bases as $cb_tmp ) {
+			if ( $cb_tmp['basis'] == $date_calc_str_bk ) {
+				$info .= "cb_tmp basis: ".$cb_tmp['basis']." is identical to date_calc_str_bk<br />";
+				$calc_basis = $cb_tmp['basis'];
+				$calc_basis_id = $cb_tmp['post_id'];
+			}
+		}
 		//
 	} else if ( count($calc_bases) == 1 ) {
 		if ( $verbose == "true" ) { $info .= "Single calc_basis found.<br />"; }
