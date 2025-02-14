@@ -1798,7 +1798,11 @@ function calc_date_from_components ( $args = array() ) {
 				
 					// e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
 					if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
-					$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+					if ( !empty($calc_weekday) ) {
+						$calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
+					} else {
+						$calc_formula = $prev_next." day"; // e.g. "previous day";
+					}				
 				
 				}
 			
