@@ -1598,7 +1598,13 @@ function calc_date_from_str( $year = null, $date_calc_str = null, $verbose = fal
 		if ( is_int($calc_date) ) {
 			$new_basis_date_str = date("Y-m-d", $calc_date );
 		} else {
-			if ( $verbose == "true" ) { $info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />'; }
+			if ( $verbose == "true" ) {
+				if ( empty($calc_date) ) {
+					$info .= '<span class="notice">'."Cannot create new_basis_date_str -- calc_date is empty</span>".'<br />';
+				} else {
+					$info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />';
+				}				
+			}
 		}
 	}
 	
