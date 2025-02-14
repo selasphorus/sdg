@@ -1474,7 +1474,10 @@ function parse_date_str ( $args = array() ) {
 		
 		if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
 			$sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+		} else {
+			// ???
 		}
+		$info .= "sub_calc_str: $sub_calc_str<br />";
 		
 		$components['date_calc_str'] = $sub_calc_str;
 		//if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
@@ -1485,9 +1488,13 @@ function parse_date_str ( $args = array() ) {
 		}
 		//
 		$arr_elements['sub_calc_str'] = $components;
-		$info .= "sub_calc_str: $sub_calc_str<br />";
 		//
-		$super_calc_str = trim(substr( $date_calc_str, 0, strpos($date_calc_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
+		if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
+			$super_calc_str = trim(substr( $date_calc_str, 0, strpos($date_calc_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
+		} else {
+			// ???
+		}
+		
 		$components['date_calc_str'] = $super_calc_str;
 		//
 		$calc_weekdays = get_calc_weekdays_from_str($super_calc_str);
