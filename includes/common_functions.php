@@ -110,7 +110,7 @@ function sdg_post_title ( $args = array() ) {
 		$replace   = array('<span class="emtitle">', '</span>');
 		$title = str_replace($find, $replace, $title);
 		//
-		$find = array('//', '//');
+		$find = array('//', '\\');
 		$replace   = array('<span class="emtitle">', '</span>');
 		$title = str_replace($find, $replace, $title);
 	}
