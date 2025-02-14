@@ -1379,8 +1379,8 @@ function parse_date_str ( $args = array() ) {
 		//$calc['calc_info'] = $info;
 		//return $calc; // abort early -- we don't know what to do with this date_calc_str
 		foreach ( $calc_bases as $cb_tmp ) {
-			if ( $cb_tmp['basis'] == $date_calc_str_bk ) {
-				$info .= "cb_tmp basis: ".$cb_tmp['basis']." is identical to date_calc_str_bk<br />";
+			if ( $cb_tmp['basis'] == $calc_basis ) {
+				$info .= "cb_tmp basis: ".$cb_tmp['basis']." is identical to calc_basis<br />";
 				$calc_basis = $cb_tmp['basis'];
 				$calc_basis_id = $cb_tmp['post_id'];
 			}
