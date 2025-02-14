@@ -1475,7 +1475,7 @@ function parse_date_str ( $args = array() ) {
 		if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
 			$sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
 		} else {
-			// ???
+			$sub_calc_str = ""; // ???
 		}
 		$info .= "sub_calc_str: $sub_calc_str<br />";
 		
@@ -1492,7 +1492,7 @@ function parse_date_str ( $args = array() ) {
 		if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
 			$super_calc_str = trim(substr( $date_calc_str, 0, strpos($date_calc_str, "after the")+9 ))." sub_calc_str"; // WIP 231204
 		} else {
-			// ???
+			$super_calc_str = ""; // ???
 		}
 		
 		$components['date_calc_str'] = $super_calc_str;
