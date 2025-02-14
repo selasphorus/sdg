@@ -1470,7 +1470,12 @@ function parse_date_str ( $args = array() ) {
 	// phase this out? or generalize?
 	// If it's a complex formula, extract the sub_formula upon which the final calc will be based
 	if ( $complex_formula ) {
-		$sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+		if ( $verbose == "true" ) { $info .= "This is a complex_formula => extract the sub_formula<br />"; }
+		
+		if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
+			$sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+		}
+		
 		$components['date_calc_str'] = $sub_calc_str;
 		//if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
 		//
