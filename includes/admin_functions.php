@@ -1255,21 +1255,8 @@ function filter_the_title( $post_title, $post_id = null ) {
         
         $return_revised = true;
         $post_title = make_clean_title( $post_id, $post_title, $return_revised );
-        //if ( $post_type != 'event' ) { $post_title = make_clean_title( $post_id, $post_title, $return_revised ); } // tft
         
-        /*
-        // WIP!
-        $event_series = get_post_meta( $post_id, 'event_series', true );
-        if ( isset($event_series['ID']) ) {
-            $series_id = $event_series['ID'];
-            $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
-            if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
-            // Prepend series_title, if applicable
-            if ( $series_title != "" ) { $post_title = $series_title.": ".$post_title; }
-        }
-        */
-        
-        $title = sdg_format_title($title);
+        $post_title = sdg_format_title($post_title);
  
     }   
     
