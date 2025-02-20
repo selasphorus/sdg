@@ -104,13 +104,18 @@ function sdg_post_title ( $args = array() ) {
     
     // Italicize info contained w/in double brackets
     if (! is_admin()) {
-		$find = array('[[', ']]');
-        //$find = array('<<', '>>');
-		//$find = array("&ldquo;", "&rdquo;");
+    	//
+		$find = array('//', '\\');
+		$replace   = array('<span class="emtitle">', '</span>');
+		$title = str_replace($find, $replace, $title);
+    	//
+		$find = array('*', '*');
 		$replace   = array('<span class="emtitle">', '</span>');
 		$title = str_replace($find, $replace, $title);
 		//
-		$find = array('//', '\\');
+		$find = array('[[', ']]');
+        //$find = array('<<', '>>');
+		//$find = array("&ldquo;", "&rdquo;");
 		$replace   = array('<span class="emtitle">', '</span>');
 		$title = str_replace($find, $replace, $title);
 	}
