@@ -101,40 +101,9 @@ function sdg_post_title ( $args = array() ) {
     */
     
     // Clean it up
+    $title = sdg_format_title($title);
     
-    // Italicize info contained w/in double brackets
-    if (! is_admin()) {
-    	//
-		$find = array('//', '\\');
-		$replace   = array('<span class="emtitle">', '</span>');
-		$title = str_replace($find, $replace, $title);
-    	//
-		$find = array('{', '}');
-		$replace   = array('<span class="emtitle">', '</span>');
-		$title = str_replace($find, $replace, $title);
-		//
-		$find = array('[[', ']]');
-        //$find = array('<<', '>>');
-		//$find = array("&ldquo;", "&rdquo;");
-		$replace   = array('<span class="emtitle">', '</span>');
-		$title = str_replace($find, $replace, $title);
-	}
-	
-	// Remove legacy UID info (STC)
-	if ( preg_match('/([0-9]+)_(.*)/', $title) ) {
-        $title = preg_replace('/([0-9]+)_(.*)/', '$2', $title);
-        $title = str_replace("_", " ", $title);
-    }    
-    $title = remove_bracketed_info($title);
-        
-	// Check for pipe character and replace it with line breaks or spaces, depending on settings
-	if ( $line_breaks ) {
-		$title = str_replace("|", "<br />", $title);
-	} else {
-		$title = str_replace("|", " ", $title);
-		$title = str_replace("  ", " ", $title); // Replace double space with single, in case extra space was left following pipe
-	}
-
+	//
 	$title = $before.$title;
 	
 	// If we're showing the subtitle, retrieve and format the relevant text
@@ -238,6 +207,51 @@ function sdg_post_title ( $args = array() ) {
 	} else {
 		return $info;
 	}
+	
+}
+
+// TODO: generalize for non-title text
+function sdg_format_title ( $str = null ) {
+
+	// Return if empty
+	if ( empty($str) ) {
+		return $str;
+	}
+	
+	// Italicize info contained w/in double brackets
+    if (! is_admin()) {
+    	//
+		$find = array('//', '\\');
+		$replace   = array('<span class="emtitle">', '</span>');
+		$str = str_replace($find, $replace, $str);
+    	//
+		$find = array('{', '}');
+		$replace   = array('<span class="emtitle">', '</span>');
+		$str = str_replace($find, $replace, $str);
+		//
+		$find = array('[[', ']]');
+        //$find = array('<<', '>>');
+		//$find = array("&ldquo;", "&rdquo;");
+		$replace   = array('<span class="emtitle">', '</span>');
+		$str = str_replace($find, $replace, $str);
+	}
+	
+	// Remove legacy UID info (STC)
+	if ( preg_match('/([0-9]+)_(.*)/', $str) ) {
+        $str = preg_replace('/([0-9]+)_(.*)/', '$2', $str);
+        $str = str_replace("_", " ", $str);
+    }    
+    $str = remove_bracketed_info($str);
+        
+	// Check for pipe character and replace it with line breaks or spaces, depending on settings
+	if ( $line_breaks ) {
+		$str = str_replace("|", "<br />", $str);
+	} else {
+		$str = str_replace("|", " ", $str);
+		$str = str_replace("  ", " ", $str); // Replace double space with single, in case extra space was left following pipe
+	}
+	
+	return $str;
 	
 }
 
