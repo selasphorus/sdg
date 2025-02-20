@@ -1268,6 +1268,8 @@ function filter_the_title( $post_title, $post_id = null ) {
             if ( $series_title != "" ) { $post_title = $series_title.": ".$post_title; }
         }
         */
+        
+        $title = sdg_format_title($title);
  
     }   
     
