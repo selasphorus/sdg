@@ -719,7 +719,13 @@ function sdg_meta_tags() {
         $og_type = "article";
         $post_id = get_queried_object_id();
         $og_url = get_the_permalink( $post_id );
-        $og_title = get_the_title( $post_id );
+        
+        // Get title via post object to avoid filters
+        $post = get_post();
+        $og_title = $post->post_title;
+        //$og_title = get_the_title( $post_id );
+        
+        // Clean up the title in case it's been formatted for italics etc.
         
         // Get the featured image URL, if there is one
         // TODO: get image from content if no featured image?
