@@ -1538,9 +1538,9 @@ function calc_date_from_str( $year = null, $date_calc_str = null, $verbose = fal
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
 	
 	// Find the liturgical_date_calc post for the selected year
-	//$liturgical_date_calc_id = get_liturgical_date_calc_id ( $year ); // WIP
-	
+	//$liturgical_date_calc_id = get_liturgical_date_calc_id ( $year ); // WIP	
 	// (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
+	// TODO: make this a separate function?
 	$wp_args = array(
 		'post_type'   => 'liturgical_date_calc',
 		'post_status' => 'publish',
@@ -2008,6 +2008,15 @@ function calc_litdates( $atts = array() ) {
         $date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
         $date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
         //$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
+        
+        if ( empty($date_calc_str) ) {        	
+			// Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
+			if ( if (strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0) ) {
+				$post_title_mod = ltrim($post_title,"The ");
+				$post_title_mod = ltrim($post_title_mod,"Eve of ");
+				$date_calc_str = "Day before ".$post_title_mod;
+			}
+        }
         
         foreach ( $arr_years as $year ) {
         
