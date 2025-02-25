@@ -101,7 +101,7 @@ function sdg_post_title ( $args = array() ) {
     */
     
     // Clean it up
-    $title = sdg_format_title($title);
+    $title = sdg_format_title($title, $line_breaks);
     
 	//
 	$title = $before.$title;
@@ -211,7 +211,7 @@ function sdg_post_title ( $args = array() ) {
 }
 
 // TODO: generalize for non-title text
-function sdg_format_title ( $str = null ) {
+function sdg_format_title ( $str = null, $line_breaks = false ) {
 
 	// Return if empty
 	if ( empty($str) ) {
