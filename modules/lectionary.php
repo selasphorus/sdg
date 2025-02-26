@@ -1926,8 +1926,7 @@ function calc_litdates( $atts = array() ) {
     //if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
     
     $info .= "&gt;&gt;&gt; calc_litdates &lt;&lt;&lt;<br />";
-    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ";
-    $info .= "years: $years<br />";
+    $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ids: $ids; years: $years<br />";
     
     // Turn years var into array, in case of multiple years
     $arr_years = array(); // init
@@ -1981,7 +1980,7 @@ function calc_litdates( $atts = array() ) {
     $posts = $arr_posts->posts;
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
-    $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
+    if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
     $info .= "<br />";
     
@@ -2011,7 +2010,7 @@ function calc_litdates( $atts = array() ) {
         
         if ( empty($date_calc_str) ) {        	
 			// Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
-			if ( if (strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0) ) {
+			if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
 				$post_title_mod = ltrim($post_title,"The ");
 				$post_title_mod = ltrim($post_title_mod,"Eve of ");
 				$date_calc_str = "Day before ".$post_title_mod;
