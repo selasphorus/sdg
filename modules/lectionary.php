@@ -1956,7 +1956,15 @@ function calc_litdates( $atts = array() ) {
 		'post_type' => 'liturgical_date',
 		'post_status' => 'publish',
         'posts_per_page' => $num_posts,
-        'meta_query' => array(
+        'orderby' => $orderby,
+        'order'	=> $order,
+	);
+    
+    // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
+    if ( !empty($ids) && strlen($ids) > 0 ) {
+    	$wp_args['post__in'] = explode(', ', $ids);
+    } else {
+    	$wp_args['meta_query'] = array(
             'relation' => 'AND',
             array(
                 'key'   => "date_type", 
@@ -1966,13 +1974,8 @@ function calc_litdates( $atts = array() ) {
                 'key'   => "date_calculation",
                 'compare' => 'EXISTS'
             )
-        ),
-        'orderby' => $orderby,
-        'order'	=> $order,
-	);
-    
-    // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
-    if ( !empty($ids) && strlen($ids) > 0 ) { $wp_args['post__in'] = explode(', ', $ids); }
+        );
+    }
     if ( !empty($meta_key) ) { $wp_args['meta_key'] = $meta_key; }
     
     // Run the query
