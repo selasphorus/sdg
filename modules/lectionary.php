@@ -1710,7 +1710,7 @@ function calc_date_from_components ( $args = array() ) {
 		$calc_interval = null;
 		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 		
-		if ( is_numeric($basis_date) ) {
+		if ( is_numeric($basis_date) && $verbose == "true" ) {
 			$info .= "basis_date is a timestamp.<br />";
 		}
 		
@@ -1907,7 +1907,7 @@ function calc_date_from_components ( $args = array() ) {
 		}
 
 	}
-	$info .= "<br /><hr />"; // <br />
+	$info .= "<br />"; // <hr /><br />
 	
 	$arr_info['date'] = $calc_date;
     $arr_info['info'] = $info;
