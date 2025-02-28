@@ -1413,7 +1413,7 @@ function parse_date_str ( $args = array() ) {
 		// Remove anything in parentheses or brackets
 		if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calc_basis.<br />"; }
 		$calc_basis = remove_bracketed_info($calc_basis,true);
-		
+		$info .= "calc_basis: $calc_basis<br />";
 	}
 			
 	if ( $calc_basis ) { $components['calc_basis'] = $calc_basis; }
