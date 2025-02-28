@@ -30,3 +30,5 @@ function sdg_display_notification_bar() {
 	</div>
 	<?php
 }
+
+?>
