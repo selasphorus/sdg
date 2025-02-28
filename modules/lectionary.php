@@ -1163,11 +1163,17 @@ function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array(
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
 	if ( count($arr_posts->posts) > 0 ) {
 		foreach ( $arr_posts->posts AS $post ) {
-			$calc_bases[] = array( 'post_id' => $post->ID, 'basis' => strtolower($post->post_title) ); // originally retrieved just the post_title
+			// Check to make sure this isn't an "Eve of" or "Week of" date before adding it to the array
+			$calc_basis = strtolower($post->post_title);
+			if ( strpos($calc_basis, 'eve of ') == false && strpos($calc_basis, 'week of ') == false ) {
+				$calc_bases[] = array( 'post_id' => $post->ID, 'basis' => $calc_basis );
+			} else {
+				//
+			}
 		}
 	} else {
 		// if not...
-		// lit basis foiund in $date_calc_str?
+		// lit basis found in $date_calc_str?
 		$liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
 		
 		// Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calc_str)
