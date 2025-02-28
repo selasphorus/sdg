@@ -1130,7 +1130,7 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 
 }
 
-function get_calc_bases_from_str ( $date_calc_str = "" ) {
+function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array() ) {
 	
 	// Init vars
 	$arr_info = array();
@@ -1151,6 +1151,8 @@ function get_calc_bases_from_str ( $date_calc_str = "" ) {
         //'return_fields' => 'ids',
         '_search_title'	=> $date_calc_str,
 	);
+	
+	if ( !empty($ids_to_exclude) ) { $wp_args['post__not_in'] = $ids_to_exclude; }
 
     // Run the query
 	$arr_posts = new WP_Query( $wp_args );
@@ -1247,6 +1249,7 @@ function parse_date_str ( $args = array() ) {
 		'year'				=> null,
 		'date_calc_str'		=> null,
 		'verbose'			=> true,
+		'ids_to_exclude'	=> array(), // IDs to exclude -- e.g. when dealing w/ "Eve of" dates -- so that "eve of" post doesn't find itself as a possible basis
 	);
 
 	// Parse & Extract args
@@ -1349,7 +1352,6 @@ function parse_date_str ( $args = array() ) {
 	}
 	if ( $verbose == "true" ) { $info .= "component_info (FYI): <br />".$component_info."<br /><hr />"; }
 	
-	
 	// Determine the calc components
 	// WIP!!!
 	// TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
@@ -1358,10 +1360,10 @@ function parse_date_str ( $args = array() ) {
 	//if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
 	if ( $calc_basis ) {
 		if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
-		$calc_bases_info = get_calc_bases_from_str($calc_basis);
+		$calc_bases_info = get_calc_bases_from_str($calc_basis, $ids_to_exclude);
 	} else {
 		if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str date_calc_str: $date_calc_str<br />"; }
-		$calc_bases_info = get_calc_bases_from_str($date_calc_str);
+		$calc_bases_info = get_calc_bases_from_str($date_calc_str, $ids_to_exclude);
 	}
 	//$calc_bases_info = get_calc_bases_from_str($date_calc_str);
 	$calc_bases = $calc_bases_info['calc_bases'];
@@ -1523,7 +1525,19 @@ function parse_date_str ( $args = array() ) {
 }
 
 // WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
-function calc_date_from_str( $year = null, $date_calc_str = null, $verbose = false ) {
+function calc_date_from_str( $args = array() ) {
+	
+	// Defaults
+	$defaults = array(
+		'year'				=> null,
+		'date_calc_str'		=> null,
+		'verbose'			=> false,
+		'ids_to_exclude'		=> array(),
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
 	
 	// Abort if date_calc_str or year is empty
 	if ( empty($date_calc_str) || empty($year) ) { return false; }
@@ -1565,7 +1579,7 @@ function calc_date_from_str( $year = null, $date_calc_str = null, $verbose = fal
 	}
 	
 	// Parse the date string
-	$args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose );
+	$args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => $ids_to_exclude );
 	$date_elements_info = parse_date_str ( $args );
 	$info .= $date_elements_info['info'];
 	$date_elements = $date_elements_info['elements'];
@@ -1949,7 +1963,7 @@ function calc_litdates( $atts = array() ) {
     } else {
     	$arr_years[] = $years;
     }
-    $info .= "arr_years: ".print_r($arr_years,true)."<br />";
+    if ( $verbose == "true" ) { $info .= "arr_years: <pre>".print_r($arr_years,true)."</pre>"; }
     
     // Set up the WP query args
 	$wp_args = array(
@@ -2025,8 +2039,9 @@ function calc_litdates( $atts = array() ) {
         	$calc_info .= "About to do calc for year: $year<hr />";
         	
 			if ( !empty($date_calc_str) ) {
-				$calc_info .= "date_calc_str: $date_calc_str<br />"; // tft
-				$calc = calc_date_from_str( $year, $date_calc_str, $verbose );
+				$calc_info .= "date_calc_str: $date_calc_str<br />";
+				$calc_args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => array($post_id) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
+				$calc = calc_date_from_str( $calc_args ); //$calc = calc_date_from_str( $year, $date_calc_str, $verbose );
 				if ( $calc ) {
 					$calc_date = $calc['calc_date'];
 					$calc_info .= $calc['calc_info'];
