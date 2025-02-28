@@ -2042,7 +2042,7 @@ function calc_litdates( $atts = array() ) {
         
         foreach ( $arr_years as $year ) {
         
-        	$calc_info .= "About to do calc for year: $year<hr />";
+        	$calc_info .= "<hr />About to do calc for year: $year";
         	
 			if ( !empty($date_calc_str) ) {
 				$calc_info .= "date_calc_str: $date_calc_str<br />";
