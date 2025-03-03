@@ -1988,6 +1988,12 @@ function calc_litdates( $atts = array() ) {
     // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
     if ( !empty($ids) && strlen($ids) > 0 ) {
     	$wp_args['post__in'] = explode(', ', $ids);
+    	$wp_args['meta_query'] = array(
+            array(
+                'key'   => "date_type", 
+                'value' => 'variable',
+            ),
+        );
     } else {
     	$wp_args['meta_query'] = array(
             'relation' => 'AND',
