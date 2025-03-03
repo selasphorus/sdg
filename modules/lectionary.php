@@ -1070,6 +1070,8 @@ function get_basis_date ( $year = null, $liturgical_date_calc_id = null, $calc_b
 	$basis_date_str = null;
 	$basis_date = null;
 	
+	$info .= ">>> get_basis_date <<<<br />";
+	
 	if ( $calc_basis == 'christmas' ) {
 		$basis_date_str = $year."-12-25";          
 	} else if ( $calc_basis == 'epiphany' ) {                
@@ -1367,7 +1369,10 @@ function parse_date_str ( $args = array() ) {
 	if ( $calc_basis ) {
 		if ( array_key_exists(strtolower($calc_basis), $liturgical_bases) ) {
 			//if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis is a liturgical_base<br />"; }
-			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => array( array('basis' => strtolower($calc_basis)) ) ); // calc_bases array needs to be array of arrays to match get_calc_bases_from_str results
+			$calc_bases = array();  // calc_bases array needs to be array of arrays to match get_calc_bases_from_str results
+			$basis_field = $liturgical_bases[$calc_basis];
+			$calc_bases[] = array('basis' => strtolower($calc_basis), 'basis_field' => $basis_field );
+			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => $calc_bases );
 		} else {
 			if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
 			$calc_bases_info = get_calc_bases_from_str($calc_basis, $ids_to_exclude);
@@ -1561,6 +1566,7 @@ function calc_date_from_str( $args = array() ) {
 	
 	$info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
 	if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
+	if ( $verbose == "true" ) { $info .= "date_calc_str: ".$date_calc_str."<br />"; }
 	
 	// Find the liturgical_date_calc post for the selected year
 	//$liturgical_date_calc_id = get_liturgical_date_calc_id ( $year ); // WIP	
@@ -1605,7 +1611,7 @@ function calc_date_from_str( $args = array() ) {
 		//
 		if ( isset($components['date_calc_str']) ) { $date_calc_str = $components['date_calc_str']; }
 		//
-		if ( isset($components['calc_basis']) && strtolower($date_calc_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday", &c.=		
+		if ( isset($components['calc_basis']) && strtolower($date_calc_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=		
 			$calc_date = get_basis_date( $year, $liturgical_date_calc_id, $components['calc_basis'], $components['calc_basis_field'] );
 			$info .= "date to be calculated is same as basis_date.<br />";		
 		} else {
@@ -1901,8 +1907,12 @@ function calc_date_from_components ( $args = array() ) {
 			$advent_sunday_date = get_post_meta( $liturgical_date_calc_id, 'advent_sunday_date', true);
 			if ( $verbose == "true" ) { $info .= "advent_sunday_date: ".$advent_sunday_date."<br />"; }
 			
-			if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
+			// WIP
+			//$pentecost_date = get_post_meta( $liturgical_date_calc_id, 'pentecost_date', true);
+			//if ( $verbose == "true" ) { $info .= "pentecost_date: ".$pentecost_date."<br />"; }
+			
 			//if ( $calc_date > strtotime($advent_sunday_date) ) {
+			if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
 				//$info .= $indent.date( 'Y-m-d', strtotime("previous Saturday", strtotime($advent_sunday_date)) );
 				$info .= $indent.'<span class="warning">'."Uh oh! ".date('Y-m-d',$calc_date)." conflicts with Advent. Advent Sunday is $advent_sunday_date.</span><br />"; // tft
 				$calc_date = null; //$calc_date = "N/A";
