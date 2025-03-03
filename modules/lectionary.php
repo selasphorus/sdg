@@ -2029,6 +2029,9 @@ function calc_litdates( $atts = array() ) {
         
         $changes_made = false;
         $complex_formula = false;
+		
+        // Get date_calculation info & break it down
+        $date_calc_str = strtolower(get_post_meta( $post_id, 'date_calculation', true ));
         
         // Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
 		if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
@@ -2038,13 +2041,12 @@ function calc_litdates( $atts = array() ) {
 				$post_title_mod = ltrim($post_title,"The ");
 				$post_title_mod = ltrim($post_title_mod,"Eve of ");
 				$date_calc_str = "Day before ".$post_title_mod;
-			} else {
-				//
 			}
+		} else {
+			 
 		}
-		
-        // Get date_calculation info & break it down
-        $date_calc_str = strtolower(get_post_meta( $post_id, 'date_calculation', true ));
+       
+       	// Clean it up a little
         $date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
         $date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
         //$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
