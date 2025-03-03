@@ -1365,9 +1365,9 @@ function parse_date_str ( $args = array() ) {
 	// 1. Liturgical calc basis (calc_basis)
 	//if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
 	if ( $calc_basis ) {
-		if ( array_key_exists($calc_basis, $liturgical_bases) ) {
+		if ( array_key_exists(strtolower($calc_basis), $liturgical_bases) ) {
 			if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis is a liturgical_base<br />"; }
-			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => array( 'basis' => $calc_basis ) );
+			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => array( 'basis' => strtolower($calc_basis) ) );
 		} else {
 			if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
 			$calc_bases_info = get_calc_bases_from_str($calc_basis, $ids_to_exclude);
