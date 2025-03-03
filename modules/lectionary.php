@@ -2038,19 +2038,17 @@ function calc_litdates( $atts = array() ) {
 			if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate<br />"; }
 			if ( empty($date_calc_str) ) {
 				if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
-				$post_title_mod = ltrim($post_title,"The ");
+				if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = ltrim($post_title,"The "); }
 				$post_title_mod = ltrim($post_title_mod,"Eve of ");
 				$date_calc_str = "Day before ".$post_title_mod;
 			}
 		} else {
-			 
+			 // Clean it up a little
+			$date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
+			$date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
+			//$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
 		}
-       
-       	// Clean it up a little
-        $date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
-        $date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
-        //$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
-        
+
         foreach ( $arr_years as $year ) {
         
         	$calc_info .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
