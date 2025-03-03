@@ -2035,7 +2035,7 @@ function calc_litdates( $atts = array() ) {
         
         // Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
 		if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
-			if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate<br />"; }
+			if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate ($post_title)<br />"; }
 			if ( empty($date_calc_str) ) {
 				if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
 				if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = ltrim($post_title,"The "); }
