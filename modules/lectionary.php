@@ -1365,8 +1365,13 @@ function parse_date_str ( $args = array() ) {
 	// 1. Liturgical calc basis (calc_basis)
 	//if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
 	if ( $calc_basis ) {
-		if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
-		$calc_bases_info = get_calc_bases_from_str($calc_basis, $ids_to_exclude);
+		if ( array_key_exists($calc_basis, $liturgical_bases) ) {
+			if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis is a liturgical_base<br />"; }
+			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => array( 'basis' => $calc_basis ) );
+		} else {
+			if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
+			$calc_bases_info = get_calc_bases_from_str($calc_basis, $ids_to_exclude);
+		}		
 	} else {
 		if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str date_calc_str: $date_calc_str<br />"; }
 		$calc_bases_info = get_calc_bases_from_str($date_calc_str, $ids_to_exclude);
@@ -2025,20 +2030,24 @@ function calc_litdates( $atts = array() ) {
         $changes_made = false;
         $complex_formula = false;
         
+        // Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
+		if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
+			if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate<br />"; }
+			if ( empty($date_calc_str) ) {
+				if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
+				$post_title_mod = ltrim($post_title,"The ");
+				$post_title_mod = ltrim($post_title_mod,"Eve of ");
+				$date_calc_str = "Day before ".$post_title_mod;
+			} else {
+				//
+			}
+		}
+		
         // Get date_calculation info & break it down
         $date_calc_str = strtolower(get_post_meta( $post_id, 'date_calculation', true ));
         $date_calc_str = str_replace('christmas day', 'christmas', strtolower($date_calc_str) );
         $date_calc_str = str_replace('the epiphany', 'epiphany', strtolower($date_calc_str) );
         //$date_calc_str = str_replace(['the', 'day'], '', strtolower($date_calc_str) );
-        
-        if ( empty($date_calc_str) ) {        	
-			// Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
-			if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
-				$post_title_mod = ltrim($post_title,"The ");
-				$post_title_mod = ltrim($post_title_mod,"Eve of ");
-				$date_calc_str = "Day before ".$post_title_mod;
-			}
-        }
         
         foreach ( $arr_years as $year ) {
         
@@ -2055,7 +2064,7 @@ function calc_litdates( $atts = array() ) {
 					$calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
 				}
 			} else {
-				$calc_info .= "date_calc_str is empty<br />"; // tft
+				$calc_info .= "date_calc_str is empty<br />";
 				//$calc = null;
 			}   
 			
@@ -2064,7 +2073,7 @@ function calc_litdates( $atts = array() ) {
 				//$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
 				$calc_info .= "calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
 			} else {
-				$calc_info .= "calc_date N/A<br />"; // tft            
+				$calc_info .= "calc_date N/A<br />";         
 			}
 			
 			// 3. Save dates to ACF repeater field row for date_calculatedday_
