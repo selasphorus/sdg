@@ -2038,8 +2038,7 @@ function calc_litdates( $atts = array() ) {
 			if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate ($post_title)<br />"; }
 			if ( empty($date_calc_str) ) {
 				if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
-				if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = ltrim($post_title,"The "); } else { $post_title_mod = $post_title; }
-				$post_title_mod = ltrim($post_title_mod,"Eve of ");
+				if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = str_replace("The Eve of", "", $post_title); } else { $post_title_mod = str_replace("Eve of", "", $post_title); }	// TODO make more efficient w/ regexp?		
 				$date_calc_str = "Day before ".$post_title_mod;
 			}
 		} else {
