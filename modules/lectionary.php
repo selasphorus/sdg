@@ -1367,11 +1367,12 @@ function parse_date_str ( $args = array() ) {
 	// 1. Liturgical calc basis (calc_basis)
 	//if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
 	if ( $calc_basis ) {
-		if ( array_key_exists(strtolower($calc_basis), $liturgical_bases) ) {
+		$calc_basis = strtolower($calc_basis);
+		if ( array_key_exists($calc_basis, $liturgical_bases) ) {
 			//if ( $verbose == "true" ) { $info .= "calc_basis: $calc_basis is a liturgical_base<br />"; }
 			$calc_bases = array();  // calc_bases array needs to be array of arrays to match get_calc_bases_from_str results
 			$basis_field = $liturgical_bases[$calc_basis];
-			$calc_bases[] = array('basis' => strtolower($calc_basis), 'basis_field' => $basis_field );
+			$calc_bases[] = array('basis' => $calc_basis, 'basis_field' => $basis_field );
 			$calc_bases_info = array( 'info' => "calc_basis: $calc_basis is a liturgical_base<br />", 'calc_bases' => $calc_bases );
 		} else {
 			if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calc_basis<br />"; }
