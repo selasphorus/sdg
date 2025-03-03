@@ -1205,7 +1205,7 @@ function get_calc_boias_from_str ( $date_calc_str = "" ) {
 	
 	// can we do this without the loop -- match str against array of substr?
 	foreach ( $boias AS $boia ) {
-		if ( preg_match_all('/\s+'.$boia.'/\s+', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
+		if ( preg_match_all('/\s+'.$boia.'\s+/', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			//$info .= "&rarr; "."boia '$boia' found in date_calc_str<br />"; // 
 			//$calc_boia = strtolower($boia);
 			$calc_boias[] = strtolower($boia);
