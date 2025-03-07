@@ -47,6 +47,7 @@ function sdg_post_title ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
+	$hclass .= " sdgp";
 	if ( is_numeric($post) ) { 
 		$post_id = $post;
 		$post = get_post( $post_id );
@@ -134,6 +135,7 @@ function sdg_post_title ( $args = array() ) {
 	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
 	
 		$info .= "<!-- show_series_title -->";
+		$hclass .= " with-series-title";
 		
 		// Determine the series type
 		if ( $post->post_type == "event" ) {
@@ -878,8 +880,8 @@ function display_postmeta( $args = array() ) {
 /*********** MEDIA ***********/
 
 // Get Media Player -- Based on contents of ACF A/V Info fields
-function get_media_player( $args = array() ) {
 //function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null, $called_by = null ) {
+function get_media_player( $args = array() ) {
 	
 	// TS/logging setup
     $do_ts = devmode_active( array("sdg", "media") );
@@ -914,7 +916,7 @@ function get_media_player( $args = array() ) {
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-	extract( $args );IMES</span
+	extract( $args );
 	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
