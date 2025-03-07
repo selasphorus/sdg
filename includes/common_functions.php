@@ -153,7 +153,7 @@ function sdg_post_title ( $args = array() ) {
 		$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );		
 		if ( empty( $series_subtitle ) && !empty( $series_id ) ) {
 			if ( $post->post_type == "event" ) {
-				$series_subtitle = "Part of the event series <em>".get_the_title( $series_id ).'</em>';
+				$series_subtitle = 'Part of the event series <span class="series-title">'.get_the_title( $series_id ).'</span>';
 			} else {
 				$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
 			}			
