@@ -914,7 +914,7 @@ function get_media_player( $args = array() ) {
 
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
+	extract( $args );IMES</span
 	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
@@ -1368,7 +1368,7 @@ function display_media_player( $atts = array() ) {
 		$info .= "<!-- context: $context -->";
 		$info .= "<!-- player_status: $player_status -->";
 		$info .= '<!-- /Audio/Video -->';
-		if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$mp_info['ts_info'].'</div>'; }
+		//if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$mp_info['ts_info'].'</div>'; }
     } else {
     	$info .= "<!-- ".print_r($mp_info,true)." -->";
     }	
