@@ -15,14 +15,14 @@ function sdg_post_title ( $args = array() ) {
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") ); 
     $do_log = false;
+    $fcn_id = "[sdg-pt] ";
     sdg_log( "divline2", $do_log );
     
     // Init vars
 	$info = "";
 	$ts_info = "";
 	
-	//$ts_info = "START sdg_post_title<br />";	
-	$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
+	$ts_info .= $fcn_id."<pre>args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -152,7 +152,11 @@ function sdg_post_title ( $args = array() ) {
 		$info .= "<!-- series_id: $series_id -->";
 		$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );		
 		if ( empty( $series_subtitle ) && !empty( $series_id ) ) {
-			$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id );
+			if ( $post->post_type == "event" ) {
+				$series_subtitle = "Part of the event series <em>".get_the_title( $series_id ).'</em>';
+			} else {
+				$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
+			}			
 		}		
 		if ( !empty( $series_subtitle ) ) {
 			if ( !empty( $series_id ) ) { 
@@ -899,7 +903,7 @@ function get_media_player( $args = array() ) {
 		'position'		=> null,
 		'media_type'	=> 'unknown',
 		'url'			=> null,
-		'called_by'  	=> null, // option for TS to indicate origin of function call -- e.g. theme header
+		'called_by'  	=> null, // option for TS to indicate origin of function call -- e.g. theme-header
 		'do_ts'  		=> false,
 	);
 	
