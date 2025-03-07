@@ -103,10 +103,11 @@ function sdg_post_title ( $args = array() ) {
     // Clean it up
     $title = sdg_format_title($title, $line_breaks);
     
-	//
+    // Prepend "before" text, if any
 	$title = $before.$title;
 	
 	// If we're showing the subtitle, retrieve and format the relevant text
+	$subtitle = ""; // init
 	if ( $show_subtitle ) { // && function_exists( 'is_dev_site' ) && is_dev_site()
 		$subtitle = get_post_meta( $post_id, 'subtitle', true );
 		if ( strlen( $subtitle ) != 0 ) {
@@ -118,8 +119,6 @@ function sdg_post_title ( $args = array() ) {
 				$subtitle = '<br /><span class="subtitle">'.$subtitle.'</span>';
 			}
 		}
-	} else {
-		$subtitle = "";
 	}
 	
 	// If we're showing the person_title, retrieve and format the relevant text
@@ -138,7 +137,7 @@ function sdg_post_title ( $args = array() ) {
 		
 		// Determine the series type
 		if ( $post->post_type == "event" ) {
-			$series_field = 'series_events'; //$series_field = 'events_series';
+			$series_field = 'event_series'; //$series_field = 'series_events'; //$series_field = 'events_series';
 		} else if ( $post->post_type == "sermon" ) {
 			$series_field = 'sermons_series';
 		}
@@ -181,7 +180,7 @@ function sdg_post_title ( $args = array() ) {
         }*/
 
         // Prepend series_title, if applicable
-        if ( $series_title != "" ) { $event_title = $series_title.": ".$event_title; }
+        if ( $series_title != "" ) { $title = $series_title.": ".$title; }
     }
     
     // Hyperlink the title, if applicable
