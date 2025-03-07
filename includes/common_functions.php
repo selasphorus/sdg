@@ -20,9 +20,9 @@ function sdg_post_title ( $args = array() ) {
     // Init vars
 	$info = "";
 	$ts_info = "";
-	//$ts_info = "START sdg_post_title<br />";
 	
-	//$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
+	//$ts_info = "START sdg_post_title<br />";	
+	$ts_info .= "<pre>args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
 	$defaults = array(
@@ -46,6 +46,8 @@ function sdg_post_title ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
+	
+	$ts_info .= "<pre>args parsed/extracted: ".print_r($args, true)."</pre>";
 	
 	$hclass .= " sdgp";
 	if ( is_numeric($post) ) { 
