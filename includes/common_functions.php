@@ -161,7 +161,9 @@ function sdg_post_title ( $args = array() ) {
 	} else {
 		$series_subtitle = "";
 	}
-	/*
+	
+	// Prepend series title?
+	// TBD: move this to WHX4
 	if ( is_dev_site() ) {
         
         //$event_title = get_the_title($EM_Event->ID); // For some reason this is breaking things on the live site, but only when event titles have info in brackets with space around hyphen -- e.g. 2022 - Shrine Prayers
@@ -170,17 +172,17 @@ function sdg_post_title ( $args = array() ) {
         $series_id = null;
         $series_title = "";
 
-        $event_series = get_post_meta( $post_id, 'series_events', true );
-        if ( isset($event_series['ID']) ) { 
+        $series_id = get_post_meta( $post_id, 'event_series', true ); //$event_series = get_post_meta( $post_id, 'series_events', true );
+        $series_title = get_the_title( $series_id );
+        /*if ( isset($event_series['ID']) ) { 
             $series_id = $event_series['ID'];
             $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
             if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
-        }
+        }*/
 
         // Prepend series_title, if applicable
         if ( $series_title != "" ) { $event_title = $series_title.": ".$event_title; }
     }
-    */
     
     // Hyperlink the title, if applicable
 	if ( $link ) {
