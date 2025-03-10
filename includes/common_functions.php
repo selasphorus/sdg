@@ -153,11 +153,7 @@ function sdg_post_title ( $args = array() ) {
 		if ( $series_id ) {
 			$ts_info .= $fcn_id."series_id: $series_id<br />";
 			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';
-			if ( $post->post_type == "event" ) {
-				$series_title = 'Part of the event series '.$series_title;
-			} else {
-				$series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
-			}
+			
 			/*
 			// Check to see if the series has a subtitle
 			$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
@@ -194,7 +190,7 @@ function sdg_post_title ( $args = array() ) {
     	$prepend_series_title = false;
     }
     // Prepend series_title, if applicable
-    if ( $prepend_series_title && $series_title != "" ) { $title = $series_title.": ".$title; }
+    //if ( $prepend_series_title && $series_title != "" ) { $title = $series_title.": ".$title; }
             
     // Hyperlink the title, if applicable
 	if ( $link ) {
@@ -206,10 +202,23 @@ function sdg_post_title ( $args = array() ) {
 		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>'; // '<h1 class="entry-title">'
 	}
 	
-	// Add the title, subtitle, and series_subtitle to the info for return
+	// Add the title, subtitle, and series_title to the info for return
+	// WIP: streamline
+	if ( $show_series_title == 'prepend' ) {
+		$info .= $series_title."&nbsp;&mdash;&nbsp;";
+	}
 	$info .= $title;
 	$info .= $subtitle;
-	if ( $prepend_series_title == false) { $info .= $series_title; }
+	if ( $show_series_title === true ) {
+		if ( $post->post_type == "event" ) {
+			$info .= 'Part of the event series '.$series_title;
+		} else {
+			$info .= "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
+		}
+	}
+	if ( $show_series_title == 'append' ) {
+		$info .= "Series: ".$series_title."<br />";
+	}
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
