@@ -157,14 +157,14 @@ function sdg_post_title ( $args = array() ) {
 			$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark">'.$series_title.'</a>';
 			if ( $show_series_title == "prepend" ) {
 				$series_title = $series_title."&nbsp;&mdash;&nbsp;";
-			} else if ( $show_series_title == "1") {
+			} else if ( $show_series_title == "append" ) {
+				$series_title = "Series: ".$series_title."<br />";
+			} else if ( $show_series_title == "wordy") {
 				if ( $post->post_type == "event" ) {
 					$series_title = 'Part of the event series '.$series_title;
 				} else {
 					$series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
 				}
-			} else if ( $show_series_title == "append" ) {
-				$series_title = "Series: ".$series_title."<br />";
 			}
 			if ( $hlevel_sub ) {
 				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
