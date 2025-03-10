@@ -186,13 +186,16 @@ function sdg_post_title ( $args = array() ) {
 	// TBD: move this to WHX4
 	if ( is_dev_site() ) {
 	
+		$prepend_series_title = true;
 		//$prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
         //if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
 
-        // Prepend series_title, if applicable
-        if ( $series_title != "" ) { $title = $series_title.": ".$title; }
+    } else {
+    	$prepend_series_title = false;
     }
-    
+    // Prepend series_title, if applicable
+    if ( $prepend_series_title && $series_title != "" ) { $title = $series_title.": ".$title; }
+            
     // Hyperlink the title, if applicable
 	if ( $link ) {
 		$title = '<a href="'.esc_url( get_permalink($post_id) ).'" rel="bookmark">'.$title.'</a>';
@@ -206,7 +209,7 @@ function sdg_post_title ( $args = array() ) {
 	// Add the title, subtitle, and series_subtitle to the info for return
 	$info .= $title;
 	$info .= $subtitle;
-	$info .= $series_title;
+	if ( $prepend_series_title == false) { $info .= $series_title; }
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
