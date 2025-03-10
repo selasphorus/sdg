@@ -22,8 +22,6 @@ function sdg_post_title ( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
-	if ( is_singular() ) { $ts_info .= $fcn_id."is_singular<br />"; } else { $ts_info .= $fcn_id."NOT is_singular<br />"; }
-	
 	$ts_info .= $fcn_id."<pre>args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
