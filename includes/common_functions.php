@@ -152,7 +152,8 @@ function sdg_post_title ( $args = array() ) {
 		// If a series_id has been found, then show the series title and subtitle
 		if ( $series_id ) {
 			$ts_info .= $fcn_id."series_id: $series_id<br />";
-			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
+			$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark"><span class="series-title">'.get_the_title( $series_id ).'</span></a>';
+			//$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
 			/*
 			// Check to see if the series has a subtitle
 			$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
