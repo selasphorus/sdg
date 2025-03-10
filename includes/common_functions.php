@@ -170,26 +170,11 @@ function sdg_post_title ( $args = array() ) {
 			}*/
 		}
 		
-		// TODO: add hyperlink to the series page
+		// TODO: add hyperlink to the series page?
 		//
 	} else {
-		//$series_subtitle = "";
 		$series_title = null;
 	}
-	
-	// Prepend series title?
-	// TBD: move this to WHX4
-	if ( is_dev_site() ) {
-	
-		$prepend_series_title = true;
-		//$prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
-        //if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
-
-    } else {
-    	$prepend_series_title = false;
-    }
-    // Prepend series_title, if applicable
-    //if ( $prepend_series_title && $series_title != "" ) { $title = $series_title.": ".$title; }
             
     // Hyperlink the title, if applicable
 	if ( $link ) {
@@ -208,7 +193,7 @@ function sdg_post_title ( $args = array() ) {
 	}
 	$info .= $title;
 	$info .= $subtitle;
-	if ( $series_title && $show_series_title === true ) {
+	if ( $series_title && $show_series_title == 1 ) {
 		if ( $post->post_type == "event" ) {
 			$info .= 'Part of the event series '.$series_title;
 		} else {
