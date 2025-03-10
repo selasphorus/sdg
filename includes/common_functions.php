@@ -169,7 +169,7 @@ function sdg_post_title ( $args = array() ) {
 			if ( $hlevel_sub ) {
 				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
 			} else {
-				$series_title = '<span class="series-title">'.$series_title.'</span>'; //<br />
+				$series_title = '<span class="series-title subtitle">'.$series_title.'</span>'; //<br />
 			}
 			//$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark"><span class="series-title">'.get_the_title( $series_id ).'</span></a>';
 			//$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
