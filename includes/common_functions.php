@@ -137,7 +137,7 @@ function sdg_post_title ( $args = array() ) {
 	// If we're showing a series subtitle, retrieve and format the relevant text
 	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
 	
-		$ts_info .= $fcn_id."show_series_title<br />";
+		$ts_info .= $fcn_id."show_series_title: ".$show_series_title."<br />";
 		$hclass .= " with-series-title";
 		
 		// Determine the series type
@@ -152,8 +152,7 @@ function sdg_post_title ( $args = array() ) {
 		// If a series_id has been found, then show the series title and subtitle
 		if ( $series_id ) {
 			$ts_info .= $fcn_id."series_id: $series_id<br />";
-			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';
-			
+			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
 			/*
 			// Check to see if the series has a subtitle
 			$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
@@ -175,7 +174,7 @@ function sdg_post_title ( $args = array() ) {
 		//
 	} else {
 		//$series_subtitle = "";
-		$series_title ="";
+		$series_title = null;
 	}
 	
 	// Prepend series title?
@@ -204,19 +203,19 @@ function sdg_post_title ( $args = array() ) {
 	
 	// Add the title, subtitle, and series_title to the info for return
 	// WIP: streamline
-	if ( $show_series_title == 'prepend' ) {
+	if ( $series_title && $show_series_title == 'prepend' ) {
 		$info .= $series_title."&nbsp;&mdash;&nbsp;";
 	}
 	$info .= $title;
 	$info .= $subtitle;
-	if ( $show_series_title === true ) {
+	if ( $series_title && $show_series_title === true ) {
 		if ( $post->post_type == "event" ) {
 			$info .= 'Part of the event series '.$series_title;
 		} else {
 			$info .= "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
 		}
 	}
-	if ( $show_series_title == 'append' ) {
+	if ( $series_title && $show_series_title == 'append' ) {
 		$info .= "Series: ".$series_title."<br />";
 	}
 	
