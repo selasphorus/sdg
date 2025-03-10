@@ -135,6 +135,7 @@ function sdg_post_title ( $args = array() ) {
 	}
 	
 	// If we're showing a series subtitle, retrieve and format the relevant text
+	$series_title = ""; // init
 	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
 	
 		$ts_info .= $fcn_id."show_series_title: ".$show_series_title."<br />";
@@ -191,8 +192,6 @@ function sdg_post_title ( $args = array() ) {
 		
 		// TODO: add hyperlink to the series page?
 		//
-	} else {
-		$series_title = null;
 	}
             
     // Hyperlink the title, if applicable
