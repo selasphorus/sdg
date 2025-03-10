@@ -156,7 +156,7 @@ function sdg_post_title ( $args = array() ) {
 			$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark">'.$series_title.'</a>';
 			if ( $show_series_title == "prepend" ) {
 				$series_title = $series_title."&nbsp;&mdash;&nbsp;";
-			} else if ( $show_series_title == 1) {
+			} else if ( $show_series_title == "1") {
 				if ( $post->post_type == "event" ) {
 					$info .= 'Part of the event series '.$series_title;
 				} else {
@@ -212,7 +212,7 @@ function sdg_post_title ( $args = array() ) {
 	}
 	$info .= $title;
 	$info .= $subtitle;
-	if ( $series_title && $show_series_title != 'prepend' & $show_series_title !== false) {
+	if ( $series_title && $show_series_title != 'prepend' && $show_series_title !== false) {
 		$info .= $series_title;
 	}
 	
