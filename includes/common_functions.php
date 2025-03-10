@@ -158,12 +158,12 @@ function sdg_post_title ( $args = array() ) {
 				$series_title = $series_title."&nbsp;&mdash;&nbsp;";
 			} else if ( $show_series_title == "1") {
 				if ( $post->post_type == "event" ) {
-					$info .= 'Part of the event series '.$series_title;
+					$series_title = 'Part of the event series '.$series_title;
 				} else {
-					$info .= "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
+					$series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
 				}
 			} else if ( $show_series_title == "append" ) {
-				$series_title .= "Series: ".$series_title."<br />";
+				$series_title = "Series: ".$series_title."<br />";
 			}
 			if ( $hlevel_sub ) {
 				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
