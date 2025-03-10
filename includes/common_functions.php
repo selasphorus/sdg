@@ -15,7 +15,7 @@ function sdg_post_title ( $args = array() ) {
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") ); 
     $do_log = false;
-    $fcn_id = "[sdg-pt] ";
+    $fcn_id = "[sdg-pt]&nbsp;";
     sdg_log( "divline2", $do_log );
     
     // Init vars
@@ -59,7 +59,7 @@ function sdg_post_title ( $args = array() ) {
 		$post_id = isset( $post->ID ) ? $post->ID : 0;
 	}
 	if ( $post ) {
-		$ts_info .= "[sdg-pt] post_id: ".$post_id."<br />";
+		$ts_info .= $fcn_id."post_id: ".$post_id."<br />";
 		//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
 		$post_type = $post->post_type;
 	} else {
@@ -137,7 +137,7 @@ function sdg_post_title ( $args = array() ) {
 	// If we're showing a series subtitle, retrieve and format the relevant text
 	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
 	
-		$info .= "<!-- show_series_title -->";
+		$ts_info .= $fcn_id."show_series_title<br />";
 		$hclass .= " with-series-title";
 		
 		// Determine the series type
@@ -146,17 +146,17 @@ function sdg_post_title ( $args = array() ) {
 		} else if ( $post->post_type == "sermon" ) {
 			$series_field = 'sermons_series';
 		}
-		$info .= "<!-- series_field: $series_field -->";
+		$ts_info .= $fcn_id."series_field: $series_field<br />";
 		$series = get_post_meta( $post_id, $series_field, true );
 		if (isset($series[0])) { $series_id = $series[0]; } else { $series_id = null; $info .= "<!-- series: ".print_r($series, true)." -->"; }
 		// If a series_id has been found, then show the series title and subtitle
 		if ( $series_id ) {
-			$info .= "<!-- series_id: $series_id -->";
+			$ts_info .= $fcn_id."series_id: $series_id<br />";
 			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';
 			if ( $post->post_type == "event" ) {
-				$series_subtitle = 'Part of the event series '.$series_title;
+				$series_title = 'Part of the event series '.$series_title;
 			} else {
-				$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
+				$series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
 			}
 			/*
 			// Check to see if the series has a subtitle
@@ -185,20 +185,9 @@ function sdg_post_title ( $args = array() ) {
 	// Prepend series title?
 	// TBD: move this to WHX4
 	if ( is_dev_site() ) {
-        
-        //$event_title = get_the_title($EM_Event->ID); // For some reason this is breaking things on the live site, but only when event titles have info in brackets with space around hyphen -- e.g. 2022 - Shrine Prayers
-        
-        // Get the series title, if any
-        $series_id = null;
-        $series_title = "";
-
-        $series_id = get_post_meta( $post_id, 'event_series', true ); //$event_series = get_post_meta( $post_id, 'series_events', true );
-        $series_title = get_the_title( $series_id );
-        /*if ( isset($event_series['ID']) ) { 
-            $series_id = $event_series['ID'];
-            $prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
-            if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
-        }*/
+	
+		//$prepend_series_title = get_post_meta( $series_id, 'prepend_series_title', true );
+        //if ( $prepend_series_title == 1 ) { $series_title = get_the_title( $series_id ); }
 
         // Prepend series_title, if applicable
         if ( $series_title != "" ) { $title = $series_title.": ".$title; }
@@ -210,7 +199,7 @@ function sdg_post_title ( $args = array() ) {
 	}
 	
 	// Format the title according to the parameters for heading level and class
-	if ( $hlevel ) {
+	if ( $hlevel && $hlevel != 0 ) {
 		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>'; // '<h1 class="entry-title">'
 	}
 	
