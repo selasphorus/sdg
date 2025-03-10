@@ -22,6 +22,8 @@ function sdg_post_title ( $args = array() ) {
 	$info = "";
 	$ts_info = "";
 	
+	if ( is_singular() ) { $ts_info .= $fcn_id."is_singular<br />"; } else { $ts_info .= $fcn_id."NOT is_singular<br />"; }
+	
 	$ts_info .= $fcn_id."<pre>args: ".print_r($args, true)."</pre>";
 	
 	// Defaults
@@ -48,7 +50,7 @@ function sdg_post_title ( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
 	
-	$ts_info .= "<pre>args parsed/extracted: ".print_r($args, true)."</pre>";
+	$ts_info .= $fcn_id."<pre>args parsed/extracted: ".print_r($args, true)."</pre>";
 	
 	$hclass .= " sdgp";
 	if ( is_numeric($post) ) { 
@@ -149,25 +151,37 @@ function sdg_post_title ( $args = array() ) {
 		$info .= "<!-- series_field: $series_field -->";
 		$series = get_post_meta( $post_id, $series_field, true );
 		if (isset($series[0])) { $series_id = $series[0]; } else { $series_id = null; $info .= "<!-- series: ".print_r($series, true)." -->"; }
-		$info .= "<!-- series_id: $series_id -->";
-		$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );		
-		if ( empty( $series_subtitle ) && !empty( $series_id ) ) {
+		// If a series_id has been found, then show the series title and subtitle
+		if ( $series_id ) {
+			$info .= "<!-- series_id: $series_id -->";
+			$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';
 			if ( $post->post_type == "event" ) {
-				$series_subtitle = 'Part of the event series <span class="series-title">'.get_the_title( $series_id ).'</span>';
+				$series_subtitle = 'Part of the event series '.$series_title;
 			} else {
 				$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
-			}			
-		}		
-		if ( !empty( $series_subtitle ) ) {
-			if ( !empty( $series_id ) ) { 
-				$series_subtitle = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark" target="_blank">'.$series_subtitle.'</a>';
 			}
-			$series_subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_subtitle.'</h'.$hlevel_sub.'>';
+			/*
+			// Check to see if the series has a subtitle
+			$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
+			//	
+			if ( empty( $series_subtitle ) ) {
+				if ( $post->post_type == "event" ) {
+					$series_subtitle = 'Part of the event series '.$series_title;
+				} else {
+					$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
+				}			
+			}		
+			if ( !empty( $series_subtitle ) ) {
+				$series_subtitle = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark" target="_blank">'.$series_subtitle.'</a>';
+				$series_subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_subtitle.'</h'.$hlevel_sub.'>';
+			}*/
 		}
+		
 		// TODO: add hyperlink to the series page
 		//
 	} else {
-		$series_subtitle = "";
+		//$series_subtitle = "";
+		$series_title ="";
 	}
 	
 	// Prepend series title?
@@ -205,7 +219,7 @@ function sdg_post_title ( $args = array() ) {
 	// Add the title, subtitle, and series_subtitle to the info for return
 	$info .= $title;
 	$info .= $subtitle;
-	$info .= $series_subtitle;
+	$info .= $series_title;
 	
 	//$ts_info .= "END sdg_post_title<br />";
 	
