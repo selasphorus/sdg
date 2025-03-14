@@ -157,9 +157,9 @@ function sdg_post_title ( $args = array() ) {
 			$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark">'.$series_title.'</a>';
 			if ( $show_series_title == "prepend" ) {
 				$series_title = $series_title."&nbsp;&mdash;&nbsp;";
-			} else if ( $show_series_title == "append" ) {
-				$series_title = "Series: ".$series_title."<br />";
-			} else if ( $show_series_title == "wordy") {
+			//} else if ( $show_series_title == "append" ) {
+				//$series_title = "Series: ".$series_title."<br />";
+			} else if ( $show_series_title == "wordy" || $show_series_title == "append" ) {
 				if ( $post->post_type == "event" ) {
 					$series_title = 'Part of the event series '.$series_title;
 				} else {
