@@ -829,6 +829,20 @@ function devmode_active( $arr_qvar_vals = array() ) {
 	return false;
 }
 
+// Function to determine whether to activate front-end editmode
+function sdg_editmode() {
+	
+	$dev = devmode_active( array("edit") );
+	
+	$current_user = wp_get_current_user();
+    if ( $dev && in_array( 'administrator', (array) $user->roles ) ) {
+    	return true;
+    } else {
+    	return false;
+    }
+    
+}
+
 // Function to display troubleshooting info
 add_shortcode( 'troubleshooting', 'sdg_show_troubleshooting_info' );
 function sdg_show_troubleshooting_info ( ) {
