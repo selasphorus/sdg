@@ -137,7 +137,7 @@ function get_lit_dates ( $args ) {
 		$litdate_args_fixed['meta_query'] = $meta_query_fixed;
 		
 		// Run the query
-		//$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		$ts_info .= "litdate_args_fixed: <pre>".print_r($litdate_args_fixed, true)."</pre>";
 		$arr_fixed = new WP_Query( $litdate_args_fixed );
 		$arr_posts_fixed = $arr_fixed->posts;
 		$arr_posts = array_merge($arr_posts, $arr_posts_fixed);
@@ -218,7 +218,7 @@ function get_lit_dates ( $args ) {
 		$litdate_args_variable['meta_query'] = $meta_query_variable;
 		
 		// Run the query
-		//$ts_info .= "<!-- litdate_args: <pre>".print_r($litdate_args, true)."</pre> -->"; // tft
+		$ts_info .= "litdate_args_variable: <pre>".print_r($litdate_args_variable, true)."</pre>";
 		$arr_variable = new WP_Query( $litdate_args_variable );
 		$arr_posts_variable = $arr_variable->posts;
 		$arr_posts = array_merge($arr_posts, $arr_posts_variable);
@@ -1048,7 +1048,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 	if ( function_exists('get_special_date_content') && !$hide_special_notices ) { $info .= get_special_date_content( $the_date ); }
 	
 	// TS Info
-	if ( $ts_info != "" && $do_ts === true ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; } //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+	if ( $ts_info != ""&& ( $do_ts === true || $do_ts == "day_titles" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 	
 	$info .= "\n<!-- /get_day_title -->\n";
 	
