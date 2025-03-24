@@ -93,7 +93,7 @@ function get_lit_dates ( $args ) {
 		$meta_query = array();
 		$meta_query['relation'] = 'AND';
 	
-		if ( $day_titles_only == true ) {
+		if ( $day_titles_only ) {
 			$meta_query[] = array(
 				'key'		=> 'day_title',
 				'compare'	=> '=',
