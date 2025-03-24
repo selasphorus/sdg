@@ -17,13 +17,21 @@ function get_lit_dates ( $args ) {
 	
 	$ts_info = "";
 	
-	// init
+	// Defaults
+	$defaults = array(
+		'date'	=> null,
+		'year'	=> null,
+		'month'	=> null,
+		'day_titles_only' => false,
+	);
+
+	// Parse & Extract args
+	$args = wp_parse_args( $args, $defaults );
+	extract( $args );
+	
+	// Init
 	$litdates = array();
 	$litdate_posts = array();
-	$date = null;
-	$year = null;
-	$month = null;
-	$day_titles_only = false;
 	$start_date = null;
 	$end_date = null;
 	
@@ -32,9 +40,8 @@ function get_lit_dates ( $args ) {
 	// Set vars
 	// TODO: remember how to do this more efficiently, setting defaults from array or along those lines...
 	
-	if ( isset($args['date']) ) {
+	if ( $date ) {
 	
-		$date = $args['date'];
 		// TODO: deal w/ possibility that date is passed in the wrong format >> convert it to YYYY-MM-DD
 		//if str contains commas? if first four digits not a number? ... date('Y-m-d',strtotime($date))
 		$start_date = $end_date = $date;
@@ -42,10 +49,6 @@ function get_lit_dates ( $args ) {
 		$month = substr($date,5,2);
 		
 	} else {
-	
-		if ( isset($args['year']) ) { $year = $args['year']; }
-		if ( isset($args['month']) ) { $month = $args['month']; }
-		if ( isset($args['day_titles_only']) ) { $day_titles_only = $args['day_titles_only']; }	
 		
 		if ( empty($year) ) {
 			// For now, default to current year
