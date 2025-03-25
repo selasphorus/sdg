@@ -1710,8 +1710,9 @@ function sdg_custom_post_content() {
 		//$info .= get_cpt_sermon_content(); // Disabled because the function doesn't currently add any actual custom content.
 	} else if ($post_type === "venue") {
 		$info .= get_cpt_venue_content();
-	} else if ($post_type === "organ") {
-		$info .= get_cpt_organ_content();
+	} else if ( $post_type === "organ" || $post_type === "instrument" ) {
+		if ( $post_type === "organ" && function_exists('get_cpt_organ_content') ) { $info .= get_cpt_organ_content(); }
+		$info .= get_cpt_instrument_content();
 	} else {
 		//$info .= "<p>[post] content (default)-- coming soon</p>";
 		//return false;
