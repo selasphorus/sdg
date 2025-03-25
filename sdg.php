@@ -1712,7 +1712,7 @@ function sdg_custom_post_content() {
 		$info .= get_cpt_venue_content();
 	} else if ( $post_type === "organ" || $post_type === "instrument" ) {
 		if ( $post_type === "organ" && function_exists('get_cpt_organ_content') ) { $info .= get_cpt_organ_content(); }
-		$info .= get_cpt_instrument_content();
+		if ( function_exists('get_cpt_instrument_content') ) { $info .= get_cpt_instrument_content(); }
 	} else {
 		//$info .= "<p>[post] content (default)-- coming soon</p>";
 		//return false;
