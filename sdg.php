@@ -1679,6 +1679,7 @@ add_action( 'admin_init', function () {
 
 // Umbrella function to get CPT content
 // TODO: phase this out? It makes fine-tuning content ordering a bit tricky...
+// OR: break it up, move to separate plugins for relevant cpts
 function sdg_custom_post_content() {
 	
 	// TS/logging setup
@@ -1713,6 +1714,8 @@ function sdg_custom_post_content() {
 	} else if ( $post_type === "organ" || $post_type === "instrument" ) {
 		if ( $post_type === "organ" && function_exists('get_cpt_organ_content') ) { $info .= get_cpt_organ_content(); }
 		if ( function_exists('get_cpt_instrument_content') ) { $info .= get_cpt_instrument_content(); }
+	} else if ($post_type === "builder") {
+		$info .= get_cpt_builder_content();
 	} else {
 		//$info .= "<p>[post] content (default)-- coming soon</p>";
 		//return false;
