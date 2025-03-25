@@ -205,8 +205,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_628e725bfa88a',
@@ -715,8 +714,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_628e67ec9ad4d',
@@ -938,8 +936,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_62742fcbdac58',
@@ -1134,8 +1131,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_627436ef0252d',
@@ -1162,8 +1158,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274373892a57',
@@ -1210,8 +1205,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_627437030252e',
@@ -1238,8 +1232,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274375792a59',
@@ -1286,8 +1279,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274370d0252f',
@@ -1314,8 +1306,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274374492a58',
@@ -1362,8 +1353,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274371602530',
@@ -1390,8 +1380,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_6274377092a5a',
@@ -2457,8 +2446,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'id',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_62718bc597a1d',
@@ -2658,8 +2646,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'elements' => '',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_63320240a5fd9',
@@ -2687,8 +2674,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'elements' => '',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 		),
 		'location' => array(
@@ -2855,8 +2841,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_62bdde1bac637',
@@ -2920,8 +2905,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_63320afb66a22',
@@ -2948,8 +2932,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'elements' => '',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_628e3ccea7956',
@@ -2976,8 +2959,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'elements' => '',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_628e3d0ea7957',
@@ -3103,8 +3085,7 @@ function sdg_register_field_groups() {
 				'min' => '',
 				'max' => '',
 				'return_format' => 'object',
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_63ecfd62b80ed',
@@ -3129,8 +3110,7 @@ function sdg_register_field_groups() {
 				'multiple' => 1,
 				'allow_null' => 0,
 				'ui' => 1,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_63ee561532187',
@@ -5931,8 +5911,7 @@ function sdg_register_field_groups() {
 				'multiple' => 1,
 				'allow_null' => 0,
 				'ui' => 1,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 		),
 		'location' => array(
@@ -6674,8 +6653,7 @@ function sdg_register_field_groups() {
 				'max' => '',
 				'elements' => '',
 				'bidirectional' => 0,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 		),
 		'location' => array(
@@ -7603,8 +7581,7 @@ function sdg_register_field_groups() {
 				'allow_null' => 0,
 				'bidirectional' => 0,
 				'ui' => 1,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_651dab5c12567',
@@ -7651,8 +7628,7 @@ function sdg_register_field_groups() {
 				'allow_null' => 0,
 				'bidirectional' => 0,
 				'ui' => 1,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 			array(
 				'key' => 'field_65288f56a8bab',
@@ -8122,8 +8098,7 @@ function sdg_register_field_groups() {
 				'bidirectional' => 0,
 				'multiple' => 0,
 				'allow_null' => 0,
-				'bidirectional_target' => array(
-				),
+				'bidirectional_target' => array(),
 			),
 		),
 		'location' => array(
