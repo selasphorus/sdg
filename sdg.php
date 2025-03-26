@@ -1909,13 +1909,6 @@ function sdg_acf_admin_footer() {
 	
 }
 
-//add_filter( 'the_content', 'sdg_the_content', 20, 1 );
-function sdg_the_content( $content ) {
-    
-    $post_id = get_the_ID();    
-    return $content;
-    
- }
 
 /**
  * Remove empty paragraphs created by wpautop()
