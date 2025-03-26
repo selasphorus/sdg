@@ -1694,7 +1694,7 @@ function sdg_custom_post_content() {
 	
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
 	$cpt_function = "get_cpt_".$post_type."_content";
-	if ( function_exists($cpt_function) ) { $info .= $cpt_function(); }
+	if ( function_exists($cpt_function) ) { $info .= $cpt_function(); } else { $info .= "<!-- No such function: ".$cpt_function." -->"; }
 	
 	/*
 	if ($post_type === "group") {
