@@ -1692,7 +1692,11 @@ function sdg_custom_post_content() {
 	$ts_info = "";
 	$post_type = get_post_type( get_the_ID() );
 	
-	$info .= "<!-- START sdg_custom_post_content -->";
+	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
+	$cpt_function = "get_cpt_".$post_type."_content";
+	if ( function_exists($cpt_function) ) { $info .= $cpt_function(); }
+	
+	/*
 	if ($post_type === "group") {
 		$info .= get_cpt_group_content();
 	} else if ($post_type === "liturgical_date") {
@@ -1720,13 +1724,21 @@ function sdg_custom_post_content() {
 		//$info .= "<p>[post] content (default)-- coming soon</p>";
 		//return false;
 		//return;
-	}
+	}*/
 	
 	if ( $do_ts ) { $info .= $ts_info; }
 	$info .= "<!-- END sdg_custom_post_content -->";
 	
 	return $info;
 }
+//
+add_filter( 'the_content', 'sdg_the_content', 20, 1 );
+function sdg_the_content( $content ) {
+    //$content .= sdg_custom_post_content();
+    $content = sdg_custom_post_content().$content;    
+    return $content;    
+}
+
 
 // Modify the display order of CPT archives
 //add_filter( 'posts_orderby' , 'custom_cpt_order' );
