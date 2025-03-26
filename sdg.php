@@ -1706,36 +1706,6 @@ function sdg_custom_post_content() {
 		$info .= "<!-- No such function: ".$cpt_function." -->";
 	}
 	
-	/*
-	if ($post_type === "group") {
-		$info .= get_cpt_group_content();
-	} else if ($post_type === "liturgical_date") {
-		$info .= get_cpt_liturgical_date_content();
-	} else if ($post_type === "person") {
-		$info .= get_cpt_person_content();
-	} else if ($post_type === "repertoire") {
-		$arr_info = get_cpt_repertoire_content();
-		$info .= $arr_info['info'];
-		$ts_info .= $arr_info['ts_info'];
-	} else if ($post_type === "edition") {
-		$info .= get_cpt_edition_content();
-	} else if ($post_type === "reading") {
-		$info .= get_cpt_reading_content();
-	} else if ($post_type === "sermon") {
-		//$info .= get_cpt_sermon_content(); // Disabled because the function doesn't currently add any actual custom content.
-	} else if ($post_type === "venue") {
-		$info .= get_cpt_venue_content();
-	} else if ( $post_type === "organ" || $post_type === "instrument" ) {
-		if ( $post_type === "organ" && function_exists('get_cpt_organ_content') ) { $info .= get_cpt_organ_content(); }
-		if ( function_exists('get_cpt_instrument_content') ) { $info .= get_cpt_instrument_content(); }
-	} else if ($post_type === "builder") {
-		$info .= get_cpt_builder_content();
-	} else {
-		//$info .= "<p>[post] content (default)-- coming soon</p>";
-		//return false;
-		//return;
-	}*/
-	
 	if ( $do_ts ) { $info .= $ts_info; }
 	$info .= "<!-- END sdg_custom_post_content -->";
 	
