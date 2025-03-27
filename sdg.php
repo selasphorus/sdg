@@ -657,9 +657,7 @@ function sdg_body_class( $classes ) {
     if ( $devmode ) { $classes[] = 'devmode'; }
     
     // Show troubleshooting info only for webdev
-    if ( function_exists( 'queenbee' ) && sdg_queenbee() ) {
-        $classes[] = 'queenbee';    
-    }
+    if ( function_exists( 'queenbee' ) && sdg_queenbee() ) { $classes[] = 'queenbee'; }
     
     // Show TS?
     $options = get_option( 'sdg_settings' );
@@ -668,6 +666,7 @@ function sdg_body_class( $classes ) {
 	}
 	
 	if ( is_dev_site() ) { $classes[] = 'devsite'; }
+	if ( sdg_editmode() ) { $classes[] = 'editmode'; }
 	
 	// Always has_msg_bar(?)
 	$classes[] = 'has_msg_bar';
