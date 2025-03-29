@@ -819,7 +819,7 @@ function devmode_active( $arr_qvar_vals = array() ) {
 	
 	if ( in_array($qvar_val, $arr_qvar_vals) ) {
 		return true;
-	} else if ( $qvar_val != "" ) {
+	} else if ( !empty($qvar_val) ) {
 		return $qvar_val;        
 	} else if ( is_dev_site() && sdg_queenbee() ) {
         return true;
