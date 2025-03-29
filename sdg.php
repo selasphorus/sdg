@@ -807,21 +807,19 @@ function devmode_active( $arr_qvar_vals = array() ) {
 	
 	$devmode = false; // init
 	
-    if ( is_user_logged_in() ) {
+	// TODO: enforce that user must be logged in as admin OR have proper cookie value saved in order to activate devmode(?)
+    /*if ( is_user_logged_in() ) {
         $current_user = wp_get_current_user();
 		$username = $current_user->user_login;
     } else {
     	$username = null;
-    }
+    }*/
     
-	if ( empty($arr_qvar_vals) ) {
-		$arr_qvar_vals = array("true","yes");
-	} else {
-		array_push($arr_qvar_vals,"true","yes");
-	}
 	$qvar_val = get_query_var('dev');
 	
-	if ( in_array($qvar_val, $arr_qvar_vals) ) {
+	if ( $qvar_val && !empty($arr_qvar_vals) && in_array($qvar_val, $arr_qvar_vals) ) {
+		return true;
+	} else if ( $qvar_val && in_array($qvar_val, array("true","yes") ) ) { //if ( empty($arr_qvar_vals) ) { $arr_qvar_vals = array("true","yes"); }
 		return true;
 	} else if ( !empty($qvar_val) ) {
 		return $qvar_val;        
