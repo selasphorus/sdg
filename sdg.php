@@ -825,8 +825,6 @@ function devmode_active( $arr_qvar_vals = array() ) {
 		return true;
 	} else if ( !empty($qvar_val) ) {
 		return $qvar_val;        
-	} else if ( is_dev_site() && sdg_queenbee() ) {
-        return true;
 	}
 	
 	return false;
