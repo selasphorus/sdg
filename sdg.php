@@ -817,7 +817,7 @@ function devmode_active( $arr_qvar_vals = array() ) {
     
 	$qvar_val = get_query_var('dev');
 	
-	if ( $qvar_val && !empty($arr_qvar_vals) && in_array($qvar_val, $arr_qvar_vals) ) {
+	if ( !empty($qvar_val) && in_array($qvar_val, $arr_qvar_vals) ) { // && !empty($arr_qvar_vals)
 		return true;
 	} else if ( $qvar_val && in_array($qvar_val, array("true","yes") ) ) { //if ( empty($arr_qvar_vals) ) { $arr_qvar_vals = array("true","yes"); }
 		return true;
@@ -834,7 +834,7 @@ function sdg_editmode() {
 	//$dev = devmode_active();	
 	$current_user = wp_get_current_user();
 	
-    if ( devmode_active() === true && in_array( 'administrator', (array) $current_user->roles ) ) {
+    if ( devmode_active( array("edit") ) === true && in_array( 'administrator', (array) $current_user->roles ) ) {
     	return true;
     } else {
     	return false;
