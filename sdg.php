@@ -815,7 +815,7 @@ function devmode_active( $arr_qvar_vals = array() ) {
     }
     
 	if ( empty($arr_qvar_vals) ) { $arr_qvar_vals = array("true","yes"); } else { array_push($arr_qvar_vals,"true","yes"); }
-	$qvar_val = get_query_var('dev');	
+	$qvar_val = get_query_var('dev');
 	
 	if ( in_array($qvar_val, $arr_qvar_vals) ) {
 		return true;
@@ -831,10 +831,10 @@ function devmode_active( $arr_qvar_vals = array() ) {
 // Function to determine whether to activate front-end editmode
 function sdg_editmode() {
 	
-	$dev = devmode_active();
-	
+	//$dev = devmode_active();	
 	$current_user = wp_get_current_user();
-    if ( $dev == "edit" && in_array( 'administrator', (array) $current_user->roles ) ) {
+	
+    if ( devmode_active("edit") && in_array( 'administrator', (array) $current_user->roles ) ) {
     	return true;
     } else {
     	return false;
