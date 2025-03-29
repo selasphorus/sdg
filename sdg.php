@@ -834,7 +834,7 @@ function sdg_editmode() {
 	//$dev = devmode_active();	
 	$current_user = wp_get_current_user();
 	
-    if ( devmode_active() && in_array( 'administrator', (array) $current_user->roles ) ) {
+    if ( devmode_active() == true && in_array( 'administrator', (array) $current_user->roles ) ) {
     	return true;
     } else {
     	return false;
