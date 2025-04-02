@@ -288,7 +288,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
     $litdates = get_lit_dates( $litdate_args );
     
     $posts = $litdates['posts'];
-    $info .= $litdates['troubleshooting'];
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $litdates['troubleshooting']; }
     
     foreach ( $posts AS $date => $date_posts ) {
         
