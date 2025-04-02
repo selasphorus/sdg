@@ -1725,10 +1725,24 @@ function calc_date_from_components ( $args = array() ) {
 		$calc_interval = null;
 		// TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
 		
-		if ( is_numeric($basis_date) && $verbose == "true" ) {
-			$info .= "basis_date is a timestamp.<br />";
-		}
+		// Take a closer look at the basis_date
+		if ( is_numeric($basis_date) && $verbose == "true" ) { $info .= "basis_date is a timestamp.<br />"; }
 		
+		// Check to see if the basis_date is a Sunday
+		$basis_date_weekday = strtolower( date('l', $basis_date) );
+		if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {
+			
+			// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season                 
+			$first_sunday = strtotime("next Sunday", $basis_date);
+			if ( $verbose == "true" ) { $info .= "first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; }
+		
+		} else if ( $basis_date ) {
+			
+			$first_sunday = $basis_date;
+			if ( $verbose == "true" ) { $info .= "first_sunday is equal to basis_date.<br />"; }
+			
+		}
+				
         // ** Extract components of date_calc_str & calculate date for $year
 		// ** Determine the calc_interval -- number of days/weeks...
         if ( contains_numbers($date_calc_str) ) {
@@ -1744,7 +1758,7 @@ function calc_date_from_components ( $args = array() ) {
 			if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
 				// TODO: fix this
 				$numbers = extract_numbers($date_calc_str);
-				if ( $verbose == "true" ) { $info .= "numbers: <pre>".print_r($numbers,true)."</pre>"; }
+				if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; } //<pre></pre>
 				if ( count($numbers) == 1 ) {
 					$calc_interval = $numbers[0];
 					//$calc_interval = "";
@@ -1762,8 +1776,23 @@ function calc_date_from_components ( $args = array() ) {
 				|| ( $calc_basis == "easter" && $calc_boia == "of" )
 				|| ( strtolower(date('F d',strtotime($calc_basis))) == strtolower($calc_basis) )
 				) ) {
+				
 				$calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
+			
+			} else if ( $first_sunday != $basis_date ) {
+			
+				if ( $calc_interval && is_int($calc_interval) ) {
+					if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calc_interval - 1)<br />"; }
+					$calc_interval = $calc_interval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
+				}
+				// ???
+				if ( $calc_interval === 0 ) {
+					$calc_date = $first_sunday;
+					if ( $verbose == "true" ) { $info .= "Set calc_date = first_sunday ($first_sunday)<br />"; }
+				}
+				
 			}
+			
 			if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval (final): $calc_interval<br />"; }
 			
 		} else if ( strpos(strtolower($date_calc_str), 'last') !== false ) {
@@ -1798,25 +1827,7 @@ function calc_date_from_components ( $args = array() ) {
 				
 			} else {
 			
-				// Check to see i the basis_date is a Sunday
-				$basis_date_weekday = strtolower( date('l', $basis_date) );
 				
-				// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
-				if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
-					$first_sunday = strtotime("next Sunday", $basis_date);
-					if ( $verbose == "true" ) { $info .= "first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; }
-					if ( $calc_interval && is_int($calc_interval) ) {
-						if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calc_interval - 1)<br />"; }
-						$calc_interval = $calc_interval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
-					}
-					if ( $calc_interval === 0 ) {
-						$calc_date = $first_sunday;
-						if ( $verbose == "true" ) { $info .= "Set calc_date = first_sunday ($first_sunday)<br />"; }
-					}
-				} else if ( $basis_date ) {
-					$first_sunday = $basis_date;
-					if ( $verbose == "true" ) { $info .= "first_sunday is equal to basis_date.<br />"; }
-				}
 			
 				if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
 
