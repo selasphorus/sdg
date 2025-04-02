@@ -1780,7 +1780,7 @@ function calc_date_from_components ( $args = array() ) {
 			
 				if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
 				
-				if ( $calc_interval && is_int($calc_interval) ) {
+				if ( $calc_interval ) { // && is_int($calc_interval)
 					if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calc_interval - 1)<br />"; }
 					$calc_interval = $calc_interval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
 				}
