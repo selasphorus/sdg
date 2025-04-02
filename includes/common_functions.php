@@ -168,8 +168,10 @@ function sdg_post_title ( $args = array() ) {
 			}
 			if ( $hlevel_sub ) {
 				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
+			} else if ( is_post_type_archive('event') ) {
+				$series_title = '<p class="series-title subtitle">'.$series_title.'</p>';
 			} else {
-				$series_title = '<span class="series-title subtitle">'.$series_title.'</span>'; //<br />
+				$series_title = '<span class="series-title subtitle">'.$series_title.'</span>';
 			}
 			//$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark"><span class="series-title">'.get_the_title( $series_id ).'</span></a>';
 			//$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
