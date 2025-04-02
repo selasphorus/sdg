@@ -1710,7 +1710,7 @@ function calc_date_from_components ( $args = array() ) {
 		$num_sundays_after_epiphany = get_post_meta( $liturgical_date_calc_id, 'num_sundays_after_epiphany', true);
 	}
 	if ( $verbose == "true" && !empty($basis_date) ) { 
-		$info .= "basis_date: $basis_date (".date('Y-m-d', $basis_date).") <br />-- via get_basis_date for year: $year, liturgical_date_calc_id: $liturgical_date_calc_id, calc_basis: $calc_basis, calc_basis_id: $calc_basis_id, calc_basis_field: $calc_basis_field<br />";
+		$info .= "basis_date: $basis_date (".date('Y-m-d (l)', $basis_date).") <br />-- via get_basis_date for year: $year, liturgical_date_calc_id: $liturgical_date_calc_id, calc_basis: $calc_basis, calc_basis_id: $calc_basis_id, calc_basis_field: $calc_basis_field<br />";
 	}
 	
 	// Check to see if the date to be calculated is in fact the same as the base date
@@ -1798,9 +1798,10 @@ function calc_date_from_components ( $args = array() ) {
 				
 			} else {
 			
-				// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
+				// Check to see i the basis_date is a Sunday
 				$basis_date_weekday = strtolower( date('l', $basis_date) );
 				
+				// If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
 				if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {                    
 					$first_sunday = strtotime("next Sunday", $basis_date);
 					//$info .= $indent."first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />";
