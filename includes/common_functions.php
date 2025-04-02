@@ -168,7 +168,7 @@ function sdg_post_title ( $args = array() ) {
 			}
 			if ( $hlevel_sub ) {
 				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
-			} else if ( is_post_type_archive('event') ) {
+			} else if ( is_post_type_archive('event') || is_page('events') ) {
 				$series_title = '<p class="series-title subtitle">'.$series_title.'</p>';
 			} else {
 				$series_title = '<span class="series-title subtitle">'.$series_title.'</span>';
