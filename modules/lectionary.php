@@ -1746,12 +1746,9 @@ function calc_date_from_components ( $args = array() ) {
         // ** Extract components of date_calc_str & calculate date for $year
 		// ** Determine the calc_interval -- number of days/weeks...
         if ( contains_numbers($date_calc_str) ) {
-        //if ( preg_match('/([0-9]+)/', $date_calc_str) ) {
-		//if ( preg_match_all('/[0-9]+/', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
 			
 			// TODO/wip: also check for "two" etc
 			if ( $verbose == "true" ) { $info .= "date_calc_str contains numbers.<br />"; }
-			//if ( $verbose == "true" ) { $info .= "number matches: <pre>".print_r($matches, true)."</pre>"; } //
 			
 			// Determine the calc_interval
 			// WIP deal w/ multiple value possibilities for weekday, boia
@@ -1781,6 +1778,8 @@ function calc_date_from_components ( $args = array() ) {
 			
 			} else if ( $first_sunday != $basis_date ) {
 			
+				if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
+				
 				if ( $calc_interval && is_int($calc_interval) ) {
 					if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calc_interval - 1)<br />"; }
 					$calc_interval = $calc_interval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
