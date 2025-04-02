@@ -1691,6 +1691,9 @@ function sdg_custom_post_content() {
 	$ts_info = "";
 	$post_type = get_post_type( get_the_ID() );
 	
+	// Before/After content WIP....
+	
+	//
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
