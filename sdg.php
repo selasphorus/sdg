@@ -34,6 +34,13 @@ $plugin_path = plugin_dir_path( __FILE__ );
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
 // TODO: formalize dependencies between modules -- e.g. events, music both require people
 
+if ( is_plugin_active('whx4/whx4.php') ) {
+	require_once( plugin_dir_path( __DIR__ ) . 'whx4/vendor/autoload.php' );
+} else {
+    // Handle the case when whx4 is not active
+}
+
+
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 // Function to check for dev/admin user
@@ -1702,7 +1709,7 @@ function sdg_custom_post_content() {
 		$p = new $class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
-		$info .= "Class $post_type does not exists! :-(<br />";
+		$info .= "Class $post_type does not exist! :-(<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
