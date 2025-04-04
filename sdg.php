@@ -1726,7 +1726,8 @@ function sdg_custom_post_content() {
 		$info .= "Class $namespaced_class exists!<br />";
 		global $post;
 		$p = new $namespaced_class($post);
-		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
+		//$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
+		$info .= $p->get_cpt_content();
 	} else {
 		$info .= "Class $namespaced_class does not exist! :-(<br />";
 		//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
