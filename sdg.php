@@ -1713,7 +1713,7 @@ function sdg_custom_post_content() {
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
 	$class = ucfirst($post_type);
 	// TODO: fix this janky setup by proper autoloading for all related plugins
-	$class_file = plugins_url().'/whx4/src/'.$class.'.php';
+	$class_file = ABSPATH.'wp-content/plugins/whx4/src/'.$class.'.php';
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
 	} else {
