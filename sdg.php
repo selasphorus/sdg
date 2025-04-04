@@ -34,8 +34,12 @@ $plugin_path = plugin_dir_path( __FILE__ );
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
 // TODO: formalize dependencies between modules -- e.g. events, music both require people
 
-if ( is_plugin_active('whx4/whx4.php') ) {
-	require_once( plugin_dir_path( __DIR__ ) . 'whx4/vendor/autoload.php' );
+// This is a temporary solution for making classes from WHx4 available to sdg_acf_admin_footer
+// TODO: figure out best approach to dependencies -- probably shared autloader?
+$required_file = plugin_dir_path( __DIR__ ) . 'whx4/vendor/autoload.php';
+//if ( is_plugin_active('whx4/whx4.php') ) {
+if ( file_exists( $required_file ) ) {
+	require_once( $required_file );
 } else {
     // Handle the case when whx4 is not active
 }
