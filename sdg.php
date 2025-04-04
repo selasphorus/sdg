@@ -1716,7 +1716,7 @@ function sdg_custom_post_content() {
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
 		$info .= "Class $post_type does not exist! :-(<br />";
-		$info .= "Maybe this required_file couldn't be found? (via plugins_url):".plugins_url(). '/whx4/vendor/autoload.php'."<br />";
+		$info .= "Maybe this required_file couldn't be found? (via plugins_url/):".plugins_url(). '/whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
