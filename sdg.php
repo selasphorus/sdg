@@ -1716,17 +1716,18 @@ function sdg_custom_post_content() {
 	$class_file = ABSPATH.'wp-content/plugins/whx4/src/'.$class.'.php';
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
+		$info .= "class_file: ".$class_file." found!<br />";
 	} else {
 		$info .= "class_file: ".$class_file." not found<br />";		
 	}
 
-	if ( class_exists($class) ) {
+	if ( class_exists(atc\WHx4\$class) ) {
 		$info .= "Class $class exists!<br />";
 		global $post;
 		$p = new $class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
-		$info .= "Class $class does not exist! :-(<br />";
+		$info .= "Class atc\WHx4\$class does not exist! :-(<br />";
 		//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
