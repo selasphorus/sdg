@@ -29,7 +29,7 @@ define( 'SDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SDG_PLUGIN_BLOCKS', SDG_PLUGIN_DIR . '/blocks/' );
 //
 $plugin_path = plugin_dir_path( __FILE__ );
-$plugins_dir = WP_CONTENT_DIR . '/plugins/';
+//$plugins_dir = WP_CONTENT_DIR . '/plugins/';
 
 // TODO: Deal w/ plugin dependencies -- Display Content; ACF; EM; &c.?
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
@@ -37,6 +37,9 @@ $plugins_dir = WP_CONTENT_DIR . '/plugins/';
 
 // This is a temporary solution for making classes from WHx4 available to sdg_acf_admin_footer
 // TODO: figure out best approach to dependencies -- probably shared autloader?
+
+require_once plugin_dir_path( __FILE__ ) . '../whx4/vendor/autoload.php';
+/*
 $required_file = plugins_url().'/whx4/vendor/autoload.php';
 //if ( is_plugin_active('whx4/whx4.php') ) {
 if ( file_exists( $required_file ) ) {
@@ -44,7 +47,7 @@ if ( file_exists( $required_file ) ) {
 } else {
     // Handle the case when whx4 is not active
     
-}
+}*/
 
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
