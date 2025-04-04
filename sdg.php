@@ -1711,14 +1711,14 @@ function sdg_custom_post_content() {
 	
 	//
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
-	if ( class_exists($post_type) ) {
-		$info .= "Class $post_type exists!<br />";
+	$class = ucfirst($post_type);
+	if ( class_exists($class) ) {
+		$info .= "Class $class exists!<br />";
 		global $post;
-		$class = ucfirst($post_type);
 		$p = new $class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
-		$info .= "Class $post_type does not exist! :-(<br />";
+		$info .= "Class $class does not exist! :-(<br />";
 		$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
