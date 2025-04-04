@@ -1714,7 +1714,7 @@ function sdg_custom_post_content() {
 	
 	// TODO: fix this janky setup by proper autoloading for all related plugins
 	$class = ucfirst($post_type);
-	$class_file = ABSPATH.'wp-content/plugins/whx4/src/'.$class.'.php';
+	$class_file = ABSPATH.'wp-content/plugins/whx4/includes/classes/'.$class.'.php';
 	
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
