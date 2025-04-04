@@ -1720,14 +1720,15 @@ function sdg_custom_post_content() {
 	} else {
 		$info .= "class_file: ".$class_file." not found<br />";		
 	}
-
-	if ( class_exists(atc\WHx4\$class) ) {
-		$info .= "Class $class exists!<br />";
+	
+	$namespaced_class = 'atc\\WHx4\\'.$class;
+	if ( class_exists($namespaced_class) ) {
+		$info .= "Class $namespaced_class exists!<br />";
 		global $post;
 		$p = new $class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
-		$info .= "Class atc\WHx4\$class does not exist! :-(<br />";
+		$info .= "Class $namespaced_class does not exist! :-(<br />";
 		//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
