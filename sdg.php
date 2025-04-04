@@ -1716,7 +1716,7 @@ function sdg_custom_post_content() {
 	$class_file = ABSPATH.'wp-content/plugins/whx4/src/'.$class.'.php';
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
-		$info .= "class_file: ".$class_file." found!<br />";
+		//$info .= "class_file: ".$class_file." found!<br />";
 	} else {
 		$info .= "class_file: ".$class_file." not found<br />";		
 	}
