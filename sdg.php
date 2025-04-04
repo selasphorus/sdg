@@ -1696,11 +1696,13 @@ function sdg_custom_post_content() {
 	//
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
 	if ( class_exists($post_type) ) {
+		$info .= "Class $post_type exists!<br />";
 		global $post;
-		$p = new ucfirst($post_type)($post);
+		$class = ucfirst($post_type);
+		$p = new $class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
-		//
+		$info .= "Class $post_type does not exists! :-(<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
