@@ -1711,38 +1711,43 @@ function sdg_custom_post_content() {
 	
 	//
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
-	$class = ucfirst($post_type);
+	
 	// TODO: fix this janky setup by proper autoloading for all related plugins
+	$class = ucfirst($post_type);
 	$class_file = ABSPATH.'wp-content/plugins/whx4/src/'.$class.'.php';
+	
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
-		//$info .= "class_file: ".$class_file." found!<br />";
-	} else {
-		$info .= "class_file: ".$class_file." not found<br />";		
-	}
-	
-	$namespaced_class = 'atc\\WHx4\\'.$class;
-	if ( class_exists($namespaced_class) ) {
-		$info .= "Class $namespaced_class exists!<br />";
-		global $post;
-		$p = new $namespaced_class($post);
-		//$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
-		$info .= $p->get_cpt_content();
-	} else {
-		$info .= "Class $namespaced_class does not exist! :-(<br />";
-		//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
-	}
-	$cpt_function = "get_cpt_".$post_type."_content";
-	if ( function_exists($cpt_function) ) {
-		$cpt_info = $cpt_function();
-		if ( is_array($cpt_info) ) {
-			$info .= $cpt_info['info'];
-			$ts_info .= $cpt_info['ts_info'];
+		//$info .= "class_file: ".$class_file." found!<br />";		
+		// WIP
+		$namespaced_class = 'atc\\WHx4\\'.$class;
+		//
+		if ( class_exists($namespaced_class) ) {
+			$info .= "Class $namespaced_class exists!<br />";
+			global $post;
+			$p = new $namespaced_class($post);
+			//$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
+			$info .= $p->get_cpt_content();
 		} else {
-			$info .= $cpt_function();
+			$info .= "Class $namespaced_class does not exist! :-(<br />";
+			//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
 		}
+
 	} else {
-		$info .= "<!-- No such function: ".$cpt_function." -->";
+	
+		$info .= "class_file: ".$class_file." not found<br />";
+		$cpt_function = "get_cpt_".$post_type."_content";
+		if ( function_exists($cpt_function) ) {
+			$cpt_info = $cpt_function();
+			if ( is_array($cpt_info) ) {
+				$info .= $cpt_info['info'];
+				$ts_info .= $cpt_info['ts_info'];
+			} else {
+				$info .= $cpt_function();
+			}
+		} else {
+			$info .= "<!-- No such function: ".$cpt_function." -->";
+		}
 	}
 	
 	if ( $do_ts ) { $info .= $ts_info; }
