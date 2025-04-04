@@ -29,6 +29,7 @@ define( 'SDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SDG_PLUGIN_BLOCKS', SDG_PLUGIN_DIR . '/blocks/' );
 //
 $plugin_path = plugin_dir_path( __FILE__ );
+$plugins_dir = WP_CONTENT_DIR . '/plugins/';
 
 // TODO: Deal w/ plugin dependencies -- Display Content; ACF; EM; &c.?
 // TODO: Check for ACF field groups; import them from plugin copies if not found?
@@ -36,7 +37,7 @@ $plugin_path = plugin_dir_path( __FILE__ );
 
 // This is a temporary solution for making classes from WHx4 available to sdg_acf_admin_footer
 // TODO: figure out best approach to dependencies -- probably shared autloader?
-$required_file = plugin_dir_url().'whx4/vendor/autoload.php';
+$required_file = $plugins_dir . 'whx4/vendor/autoload.php';
 //if ( is_plugin_active('whx4/whx4.php') ) {
 if ( file_exists( $required_file ) ) {
 	require_once( $required_file );
@@ -1715,7 +1716,7 @@ function sdg_custom_post_content() {
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
 		$info .= "Class $post_type does not exist! :-(<br />";
-		$info .= "Maybe this required_file couldn't be found? :".plugin_dir_url(). 'whx4/vendor/autoload.php'."<br />";
+		$info .= "Maybe this required_file couldn't be found? :".$plugins_dir. 'whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
