@@ -38,7 +38,7 @@ $plugin_path = plugin_dir_path( __FILE__ );
 // This is a temporary solution for making classes from WHx4 available to sdg_acf_admin_footer
 // TODO: figure out best approach to dependencies -- probably shared autloader?
 
-require_once ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php';
+//require_once ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php';
 /*
 $required_file = plugins_url().'/whx4/vendor/autoload.php';
 //if ( is_plugin_active('whx4/whx4.php') ) {
@@ -1712,6 +1712,14 @@ function sdg_custom_post_content() {
 	//
 	$info .= "<!-- START sdg_custom_post_content: ".$post_type." -->";
 	$class = ucfirst($post_type);
+	// TODO: fix this janky setup by proper autoloading for all related plugins
+	$class_file = plugins_url().'/whx4/src/'.$class.'.php';
+	if ( file_exists( $class_file ) ) {
+		require_once( $class_file );
+	} else {
+		$info .= "class_file: ".$class_file." not found<br />";		
+	}
+
 	if ( class_exists($class) ) {
 		$info .= "Class $class exists!<br />";
 		global $post;
@@ -1719,7 +1727,7 @@ function sdg_custom_post_content() {
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
 		$info .= "Class $class does not exist! :-(<br />";
-		$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
+		//$info .= "Maybe this required_file couldn't be found? :".ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php'."<br />";
 	}
 	$cpt_function = "get_cpt_".$post_type."_content";
 	if ( function_exists($cpt_function) ) {
