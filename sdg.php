@@ -1725,7 +1725,7 @@ function sdg_custom_post_content() {
 	if ( class_exists($namespaced_class) ) {
 		$info .= "Class $namespaced_class exists!<br />";
 		global $post;
-		$p = new $class($post);
+		$p = new $namespaced_class($post);
 		$info .= "I got this new ".$post_type.": <pre>".print_r($p,true)."</pre>";
 	} else {
 		$info .= "Class $namespaced_class does not exist! :-(<br />";
