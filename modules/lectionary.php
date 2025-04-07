@@ -1776,6 +1776,11 @@ function calc_date_from_components ( $args = array() ) {
 				
 				$calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
 			
+			} else if ( $first_sunday == $basis_date && $date_calc_str == "first sunday of"  ) {
+			
+				if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of and first_sunday is equal to basis_date => calc_date = first_sunday<br />"; }
+				$calc_date = $first_sunday;
+			
 			} else if ( $first_sunday != $basis_date ) {
 			
 				if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
@@ -1825,8 +1830,6 @@ function calc_date_from_components ( $args = array() ) {
 				}
 				
 			} else {
-			
-				
 			
 				if ( $calc_basis != "" && $calc_weekday == "sunday" ) {
 
