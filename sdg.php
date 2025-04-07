@@ -1720,7 +1720,7 @@ function sdg_custom_post_content() {
 		require_once( $class_file );
 		//$info .= "class_file: ".$class_file." found!<br />";		
 		// WIP
-		$namespaced_class = 'atc\\WHx4\\'.$class;
+		$namespaced_class = 'atc\\WHx4\\WHx4_'.$class;
 		//
 		if ( class_exists($namespaced_class) ) {
 			$info .= "Class $namespaced_class exists!<br />";
