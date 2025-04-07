@@ -1814,7 +1814,7 @@ function calc_date_from_components ( $args = array() ) {
 		}
             
 		// If the calc_formula hasn't already been determined, build it
-		if ( $calc_formula == "" ) {
+		if ( empty($calc_date) && $calc_formula == "" ) {
 			
 			if ( $verbose == "true" ) { $info .= "About to build calc_formula...<br />"; }
 			
