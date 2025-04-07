@@ -1778,7 +1778,7 @@ function calc_date_from_components ( $args = array() ) {
 			
 			} else if ( $first_sunday == $basis_date && $date_calc_str == "first sunday of"  ) {
 			
-				if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of and first_sunday is equal to basis_date => calc_date = first_sunday<br />"; }
+				if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of && first_sunday == basis_date &#8756; calc_date = first_sunday<br />"; }
 				$calc_date = $first_sunday;
 			
 			} else if ( $first_sunday != $basis_date ) {
