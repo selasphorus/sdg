@@ -36,7 +36,11 @@ $plugin_path = plugin_dir_path( __FILE__ );
 // TODO: formalize dependencies between modules -- e.g. events, music both require people
 
 // This is a temporary solution for making classes from WHx4 available to sdg_acf_admin_footer
-// TODO: figure out best approach to dependencies -- probably shared autloader?
+// TODO: figure out best approach to dependencies -- probably shared autoloader?
+
+//require_once __DIR__ . '/vendor/autoload.php';
+
+//use atc\WHx4\Core\PostUtils;
 
 //require_once ABSPATH.'wp-content/plugins/whx4/vendor/autoload.php';
 /*
@@ -1714,13 +1718,13 @@ function sdg_custom_post_content() {
 	
 	// TODO: fix this janky setup by proper autoloading for all related plugins
 	$class = ucfirst($post_type);
-	$class_file = ABSPATH.'wp-content/plugins/whx4/includes/classes/WHx4_'.$class.'.php';
+	$class_file = ABSPATH.'wp-content/plugins/whx4/includes/classes/'.$class.'.php';
 	
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
 		//$info .= "class_file: ".$class_file." found!<br />";		
 		// WIP
-		$namespaced_class = 'atc\\WHx4\\WHx4_'.$class;
+		$namespaced_class = 'atc\\WHx4\\'.$class;
 		//
 		if ( class_exists($namespaced_class) ) {
 			$info .= "Class $namespaced_class exists!<br />";
