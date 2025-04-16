@@ -275,7 +275,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				$type = 'primary';
 			}
 
-			$unsorted[ $type ][] = [
+			$unsorted[$type][] = [
 				'post'     => $post,
 				'priority' => $postPriority,
 			];
@@ -286,8 +286,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		// Sort primaries by priority, lowest first
 		$sorted = [];
 		foreach ( $unsorted as $type => $posts ) {
-			$sorted[ $type ] = $posts;
-			usort( $sorted[ $type ], function( $a, $b ) {
+			$sorted[$type] = $posts;
+			usort( $sorted[$type], function( $a, $b ) {
 				return $a['priority'] <=> $b['priority'];
 			} );
 		}
@@ -298,7 +298,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}*/
 		// wip...
         if ( $single_top_only ) {
-        	$info .= "single_top_only => get the single most important matching primary post<br />";
+        	$info .= "single_top_only => get the single most important matching primary post for date: ".$dateStr."<br />";
         	// Get the single most important matching litdate post
         	if ( !empty( $sorted['primary'] ) ) {
         		$primaryPost = $sorted['primary'][0];
@@ -306,8 +306,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
         		$primaryPost = $sorted['other'][0];
         	}
             if ($primaryPost) {
-        		$info .= "primaryPost found: ".$primaryPost->ID."<br />";
-        		$litdate_data[$dateStr][] = $primaryPost;
+        		$info .= "primaryPost found with ID: ".$primaryPost->ID."<br />";
+        		$litdate_data[$dateStr]['primary'] = $primaryPost;
         	} else {
         		$info .= "No primaryPost found!<br />";
         	}
@@ -315,7 +315,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	if ( !empty( $sorted['secondary'] ) ) {
         		$secondaryPost = $sorted['secondary'][0];
         	}
-            if ($secondaryPost) { $litdate_data[$dateStr][] = $secondaryPost; }
+            if ($secondaryPost) { $litdate_data[$dateStr]['secondary'] = $secondaryPost; }
         } else {
             $litdate_data[$dateStr] = $sorted;
             //$litdate_data[$date] = $posts;
