@@ -325,29 +325,31 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
     
-    	$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
+    	//$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
     	
 		$output = '';	
-		if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
-		/*
+		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
+		
 		foreach ( $litdate_data as $dateStr => $groups ) {
+			
 			$output .= "<div class='liturgical-date-block'>";
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
 	
 			$groups_to_render = ['primary', 'secondary', 'other'];
 			
-			///
+			
 			foreach ( $groups_to_render as $group_key ) {
+				$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
-
+				
 				if ( !empty( $groups[ $group_key ] ) ) {
 					//if ( $group_key !== 'primary' ) {
 						$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
 					//}
-
+/*
 					foreach ( $groups[ $group_key ] as $group_item ) {
 						$post = $group_item['post'];
 						$title = get_the_title( $post );
@@ -370,14 +372,17 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						}
 						$output .= '<br />';
 					}
-
+*/
 					$output .= "<br />";
 				}
 			}
 	
 			$output .= "</div><br />";
 		}
-		*/
+		
+		if ( $args['debug'] && !empty( $info ) ) { $output = '<div class="debug-info">'.$info.'</div>'.$output; } // info first
+		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
+		
 		return $output;
 	}
 
