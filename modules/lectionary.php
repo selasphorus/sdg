@@ -338,9 +338,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	
 			$groups_to_render = ['primary', 'secondary', 'other'];
 			
-			
 			foreach ( $groups_to_render as $group_key ) {
-				//$info .= "group_key: <pre>".print_r($group_key,true)."</pre>";
+
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
@@ -352,7 +351,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 					//}
 
 					foreach ( $groups[ $group_key ] as $group_item ) {
-						$info .= "group_item: <pre>".print_r($group_item,true)."</pre>";
+						$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
+						//$info .= "group_key: ".$group_key."<br />";
 /*
 						$post = $group_item['post'];
 						$title = get_the_title( $post );
