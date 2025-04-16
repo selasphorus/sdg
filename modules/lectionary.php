@@ -299,7 +299,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     // Get litdate posts according to date
     $litdate_args = array( 'year' => $year, 'month' => $month );
     $litdates = get_lit_dates( $litdate_args );
-    $ts_info .= $litdates['troubleshooting'];
+    //$ts_info .= $litdates['troubleshooting'];
     
     $posts = $litdates['posts'];
     
@@ -324,6 +324,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
         	
         	// WIP If $public and NOT show_litdate_on_date (front end) then skip it (don't display it in the list)
         	$show_date = show_litdate_on_date( $litdate_id, $date_str );
+        	$ts_info .= "show_date for litdate_id: ".$litdate_id."; date_str: ".$date_str." is [".$show_date."]<br />";
 			if ( $public && $show_date !== true ) { continue; }
 			
         	$classes = "litdate";
