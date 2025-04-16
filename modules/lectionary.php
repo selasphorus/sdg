@@ -330,13 +330,13 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						$output .= "<em>$label</em><br />";
 					//}
 
-					foreach ( $groups[ $group_key ] as $entry ) {
-						$post = $entry['post'];
+					foreach ( $groups[ $group_key ] as $group_item ) {
+						$post = $group_item['post'];
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
 						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
 						// Optional meta info
-						if ( $args['show_meta_info'] ) {
+						if ( $show_meta_info ) {
 							$postPriority = $post['priority'];
 							$terms = get_the_terms( $post, 'liturgical_date_category' );
 							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
@@ -350,6 +350,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$output .= ' | Priority: ' . esc_html( $postPriority );
 							$output .= '</small>';
 						}
+						$output .= '<br />';
 					}
 
 					$output .= "<br />";
