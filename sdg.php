@@ -1739,7 +1739,7 @@ function sdg_custom_post_content() {
 
 	} else {
 	
-		$info .= "class_file: ".$class_file." not found<br />";
+		//$info .= "class_file: ".$class_file." not found<br />";
 		$cpt_function = "get_cpt_".$post_type."_content";
 		if ( function_exists($cpt_function) ) {
 			$cpt_info = $cpt_function();
