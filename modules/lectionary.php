@@ -11,8 +11,8 @@ if ( !function_exists( 'add_action' ) ) {
 /*********** CPT: LITURGICAL DATE ***********/
 
 // Get liturgical date records matching given date or date range (given month & year)
-function get_lit_dates ( $args ) {
-
+function get_lit_dates ( $args ) 
+{
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
 	
 	$ts_info = "";
@@ -253,13 +253,15 @@ function get_lit_dates ( $args ) {
 
 // Lit Dates overview
 add_shortcode('list_lit_dates', 'get_lit_dates_list');
-function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
+function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
+{
 
 	$info = "\n<!-- get_lit_dates_list -->\n";
     
     $args = shortcode_atts( array(
       	'year'   => date('Y'),
         'month' => null,
+        'public' => false, // set to true to show ONLY those dates being displayed on the front end -- WIP!
     ), $atts );
     
     // Extract
@@ -290,11 +292,11 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
     $posts = $litdates['posts'];
     if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $litdates['troubleshooting']; }
     
-    foreach ( $posts AS $date => $date_posts ) {
+    foreach ( $posts AS $date_str => $date_posts ) {
         
         if ( !empty($date_posts)) {
-        	$info .= '<a href="/events/'.date('Y-m-d',strtotime($date)).'/" target="_blank">';
-        	$info .= date('l, F j, Y',strtotime($date));
+        	$info .= '<a href="/events/'.date('Y-m-d',strtotime($date_str)).'/" target="_blank">';
+        	$info .= date('l, F j, Y',strtotime($date_str));
         	$info .= "</a><br />";
         }
         //$info .= print_r($date_posts, true);
@@ -308,6 +310,11 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
         
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
+        	
+        	// WIP If $public and NOT show_litdate_on_date (front end) then skip it (don't display it in the list)
+        	$show_date = show_litdate_on_date( $litdate_id, $date_str );
+			if ( $public && $show_date !== true ) { continue; }
+			
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
         	if ( $day_title == "1" ) { 
@@ -375,7 +382,8 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' ) {
     
 } 
 
-function get_cpt_liturgical_date_content( $post_id = null ) {
+function get_cpt_liturgical_date_content( $post_id = null )
+{
 	
 	// init
 	$info = "";
@@ -401,7 +409,8 @@ function get_cpt_liturgical_date_content( $post_id = null ) {
 // A liturgical date may correspond to multiple dates in a year, if dates have been both assigned and calculated,
 // or if a date has been assigned to replace the fixed date
 // The following function determines which of the date(s) is active -- could be multiple, if date assigned is NOT a replacement_date
-function get_display_dates ( $post_id = null, $year = null ) {
+function get_display_dates ( $post_id = null, $year = null )
+{
 	
 	$info = "";
 	$dates = array();
@@ -479,7 +488,8 @@ function get_display_dates ( $post_id = null, $year = null ) {
 // TODO: make this less confusing. It's all about dealing with display exceptions (replacement and exclusion dates)
 // Check to see if litdate has been assigned to another date to override the given date
 // This function is used to check litdates that have already been found to match the given date, via assignment or calculation
-function show_litdate_on_date( $litdate_id = null, $date_str = null ) { // TODO set default: date('Y-m-d')
+function show_litdate_on_date( $litdate_id = null, $date_str = null ) 
+{ // TODO set default: date('Y-m-d')
 
 	$info = "";
 	//
