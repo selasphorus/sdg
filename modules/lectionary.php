@@ -331,7 +331,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		$output = '';	
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 		
-		foreach ( $litdate_data as $dateStr => $groups ) {
+		foreach ( $litdate_data as $dateStr => $typeGroups ) {
 			
 			$output .= "<div class='liturgical-date-block'>";
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
@@ -346,16 +346,16 @@ function get_liturgical_date_data( array $args = [] ): array|string
 					continue;
 				}
 				
-				if ( !empty( $groups[ $group_key ] ) ) {
+				if ( !empty( $typeGroups[ $group_key ] ) ) {
 					//if ( $group_key !== 'primary' ) {
 						$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
 					//}
 
-					foreach ( $groups[ $group_key ] as $group_item ) {
-						$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
-/*
-						$post = $group_item['post'];
+					foreach ( $typeGroups[ $group_key ] as $group_item ) {
+						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
+
+						if (is_array($group_item)) { $post = $group_item['post']; } else { $post = $group_item; }
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
 						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
@@ -374,7 +374,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$output .= ' | Priority: ' . esc_html( $postPriority );
 							$output .= '</small>';
 						}
-*/
+
 						$output .= '<br />';
 					}
 					$output .= "<br />";
