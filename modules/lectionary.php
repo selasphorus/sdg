@@ -72,10 +72,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		'series_id'			=> null,
 		'debug'				=> false,
 		'filter_types'		=> [], // e.g. ['primary'] to limit output
-		'type_labels'		=> [    // override default labels
-			'primary'   => 'Principal Feast',
-			'secondary' => 'Commemoration',
-			'other'     => 'Optional',
+		'type_labels'		=> [   // override default labels as needed -- probably won't need this though in fact...
+			'primary'   => 'Primary',
+			'secondary' => 'Secondary',
+			'other'     => 'Other',
 		],
 	];
 
