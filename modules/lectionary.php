@@ -35,7 +35,6 @@ function normalize_month_to_int( string $month ): ?int
 
 
 add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
-
 function render_liturgical_dates_shortcode( $atts = [] ): string
 {
     $atts = shortcode_atts( [
@@ -335,7 +334,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						$post = $entry['post'];
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
-						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
+						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
 						// Optional meta info
 						if ( $args['show_meta_info'] ) {
 							$postPriority = $post['priority'];
@@ -343,7 +342,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 							$date_type = get_post_meta( $post->ID, 'date_type', true );
 							//
-							$output .= '<br /><small>';
+							$output .= '<small>'; //<br />
 							$output .= 'Date type: ' . esc_html( $date_type );
 							if ( !empty( $term_names ) ) {
 								$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
