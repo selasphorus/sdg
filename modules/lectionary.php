@@ -306,8 +306,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
         		$primaryPost = $sorted['other'][0];
         	}
             if ($primaryPost) {
-        		$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-        		//$info .= "primaryPost found with ID: ".$primaryPost->ID."<br />";
+        		//$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
+        		$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
         		$litdate_data[$dateStr]['primary'] = $primaryPost;
         	} else {
         		$info .= "No primaryPost found!<br />";
