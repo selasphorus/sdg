@@ -280,7 +280,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				'priority' => $postPriority,
 			];
 			
-			$info .= 'postID: '.$postID."; priority: ".$postPriority."<br />";
+			//$info .= 'postID: '.$postID."; priority: ".$postPriority."<br />";
 		}
 
 		// Sort primaries by priority, lowest first
@@ -340,7 +340,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			
 			
 			foreach ( $groups_to_render as $group_key ) {
-				$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
+				//$info .= "group_key: <pre>".print_r($group_key,true)."</pre>";
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
