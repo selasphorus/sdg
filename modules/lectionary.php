@@ -57,43 +57,44 @@ function render_liturgical_dates_shortcode( $atts = [] ): string
     return get_liturgical_date_data( $atts );
 }
 
-
+// WIP: Combined logic from get_lit_dates and get_day_title
 function get_liturgical_date_data( array $args = [] ): array|string
 {
     $defaults = [
-		'date'             => null,
-		'year'             => null,
-		'month'            => null,
-		'day_titles_only'  => false,
-		'single_top_only' => false,
-		'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
-		'formatted'        => false,
-		'show_meta_info'   => false,
-		'post_id'          => null,
-		'series_id'        => null,
-		'debug'            => false,
-		'filter_types'     => [], // e.g. ['primary'] to limit output
-		'type_labels'      => [    // override default labels
+		'date'				=> null,
+		'year'				=> null,
+		'month'				=> null,
+		'day_titles_only'	=> false,
+		'single_top_only'	=> false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
+		'return'			=> 'posts', // 'posts' | 'prioritized' | 'formatted'
+		'formatted'			=> false,
+		'show_meta_info'	=> false,
+		'post_id'			=> null,
+		'series_id'			=> null,
+		'debug'				=> false,
+		'filter_types'		=> [], // e.g. ['primary'] to limit output
+		'type_labels'		=> [    // override default labels
 			'primary'   => 'Principal Feast',
 			'secondary' => 'Commemoration',
 			'other'     => 'Optional',
 		],
 	];
 
-
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
 
     $info = '';
-    $litdate_posts_by_date = [];
-	$litdate_data = [];
+    $litdatePostsByDate = [];
+    $litdate_data = [];
 
 	// Normalize date input
     if ( $date ) {
-        $date = date( 'Y-m-d', strtotime( $date ) );
-        $start_date = $end_date = $date;
-        $year  = substr( $date, 0, 4 );
-        $month = substr( $date, 5, 2 );
+    
+        $dateStr = date( 'Y-m-d', strtotime( $date ) );
+        $start_date = $end_date = $dateStr;
+        $year  = substr( $dateStr, 0, 4 );
+        $month = substr( $dateStr, 5, 2 );
+    
     } else {
     	
         if ( empty( $year ) ) {
@@ -104,19 +105,20 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$start_date = $year . '-01-01';
 			$end_date   = $year . '-12-31';
 		} else {
-		
+			
 			if ( !is_numeric( $month ) ) {
 				$month = normalize_month_to_int( $month );
 			}
+
 			$month = (int)$month;
-		
+
 			if ( $month < 1 || $month > 12 ) {
 				return [
 					'args' => $args,
-					'info' => "Invalid month: '$month_key'",
+					'info' => "Invalid month: '$month'",
 				];
 			}
-		
+
 			$start_date = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-01';
 			$days_in_month = cal_days_in_month( CAL_GREGORIAN, $month, (int)$year );
 			$end_date   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
@@ -132,7 +134,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
     while ( $start <= $end ) {
         
-        $date_str = date( 'Y-m-d', $start );
+        $dateStr = date( 'Y-m-d', $start );
         
         // === Fixed Date Matching ===
         $fixed_str = date( 'F j', $start );  // without leading zero
@@ -140,31 +142,15 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
         $meta_query = [
             'relation' => 'OR',
-            [
-                'key'     => 'fixed_date_str',
-                'value'   => $fixed_str_zero,
-                'compare' => '=',
-            ],
-            [
-                'key'     => 'fixed_date_str',
-                'value'   => $fixed_str,
-                'compare' => '=',
-            ],
+            [ 'key' => 'fixed_date_str', 'value' => $fixed_str_zero, 'compare' => '=' ],
+            [ 'key' => 'fixed_date_str', 'value' => $fixed_str,      'compare' => '=' ],
         ];
 
         if ( $day_titles_only ) {
             $meta_query = [
                 'relation' => 'AND',
-                [
-                    'key'     => 'day_title',
-                    'value'   => '1',
-                    'compare' => '=',
-                ],
-                [
-                    'relation' => 'OR',
-                    $meta_query[0],
-                    $meta_query[1],
-                ],
+                [ 'key' => 'day_title', 'value' => '1', 'compare' => '=' ],
+                [ 'relation' => 'OR', $meta_query[0], $meta_query[1] ],
             ];
         }
 
@@ -172,66 +158,40 @@ function get_liturgical_date_data( array $args = [] ): array|string
             'post_type'      => 'liturgical_date',
             'post_status'    => 'publish',
             'meta_query'     => $meta_query,
-            'orderby'        => [
-                'meta_value' => 'DESC',
-                'ID'         => 'ASC',
-            ],
-            'meta_key'       => 'day_title', // for ordering
+            'orderby'        => [ 'meta_value' => 'DESC', 'ID' => 'ASC' ],
+            'meta_key'       => 'day_title',
             'posts_per_page' => -1,
         ];
 
         $q = new WP_Query( $query_args );
-
         if ( $q->have_posts() ) {
-            $litdate_posts_by_date[ $date_str ] = $q->posts;
-
+            $litdatePostsByDate[ $dateStr ] = $q->posts;
             if ( $debug ) {
-                $info .= "<strong>$date_str</strong>: found " . count( $q->posts ) . " post(s)<br />";
+                $info .= "<strong>$dateStr</strong>: found " . count( $q->posts ) . " post(s)<br />";
             }
         }
-        
+
         // === Variable Date Matching ===
         $ymd = date( 'Ymd', $start ); // for ACF stored format
 
         $variable_meta_query = [
             'relation' => 'OR',
-            [
-                'key'     => 'date_calculations_XYZ_date_calculated',
-                'value'   => $date_str,
-                'compare' => '=',
-            ],
-            [
-                'key'     => 'date_assignments_XYZ_date_assigned',
-                'value'   => $date_str,
-                'compare' => '=',
-            ],
-            [
-                'key'     => 'date_calculations_XYZ_date_calculated',
-                'value'   => $ymd,
-                'compare' => '=',
-            ],
-            [
-                'key'     => 'date_assignments_XYZ_date_assigned',
-                'value'   => $ymd,
-                'compare' => '=',
-            ],
+            [ 'key' => 'date_calculations_XYZ_date_calculated', 'value' => $dateStr, 'compare' => '=' ],
+            [ 'key' => 'date_assignments_XYZ_date_assigned',    'value' => $dateStr, 'compare' => '=' ],
+            [ 'key' => 'date_calculations_XYZ_date_calculated', 'value' => $ymd,       'compare' => '=' ],
+            [ 'key' => 'date_assignments_XYZ_date_assigned',    'value' => $ymd,       'compare' => '=' ],
         ];
 
         if ( $day_titles_only ) {
             $variable_meta_query = [
                 'relation' => 'AND',
-                [
-                    'key'     => 'day_title',
-                    'value'   => '1',
-                    'compare' => '=',
-                ],
-                [
-                    'relation' => 'OR',
+                [ 'key' => 'day_title', 'value' => '1', 'compare' => '=' ],
+                [ 'relation' => 'OR',
                     $variable_meta_query[0],
                     $variable_meta_query[1],
                     $variable_meta_query[2],
                     $variable_meta_query[3],
-                ],
+                ]
             ];
         }
 
@@ -239,199 +199,163 @@ function get_liturgical_date_data( array $args = [] ): array|string
             'post_type'      => 'liturgical_date',
             'post_status'    => 'publish',
             'meta_query'     => $variable_meta_query,
-            'orderby'        => [
-                'meta_value' => 'DESC',
-                'ID'         => 'ASC',
-            ],
+            'orderby'        => [ 'meta_value' => 'DESC', 'ID' => 'ASC' ],
             'meta_key'       => 'day_title',
             'posts_per_page' => -1,
         ];
 
         $q_var = new WP_Query( $variable_query_args );
-
         if ( $q_var->have_posts() ) {
-            if ( isset( $litdate_posts_by_date[ $date_str ] ) ) {
-                $litdate_posts_by_date[ $date_str ] = array_merge(
-                    $litdate_posts_by_date[ $date_str ],
-                    $q_var->posts
-                );
+            if ( isset( $litdatePostsByDate[ $dateStr ] ) ) {
+                $litdatePostsByDate[ $dateStr ] = array_merge( $litdatePostsByDate[ $dateStr ], $q_var->posts );
             } else {
-                $litdate_posts_by_date[ $date_str ] = $q_var->posts;
+                $litdatePostsByDate[ $dateStr ] = $q_var->posts;
             }
 
             if ( $debug ) {
-                $info .= "<em>$date_str</em>: +".count($q_var->posts)." variable match(es)<br />";
+                $info .= "<em>$dateStr</em>: +".count($q_var->posts)." variable match(es)<br />";
             }
         }
 
         $start = strtotime( '+1 day', $start );
     }
 
-	//...
+	// Loop through litdate posts and sort them by priority
+	foreach ( $litdatePostsByDate as $dateStr => $posts ) {
 
-	foreach ( $litdate_posts_by_date as $date_str => $posts ) {
-		
-		$sorted = [];
-	
+		$unsorted = [];
+		$primaryPost = null;
+		$secondaryPost = null;
+        $defaultPriority = 999;
+
 		foreach ( $posts as $post ) {
-		
+
 			$post_id = $post->ID;
+			$postPriority = $defaultPriority;
+			$type = 'other';
 			
 			// Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $post_id, $year );
 			//$ts_info .= $display_dates_info['info'];
 			$display_dates = $display_dates_info['dates'];
 			//$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
-			if ( !in_array($date_str, $display_dates) ) {
-				//$ts_info .= "date_str: ".$date_str." is not one of the display_dates for this litdate.<br />";
+			if ( !in_array($dateStr, $display_dates) ) {
+				//$ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate.<br />";
 				// Therefore don't show it.
 				//$post_id = null;
 				continue;
 			}
-			
+
 			// Get category/priority
 			$terms = get_the_terms( $post_id, 'liturgical_date_category' );
-	
-			$priority = 999;
-			$type = 'other';
-	
+			// Looping through all the post's terms, set the post priority equal to the term priority with the lowest integer value
 			if ( $terms && !is_wp_error( $terms ) ) {
 				foreach ( $terms as $term ) {
-					$term_priority = get_term_meta( $term->term_id, 'priority', true );
-					if ( is_numeric( $term_priority ) && $term_priority < $priority ) {
-						$priority = (int)$term_priority;
+					$termPriority = get_term_meta($term->term_id, 'priority', true);
+					error_log('term: '.print_r($term, true).' with priority: '.$termPriority);
+					// If term_priority is lower than current max priority, then this is a more important category (#1 comes first)
+					if ( is_numeric( $termPriority ) && $termPriority < $postPriority ) {
+						$postPriority = (int)$termPriority;
 					}
 				}
 			}
-	
-			// Check if marked as secondary
+
+			// Check if litdate post has been designated as secondary
 			$is_secondary = get_post_meta( $post_id, 'secondary', true );
-	
+
+			// Set the type accordingly (default is 'other')
 			if ( $is_secondary ) {
 				$type = 'secondary';
-			} elseif ( $priority < 999 ) {
+			} elseif ( $postPriority < 999 ) {
 				$type = 'primary';
 			}
-	
-			$sorted[ $type ][] = [
+
+			$unsorted[ $type ][] = [
 				'post'     => $post,
-				'priority' => $priority,
+				'priority' => $postPriority,
 			];
 		}
-	
+
 		// Sort primaries by priority, lowest first
-		if ( !empty( $sorted['primary'] ) ) {
+		$sorted = [];
+		foreach ( $unsorted as $type => $posts ) {
+			$sorted[ $type ] = $posts;
+			usort( $sorted[ $type ], function( $a, $b ) {
+				return $a['priority'] <=> $b['priority'];
+			} );
+		}
+		/*if ( !empty( $unsorted['primary'] ) ) {
 			usort( $sorted['primary'], function ( $a, $b ) {
 				return $a['priority'] <=> $b['priority'];
 			});
-		}
-	
-		$litdate_data[ $date_str ] = $sorted;
+		}*/
+		// wip...
+        if ( $single_top_only ) {
+        	// Get the single most important matching litdate post
+        	if ( !empty( $sorted['primary'] ) ) {
+        		$primaryPost = $sorted['primary'][0];
+        	} else if ( !empty( $sorted['other'] ) ) {
+        		$primaryPost = $sorted['other'][0];
+        	}
+            if ($primaryPost) { $litdate_data[$dateStr][] = $primaryPost; }
+            // Get the most important secondary litdate post, if any
+        	if ( !empty( $sorted['secondary'] ) ) {
+        		$secondaryPost = $sorted['secondary'][0];
+        	}
+            if ($secondaryPost) { $litdate_data[$dateStr][] = $secondaryPost; }
+        } else {
+            $litdate_data[$dateStr] = $sorted;
+            //$litdate_data[$date] = $posts;
+        }
 	}
 
-	//...
-	
-	// If formatted output requested...
+	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
 		$output = '';
 	
-		foreach ( $litdate_data as $date => $groups ) {
+		foreach ( $litdate_data as $dateStr => $groups ) {
 			$output .= "<div class='liturgical-date-block'>";
-			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $date ) ) ) . "</strong><br />";
+			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
 	
 			$groups_to_render = ['primary', 'secondary', 'other'];
 			
 			///
-			if ( $args['single_top_only'] ) {
-				
-				$top_entry = null;
-				$top_priority = 999;
-	
-				foreach ( ['primary', 'secondary', 'other'] as $group_key ) {
-					if ( empty( $groups[ $group_key ] ) ) {
-						continue;
-					}
-	
-					foreach ( $groups[ $group_key ] as $entry ) {
-						if ( $entry['priority'] < $top_priority ) {
-							$top_priority = $entry['priority'];
-							$top_entry = $entry;
-						}
-					}
-				}
-	
-				if ( $top_entry ) {
-					$post = $top_entry['post'];
-					$title = get_the_title( $post );
-					$link = get_permalink( $post );
-	
-					$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
-	
-					if ( $args['show_meta_info'] ) {
-						$priority = $top_entry['priority'];
-						$terms = get_the_terms( $post, 'liturgical_date_category' );
-						$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
-						$date_type = get_post_meta( $post->ID, 'date_type', true );
-	
-						$output .= '<br /><small>';
-						$output .= 'Date type: ' . esc_html( $date_type );
-						if ( !empty( $term_names ) ) {
-							$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
-						}
-						$output .= ' | Priority: ' . esc_html( $priority );
-						$output .= '</small>';
-					}
-	
-					$output .= '<br />';
-				}
-			
-			} else {
-
-				foreach ( $groups_to_render as $group_key ) {
-					if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
-						continue;
-					}
-	
-					if ( !empty( $groups[ $group_key ] ) ) {
-						if ( $group_key !== 'primary' ) {
-							$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
-							$output .= "<em>$label</em><br />";
-						}
-	
-						foreach ( $groups[ $group_key ] as $entry ) {
-							$post = $entry['post'];
-							$title = get_the_title( $post );
-							$link = get_permalink( $post );
-							$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
-						}
-	
-						$output .= "<br />";
-					}
-				}
-			}
-
-			/*foreach ( $groups_to_render as $group_key ) {
+			foreach ( $groups_to_render as $group_key ) {
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
-			
-				if ( !empty( $groups[ $group_key ] ) ) {
 
-					if ( $group_key !== 'primary' ) {
+				if ( !empty( $groups[ $group_key ] ) ) {
+					//if ( $group_key !== 'primary' ) {
 						$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
-					}
-	
+					//}
+
 					foreach ( $groups[ $group_key ] as $entry ) {
 						$post = $entry['post'];
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
 						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
+						// Optional meta info
+						if ( $args['show_meta_info'] ) {
+							$postPriority = $post['priority'];
+							$terms = get_the_terms( $post, 'liturgical_date_category' );
+							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
+							$date_type = get_post_meta( $post->ID, 'date_type', true );
+							//
+							$output .= '<br /><small>';
+							$output .= 'Date type: ' . esc_html( $date_type );
+							if ( !empty( $term_names ) ) {
+								$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
+							}
+							$output .= ' | Priority: ' . esc_html( $postPriority );
+							$output .= '</small>';
+						}
 					}
-	
+
 					$output .= "<br />";
 				}
-			}*/
+			}
 	
 			$output .= "</div><br />";
 		}
@@ -444,13 +368,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	}
 
     // Default return
-
     return [
         'args'                  => $args,
         'start_date'            => $start_date,
         'end_date'              => $end_date,
-        //'litdate_posts_by_date' => $litdate_posts_by_date,
-        'litdate_data' => $litdate_data,
+        'litdate_data'          => $litdate_data,
+        //'litdate_posts_by_date' => $litdatePostsByDate,
         'info'                  => $info,
     ];
 }
