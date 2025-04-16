@@ -255,9 +255,17 @@ function get_lit_dates ( $args )
 add_shortcode('list_lit_dates', 'get_lit_dates_list');
 function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 {
-
-	$info = "\n<!-- get_lit_dates_list -->\n";
+	// TS/logging setup
+    $do_ts = devmode_active( array("sdg", "lectionary") );
+    $do_log = false;
+    sdg_log( "divline2", $do_log );
+    sdg_log( "function called: get_lit_dates_list", $do_log );
+    
+	// Init
+	$info = "";
 	$ts_info = "";
+	
+	$info = "\n<!-- get_lit_dates_list -->\n";
     
     $args = shortcode_atts( array(
       	'year'   => date('Y'),
@@ -289,6 +297,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     // Get litdate posts according to date
     $litdate_args = array( 'year' => $year, 'month' => $month );
     $litdates = get_lit_dates( $litdate_args );
+    $ts_info .= $litdates['troubleshooting'];
     
     $posts = $litdates['posts'];
     
@@ -377,7 +386,9 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 		
 		if ( !empty($date_posts)) { $info .= "<br />"; }
 	}
-    //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $litdates['troubleshooting']; }
+	
+	// Troubleshooting
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $ts_info; }
     
     return $info;
     
@@ -385,7 +396,6 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 
 function get_cpt_liturgical_date_content( $post_id = null )
 {
-	
 	// init
 	$info = "";
 	if ($post_id === null) { $post_id = get_the_ID(); }
