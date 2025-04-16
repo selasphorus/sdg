@@ -276,6 +276,8 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     // Extract
 	extract( $args );
 	
+	$ts_info .= "args: <pre>".print_r($args,true)."</pre>";
+	
     // Set year
     if ( $year == "this_year" ) {
     	$month = date('Y');
