@@ -66,7 +66,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		'year'				=> null,
 		'month'				=> null,
 		'day_titles_only'	=> false,
-		'single_top_only'	=> false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
+		'exclusive'	=> false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
 		'return'			=> 'posts', // 'posts' | 'prioritized' | 'formatted'
 		'formatted'			=> false,
 		'show_meta_info'	=> false,
@@ -297,8 +297,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			});
 		}*/
 		// wip...
-        if ( $single_top_only ) {
-        	//$info .= "single_top_only => get the single most important matching primary post for date: ".$dateStr."<br />";
+        if ( $exclusive ) {
+        	//$info .= "exclusive => get only the single most important matching primary post for date: ".$dateStr."<br />";
         	// Get the single most important matching litdate post
         	if ( !empty( $sorted['primary'] ) ) {
         		$primaryPost = $sorted['primary'][0];
