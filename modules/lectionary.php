@@ -83,9 +83,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
     extract( $args );
 
     $info = '';
+    //$ts_info = '';
     $litdatePostsByDate = [];
     $litdate_data = [];
 
+	if ( $debug ) { $info .= "args: ".print_r($args,true)."<br />"; }
+	
 	// Normalize date input
     if ( $date ) {
     
@@ -124,9 +127,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}
     }
 
-    if ( $debug ) {
-        $info .= "start_date: $start_date; end_date: $end_date<br />";
-    }
+    if ( $debug ) { $info .= "start_date: $start_date; end_date: $end_date<br />"; }
 
     $start = strtotime( $start_date );
     $end   = strtotime( $end_date );
