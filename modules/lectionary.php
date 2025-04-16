@@ -65,6 +65,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		'year'             => null,
 		'month'            => null,
 		'day_titles_only'  => false,
+		'single_top_only' => false,
 		'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
 		'formatted'        => false,
 		'post_id'          => null,
@@ -338,7 +339,43 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $date ) ) ) . "</strong><br />";
 	
 			$groups_to_render = ['primary', 'secondary', 'other'];
-			foreach ( $groups_to_render as $group_key ) {
+			if ( $args['single_top_only'] ) {
+				// Priority fallback order
+				foreach ( ['primary', 'secondary', 'other'] as $group_key ) {
+					if ( !empty( $groups[ $group_key ] ) ) {
+						$entry = $groups[ $group_key ][0];
+						$post = $entry['post'];
+						$title = get_the_title( $post );
+						$link = get_permalink( $post );
+						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
+						break;
+					}
+				}
+			} else {
+				foreach ( $groups_to_render as $group_key ) {
+					if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
+						continue;
+					}
+	
+					if ( !empty( $groups[ $group_key ] ) ) {
+						if ( $group_key !== 'primary' ) {
+							$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
+							$output .= "<em>$label</em><br />";
+						}
+	
+						foreach ( $groups[ $group_key ] as $entry ) {
+							$post = $entry['post'];
+							$title = get_the_title( $post );
+							$link = get_permalink( $post );
+							$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
+						}
+	
+						$output .= "<br />";
+					}
+				}
+			}
+
+			/*foreach ( $groups_to_render as $group_key ) {
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
@@ -359,9 +396,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	
 					$output .= "<br />";
 				}
-			}
+			}*/
 	
-			$output .= "</div>";//<br />
+			$output .= "</div><br />";
 		}
 	
 		if ( $args['debug'] && !empty( $info ) ) {
