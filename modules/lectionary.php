@@ -361,6 +361,11 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						} else {
 							$post = $group_item;
 						}
+						$post = get_post( $post );
+						if ( !$post instanceof WP_Post ) {
+							$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
+							continue;
+						}
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
 						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
