@@ -118,6 +118,32 @@ function get_liturgical_date_data( array $args = [] ): array
         $start = strtotime( '+1 day', $start );
     }
 
+	// If formatted output requested...
+    if ( $args['return'] === 'formatted' ) {
+        $output = '';
+
+        foreach ( $litdate_posts_by_date as $date => $posts ) {
+            $output .= "<div class='liturgical-date-block'>";
+            $output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $date ) ) ) . "</strong><br />";
+
+            foreach ( $posts as $post ) {
+                $title = get_the_title( $post );
+                $link = get_permalink( $post );
+                $output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
+            }
+
+            $output .= "</div><br />";
+        }
+
+        if ( $args['debug'] && !empty( $info ) ) {
+            $output .= '<div class="debug-info">' . $info . '</div>';
+        }
+
+        return $output;
+    }
+
+    // Default return
+
     return [
         'args'                  => $args,
         'start_date'            => $start_date,
