@@ -66,7 +66,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $end   = strtotime( $end_date );
 
     while ( $start <= $end ) {
+        
         $date_str = date( 'Y-m-d', $start );
+        
+        // === Fixed Date Matching ===
         $fixed_str = date( 'F j', $start );  // without leading zero
         $fixed_str_zero = date( 'F d', $start ); // with leading zero
 
@@ -119,6 +122,80 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
             if ( $debug ) {
                 $info .= "<strong>$date_str</strong>: found " . count( $q->posts ) . " post(s)<br />";
+            }
+        }
+        
+        // === Variable Date Matching ===
+        $ymd = date( 'Ymd', $start ); // for ACF stored format
+
+        $variable_meta_query = [
+            'relation' => 'OR',
+            [
+                'key'     => 'date_calculations_XYZ_date_calculated',
+                'value'   => $date_str,
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'date_assignments_XYZ_date_assigned',
+                'value'   => $date_str,
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'date_calculations_XYZ_date_calculated',
+                'value'   => $ymd,
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'date_assignments_XYZ_date_assigned',
+                'value'   => $ymd,
+                'compare' => '=',
+            ],
+        ];
+
+        if ( $day_titles_only ) {
+            $variable_meta_query = [
+                'relation' => 'AND',
+                [
+                    'key'     => 'day_title',
+                    'value'   => '1',
+                    'compare' => '=',
+                ],
+                [
+                    'relation' => 'OR',
+                    $variable_meta_query[0],
+                    $variable_meta_query[1],
+                    $variable_meta_query[2],
+                    $variable_meta_query[3],
+                ],
+            ];
+        }
+
+        $variable_query_args = [
+            'post_type'      => 'liturgical_date',
+            'post_status'    => 'publish',
+            'meta_query'     => $variable_meta_query,
+            'orderby'        => [
+                'meta_value' => 'DESC',
+                'ID'         => 'ASC',
+            ],
+            'meta_key'       => 'day_title',
+            'posts_per_page' => -1,
+        ];
+
+        $q_var = new WP_Query( $variable_query_args );
+
+        if ( $q_var->have_posts() ) {
+            if ( isset( $litdate_posts_by_date[ $date_str ] ) ) {
+                $litdate_posts_by_date[ $date_str ] = array_merge(
+                    $litdate_posts_by_date[ $date_str ],
+                    $q_var->posts
+                );
+            } else {
+                $litdate_posts_by_date[ $date_str ] = $q_var->posts;
+            }
+
+            if ( $debug ) {
+                $info .= "<em>$date_str</em>: +".count($q_var->posts)." variable match(es)<br />";
             }
         }
 
