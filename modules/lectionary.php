@@ -92,7 +92,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
 	
 	// Normalize date input
-    if ( $date ) {
+    if ($date) {
     
         $dateStr = date( 'Y-m-d', strtotime( $date ) );
         $start_date = $end_date = $dateStr;
@@ -129,12 +129,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}
     }
 
-    if ( $debug ) { $info .= "start_date: $start_date; end_date: $end_date<br />"; }
+    if ($debug) { $info .= "start_date: $start_date; end_date: $end_date<br />"; }
 
     $start = strtotime( $start_date );
     $end   = strtotime( $end_date );
 
-    while ( $start <= $end ) {
+    while ($start <= $end) {
         
         $dateStr = date( 'Y-m-d', $start );
         
@@ -169,7 +169,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		
         $qFixed = new WP_Query($fixedQueryArgs);
         if ( $qFixed->have_posts() ) {
-            $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
+            $litdatePostsByDate[$dateStr] = $qFixed->posts;
             if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
         }
 
@@ -210,10 +210,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		
         $qVar = new WP_Query($variableQueryArgs);
         if ( $qVar->have_posts() ) {
-            if ( isset( $litdatePostsByDate[ $dateStr ] ) ) {
-                $litdatePostsByDate[ $dateStr ] = array_merge( $litdatePostsByDate[ $dateStr ], $qVar->posts );
+            if ( isset( $litdatePostsByDate[$dateStr] ) ) {
+                $litdatePostsByDate[$dateStr] = array_merge($litdatePostsByDate[$dateStr], $qVar->posts);
             } else {
-                $litdatePostsByDate[ $dateStr ] = $qVar->posts;
+                $litdatePostsByDate[$dateStr] = $qVar->posts;
             }
             if ( count($qVar->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
         }
@@ -222,33 +222,37 @@ function get_liturgical_date_data( array $args = [] ): array|string
     }
 
 	// Loop through litdate posts and sort them by priority
-	foreach ( $litdatePostsByDate as $dateStr => $posts ) {
+	foreach ($litdatePostsByDate as $dateStr => $posts) {
 
 		$unsorted = [];
 		$primaryPost = null;
 		$secondaryPost = null;
         $defaultPriority = 999;
+        //
+        error_log('=== litdatePostsByDate for date: '.$dateStr.' ===');
+        
+		foreach ($posts as $post) {
 
-		foreach ( $posts as $post ) {
-
-			$post_id = $post->ID;
+			$postID = $post->ID;
 			$postPriority = $defaultPriority;
 			$type = 'other';
+			//
+			error_log('postID: '.$postID);
 			
 			// Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
-			$display_dates_info = get_display_dates ( $post_id, $year );
+			$display_dates_info = get_display_dates ( $postID, $year );
 			//$ts_info .= $display_dates_info['info'];
 			$display_dates = $display_dates_info['dates'];
 			//$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
 			if ( !in_array($dateStr, $display_dates) ) {
 				//$ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate.<br />";
 				// Therefore don't show it.
-				//$post_id = null;
+				//$postID = null;
 				continue;
 			}
 
 			// Get category/priority
-			$terms = get_the_terms( $post_id, 'liturgical_date_category' );
+			$terms = get_the_terms( $postID, 'liturgical_date_category' );
 			// Looping through all the post's terms, set the post priority equal to the term priority with the lowest integer value
 			if ( $terms && !is_wp_error( $terms ) ) {
 				foreach ( $terms as $term ) {
@@ -262,7 +266,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			}
 
 			// Check if litdate post has been designated as secondary
-			$is_secondary = get_post_meta( $post_id, 'secondary', true );
+			$is_secondary = get_post_meta( $postID, 'secondary', true );
 
 			// Set the type accordingly (default is 'other')
 			if ( $is_secondary ) {
@@ -772,12 +776,12 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     
 } 
 
-function get_cpt_liturgical_date_content( $post_id = null )
+function get_cpt_liturgical_date_content( $postID = null )
 {
 	// init
 	$info = "";
-	if ($post_id === null) { $post_id = get_the_ID(); }
-	$litdate_id = $post_id;
+	if ($postID === null) { $postID = get_the_ID(); }
+	$litdate_id = $postID;
 	
 	$info .= '<!-- cpt_liturgical_date_content -->';
     $info .= '<!-- litdate_id: '.$litdate_id.' -->';
@@ -798,7 +802,7 @@ function get_cpt_liturgical_date_content( $post_id = null )
 // A liturgical date may correspond to multiple dates in a year, if dates have been both assigned and calculated,
 // or if a date has been assigned to replace the fixed date
 // The following function determines which of the date(s) is active -- could be multiple, if date assigned is NOT a replacement_date
-function get_display_dates ( $post_id = null, $year = null )
+function get_display_dates ( $postID = null, $year = null )
 {
 	
 	$info = "";
@@ -807,13 +811,13 @@ function get_display_dates ( $post_id = null, $year = null )
 	$fixed_date_str = ""; 
 	
 	// Get date_type (fixed, calculated, assigned)
-    $date_type = get_post_meta( $post_id, 'date_type', true );
+    $date_type = get_post_meta( $postID, 'date_type', true );
     $info .= "--- get_display_dates ---<br />";
-    $info .= "litdate post_id: ".$post_id."; date_type: ".$date_type."; year: ".$year."<br />";
+    $info .= "litdate post_id: ".$postID."; date_type: ".$date_type."; year: ".$year."<br />";
          
 	// Get calculated or fixed date for designated year
 	if ( $date_type == "fixed" ) {
-		if ( !$fixed_date_str = get_field( 'fixed_date_str', $post_id ) ) { 
+		if ( !$fixed_date_str = get_field( 'fixed_date_str', $postID ) ) { 
 			$info .= "No fixed_date_str found.<br />";
 		} else {
 			$info .= "fixed_date_str: ".$fixed_date_str."<br />";
@@ -828,8 +832,8 @@ function get_display_dates ( $post_id = null, $year = null )
 	} else {
 		// For variable dates, get date calculations
 		// TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
-		if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-			while ( have_rows('date_calculations', $post_id) ) : the_row();
+		if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+			while ( have_rows('date_calculations', $postID) ) : the_row();
 				$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
 				$year_calculated = substr($date_calculated, 0, 4);
 				if ( $year_calculated == $year ) {
@@ -841,8 +845,8 @@ function get_display_dates ( $post_id = null, $year = null )
 	
 	// get date assignments to see if there is a replacement_date to override the fixed_date_str
 	// TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
-	if ( have_rows('date_assignments', $post_id) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
-		while ( have_rows('date_assignments', $post_id) ) : the_row();
+	if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+		while ( have_rows('date_assignments', $postID) ) : the_row();
 			$date_assigned = get_sub_field('date_assigned');
 			$date_exception = get_sub_field('date_exception'); 
 			$replacement_date = get_sub_field('replacement_date'); // deprecated
@@ -1113,8 +1117,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' )
 	$info .= "\n<!-- get_day_title -->\n";
 	$ts_info .= ">>> get_day_title <<<<br />";
 	
-    if ( $post_id === null ) { $post_id = get_the_ID(); }
-    $ts_info .= "[get_day_title] post_id: ".$post_id."<br />";
+    if ( $postID === null ) { $postID = get_the_ID(); }
+    $ts_info .= "[get_day_title] post_id: ".$postID."<br />";
     if ( $series_id ) { $ts_info .= "series_id: ".$series_id."<br />"; }
     
     // If no date has yet been set, try to find one
@@ -1123,28 +1127,28 @@ function get_day_title( $atts = array(), $content = null, $tag = '' )
         $ts_info .= "the_date is null -- get the_date<br />";
 		
         // If no date was specified when the function was called, then get event start_date or sermon_date OR ...
-        if ( $post_id === null ) {
+        if ( $postID === null ) {
             
             return "<!-- no post -->";
             
         } else {
             
-            $post = get_post( $post_id );
+            $post = get_post( $postID );
             $post_type = $post->post_type;
             $ts_info .= "post_type: ".$post_type."<br />";
 
             if ( $post_type == 'event' ) {
                 
-                $date_str = get_post_meta( $post_id, '_event_start_date', true );
+                $date_str = get_post_meta( $postID, '_event_start_date', true );
                 $the_date = strtotime($date_str);
                 
             } else if ( $post_type == 'sermon' ) {
                 
-                $the_date = the_field( 'sermon_date', $post_id );
-                //if ( get_field( 'sermon_date', $post_id )  ) { $the_date = the_field( 'sermon_date', $post_id ); }
+                $the_date = the_field( 'sermon_date', $postID );
+                //if ( get_field( 'sermon_date', $postID )  ) { $the_date = the_field( 'sermon_date', $postID ); }
                 
             } else {
-                //$ts_info .= "post_id: ".$post_id."<br />";
+                //$ts_info .= "post_id: ".$postID."<br />";
                 //$ts_info .= "post_type: ".$post_type."<br />";
             }
         }
@@ -1229,7 +1233,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' )
     
     // If there is no series-wide ban on displaying the titles, then should we display them for this particular post?
     if ( $hide_day_titles == 0 ) {
-    	$hide_day_titles = get_post_meta( $post_id, 'hide_day_titles', true );
+    	$hide_day_titles = get_post_meta( $postID, 'hide_day_titles', true );
     }
     //$ts_info .= "<!-- hide_day_titles: [$hide_day_titles] -->";
     
@@ -1248,7 +1252,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' )
     
     // If there is no series-wide ban on displaying the notices, then should we display them for this particular post?
     if ( $hide_special_notices == 0 ) {
-    	$hide_special_notices = get_post_meta( $post_id, 'hide_special_notices', true );
+    	$hide_special_notices = get_post_meta( $postID, 'hide_special_notices', true );
     }
     
     if ( $hide_special_notices == 1 ) { 
@@ -2459,10 +2463,10 @@ function calc_litdates( $atts = array() ) {
     foreach ( $posts AS $post ) {
         
         setup_postdata( $post );
-        $post_id = $post->ID;
+        $postID = $post->ID;
         $post_title = $post->post_title;
         $slug = $post->post_name;
-        $info .= '<span class="label">['.$post_id.'] "'.$post_title.'"</span><br />';
+        $info .= '<span class="label">['.$postID.'] "'.$post_title.'"</span><br />';
         $info .= '<div class="code indent">';
         
         // init
@@ -2474,7 +2478,7 @@ function calc_litdates( $atts = array() ) {
         $complex_formula = false;
 		
         // Get date_calculation info & break it down
-        $date_calc_str = strtolower(get_post_meta( $post_id, 'date_calculation', true ));
+        $date_calc_str = strtolower(get_post_meta( $postID, 'date_calculation', true ));
         
         // Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
 		if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
@@ -2497,7 +2501,7 @@ function calc_litdates( $atts = array() ) {
         	
 			if ( !empty($date_calc_str) ) {
 				$calc_info .= "date_calc_str: $date_calc_str<br />";
-				$calc_args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => array($post_id) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
+				$calc_args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
 				$calc = calc_date_from_str( $calc_args ); //$calc = calc_date_from_str( $year, $date_calc_str, $verbose );
 				if ( $calc ) {
 					$calc_date = $calc['calc_date'];
@@ -2525,8 +2529,8 @@ function calc_litdates( $atts = array() ) {
 				
 				$newrow = true;
 				
-				if ( have_rows('date_calculations', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-					while ( have_rows('date_calculations', $post_id) ) : the_row();
+				if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+					while ( have_rows('date_calculations', $postID) ) : the_row();
 						$date_calculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
 						if ( $date_calculated == $calc_date_str ) {
 							// Already in there
@@ -2544,12 +2548,12 @@ function calc_litdates( $atts = array() ) {
 						'date_calculated' => $calc_date_str
 					);
 	
-					$calc_info .= "About to add row to post_id $post_id: ".print_r( $row, true )."<br />"; // <pre></pre>
+					$calc_info .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
 					if ( $testing != "true" ) {
-						if ( add_row('date_calculations', $row, $post_id) ) { // ACF function syntax: add_row($selector, $value, [$post_id])
-							$calc_info .= "ACF row added for post_id: $post_id<br />";
+						if ( add_row('date_calculations', $row, $postID) ) { // ACF function syntax: add_row($selector, $value, [$postID])
+							$calc_info .= "ACF row added for post_id: $postID<br />";
 						} else {
-							$calc_info .= "ACF add row FAILED for post_id: $post_id<br />";
+							$calc_info .= "ACF add row FAILED for post_id: $postID<br />";
 						}
 					}
 	
@@ -2607,7 +2611,7 @@ function liturgical_date_meta_box_callback( $post ) {
 
 
 /*********** CPT: READING ***********/
-function get_cpt_reading_content( $post_id = null ) {
+function get_cpt_reading_content( $postID = null ) {
 	
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "lectionary") ); 
@@ -2618,13 +2622,13 @@ function get_cpt_reading_content( $post_id = null ) {
     // Init vars
     $info = "";
     $ts_info = "";
-	if ($post_id === null) { $post_id = get_the_ID(); }
+	if ($postID === null) { $postID = get_the_ID(); }
     
     // Get the CPT object
-    $post = get_post($post_id);
+    $post = get_post($postID);
     
     // Link to text of Bible Verses -- WIP
-    $bible_book_id = get_post_meta( $post_id, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $post_id );
+    $bible_book_id = get_post_meta( $postID, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $postID );
     if ( is_array($bible_book_id) ) {
     	$ts_info .= "bible_book_id is array: ".print_r($bible_book_id, true)."<br />";
     } else {
@@ -2633,7 +2637,7 @@ function get_cpt_reading_content( $post_id = null ) {
     	$ts_info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
     }
     
-    $chapterverses = get_field( 'chapterverses', $post_id );
+    $chapterverses = get_field( 'chapterverses', $postID );
     
     // Get book num from book name
     $book_num = "tmp";
@@ -2715,12 +2719,12 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
     // Extract
 	extract( $args );
     
-    $post = get_post( $post_id );
+    $post = get_post( $postID );
     if ( $post ) { $post_type = $post->post_type; }
-    if ( $post_type == 'event' ) { $event_id = $post_id; }
+    if ( $post_type == 'event' ) { $event_id = $postID; }
     
     if ( is_dev_site() ) {
-        //$info .= "post_id: $post_id; post_type: $post_type; event_id: $event_id; <br />";
+        //$info .= "post_id: $postID; post_type: $post_type; event_id: $event_id; <br />";
     }
     
     if ($event_id === null) {
