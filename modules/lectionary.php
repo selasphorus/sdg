@@ -38,23 +38,46 @@ add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
 
 function render_liturgical_dates_shortcode( $atts = [] ): string
 {
-    $atts['return'] = 'formatted'; // force formatted output
+    $atts = shortcode_atts( [
+        'date'        => null,
+        'year'        => null,
+        'month'       => null,
+        'day_titles_only' => false,
+        'debug'       => false,
+        'filter_types' => '',
+    ], $atts );
+
+    $atts['return'] = 'formatted'; // force formatted output (instead of data array)
+
+    // Convert comma-separated string to array
+    if ( !empty( $atts['filter_types'] ) ) {
+        $atts['filter_types'] = array_map( 'trim', explode( ',', strtolower( $atts['filter_types'] ) ) );
+    }
+
     return get_liturgical_date_data( $atts );
 }
+
 
 function get_liturgical_date_data( array $args = [] ): array|string
 {
     $defaults = [
-        'date'             => null,
-        'year'             => null,
-        'month'            => null,
-        'day_titles_only'  => false,
-        'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
-        'formatted'        => false,
-        'post_id'          => null,
-        'series_id'        => null,
-        'debug'            => false,
-    ];
+		'date'             => null,
+		'year'             => null,
+		'month'            => null,
+		'day_titles_only'  => false,
+		'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
+		'formatted'        => false,
+		'post_id'          => null,
+		'series_id'        => null,
+		'debug'            => false,
+		'filter_types'     => [], // e.g. ['primary'] to limit output
+		'type_labels'      => [    // override default labels
+			'primary'   => 'Principal Feast',
+			'secondary' => 'Commemoration',
+			'other'     => 'Optional',
+		],
+	];
+
 
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
@@ -314,10 +337,16 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$output .= "<div class='liturgical-date-block'>";
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $date ) ) ) . "</strong><br />";
 	
-			foreach ( ['primary', 'secondary', 'other'] as $group_key ) {
+			$groups_to_render = ['primary', 'secondary', 'other'];
+			foreach ( $groups_to_render as $group_key ) {
+				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
+					continue;
+				}
+			
 				if ( !empty( $groups[ $group_key ] ) ) {
+
 					if ( $group_key !== 'primary' ) {
-						$label = ucfirst( $group_key );
+						$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
 					}
 	
