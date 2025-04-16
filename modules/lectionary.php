@@ -61,6 +61,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
     $info = '';
     $litdate_posts_by_date = [];
+	$litdate_data = [];
 
 	// Normalize date input
     if ( $date ) {
@@ -241,6 +242,70 @@ function get_liturgical_date_data( array $args = [] ): array|string
         $start = strtotime( '+1 day', $start );
     }
 
+	//...
+
+	foreach ( $litdate_posts_by_date as $date_str => $posts ) {
+		
+		$sorted = [];
+	
+		foreach ( $posts as $post ) {
+		
+			$post_id = $post->ID;
+			
+			// Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
+			$display_dates_info = get_display_dates ( $post_id, $year );
+			//$ts_info .= $display_dates_info['info'];
+			$display_dates = $display_dates_info['dates'];
+			//$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
+			if ( !in_array($date_str, $display_dates) ) {
+				//$ts_info .= "date_str: ".$date_str." is not one of the display_dates for this litdate.<br />";
+				// Therefore don't show it.
+				//$post_id = null;
+				continue;
+			}
+			
+			// Get category/priority
+			$terms = get_the_terms( $post_id, 'liturgical_date_category' );
+	
+			$priority = 999;
+			$type = 'other';
+	
+			if ( $terms && !is_wp_error( $terms ) ) {
+				foreach ( $terms as $term ) {
+					$term_priority = get_term_meta( $term->term_id, 'priority', true );
+					if ( is_numeric( $term_priority ) && $term_priority < $priority ) {
+						$priority = (int)$term_priority;
+					}
+				}
+			}
+	
+			// Check if marked as secondary
+			$is_secondary = get_post_meta( $post_id, 'secondary', true );
+	
+			if ( $is_secondary ) {
+				$type = 'secondary';
+			} elseif ( $priority < 999 ) {
+				$type = 'primary';
+			}
+	
+			$sorted[ $type ][] = [
+				'post'     => $post,
+				'priority' => $priority,
+			];
+		}
+	
+		// Sort primaries by priority, lowest first
+		if ( !empty( $sorted['primary'] ) ) {
+			usort( $sorted['primary'], function ( $a, $b ) {
+				return $a['priority'] <=> $b['priority'];
+			});
+		}
+	
+		$litdate_data[ $date_str ] = $sorted;
+	}
+
+	//...
+	
 	// If formatted output requested...
     if ( $args['return'] === 'formatted' ) {
         $output = '';
@@ -271,7 +336,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
         'args'                  => $args,
         'start_date'            => $start_date,
         'end_date'              => $end_date,
-        'litdate_posts_by_date' => $litdate_posts_by_date,
+        //'litdate_posts_by_date' => $litdate_posts_by_date,
+        'litdate_data' => $litdate_data,
         'info'                  => $info,
     ];
 }
