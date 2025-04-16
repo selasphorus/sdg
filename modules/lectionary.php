@@ -355,13 +355,17 @@ function get_liturgical_date_data( array $args = [] ): array|string
 					foreach ( $typeGroups[ $group_key ] as $group_item ) {
 						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
 
-						if (is_array($group_item)) { $post = $group_item['post']; } else { $post = $group_item; }
+						if (is_array($group_item)) {
+							$post = $group_item['post'];
+							$postPriority = $post['priority'];
+						} else {
+							$post = $group_item;
+						}
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
 						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
 						// Optional meta info
 						if ( $show_meta_info ) {
-							$postPriority = $post['priority'];
 							$terms = get_the_terms( $post, 'liturgical_date_category' );
 							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 							$date_type = get_post_meta( $post->ID, 'date_type', true );
