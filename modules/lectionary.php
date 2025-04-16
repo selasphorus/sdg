@@ -165,12 +165,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
             'posts_per_page' => -1,
         ];
 
-		$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
+		//$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
 		
         $qFixed = new WP_Query($fixedQueryArgs);
         if ( $qFixed->have_posts() ) {
             $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
-            $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching post(s)<br />";
+            if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
         }
 
         // === Variable Date Matching ===
@@ -206,7 +206,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
             'posts_per_page' => -1,
         ];
 
-		$info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
+		//$info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
 		
         $qVar = new WP_Query($variableQueryArgs);
         if ( $qVar->have_posts() ) {
@@ -215,7 +215,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
             } else {
                 $litdatePostsByDate[ $dateStr ] = $qVar->posts;
             }
-            $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />";
+            if ( count($qVar->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
         }
 
         $start = strtotime( '+1 day', $start );
