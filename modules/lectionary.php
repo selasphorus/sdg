@@ -10,7 +10,126 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+add_shortcode('litdates_wip', 'get_liturgical_date_data');
+function get_liturgical_date_data( array $args = [] ): array
+{
+    $defaults = [
+        'date'             => null,
+        'year'             => null,
+        'month'            => null,
+        'day_titles_only'  => false,
+        'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
+        'formatted'        => false,
+        'post_id'          => null,
+        'series_id'        => null,
+        'debug'            => false,
+    ];
+
+    $args = wp_parse_args( $args, $defaults );
+    extract( $args );
+
+    $info = '';
+    $litdate_posts_by_date = [];
+
+    if ( $date ) {
+        $date = date( 'Y-m-d', strtotime( $date ) );
+        $start_date = $end_date = $date;
+        $year  = substr( $date, 0, 4 );
+        $month = substr( $date, 5, 2 );
+    } else {
+        if ( empty( $year ) ) {
+            $year = date( 'Y' );
+        }
+
+        if ( empty( $month ) ) {
+            $start_date = $year . '-01-01';
+            $end_date   = $year . '-12-31';
+        } else {
+            $start_date = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-01';
+            $days_in_month = cal_days_in_month( CAL_GREGORIAN, (int)$month, (int)$year );
+            $end_date   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
+        }
+    }
+
+    if ( $debug ) {
+        $info .= "start_date: $start_date; end_date: $end_date<br />";
+    }
+
+    $start = strtotime( $start_date );
+    $end   = strtotime( $end_date );
+
+    while ( $start <= $end ) {
+        $date_str = date( 'Y-m-d', $start );
+        $fixed_str = date( 'F j', $start );  // without leading zero
+        $fixed_str_zero = date( 'F d', $start ); // with leading zero
+
+        $meta_query = [
+            'relation' => 'OR',
+            [
+                'key'     => 'fixed_date_str',
+                'value'   => $fixed_str_zero,
+                'compare' => '=',
+            ],
+            [
+                'key'     => 'fixed_date_str',
+                'value'   => $fixed_str,
+                'compare' => '=',
+            ],
+        ];
+
+        if ( $day_titles_only ) {
+            $meta_query = [
+                'relation' => 'AND',
+                [
+                    'key'     => 'day_title',
+                    'value'   => '1',
+                    'compare' => '=',
+                ],
+                [
+                    'relation' => 'OR',
+                    $meta_query[0],
+                    $meta_query[1],
+                ],
+            ];
+        }
+
+        $query_args = [
+            'post_type'      => 'liturgical_date',
+            'post_status'    => 'publish',
+            'meta_query'     => $meta_query,
+            'orderby'        => [
+                'meta_value' => 'DESC',
+                'ID'         => 'ASC',
+            ],
+            'meta_key'       => 'day_title', // for ordering
+            'posts_per_page' => -1,
+        ];
+
+        $q = new WP_Query( $query_args );
+
+        if ( $q->have_posts() ) {
+            $litdate_posts_by_date[ $date_str ] = $q->posts;
+
+            if ( $debug ) {
+                $info .= "<strong>$date_str</strong>: found " . count( $q->posts ) . " post(s)<br />";
+            }
+        }
+
+        $start = strtotime( '+1 day', $start );
+    }
+
+    return [
+        'args'                  => $args,
+        'start_date'            => $start_date,
+        'end_date'              => $end_date,
+        'litdate_posts_by_date' => $litdate_posts_by_date,
+        'info'                  => $info,
+    ];
+}
+
 // Get liturgical date records matching given date or date range (given month & year)
+// Returns multi-dimensional array of litdate post objects per date
+// Merge this with the get_day_title fcn => return IDs or post objects in order of priority, and flagged as primary, secondary, low_priority(?)
 function get_lit_dates ( $args ) 
 {
 	// TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
@@ -297,11 +416,21 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     $month = (int) $month;
     
     // Get litdate posts according to date
-    $litdate_args = array( 'year' => $year, 'month' => $month );
-    $litdates = get_lit_dates( $litdate_args );
-    //$ts_info .= $litdates['troubleshooting'];
     
-    $posts = $litdates['posts'];
+    // If $public, then get_day_title per date
+    
+    // If NOT $public, get all litdates for the date range
+    if ($public) {
+    	//get_day_title( array ('the_date' => $sermon_date ) )
+    } else {
+    	$litdate_args = array( 'year' => $year, 'month' => $month );
+		$litdates = get_lit_dates( $litdate_args );
+		//$ts_info .= $litdates['troubleshooting'];
+		
+		$posts = $litdates['posts'];
+    }
+	
+    
     
     foreach ( $posts AS $date_str => $date_posts ) {
         
@@ -321,11 +450,6 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
         
         	//$info .= print_r($lit_date, true);
         	$litdate_id = $lit_date->ID;
-        	
-        	// WIP If $public and NOT show_litdate_on_date (front end) then skip it (don't display it in the list)
-        	$show_date = show_litdate_on_date( $litdate_id, $date_str );
-        	$ts_info .= "show_date for litdate_id: ".$litdate_id."; date_str: ".$date_str." is [".$show_date."]<br />";
-			if ( $public && $show_date !== true ) { continue; }
 			
         	$classes = "litdate";
         	$day_title = get_post_meta($litdate_id, 'day_title', true);
@@ -549,7 +673,8 @@ function show_litdate_on_date( $litdate_id = null, $date_str = null )
 }
 
 // Collects -- get collect to match litdate (or calendar date? wip)
-function get_collect_text( $litdate_id = null, $date_str = null ) {
+function get_collect_text( $litdate_id = null, $date_str = null )
+{
 
 	// TS/logging setup
     $do_ts = devmode_active( array("sdg", "lectionary") );
@@ -705,9 +830,10 @@ function get_collect_text( $litdate_id = null, $date_str = null ) {
 
 // Day Titles
 // TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
+// TODO: merge this fcn with get_lit_dates(?)
 add_shortcode('day_title', 'get_day_title');
-function get_day_title( $atts = array(), $content = null, $tag = '' ) {
-
+function get_day_title( $atts = array(), $content = null, $tag = '' )
+{
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
     
@@ -727,6 +853,7 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 		'series_id' => null,
 		'the_date'  => null,
 		'formatted' => true,
+		'return'	=> 'display', // options: return for display or just return litdate post(s)
 	), $atts);
     
     // Extract
@@ -1085,7 +1212,8 @@ function get_day_title( $atts = array(), $content = null, $tag = '' ) {
 
 // Function(s) to calculate variable liturgical_dates
 
-function get_liturgical_date_calc_id ( $year = null ) {
+function get_liturgical_date_calc_id ( $year = null )
+{
 	// WIP
 }
 
