@@ -257,6 +257,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 {
 
 	$info = "\n<!-- get_lit_dates_list -->\n";
+	$ts_info = "";
     
     $args = shortcode_atts( array(
       	'year'   => date('Y'),
@@ -290,7 +291,6 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
     $litdates = get_lit_dates( $litdate_args );
     
     $posts = $litdates['posts'];
-    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $litdates['troubleshooting']; }
     
     foreach ( $posts AS $date_str => $date_posts ) {
         
@@ -377,6 +377,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 		
 		if ( !empty($date_posts)) { $info .= "<br />"; }
 	}
+    //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $litdates['troubleshooting']; }
     
     return $info;
     
