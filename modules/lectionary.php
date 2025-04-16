@@ -37,7 +37,8 @@ function normalize_month_to_int( string $month ): ?int
 add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
 function render_liturgical_dates_shortcode( $atts = [] ): string
 {
-    $atts = shortcode_atts( [
+    // Extract args    
+    $args = shortcode_atts( [
         'date'        => null,
         'year'        => null,
         'month'       => null,
@@ -45,6 +46,7 @@ function render_liturgical_dates_shortcode( $atts = [] ): string
         'debug'       => false,
         'filter_types' => '',
     ], $atts );
+	extract( $args );
 
     $atts['return'] = 'formatted'; // force formatted output (instead of data array)
 
