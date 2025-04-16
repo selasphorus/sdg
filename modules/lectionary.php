@@ -129,7 +129,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}
     }
 
-    if ($debug) { $info .= "start_date: $start_date; end_date: $end_date<br />"; }
+    $info .= "start_date: $start_date; end_date: $end_date<br />";
 
     $start = strtotime( $start_date );
     $end   = strtotime( $end_date );
@@ -229,7 +229,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		$secondaryPost = null;
         $defaultPriority = 999;
         //
-        error_log('=== litdatePostsByDate for date: '.$dateStr.' ===');
+        //error_log('=== litdatePostsByDate for date: '.$dateStr.' ===');
         
 		foreach ($posts as $post) {
 
@@ -237,7 +237,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$postPriority = $defaultPriority;
 			$type = 'other';
 			//
-			error_log('postID: '.$postID);
+			//error_log('postID: '.$postID);
 			
 			// Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $postID, $year );
@@ -279,6 +279,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				'post'     => $post,
 				'priority' => $postPriority,
 			];
+			
+			$info .= 'postID: '.$postID."; priority: ".$postPriority."<br />";
 		}
 
 		// Sort primaries by priority, lowest first
@@ -296,13 +298,19 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}*/
 		// wip...
         if ( $single_top_only ) {
+        	$info .= "single_top_only => get the single most important matching primary post<br />";
         	// Get the single most important matching litdate post
         	if ( !empty( $sorted['primary'] ) ) {
         		$primaryPost = $sorted['primary'][0];
         	} else if ( !empty( $sorted['other'] ) ) {
         		$primaryPost = $sorted['other'][0];
         	}
-            if ($primaryPost) { $litdate_data[$dateStr][] = $primaryPost; }
+            if ($primaryPost) {
+        		$info .= "primaryPost found: ".$primaryPost->ID."<br />";
+        		$litdate_data[$dateStr][] = $primaryPost;
+        	} else {
+        		$info .= "No primaryPost found!<br />";
+        	}
             // Get the most important secondary litdate post, if any
         	if ( !empty( $sorted['secondary'] ) ) {
         		$secondaryPost = $sorted['secondary'][0];
