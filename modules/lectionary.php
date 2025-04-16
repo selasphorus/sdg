@@ -339,9 +339,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$groups_to_render = ['primary', 'secondary', 'other'];
 			
 			foreach ( $groups_to_render as $group_key ) {
-				
-				$output .= "group_key: ".$group_key."<br />";
-				
+
 				if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 					continue;
 				}
