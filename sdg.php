@@ -1718,7 +1718,7 @@ function sdg_custom_post_content() {
 	
 	// TODO: fix this janky setup by proper autoloading for all related plugins
 	$class = ucfirst($post_type);
-	$class_file = ABSPATH.'wp-content/plugins/whx4/includes/classes/'.$class.'.php';
+	$class_file = ABSPATH.'wp-content/plugins/whx4/src/classes/'.$class.'.php';
 	
 	if ( file_exists( $class_file ) ) {
 		require_once( $class_file );
@@ -1739,7 +1739,7 @@ function sdg_custom_post_content() {
 
 	} else {
 	
-		$info .= "class_file: ".$class_file." not found<br />";
+		//$info .= "class_file: ".$class_file." not found<br />";
 		$cpt_function = "get_cpt_".$post_type."_content";
 		if ( function_exists($cpt_function) ) {
 			$cpt_info = $cpt_function();
