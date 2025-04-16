@@ -10,6 +10,30 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+// TODO: move this function to WHx4
+function normalize_month_to_int( string $month ): ?int
+{
+    $month = strtolower( trim( $month ) );
+
+    $map = [
+        'jan' => 1, 'january'   => 1,
+        'feb' => 2, 'february'  => 2,
+        'mar' => 3, 'march'     => 3,
+        'apr' => 4, 'april'     => 4,
+        'may' => 5,
+        'jun' => 6, 'june'      => 6,
+        'jul' => 7, 'july'      => 7,
+        'aug' => 8, 'august'    => 8,
+        'sep' => 9, 'sept' => 9, 'september' => 9,
+        'oct' => 10, 'october'  => 10,
+        'nov' => 11, 'november' => 11,
+        'dec' => 12, 'december' => 12,
+    ];
+
+    return $map[ $month ] ?? null;
+}
+
+
 add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
 
 function render_liturgical_dates_shortcode( $atts = [] ): string
@@ -38,24 +62,39 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $info = '';
     $litdate_posts_by_date = [];
 
+	// Normalize date input
     if ( $date ) {
         $date = date( 'Y-m-d', strtotime( $date ) );
         $start_date = $end_date = $date;
         $year  = substr( $date, 0, 4 );
         $month = substr( $date, 5, 2 );
     } else {
+    	
         if ( empty( $year ) ) {
-            $year = date( 'Y' );
+            $year = date( 'Y' ); // default to current year if none is set
         }
 
-        if ( empty( $month ) ) {
-            $start_date = $year . '-01-01';
-            $end_date   = $year . '-12-31';
-        } else {
-            $start_date = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-01';
-            $days_in_month = cal_days_in_month( CAL_GREGORIAN, (int)$month, (int)$year );
-            $end_date   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
-        }
+		if ( empty( $month ) ) {
+			$start_date = $year . '-01-01';
+			$end_date   = $year . '-12-31';
+		} else {
+		
+			if ( !is_numeric( $month ) ) {
+				$month = normalize_month_to_int( $month );
+			}
+			$month = (int)$month;
+		
+			if ( $month < 1 || $month > 12 ) {
+				return [
+					'args' => $args,
+					'info' => "Invalid month: '$month_key'",
+				];
+			}
+		
+			$start_date = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-01';
+			$days_in_month = cal_days_in_month( CAL_GREGORIAN, $month, (int)$year );
+			$end_date   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
+		}
     }
 
     if ( $debug ) {
