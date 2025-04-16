@@ -390,7 +390,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
 	}
 	
 	// Troubleshooting
-    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= $ts_info; }
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "lectionary" ) ) { $info .= $ts_info; }
     
     return $info;
     
