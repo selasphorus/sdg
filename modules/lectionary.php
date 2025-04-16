@@ -68,6 +68,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		'single_top_only' => false,
 		'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
 		'formatted'        => false,
+		'show_meta_info'   => false,
 		'post_id'          => null,
 		'series_id'        => null,
 		'debug'            => false,
@@ -339,19 +340,53 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $date ) ) ) . "</strong><br />";
 	
 			$groups_to_render = ['primary', 'secondary', 'other'];
+			
+			///
 			if ( $args['single_top_only'] ) {
-				// Priority fallback order
+				
+				$top_entry = null;
+				$top_priority = 999;
+	
 				foreach ( ['primary', 'secondary', 'other'] as $group_key ) {
-					if ( !empty( $groups[ $group_key ] ) ) {
-						$entry = $groups[ $group_key ][0];
-						$post = $entry['post'];
-						$title = get_the_title( $post );
-						$link = get_permalink( $post );
-						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a><br />';
-						break;
+					if ( empty( $groups[ $group_key ] ) ) {
+						continue;
+					}
+	
+					foreach ( $groups[ $group_key ] as $entry ) {
+						if ( $entry['priority'] < $top_priority ) {
+							$top_priority = $entry['priority'];
+							$top_entry = $entry;
+						}
 					}
 				}
+	
+				if ( $top_entry ) {
+					$post = $top_entry['post'];
+					$title = get_the_title( $post );
+					$link = get_permalink( $post );
+	
+					$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>';
+	
+					if ( $args['show_meta_info'] ) {
+						$priority = $top_entry['priority'];
+						$terms = get_the_terms( $post, 'liturgical_date_category' );
+						$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
+						$date_type = get_post_meta( $post->ID, 'date_type', true );
+	
+						$output .= '<br /><small>';
+						$output .= 'Date type: ' . esc_html( $date_type );
+						if ( !empty( $term_names ) ) {
+							$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
+						}
+						$output .= ' | Priority: ' . esc_html( $priority );
+						$output .= '</small>';
+					}
+	
+					$output .= '<br />';
+				}
+			
 			} else {
+
 				foreach ( $groups_to_render as $group_key ) {
 					if ( !empty( $args['filter_types'] ) && !in_array( $group_key, $args['filter_types'], true ) ) {
 						continue;
