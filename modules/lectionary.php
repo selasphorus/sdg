@@ -350,8 +350,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						$label = $args['type_labels'][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
 					//}
-/*
+
 					foreach ( $groups[ $group_key ] as $group_item ) {
+						$info .= "group_item: <pre>".print_r($group_item,true)."</pre>";
+/*
 						$post = $group_item['post'];
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
@@ -371,9 +373,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$output .= ' | Priority: ' . esc_html( $postPriority );
 							$output .= '</small>';
 						}
+*/
 						$output .= '<br />';
 					}
-*/
 					$output .= "<br />";
 				}
 			}
