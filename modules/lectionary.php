@@ -325,9 +325,11 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
     
+    	$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
+    	
 		$output = '';	
 		if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
-	
+		/*
 		foreach ( $litdate_data as $dateStr => $groups ) {
 			$output .= "<div class='liturgical-date-block'>";
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
@@ -375,7 +377,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	
 			$output .= "</div><br />";
 		}
-	
+		*/
 		return $output;
 	}
 
