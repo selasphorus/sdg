@@ -10,8 +10,15 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
-add_shortcode('litdates_wip', 'get_liturgical_date_data');
-function get_liturgical_date_data( array $args = [] ): array
+add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
+
+function render_liturgical_dates_shortcode( $atts = [] ): string
+{
+    $atts['return'] = 'formatted'; // force formatted output
+    return get_liturgical_date_data( $atts );
+}
+
+function get_liturgical_date_data( array $args = [] ): array|string
 {
     $defaults = [
         'date'             => null,
