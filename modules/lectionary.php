@@ -89,7 +89,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $litdatePostsByDate = [];
     $litdate_data = [];
 
-	if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
+	//$info .= "args: <pre>".print_r($args,true)."</pre>";
 	
 	// Normalize date input
     if ($date) {
