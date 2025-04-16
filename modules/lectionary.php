@@ -89,7 +89,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $litdatePostsByDate = [];
     $litdate_data = [];
 
-	if ( $debug ) { $info .= "args: ".print_r($args,true)."<br />"; }
+	if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
 	
 	// Normalize date input
     if ( $date ) {
@@ -142,41 +142,41 @@ function get_liturgical_date_data( array $args = [] ): array|string
         $fixed_str = date( 'F j', $start );  // without leading zero
         $fixed_str_zero = date( 'F d', $start ); // with leading zero
 
-        $meta_query = [
+        $fixedMetaQuery = [
             'relation' => 'OR',
             [ 'key' => 'fixed_date_str', 'value' => $fixed_str_zero, 'compare' => '=' ],
             [ 'key' => 'fixed_date_str', 'value' => $fixed_str,      'compare' => '=' ],
         ];
 
         if ( $day_titles_only ) {
-            $meta_query = [
+            $fixedMetaQuery = [
                 'relation' => 'AND',
                 [ 'key' => 'day_title', 'value' => '1', 'compare' => '=' ],
-                [ 'relation' => 'OR', $meta_query[0], $meta_query[1] ],
+                [ 'relation' => 'OR', $fixedMetaQuery[0], $fixedMetaQuery[1] ],
             ];
         }
 
-        $query_args = [
+        $fixedQueryArgs = [
             'post_type'      => 'liturgical_date',
             'post_status'    => 'publish',
-            'meta_query'     => $meta_query,
+            'meta_query'     => $fixedMetaQuery,
             'orderby'        => [ 'meta_value' => 'DESC', 'ID' => 'ASC' ],
             'meta_key'       => 'day_title',
             'posts_per_page' => -1,
         ];
 
-        $q = new WP_Query( $query_args );
-        if ( $q->have_posts() ) {
-            $litdatePostsByDate[ $dateStr ] = $q->posts;
-            if ( $debug ) {
-                $info .= "<strong>$dateStr</strong>: found " . count( $q->posts ) . " post(s)<br />";
-            }
+		$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
+		
+        $qFixed = new WP_Query($fixedQueryArgs);
+        if ( $qFixed->have_posts() ) {
+            $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
+            $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching post(s)<br />";
         }
 
         // === Variable Date Matching ===
         $ymd = date( 'Ymd', $start ); // for ACF stored format
 
-        $variable_meta_query = [
+        $variableMetaQuery = [
             'relation' => 'OR',
             [ 'key' => 'date_calculations_XYZ_date_calculated', 'value' => $dateStr, 'compare' => '=' ],
             [ 'key' => 'date_assignments_XYZ_date_assigned',    'value' => $dateStr, 'compare' => '=' ],
@@ -185,38 +185,37 @@ function get_liturgical_date_data( array $args = [] ): array|string
         ];
 
         if ( $day_titles_only ) {
-            $variable_meta_query = [
+            $variableMetaQuery = [
                 'relation' => 'AND',
                 [ 'key' => 'day_title', 'value' => '1', 'compare' => '=' ],
                 [ 'relation' => 'OR',
-                    $variable_meta_query[0],
-                    $variable_meta_query[1],
-                    $variable_meta_query[2],
-                    $variable_meta_query[3],
+                    $variableMetaQuery[0],
+                    $variableMetaQuery[1],
+                    $variableMetaQuery[2],
+                    $variableMetaQuery[3],
                 ]
             ];
         }
 
-        $variable_query_args = [
+        $variableQueryArgs = [
             'post_type'      => 'liturgical_date',
             'post_status'    => 'publish',
-            'meta_query'     => $variable_meta_query,
+            'meta_query'     => $variableMetaQuery,
             'orderby'        => [ 'meta_value' => 'DESC', 'ID' => 'ASC' ],
             'meta_key'       => 'day_title',
             'posts_per_page' => -1,
         ];
 
-        $q_var = new WP_Query( $variable_query_args );
-        if ( $q_var->have_posts() ) {
+		$info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
+		
+        $qVar = new WP_Query($variableQueryArgs);
+        if ( $qVar->have_posts() ) {
             if ( isset( $litdatePostsByDate[ $dateStr ] ) ) {
-                $litdatePostsByDate[ $dateStr ] = array_merge( $litdatePostsByDate[ $dateStr ], $q_var->posts );
+                $litdatePostsByDate[ $dateStr ] = array_merge( $litdatePostsByDate[ $dateStr ], $qVar->posts );
             } else {
-                $litdatePostsByDate[ $dateStr ] = $q_var->posts;
+                $litdatePostsByDate[ $dateStr ] = $qVar->posts;
             }
-
-            if ( $debug ) {
-                $info .= "<em>$dateStr</em>: +".count($q_var->posts)." variable match(es)<br />";
-            }
+            $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />";
         }
 
         $start = strtotime( '+1 day', $start );
@@ -313,7 +312,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
-		$output = '';
+    
+		$output = '';	
+		if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 	
 		foreach ( $litdate_data as $dateStr => $groups ) {
 			$output .= "<div class='liturgical-date-block'>";
@@ -361,10 +362,6 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			}
 	
 			$output .= "</div><br />";
-		}
-	
-		if ( $args['debug'] && !empty( $info ) ) {
-			$output .= '<div class="debug-info">' . $info . '</div>';
 		}
 	
 		return $output;
