@@ -332,7 +332,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				}
 			}
 	
-			$output .= "</div><br />";
+			$output .= "</div>";//<br />
 		}
 	
 		if ( $args['debug'] && !empty( $info ) ) {
