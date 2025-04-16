@@ -298,7 +298,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}*/
 		// wip...
         if ( $single_top_only ) {
-        	$info .= "single_top_only => get the single most important matching primary post for date: ".$dateStr."<br />";
+        	//$info .= "single_top_only => get the single most important matching primary post for date: ".$dateStr."<br />";
         	// Get the single most important matching litdate post
         	if ( !empty( $sorted['primary'] ) ) {
         		$primaryPost = $sorted['primary'][0];
@@ -306,7 +306,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
         		$primaryPost = $sorted['other'][0];
         	}
             if ($primaryPost) {
-        		$info .= "primaryPost found with ID: ".$primaryPost->ID."<br />";
+        		$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
+        		//$info .= "primaryPost found with ID: ".$primaryPost->ID."<br />";
         		$litdate_data[$dateStr]['primary'] = $primaryPost;
         	} else {
         		$info .= "No primaryPost found!<br />";
