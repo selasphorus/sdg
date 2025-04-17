@@ -89,9 +89,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $litdatePostsByDate = [];
     $litdate_data = [];
 
-	if ($exclusive) { $day_titles_only = true; }
+	if ($exclusive) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
 	//$info .= "args: <pre>".print_r($args,true)."</pre>";
-	$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only; end_date: $end_date<br />";
+	$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />";
 	
 	// Normalize date input
     if ($date) {
@@ -363,10 +363,15 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$postPriority = $post['priority'];
 						} else {
 							$post = $group_item;
+							$postPriority = "UNKNOWN";
 						}
 						$post = get_post( $post );
 						if ( !$post instanceof WP_Post ) {
 							//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
+							continue;
+						}
+						if ($post->post_type != "liturgical_date") {
+							$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type.". Moving on to the next...<br />";
 							continue;
 						}
 						$title = get_the_title( $post );
