@@ -285,7 +285,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
 		}
 
-		$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>";
+		//$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
 		
 		// Sort primaries by priority, lowest first
 		$sorted = [];
@@ -295,13 +295,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				return $a['priority'] <=> $b['priority'];
 			} );
 		}
-		/*if ( !empty( $unsorted['primary'] ) ) {
-			usort( $sorted['primary'], function ( $a, $b ) {
-				return $a['priority'] <=> $b['priority'];
-			});
-		}*/
 		
-		$info .= "sorted array of posts and priorities: <pre>".print_r($sorted,true)."</pre>";
+		//$info .= "sorted array of posts and priorities: <pre>".print_r($sorted,true)."</pre>"; // ok
 		
 		// wip...
         if ( $exclusive ) {
@@ -312,7 +307,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	} else if ( !empty( $sorted['other'] ) ) {
         		$primaryPost = $sorted['other'][0];
         	}
-            if ($primaryPost) {
+            if ( $primaryPost ) {
         		//$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
         		$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
         		$litdate_data[$dateStr]['primary'] = $primaryPost;
@@ -323,12 +318,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	if ( !empty( $sorted['secondary'] ) ) {
         		$secondaryPost = $sorted['secondary'][0];
         	}
-            if ($secondaryPost) {
+            if ( $secondaryPost ) {
             	$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
-            	$litdate_data[$dateStr]['secondary'] = $secondaryPost;
+            	$litdate_data[ $dateStr ][ 'secondary' ] = $secondaryPost;
             }
         } else {
-            $litdate_data[$dateStr] = $sorted;
+            $litdate_data[ $dateStr ] = $sorted;
             //$litdate_data[$date] = $posts;
         }
 	}
@@ -337,7 +332,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
     if ( $args['return'] === 'formatted' ) {
     
 		$output = '';
-    	//$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
+    	$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
     		
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 		
