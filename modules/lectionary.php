@@ -354,18 +354,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						$output .= "<em>$label</em><br />";
 					//}
 
-					foreach ( $typeGroups[ $group_key ] as $group_item ) {
-						
-						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
-						$output .= "group_item is a var of type: ".gettype($group_item)."<br />";
+					foreach ( $typeGroups[ $group_key ] as $post => $postPriority ) {
 
-						if (is_array($group_item)) {
-							$post = $group_item[ 'post' ];
-							$postPriority = $post[ 'priority' ];
-						} else {
-							$post = $group_item;
-							$postPriority = "UNKNOWN";
-						}
 						$post = get_post( $post );
 						if ( !$post instanceof WP_Post ) {
 							//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
