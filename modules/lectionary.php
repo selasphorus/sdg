@@ -316,7 +316,6 @@ function get_liturgical_date_data( array $args = [] ): array|string
             }
         } else {
             $litdate_data[ $dateStr ] = $sorted;
-            //$litdate_data[$date] = $posts;
         }
     }
 
@@ -338,10 +337,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
                 }
                 
                 if ( !empty( $typeGroups[ $groupKey ] ) ) {
-                    if ( $show_meta_info ) { //if ( $groupKey !== 'primary' ) {
-                        $label = $args[ 'type_labels' ][ $groupKey ] ?? ucfirst( $groupKey );
-                        $output .= "<em>$label</em><br />";
-                    }
+                    //if ( $show_meta_info ) { //if ( $groupKey !== 'primary' ) {
+                        //$label = $args[ 'type_labels' ][ $groupKey ] ?? ucfirst( $groupKey );
+                        //$output .= "<em>$label</em><br />";
+                    //}
 
                     foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
                         //$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
@@ -378,6 +377,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
                             $output .= ' | Priority: ' . esc_html( $postPriority );
                             $output .= '</small>';
                         }
+                        $output .= '&nbsp;>> <a href="' . get_edit_post_link( $litdate_id ) . '" class="subtle" target="_blank">Edit</a> <<';
 
                         $output .= '<br />';
                     }
@@ -750,7 +750,7 @@ function get_lit_dates_list( $atts = array(), $content = null, $tag = '' )
             }
             $info .= '<span class="'.$classes.'">';
             $info .= $lit_date->post_title;
-            $info .= '</span>';        
+            $info .= '</span>';
             $info .= ' >> <a href="'.get_edit_post_link($litdate_id).'" class="subtle" target="_blank">Edit</a> << ';
             //$info .=" (".print_r($day_title, true).")";
             // TODO: determine/show if this is calc date, override date, &c.
