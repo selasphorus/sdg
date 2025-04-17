@@ -91,7 +91,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 	if ($exclusive) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
 	//$info .= "args: <pre>".print_r($args,true)."</pre>";
-	$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />";
+	//$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />";
 	
 	// Normalize date input
     if ($date) {
@@ -131,7 +131,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		}
     }
 
-    $info .= "start_date: $start_date; end_date: $end_date<br />";
+    //$info .= "start_date: $start_date; end_date: $end_date<br />";
 
     $start = strtotime( $start_date );
     $end   = strtotime( $end_date );
@@ -230,16 +230,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		$primaryPost = null;
 		$secondaryPost = null;
         $defaultPriority = 999;
-        //
-        //error_log('=== litdatePostsByDate for date: '.$dateStr.' ===');
         
 		foreach ($posts as $post) {
 
 			$postID = $post->ID;
 			$postPriority = $defaultPriority;
 			$date_type = 'other';
-			//
-			//error_log('postID: '.$postID);
 			
 			// Get the actual display_dates for the given litdate, to make sure the date in question hasn't been overridden			
 			$display_dates_info = get_display_dates ( $postID, $year );
@@ -259,7 +255,6 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			if ( $terms && !is_wp_error( $terms ) ) {
 				foreach ( $terms as $term ) {
 					$termPriority = get_term_meta($term->term_id, 'priority', true);
-					error_log('term: '.print_r($term, true).' with priority: '.$termPriority);
 					// If term_priority is lower than current max priority, then this is a more important category (#1 comes first)
 					if ( is_numeric( $termPriority ) && $termPriority < $postPriority ) {
 						$postPriority = (int)$termPriority;
@@ -282,7 +277,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				'priority' => $postPriority,
 			];
 			
-			$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
+			//$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
 		}
 
 		//$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
