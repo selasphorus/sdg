@@ -357,7 +357,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
 					//foreach ( $typeGroups[ $group_key ] as $groupPost => $postPriority ) {
 						
-						$output .= "$groupItem: <pre>".print_r($groupItem,true)."</pre>";
+						$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
 						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
 						//$output .= "group_item is a var of type: ".gettype($group_item)."<br />";
 /*
