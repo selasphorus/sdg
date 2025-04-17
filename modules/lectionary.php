@@ -328,7 +328,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
         
         foreach ( $litdate_data as $dateStr => $typeGroups ) {    
             $output .= "<div class='liturgical-date-block'>";
-            $output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
+            //$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
+            $output .= '<a href="/events/' . date( 'Y-m-d', strtotime( $date_str ) ) . '/" target="_blank">';
+            $output .= date( 'l, F j, Y', strtotime( $date_str ) );
+            $output .= "</a><br />";
     
             $groups_to_render = [ 'primary', 'secondary', 'other' ];
             
