@@ -354,12 +354,13 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						$output .= "<em>$label</em><br />";
 					//}
 
-					foreach ( $typeGroups[ $group_key ] as $groupPost => $postPriority ) {
+					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
+					//foreach ( $typeGroups[ $group_key ] as $groupPost => $postPriority ) {
 						
-						$output .= "groupPost: <pre>".print_r($groupPost,true)."</pre>";
+						$output .= "$groupItem: <pre>".print_r($groupItem,true)."</pre>";
 						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
 						//$output .= "group_item is a var of type: ".gettype($group_item)."<br />";
-
+/*
 						$post = get_post( $groupPost );
 						if ( !$post instanceof WP_Post ) {
 							//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
@@ -388,7 +389,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$output .= ' | Priority: ' . esc_html( $postPriority );
 							$output .= '</small>';
 						}
-
+*/
 						$output .= '<br />';
 					}
 					$output .= "<br />";
