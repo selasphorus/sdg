@@ -371,7 +371,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							continue;
 						}
 						if ($post->post_type != "liturgical_date") {
-							$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type.". Moving on to the next...<br />";
+							$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
 							continue;
 						}
 						$title = get_the_title( $post );
@@ -385,7 +385,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							if (!$date_type) { $date_type = "UNKNOWN"; }
 							//
 							$output .= '<small>'; //<br />
-							$output .= 'Date type: ' . esc_html( $date_type );
+							$output .= 'ID: ' . $post->ID;
+							$output .= ' | Date type: ' . esc_html( $date_type );
 							if ( !empty( $term_names ) ) {
 								$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
 							}
