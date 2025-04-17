@@ -11,7 +11,7 @@ if ( !function_exists( 'add_action' ) ) {
 /*********** CPT: LITURGICAL DATE ***********/
 
 // TODO: move this function to WHx4
-function normalize_month_to_int( string $month ): ?int
+function normalizeMonthToInt( string $month ): ?int
 {
     $month = strtolower( trim( $month ) );
 
@@ -34,8 +34,8 @@ function normalize_month_to_int( string $month ): ?int
 }
 
 
-add_shortcode( 'liturgical_dates', 'render_liturgical_dates_shortcode' );
-function render_liturgical_dates_shortcode( $atts = [] ): string
+add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
+function renderLitDatesShortcode( $atts = [] ): string
 {
     // Extract args    
     $args = shortcode_atts( [
@@ -113,7 +113,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 		} else {
 			
 			if ( !is_numeric( $month ) ) {
-				$month = normalize_month_to_int( $month );
+				$month = normalizeMonthToInt( $month );
 			}
 
 			$month = (int)$month;
@@ -325,33 +325,28 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
-    
 		$output = '';
     	//$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";	
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 		
-		foreach ( $litdate_data as $dateStr => $typeGroups ) {
-			
+		foreach ( $litdate_data as $dateStr => $typeGroups ) {	
 			$output .= "<div class='liturgical-date-block'>";
 			$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
 	
 			$groups_to_render = [ 'primary', 'secondary', 'other' ];
 			
 			foreach ( $groups_to_render as $group_key ) {
-
 				if ( !empty( $args[ 'filter_types' ] ) && !in_array( $group_key, $args[ 'filter_types' ], true ) ) {
 					continue;
 				}
 				
 				if ( !empty( $typeGroups[ $group_key ] ) ) {
-				
 					if ( $show_meta_info ) { //if ( $group_key !== 'primary' ) {
 						$label = $args[ 'type_labels' ][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
 					}
 
 					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
-						
 						//$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
 						
 						$post = $groupItem[ 'post' ];
