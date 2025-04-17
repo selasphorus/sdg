@@ -310,7 +310,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
             if ( $primaryPost ) {
         		//$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
         		$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
-        		$litdate_data[$dateStr]['primary'] = $primaryPost;
+        		$litdate_data[$dateStr]['primary'][] = $primaryPost;
         	} else {
         		$info .= "No primaryPost found!<br />";
         	}
@@ -320,7 +320,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	}
             if ( $secondaryPost ) {
             	$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
-            	$litdate_data[ $dateStr ][ 'secondary' ] = $secondaryPost;
+            	$litdate_data[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
         } else {
             $litdate_data[ $dateStr ] = $sorted;
@@ -332,8 +332,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
     if ( $args['return'] === 'formatted' ) {
     
 		$output = '';
-    	$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
-    		
+    	//$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";	
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 		
 		foreach ( $litdate_data as $dateStr => $typeGroups ) {
