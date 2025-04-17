@@ -89,7 +89,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $litdatePostsByDate = [];
     $litdate_data = [];
 
+	if ($exclusive) { $day_titles_only = true; }
 	//$info .= "args: <pre>".print_r($args,true)."</pre>";
+	$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only; end_date: $end_date<br />";
 	
 	// Normalize date input
     if ($date) {
