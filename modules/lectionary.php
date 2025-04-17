@@ -384,7 +384,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 						$output .= '<br />';
 					}
-					$output .= "<br />";
+					if ( !$exclusive ) { $output .= "<br />"; }
 				}
 			}
 	
