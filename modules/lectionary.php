@@ -285,6 +285,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
 		}
 
+		$output .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>";
+		
 		// Sort primaries by priority, lowest first
 		$sorted = [];
 		foreach ( $unsorted as $date_type => $posts ) {
@@ -298,6 +300,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				return $a['priority'] <=> $b['priority'];
 			});
 		}*/
+		
+		$output .= "sorted array of posts and priorities: <pre>".print_r($sorted,true)."</pre>";
+		
 		// wip...
         if ( $exclusive ) {
         	//$info .= "exclusive => get only the single most important matching primary post for date: ".$dateStr."<br />";
