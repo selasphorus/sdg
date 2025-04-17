@@ -355,13 +355,13 @@ function get_liturgical_date_data( array $args = [] ): array|string
 					//}
 
 					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
-					//foreach ( $typeGroups[ $group_key ] as $groupPost => $postPriority ) {
 						
 						$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
-						//$output .= "group_item: <pre>".print_r($group_item,true)."</pre>";
-						//$output .= "group_item is a var of type: ".gettype($group_item)."<br />";
-/*
-						$post = get_post( $groupPost );
+						
+						$post = $groupItem[ 'post' ];
+						$postPriority = $groupItem[ 'priority' ];
+						//
+						$post = get_post( $post );
 						if ( !$post instanceof WP_Post ) {
 							//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
 							continue;
