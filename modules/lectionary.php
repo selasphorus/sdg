@@ -344,10 +344,11 @@ function get_liturgical_date_data( array $args = [] ): array|string
 				}
 				
 				if ( !empty( $typeGroups[ $group_key ] ) ) {
-					//if ( $group_key !== 'primary' ) {
+				
+					if ( $show_meta_info ) { //if ( $group_key !== 'primary' ) {
 						$label = $args[ 'type_labels' ][ $group_key ] ?? ucfirst( $group_key );
 						$output .= "<em>$label</em><br />";
-					//}
+					}
 
 					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
 						
@@ -362,7 +363,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							continue;
 						}
 						if ($post->post_type != "liturgical_date") {
-							$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
+							//$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
 							continue;
 						}
 						$title = get_the_title( $post );
