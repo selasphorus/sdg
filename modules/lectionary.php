@@ -172,7 +172,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
         $qFixed = new WP_Query($fixedQueryArgs);
         if ( $qFixed->have_posts() ) {
             $litdatePostsByDate[$dateStr] = $qFixed->posts;
-            if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
+            //if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
         }
 
         // === Variable Date Matching ===
@@ -217,7 +217,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
             } else {
                 $litdatePostsByDate[$dateStr] = $qVar->posts;
             }
-            if ( count($qVar->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
+            //if ( count($qVar->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
         }
 
         $start = strtotime( '+1 day', $start );
@@ -304,17 +304,17 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	}
             if ( $primaryPost ) {
         		//$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-        		$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
+        		//$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
         		$litdate_data[$dateStr]['primary'][] = $primaryPost;
         	} else {
-        		$info .= "No primaryPost found!<br />";
+        		//$info .= "No primaryPost found!<br />";
         	}
             // Get the most important secondary litdate post, if any
         	if ( !empty( $sorted['secondary'] ) ) {
         		$secondaryPost = $sorted['secondary'][0];
         	}
             if ( $secondaryPost ) {
-            	$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
+            	//$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
             	$litdate_data[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
         } else {
