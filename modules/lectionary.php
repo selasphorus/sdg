@@ -237,7 +237,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 			$postID = $post->ID;
 			$postPriority = $defaultPriority;
-			$type = 'other';
+			$date_type = 'other';
 			//
 			//error_log('postID: '.$postID);
 			
@@ -272,24 +272,24 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 			// Set the type accordingly (default is 'other')
 			if ( $is_secondary ) {
-				$type = 'secondary';
+				$date_type = 'secondary';
 			} elseif ( $postPriority < 999 ) {
-				$type = 'primary';
+				$date_type = 'primary';
 			}
 
-			$unsorted[$type][] = [
+			$unsorted[$date_type][] = [
 				'post'     => $post,
 				'priority' => $postPriority,
 			];
 			
-			//$info .= 'postID: '.$postID."; priority: ".$postPriority."<br />";
+			$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
 		}
 
 		// Sort primaries by priority, lowest first
 		$sorted = [];
-		foreach ( $unsorted as $type => $posts ) {
-			$sorted[$type] = $posts;
-			usort( $sorted[$type], function( $a, $b ) {
+		foreach ( $unsorted as $date_type => $posts ) {
+			$sorted[$date_type] = $posts;
+			usort( $sorted[$date_type], function( $a, $b ) {
 				return $a['priority'] <=> $b['priority'];
 			} );
 		}
@@ -318,7 +318,10 @@ function get_liturgical_date_data( array $args = [] ): array|string
         	if ( !empty( $sorted['secondary'] ) ) {
         		$secondaryPost = $sorted['secondary'][0];
         	}
-            if ($secondaryPost) { $litdate_data[$dateStr]['secondary'] = $secondaryPost; }
+            if ($secondaryPost) {
+            	$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
+            	$litdate_data[$dateStr]['secondary'] = $secondaryPost;
+            }
         } else {
             $litdate_data[$dateStr] = $sorted;
             //$litdate_data[$date] = $posts;
@@ -374,6 +377,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$terms = get_the_terms( $post, 'liturgical_date_category' );
 							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 							$date_type = get_post_meta( $post->ID, 'date_type', true );
+							if (!$date_type) { $date_type = "UNKNOWN"; }
 							//
 							$output .= '<small>'; //<br />
 							$output .= 'Date type: ' . esc_html( $date_type );
