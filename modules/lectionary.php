@@ -62,19 +62,20 @@ function renderLitDatesShortcode( $atts = [] ): string
 function get_liturgical_date_data( array $args = [] ): array|string
 {
     $defaults = [
-        'date'                => null,
-        'year'                => null,
-        'month'                => null,
-        'day_titles_only'    => false,
-        'exclusive'    => false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
-        'return'            => 'posts', // 'posts' | 'prioritized' | 'formatted'
-        'formatted'            => false,
-        'show_meta_info'    => false,
-        'post_id'            => null,
-        'series_id'            => null,
-        'debug'                => false,
-        'filter_types'        => [], // e.g. ['primary'] to limit output
-        'type_labels'        => [   // override default labels as needed -- probably won't need this though in fact...
+        'date'             => null,
+        'year'             => null,
+        'month'            => null,
+        'day_titles_only'  => false,
+        'exclusive'        => false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
+        'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
+        'formatted'        => false,
+        'show_meta_info'   => false,
+        'admin'            => false, // whether to show Edit links etc.
+        'post_id'          => null,
+        'series_id'        => null,
+        'debug'            => false,
+        'filter_types'     => [], // e.g. ['primary'] to limit output
+        'type_labels'      => [   // override default labels as needed -- probably won't need this though in fact...
             'primary'   => 'Primary',
             'secondary' => 'Secondary',
             'other'     => 'Other',
@@ -377,7 +378,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
                             $output .= ' | Priority: ' . esc_html( $postPriority );
                             $output .= '</small>';
                         }
-                        $output .= '&nbsp;>> <a href="' . get_edit_post_link( $litdate_id ) . '" class="subtle" target="_blank">Edit</a> <<';
+                        $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<';
 
                         $output .= '<br />';
                     }
