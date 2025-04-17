@@ -137,9 +137,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
     $end   = strtotime( $end_date );
 
     while ($start <= $end) {
-        
         $dateStr = date( 'Y-m-d', $start );
-        
+
         // === Fixed Date Matching ===
         $fixed_str = date( 'F j', $start );  // without leading zero
         $fixed_str_zero = date( 'F d', $start ); // with leading zero
@@ -169,9 +168,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 		//$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
 		
-        $qFixed = new WP_Query($fixedQueryArgs);
+        $qFixed = new WP_Query( $fixedQueryArgs );
         if ( $qFixed->have_posts() ) {
-            $litdatePostsByDate[$dateStr] = $qFixed->posts;
+            $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
             //if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
         }
 
@@ -225,14 +224,12 @@ function get_liturgical_date_data( array $args = [] ): array|string
 
 	// Loop through litdate posts and sort them by priority
 	foreach ($litdatePostsByDate as $dateStr => $posts) {
-
 		$unsorted = [];
 		$primaryPost = null;
 		$secondaryPost = null;
         $defaultPriority = 999;
         
 		foreach ($posts as $post) {
-
 			$postID = $post->ID;
 			$postPriority = $defaultPriority;
 			$date_type = 'other';
@@ -391,7 +388,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 			$output .= "</div><br />";
 		}
 		
-		if ( $args['debug'] && !empty( $info ) ) { $output = '<div class="debug-info">'.$info.'</div>'.$output; } // info first
+		if ( $args[ 'debug' ] && !empty( $info ) ) { $output = '<div class="debug-info">'.$info.'</div>' . $output; } // info first
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
 		
 		return $output;
