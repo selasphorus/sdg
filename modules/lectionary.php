@@ -331,9 +331,9 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	// If formatted output was requested...
     if ( $args['return'] === 'formatted' ) {
     
-    	//$info .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
-    	
-		$output = '';	
+		$output = '';
+    	$output .= "litdate_data: <pre>".print_r($litdate_data,true)."</pre>";
+    		
 		//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 		
 		foreach ( $litdate_data as $dateStr => $typeGroups ) {
