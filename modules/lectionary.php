@@ -389,7 +389,7 @@ function get_liturgical_date_data( array $args = [] ): array|string
 							$output .= ' | Priority: ' . esc_html( $postPriority );
 							$output .= '</small>';
 						}
-*/
+
 						$output .= '<br />';
 					}
 					$output .= "<br />";
