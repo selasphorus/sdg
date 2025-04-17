@@ -335,18 +335,18 @@ function get_liturgical_date_data( array $args = [] ): array|string
 	
 			$groups_to_render = [ 'primary', 'secondary', 'other' ];
 			
-			foreach ( $groups_to_render as $group_key ) {
-				if ( !empty( $args[ 'filter_types' ] ) && !in_array( $group_key, $args[ 'filter_types' ], true ) ) {
+			foreach ( $groups_to_render as $groupKey ) {
+				if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
 					continue;
 				}
 				
-				if ( !empty( $typeGroups[ $group_key ] ) ) {
-					if ( $show_meta_info ) { //if ( $group_key !== 'primary' ) {
-						$label = $args[ 'type_labels' ][ $group_key ] ?? ucfirst( $group_key );
+				if ( !empty( $typeGroups[ $groupKey ] ) ) {
+					if ( $show_meta_info ) { //if ( $groupKey !== 'primary' ) {
+						$label = $args[ 'type_labels' ][ $groupKey ] ?? ucfirst( $groupKey );
 						$output .= "<em>$label</em><br />";
 					}
 
-					foreach ( $typeGroups[ $group_key ] as $groupItem ) {
+					foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
 						//$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
 						
 						$post = $groupItem[ 'post' ];
@@ -363,7 +363,8 @@ function get_liturgical_date_data( array $args = [] ): array|string
 						}
 						$title = get_the_title( $post );
 						$link = get_permalink( $post );
-						$output .= '<a href="' . esc_url( $link ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
+						$class = $groupKey;
+						$output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
 						// Optional meta info
 						if ( $show_meta_info ) {
 							$terms = get_the_terms( $post, 'liturgical_date_category' );
