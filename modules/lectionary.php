@@ -609,6 +609,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					//$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
 					
 					$post = $groupItem[ 'post' ];
+					$postID = $post->ID;
 					$postPriority = $groupItem[ 'priority' ];
 					//
 					$post = get_post( $post );
@@ -644,16 +645,16 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					}
 					
 					// Edit post link, for admin use
-					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
+					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $postID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
 						
 					// Content and collect?				
-					if ( $args[ 'show_content' ] ) {
+					if ( $args[ 'show_content' ] && $postPriority == "primary" ) {
 						$ts_info .= "about to look for content and collect<br />";
 						
-						$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
-						$collect_text = get_collect_text($litdate_id, $dateStr);
+						$litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
+						$collect_text = get_collect_text( $postID, $dateStr );
 		
-						// TODO/atcwip: if no match by litdate_id, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
+						// TODO/atcwip: if no match by postID, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
 				
 						// If there's something other than the title available to display, then display the popup link
 						// TODO: set width and height dynamically based on browser window dimensions
@@ -663,27 +664,27 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						if ( !empty($collect_text) ) {
 							// TODO: modify title in case of Propers?
 							
-							$output .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
-							$output .= $litdate_title;
+							$output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">';
+							$output .= $title;
 							$output .= '</a>';
-							if ( $litdate_id_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
+							if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
-							$output .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
-							$output .=         '<h2 autofocus>'.$litdate_title.'</h2>';
+							$output .= '<div id="dialog_content_'.$postID.'" class="calendar-day-desc dialog">';
+							$output .= '<h2 autofocus>'.$title.'</h2>';
 							//if ( is_dev_site() ) { $output .= $litdate_content; }
 							if ( $collect_text !== null ) {
-								$output .=     '<div class="calendar-day-collect">';
-								//$output .=         '<h3>Collect:</h3>';
-								$output .=         '<p>'.$collect_text.'</p>';
-								$output .=     '</div>';
+								$output .= '<div class="calendar-day-collect">';
+								//$output .= '<h3>Collect:</h3>';
+								$output .= '<p>'.$collect_text.'</p>';
+								$output .= '</div>';
 							}
 							$output .= '</div>'; ///calendar-day-desc<br />
 		
 						} else {
 							$ts_info .= "no collect_text found<br />";							
 							// If no content or collect, just show the day title
-							$output .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
-							if ( $litdate_id_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
+							$output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
+							if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
 						}
 					}
@@ -789,7 +790,7 @@ function getDisplayDates ( $postID = null, $year = null )
 }
 
 // Collects -- get collect to match litdate (or calendar date? wip)
-function get_collect_text( $litdate_id = null, $dateStr = null )
+function get_collect_text( $postID = null, $dateStr = null )
 {
 
     // TS/logging setup
@@ -805,7 +806,7 @@ function get_collect_text( $litdate_id = null, $dateStr = null )
     $ts_info = "";
     
     $ts_info .= ">>> get_collect_text <<<<br />";
-    $ts_info .= "litdate_id: ".$litdate_id."<br />";
+    $ts_info .= "postID: ".$postID."<br />";
     $ts_info .= "date_str: ".$dateStr."<br />";
     $date = strtotime($dateStr);
     $ts_info .= "litdate date Y-m-d: ".date('Y-m-d',$date)."<br />";
@@ -813,7 +814,7 @@ function get_collect_text( $litdate_id = null, $dateStr = null )
     $month = date('F',$date);
     $year = date('Y',$date);
             
-    if ( $litdate_id ) {
+    if ( $postID ) {
     
         $collect_args = array(
             'post_type'   => 'collect',
@@ -821,7 +822,7 @@ function get_collect_text( $litdate_id = null, $dateStr = null )
             //'posts_per_page' => 1,
             );
             
-        $litdate_title = get_the_title( $litdate_id );
+        $litdate_title = get_the_title( $postID );
         $ts_info .= "litdate_title: ".$litdate_title."<br />";
         
         if ( strpos(strtolower($litdate_title), 'sunday after pentecost') !== false ) {
@@ -853,7 +854,7 @@ function get_collect_text( $litdate_id = null, $dateStr = null )
                 'relation' => 'AND',
                 'first_clause' => array(
                     'key'     => 'related_liturgical_date',
-                    'value'     => '"' . $litdate_id . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
+                    'value'     => '"' . $postID . '"', // matches exactly "123", not just 123. This prevents a match for "1234"
                     'compare'     => 'LIKE',
                 ),
                 'second_clause' => array(
