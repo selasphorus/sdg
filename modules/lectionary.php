@@ -591,7 +591,9 @@ function getLitDateData( array $args = [] ): array|string
     // If formatted output was requested...
     // TODO: revise to include options to show/hide date; to show collect or not... etc.
     if ( $args['return'] === 'formatted' ) {
-        $output = formatLitDateData( $litdateData, $args );        
+        $data = formatLitDateData( $litdateData, $args );
+        $output .= $info;
+        $output .= $data;
         return $output;
     }
 
