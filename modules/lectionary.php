@@ -503,7 +503,7 @@ function getLitDateData( array $args = [] ): array|string
             $postID = $post->ID;
             $postPriority = $defaultPriority;
             $dateGroup = 'other';
-            $info .= "postID: ".$postID."<br />";
+            $info .= "postID: " . $postID . " (" . $post->post_title . ")<br />";
             
             // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden            
             $displayDatesInfo = getDisplayDates( $postID, $year );
