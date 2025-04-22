@@ -595,9 +595,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
 		    $output .= "</a><br />";
 		}
 
-		$groups_to_render = [ 'primary', 'secondary', 'other' ];
+		$groupsToDisplay = [ 'primary', 'secondary', 'other' ];
 		
-		foreach ( $groups_to_render as $groupKey ) {
+		foreach ( $groupsToDisplay as $groupKey ) {
+			if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
 			if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
 				continue;
 			}
