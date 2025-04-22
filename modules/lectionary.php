@@ -591,6 +591,7 @@ function getLitDateData( array $args = [] ): array|string
     // If formatted output was requested...
     // TODO: revise to include options to show/hide date; to show collect or not... etc.
     if ( $args['return'] === 'formatted' ) {
+        $output = "";
         $data = formatLitDateData( $litdateData, $args );
         $output .= $info;
         $output .= $data;
@@ -599,12 +600,11 @@ function getLitDateData( array $args = [] ): array|string
 
     // Default return
     return [
-        'args'                  => $args,
-        'startDate'            => $startDate,
-        'endDate'              => $endDate,
-        'litdateData'          => $litdateData,
-        //'litdate_posts_by_date' => $litdatePostsByDate,
-        'info'                  => $info,
+        'args'       => $args,
+        'startDate'  => $startDate,
+        'endDate'    => $endDate,
+        'litdateData'=> $litdateData,
+        'info'       => $info,
     ];
 }
 
