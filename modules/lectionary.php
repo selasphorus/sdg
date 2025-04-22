@@ -331,8 +331,8 @@ function getLitDateData( array $args = [] ): array|string
     // WIP -- translate from WP-style atts to PSR-12 var names
     $postID = $post_id;
 
-    if ($exclusive) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
-    //$info .= "args: <pre>".print_r($args,true)."</pre>";
+    if ( $exclusive ) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
+    if ( $admin ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
     //$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />";
     
     // Normalize date input
