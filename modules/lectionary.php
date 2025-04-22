@@ -332,8 +332,8 @@ function getLitDateData( array $args = [] ): array|string
     $postID = $post_id;
 
     if ( $exclusive ) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
-    if ( $admin ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
-    //$info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />";
+    if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
+    if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
     
     // Normalize date input
     if ( $date ) {
@@ -579,6 +579,7 @@ function getLitDateData( array $args = [] ): array|string
 function formatLitDateData( $litDateData = [], $args = [] )
 {
 	$output = '';
+	$ts_info = '';
 	
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	
@@ -614,7 +615,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
 						continue;
 					}
-					if ($post->post_type != "liturgical_date") {
+					if ( $post->post_type != "liturgical_date" ) {
 						//$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
 						continue;
 					}
