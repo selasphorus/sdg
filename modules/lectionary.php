@@ -263,7 +263,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 		$atts[ 'date' ] = $date;
 		$atts[ 'exclusive' ] = true;
 		$atts[ 'show_content' ] = true;
-		$atts[ 'filter_types' ] = [ 'primary' ];
+		$atts[ 'filter_types' ] = [ 'primary', 'secondary' ];
 		$atts[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
 		//
 		$ts_info .= "About to getLitDateData for date: $date<br />";
@@ -584,6 +584,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
 	
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
+	//
+	if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
 	
 	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
