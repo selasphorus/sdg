@@ -583,7 +583,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
 	$ts_info = '';
 	$modal = "";
 	
-	$output .= "args: <pre>".print_r($args,true)."</pre>"; // tft
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
 	//
