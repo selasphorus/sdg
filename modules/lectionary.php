@@ -654,8 +654,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						
 					// Content and collect?				
 					if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
-						//if ( $debug ) { $output .= "about to look for content and collect<br />"; }
-						$ts_info .= "about to look for content and collect<br />";
+						//$ts_info .= "about to look for content and collect<br />";
 						
 						$litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
 						$collect_text = get_collect_text( $postID, $dateStr );
@@ -693,8 +692,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							//if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
 						}
+					} elseif ( $groupKey == "secondary" ) {
+					    $info .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
 					} else {
-					    $ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
+					    //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 					}
 					
 					$output .= '<br />';
