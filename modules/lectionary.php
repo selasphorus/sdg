@@ -74,6 +74,11 @@ function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
                 $end   = $now->modify( 'last day of this month' )->format( 'Y-m-d' );
                 return [ 'startDate' => $start, 'endDate' => $end ];
 
+            case 'next_month':
+                $start = $now->modify( 'first day of next month' )->format( 'Y-m-d' );
+                $end   = $now->modify( 'last day of next month' )->format( 'Y-m-d' );
+                return [ 'startDate' => $start, 'endDate' => $end ];
+
             case 'last_year':
                 $start = ( new DateTimeImmutable( 'first day of January last year' ) )->format( 'Y-m-d' );
                 $end   = ( new DateTimeImmutable( 'last day of December last year' ) )->format( 'Y-m-d' );
@@ -177,6 +182,7 @@ function renderLitDatesShortcode( $atts = [] ): string
     // Extract args    
     $args = shortcode_atts( [
         'date'        => null,
+        'scope'       => null,
         'year'        => null,
         'month'       => null,
         'show_date'   => true,
@@ -302,6 +308,7 @@ function getLitDateData( array $args = [] ): array|string
 {
     $defaults = [
         'date'             => null,
+        'scope'            => null,
         'year'             => null,
         'month'            => null,
         //
@@ -353,6 +360,17 @@ function getLitDateData( array $args = [] ): array|string
             $month = substr( $dateStr, 5, 2 );
         } else {
             $info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+        }    
+    } elseif ( $scope ) {
+        $dates = normalizeDateInput( [ 'scope' => $scope ] );
+        if ( is_string( $dates ) ) {
+            $startDate = $endDate = $dates;
+            $year  = substr( $dateStr, 0, 4 );
+            $month = substr( $dateStr, 5, 2 );
+        } else {
+            $startDate = $dates[ 'startDate' ];
+            $endDate = $dates[ 'endDate' ];
+            //$info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }    
     } else {
         if ( empty( $year ) ) {
