@@ -348,8 +348,8 @@ function getLitDateData( array $args = [] ): array|string
 
     if ( $exclusive ) { $day_titles_only = true; }
     // $filter_types = ['primary','secondary'];
-    if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
-    if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
+    $info .= "args: <pre>".print_r($args,true)."</pre>";
+    //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
     
     // Normalize date input
     if ( $date ) {
