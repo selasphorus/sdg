@@ -497,6 +497,7 @@ function getLitDateData( array $args = [] ): array|string
         $primaryPost = null;
         $secondaryPost = null;
         $defaultPriority = 999;
+        $info .= count( $posts ) . " posts found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
         
         foreach ( $posts as $post ) {
             $postID = $post->ID;
