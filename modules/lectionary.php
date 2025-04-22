@@ -510,7 +510,7 @@ function getLitDateData( array $args = [] ): array|string
             $displayDates = $displayDatesInfo[ 'dates' ];
             //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
-                $info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate.<br />";
+                $info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
                 // Therefore don't show it.
                 //$postID = null;
                 continue;
@@ -748,7 +748,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
 // A liturgical date may correspond to multiple dates in a year, if dates have been both assigned and calculated,
 // or if a date has been assigned to replace the fixed date
 // The following function determines which of the date(s) is active -- could be multiple, if date assigned is NOT a replacement_date
-function getDisplayDates ( $postID = null, $year = null )
+// year default to current year
+function getDisplayDates ( $postID = null, $year = date( 'Y' ) )
 {
     $info = "";
     $dates = array();
