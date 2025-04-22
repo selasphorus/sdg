@@ -306,7 +306,7 @@ function getLitDateData( array $args = [] ): array|string
         //
         'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
         'formatted'        => false,
-        'show_meta_info'   => false,
+        'show_meta'   => false,
         'show_content'   => false,
         'admin'            => false, // whether to show Edit links etc.
         'debug'            => false,
@@ -328,8 +328,6 @@ function getLitDateData( array $args = [] ): array|string
     
     // WIP -- translate from WP-style atts to PSR-12 var names
     $postID = $post_id;
-    $showMeta = $show_meta_info;
-    $showContent = $show_content;
 
     if ($exclusive) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
     //$info .= "args: <pre>".print_r($args,true)."</pre>";
@@ -561,7 +559,7 @@ function getLitDateData( array $args = [] ): array|string
     // If formatted output was requested...
     // TODO: revise to include options to show/hide date; to show collect or not... etc.
     if ( $args['return'] === 'formatted' ) {
-        $output = formatLitDateData( $litdateData, $showMeta, $showContent, $admin );        
+        $output = formatLitDateData( $litdateData, $args );        
         return $output;
     }
 
@@ -576,7 +574,7 @@ function getLitDateData( array $args = [] ): array|string
     ];
 }
 
-function formatLitDateData( $litDateData = [], $showMeta = false, $admin = false )
+function formatLitDateData( $litDateData = [], $args = [] )
 {
 	$output = '';
 	
@@ -598,7 +596,7 @@ function formatLitDateData( $litDateData = [], $showMeta = false, $admin = false
 			}
 			
 			if ( !empty( $typeGroups[ $groupKey ] ) ) {
-				//if ( $showMeta ) { //if ( $groupKey !== 'primary' ) {
+				//if ( $args[ 'show_meta' ] ) { //if ( $groupKey !== 'primary' ) {
 					//$label = $args[ 'type_labels' ][ $groupKey ] ?? ucfirst( $groupKey );
 					//$output .= "<em>$label</em><br />";
 				//}
@@ -625,7 +623,7 @@ function formatLitDateData( $litDateData = [], $showMeta = false, $admin = false
 					$output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
 					
 					// Optional meta info
-					if ( $showMeta || $admin ) {
+					if ( $args[ 'show_meta' ] || $args[ 'admin' ] ) {
 						$terms = get_the_terms( $post, 'liturgical_date_category' );
 						$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 						$date_type = get_post_meta( $post->ID, 'date_type', true );
@@ -645,7 +643,7 @@ function formatLitDateData( $litDateData = [], $showMeta = false, $admin = false
 					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
 						
 					// Content and collect?				
-					if ( $showContent ) {
+					if ( $args[ 'show_content' ] ) {
 						$ts_info .= "about to look for content and collect<br />";
 						
 						$litdate_content = get_the_content( null, false, $litdate_id ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
