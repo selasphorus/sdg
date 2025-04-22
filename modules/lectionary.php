@@ -262,6 +262,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( !$hideDayTitles ) { // == 0
 		$atts[ 'date' ] = $date;
 		$atts[ 'exclusive' ] = true;
+		$atts[ 'show_content' ] = true;
 		$atts[ 'filter_types' ] = [ 'primary' ];
 		$atts[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
 		//
