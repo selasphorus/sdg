@@ -685,16 +685,13 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$ts_info .= "no collect_text found<br />";							
 							// If no content or collect, just show the day title
 							$output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
-							//if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
-							$output .= '<br />';
 						}
 					} elseif ( $groupKey == "secondary" && !$admin ) {
 					    $output .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
 					} else {
+					    $output .= '<br />';
 					    //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 					}
-					
-					$output .= '<br />';
 				}
 				if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
 			}
