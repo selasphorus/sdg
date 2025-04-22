@@ -374,9 +374,7 @@ function getLitDateData( array $args = [] ): array|string
             //$info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }    
     } else {
-        if ( empty( $year ) ) {
-            $year = date( 'Y' ); // default to current year if none is set
-        }
+        if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
         if ( empty( $month ) ) {
             $startDate = $year . '-01-01';
             $endDate   = $year . '-12-31';
@@ -748,13 +746,13 @@ function formatLitDateData( $litDateData = [], $args = [] )
 // A liturgical date may correspond to multiple dates in a year, if dates have been both assigned and calculated,
 // or if a date has been assigned to replace the fixed date
 // The following function determines which of the date(s) is active -- could be multiple, if date assigned is NOT a replacement_date
-// year default to current year
-function getDisplayDates ( $postID = null, $year = date( 'Y' ) )
+function getDisplayDates ( $postID = null, $year = null )
 {
     $info = "";
     $dates = array();
     $arr_info = array();
-    $fixedDateStr = ""; 
+    $fixedDateStr = "";
+    if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
     
     // Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $postID, 'date_type', true );
