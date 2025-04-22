@@ -241,7 +241,6 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         if ( $postID ) {
             $post = get_post( $postID );
             $post_type = $post->post_type;
-            //
             if ( $post_type == 'event' ) {
                 $dateStr = get_post_meta( $postID, '_event_start_date', true );
                 $date = strtotime($dateStr);
@@ -259,13 +258,16 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     }
     
     // If hideDayTitles is false, go ahead and get litdates for the date
-    if ( $hideDayTitles == 0 ) { 
+    if ( !$hideDayTitles ) { // == 0
 		$atts[ 'date' ] = $date;
 		$atts[ 'exclusive' ] = true;
 		$atts[ 'filter_types' ] = [ 'primary' ];
 		$atts[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
-	
+		//
+		$ts_info .= "About to getLitDateData for date: $date<br />";
 		$output .= getLitDateData( $atts );
+    } else {
+    	$ts_info .= "hideDayTitles is set to true for this post/event<br />";
     }
     
     // Show or Hide Special Notices?
@@ -275,7 +277,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( $series_id ) { $hideSpecialNotices = get_post_meta( $series_id, 'hide_special_notices', true ); }
     // If there is no series-wide ban on displaying the notices, then should we display them for this particular post?
     if ( $hideSpecialNotices == 0 ) { $hideSpecialNotices = get_post_meta( $postID, 'hide_special_notices', true ); }
-    //if ( $hideSpecialNotices == 1 ) { $ts_info .= "hide_special_notices is set to true for this post/event<br />"; }
+    if ( $hideSpecialNotices == 1 ) { $ts_info .= "hideSpecialNotices is set to true for this post/event<br />"; }
     // Append Event Special Notices content, as applicable
     if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
     //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $date ); }
