@@ -216,7 +216,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'date'      => null,
         'the_date'      => null, // deprecated -- to be removed as soon as changes are pushed live and plugin-templates/events-list.php has been updated on live site
         //'exclusive' => true,
-        'debug'     => false,
+        'debug'     => true, // true tft -- set to false for production
     ], $atts );
     extract( $args );
     
@@ -253,7 +253,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If the date is still null, give up and go
     if ( $date == null ) {
         $ts_info .= "no date available for which to find day_title<br />";
-        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }
     
@@ -283,9 +283,8 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $date ); }
     
     // TS Info
-    if ( $ts_info != ""&& ( $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-    
     $output .= "\n<!-- /getDayTitle -->\n";
+    if ( $ts_info != ""&& ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $output;
     
@@ -584,7 +583,7 @@ function formatLitDateData( $litDateData = [] )
 	//$output .= "litdate_data: <pre>".print_r($litdateData,true)."</pre>";    
 	//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
 	
-	foreach ( $litdateData as $dateStr => $typeGroups ) {    
+	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
 		//$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
 		$output .= '<a href="/events/' . date( 'Y-m-d', strtotime( $dateStr ) ) . '/" class="subtle" target="_blank">';
