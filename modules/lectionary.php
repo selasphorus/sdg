@@ -615,7 +615,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
 	//
-	if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
+	//if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
 	
 	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
@@ -658,6 +658,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					$title = get_the_title( $post );
 					$link = get_permalink( $post );
 					$class = $groupKey;
+					if ( $debug ) { $output .= "postID: $postID; title: $title<br />"; }
+					
 					// TODO: option to return UN-linked version of title(s)?
 					if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
 					
