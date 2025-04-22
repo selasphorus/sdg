@@ -495,6 +495,7 @@ function getLitDateData( array $args = [] ): array|string
         $primaryPost = null;
         $secondaryPost = null;
         $defaultPriority = 999;
+        $year  = substr( $dateStr, 0, 4 );
         $info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
         
         foreach ( $posts as $post ) {
@@ -594,7 +595,7 @@ function getLitDateData( array $args = [] ): array|string
     if ( $args['return'] === 'formatted' ) {
         $output = "";
         $data = formatLitDateData( $litdateData, $args );
-        $output .= $info;
+        if ( $debug ) { $output .= $info; }
         $output .= $data;
         return $output;
     }
