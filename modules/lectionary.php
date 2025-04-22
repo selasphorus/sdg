@@ -599,7 +599,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 		$groupsToDisplay = [ 'primary', 'secondary', 'other' ];
 		
 		foreach ( $groupsToDisplay as $groupKey ) {
-			if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
+			//if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
 			if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
 				continue;
 			}
@@ -611,7 +611,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 				//}
 
 				foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
-					if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
+					//if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
 					
 					$post = $groupItem[ 'post' ];
 					$postID = $post->ID;
@@ -619,11 +619,11 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					//
 					$post = get_post( $post );
 					if ( !$post instanceof WP_Post ) {
-						//$output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
+						if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
 						continue;
 					}
 					if ( $post->post_type != "liturgical_date" ) {
-						//$output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
+						if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
 						continue;
 					}
 					$title = get_the_title( $post );
