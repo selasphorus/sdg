@@ -46,10 +46,11 @@ function normalizeMonthToInt( string $month ): ?int
 function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
 {    
     $args = wp_parse_args( $args, [
-        'scope'         => null,
         'date'          => null,
+        'scope'         => null,
         'year'          => null,
         'month'         => null,
+        //'returnSingle'  => true, // WIP return a single date, as opposed 
         'asDateObjects' => false,
     ] );
     extract( $args );
@@ -112,6 +113,7 @@ function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
         return $date->format( 'Y-m-d' );
     }
 
+    // Date range? Then set start and end dates
     if ( is_string( $date ) && strpos( $date, ',' ) !== false ) {
         [ $raw_start, $raw_end ] = explode( ',', $date, 2 );
         $start = parseFlexibleDate( trim( $raw_start ) );
@@ -340,10 +342,13 @@ function getLitDateData( array $args = [] ): array|string
     if ( $date ) {
         $dateStr = normalizeDateInput( [ 'date' => $date ] );
         //
-        $startDate = $end_date = $dateStr;
-        $year  = substr( $dateStr, 0, 4 );
-        $month = substr( $dateStr, 5, 2 );
-    
+        if ( is_string( $dateStr ) ) {
+            $startDate = $end_date = $dateStr;
+            $year  = substr( $dateStr, 0, 4 );
+            $month = substr( $dateStr, 5, 2 );
+        } else {
+            $output .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+        }    
     } else {
         if ( empty( $year ) ) {
             $year = date( 'Y' ); // default to current year if none is set
