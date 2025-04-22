@@ -583,6 +583,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 	$ts_info = '';
 	
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
+	if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
 	
 	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
@@ -606,7 +607,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 				//}
 
 				foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
-					//$output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
+					if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
 					
 					$post = $groupItem[ 'post' ];
 					$postID = $post->ID;
