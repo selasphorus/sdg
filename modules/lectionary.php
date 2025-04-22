@@ -330,6 +330,8 @@ function getLitDateData( array $args = [] ): array|string
     //$ts_info = '';
     $litdatePostsByDate = [];
     $litdateData = [];
+    $startDate = null;
+    $endDate = null;
     
     // WIP -- translate from WP-style atts to PSR-12 var names
     $postID = $post_id;
@@ -343,11 +345,11 @@ function getLitDateData( array $args = [] ): array|string
         $dateStr = normalizeDateInput( [ 'date' => $date ] );
         //
         if ( is_string( $dateStr ) ) {
-            $startDate = $end_date = $dateStr;
+            $startDate = $endDate = $dateStr;
             $year  = substr( $dateStr, 0, 4 );
             $month = substr( $dateStr, 5, 2 );
         } else {
-            $output .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+            $info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }    
     } else {
         if ( empty( $year ) ) {
@@ -355,7 +357,7 @@ function getLitDateData( array $args = [] ): array|string
         }
         if ( empty( $month ) ) {
             $startDate = $year . '-01-01';
-            $end_date   = $year . '-12-31';
+            $endDate   = $year . '-12-31';
         } else {
             if ( !is_numeric( $month ) ) {
                 $month = normalizeMonthToInt( $month );
@@ -370,14 +372,14 @@ function getLitDateData( array $args = [] ): array|string
             //
             $startDate = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-01';
             $days_in_month = cal_days_in_month( CAL_GREGORIAN, $month, (int)$year );
-            $end_date   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
+            $endDate   = $year . '-' . str_pad( $month, 2, '0', STR_PAD_LEFT ) . '-' . $days_in_month;
         }
     }
 
-    //$info .= "start_date: $startDate; end_date: $end_date<br />";
+    //$info .= "startDate: $startDate; endDate: $endDate<br />";
 
     $start = strtotime( $startDate );
-    $end   = strtotime( $end_date );
+    $end   = strtotime( $endDate );
 
     ///
 
@@ -574,9 +576,9 @@ function getLitDateData( array $args = [] ): array|string
     // Default return
     return [
         'args'                  => $args,
-        'start_date'            => $startDate,
-        'end_date'              => $end_date,
-        'litdate_data'          => $litdateData,
+        'startDate'            => $startDate,
+        'endDate'              => $endDate,
+        'litdateData'          => $litdateData,
         //'litdate_posts_by_date' => $litdatePostsByDate,
         'info'                  => $info,
     ];
