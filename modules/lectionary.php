@@ -203,7 +203,8 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // TS/logging setup
     $ts_info = "";
     $do_ts = devmode_active( array("sdg", "lectionary") );
-    
+    $do_ts = true; // tft
+
     $output .= "\n<!-- getDayTitle -->\n";
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
