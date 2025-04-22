@@ -192,8 +192,10 @@ function renderLitDatesShortcode( $atts = [] ): string
     if ( !empty( $atts['filter_types'] ) ) {
         $atts['filter_types'] = array_map( 'trim', explode( ',', strtolower( $atts['filter_types'] ) ) );
     }
-
-    return getLitDateData( $atts );
+    
+    $output = getLitDateData( $atts );
+    if ( !is_string( $output ) ) { $output = print_r( $output, true ); }
+    return $output;
 }
 
 
