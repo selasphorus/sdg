@@ -215,9 +215,9 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'post_id'   => get_the_ID(),
         'series_id' => null,
         'date'      => null,
-        'the_date'      => null, // deprecated -- to be removed as soon as changes are pushed live and plugin-templates/events-list.php has been updated on live site
-        //'exclusive' => true,
-        'debug'     => true, // true tft -- set to false for production
+        'the_date'  => null, // deprecated -- to be removed as soon as changes are pushed live and plugin-templates/events-list.php has been updated on live site
+        'exclusive' => true,
+        'debug'     => false,
     ], $atts );
     extract( $args );
     
@@ -260,14 +260,14 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     
     // If hideDayTitles is false, go ahead and get litdates for the date
     if ( !$hideDayTitles ) { // == 0
-		$atts[ 'date' ] = $date;
-		$atts[ 'exclusive' ] = true;
-		$atts[ 'show_content' ] = true;
-		$atts[ 'filter_types' ] = [ 'primary', 'secondary' ];
-		$atts[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
+		$args[ 'date' ] = $date;
+		$args[ 'show_content' ] = true;
+		$args[ 'filter_types' ] = [ 'primary', 'secondary' ];
+		$args[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
+		$args[ 'debug' ] = true; // tft
 		//
 		$ts_info .= "About to getLitDateData for date: $date<br />";
-		$output .= getLitDateData( $atts );
+		$output .= getLitDateData( $args );
     } else {
     	$ts_info .= "hideDayTitles is set to true for this post/event<br />";
     }
