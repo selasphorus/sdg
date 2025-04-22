@@ -346,7 +346,8 @@ function getLitDateData( array $args = [] ): array|string
     // WIP -- translate from WP-style atts to PSR-12 var names
     $postID = $post_id;
 
-    if ( $exclusive ) { $day_titles_only = true; } // $filter_types = ['primary','secondary'];
+    if ( $exclusive ) { $day_titles_only = true; }
+    // $filter_types = ['primary','secondary'];
     if ( $debug ) { $info .= "args: <pre>".print_r($args,true)."</pre>"; }
     if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
     
@@ -614,7 +615,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
 	//
-	//if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
+	if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
 	
 	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
@@ -627,7 +628,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 		$groupsToDisplay = [ 'primary', 'secondary', 'other' ];
 		
 		foreach ( $groupsToDisplay as $groupKey ) {
-			//if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
+			if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
 			if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
 				continue;
 			}
@@ -642,18 +643,18 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					//if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
 					
 					$post = $groupItem[ 'post' ];
-					$postID = $post->ID;
 					$postPriority = $groupItem[ 'priority' ];
-					//
 					$post = get_post( $post );
+					// Make sure we've got the right type of post object
 					if ( !$post instanceof WP_Post ) {
-					    $ts_info .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
+					    if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
 						continue;
 					}
 					if ( $post->post_type != "liturgical_date" ) {
-						$ts_info .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
+						if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
 						continue;
 					}
+					$postID = $post->ID;
 					$title = get_the_title( $post );
 					$link = get_permalink( $post );
 					$class = $groupKey;
