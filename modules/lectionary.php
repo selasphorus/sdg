@@ -581,6 +581,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 {
 	$output = '';
 	$ts_info = '';
+	$modal = "";
 	
 	$output .= "args: <pre>".print_r($args,true)."</pre>"; // tft
 	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
@@ -668,22 +669,18 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					
 						if ( !empty($collect_text) ) {
 							// TODO: modify title in case of Propers?
-							
-							$output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">';
-							$output .= $title;
-							$output .= '</a>';
-							if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
-							$output .= '<br />';
-							$output .= '<div id="dialog_content_'.$postID.'" class="calendar-day-desc dialog">';
-							$output .= '<h2 autofocus>'.$title.'</h2>';
+							if ( !$admin ) { $output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">' . $title . '</a>'; }
+							// Put together the collect modal
+							$modal .= '<div id="dialog_content_'.$postID.'" class="calendar-day-desc dialog">';
+							$modal .= '<h2 autofocus>'.$title.'</h2>';
 							//if ( is_dev_site() ) { $output .= $litdate_content; }
 							if ( $collect_text !== null ) {
-								$output .= '<div class="calendar-day-collect">';
+								$modal .= '<div class="calendar-day-collect">';
 								//$output .= '<h3>Collect:</h3>';
-								$output .= '<p>'.$collect_text.'</p>';
-								$output .= '</div>';
+								$modal .= '<p>'.$collect_text.'</p>';
+								$modal .= '</div>';
 							}
-							$output .= '</div>'; ///calendar-day-desc<br />
+							$modal .= '</div>'; ///calendar-day-desc<br />
 		
 						} else {
 							$ts_info .= "no collect_text found<br />";							
@@ -692,7 +689,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							//if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
 						}
-					} elseif ( $groupKey == "secondary" ) {
+					} elseif ( $groupKey == "secondary" && !$admin ) {
 					    $info .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
 					} else {
 					    //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
@@ -703,7 +700,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 				if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
 			}
 		}
-
+		$output .= $modal;
 		$output .= "</div><br />";
 	}
 	
