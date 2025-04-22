@@ -176,6 +176,7 @@ function renderLitDatesShortcode( $atts = [] ): string
         'date'        => null,
         'year'        => null,
         'month'       => null,
+        'show_date'   => true,
         'day_titles_only' => false,
         'debug'       => false,
         'filter_types' => '',
@@ -306,8 +307,9 @@ function getLitDateData( array $args = [] ): array|string
         //
         'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
         'formatted'        => false,
-        'show_meta'   => false,
-        'show_content'   => false,
+        'show_date'        => false, // we'll only display the date if returning formatted in non-events context
+        'show_meta'        => false,
+        'show_content'     => false,
         'admin'            => false, // whether to show Edit links etc.
         'debug'            => false,
         'filter_types'     => [], // e.g. ['primary'] to limit output
@@ -578,15 +580,15 @@ function formatLitDateData( $litDateData = [], $args = [] )
 {
 	$output = '';
 	
-	//$output .= "litdate_data: <pre>".print_r($litdateData,true)."</pre>";    
-	//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; }
+	if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
 	
 	foreach ( $litDateData as $dateStr => $typeGroups ) {    
 		$output .= "<div class='liturgical-date-block'>";
-		//$output .= "<strong>" . esc_html( date( 'l, F j, Y', strtotime( $dateStr ) ) ) . "</strong><br />";
-		$output .= '<a href="/events/' . date( 'Y-m-d', strtotime( $dateStr ) ) . '/" class="subtle" target="_blank">';
-		$output .= date( 'l, F j, Y', strtotime( $dateStr ) );
-		$output .= "</a><br />";
+		if ( $admin || $args[ 'show_date' ] ) {
+		    $output .= '<a href="/events/' . date( 'Y-m-d', strtotime( $dateStr ) ) . '/" class="subtle" target="_blank">';
+		    $output .= date( 'l, F j, Y', strtotime( $dateStr ) );
+		    $output .= "</a><br />";
+		}
 
 		$groups_to_render = [ 'primary', 'secondary', 'other' ];
 		
@@ -620,10 +622,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					$link = get_permalink( $post );
 					$class = $groupKey;
 					// TODO: option to return UN-linked version of title(s)?
-					$output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; // <br />
+					if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
 					
 					// Optional meta info
-					if ( $args[ 'show_meta' ] || $args[ 'admin' ] ) {
+					if ( $args[ 'show_meta' ] || $admin ) {
 						$terms = get_the_terms( $post, 'liturgical_date_category' );
 						$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
 						$date_type = get_post_meta( $post->ID, 'date_type', true );
@@ -640,7 +642,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					}
 					
 					// Edit post link, for admin use
-					if ( $args[ 'admin' ] ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
+					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
 						
 					// Content and collect?				
 					if ( $args[ 'show_content' ] ) {
@@ -657,34 +659,30 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						$height = '450';
 					
 						if ( !empty($collect_text) ) {
-						
 							// TODO: modify title in case of Propers?
 							
-							$info .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
-							$info .= $litdate_title;
-							$info .= '</a>';
-							if ( $litdate_id_secondary ) { $info .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
-							$info .= '<br />';
-							$info .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
-							$info .=         '<h2 autofocus>'.$litdate_title.'</h2>';
-							if ( is_dev_site() ) {
-								//$info .=         $litdate_content;
+							$output .= '<a href="#!" id="dialog_handle_'.$litdate_id.'" class="calendar-day dialog_handle">';
+							$output .= $litdate_title;
+							$output .= '</a>';
+							if ( $litdate_id_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
+							$output .= '<br />';
+							$output .= '<div id="dialog_content_'.$litdate_id.'" class="calendar-day-desc dialog">';
+							$output .=         '<h2 autofocus>'.$litdate_title.'</h2>';
+							//if ( is_dev_site() ) { $output .= $litdate_content; }
+							if ( $collect_text !== null ) {
+								$output .=     '<div class="calendar-day-collect">';
+								//$output .=         '<h3>Collect:</h3>';
+								$output .=         '<p>'.$collect_text.'</p>';
+								$output .=     '</div>';
 							}
-							if ($collect_text !== null) {
-								$info .=     '<div class="calendar-day-collect">';
-								//$info .=         '<h3>Collect:</h3>';
-								$info .=         '<p>'.$collect_text.'</p>';
-								$info .=     '</div>';
-							}
-							$info .= '</div>'; ///calendar-day-desc<br />
+							$output .= '</div>'; ///calendar-day-desc<br />
 		
 						} else {
-							$ts_info .= "no collect_text found<br />";
-							
+							$ts_info .= "no collect_text found<br />";							
 							// If no content or collect, just show the day title
-							$info .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
-							if ( $litdate_id_secondary ) { $info .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
-							$info .= '<br />';
+							$output .= '<span id="'.$litdate_id.'" class="calendar-day">'.$litdate_title.'</span>';
+							if ( $litdate_id_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $litdate_id_secondary ).'</span>'; }
+							$output .= '<br />';
 						}
 					}
 					
