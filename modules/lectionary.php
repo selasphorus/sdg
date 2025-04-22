@@ -640,7 +640,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					}
 					
 					// Edit post link, for admin use
-					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
+					if ( $args[ 'admin' ] ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $post->ID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
 						
 					// Content and collect?				
 					if ( $args[ 'show_content' ] ) {
@@ -690,7 +690,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					
 					$output .= '<br />';
 				}
-				if ( !$exclusive ) { $output .= "<br />"; }
+				if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
 			}
 		}
 
