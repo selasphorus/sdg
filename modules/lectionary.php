@@ -619,11 +619,11 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					//
 					$post = get_post( $post );
 					if ( !$post instanceof WP_Post ) {
-						if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
+					    $ts_info .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />";
 						continue;
 					}
 					if ( $post->post_type != "liturgical_date" ) {
-						if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
+						$ts_info .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />";
 						continue;
 					}
 					$title = get_the_title( $post );
@@ -654,6 +654,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						
 					// Content and collect?				
 					if ( $args[ 'show_content' ] && $postPriority == "primary" ) {
+						//if ( $debug ) { $output .= "about to look for content and collect<br />"; }
 						$ts_info .= "about to look for content and collect<br />";
 						
 						$litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
@@ -689,7 +690,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$ts_info .= "no collect_text found<br />";							
 							// If no content or collect, just show the day title
 							$output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
-							if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
+							//if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
 						}
 					} else {
@@ -705,7 +706,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 		$output .= "</div><br />";
 	}
 	
-	if ( $args[ 'debug' ] && !empty( $info ) ) { $output = '<div class="debug-info">'.$info.'</div>' . $output; } // info first
+	if ( $args[ 'debug' ] && !empty( $ts_info ) ) { $output = '<div class="debug-info">'.$ts_info.'</div>' . $output; } // info first
 	//if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
 	
 	return $output;
