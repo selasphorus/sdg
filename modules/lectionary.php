@@ -113,8 +113,9 @@ function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
         return $date->format( 'Y-m-d' );
     }
 
-    // Date range? Then set start and end dates
-    if ( is_string( $date ) && strpos( $date, ',' ) !== false ) {
+    // Date range in format "YYYY-mm-dd, YYYY-mm-dd"? Then set start, end dates
+    //if ( is_string( $date ) && strpos( $date, ',' ) !== false ) {
+    if ( preg_match( '/^\d{4}-\d{2}-\d{2},\s?\d{4}-\d{2}-\d{2}$/', $date ) ) {
         [ $raw_start, $raw_end ] = explode( ',', $date, 2 );
         $start = parseFlexibleDate( trim( $raw_start ) );
         $end   = parseFlexibleDate( trim( $raw_end ) );
