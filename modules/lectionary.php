@@ -264,7 +264,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 		$args[ 'show_content' ] = true;
 		$args[ 'filter_types' ] = [ 'primary', 'secondary' ];
 		$args[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
-		$args[ 'debug' ] = true; // tft
+		//$args[ 'debug' ] = true; // tft
 		//
 		$ts_info .= "About to getLitDateData for date: $date<br />";
 		$output .= getLitDateData( $args );
