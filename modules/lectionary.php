@@ -497,19 +497,20 @@ function getLitDateData( array $args = [] ): array|string
         $primaryPost = null;
         $secondaryPost = null;
         $defaultPriority = 999;
-        $info .= count( $posts ) . " posts found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
+        $info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
         
         foreach ( $posts as $post ) {
             $postID = $post->ID;
             $postPriority = $defaultPriority;
-            $date_type = 'other';
+            $dateGroup = 'other';
+            $info .= "postID: ".$postID."<br />";
             
             // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden            
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
             //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
-                //$ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate.<br />";
+                $info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate.<br />";
                 // Therefore don't show it.
                 //$postID = null;
                 continue;
@@ -528,32 +529,33 @@ function getLitDateData( array $args = [] ): array|string
                     }
                 }
             }
+            $info .= "postPriority: ".$postPriority."<br />";
 
             // Check if litdate post has been designated as secondary
             $is_secondary = get_post_meta( $postID, 'secondary', true );
 
             // Set the type accordingly (default is 'other')
             if ( $is_secondary ) {
-                $date_type = 'secondary';
+                $dateGroup = 'secondary';
             } elseif ( $postPriority < 999 ) {
-                $date_type = 'primary';
+                $dateGroup = 'primary';
             }
 
-            $unsorted[$date_type][] = [
+            $unsorted[ $dateGroup ][] = [
                 'post'     => $post,
                 'priority' => $postPriority,
             ];
             
-            //$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$date_type."<br />";
+            //$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$dateGroup."<br />";
         }
 
         //$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
         
         // Sort primaries by priority, lowest first
         $sorted = [];
-        foreach ( $unsorted as $date_type => $posts ) {
-            $sorted[ $date_type ] = $posts;
-            usort( $sorted[ $date_type ], function( $a, $b ) {
+        foreach ( $unsorted as $dateGroup => $posts ) {
+            $sorted[ $dateGroup ] = $posts;
+            usort( $sorted[ $dateGroup ], function( $a, $b ) {
                 return $a[ 'priority' ] <=> $b[ 'priority' ];
             } );
         }
@@ -577,8 +579,8 @@ function getLitDateData( array $args = [] ): array|string
                 //$info .= "No primaryPost found!<br />";
             }
             // Get the most important secondary litdate post, if any
-            if ( !empty( $sorted['secondary'] ) ) {
-                $secondaryPost = $sorted['secondary'][0];
+            if ( !empty( $sorted[ 'secondary' ] ) ) {
+                $secondaryPost = $sorted[ 'secondary' ][0];
             }
             if ( $secondaryPost ) {
                 $info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
