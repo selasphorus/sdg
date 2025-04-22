@@ -687,6 +687,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							if ( $postID_secondary ) { $output .= '<br /><span class="calendar-day secondary">'.get_the_title( $postID_secondary ).'</span>'; }
 							$output .= '<br />';
 						}
+					} else {
+					    $ts_info .= "show_content: " . $args[ 'show_content' ] ."; postPriority: $postPriority<br />";
 					}
 					
 					$output .= '<br />';
