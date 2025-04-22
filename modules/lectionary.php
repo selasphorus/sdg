@@ -653,7 +653,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $postID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
 						
 					// Content and collect?				
-					if ( $args[ 'show_content' ] && $postPriority == "primary" ) {
+					if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
 						//if ( $debug ) { $output .= "about to look for content and collect<br />"; }
 						$ts_info .= "about to look for content and collect<br />";
 						
@@ -694,7 +694,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$output .= '<br />';
 						}
 					} else {
-					    $ts_info .= "show_content: " . $args[ 'show_content' ] ."; postPriority: $postPriority<br />";
+					    $ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 					}
 					
 					$output .= '<br />';
