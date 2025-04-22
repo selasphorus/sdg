@@ -213,6 +213,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'post_id'   => get_the_ID(),
         'series_id' => null,
         'date'      => null,
+        'the_date'      => null, // deprecated -- to be removed as soon as changes are pushed live and plugin-templates/events-list.php has been updated on live site
         //'exclusive' => true,
         'debug'     => false,
     ], $atts );
@@ -234,11 +235,12 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     }*/
     
     // If no date has yet been set, try to find one
+    if ( $the_date ) { $date = $the_date; }
     if ( $date == null ) {
         if ( $postID ) {
             $post = get_post( $postID );
             $post_type = $post->post_type;
-
+            //
             if ( $post_type == 'event' ) {
                 $dateStr = get_post_meta( $postID, '_event_start_date', true );
                 $date = strtotime($dateStr);
@@ -274,8 +276,8 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( $hideSpecialNotices == 0 ) { $hideSpecialNotices = get_post_meta( $postID, 'hide_special_notices', true ); }
     //if ( $hideSpecialNotices == 1 ) { $ts_info .= "hide_special_notices is set to true for this post/event<br />"; }
     // Append Event Special Notices content, as applicable
-    if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $the_date ); }
-    //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $the_date ); }
+    if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
+    //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $date ); }
     
     // TS Info
     if ( $ts_info != ""&& ( $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
