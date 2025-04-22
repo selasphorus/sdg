@@ -690,7 +690,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$output .= '<br />';
 						}
 					} elseif ( $groupKey == "secondary" && !$admin ) {
-					    $info .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
+					    $output .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
 					} else {
 					    //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 					}
