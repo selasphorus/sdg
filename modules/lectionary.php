@@ -564,13 +564,13 @@ function getLitDateData( array $args = [] ): array|string
             //$info .= "exclusive => get only the single most important matching primary post for date: ".$dateStr."<br />";
             // Get the single most important matching litdate post
             if ( !empty( $sorted[ 'primary' ] ) ) {
-                $primaryPost = $sorted['primary'][0];
+                $primaryPost = $sorted[ 'primary' ][0];
             } elseif ( !empty( $sorted[ 'other' ] ) ) {
-                $primaryPost = $sorted['other'][0];
+                $primaryPost = $sorted[ 'other' ][0];
             }
             if ( $primaryPost ) {
                 //$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-                $info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID."<br />";
+                $info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID." (" . $primaryPost['post']->post_title . ")<br />";
                 $litdateData[ $dateStr ][ 'primary' ][] = $primaryPost;
             } else {
                 //$info .= "No primaryPost found!<br />";
@@ -580,7 +580,7 @@ function getLitDateData( array $args = [] ): array|string
                 $secondaryPost = $sorted['secondary'][0];
             }
             if ( $secondaryPost ) {
-                $info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
+                $info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
                 $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
         } else {
