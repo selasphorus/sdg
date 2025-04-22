@@ -570,7 +570,7 @@ function getLitDateData( array $args = [] ): array|string
             }
             if ( $primaryPost ) {
                 //$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-                //$info .= "primaryPost found with ID: ".$primaryPost['post']->ID."<br />";
+                $info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID."<br />";
                 $litdateData[ $dateStr ][ 'primary' ][] = $primaryPost;
             } else {
                 //$info .= "No primaryPost found!<br />";
@@ -580,7 +580,7 @@ function getLitDateData( array $args = [] ): array|string
                 $secondaryPost = $sorted['secondary'][0];
             }
             if ( $secondaryPost ) {
-                //$info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
+                $info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID."<br />";
                 $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
         } else {
