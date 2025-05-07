@@ -1063,6 +1063,8 @@ function sdg_msg_bar( $args = array() ) {
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
 
+    $postID = $post_id;
+
     // If no specific post id was passed to the fcn for display, then look for content to feature
 
     // First, see if the post calling the banner has designated banner_content
