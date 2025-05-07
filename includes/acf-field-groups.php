@@ -5955,7 +5955,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '15',
+                    'width' => '10',
                     'class' => '',
                     'id' => '',
                 ),
@@ -5976,7 +5976,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '25',
+                    'width' => '30',
                     'class' => '',
                     'id' => '',
                 ),
@@ -5997,7 +5997,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '25',
+                    'width' => '30',
                     'class' => '',
                     'id' => '',
                 ),
@@ -6018,7 +6018,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '25',
+                    'width' => '30',
                     'class' => '',
                     'id' => '',
                 ),
