@@ -1069,7 +1069,7 @@ function sdg_msg_bar( $args = array() ) {
 
     // First, see if the post calling the banner has designated banner_content
     $banner_content = get_post_meta( get_the_ID(), 'banner_content', true );
-    if ( $banner_content ) {
+    if ( !empty($banner_content) ) {
         $postID = get_the_ID();
         $banner_type = 'banner_content';
     } else {
@@ -1110,17 +1110,17 @@ function sdg_msg_bar( $args = array() ) {
             $msg = $banner_content;
         } elseif ( $post_type == "event" ) {
             $msg = "Currently livestreaming: ";
-            $event_title = get_the_title( $post_id );
-            $msg .= make_link( get_permalink($post_id), $event_title );
+            $event_title = get_the_title( $postID );
+            $msg .= make_link( get_permalink($postID), $event_title );
         } else {
-            $post = get_post( $post_id );
-            $post_title = get_the_title( $post_id );
+            $post = get_post( $postID );
+            $post_title = get_the_title( $postID );
             //$excerpt = $post->post_excerpt;
-            if ( has_excerpt( $post_id ) ) {
+            if ( has_excerpt( $postID ) ) {
                 $msg = $post->post_excerpt; // custom excerpt
                 $msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>', $post_title );
             } else {
-                $msg = get_the_excerpt( $post_id );
+                $msg = get_the_excerpt( $postID );
             }
             //$msg = $excerpt;
             //$msg = get_the_excerpt( $post_id );
@@ -1130,7 +1130,7 @@ function sdg_msg_bar( $args = array() ) {
         //$msg .= "<!-- ".date("l jS \of F Y h:i:s A e")." -->";
         //
 
-        $info .= '<div id="post-'.$post_id.'" class="'.$post_type.' featured-post">';
+        $info .= '<div id="post-'.$postID.'" class="'.$post_type.' featured-post">';
         $info .= "<p>";
         $info .= $msg;
         $info .= $ts_info;
