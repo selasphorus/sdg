@@ -6122,7 +6122,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '50',
+                    'width' => '100',
                     'class' => '',
                     'id' => '',
                 ),
