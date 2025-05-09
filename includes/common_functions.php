@@ -4,8 +4,8 @@ defined( 'ABSPATH' ) or die( 'Nope!' );
 
 // Make sure we don't expose any info if called directly
 if ( !function_exists( 'add_action' ) ) {
-	echo 'Hi there!  I\'m just a plugin file, not much I can do when called directly.';
-	exit;
+    echo 'Hi there!  I\'m just a plugin file, not much I can do when called directly.';
+    exit;
 }
 
 /*********** POST BASICS ***********/
@@ -19,84 +19,84 @@ function sdg_post_title ( $args = array() ) {
     sdg_log( "divline2", $do_log );
     
     // Init vars
-	$info = "";
-	$ts_info = "";
-	
-	$ts_info .= $fcn_id."<pre>args: ".print_r($args, true)."</pre>";
-	
-	// Defaults
-	$defaults = array(
-		'the_title'		=> null, // optional override to set title via fcn arg, not via post
-		'post'			=> null,
-		'line_breaks'	=> false,
-		'show_subtitle'	=> false,
-		'show_person_title' => false, // WIP
-		'show_series_title' => false,
-		'link'			=> false,
-		'echo'			=> true,
-		'hlevel'		=> 1,
-		'hlevel_sub'	=> 2,
-		'hclass'  		=> 'entry-title',
-		'hclass_sub'  	=> 'subtitle',
-		'before'  		=> '',
-		'after'  		=> '',
-		'called_by'		=> null,
-		'do_ts'			=> devmode_active( array("sdg", "titles") ),
-	);
+    $info = "";
+    $ts_info = "";
+    
+    $ts_info .= $fcn_id."<pre>args: ".print_r($args, true)."</pre>";
+    
+    // Defaults
+    $defaults = array(
+        'the_title'        => null, // optional override to set title via fcn arg, not via post
+        'post'            => null,
+        'line_breaks'    => false,
+        'show_subtitle'    => false,
+        'show_person_title' => false, // WIP
+        'show_series_title' => false,
+        'link'            => false,
+        'echo'            => true,
+        'hlevel'        => 1,
+        'hlevel_sub'    => 2,
+        'hclass'          => 'entry-title',
+        'hclass_sub'      => 'subtitle',
+        'before'          => '',
+        'after'          => '',
+        'called_by'        => null,
+        'do_ts'            => devmode_active( array("sdg", "titles") ),
+    );
 
-	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	
-	$ts_info .= $fcn_id."<pre>args parsed/extracted: ".print_r($args, true)."</pre>";
-	
-	$hclass .= " sdgp";
-	if ( is_numeric($post) ) { 
-		$post_id = $post;
-		$post = get_post( $post_id );
-	} else {
-		//$ts_info .= "Not is_numeric: ".$post."<br />";
-		$post_id = isset( $post->ID ) ? $post->ID : 0;
-	}
-	if ( $post ) {
-		$ts_info .= $fcn_id."post_id: ".$post_id."<br />";
-		//$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
-		$post_type = $post->post_type;
-	} else {
-		$post_type = null;
-	}
-	
-	if ( !$show_subtitle ) {
-    	//$ts_info .= "[sdgpt] show_subtitles: false<br />";
+    // Parse & Extract args
+    $args = wp_parse_args( $args, $defaults );
+    extract( $args );
+    
+    $ts_info .= $fcn_id."<pre>args parsed/extracted: ".print_r($args, true)."</pre>";
+    
+    $hclass .= " sdgp";
+    if ( is_numeric($post) ) { 
+        $post_id = $post;
+        $post = get_post( $post_id );
     } else {
-    	//$ts_info .= "[sdgpt] show_subtitles: true<br />";
+        //$ts_info .= "Not is_numeric: ".$post."<br />";
+        $post_id = isset( $post->ID ) ? $post->ID : 0;
     }
-	
-	// If a title has been submitted, use it; if not, get the post_title
-	if ( $the_title ) {
-		$title = $the_title;
-	} else if ( is_object($post) ) {
-		$title = $post->post_title;
-		// WIP: maybe not practical to build in all args for person title display in this function -- use get_person_display_name directly instead
-		/*if ( $post_type == "person" ) {
-			$title = get_person_display_name($post_id);
-		} else {
-			$title = $post->post_title;
-		}*/		
-	} else {
-		$title = "";
-	}
-	
-	// If both title and post_id are empty, abort
-	if ( strlen( $title ) == 0 || $post_id == 0) {
-		if ( $do_ts && !empty($ts_info) ) { return $ts_info; }
-		return;
-	}
-	
-	// WIP
-	// What about clean_title?
-	/*
-	$clean_title = get_post_meta( $post_id, 'clean_title', true ); // for legacy events only
+    if ( $post ) {
+        $ts_info .= $fcn_id."post_id: ".$post_id."<br />";
+        //$ts_info .= "<pre>post: ".print_r($post, true)."</pre>";
+        $post_type = $post->post_type;
+    } else {
+        $post_type = null;
+    }
+    
+    if ( !$show_subtitle ) {
+        //$ts_info .= "[sdgpt] show_subtitles: false<br />";
+    } else {
+        //$ts_info .= "[sdgpt] show_subtitles: true<br />";
+    }
+    
+    // If a title has been submitted, use it; if not, get the post_title
+    if ( $the_title ) {
+        $title = $the_title;
+    } else if ( is_object($post) ) {
+        $title = $post->post_title;
+        // WIP: maybe not practical to build in all args for person title display in this function -- use get_person_display_name directly instead
+        /*if ( $post_type == "person" ) {
+            $title = get_person_display_name($post_id);
+        } else {
+            $title = $post->post_title;
+        }*/        
+    } else {
+        $title = "";
+    }
+    
+    // If both title and post_id are empty, abort
+    if ( strlen( $title ) == 0 || $post_id == 0) {
+        if ( $do_ts && !empty($ts_info) ) { return $ts_info; }
+        return;
+    }
+    
+    // WIP
+    // What about clean_title?
+    /*
+    $clean_title = get_post_meta( $post_id, 'clean_title', true ); // for legacy events only
     if ( $clean_title && $clean_title != "" ) {
         $event_title = $clean_title;
     } else {
@@ -108,200 +108,200 @@ function sdg_post_title ( $args = array() ) {
     $title = sdg_format_title($title, $line_breaks);
     
     // Prepend "before" text, if any
-	$title = $before.$title;
-	
-	// If we're showing the subtitle, retrieve and format the relevant text
-	$subtitle = ""; // init
-	if ( $show_subtitle ) { // && function_exists( 'is_dev_site' ) && is_dev_site()
-		$subtitle = get_post_meta( $post_id, 'subtitle', true );
-		if ( strlen( $subtitle ) != 0 ) {
-			// Add "with-subtitle" class to title header, if any
-			$hclass .= " with-subtitle";
-			if ( $hlevel_sub ) {
-				$subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$subtitle.'</h'.$hlevel_sub.'>';
-			} else {
-				$subtitle = '<br /><span class="subtitle">'.$subtitle.'</span>';
-			}
-		}
-	}
-	
-	// If we're showing the person_title, retrieve and format the relevant text
-	// WIP!
-	if ( $show_person_title ) {
-		/*$person_title = get_post_meta( $post_id, 'subtitle', true );
-		if ( strlen( $person_title ) != 0 ) {
-			$title .= ", ".$person_title;
-		}*/
-	}
-	
-	// If we're showing a series subtitle, retrieve and format the relevant text
-	$series_title = ""; // init
-	if ( is_singular('event') ) { $show_series_title = "wordy"; } // Force show_series_title for event records
-	if ( $show_series_title ) {	// && function_exists( 'is_dev_site' ) && is_dev_site()
-	
-		$ts_info .= $fcn_id."show_series_title: ".$show_series_title."<br />";
-		$hclass .= " with-series-title";
-		
-		// Determine the series type
-		if ( $post->post_type == "event" ) {
-			$series_field = 'event_series'; //$series_field = 'series_events'; //$series_field = 'events_series';
-		} else if ( $post->post_type == "sermon" ) {
-			$series_field = 'sermons_series';
-		}
-		$ts_info .= $fcn_id."series_field: $series_field<br />";
-		$series = get_post_meta( $post_id, $series_field, true );
-		if (isset($series[0])) { $series_id = $series[0]; } else { $series_id = null; $info .= "<!-- series: ".print_r($series, true)." -->"; }
-		// If a series_id has been found, then show the series title and subtitle
-		if ( $series_id ) {
-			$ts_info .= $fcn_id."series_id: $series_id<br />";
-			$series_title = get_the_title( $series_id );
-			$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark">'.$series_title.'</a>';
-			if ( $show_series_title == "prepend" ) {
-				$series_title = $series_title."&nbsp;&mdash;&nbsp;";
-			//} else if ( $show_series_title == "append" ) {
-				//$series_title = "Series: ".$series_title."<br />";
-			} else if ( $show_series_title == "wordy" || $show_series_title == "append" ) {
-				if ( $post->post_type == "event" ) {
-					$series_title = 'Part of the event series '.$series_title;
-				} else {
-					$series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
-				}
-			}
-			if ( $hlevel_sub ) {
-				$series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
-			} else if ( is_post_type_archive('event') || is_page('events') ) {
-				$series_title = '<p class="series-title subtitle">'.$series_title.'</p>';
-			} else {
-				$series_title = '<span class="series-title subtitle">'.$series_title.'</span>';
-			}
-			//$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark"><span class="series-title">'.get_the_title( $series_id ).'</span></a>';
-			//$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';			
-			/*
-			// Check to see if the series has a subtitle
-			$series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
-			//	
-			if ( empty( $series_subtitle ) ) {
-				if ( $post->post_type == "event" ) {
-					$series_subtitle = 'Part of the event series '.$series_title;
-				} else {
-					$series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
-				}			
-			}		
-			if ( !empty( $series_subtitle ) ) {
-				$series_subtitle = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark" target="_blank">'.$series_subtitle.'</a>';
-				$series_subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_subtitle.'</h'.$hlevel_sub.'>';
-			}*/
-		}
-		
-		// TODO: add hyperlink to the series page?
-		//
-	}
+    $title = $before.$title;
+    
+    // If we're showing the subtitle, retrieve and format the relevant text
+    $subtitle = ""; // init
+    if ( $show_subtitle ) { // && function_exists( 'is_dev_site' ) && is_dev_site()
+        $subtitle = get_post_meta( $post_id, 'subtitle', true );
+        if ( strlen( $subtitle ) != 0 ) {
+            // Add "with-subtitle" class to title header, if any
+            $hclass .= " with-subtitle";
+            if ( $hlevel_sub ) {
+                $subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$subtitle.'</h'.$hlevel_sub.'>';
+            } else {
+                $subtitle = '<br /><span class="subtitle">'.$subtitle.'</span>';
+            }
+        }
+    }
+    
+    // If we're showing the person_title, retrieve and format the relevant text
+    // WIP!
+    if ( $show_person_title ) {
+        /*$person_title = get_post_meta( $post_id, 'subtitle', true );
+        if ( strlen( $person_title ) != 0 ) {
+            $title .= ", ".$person_title;
+        }*/
+    }
+    
+    // If we're showing a series subtitle, retrieve and format the relevant text
+    $series_title = ""; // init
+    if ( is_singular('event') ) { $show_series_title = "wordy"; } // Force show_series_title for event records
+    if ( $show_series_title ) {    // && function_exists( 'is_dev_site' ) && is_dev_site()
+    
+        $ts_info .= $fcn_id."show_series_title: ".$show_series_title."<br />";
+        $hclass .= " with-series-title";
+        
+        // Determine the series type
+        if ( $post->post_type == "event" ) {
+            $series_field = 'event_series'; //$series_field = 'series_events'; //$series_field = 'events_series';
+        } else if ( $post->post_type == "sermon" ) {
+            $series_field = 'sermons_series';
+        }
+        $ts_info .= $fcn_id."series_field: $series_field<br />";
+        $series = get_post_meta( $post_id, $series_field, true );
+        if (isset($series[0])) { $series_id = $series[0]; } else { $series_id = null; $info .= "<!-- series: ".print_r($series, true)." -->"; }
+        // If a series_id has been found, then show the series title and subtitle
+        if ( $series_id ) {
+            $ts_info .= $fcn_id."series_id: $series_id<br />";
+            $series_title = get_the_title( $series_id );
+            $series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark">'.$series_title.'</a>';
+            if ( $show_series_title == "prepend" ) {
+                $series_title = $series_title."&nbsp;&mdash;&nbsp;";
+            //} else if ( $show_series_title == "append" ) {
+                //$series_title = "Series: ".$series_title."<br />";
+            } else if ( $show_series_title == "wordy" || $show_series_title == "append" ) {
+                if ( $post->post_type == "event" ) {
+                    $series_title = 'Part of the event series '.$series_title;
+                } else {
+                    $series_title = "From the ".ucfirst($post->post_type)." Series &mdash; ".$series_title; // for sermons -- etc?
+                }
+            }
+            if ( $hlevel_sub ) {
+                $series_title = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_title.'</h'.$hlevel_sub.'>';
+            } else if ( is_post_type_archive('event') || is_page('events') ) {
+                $series_title = '<p class="series-title subtitle">'.$series_title.'</p>';
+            } else {
+                $series_title = '<span class="series-title subtitle">'.$series_title.'</span>';
+            }
+            //$series_title = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark"><span class="series-title">'.get_the_title( $series_id ).'</span></a>';
+            //$series_title = '<span class="series-title">'.get_the_title( $series_id ).'</span>';            
+            /*
+            // Check to see if the series has a subtitle
+            $series_subtitle = get_post_meta( $series_id, 'series_subtitle', true );
+            //    
+            if ( empty( $series_subtitle ) ) {
+                if ( $post->post_type == "event" ) {
+                    $series_subtitle = 'Part of the event series '.$series_title;
+                } else {
+                    $series_subtitle = "From the ".ucfirst($post->post_type)." Series &mdash; ".get_the_title( $series_id ); // for sermons -- etc?
+                }            
+            }        
+            if ( !empty( $series_subtitle ) ) {
+                $series_subtitle = '<a href="'.esc_url( get_permalink($series_id) ).'" rel="bookmark" target="_blank">'.$series_subtitle.'</a>';
+                $series_subtitle = '<h'.$hlevel_sub.' class="'.$hclass_sub.'">'.$series_subtitle.'</h'.$hlevel_sub.'>';
+            }*/
+        }
+        
+        // TODO: add hyperlink to the series page?
+        //
+    }
             
     // Hyperlink the title, if applicable
-	if ( $link ) {
-		$title = '<a href="'.esc_url( get_permalink($post_id) ).'" rel="bookmark">'.$title.'</a>';
-	}
-	
-	// Format the title according to the parameters for heading level and class
-	if ( $hlevel && $hlevel != 0 ) {
-		$title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>'; // '<h1 class="entry-title">'
-	}
-	
-	// Add the title, subtitle, and series_title to the info for return
-	// WIP: streamline
-	if ( $series_title && $show_series_title == 'prepend' ) {
-		$info .= $series_title;
-	}
-	$info .= $title;
-	$info .= $subtitle;
-	if ( $series_title && $show_series_title != 'prepend' && $show_series_title !== false) {
-		$info .= $series_title;
-	}
-	
-	//$ts_info .= "END sdg_post_title<br />";
-	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "basics" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	
-	// Echo or return, as requested via $echo arg.
-	if ( $echo ) {
-		echo $info;
-	} else {
-		return $info;
-	}
-	
+    if ( $link ) {
+        $title = '<a href="'.esc_url( get_permalink($post_id) ).'" rel="bookmark">'.$title.'</a>';
+    }
+    
+    // Format the title according to the parameters for heading level and class
+    if ( $hlevel && $hlevel != 0 ) {
+        $title = '<h'.$hlevel.' class="'.$hclass.'">'.$title.'</h'.$hlevel.'>'; // '<h1 class="entry-title">'
+    }
+    
+    // Add the title, subtitle, and series_title to the info for return
+    // WIP: streamline
+    if ( $series_title && $show_series_title == 'prepend' ) {
+        $info .= $series_title;
+    }
+    $info .= $title;
+    $info .= $subtitle;
+    if ( $series_title && $show_series_title != 'prepend' && $show_series_title !== false) {
+        $info .= $series_title;
+    }
+    
+    //$ts_info .= "END sdg_post_title<br />";
+    
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "basics" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    
+    // Echo or return, as requested via $echo arg.
+    if ( $echo ) {
+        echo $info;
+    } else {
+        return $info;
+    }
+    
 }
 
 // TODO: generalize for non-title text
 function sdg_format_title ( $str = null, $line_breaks = false ) {
 
-	// Return if empty
-	if ( empty($str) ) {
-		return $str;
-	}
-	
-	// Italicize info contained w/in double brackets
+    // Return if empty
+    if ( empty($str) ) {
+        return $str;
+    }
+    
+    // Italicize info contained w/in double brackets
     if (! is_admin()) {
-    	//
-		$find = array('//', '\\');
-		$replace   = array('<span class="emtitle">', '</span>');
-		$str = str_replace($find, $replace, $str);
-    	//
-		$find = array('{', '}');
-		$replace   = array('<span class="emtitle">', '</span>');
-		$str = str_replace($find, $replace, $str);
-		//
-		$find = array('[[', ']]');
+        //
+        $find = array('//', '\\');
+        $replace   = array('<span class="emtitle">', '</span>');
+        $str = str_replace($find, $replace, $str);
+        //
+        $find = array('{', '}');
+        $replace   = array('<span class="emtitle">', '</span>');
+        $str = str_replace($find, $replace, $str);
+        //
+        $find = array('[[', ']]');
         //$find = array('<<', '>>');
-		//$find = array("&ldquo;", "&rdquo;");
-		$replace   = array('<span class="emtitle">', '</span>');
-		$str = str_replace($find, $replace, $str);
-	}
-	
-	// Remove legacy UID info (STC)
-	if ( preg_match('/([0-9]+)_(.*)/', $str) ) {
+        //$find = array("&ldquo;", "&rdquo;");
+        $replace   = array('<span class="emtitle">', '</span>');
+        $str = str_replace($find, $replace, $str);
+    }
+    
+    // Remove legacy UID info (STC)
+    if ( preg_match('/([0-9]+)_(.*)/', $str) ) {
         $str = preg_replace('/([0-9]+)_(.*)/', '$2', $str);
         $str = str_replace("_", " ", $str);
     }    
     $str = remove_bracketed_info($str);
         
-	// Check for pipe character and replace it with line breaks or spaces, depending on settings
-	if ( $line_breaks ) {
-		$str = str_replace("|", "<br />", $str);
-	} else {
-		$str = str_replace("|", " ", $str);
-		$str = str_replace("  ", " ", $str); // Replace double space with single, in case extra space was left following pipe
-	}
-	
-	return $str;
-	
+    // Check for pipe character and replace it with line breaks or spaces, depending on settings
+    if ( $line_breaks ) {
+        $str = str_replace("|", "<br />", $str);
+    } else {
+        $str = str_replace("|", " ", $str);
+        $str = str_replace("  ", " ", $str); // Replace double space with single, in case extra space was left following pipe
+    }
+    
+    return $str;
+    
 }
 
 function sort_post_ids_by_title ( $arr_ids = array() ) {
-	
-	$arr_info = array();
-	$info = "";
-	
-	//$info .= "arr_ids to be sorted by title => ".print_r($arr_ids,true)."<br />";
-	
-	$wp_args = array(
-		'post_type'   => 'any',
-		'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
-		'posts_per_page' => -1,
-		'post__in' => $arr_ids,
-		'orderby'   => 'title',
-		'order'     => 'ASC',
-		'fields'	=> 'ids',
-	);
-	
-	$query = new WP_Query( $wp_args );
-	$post_ids = $query->posts;
-	//$info .= count($post_ids)." posts found and sorted<br />";
-	
-	$arr_info['post_ids'] = $post_ids;
-	$arr_info['info'] = $info;
-	
-	return $arr_info;
-	
+    
+    $arr_info = array();
+    $info = "";
+    
+    //$info .= "arr_ids to be sorted by title => ".print_r($arr_ids,true)."<br />";
+    
+    $wp_args = array(
+        'post_type'   => 'any',
+        'post_status' => array( 'private', 'draft', 'publish', 'archive' ),
+        'posts_per_page' => -1,
+        'post__in' => $arr_ids,
+        'orderby'   => 'title',
+        'order'     => 'ASC',
+        'fields'    => 'ids',
+    );
+    
+    $query = new WP_Query( $wp_args );
+    $post_ids = $query->posts;
+    //$info .= count($post_ids)." posts found and sorted<br />";
+    
+    $arr_info['post_ids'] = $post_ids;
+    $arr_info['info'] = $info;
+    
+    return $arr_info;
+    
 }
 
 /************** IMAGE FUNCTIONS ***************/
@@ -317,39 +317,39 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     // Init vars
     $info = "";
-	$ts_info = "";
-	
-	//$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
-	
-	// Defaults
-	$defaults = array(
-		'post_id'	=> null,
-		'format'	=> "singular", // default to singular; other option is excerpt
-		'img_size'	=> "thumbnail",
-		'sources'	=> array("featured_image", "gallery"),
-		'echo'		=> true,
-		'return_value' => 'html',
-		//'do_ts'  	=> false,
-	);
+    $ts_info = "";
+    
+    //$ts_info .= "<pre>sdg_post_thumbnail args: ".print_r($args, true)."</pre>";
+    
+    // Defaults
+    $defaults = array(
+        'post_id'    => null,
+        'format'    => "singular", // default to singular; other option is excerpt
+        'img_size'    => "thumbnail",
+        'sources'    => array("featured_image", "gallery"),
+        'echo'        => true,
+        'return_value' => 'html',
+        //'do_ts'      => false,
+    );
 
-	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	$ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
-	
+    // Parse & Extract args
+    $args = wp_parse_args( $args, $defaults );
+    extract( $args );
+    $ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+    
     if ( $post_id == null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
     $img_id = null;
     if ( $return_value == "html" ) {
-    	$img_html = "";
-    	$caption_html = "";
+        $img_html = "";
+        $caption_html = "";
     }
     
     $img_type = "post_image"; // other option: attachment_image
     
     $image_gallery = array();
     if ( $sources == "all" ) {
-    	$sources = array("featured", "gallery", "custom_thumb", "content");
+        $sources = array("featured", "gallery", "custom_thumb", "content");
     }
     
     if ( $format == "singular" && !is_page('events') ) {
@@ -368,18 +368,18 @@ function sdg_post_thumbnail ( $args = array() ) {
     // Make sure this is a proper context for display of the featured image
     
     $mp_args = array('post_id' => $post_id, 'status_only' => true, 'position' => 'above', 'media_type' => 'video' );
-	$player_status = get_media_player( $mp_args );
-	
-	$mp_args = array('post_id' => $post_id, 'position' => 'above', 'media_type' => 'video' );
-	$mp_info = get_media_player( $mp_args );
-	$player_status = $mp_info['status'];
-	$ts_info .= $fcn_id.$mp_info['ts_info'];
+    $player_status = get_media_player( $mp_args );
     
-	if ( $format == "singular" && $player_status == "ready" ) {
-		return;
-	} else {
-		$ts_info .= $fcn_id."player_status: ".print_r($player_status,true)."<br />";
-	}
+    $mp_args = array('post_id' => $post_id, 'position' => 'above', 'media_type' => 'video' );
+    $mp_info = get_media_player( $mp_args );
+    $player_status = $mp_info['status'];
+    $ts_info .= $fcn_id.$mp_info['ts_info'];
+    
+    if ( $format == "singular" && $player_status == "ready" ) {
+        return;
+    } else {
+        $ts_info .= $fcn_id."player_status: ".print_r($player_status,true)."<br />";
+    }
     if ( post_password_required($post_id) || is_attachment($post_id) ) {
         return;
     } else if ( has_term( 'video-webcasts', 'event-categories' ) && is_singular('event') ) {        
@@ -388,8 +388,8 @@ function sdg_post_thumbnail ( $args = array() ) {
     } else if ( has_term( 'video-webcasts', 'category' ) ) {        
         //
     } else if ( is_page_template('page-centered.php') && $post_id == get_the_ID() ) {        
-		return;
-	} else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
+        return;
+    } else if ( is_singular() && $post_id == get_the_ID() && in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {        
         return; // wip
     }
 
@@ -405,11 +405,11 @@ function sdg_post_thumbnail ( $args = array() ) {
     // Are we using the custom image, if any is set?
     // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
     if ( $format != "singular" && in_array("custom_thumb", $sources ) ) {
-    	$ts_info .= $fcn_id."Check for custom_thumb<br />";
+        $ts_info .= $fcn_id."Check for custom_thumb<br />";
         // First, check to see if the post has a Custom Thumbnail
         $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
         if ( $custom_thumb_id ) {
-        	$ts_info .= $fcn_id."custom_thumb_id found: $custom_thumb_id<br />";
+            $ts_info .= $fcn_id."custom_thumb_id found: $custom_thumb_id<br />";
             $img_id = $custom_thumb_id;
         }
     }
@@ -417,12 +417,12 @@ function sdg_post_thumbnail ( $args = array() ) {
     // WIP: order?
     // If this is a sermon, are we using the author image
     if ( $format != "singular" && $post_type == "sermon" && !is_singular('sermon') ) {
-    	if ( get_field('author_image_for_archive') ) {
-    		$img_id = get_author_img_id ( $post_id );
-    		$classes .= " author_img_for_archive";
-    	} else {
-    		$ts_info .= $fcn_id."author_image_for_archive set to false<br />";
-    	}
+        if ( get_field('author_image_for_archive') ) {
+            $img_id = get_author_img_id ( $post_id );
+            $classes .= " author_img_for_archive";
+        } else {
+            $ts_info .= $fcn_id."author_image_for_archive set to false<br />";
+        }
     }
 
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
@@ -442,68 +442,68 @@ function sdg_post_thumbnail ( $args = array() ) {
             
             // Image Gallery?
             if ( in_array("gallery", $sources ) ) {
-				// get image gallery images and select one at random
-				$image_gallery = get_post_meta( $post_id, 'image_gallery', true );
-				if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
-					$ts_info .= $fcn_id."Found an image_gallery array.<br />";
-					$ts_info .= $fcn_id."image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
-					$i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
-					// WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
-					/*
-					// Get number of items in array...
-					$img_count = count($image_gallery);
-					// Get event date and weekday
-					if ( get_post_type($post_id) == 'event' ) {
-						// Is this an instance of a recurring event? look for recurrent event id...
-						$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
-						if ( $recurrence_id ) {
-					
-							$meta = get_post_meta( $post_id );
-							$ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
-						
-							// Get event object?
-							//$ts_info .= print_r($XXX,true);
-						
-							// Get recurring event info
-							$revent = get_post ( $recurrence_id );
-							$ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
-							$recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
-							$recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
-							$recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
-							//'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
-							$ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
-						
-							// Get event date
-							$event_date = get_post_meta( $post_id, '_event_start_date', true );
-							$ts_info .= "event_date: $event_date; <br />";
-						
-						
-							$date = explode('-', $event_date);
-							$year = $date[0];
-							$month = $date[1];
-							$day = $date[2];
-							$weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
-							$yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
-						}					
-					}
-					*/
-					$img_id = $image_gallery[$i];
-					$img_type = $fcn_id."attachment_image";
-					$ts_info .= $fcn_id."Random thumbnail ID: $img_id<br />";
-				} else {
-					$ts_info .= $fcn_id."No image_gallery found.<br />";
-				}
+                // get image gallery images and select one at random
+                $image_gallery = get_post_meta( $post_id, 'image_gallery', true );
+                if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
+                    $ts_info .= $fcn_id."Found an image_gallery array.<br />";
+                    $ts_info .= $fcn_id."image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
+                    $i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
+                    // WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
+                    /*
+                    // Get number of items in array...
+                    $img_count = count($image_gallery);
+                    // Get event date and weekday
+                    if ( get_post_type($post_id) == 'event' ) {
+                        // Is this an instance of a recurring event? look for recurrent event id...
+                        $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
+                        if ( $recurrence_id ) {
+                    
+                            $meta = get_post_meta( $post_id );
+                            $ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
+                        
+                            // Get event object?
+                            //$ts_info .= print_r($XXX,true);
+                        
+                            // Get recurring event info
+                            $revent = get_post ( $recurrence_id );
+                            $ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
+                            $recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
+                            $recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
+                            $recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
+                            //'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
+                            $ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
+                        
+                            // Get event date
+                            $event_date = get_post_meta( $post_id, '_event_start_date', true );
+                            $ts_info .= "event_date: $event_date; <br />";
+                        
+                        
+                            $date = explode('-', $event_date);
+                            $year = $date[0];
+                            $month = $date[1];
+                            $day = $date[2];
+                            $weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
+                            $yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
+                        }                    
+                    }
+                    */
+                    $img_id = $image_gallery[$i];
+                    $img_type = $fcn_id."attachment_image";
+                    $ts_info .= $fcn_id."Random thumbnail ID: $img_id<br />";
+                } else {
+                    $ts_info .= $fcn_id."No image_gallery found.<br />";
+                }
             }
             
             // Image(s) in post content?
             if ( empty($img_id) && in_array("content", $sources ) && function_exists('get_first_image_from_post_content') ) {
-				$image_info = get_first_image_from_post_content( $post_id );
-				if ( $image_info ) {
-					$img_id = $image_info['id'];
-				}
-			}
+                $image_info = get_first_image_from_post_content( $post_id );
+                if ( $image_info ) {
+                    $img_id = $image_info['id'];
+                }
+            }
 
-			// Image attachment(s)?
+            // Image attachment(s)?
             if ( empty($img_id) ) {
 
                 // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
@@ -531,101 +531,101 @@ function sdg_post_thumbnail ( $args = array() ) {
     
     if ( $return_value == "html" && !empty($img_id ) ) {
     
-		// For html return format, add caption, if there is one
+        // For html return format, add caption, if there is one
         
         // Retrieve the caption
-		if ( get_post( $img_id ) ) { $caption = get_post( $img_id )->post_excerpt; } else { $caption = null; }
-		if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
-			$classes .= " has-caption";
-			$ts_info .= $fcn_id."Caption found for img_id $img_id: '$caption'<br />";
-		} else {
-			$classes .= " no-caption";
-			$ts_info .= $fcn_id."No caption found for img_id $img_id<br />";
-		}
-		
-		if ( $caption != "" ) {
-			$caption_class = "sdg_post_thumbnail featured_image_caption";
-			$caption_html = '<p class="'. $caption_class . '">' . $caption . '</p>';
-		} else {
-			$caption_html = '<br />';
-		}
-		
-		// Set up the img_html
-		if ( $format == "singular" && !( is_page('events') ) ) {
-		
-			$ts_info .= $fcn_id."post format is_singular<br />";
-			if ( has_post_thumbnail($post_id) ) {
-			
-				if ( is_singular('person') ) {
-					$img_size = "medium"; // portrait
-					$classes .= " float-left";
-				}
-		
-				$classes .= " is_singular";
-		
-				$img_html .= '<div class="'.$classes.'">';
-				$img_html .= get_the_post_thumbnail( $post_id, $img_size );
-				$img_html .= $caption_html;
-				$img_html .= '</div><!-- .post-thumbnail -->';
+        if ( get_post( $img_id ) ) { $caption = get_post( $img_id )->post_excerpt; } else { $caption = null; }
+        if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
+            $classes .= " has-caption";
+            $ts_info .= $fcn_id."Caption found for img_id $img_id: '$caption'<br />";
+        } else {
+            $classes .= " no-caption";
+            $ts_info .= $fcn_id."No caption found for img_id $img_id<br />";
+        }
+        
+        if ( $caption != "" ) {
+            $caption_class = "sdg_post_thumbnail featured_image_caption";
+            $caption_html = '<p class="'. $caption_class . '">' . $caption . '</p>';
+        } else {
+            $caption_html = '<br />';
+        }
+        
+        // Set up the img_html
+        if ( $format == "singular" && !( is_page('events') ) ) {
+        
+            $ts_info .= $fcn_id."post format is_singular<br />";
+            if ( has_post_thumbnail($post_id) ) {
+            
+                if ( is_singular('person') ) {
+                    $img_size = "medium"; // portrait
+                    $classes .= " float-left";
+                }
+        
+                $classes .= " is_singular";
+        
+                $img_html .= '<div class="'.$classes.'">';
+                $img_html .= get_the_post_thumbnail( $post_id, $img_size );
+                $img_html .= $caption_html;
+                $img_html .= '</div><!-- .post-thumbnail -->';
 
-			} else {
-		
-				// If an image_gallery was found, show one image as the featured image
-				// TODO: streamline this
-				if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
-					$ts_info .= $fcn_id."image_gallery image<br />";
-					$img_html .= '<div class="'.$classes.'">';
-					$img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
-					$img_html .= $caption_html;
-					$img_html .= '</div><!-- .post-thumbnail -->';
-				}
-			
-			}
-		
-		} else if ( !( $format == "singular" && is_page('events') ) ) {
-		
-			$ts_info .= $fcn_id."NOT is_singular<br />";
-		
-			// NOT singular -- aka archives, search results, &c.
-			$img_tag = "";
-		
-			if ( $img_id ) {
-			
-				// display attachment via thumbnail_id
-				$img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
-			
-				$ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
-				if ( isset($images)) { $ts_info .= $fcn_id.'<pre>'.print_r($images,true).'</pre>'; }
-			
-			} else {
-			
-				$ts_info .= 'Use placeholder img';
-			
-				if ( function_exists( 'get_placeholder_img' ) ) { 
-					$img_tag = get_placeholder_img();
-				}
-			}
-		
-			if ( !empty($img_tag) ) {
-				$classes .= " float-left"; //$classes .= " NOT_is_singular";
-				$img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
-				$img_html .= $img_tag;
-				$img_html .= '</a>';
-			}
-		
-		} // END if is_singular()
-	} // END if ( $return_value == "html" && !empty($img_id )
+            } else {
+        
+                // If an image_gallery was found, show one image as the featured image
+                // TODO: streamline this
+                if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
+                    $ts_info .= $fcn_id."image_gallery image<br />";
+                    $img_html .= '<div class="'.$classes.'">';
+                    $img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+                    $img_html .= $caption_html;
+                    $img_html .= '</div><!-- .post-thumbnail -->';
+                }
+            
+            }
+        
+        } else if ( !( $format == "singular" && is_page('events') ) ) {
+        
+            $ts_info .= $fcn_id."NOT is_singular<br />";
+        
+            // NOT singular -- aka archives, search results, &c.
+            $img_tag = "";
+        
+            if ( $img_id ) {
+            
+                // display attachment via thumbnail_id
+                $img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+            
+                $ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
+                if ( isset($images)) { $ts_info .= $fcn_id.'<pre>'.print_r($images,true).'</pre>'; }
+            
+            } else {
+            
+                $ts_info .= 'Use placeholder img';
+            
+                if ( function_exists( 'get_placeholder_img' ) ) { 
+                    $img_tag = get_placeholder_img();
+                }
+            }
+        
+            if ( !empty($img_tag) ) {
+                $classes .= " float-left"; //$classes .= " NOT_is_singular";
+                $img_html .= '<a class="'.$classes.'" href="'.get_the_permalink( $post_id ).'" aria-hidden="true">';
+                $img_html .= $img_tag;
+                $img_html .= '</a>';
+            }
+        
+        } // END if is_singular()
+    } // END if ( $return_value == "html" && !empty($img_id )
     
     if ( $return_value == "html" ) {
-    	$info .= $img_html;
+        $info .= $img_html;
     } else { // $return_value == "id"
-    	$info = $img_id;
+        $info = $img_id;
     }
-	
-	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" || $do_ts == "media" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	
-	// Echo or return info
-	if ( $echo == true ) { echo $info; } else { return $info; }
+    
+    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" || $do_ts == "media" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    
+    // Echo or return info
+    if ( $echo == true ) { echo $info; } else { return $info; }
 
 }
 
@@ -665,8 +665,8 @@ function sdg_post_image_html( $html, $post_id, $post_image_id ) {
     
     if ( is_singular() && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
-    	$html .= '<!-- fcn sdg_post_image_html -->';
-    	
+        $html .= '<!-- fcn sdg_post_image_html -->';
+        
         $featured_image_id = get_post_thumbnail_id();
         if ( $featured_image_id ) {
             $caption = get_post( $featured_image_id )->post_excerpt;
@@ -700,8 +700,8 @@ function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
     // TODO: fix this for other post types. How to tell if attachment was called from content-excerpt.php template?
     if ( is_singular('event') && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
     
-    	$html .= '<!-- fcn sdg_attachment_image_html -->';
-    	
+        $html .= '<!-- fcn sdg_attachment_image_html -->';
+        
         if ( $attachment_id ) {
             $caption = get_post( $attachment_id )->post_excerpt;
             if ( $caption != "" ) {
@@ -722,19 +722,19 @@ function sdg_attachment_image_html( $html, $attachment_id, $post_image_id ) {
 // Function to display featured caption in EM event template
 add_shortcode( 'featured_image_caption', 'sdg_featured_image_caption' );
 function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
-	
-	global $post;
-	global $wp_query;
+    
+    global $post;
+    global $wp_query;
     $info = "";
     $caption = "";
     
     if ( $attachment_id ) {
     
     } else {
-    	if ( $post_id == null ) { $post_id = get_the_ID(); }
+        if ( $post_id == null ) { $post_id = get_the_ID(); }
     }
-	
-	// Retrieve the caption (if any) and return it for display
+    
+    // Retrieve the caption (if any) and return it for display
     if ( get_post_thumbnail_id() ) {
         $caption = get_post( get_post_thumbnail_id() )->post_excerpt;
     }
@@ -742,14 +742,14 @@ function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
     if ( $caption != "" && !in_array( get_field('featured_image_display'), array( "background", "thumbnail", "banner" ) ) ) {
         $caption_class = "sdg_featured_image_caption";
         $info .= '<p class="'. $caption_class . '">';
-        $info .= $caption;	
+        $info .= $caption;    
         $info .= '</p>';
     } else {
         $info .= '<p class="zeromargin">&nbsp;</p>'; //$info .= '<br class="empty_caption" />';
     }
-	
-	return $info;
-	
+    
+    return $info;
+    
 }
 
 
@@ -758,19 +758,19 @@ function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
 // The following function is the replacement for the old get_related_podposts fcn
 function get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $single = false ) {
 
-	$info = null; // init
-	
-	// If we don't have actual values for all parameters, there's not enough info to proceed
-	if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
-	
-	$related_id = null; // init
+    $info = null; // init
+    
+    // If we don't have actual values for all parameters, there's not enough info to proceed
+    if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
+    
+    $related_id = null; // init
     if ( $single ) {
         $limit = 1;
     } else {
         $limit = -1;
     }
 
-	// Set args
+    // Set args
     $wp_args = array(
         'post_type'   => $related_post_type,
         'post_status' => 'publish',
@@ -781,8 +781,8 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
                 'value'   => $post_id
             )
         ),
-        'orderby'		=> 'title',
-        'order'			=> 'ASC',
+        'orderby'        => 'title',
+        'order'            => 'ASC',
     );
     // Run query
     $related_posts = new WP_Query( $wp_args );
@@ -809,11 +809,11 @@ function get_related_posts( $post_id = null, $related_post_type = null, $related
         */
         
     } else {
-    	$info = "No matching posts found for wp_args: ".print_r($wp_args,true);
+        $info = "No matching posts found for wp_args: ".print_r($wp_args,true);
     }
-	
-	return $info;
-	
+    
+    return $info;
+    
 }
 
 function display_postmeta( $args = array() ) {
@@ -826,26 +826,26 @@ function display_postmeta( $args = array() ) {
     
     // Init vars
     $info = "";
-	$ts_info = "";
-	
-	//$ts_info .= "<pre>display_postmeta args: ".print_r($args, true)."</pre>";
-	
-	// Defaults
-	$defaults = array(
-		'post_id'	=> null,
-		/*'format'	=> "singular", // default to singular; other option is excerpt
-		'img_size'	=> "thumbnail",
-		'sources'	=> array("featured_image", "gallery"),
-		'echo'		=> true,
-		'return_value'  	=> 'html',
-		'do_ts'  	=> false,*/
-	);
+    $ts_info = "";
+    
+    //$ts_info .= "<pre>display_postmeta args: ".print_r($args, true)."</pre>";
+    
+    // Defaults
+    $defaults = array(
+        'post_id'    => null,
+        /*'format'    => "singular", // default to singular; other option is excerpt
+        'img_size'    => "thumbnail",
+        'sources'    => array("featured_image", "gallery"),
+        'echo'        => true,
+        'return_value'      => 'html',
+        'do_ts'      => false,*/
+    );
 
-	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	$ts_info .= $fcn_id."display_postmeta parsed/extracted args: <pre>".print_r($args, true)."</pre>";
-	
+    // Parse & Extract args
+    $args = wp_parse_args( $args, $defaults );
+    extract( $args );
+    $ts_info .= $fcn_id."display_postmeta parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+    
     if ( $post_id === null ) { $post_id = get_the_ID(); }
     
     $postmeta = get_post_meta( $post_id );
@@ -854,45 +854,45 @@ function display_postmeta( $args = array() ) {
     $info .= "<h4>(Displaying NON-empty values only)</h4>";
     $info .= "<pre>";
     foreach ( $postmeta as $key => $value ) {
-    	if ( strpos($key,"_") !== 0 ) { // Don't bother to display ACF field identifier postmeta
-    		//$info .= $key." => ".print_r($value,true);
-    		if (count($value) > 1) {
-    		
-    			$info .= $key." => ".print_r($value,true);
-    			
-    		} else {
-    		
-    			$value = $value[0];
-    			if ( empty($value) ) { continue; }    			
-    			
-    			if ( strpos($value,"<") !== false ) {
-    				$info .= $key.' {html} =><br />';
-    				//$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
-    				$info .= '<div class="devwip">';
-    				//$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe>';
-    				//$info .= '<div style="width: 50%; float:left;">'.htmlspecialchars($value).'</div>';
-    				if ( $key == 'venue_html_vp' ) { // TMP/WIP for AGO
-						//$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
-						$info .= "[WIP]";
-					} else if ( $key == 'organs_html_ip' || $key == 'organs_html_vp' ) { // TMP/WIP for AGO
-						//strip_tags($value, '<p><a>');
-						$info .= $value;
-					} else {
-						$info .= htmlspecialchars($value);
-					}
-    				$info .= '</div>';
-    			} else {
-    				$info .= $key." => ".$value."<br />";
-    			}    			
-    		}
-    	}
+        if ( strpos($key,"_") !== 0 ) { // Don't bother to display ACF field identifier postmeta
+            //$info .= $key." => ".print_r($value,true);
+            if (count($value) > 1) {
+            
+                $info .= $key." => ".print_r($value,true);
+                
+            } else {
+            
+                $value = $value[0];
+                if ( empty($value) ) { continue; }                
+                
+                if ( strpos($value,"<") !== false ) {
+                    $info .= $key.' {html} =><br />';
+                    //$info .= $key.' {html} => <div class="devwip"><pre>'.htmlspecialchars($value).'</pre></div>';
+                    $info .= '<div class="devwip">';
+                    //$info .= '<iframe srcdoc="'.$value.'" style="width: 50%; float:left;">[iframe]</iframe>';
+                    //$info .= '<div style="width: 50%; float:left;">'.htmlspecialchars($value).'</div>';
+                    if ( $key == 'venue_html_vp' ) { // TMP/WIP for AGO
+                        //$info .= '<iframe srcdoc="'.$value.'" style="">[iframe]</iframe>';
+                        $info .= "[WIP]";
+                    } else if ( $key == 'organs_html_ip' || $key == 'organs_html_vp' ) { // TMP/WIP for AGO
+                        //strip_tags($value, '<p><a>');
+                        $info .= $value;
+                    } else {
+                        $info .= htmlspecialchars($value);
+                    }
+                    $info .= '</div>';
+                } else {
+                    $info .= $key." => ".$value."<br />";
+                }                
+            }
+        }
     }
     $info .= "</pre>";
     
     if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     
     return $info;
-	
+    
 }
 
 /*********** MEDIA ***********/
@@ -900,30 +900,30 @@ function display_postmeta( $args = array() ) {
 // Get Media Player -- Based on contents of ACF A/V Info fields
 //function get_media_player ( $post_id = null, $status_only = false, $position = null, $media_type = 'unknown', $url = null, $called_by = null ) {
 function get_media_player( $args = array() ) {
-	
-	// TS/logging setup
+    
+    // TS/logging setup
     $do_ts = devmode_active( array("sdg", "media") );
     $do_log = false;
     $fcn_id = "[sdg-gmp] ";
     sdg_log( "divline2", $do_log );
     
     // Defaults
-	$defaults = array(
-		'post_id'		=> null,
-		'status_only'	=> false,
-		'position'		=> null,
-		'media_type'	=> 'unknown',
-		'url'			=> null,
-		'called_by'  	=> null, // option for TS to indicate origin of function call -- e.g. theme-header
-		'do_ts'  		=> false,
-	);
-	
+    $defaults = array(
+        'post_id'        => null,
+        'status_only'    => false,
+        'position'        => null,
+        'media_type'    => 'unknown',
+        'url'            => null,
+        'called_by'      => null, // option for TS to indicate origin of function call -- e.g. theme-header
+        'do_ts'          => false,
+    );
+    
     // Init vars
     $arr_info = array(); // return info and status, or status only, depending on options selected
-	$info = "";
-	$ts_info = "";
-	//
-	$media_player_active = false;
+    $info = "";
+    $ts_info = "";
+    //
+    $media_player_active = false;
     $player = "";
     $player_status = "unknown";
     $player_position = "unknown";
@@ -932,10 +932,10 @@ function get_media_player( $args = array() ) {
     $featured_audio = false;
     $multimedia = false; // does the post have both featured audio and video?
 
-	// Parse & Extract args
-	$args = wp_parse_args( $args, $defaults );
-	extract( $args );
-	$ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
+    // Parse & Extract args
+    $args = wp_parse_args( $args, $defaults );
+    extract( $args );
+    $ts_info .= $fcn_id."get_media_player parsed/extracted args: <pre>".print_r($args, true)."</pre>";
     
     if ( $post_id == null ) { $post_id = get_the_ID(); } 
     //$ts_info .= $fcn_id."atts on init ==> post_id: '".$post_id."'; position: '".$position."'; media_type: '".$media_type."'; status_only: '[".$status_only."]'<br />";
@@ -948,426 +948,426 @@ function get_media_player( $args = array() ) {
     if ( !empty($featured_AV) ) { $media_player_active = true; }
     //
     $ts_info .= $fcn_id."featured_AV: ".print_r($featured_AV, true)."<br />";
-	$ts_info .= $fcn_id."media_format: ".print_r($media_format, true)."<br />";
-	
-	if ( is_array($featured_AV) && count($featured_AV) > 1 ) {
-		$multimedia = true;
-		$ts_info .= $fcn_id."MULTIPLE FEATURED A/V MEDIA FOUND<br />";
-	} else {
-		$ts_info .= $fcn_id."Multimedia FALSE<br />";		
-	}
-	
+    $ts_info .= $fcn_id."media_format: ".print_r($media_format, true)."<br />";
+    
+    if ( is_array($featured_AV) && count($featured_AV) > 1 ) {
+        $multimedia = true;
+        $ts_info .= $fcn_id."MULTIPLE FEATURED A/V MEDIA FOUND<br />";
+    } else {
+        $ts_info .= $fcn_id."Multimedia FALSE<br />";        
+    }
+    
     if ( empty($media_format) ) { $media_format = null; } else if ( is_array($media_format) && count($media_format) == 1 ) { $media_format = $media_format[0]; }
     
     // Get additional vars based on presence of featured audio and/or video
     if ( is_array($featured_AV) && in_array( 'video', $featured_AV) ) {
-    	$featured_video = true;
-    	$player_position = get_field('video_player_position', $post_id); // above/below/banner
-    	$ts_info .= $fcn_id."player_position: '".$player_position."' / position: '".$position."'<br />";
-    	if ( $media_type == "unknown" && $player_position == $position ) {
-    		$media_type = 'video';
-    		$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
-    	}
+        $featured_video = true;
+        $player_position = get_field('video_player_position', $post_id); // above/below/banner
+        $ts_info .= $fcn_id."player_position: '".$player_position."' / position: '".$position."'<br />";
+        if ( $media_type == "unknown" && $player_position == $position ) {
+            $media_type = 'video';
+            $ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
+        }
     }
     if ( is_array($featured_AV) && in_array( 'audio', $featured_AV) ) {
-    	$featured_audio = true;
-    	$player_position = get_field('audio_player_position', $post_id); // above/below/banner
-    	$ts_info .= $fcn_id."player_position: '".$player_position."'<br />";
-    	if ( $media_type == "unknown" && $player_position == $position ) {
-    		$media_type = 'audio';
-    		$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
-    	}
+        $featured_audio = true;
+        $player_position = get_field('audio_player_position', $post_id); // above/below/banner
+        $ts_info .= $fcn_id."player_position: '".$player_position."'<br />";
+        if ( $media_type == "unknown" && $player_position == $position ) {
+            $media_type = 'audio';
+            $ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
+        }
     }
     
-	// Make sure we're looking to show a player in this position; if not, cut it short
-	if ( $player_position == $position ) {
-	
-		if ( $media_type == "video" ) {
-		
-			//$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
-			$video_file = null;
-			$video_id = get_field('video_id', $post_id);
-			$yt_ts = get_field('yt_ts', $post_id); // YT timestamp
-			$yt_series_id = get_field('yt_series_id', $post_id);
-			$yt_list_id = get_field('yt_list_id', $post_id);
-			
-			// Mobile or desktop? If mobile, check to see if a smaller version is available -- WIP
-			if ( wp_is_mobile() ) {
-				$video_file = get_field('video_file_mobile'); //$video_file = get_field('featured_video_mobile');
-			}
-			if (empty($video_file) ) {
-				$video_file = get_field('video_file'); //$video_file = get_field('featured_video');
-			}
-			if ( is_array($video_file) ) {
-				$src = $video_file['url'];
-			} else if ( !empty($video_file) ) {
-				$src = $video_file;
-			}
-			
-			$ts_info .= $fcn_id."video_id: '".$video_id."'; video_file src: '".$src."'<br />";
-			
-			if ( $src && is_array($media_format) && in_array( 'video', $media_format) ) {
-				$media_format = "video";
-			} else if ( $video_id && is_array($media_format) && in_array( 'vimeo', $media_format) ) {
-				$media_format = "vimeo";
-			} else if ( empty($src) && !empty($video_id) ){ 
-				$media_format = "youtube";
-			}
-			
-		} else if ( $media_type == "audio" ) {
-			
-			$audio_file = get_field('audio_file', $post_id);
-			$ts_info .= $fcn_id."audio_file: '".$audio_file."<br />";
-			if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
-			if ( is_array($audio_file) ) { $src = $audio_file['url']; } else { $src = $audio_file; }
-			
-		} else {
-		
-			$media_format = "unknown";
-			
-		}
-	
-		$ts_info .= $fcn_id."media_format REVISED: '".print_r($media_format,true)."'<br />";
-		//if ( $media_format != 'unknown' ) { $player_status = "ready"; }
-		
-		// Webcast?
-		$webcast = get_field('webcast', $post_id);
-		//if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
-		if ( $webcast ) {
-			$webcast_status = get_webcast_status( $post_id );
-			//if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
-			$url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
-			$ts_info .= $fcn_id."webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
-		}
-		
-		/*
-		DEPRECATED:
-		---
-		Webcast Format Options:
-		---
-		vimeo : Vimeo Video/One-time Event
-		vimeo_recurring : Vimeo Recurring Event
-		youtube: YouTube
-		youtube_list : YouTube Playlist
-		video : Video (formerly: Flowplayer -- future use tbd)
-		video_as_audio : Video as Audio
-		video_as_audio_live : Video as Audio - Livestream
-		audio : Audio Only
-		---
-		*/
-		
-		if ( $media_format == "audio" ) {
-		
-			$type = wp_check_filetype( $src, wp_get_mime_types() ); // tft
-			$ext = $type['ext'];
-			$ts_info .= "audio_file ext: ".$ext."<br />"; // tft
-			$atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
-			$ts_info .= $fcn_id."audio_player atts: ".print_r($atts,true)."<br />";
-			
-			if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
-				
-				// Audio file from Media Library
-				
-				$player_status = "ready";
-				
-				if ( $status_only == false ) {
-					// Audio Player: HTML5 'generic' player via WP audio shortcode (summons mejs -- https://www.mediaelementjs.com/ -- stylable player)
-					// NB default browser player has VERY limited styling options, which is why we're using the shortcode
-					$player .= '<div class="audio_player">'; // media_player
-					$player .= wp_audio_shortcode( $atts );
-					$player .= '</div>';
-				}
-				
-			} else if ( !empty($url) ) {
-				
-				// Audio file by URL
-				
-				$player_status = "ready";
-				
-				if ( $status_only == false ) {
-					
-					// For m3u8 files, use generic HTML5 player for now, even though the styling is lousy. Can't get it to work yet via WP shortcode.
-					$player .= '<div class="audio_player video_as_audio">';
-					$player .= '<audio id="'.$player_id.'" class="masked" style="height: 3.5rem; width: 100%;" controls="controls" width="300" height="150">';
-					$player .= 'Your browser does not support the audio element.';
-					$player .= '</audio>';
-					$player .= '</div>';
-	
-					// Create array of necessary attributes for HLS JS
-					$atts = array('src' => $src, 'player_id' => $player_id ); // other options: $masked
-					// Load HLS JS
-					$player .= "Load HLS JS<br />";
-					$player .= load_hls_js( $atts );
-				}
-				
-			}
-			
-		} else if ( $media_format == "video" && !empty($src) ) { //} else if ( $media_format == "video" && isset($video_file['url']) ) {
-			
-			// Video file from Media Library
-			
-			$player_status = "ready";
-			
-			if ( $status_only == false ) {
-				$player .= '<div class="hero vidfile video-container">';
-				$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
-				$player .= '</div>';
-			}
-			
-		} else if ( $media_format == "vimeo" && $video_id ) {
-				
-			// Vimeo iframe embed
-			
-			$player_status = "ready";
-			
-			$src = 'https://player.vimeo.com/video/'.$video_id;
-				
-			if ( $status_only == false ) {
-				$class = "vimeo_container";
-				if ( $player_position == "banner" ) { $class .= " hero vimeo video-container"; }
-				$player .= '<div class="'.$class.'">';
-				if ( $player_position == "banner" ) { 
-					$player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline" controls></video>';
-				} else {
-					$player .= '<iframe id="vimeo" src="'.$src.'" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>';
-				}
-				$player .= '</div>';
-			}
-			
-		} else if ( $media_format == "youtube" ) {		
-			//&& ( !has_post_thumbnail( $post_id ) || ( $webcast_status == "live" || $webcast_status == "on_demand" ) )
-			
-			// WIP -- deal w/ webcasts w/ status other than live/on_demand
-			
-			// Get SRC
-			if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
-				$src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?enablejsapi=1&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
-				//https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH	
-			} else if ( !empty($video_id) ) {
-				$src = 'https://www.youtube.com/embed/'.$video_id.'?enablejsapi=1&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
-				//$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
-				//$src = 'https://www.youtube.com/watch?v='.$video_id;
-			} else {
-				$src = null;
-			}
-			
-			$ts_info .= $fcn_id."src: '".$src."'<br />";
-				
-			//if ( $src ) { $player_status = "ready"; }
-			
-			if ( !empty($src) && $status_only == false ) {
-				
-				$player_status = "ready";
-				
-				// Timestamp?
-				if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
-				
-				// Assemble media player iframe
-				$player .= '<div class="hero video-container youtube-responsive-container">';
-				$player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" enablejsapi="true" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-				$player .= '</div>';
-			}
-			
-		}
-		
-		//if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) { $player_status = "before"; }
-		
-		if ( $status_only === true ) {
-			return $player_status;
-		}
-		
-		// CTA?
-		$show_cta = get_post_meta( $post_id, 'show_cta', true );
-		$cta = "";
-		
-		// If show_cta is true and the Media player is active for this post, regardless of player or webcast status, show the CTA
-		if ( $media_player_active && $show_cta ) {
-			
-			// TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts')
-			// post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
-			// -- or by special category of content associated w/ CPTs?
-			$status_message = get_status_message ( $post_id, 'webcast_status' );
-			if ( $show_cta == "1" ) { $show_cta = true; } else { $show_cta = false; }
-			// WIP -- don't show the CTA twice...
-			if ( $multimedia && $media_format == "audio" ) {
-				$show_cta = false;
-			} else {
-				$ts_info .= $fcn_id."multimedia: ".$multimedia.'/ media_format: '.$media_format.'<br />';
-			}
-			if ( $show_cta ) {
-				$ts_info .= 'show_cta: TRUE<br />';
-				$cta .= '<div class="cta">';
-				$cta .= '<h2>Support Saint Thomas Church</h2>';
-				//$cta .= '<h2>Support Our Ministry</h2>';
-				////$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a donation for the work of the Episcopal Church in the Holy Land on Good Friday</a>';
-				//$cta .= '<a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank" class="button">Pledge to our Annual Appeal</a>&nbsp;';
-				//$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a Donation</a>';
-				//$cta .= '<a href="https://www.saintthomaschurch.org/product/make-a-payment-on-your-annual-appeal-pledge/" target="_blank" class="button">Make an Annual Appeal Pledge Payment</a>';
-				$cta .= '<a href="https://www.saintthomaschurch.org/give/" target="_blank" class="button">Pledge to the 2025 Annual Appeal</a>&nbsp;';				
-				$cta .= '<br />';
-				$cta .= '<h3>You can also text "give" to <a href="sms://+18559382085">(855) 938-2085</a></h3>';
-				//$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
-				$cta .= '</div>';
-			} else {
-				$ts_info .= $fcn_id."show_cta: FALSE<br />";
-			}
-			
-			//
-			if ( $status_message !== "" && $position != "banner" ) {
-				$info .= '<p class="message-info">'.$status_message.'</p>';
-				if ( $show_cta !== false
-					&& get_post_type($post_id) != 'sermon' // Don't show CTA for sermons
-					//&& !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
-					) { 
-					$info .= $cta;
-				}
-				//return $info; // tmp disabled because it made "before" Vimeo vids not show up
-			}
-		}
-		
-		// If there's media to display, show the player
-		if ( $player_status == "ready" ) {
-			
-			if ( $player != "" && is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" && $position != "banner" ) { 
-				$player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
-			}
-			
-			if ( !empty($player) ) {
-				if ( $player_position == $position ) {
-					$info .= "<!-- MEDIA_PLAYER -->";
-					$info .= $player;
-					$info .= "<!-- /MEDIA_PLAYER -->";
-				} else {
-					$ts_info .= "NB: player_position != $position ==> don't show the player, even though there is one.<br />";
-				}
-				
-			} else {
-				$info .= "<!-- NO MEDIA_PLAYER AVAILABLE -->";
-			}
-			
-			// Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
-			$rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
-			/*if ( have_rows('cuepoints', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-				while ( have_rows('cuepoints', $post_id) ) : the_row();
-					$XXX = get_sub_field('XXX'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-				endwhile;
-			} // end if
-			*/
-				
-			// Loop through rows and assemble cuepoints
-			if ($rows) {
-				
-				// Cuepoints
-				
-				$info .= '<!-- HTML5 Player Cuepoints -->'; // tft
-				// TODO: move this to sdg.js?
-				$info .= '<script>';
-				$info .= '  var vid = document.getElementsByClassName("wp-audio-shortcode")[0];';
-				$info .= '  function setCurTime( seconds ) {';
-				$info .= '    vid.currentTime = seconds;';
-				$info .= '  }';
-				$info .= '</script>';
-	
-				// Cuepoints
-				$seek_buttons = ""; // init
-				$button_actions = ""; // init
-	
-				$info .= '<div id="cuepoints" class="cuepoints scroll">';
-	
-				foreach( $rows as $row ) {
-	
-					//print_r($row); // tft
-					$name = ucwords(strtolower($row['name'])); // Deal w/ the fact that many cuepoint labels were entered in UPPERCASE... :-[
-					$start_time = $row['start_time'];
-					$end_time = $row['end_time'];
-					$button_id = $name.'-'.str_replace(':','',$start_time);
-	
-					// If the start_time is < 1hr, don't show the initial pair of zeros
-					if ( substr( $start_time, 0, 3 ) === "00:" ) { $start_time = substr( $start_time, 3 ); }
-					// Likewise, if the end_time is < 1hr, don't show the initial pair of zeros
-					if ( substr( $end_time, 0, 3 ) === "00:" ) { $end_time = substr( $end_time, 3 ); }
-	
-					// Convert cuepoints to number of seconds for use in player
-					$start_time_seconds = xtime_to_seconds($row['start_time']);
-					$end_time_seconds = xtime_to_seconds($row['end_time']);
-	
-					$seek_buttons .= '<div class="cuepoint">';
-					$seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" onclick="setCurTime('.$start_time_seconds.')" type="button" class="cue_button">'.$name.'</button></span>';
-					if ( $start_time ) {
-						$seek_buttons .= '<span class="cue_time">'.$start_time;
-						if ( $end_time ) { $seek_buttons .= '-'.$end_time; }
-						$seek_buttons .= '</span>';
-					}
-					$seek_buttons .= '</div>';
-	
-				}
-	
-				$info .= $seek_buttons;
-				$info .= '</div>';
-				
-			} // END if ($rows) for Cuepoints
-			
-			// Add call to action beneath media player
-			if ( !empty($player)
-				&& $player_position == $position
-				&& $player_status == "ready"
-				//&& $player_status != "before" 
-				//&& !is_dev_site() 
-				&& $show_cta !== false 
-				&& $post_id != 232540 
-				&& get_post_type($post_id) != 'sermon' ) {
-				$info .= $cta;
-			}
-			
-		}
-		
-	} else { $player_status = "N/A for this position"; }
-	
-	$ts_info .= $fcn_id."player_status: ".$player_status."<br />";
-	if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
-	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	$arr_info['player'] = $info;
-	
-	//if ( $ts_info != "" && ( $do_ts === true || $do_ts == "media" || $do_ts == "events" ) ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }	
-	$arr_info['ts_info'] = $ts_info;
-	$arr_info['position'] = $position;
-	$arr_info['status'] = $player_status;
+    // Make sure we're looking to show a player in this position; if not, cut it short
+    if ( $player_position == $position ) {
+    
+        if ( $media_type == "video" ) {
+        
+            //$ts_info .= $fcn_id."media_type REVISED: '".$media_type."'<br />";
+            $video_file = null;
+            $video_id = get_field('video_id', $post_id);
+            $yt_ts = get_field('yt_ts', $post_id); // YT timestamp
+            $yt_series_id = get_field('yt_series_id', $post_id);
+            $yt_list_id = get_field('yt_list_id', $post_id);
+            
+            // Mobile or desktop? If mobile, check to see if a smaller version is available -- WIP
+            if ( wp_is_mobile() ) {
+                $video_file = get_field('video_file_mobile'); //$video_file = get_field('featured_video_mobile');
+            }
+            if (empty($video_file) ) {
+                $video_file = get_field('video_file'); //$video_file = get_field('featured_video');
+            }
+            if ( is_array($video_file) ) {
+                $src = $video_file['url'];
+            } else if ( !empty($video_file) ) {
+                $src = $video_file;
+            }
+            
+            $ts_info .= $fcn_id."video_id: '".$video_id."'; video_file src: '".$src."'<br />";
+            
+            if ( $src && is_array($media_format) && in_array( 'video', $media_format) ) {
+                $media_format = "video";
+            } else if ( $video_id && is_array($media_format) && in_array( 'vimeo', $media_format) ) {
+                $media_format = "vimeo";
+            } else if ( empty($src) && !empty($video_id) ){ 
+                $media_format = "youtube";
+            }
+            
+        } else if ( $media_type == "audio" ) {
+            
+            $audio_file = get_field('audio_file', $post_id);
+            $ts_info .= $fcn_id."audio_file: '".$audio_file."<br />";
+            if ( $audio_file ) { $media_format = "audio"; } else { $media_format = "unknown"; }
+            if ( is_array($audio_file) ) { $src = $audio_file['url']; } else { $src = $audio_file; }
+            
+        } else {
+        
+            $media_format = "unknown";
+            
+        }
+    
+        $ts_info .= $fcn_id."media_format REVISED: '".print_r($media_format,true)."'<br />";
+        //if ( $media_format != 'unknown' ) { $player_status = "ready"; }
+        
+        // Webcast?
+        $webcast = get_field('webcast', $post_id);
+        //if ( is_array($featured_AV) && in_array( 'webcast', $featured_AV) ) {
+        if ( $webcast ) {
+            $webcast_status = get_webcast_status( $post_id );
+            //if ( $webcast_status == "live" || $webcast_status == "on_demand" ) { }
+            $url = get_webcast_url( $post_id ); //if ( empty($video_id)) { $src = get_webcast_url( $post_id ); }
+            $ts_info .= $fcn_id."webcast_status: '".$webcast_status."'; webcast_url: '".$url."'<br />";
+        }
+        
+        /*
+        DEPRECATED:
+        ---
+        Webcast Format Options:
+        ---
+        vimeo : Vimeo Video/One-time Event
+        vimeo_recurring : Vimeo Recurring Event
+        youtube: YouTube
+        youtube_list : YouTube Playlist
+        video : Video (formerly: Flowplayer -- future use tbd)
+        video_as_audio : Video as Audio
+        video_as_audio_live : Video as Audio - Livestream
+        audio : Audio Only
+        ---
+        */
+        
+        if ( $media_format == "audio" ) {
+        
+            $type = wp_check_filetype( $src, wp_get_mime_types() ); // tft
+            $ext = $type['ext'];
+            $ts_info .= "audio_file ext: ".$ext."<br />"; // tft
+            $atts = array('src' => $src, 'preload' => 'auto' ); // Playback position defaults to 00:00 via preload -- allows for clearer nav to other time points before play button has been pressed
+            $ts_info .= $fcn_id."audio_player atts: ".print_r($atts,true)."<br />";
+            
+            if ( !empty($src) && !empty($ext) && !empty($atts) ) { // && !empty($url) 
+                
+                // Audio file from Media Library
+                
+                $player_status = "ready";
+                
+                if ( $status_only == false ) {
+                    // Audio Player: HTML5 'generic' player via WP audio shortcode (summons mejs -- https://www.mediaelementjs.com/ -- stylable player)
+                    // NB default browser player has VERY limited styling options, which is why we're using the shortcode
+                    $player .= '<div class="audio_player">'; // media_player
+                    $player .= wp_audio_shortcode( $atts );
+                    $player .= '</div>';
+                }
+                
+            } else if ( !empty($url) ) {
+                
+                // Audio file by URL
+                
+                $player_status = "ready";
+                
+                if ( $status_only == false ) {
+                    
+                    // For m3u8 files, use generic HTML5 player for now, even though the styling is lousy. Can't get it to work yet via WP shortcode.
+                    $player .= '<div class="audio_player video_as_audio">';
+                    $player .= '<audio id="'.$player_id.'" class="masked" style="height: 3.5rem; width: 100%;" controls="controls" width="300" height="150">';
+                    $player .= 'Your browser does not support the audio element.';
+                    $player .= '</audio>';
+                    $player .= '</div>';
+    
+                    // Create array of necessary attributes for HLS JS
+                    $atts = array('src' => $src, 'player_id' => $player_id ); // other options: $masked
+                    // Load HLS JS
+                    $player .= "Load HLS JS<br />";
+                    $player .= load_hls_js( $atts );
+                }
+                
+            }
+            
+        } else if ( $media_format == "video" && !empty($src) ) { //} else if ( $media_format == "video" && isset($video_file['url']) ) {
+            
+            // Video file from Media Library
+            
+            $player_status = "ready";
+            
+            if ( $status_only == false ) {
+                $player .= '<div class="hero vidfile video-container">';
+                $player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline"></video>';
+                $player .= '</div>';
+            }
+            
+        } else if ( $media_format == "vimeo" && $video_id ) {
+                
+            // Vimeo iframe embed
+            
+            $player_status = "ready";
+            
+            $src = 'https://player.vimeo.com/video/'.$video_id;
+                
+            if ( $status_only == false ) {
+                $class = "vimeo_container";
+                if ( $player_position == "banner" ) { $class .= " hero vimeo video-container"; }
+                $player .= '<div class="'.$class.'">';
+                if ( $player_position == "banner" ) { 
+                    $player .= '<video poster="" id="section-home-hero-video" class="hero-video" src="'.$src.'" autoplay="autoplay" loop="loop" preload="auto" muted="true" playsinline="playsinline" controls></video>';
+                } else {
+                    $player .= '<iframe id="vimeo" src="'.$src.'" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%;"></iframe>';
+                }
+                $player .= '</div>';
+            }
+            
+        } else if ( $media_format == "youtube" ) {        
+            //&& ( !has_post_thumbnail( $post_id ) || ( $webcast_status == "live" || $webcast_status == "on_demand" ) )
+            
+            // WIP -- deal w/ webcasts w/ status other than live/on_demand
+            
+            // Get SRC
+            if ( !empty($yt_series_id) && !empty($yt_list_id) ) { // && $media_format == "youtube_list"    
+                $src = 'https://www.youtube.com/embed/videoseries?si='.$yt_series_id.'?enablejsapi=1&list='.$yt_list_id.'&autoplay=0&loop=1&mute=0&controls=1';
+                //https://www.youtube.com/embed/videoseries?si=gYNXkhOf6D2fbK_y&amp;list=PLXqJV8BgiyOQBPR5CWMs0KNCi3UyUl0BH    
+            } else if ( !empty($video_id) ) {
+                $src = 'https://www.youtube.com/embed/'.$video_id.'?enablejsapi=1&playlist='.$video_id.'&autoplay=0&loop=1&mute=0&controls=1';
+                //$src = 'https://www.youtube.com/embed/'.$youtube_id.'?&playlist='.$youtube_id.'&autoplay=1&loop=1&mute=1&controls=0'; // old theme header version -- note controls
+                //$src = 'https://www.youtube.com/watch?v='.$video_id;
+            } else {
+                $src = null;
+            }
+            
+            $ts_info .= $fcn_id."src: '".$src."'<br />";
+                
+            //if ( $src ) { $player_status = "ready"; }
+            
+            if ( !empty($src) && $status_only == false ) {
+                
+                $player_status = "ready";
+                
+                // Timestamp?
+                if ( $yt_ts ) { $src .= "&start=".$yt_ts; }
+                
+                // Assemble media player iframe
+                $player .= '<div class="hero video-container youtube-responsive-container">';
+                $player .= '<iframe width="100%" height="100%" src="'.$src.'" title="YouTube video player" enablejsapi="true" frameborder="0" allowfullscreen></iframe>'; // controls=0 // allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                $player .= '</div>';
+            }
+            
+        }
+        
+        //if ( $webcast && $webcast_status == "before" && $player_status == "unknown" ) { $player_status = "before"; }
+        
+        if ( $status_only === true ) {
+            return $player_status;
+        }
+        
+        // CTA?
+        $show_cta = get_post_meta( $post_id, 'show_cta', true );
+        $cta = "";
+        
+        // If show_cta is true and the Media player is active for this post, regardless of player or webcast status, show the CTA
+        if ( $media_player_active && $show_cta ) {
+            
+            // TODO: get this content from some post type manageable via the front end, by slug or id (e.g. 'cta-for-webcasts')
+            // post type for CTAs could be e.g. "Notifications", or post in "CTAs" post category, or... 
+            // -- or by special category of content associated w/ CPTs?
+            $status_message = get_status_message ( $post_id, 'webcast_status' );
+            if ( $show_cta == "1" ) { $show_cta = true; } else { $show_cta = false; }
+            // WIP -- don't show the CTA twice...
+            if ( $multimedia && $media_format == "audio" ) {
+                $show_cta = false;
+            } else {
+                $ts_info .= $fcn_id."multimedia: ".$multimedia.'/ media_format: '.$media_format.'<br />';
+            }
+            if ( $show_cta ) {
+                $ts_info .= 'show_cta: TRUE<br />';
+                $cta .= '<div class="cta">';
+                $cta .= '<h2>Support Saint Thomas Church</h2>';
+                //$cta .= '<h2>Support Our Ministry</h2>';
+                ////$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a donation for the work of the Episcopal Church in the Holy Land on Good Friday</a>';
+                //$cta .= '<a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank" class="button">Pledge to our Annual Appeal</a>&nbsp;';
+                //$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a Donation</a>';
+                //$cta .= '<a href="https://www.saintthomaschurch.org/product/make-a-payment-on-your-annual-appeal-pledge/" target="_blank" class="button">Make an Annual Appeal Pledge Payment</a>';
+                $cta .= '<a href="https://www.saintthomaschurch.org/give/" target="_blank" class="button">Pledge to the 2025 Annual Appeal</a>&nbsp;';                
+                $cta .= '<br />';
+                $cta .= '<h3>You can also text "give" to <a href="sms://+18559382085">(855) 938-2085</a></h3>';
+                //$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
+                $cta .= '</div>';
+            } else {
+                $ts_info .= $fcn_id."show_cta: FALSE<br />";
+            }
+            
+            //
+            if ( $status_message !== "" && $position != "banner" ) {
+                $info .= '<p class="message-info">'.$status_message.'</p>';
+                if ( $show_cta !== false
+                    && get_post_type($post_id) != 'sermon' // Don't show CTA for sermons
+                    //&& !is_dev_site() // Don't show CTA on dev site. It's annoying clutter.
+                    ) { 
+                    $info .= $cta;
+                }
+                //return $info; // tmp disabled because it made "before" Vimeo vids not show up
+            }
+        }
+        
+        // If there's media to display, show the player
+        if ( $player_status == "ready" ) {
+            
+            if ( $player != "" && is_singular('sermon') && has_term( 'webcasts', 'admin_tag', $post_id ) && get_post_meta( $post_id, 'audio_file', true ) != "" && $position != "banner" ) { 
+                $player = '<h3 id="sermon-audio" name="sermon-audio"><a>Sermon Audio</a></h3>'.$player;
+            }
+            
+            if ( !empty($player) ) {
+                if ( $player_position == $position ) {
+                    $info .= "<!-- MEDIA_PLAYER -->";
+                    $info .= $player;
+                    $info .= "<!-- /MEDIA_PLAYER -->";
+                } else {
+                    $ts_info .= "NB: player_position != $position ==> don't show the player, even though there is one.<br />";
+                }
+                
+            } else {
+                $info .= "<!-- NO MEDIA_PLAYER AVAILABLE -->";
+            }
+            
+            // Assemble Cuepoints (for non-Vimeo webcasts only -- HTML5 Audio-only
+            $rows = get_field('cuepoints', $post_id); // ACF function: https://www.advancedcustomfields.com/resources/get_field/ -- TODO: change to use have_rows() instead?
+            /*if ( have_rows('cuepoints', $post_id) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+                while ( have_rows('cuepoints', $post_id) ) : the_row();
+                    $XXX = get_sub_field('XXX'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+                endwhile;
+            } // end if
+            */
+                
+            // Loop through rows and assemble cuepoints
+            if ($rows) {
+                
+                // Cuepoints
+                
+                $info .= '<!-- HTML5 Player Cuepoints -->'; // tft
+                // TODO: move this to sdg.js?
+                $info .= '<script>';
+                $info .= '  var vid = document.getElementsByClassName("wp-audio-shortcode")[0];';
+                $info .= '  function setCurTime( seconds ) {';
+                $info .= '    vid.currentTime = seconds;';
+                $info .= '  }';
+                $info .= '</script>';
+    
+                // Cuepoints
+                $seek_buttons = ""; // init
+                $button_actions = ""; // init
+    
+                $info .= '<div id="cuepoints" class="cuepoints scroll">';
+    
+                foreach( $rows as $row ) {
+    
+                    //print_r($row); // tft
+                    $name = ucwords(strtolower($row['name'])); // Deal w/ the fact that many cuepoint labels were entered in UPPERCASE... :-[
+                    $start_time = $row['start_time'];
+                    $end_time = $row['end_time'];
+                    $button_id = $name.'-'.str_replace(':','',$start_time);
+    
+                    // If the start_time is < 1hr, don't show the initial pair of zeros
+                    if ( substr( $start_time, 0, 3 ) === "00:" ) { $start_time = substr( $start_time, 3 ); }
+                    // Likewise, if the end_time is < 1hr, don't show the initial pair of zeros
+                    if ( substr( $end_time, 0, 3 ) === "00:" ) { $end_time = substr( $end_time, 3 ); }
+    
+                    // Convert cuepoints to number of seconds for use in player
+                    $start_time_seconds = xtime_to_seconds($row['start_time']);
+                    $end_time_seconds = xtime_to_seconds($row['end_time']);
+    
+                    $seek_buttons .= '<div class="cuepoint">';
+                    $seek_buttons .= '<span class="cue_name"><button id="'.$button_id.'" onclick="setCurTime('.$start_time_seconds.')" type="button" class="cue_button">'.$name.'</button></span>';
+                    if ( $start_time ) {
+                        $seek_buttons .= '<span class="cue_time">'.$start_time;
+                        if ( $end_time ) { $seek_buttons .= '-'.$end_time; }
+                        $seek_buttons .= '</span>';
+                    }
+                    $seek_buttons .= '</div>';
+    
+                }
+    
+                $info .= $seek_buttons;
+                $info .= '</div>';
+                
+            } // END if ($rows) for Cuepoints
+            
+            // Add call to action beneath media player
+            if ( !empty($player)
+                && $player_position == $position
+                && $player_status == "ready"
+                //&& $player_status != "before" 
+                //&& !is_dev_site() 
+                && $show_cta !== false 
+                && $post_id != 232540 
+                && get_post_type($post_id) != 'sermon' ) {
+                $info .= $cta;
+            }
+            
+        }
+        
+    } else { $player_status = "N/A for this position"; }
+    
+    $ts_info .= $fcn_id."player_status: ".$player_status."<br />";
+    if ( $ts_info ) { $ts_info .= "+~+~+~+~+~+~+~+<br />"; }
+    //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    $arr_info['player'] = $info;
+    
+    //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "media" || $do_ts == "events" ) ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }    
+    $arr_info['ts_info'] = $ts_info;
+    $arr_info['position'] = $position;
+    $arr_info['status'] = $player_status;
 
-	return $arr_info;
-	
+    return $arr_info;
+    
 }
 
 // Display shortcode for media_player -- for use via EM settings
 add_shortcode('display_media_player', 'display_media_player');
 function display_media_player( $atts = array() ) {
-	
-	// TS/logging setup
+    
+    // TS/logging setup
     $do_ts = devmode_active( array("sdg", "media") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
     
     // Init vars
     $info = "";
-	$ts_info = "";
-	
-	// Normalize attribute keys by making them all lowercase
-	$atts = array_change_key_case( (array) $atts, CASE_LOWER );
-	
-	// Override default attributes with user attributes
-	$args = shortcode_atts(
-		array(
-			'post_id' => get_the_ID(),
-			'position' => 'above',
-			'return' => 'info',
-			'context' => 'unknown'
-		), $atts
-	);
-	
-	// Extract args as vars
-	extract( $args );
-	
+    $ts_info = "";
+    
+    // Normalize attribute keys by making them all lowercase
+    $atts = array_change_key_case( (array) $atts, CASE_LOWER );
+    
+    // Override default attributes with user attributes
+    $args = shortcode_atts(
+        array(
+            'post_id' => get_the_ID(),
+            'position' => 'above',
+            'return' => 'info',
+            'context' => 'unknown'
+        ), $atts
+    );
+    
+    // Extract args as vars
+    extract( $args );
+    
     if ( $return == "array" ) {
-    	$arr_info = array();
+        $arr_info = array();
     }    
     
     // TODO: handle webcast status considerations
@@ -1378,27 +1378,27 @@ function display_media_player( $atts = array() ) {
     }*/
     
     $mp_args = array('post_id' => $post_id, 'position' => $position );
-	$mp_info = get_media_player( $mp_args );
+    $mp_info = get_media_player( $mp_args );
     //$mp_info = get_media_player( $post_id, false, $position );
     if ( is_array($mp_info) ) {
-    	$player_status = $mp_info['status'];
-		//
-		$info .= "<!-- Audio/Video for post_id: $post_id -->";
-		$info .= $mp_info['player'];
-		$info .= "<!-- context: $context -->";
-		$info .= "<!-- player_status: $player_status -->";
-		$info .= '<!-- /Audio/Video -->';
-		//if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$mp_info['ts_info'].'</div>'; }
+        $player_status = $mp_info['status'];
+        //
+        $info .= "<!-- Audio/Video for post_id: $post_id -->";
+        $info .= $mp_info['player'];
+        $info .= "<!-- context: $context -->";
+        $info .= "<!-- player_status: $player_status -->";
+        $info .= '<!-- /Audio/Video -->';
+        //if ( $context == "EM-settings" ) { $info .= '<div class="troubleshooting sdgp">'.$mp_info['ts_info'].'</div>'; }
     } else {
-    	$info .= "<!-- ".print_r($mp_info,true)." -->";
-    }	
+        $info .= "<!-- ".print_r($mp_info,true)." -->";
+    }    
     
     if ( $return == "array" ) {
-		$arr_info['info'] = $info;
-		$arr_info['player_status'] = $player_status;
-		return $arr_info;
+        $arr_info['info'] = $info;
+        $arr_info['player_status'] = $player_status;
+        return $arr_info;
     } else {
-    	return $info;
+        return $info;
     }
 }
 
@@ -1408,18 +1408,18 @@ function sdg_list_media_items ( $atts = array() ) {
 
     global $wpdb;
     
-	$info = "";
+    $info = "";
     $mime_types = array();
-	
-	$args = shortcode_atts( array(
-      	'type'        => null,
-		'category'    => null,
-		'grouped_by'  => null,
+    
+    $args = shortcode_atts( array(
+          'type'        => null,
+        'category'    => null,
+        'grouped_by'  => null,
     ), $atts );
     
     // Extract
-	extract( $args );
-	
+    extract( $args );
+    
     if ($type == "pdf") {
         $mime_types[] = "application/pdf";
     } else {
@@ -1429,7 +1429,7 @@ function sdg_list_media_items ( $atts = array() ) {
     //$unsupported_mimes  = array( 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/tiff', 'image/x-icon' );
     //$all_mimes          = get_allowed_mime_types();
     //$mime_types       = array_diff( $all_mimes, $unsupported_mimes );
-	
+    
     $wp_args = array(
         'post_type' => 'attachment',
         'post_status' => 'inherit',
@@ -1446,9 +1446,9 @@ function sdg_list_media_items ( $atts = array() ) {
     if ( $category !== null ) {
         $wp_args['tax_query'] = array(
             array(
-                'taxonomy' 	=> 'media_category',
-                'field' 	=> 'slug',
-                'terms' 	=> $category
+                'taxonomy'     => 'media_category',
+                'field'     => 'slug',
+                'terms'     => $category
             )
         );
     }
@@ -1459,7 +1459,7 @@ function sdg_list_media_items ( $atts = array() ) {
     //$info .= "<!-- Last SQL-Query: ".$wpdb->last_query." -->";
     
     if ( !empty( $posts ) && !is_wp_error( $posts ) ){
-		
+        
         $info .= '<div class="media_list">';
         // init
         $items  = array();
@@ -1477,9 +1477,9 @@ function sdg_list_media_items ( $atts = array() ) {
             $url = wp_get_attachment_url($post_id); // get_attachment_link($post_id);
             
             // Don't display the words "Music List", if present in the title
-			if (strpos(strtolower($title), 'music list') !== false) { 
+            if (strpos(strtolower($title), 'music list') !== false) { 
                 $title = str_ireplace("Music List", "", $title);
-			}
+            }
             
             if ( $grouped_by == "year" ) {
                 
@@ -1603,11 +1603,11 @@ function sdg_list_media_items ( $atts = array() ) {
         $info .= '</div>'; // close media_list div
         
     } else {
-		$info .= "<p>No items found.</p>";
+        $info .= "<p>No items found.</p>";
         $info .= "Last SQL-Query: ".$wpdb->last_query."";
         //$info .= "<!-- Last SQL-Query: ".$wpdb->last_query." -->";
-	}
-	return $info;
+    }
+    return $info;
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -1623,24 +1623,24 @@ function sdg_scope_dates( $scope = null ) {
     $do_ts = devmode_active( array("sdg", "events") ); 
     $do_log = false;
     sdg_log( "divline2", $do_log );
-	
-	if ( empty($scope) ) { return null; }
-	
-	// Init vars
-	$dates = array();
-	$start_date = null;
-	$end_date = null;
-	$date_format = "Ymd"; // no hyphens for ACF fields(?) ... "Y-m-d"
-	
+    
+    if ( empty($scope) ) { return null; }
+    
+    // Init vars
+    $dates = array();
+    $start_date = null;
+    $end_date = null;
+    $date_format = "Ymd"; // no hyphens for ACF fields(?) ... "Y-m-d"
+    
     // get info about today's date
     $today = time(); //$today = new DateTime();
-	$year = date_i18n('Y');
-	
-	// Define basic season parameters
-	$season_start = strtotime("September 1st");
-	$season_end = strtotime("July 1st");
-	
-	if ( $scope == 'today' ){
+    $year = date_i18n('Y');
+    
+    // Define basic season parameters
+    $season_start = strtotime("September 1st");
+    $season_end = strtotime("July 1st");
+    
+    if ( $scope == 'today' ){
         
         $start_date = date_i18n($date_format); // today
         $end_date = $start_date;
@@ -1653,14 +1653,14 @@ function sdg_scope_dates( $scope = null ) {
     
     } else if ( $scope == 'upcoming' ) {
     
-    	// Get start/end dates of today plus six        
+        // Get start/end dates of today plus six        
         $start_date = date_i18n($date_format); // today
         $seventh_day = strtotime($start_date." +6 days");
         $end_date = date_i18n($date_format,$seventh_day);
     
     } else if ( $scope == 'this_week' ) {
     
-    	// Get start/end dates for the current week        
+        // Get start/end dates for the current week        
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
         $saturday = strtotime(date($date_format,$sunday)." +6 days");
@@ -1669,8 +1669,8 @@ function sdg_scope_dates( $scope = null ) {
     
     } else if ( $scope == 'last_week' ) {
     
-    	// Get start/end dates for the previous week
-    	// WIP       
+        // Get start/end dates for the previous week
+        // WIP       
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
         $saturday = strtotime(date($date_format,$sunday)." +6 days");
@@ -1679,8 +1679,8 @@ function sdg_scope_dates( $scope = null ) {
     
     } else if ( $scope == 'next_week' ) {
     
-    	// Get start/end dates for the next week
-    	// WIP
+        // Get start/end dates for the next week
+        // WIP
         $sunday = strtotime("last sunday");
         $sunday = date_i18n('w', $sunday)==date('w') ? $sunday+7*86400 : $sunday;
         $saturday = strtotime(date($date_format,$sunday)." +6 days");
@@ -1689,83 +1689,83 @@ function sdg_scope_dates( $scope = null ) {
     
     } else if ( $scope == 'this_month' ) {
     
-    	// Get start/end dates for the current month
-    	// WIP
+        // Get start/end dates for the current month
+        // WIP
     
     } else if ( $scope == 'last_month' ) {
     
-    	// Get start/end dates for the previous month
-    	// WIP
+        // Get start/end dates for the previous month
+        // WIP
     
     } else if ( $scope == 'next_month' ) {
     
-    	// Get start/end dates for the next month
-    	// WIP
+        // Get start/end dates for the next month
+        // WIP
     
     } else if ( $scope == 'this_season' ) {
     
-    	// Get actual season start/end dates
-		if ($today < $season_start){
-			$season_start = strtotime("-1 Year", $season_start);
-		} else {
-			$season_end = strtotime("+1 Year", $season_end);
-		}
-		
-		$start_date = date_i18n($date_format,$season_start);
-		$end_date = date_i18n($date_format,$season_end);
+        // Get actual season start/end dates
+        if ($today < $season_start){
+            $season_start = strtotime("-1 Year", $season_start);
+        } else {
+            $season_end = strtotime("+1 Year", $season_end);
+        }
+        
+        $start_date = date_i18n($date_format,$season_start);
+        $end_date = date_i18n($date_format,$season_end);
     
     } else if ( $scope == 'next_season' ) {
     
-		// Get actual season start/end dates
-		if ($today > $season_start){
-			$season_start = strtotime("+1 Year", $season_start);
-			$season_end = strtotime("+2 Year", $season_end);
-		} else {
-			$season_end = strtotime("+1 Year", $season_end);
-		}
-		
-		$start_date = date_i18n($date_format,$season_start);
-		$end_date = date_i18n($date_format,$season_end);
+        // Get actual season start/end dates
+        if ($today > $season_start){
+            $season_start = strtotime("+1 Year", $season_start);
+            $season_end = strtotime("+2 Year", $season_end);
+        } else {
+            $season_end = strtotime("+1 Year", $season_end);
+        }
+        
+        $start_date = date_i18n($date_format,$season_start);
+        $end_date = date_i18n($date_format,$season_end);
     
     } else if ( $scope == 'ytd' ) {
     
-    	$start = strtotime("January 1st, {$year}");		
-		$start_date = date_i18n($date_format,$start);
-		$end_date = date_i18n($date_format); // today
+        $start = strtotime("January 1st, {$year}");        
+        $start_date = date_i18n($date_format,$start);
+        $end_date = date_i18n($date_format); // today
     
     } else if ( $scope == 'this_year' ) {
     
-    	$start = strtotime("January 1st, {$year}");
-    	$end = strtotime("December 31st, {$year}");
-		
-		$start_date = date_i18n($date_format,$start);
-		$end_date = date_i18n($date_format,$end);
+        $start = strtotime("January 1st, {$year}");
+        $end = strtotime("December 31st, {$year}");
+        
+        $start_date = date_i18n($date_format,$start);
+        $end_date = date_i18n($date_format,$end);
     
     } else if ( $scope == 'last_year' ) {
     
-    	$year = $year-1;
-    	$start = strtotime("January 1st, {$year}");
-    	$end = strtotime("December 31st, {$year}");
-		
-		$start_date = date_i18n($date_format,$start);
-		$end_date = date_i18n($date_format,$end);
+        $year = $year-1;
+        $start = strtotime("January 1st, {$year}");
+        $end = strtotime("December 31st, {$year}");
+        
+        $start_date = date_i18n($date_format,$start);
+        $end_date = date_i18n($date_format,$end);
     
     } else if ( $scope == 'next_year' ) {
     
-    	$year = $year+1;
-    	$start = strtotime("January 1st, {$year}");
-    	$end = strtotime("December 31st, {$year}");
-		
-		$start_date = date_i18n($date_format,$start);
-		$end_date = date_i18n($date_format,$end);
+        $year = $year+1;
+        $start = strtotime("January 1st, {$year}");
+        $end = strtotime("December 31st, {$year}");
+        
+        $start_date = date_i18n($date_format,$start);
+        $end_date = date_i18n($date_format,$end);
     
     }
-	
-	$dates['start'] = $start_date;
-	$dates['end'] 	= $end_date;
-	
-	return $dates;
-	
+    
+    $dates['start'] = $start_date;
+    $dates['end']     = $end_date;
+    
+    return $dates;
+    
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -1775,13 +1775,13 @@ function sdg_scope_dates( $scope = null ) {
 add_shortcode('sdg_search_form', 'sdg_search_form');
 function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 
-	// TS/logging setup
+    // TS/logging setup
     $do_ts = devmode_active( array("sdg") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
 
-	// Init vars
-	$info = "";
+    // Init vars
+    $info = "";
     $ts_info = "";
     //$search_values = false; // var to track whether any search values have been submitted on which to base the search
     $search_values = array(); // var to track whether any search values have been submitted and to which post_types they apply
@@ -1789,15 +1789,15 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
     $ts_info .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; // tft
     //$ts_info .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
         
-	$args = shortcode_atts( array(
-		'post_type'    => 'post',
+    $args = shortcode_atts( array(
+        'post_type'    => 'post',
         'form_type'    => 'simple_search',
-		'fields'       => null,
+        'fields'       => null,
         'limit'        => '-1'
     ), $atts );
     
     // Extract
-	extract( $args );
+    extract( $args );
     
     //$info .= "form_type: $form_type<br />"; // tft
 
@@ -1805,17 +1805,17 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
     // In prep for that search call, initialize some vars to be used in the args array
     // Set up basic query args
     $bgp_args = array(
-		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
-		'post_status'     => 'publish',
-		'posts_per_page'  => $limit, //-1, //$posts_per_page,
+        'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+        'post_status'     => 'publish',
+        'posts_per_page'  => $limit, //-1, //$posts_per_page,
         'orderby'         => array( 'title' => 'ASC', 'ID' => 'ASC' ),
         'return_fields'   => 'ids',
-	);
+    );
     
     // WIP / TODO: fine-tune ordering -- 1) rep with editions, sorted by title_clean 2) rep without editions, sorted by title_clean
     /*
-    'orderby'	=> 'meta_value',
-    'meta_key' 	=> '_event_start_date',
+    'orderby'    => 'meta_value',
+    'meta_key'     => '_event_start_date',
     'order'     => 'DESC',
     */
     
@@ -2020,8 +2020,8 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 
                             } else {
                             
-                            	$field_info .= " -- NOT found in primary taxonomies array<br />";
-                            	
+                                $field_info .= " -- NOT found in primary taxonomies array<br />";
+                                
                                 // Get all taxonomies associated with the related_post_type
                                 $related_taxonomies = get_object_taxonomies( $related_post_type );
 
@@ -2052,13 +2052,13 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
                     //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-					if ( is_array($field_post_type) ) {
-						$field_post_type = $field['post_type'][0];
-						$field_info .= "field_post_type: $field_post_type<br />";
-					} else {
-						// ???
-					}
-					
+                    if ( is_array($field_post_type) ) {
+                        $field_post_type = $field['post_type'][0];
+                        $field_info .= "field_post_type: $field_post_type<br />";
+                    } else {
+                        // ???
+                    }
+                    
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
                     if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
@@ -2121,7 +2121,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                     }                    
                     
                     if ( ( $field_name == "post_title" ) && !empty($field_value) ) {
-                    	$bgp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
+                        $bgp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
                     }
                     
                     if ( $field_type == "text" && !empty($field_value) && $field_name != "post_title" ) {
@@ -2135,33 +2135,33 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
                         // For now, set it explicitly per field_name
                         if ( $field_name == "box_num" ) {
-                        	//$match_value = "'".$match_value."'";
-                        	//$match_value = '"'.$match_value.'"'; // matches exactly "123", not just 123. This prevents a match for "1234"
+                            //$match_value = "'".$match_value."'";
+                            //$match_value = '"'.$match_value.'"'; // matches exactly "123", not just 123. This prevents a match for "1234"
                         } else {
-                        	$match_value = "XXX".$match_value."XXX";
+                            $match_value = "XXX".$match_value."XXX";
                         }
                         
                         // If querying title_clean, then also query tune_name
                         if ( $field_name == "title_clean" ) {
-                        	$mq_component = array(
-								'relation' => 'OR',
-								array(
-									'key'   => 'title_clean',
-									'value' => $match_value,
-									'compare'=> 'LIKE'
-								),
-								array(
-									'key'   => 'tune_name',
-									'value' => $match_value,
-									'compare'=> 'LIKE'
-								)
-							);
+                            $mq_component = array(
+                                'relation' => 'OR',
+                                array(
+                                    'key'   => 'title_clean',
+                                    'value' => $match_value,
+                                    'compare'=> 'LIKE'
+                                ),
+                                array(
+                                    'key'   => 'tune_name',
+                                    'value' => $match_value,
+                                    'compare'=> 'LIKE'
+                                )
+                            );
                         } else {
-                        	$mq_component = array(
-								'key'   => $field_name,
-								'value' => $match_value,
-								'compare'=> 'LIKE'
-							);
+                            $mq_component = array(
+                                'key'   => $field_name,
+                                'value' => $match_value,
+                                'compare'=> 'LIKE'
+                            );
                         }
 
                     } else if ( $field_type == "select" && !empty($field_value) ) {
@@ -2179,7 +2179,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                             'value' => $match_value,
                             'compare'=> $compare
                         );
-						
+                        
                     } else if ( $field_type == "checkbox" && !empty($field_value) ) {
                         
                         $compare = 'LIKE';
@@ -2193,7 +2193,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 
                     } else if ( $field_type == "relationship" ) {
                     
-                    	if ( !empty($field_value) ) {
+                        if ( !empty($field_value) ) {
                             
                             $field_value_converted = ""; // init var for storing ids of posts matching field_value
                             
@@ -2266,10 +2266,10 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                                     }
                                     
                                 } else {
-                                	// No matches found!
-                                	$field_info .= "count(field_value_posts) not > 0<br />";
-                                	//$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
-                                	//$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
+                                    // No matches found!
+                                    $field_info .= "count(field_value_posts) not > 0<br />";
+                                    //$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
+                                    //$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
                                 }
                                 
                             }
@@ -2298,14 +2298,14 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                             
                         $field_info .= ">> WIP: field_type: taxonomy; field_name: $field_name; post_type: $post_type; terms: $field_value<br />"; // tft
 
-						$tq_component = array (
-							'taxonomy' => $field_name,
-							//'field'    => 'slug',
-							'terms'    => $field_value,
-						);
-					
-						// Add query component to the appropriate components array
-						
+                        $tq_component = array (
+                            'taxonomy' => $field_name,
+                            //'field'    => 'slug',
+                            'terms'    => $field_value,
+                        );
+                    
+                        // Add query component to the appropriate components array
+                        
                         if ( $post_type == "repertoire" ) {
 
                             // Since rep & editions share numerous taxonomies in common, check both -- WIP                             
@@ -2331,38 +2331,38 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                             */
 
                         } else {
-                        	//
+                            //
                         }
 
                     }
                     
-					// Add query components to the appropriate components arrays
-					// Meta query
-					if ( $mq_component ) {
-						$default_query = false;
-						$field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_component; } else { $mq_components_related[] = $mq_component; }
-					}
-					// Meta query alt
-					if ( $mq_alt_component ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_alt_component; } else { $mq_components_related[] = $mq_alt_component; }
-					}
-					// Meta subquery
-					if ( $mq_subquery ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_subquery; } else { $mq_components_related[] = $mq_subquery; }
-					}
+                    // Add query components to the appropriate components arrays
+                    // Meta query
+                    if ( $mq_component ) {
+                        $default_query = false;
+                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_component; } else { $mq_components_related[] = $mq_component; }
+                    }
+                    // Meta query alt
+                    if ( $mq_alt_component ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_alt_component; } else { $mq_components_related[] = $mq_alt_component; }
+                    }
+                    // Meta subquery
+                    if ( $mq_subquery ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_subquery; } else { $mq_components_related[] = $mq_subquery; }
+                    }
                     // Tax query
-					if ( $tq_component ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $tq_components_primary[] = $tq_component; } else { $tq_components_related[] = $tq_component; }
-					}
-					
+                    if ( $tq_component ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $tq_components_primary[] = $tq_component; } else { $tq_components_related[] = $tq_component; }
+                    }
+                    
                     //$field_info .= "-----<br />";
                     
                 } else {
-                	$field_info .= "No field found for field_name $field_name <br />";
+                    $field_info .= "No field found for field_name $field_name <br />";
                 } // END if ( $field )
                 
                 
@@ -2511,17 +2511,17 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                                 asort($options);
 
                             } else {
-                            	$field_info .= "NOT looking for options for this relationship field...<br />";
-                            	$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
+                                $field_info .= "NOT looking for options for this relationship field...<br />";
+                                $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
                             }
 
                             
 
                         //} else {
-                        	
-                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
-                    		//$input_html = "LE TSET"; // tft
-                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
+                            
+                            //$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
+                            //$input_html = "LE TSET"; // tft
+                            //$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
                         //}
                         
                     } else if ( $field_type == "taxonomy" ) {
@@ -2617,13 +2617,13 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
         // then set up a second set of args/birdhive_get_posts
         
         if ( $search_primary_post_type == true ) {
-			$bgp_args['post_type'] = $post_type;
-		}
-		
-		if ( $search_related_post_type == true ) {
-			if ( is_array($bgp_args) && is_array($bgp_args_related) ) {
-				$bgp_args_related = array_merge( $bgp_args_related, $bgp_args ); //$bgp_args_related = $bgp_args;
-			}
+            $bgp_args['post_type'] = $post_type;
+        }
+        
+        if ( $search_related_post_type == true ) {
+            if ( is_array($bgp_args) && is_array($bgp_args_related) ) {
+                $bgp_args_related = array_merge( $bgp_args_related, $bgp_args ); //$bgp_args_related = $bgp_args;
+            }
             $bgp_args_related['post_type'] = $related_post_type;
         }
         
@@ -2651,125 +2651,125 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
         */
         
         if ( $search_primary_post_type == true ) {
-			if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
-				$meta_query['relation'] = $search_operator;
-			}
-			if ( count($mq_components_primary) == 1) {                
-				$meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
-			} else {
-				foreach ( $mq_components_primary AS $component ) {
-					$meta_query[] = $component;
-				}
-			}
-			/*foreach ( $mq_components_primary AS $component ) {
-				$meta_query[] = $component;
-			}*/
-			if ( !empty($meta_query) ) { $bgp_args['meta_query'] = $meta_query; }
-		}
-		
-		// related query
-		if ( $search_related_post_type == true ) {
-			if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
-				$meta_query_related['relation'] = $search_operator;
-			}
-			if ( count($mq_components_related) == 1) {
-				$meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
-			} else {
-				foreach ( $mq_components_related AS $component ) {
-					$meta_query_related[] = $component;
-				}
-			}
-			/*foreach ( $mq_components_related AS $component ) {
-				$meta_query_related[] = $component;
-			}*/
-			if ( !empty($meta_query_related) ) { $bgp_args_related['meta_query'] = $meta_query_related; }
-		}            
+            if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
+                $meta_query['relation'] = $search_operator;
+            }
+            if ( count($mq_components_primary) == 1) {                
+                $meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
+            } else {
+                foreach ( $mq_components_primary AS $component ) {
+                    $meta_query[] = $component;
+                }
+            }
+            /*foreach ( $mq_components_primary AS $component ) {
+                $meta_query[] = $component;
+            }*/
+            if ( !empty($meta_query) ) { $bgp_args['meta_query'] = $meta_query; }
+        }
+        
+        // related query
+        if ( $search_related_post_type == true ) {
+            if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
+                $meta_query_related['relation'] = $search_operator;
+            }
+            if ( count($mq_components_related) == 1) {
+                $meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
+            } else {
+                foreach ( $mq_components_related AS $component ) {
+                    $meta_query_related[] = $component;
+                }
+            }
+            /*foreach ( $mq_components_related AS $component ) {
+                $meta_query_related[] = $component;
+            }*/
+            if ( !empty($meta_query_related) ) { $bgp_args_related['meta_query'] = $meta_query_related; }
+        }            
         
         // Finalize tax_query or queries
         // =============================
         
         if ( $search_primary_post_type == true ) {
-			if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
-				$tax_query['relation'] = $search_operator;
-			}
-			
-			$rep_cat_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
-			$admin_tag_exclusions = array('exclude-from-search', 'external-repertoire');
-			
-			foreach ( $tq_components_primary AS $component ) {
-		
-				// Check to see if component relates to repertoire_category
-				if ( $post_type == "repertoire" ) {
-				
-					$ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
-					
-					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
-					// TODO: generalize this option to all cats to be set via SDG options -- currently it is VERY STC-specific...
-					if ( $component['taxonomy'] == "repertoire_category" ) {
-				
-						$rep_cat_queried = true;
-					
-						// Add 'AND' relation...
-						$component = array(
-							'relation' => 'AND',
-							array(
-								'taxonomy' => 'repertoire_category',
-								'terms'    => $component['terms'],
-								'operator' => 'IN',
-							),
-							array(
-								'taxonomy' => 'repertoire_category',
-								'field'    => 'slug',
-								'terms'    => $rep_cat_exclusions,
-								'operator' => 'NOT IN',
-								//'include_children' => true,
-							),
-							array(
-								'taxonomy' => 'admin_tag',
-								'field'    => 'slug',
-								'terms'    => $admin_tag_exclusions,
-								'operator' => 'NOT IN',
-								//'include_children' => true,
-							),
-						);
-						$default_query = false;
-						$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
-					}
-				}
-				$tax_query[] = $component;
-			}
-			if ( $post_type == "repertoire" && $rep_cat_queried == false ) {
-				$tax_query[] = array(
-					'relation' => 'AND',
-					array(
-						'taxonomy' => 'repertoire_category',
-						'field'    => 'slug',
-						'terms'    => $rep_cat_exclusions,
-						'operator' => 'NOT IN',
-						//'include_children' => true,
-					),
-					array(
-						'taxonomy' => 'admin_tag',
-						'field'    => 'slug',
-						'terms'    => $admin_tag_exclusions,
-						'operator' => 'NOT IN',
-						//'include_children' => true,
-					),
-				);
-			}
-			if ( !empty($tax_query) ) { $bgp_args['tax_query'] = $tax_query; }
-		}
-		
-		// related query
-		if ( $search_related_post_type == true ) {
-			if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
-				$tax_query_related['relation'] = $search_operator;
-			}
-			foreach ( $tq_components_related AS $component ) {
-				$tax_query_related[] = $component;
-			}
-			if ( !empty($tax_query_related) ) { $bgp_args_related['tax_query'] = $tax_query_related; }
-		}            
+            if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
+                $tax_query['relation'] = $search_operator;
+            }
+            
+            $rep_cat_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+            $admin_tag_exclusions = array('exclude-from-search', 'external-repertoire');
+            
+            foreach ( $tq_components_primary AS $component ) {
+        
+                // Check to see if component relates to repertoire_category
+                if ( $post_type == "repertoire" ) {
+                
+                    $ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
+                    
+                    // TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+                    // TODO: generalize this option to all cats to be set via SDG options -- currently it is VERY STC-specific...
+                    if ( $component['taxonomy'] == "repertoire_category" ) {
+                
+                        $rep_cat_queried = true;
+                    
+                        // Add 'AND' relation...
+                        $component = array(
+                            'relation' => 'AND',
+                            array(
+                                'taxonomy' => 'repertoire_category',
+                                'terms'    => $component['terms'],
+                                'operator' => 'IN',
+                            ),
+                            array(
+                                'taxonomy' => 'repertoire_category',
+                                'field'    => 'slug',
+                                'terms'    => $rep_cat_exclusions,
+                                'operator' => 'NOT IN',
+                                //'include_children' => true,
+                            ),
+                            array(
+                                'taxonomy' => 'admin_tag',
+                                'field'    => 'slug',
+                                'terms'    => $admin_tag_exclusions,
+                                'operator' => 'NOT IN',
+                                //'include_children' => true,
+                            ),
+                        );
+                        $default_query = false;
+                        $ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
+                    }
+                }
+                $tax_query[] = $component;
+            }
+            if ( $post_type == "repertoire" && $rep_cat_queried == false ) {
+                $tax_query[] = array(
+                    'relation' => 'AND',
+                    array(
+                        'taxonomy' => 'repertoire_category',
+                        'field'    => 'slug',
+                        'terms'    => $rep_cat_exclusions,
+                        'operator' => 'NOT IN',
+                        //'include_children' => true,
+                    ),
+                    array(
+                        'taxonomy' => 'admin_tag',
+                        'field'    => 'slug',
+                        'terms'    => $admin_tag_exclusions,
+                        'operator' => 'NOT IN',
+                        //'include_children' => true,
+                    ),
+                );
+            }
+            if ( !empty($tax_query) ) { $bgp_args['tax_query'] = $tax_query; }
+        }
+        
+        // related query
+        if ( $search_related_post_type == true ) {
+            if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
+                $tax_query_related['relation'] = $search_operator;
+            }
+            foreach ( $tq_components_related AS $component ) {
+                $tax_query_related[] = $component;
+            }
+            if ( !empty($tax_query_related) ) { $bgp_args_related['tax_query'] = $tax_query_related; }
+        }            
 
         ///// WIP
         if ( $search_related_post_type == true && $related_post_type ) {
@@ -2789,35 +2789,35 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
         if ( count($search_values) > 0 ) {
             
             if ( $search_primary_post_type == true && $bgp_args ) {
-				$ts_info .= "About to pass bgp_args to birdhive_get_posts: <pre>".print_r($bgp_args,true)."</pre>"; // tft
-			
-				// Get posts matching the assembled args
-				/* ===================================== */
-				if ( $default_query === true ) {
-					$ts_info .= "Default query -- no need to run a search<br />";
-				} else {
-					if ( $form_type == "advanced_search" ) {
-						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
-						$posts_info = birdhive_get_posts( $bgp_args );
-					} else {
-						$posts_info = birdhive_get_posts( $bgp_args );
-					}
-					
-					if ( isset($posts_info['arr_posts']) ) {
-				
-						$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
-						$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
-				
-						$ts_info .= $posts_info['ts_info'];
-				
-						// Print last SQL query string
-						//global $wpdb;
-						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
-				
-					}
-				}			
-			}
+                $ts_info .= "About to pass bgp_args to birdhive_get_posts: <pre>".print_r($bgp_args,true)."</pre>"; // tft
+            
+                // Get posts matching the assembled args
+                /* ===================================== */
+                if ( $default_query === true ) {
+                    $ts_info .= "Default query -- no need to run a search<br />";
+                } else {
+                    if ( $form_type == "advanced_search" ) {
+                        //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array(); // tft
+                        $posts_info = birdhive_get_posts( $bgp_args );
+                    } else {
+                        $posts_info = birdhive_get_posts( $bgp_args );
+                    }
+                    
+                    if ( isset($posts_info['arr_posts']) ) {
+                
+                        $arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
+                        $ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
+                        //$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
+                
+                        $ts_info .= $posts_info['ts_info'];
+                
+                        // Print last SQL query string
+                        //global $wpdb;
+                        //$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
+                
+                    }
+                }            
+            }
             
             if ( $search_related_post_type == true && $bgp_args_related && $default_query == false ) {
                 
@@ -2833,7 +2833,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>";
 
                     if ( isset($related_posts_info['info']) ) { $ts_info .= $related_posts_info['info']; }
-					if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
+                    if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
@@ -2904,7 +2904,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
                         $ts_info .= "Num full_match_ids: [".count($full_match_ids)."]".'</div>';
                         
                     } else {
-                    	$ts_info .= "Primary arr_post_ids is empty >> use arr_related_post_ids as arr_post_ids<br />";
+                        $ts_info .= "Primary arr_post_ids is empty >> use arr_related_post_ids as arr_post_ids<br />";
                         $arr_post_ids = $arr_related_post_ids;
                     }
 
@@ -2977,42 +2977,42 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' ) {
 // ... then loop through returned ids based on search criteria
 add_shortcode('sdg_search_form_v2', 'sdg_search_form_v2');
 function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
-	
-	$info = "";
+    
+    $info = "";
     $ts_info = "";
     $search_values = array(); // var to track whether any search values have been submitted and to which post_types they apply
     
     $ts_info .= '_GET: <pre>'.print_r($_GET,true).'</pre>'; // tft
     //$ts_info .= '_REQUEST: <pre>'.print_r($_REQUEST,true).'</pre>'; // tft
         
-	$args = shortcode_atts( array(
+    $args = shortcode_atts( array(
         'form_type'    => 'simple_search',
-		'post_type'    => 'post',
-		'fields'       => null,
+        'post_type'    => 'post',
+        'fields'       => null,
         'limit'        => '-1'
     ), $atts );
     
     // Extract
-	extract( $args );
-	
-	//$ts_info .= "form_type: $form_type<br />";
-	//$ts_info .= "post_type: $post_type<br />";
+    extract( $args );
+    
+    //$ts_info .= "form_type: $form_type<br />";
+    //$ts_info .= "post_type: $post_type<br />";
 
     // After building the form, assuming any search terms have been submitted, we're going to call the function birdhive_get_posts
     // In prep for that search call, initialize some vars to be used in the args array
     // Set up basic query args
     $bgp_args = array(
-		'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
-		'post_status'     => 'publish',
-		'posts_per_page'  => $limit, //-1, //$posts_per_page,
+        'post_type'       => array( $post_type ), // Single item array, for now. May add other related_post_types -- e.g. repertoire; edition
+        'post_status'     => 'publish',
+        'posts_per_page'  => $limit, //-1, //$posts_per_page,
         'orderby'         => array( 'title' => 'ASC', 'ID' => 'ASC' ),
         'return_fields'   => 'ids',
-	);
+    );
     
     // WIP / TODO: fine-tune ordering options -- e.g. for mlib: 1) rep with editions, sorted by title_clean 2) rep without editions, sorted by title_clean
     /*
-    'orderby'	=> 'meta_value',
-    'meta_key' 	=> '_event_start_date',
+    'orderby'    => 'meta_value',
+    'meta_key'     => '_event_start_date',
     'order'     => 'DESC',
     */
     
@@ -3215,8 +3215,8 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
 
                             } else {
                             
-                            	$field_info .= " -- NOT found in primary taxonomies array<br />";
-                            	
+                                $field_info .= " -- NOT found in primary taxonomies array<br />";
+                                
                                 // Get all taxonomies associated with the related_post_type
                                 $related_taxonomies = get_object_taxonomies( $related_post_type );
 
@@ -3247,13 +3247,13 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                     if ( isset($field['post_type']) ) { $field_post_type = $field['post_type']; } else { $field_post_type = null; } // ??
                     //$field_info .= "field_post_type: ".print_r($field_post_type,true)."<br />";
                     // Check to see if more than one element in array. If not, use $field['post_type'][0]...
-					if ( is_array($field_post_type) ) {
-						$field_post_type = $field['post_type'][0];
-						$field_info .= "field_post_type: $field_post_type<br />";
-					} else {
-						// ???
-					}
-					
+                    if ( is_array($field_post_type) ) {
+                        $field_post_type = $field['post_type'][0];
+                        $field_info .= "field_post_type: $field_post_type<br />";
+                    } else {
+                        // ???
+                    }
+                    
                     // Check to see if a custom post type or taxonomy exists with same name as $field_name
                     // In the case of the choirplanner search form, this will be relevant for post types such as "Publisher" and taxonomies such as "Voicing"
                     if ( post_type_exists( $arr_field ) || taxonomy_exists( $arr_field ) ) {
@@ -3316,7 +3316,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                     }                    
                     
                     if ( ( $field_name == "post_title" ) && !empty($field_value) ) {
-                    	$bgp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
+                        $bgp_args['_search_title'] = $field_value; // custom parameter -- see posts_where filter fcn
                     }
                     
                     // Not a title field >> meta or taxonomy, depending on field_type
@@ -3332,39 +3332,39 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                         // -- e.g. box_num should be exact, but not necessarily for title_clean?
                         // For now, set it explicitly per field_name
                         if ( $field_name == "box_num" ) { // WIP: applies only for mlib; must be generalized for non-STC libs
-                        	//$match_value = "'".$match_value."'";
-                        	//$match_value = '"'.$match_value.'"'; // matches exactly "123", not just 123. This prevents a match for "1234"
+                            //$match_value = "'".$match_value."'";
+                            //$match_value = '"'.$match_value.'"'; // matches exactly "123", not just 123. This prevents a match for "1234"
                         } else {
-                        	$match_value = "XXX".$match_value."XXX";
+                            $match_value = "XXX".$match_value."XXX";
                         }
                         
                         // If querying title_clean, then also query tune_name -- WIP: applies only for mlib                        
                         if ( $field_name == "title_clean" && $post_type == "repertoire" ) {
-                        	
-                        	$arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => 'OR', 'meta_key' => array('title_clean','tune_name'), 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type ); // wip
-                        	
-                        	$mq_component = array(
-								'relation' => 'OR',
-								array(
-									'key'   => 'title_clean',
-									'value' => $match_value,
-									'compare'=> 'LIKE'
-								),
-								array(
-									'key'   => 'tune_name',
-									'value' => $match_value,
-									'compare'=> 'LIKE'
-								)
-							);
+                            
+                            $arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => 'OR', 'meta_key' => array('title_clean','tune_name'), 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type ); // wip
+                            
+                            $mq_component = array(
+                                'relation' => 'OR',
+                                array(
+                                    'key'   => 'title_clean',
+                                    'value' => $match_value,
+                                    'compare'=> 'LIKE'
+                                ),
+                                array(
+                                    'key'   => 'tune_name',
+                                    'value' => $match_value,
+                                    'compare'=> 'LIKE'
+                                )
+                            );
                         } else {
                         
-                        	$arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => null, 'meta_key' => $field_name, 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type ); // wip
-                        	
-                        	$mq_component = array(
-								'key'   => $field_name,
-								'value' => $match_value,
-								'compare'=> 'LIKE'
-							);
+                            $arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => null, 'meta_key' => $field_name, 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type ); // wip
+                            
+                            $mq_component = array(
+                                'key'   => $field_name,
+                                'value' => $match_value,
+                                'compare'=> 'LIKE'
+                            );
                         }
 
                     } else if ( $field_type == "select" && !empty($field_value) ) {
@@ -3382,7 +3382,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                             'value' => $match_value,
                             'compare'=> $compare
                         );
-						
+                        
                     } else if ( $field_type == "checkbox" && !empty($field_value) ) {
                         
                         $compare = 'LIKE';
@@ -3396,7 +3396,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
 
                     } else if ( $field_type == "relationship" ) {
                     
-                    	if ( !empty($field_value) ) {
+                        if ( !empty($field_value) ) {
                             
                             $field_value_converted = ""; // init var for storing ids of posts matching field_value
                             
@@ -3469,10 +3469,10 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                                     }
                                     
                                 } else {
-                                	// No matches found!
-                                	$field_info .= "count(field_value_posts) not > 0<br />";
-                                	//$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
-                                	//$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
+                                    // No matches found!
+                                    $field_info .= "count(field_value_posts) not > 0<br />";
+                                    //$field_info .= "field_value_args: ".print_r($field_value_args,true)."<br />";
+                                    //$field_info .= "field_value_query->request: ".$field_value_query->request."<br />";
                                 }
                                 
                             }
@@ -3501,14 +3501,14 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                             
                         $field_info .= ">> WIP: field_type: taxonomy; field_name: $field_name; post_type: $post_type; terms: $field_value<br />"; // tft
 
-						$tq_component = array (
-							'taxonomy' => $field_name,
-							//'field'    => 'slug',
-							'terms'    => $field_value,
-						);
-					
-						// Add query component to the appropriate components array
-						
+                        $tq_component = array (
+                            'taxonomy' => $field_name,
+                            //'field'    => 'slug',
+                            'terms'    => $field_value,
+                        );
+                    
+                        // Add query component to the appropriate components array
+                        
                         if ( $post_type == "repertoire" ) { // WIP: applies only for mlib
 
                             // Since rep & editions share numerous taxonomies in common, check both -- WIP                             
@@ -3534,38 +3534,38 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                             */
 
                         } else {
-                        	//
+                            //
                         }
 
                     }
                     
-					// Add query components to the appropriate components arrays
-					// Meta query
-					if ( $mq_component ) {
-						$default_query = false;
-						$field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_component; } else { $mq_components_related[] = $mq_component; }
-					}
-					// Meta query alt
-					if ( $mq_alt_component ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_alt_component; } else { $mq_components_related[] = $mq_alt_component; }
-					}
-					// Meta subquery
-					if ( $mq_subquery ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_subquery; } else { $mq_components_related[] = $mq_subquery; }
-					}
+                    // Add query components to the appropriate components arrays
+                    // Meta query
+                    if ( $mq_component ) {
+                        $default_query = false;
+                        $field_info .= ">> Added $query_assignment meta_query_component for key: $field_name, value: $match_value<br/>";
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_component; } else { $mq_components_related[] = $mq_component; }
+                    }
+                    // Meta query alt
+                    if ( $mq_alt_component ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_alt_component; } else { $mq_components_related[] = $mq_alt_component; }
+                    }
+                    // Meta subquery
+                    if ( $mq_subquery ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $mq_components_primary[] = $mq_subquery; } else { $mq_components_related[] = $mq_subquery; }
+                    }
                     // Tax query
-					if ( $tq_component ) {
-						$default_query = false;
-						if ( $query_assignment == "primary" ) { $tq_components_primary[] = $tq_component; } else { $tq_components_related[] = $tq_component; }
-					}
-					
+                    if ( $tq_component ) {
+                        $default_query = false;
+                        if ( $query_assignment == "primary" ) { $tq_components_primary[] = $tq_component; } else { $tq_components_related[] = $tq_component; }
+                    }
+                    
                     //$field_info .= "-----<br />";
                     
                 } else {
-                	$field_info .= "No field found for field_name $field_name <br />";
+                    $field_info .= "No field found for field_name $field_name <br />";
                 } // END if ( $field )
                 
                 
@@ -3714,17 +3714,17 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                                 asort($options);
 
                             } else {
-                            	$field_info .= "NOT looking for options for this relationship field...<br />";
-                            	$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
+                                $field_info .= "NOT looking for options for this relationship field...<br />";
+                                $input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
                             }
 
                             
 
                         //} else {
-                        	
-                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
-                    		//$input_html = "LE TSET"; // tft
-                        	//$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
+                            
+                            //$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="'.$input_class.'" />';
+                            //$input_html = "LE TSET"; // tft
+                            //$input_html = '<input type="text" id="'.$field_name.'" name="'.$field_name.'" value="'.$field_value.'" class="autocomplete '.$input_class.' relationship" />';
                         //}
                         
                     } else if ( $field_type == "taxonomy" ) {
@@ -3820,13 +3820,13 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
         // then set up a second set of args/birdhive_get_posts
         
         if ( $search_primary_post_type == true ) {
-			$bgp_args['post_type'] = $post_type;
-		}
-		
-		if ( $search_related_post_type == true ) {
-			if ( is_array($bgp_args) && is_array($bgp_args_related) ) {
-				$bgp_args_related = array_merge( $bgp_args_related, $bgp_args ); //$bgp_args_related = $bgp_args;
-			}
+            $bgp_args['post_type'] = $post_type;
+        }
+        
+        if ( $search_related_post_type == true ) {
+            if ( is_array($bgp_args) && is_array($bgp_args_related) ) {
+                $bgp_args_related = array_merge( $bgp_args_related, $bgp_args ); //$bgp_args_related = $bgp_args;
+            }
             $bgp_args_related['post_type'] = $related_post_type;
         }
         
@@ -3854,125 +3854,125 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
         */
         
         if ( $search_primary_post_type == true ) {
-			if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
-				$meta_query['relation'] = $search_operator;
-			}
-			if ( count($mq_components_primary) == 1) {                
-				$meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
-			} else {
-				foreach ( $mq_components_primary AS $component ) {
-					$meta_query[] = $component;
-				}
-			}
-			/*foreach ( $mq_components_primary AS $component ) {
-				$meta_query[] = $component;
-			}*/
-			if ( !empty($meta_query) ) { $bgp_args['meta_query'] = $meta_query; }
-		}
-		
-		// related query
-		if ( $search_related_post_type == true ) {
-			if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
-				$meta_query_related['relation'] = $search_operator;
-			}
-			if ( count($mq_components_related) == 1) {
-				$meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
-			} else {
-				foreach ( $mq_components_related AS $component ) {
-					$meta_query_related[] = $component;
-				}
-			}
-			/*foreach ( $mq_components_related AS $component ) {
-				$meta_query_related[] = $component;
-			}*/
-			if ( !empty($meta_query_related) ) { $bgp_args_related['meta_query'] = $meta_query_related; }
-		}            
+            if ( count($mq_components_primary) > 1 && empty($meta_query['relation']) ) {
+                $meta_query['relation'] = $search_operator;
+            }
+            if ( count($mq_components_primary) == 1) {                
+                $meta_query = $mq_components_primary; //$meta_query = $mq_components_primary[0];
+            } else {
+                foreach ( $mq_components_primary AS $component ) {
+                    $meta_query[] = $component;
+                }
+            }
+            /*foreach ( $mq_components_primary AS $component ) {
+                $meta_query[] = $component;
+            }*/
+            if ( !empty($meta_query) ) { $bgp_args['meta_query'] = $meta_query; }
+        }
+        
+        // related query
+        if ( $search_related_post_type == true ) {
+            if ( count($mq_components_related) > 1 && empty($meta_query_related['relation']) ) {
+                $meta_query_related['relation'] = $search_operator;
+            }
+            if ( count($mq_components_related) == 1) {
+                $meta_query_related = $mq_components_related; //$meta_query_related = $mq_components_related[0];
+            } else {
+                foreach ( $mq_components_related AS $component ) {
+                    $meta_query_related[] = $component;
+                }
+            }
+            /*foreach ( $mq_components_related AS $component ) {
+                $meta_query_related[] = $component;
+            }*/
+            if ( !empty($meta_query_related) ) { $bgp_args_related['meta_query'] = $meta_query_related; }
+        }            
         
         // Finalize tax_query or queries
         // =============================
         
         if ( $search_primary_post_type == true ) {
-			if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
-				$tax_query['relation'] = $search_operator;
-			}
-			// WIP: exclusions below apply only for mlib
-			$rep_cat_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
-			$admin_tag_exclusions = array('exclude-from-search', 'external-repertoire');
-			
-			foreach ( $tq_components_primary AS $component ) {
-		
-				// Check to see if component relates to repertoire_category
-				if ( $post_type == "repertoire" ) { // WIP: applies only for mlib
-				
-					$ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
-					
-					// TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
-					// TODO: generalize this option to all cats to be set via SDG options -- currently it is VERY STC-specific...
-					if ( $component['taxonomy'] == "repertoire_category" ) {
-				
-						$rep_cat_queried = true;
-					
-						// Add 'AND' relation...
-						$component = array(
-							'relation' => 'AND',
-							array(
-								'taxonomy' => 'repertoire_category',
-								'terms'    => $component['terms'],
-								'operator' => 'IN',
-							),
-							array(
-								'taxonomy' => 'repertoire_category',
-								'field'    => 'slug',
-								'terms'    => $rep_cat_exclusions,
-								'operator' => 'NOT IN',
-								//'include_children' => true,
-							),
-							array(
-								'taxonomy' => 'admin_tag',
-								'field'    => 'slug',
-								'terms'    => $admin_tag_exclusions,
-								'operator' => 'NOT IN',
-								//'include_children' => true,
-							),
-						);
-						$default_query = false;
-						$ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
-					}
-				}
-				$tax_query[] = $component;
-			}
-			if ( $post_type == "repertoire" && $rep_cat_queried == false ) { // WIP: applies only for mlib
-				$tax_query[] = array(
-					'relation' => 'AND',
-					array(
-						'taxonomy' => 'repertoire_category',
-						'field'    => 'slug',
-						'terms'    => $rep_cat_exclusions,
-						'operator' => 'NOT IN',
-						//'include_children' => true,
-					),
-					array(
-						'taxonomy' => 'admin_tag',
-						'field'    => 'slug',
-						'terms'    => $admin_tag_exclusions,
-						'operator' => 'NOT IN',
-						//'include_children' => true,
-					),
-				);
-			}
-			if ( !empty($tax_query) ) { $bgp_args['tax_query'] = $tax_query; }
-		}
-		
-		// related query
-		if ( $search_related_post_type == true ) {
-			if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
-				$tax_query_related['relation'] = $search_operator;
-			}
-			foreach ( $tq_components_related AS $component ) {
-				$tax_query_related[] = $component;
-			}
-			if ( !empty($tax_query_related) ) { $bgp_args_related['tax_query'] = $tax_query_related; }
-		}            
+            if ( count($tq_components_primary) > 1 && empty($tax_query['relation']) ) {
+                $tax_query['relation'] = $search_operator;
+            }
+            // WIP: exclusions below apply only for mlib
+            $rep_cat_exclusions = array('organ-works', 'piano-works', 'instrumental-music', 'instrumental-solo', 'orchestral', 'brass-music', 'psalms', 'hymns', 'noble-singers-repertoire', 'guest-ensemble-repertoire'); //, 'symphonic-works'
+            $admin_tag_exclusions = array('exclude-from-search', 'external-repertoire');
+            
+            foreach ( $tq_components_primary AS $component ) {
+        
+                // Check to see if component relates to repertoire_category
+                if ( $post_type == "repertoire" ) { // WIP: applies only for mlib
+                
+                    $ts_info .= "tq component: <pre>".print_r($component,true)."</pre>";
+                    
+                    // TODO: limit this to apply to choirplanner search forms only (in case we eventually build a separate tool for searching organ works)
+                    // TODO: generalize this option to all cats to be set via SDG options -- currently it is VERY STC-specific...
+                    if ( $component['taxonomy'] == "repertoire_category" ) {
+                
+                        $rep_cat_queried = true;
+                    
+                        // Add 'AND' relation...
+                        $component = array(
+                            'relation' => 'AND',
+                            array(
+                                'taxonomy' => 'repertoire_category',
+                                'terms'    => $component['terms'],
+                                'operator' => 'IN',
+                            ),
+                            array(
+                                'taxonomy' => 'repertoire_category',
+                                'field'    => 'slug',
+                                'terms'    => $rep_cat_exclusions,
+                                'operator' => 'NOT IN',
+                                //'include_children' => true,
+                            ),
+                            array(
+                                'taxonomy' => 'admin_tag',
+                                'field'    => 'slug',
+                                'terms'    => $admin_tag_exclusions,
+                                'operator' => 'NOT IN',
+                                //'include_children' => true,
+                            ),
+                        );
+                        $default_query = false;
+                        $ts_info .= "revised component: <pre>".print_r($component,true)."</pre>";
+                    }
+                }
+                $tax_query[] = $component;
+            }
+            if ( $post_type == "repertoire" && $rep_cat_queried == false ) { // WIP: applies only for mlib
+                $tax_query[] = array(
+                    'relation' => 'AND',
+                    array(
+                        'taxonomy' => 'repertoire_category',
+                        'field'    => 'slug',
+                        'terms'    => $rep_cat_exclusions,
+                        'operator' => 'NOT IN',
+                        //'include_children' => true,
+                    ),
+                    array(
+                        'taxonomy' => 'admin_tag',
+                        'field'    => 'slug',
+                        'terms'    => $admin_tag_exclusions,
+                        'operator' => 'NOT IN',
+                        //'include_children' => true,
+                    ),
+                );
+            }
+            if ( !empty($tax_query) ) { $bgp_args['tax_query'] = $tax_query; }
+        }
+        
+        // related query
+        if ( $search_related_post_type == true ) {
+            if ( count($tq_components_related) > 1 && empty($tax_query_related['relation']) ) {
+                $tax_query_related['relation'] = $search_operator;
+            }
+            foreach ( $tq_components_related AS $component ) {
+                $tax_query_related[] = $component;
+            }
+            if ( !empty($tax_query_related) ) { $bgp_args_related['tax_query'] = $tax_query_related; }
+        }            
 
         ///// WIP
         if ( $search_related_post_type == true && $related_post_type ) {
@@ -3992,35 +3992,35 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
         if ( count($search_values) > 0 ) {
             
             if ( $search_primary_post_type == true && $bgp_args ) {
-				$ts_info .= "About to pass bgp_args to birdhive_get_posts: <pre>".print_r($bgp_args,true)."</pre>"; // tft
-			
-				// Get posts matching the assembled args
-				/* ===================================== */
-				if ( $default_query === true ) {
-					$ts_info .= "Default query -- no need to run a search<br />";
-				} else {
-					if ( $form_type == "advanced_search" ) {
-						//$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array();
-						$posts_info = birdhive_get_posts( $bgp_args );
-					} else {
-						$posts_info = birdhive_get_posts( $bgp_args );
-					}
-					
-					if ( isset($posts_info['arr_posts']) ) {
-				
-						$arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
-						$ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
-						//$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
-				
-						$ts_info .= $posts_info['ts_info'];
-				
-						// Print last SQL query string
-						//global $wpdb;
-						//$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
-				
-					}
-				}			
-			}
+                $ts_info .= "About to pass bgp_args to birdhive_get_posts: <pre>".print_r($bgp_args,true)."</pre>"; // tft
+            
+                // Get posts matching the assembled args
+                /* ===================================== */
+                if ( $default_query === true ) {
+                    $ts_info .= "Default query -- no need to run a search<br />";
+                } else {
+                    if ( $form_type == "advanced_search" ) {
+                        //$ts_info .= "<strong>NB: search temporarily disabled for troubleshooting.</strong><br />"; $posts_info = array();
+                        $posts_info = birdhive_get_posts( $bgp_args );
+                    } else {
+                        $posts_info = birdhive_get_posts( $bgp_args );
+                    }
+                    
+                    if ( isset($posts_info['arr_posts']) ) {
+                
+                        $arr_post_ids = $posts_info['arr_posts']->posts; // Retrieves an array of IDs (based on return_fields: 'ids')
+                        $ts_info .= "Num arr_post_ids: [".count($arr_post_ids)."]<br />";
+                        //$ts_info .= "arr_post_ids: <pre>".print_r($arr_post_ids,true)."</pre>";
+                
+                        $ts_info .= $posts_info['ts_info'];
+                
+                        // Print last SQL query string
+                        //global $wpdb;
+                        //$ts_info .= "<p>last_query:</p><pre>".$wpdb->last_query."</pre>";
+                
+                    }
+                }            
+            }
             
             if ( $search_related_post_type == true && $bgp_args_related && $default_query == false ) {
                 
@@ -4036,7 +4036,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                     //$ts_info .= "arr_related_post_ids: <pre>".print_r($arr_related_post_ids,true)."</pre>";
 
                     if ( isset($related_posts_info['info']) ) { $ts_info .= $related_posts_info['info']; }
-					if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
+                    if ( isset($related_posts_info['ts_info']) ) { $ts_info .= $related_posts_info['ts_info']; }
                     
                     // WIP -- we're running an "and" so we need to find the OVERLAP between the two sets of ids... one set of repertoire ids, one of editions... hmm...
                     if ( !empty($arr_post_ids) ) {
@@ -4107,7 +4107,7 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                         $ts_info .= "Num full_match_ids: [".count($full_match_ids)."]".'</div>';
                         
                     } else {
-                    	$ts_info .= "Primary arr_post_ids is empty >> use arr_related_post_ids as arr_post_ids<br />";
+                        $ts_info .= "Primary arr_post_ids is empty >> use arr_related_post_ids as arr_post_ids<br />";
                         $arr_post_ids = $arr_related_post_ids;
                     }
 
@@ -4125,24 +4125,24 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
                 // Loop through arr_post_ids and narrow things down based on search criteria
                 foreach ( $arr_post_ids as $post_id ) {
                 
-                	// Get all post_meta for post_id
-                	$post_meta = get_post_meta($post_id);
-                	
-                	foreach ( $arr_meta as $meta_test ) {
-                	
-                		//$arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => 'OR', 'meta_key' => array('title_clean','tune_name'), 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type );
-                		if ( is_array($meta_test['meta_key'] ) ) {
-                			//
-                		} else {
-                			$test_key = $meta_test['meta_key'];
-                		}
-                		/*
-                		if ( isset($post_meta[$test_key]) ) {
-                		
-                		}
-                		*/
-                	
-                	}
+                    // Get all post_meta for post_id
+                    $post_meta = get_post_meta($post_id);
+                    
+                    foreach ( $arr_meta as $meta_test ) {
+                    
+                        //$arr_meta[] = array( 'query_assignment' => $query_assignment, 'relation' => 'OR', 'meta_key' => array('title_clean','tune_name'), 'meta_value' => $match_value, 'comparison' => 'LIKE', 'field_name' => $field_name, 'field_type' => $field_type );
+                        if ( is_array($meta_test['meta_key'] ) ) {
+                            //
+                        } else {
+                            $test_key = $meta_test['meta_key'];
+                        }
+                        /*
+                        if ( isset($post_meta[$test_key]) ) {
+                        
+                        }
+                        */
+                    
+                    }
                 
                 }
                 
@@ -4212,8 +4212,8 @@ function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' ) {
  * @return mixed
  */
 function decode_ninja_forms_display_form_settings( $settings, $form_id ) {
-	$settings[ 'fieldsMarkedRequired' ] = html_entity_decode( $settings[ 'fieldsMarkedRequired' ] );
-	return $settings;
+    $settings[ 'fieldsMarkedRequired' ] = html_entity_decode( $settings[ 'fieldsMarkedRequired' ] );
+    return $settings;
 }
 add_filter( 'ninja_forms_display_form_settings', 'decode_ninja_forms_display_form_settings', 10, 2 );
 
@@ -4225,8 +4225,8 @@ add_filter( 'ninja_forms_display_form_settings', 'decode_ninja_forms_display_for
  */
  /*
 function fix_ninja_forms_i18n_front_end( $strings ) {
-	$strings[ 'fieldsMarkedRequired' ] = 'Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required';
-	return $strings;
+    $strings[ 'fieldsMarkedRequired' ] = 'Fields marked with an <span class="ninja-forms-req-symbol">*</span> are required';
+    return $strings;
 }
 add_filter( 'ninja_forms_i18n_front_end', 'fix_ninja_forms_i18n_front_end' );
 */
