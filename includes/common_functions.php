@@ -138,6 +138,7 @@ function sdg_post_title ( $args = array() ) {
     $series_title = "";
     $series_field = "";
     if ( is_singular('event') ) { $show_series_title = "wordy"; } // Force show_series_title for event records
+    //
     if ( $show_series_title ) {    // && function_exists( 'is_dev_site' ) && is_dev_site()
 
         $ts_info .= $fcn_id."show_series_title: ".$show_series_title."<br />";
