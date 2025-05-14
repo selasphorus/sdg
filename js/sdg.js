@@ -11,18 +11,18 @@ jQuery(document).ready(function($) {
     // Background images
     if ($(".custom-page-background")[0]){
         
-        console.log('found custom-page-background');
+        //console.log('found custom-page-background');
         
         var background_image = $("#content.custom-page-background").css("background-image");
         if ( ! background_image ) {
             return;
         } else {
-            console.log('background_image: '+background_image);
+            //console.log('background_image: '+background_image);
         }
         
         var background_image_url_arr = $("#content.custom-page-background").css("background-image").match(/^url\("?(.+?)"?\)$/);//match(/^url\("?(.+?)"?\)$/);//match(/^url\(["']?(.+?)["']?\)$/)
         var background_image_url = background_image_url_arr[1];
-        console.log('background_image_url: '+background_image_url);
+        //console.log('background_image_url: '+background_image_url);
 
         // Load image in order to get dimensions
         var img = new Image ;
@@ -32,7 +32,7 @@ jQuery(document).ready(function($) {
 
             var image_file_width = img.width;
             var image_file_height = img.height;
-            console.log("img loaded: "+image_file_width + " x " + image_file_height) ;
+            //console.log("img loaded: "+image_file_width + " x " + image_file_height) ;
             
             var background_height;
             var background_width;
@@ -47,13 +47,13 @@ jQuery(document).ready(function($) {
             var x = image_file_width/bodywidth;
             //console.log("x = " + x);
             background_height = image_file_height/x;
-            console.log("background_height = " + background_height);
+            //console.log("background_height = " + background_height);
             
             /*if (image_file_width > 1500) {
                 var x = image_file_width/1500;
-                console.log("x" + x);
+                //console.log("x" + x);
                 background_height = image_file_height/x;
-                console.log("height" + height);
+                //console.log("height" + height);
             } else {
                 background_height = image_file_width;
             }*/
@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
 
             //new_background = "url('"+background_image_url+"')"; // tft
 
-            console.log('new_background: '+new_background);
+            //console.log('new_background: '+new_background);
 
             //$("#content.custom-page-background").css({'background-image':background_image_url});
             $("#content.custom-page-background").css("background-image", new_background ); 
@@ -180,7 +180,7 @@ jQuery(document).ready(function($) {
         var id = $(this).attr('id');
         var item_id = id.substr(14); // e.g. toggle_handle_35381
         var target_id = "#toggle_target_"+item_id;
-        console.log('item_id: '+item_id+"; target_id: "+target_id);
+        //console.log('item_id: '+item_id+"; target_id: "+target_id);
         $( target_id ).toggle( "fast", function() {
             // Animation complete.
         });
@@ -190,7 +190,7 @@ jQuery(document).ready(function($) {
         var id = $(this).attr('id');
         var item_id = id.substr(15); // e.g. toggle_handle2_35381
         var target_id = "#toggle_target_"+item_id;
-        console.log('item_id: '+item_id+"; target_id: "+target_id);
+        //console.log('item_id: '+item_id+"; target_id: "+target_id);
         $( target_id ).toggle( "fast", function() {
             // Animation complete.
         });
@@ -202,73 +202,71 @@ jQuery(document).ready(function($) {
     
     if ( $('#msg_bar') ) {
     	
-    	console.log('>> msg_bar <<<');
+    	//console.log('>> msg_bar <<<');
     	
     	var show_msg_bar = false;
     	$("#msg_bar").hide();
     	
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
-    	if (post_id !== undefined) { console.log('post_id: '+post_id); } else { post_id = null; console.log('no post_id defined'); }
+    	if (post_id !== undefined) {
+    	    //console.log('post_id: '+post_id);
+    	} else {
+    	    post_id = null;
+    	    //console.log('no post_id defined');
+        }
 		
 		// Check cookie
 		var sdg_featured_post = getCookie('sdg_featured_post');
 		
-		if (sdg_featured_post !== undefined) {
-	
-			console.log('sdg_featured_post: '+sdg_featured_post);
-			
+		if (sdg_featured_post !== undefined) {	
+			//console.log('sdg_featured_post: '+sdg_featured_post);
+			//
 			var sdg_user_closed_msg_bar = getCookie('sdg_user_closed_msg_bar');
 			//console.log('sdg_user_closed_msg_bar: '+sdg_user_closed_msg_bar);
-			
+			//
 			if ( sdg_user_closed_msg_bar ) {
-				console.log('sdg_user_closed_msg_bar');
+				//console.log('sdg_user_closed_msg_bar');
 			} else {
 				show_msg_bar = true;
-			}
-			
+			}			
 			// Compare cvalue with post_id
 			if ( sdg_featured_post == post_id ) {				
-				console.log('sdg_featured_post == post_id');				
+				//console.log('sdg_featured_post == post_id');				
 			} else {
-				console.log('sdg_featured_post ('+sdg_featured_post+') NE post_id ('+post_id+')');
-				console.log('setCookie sdg_featured_post');
+				//console.log('sdg_featured_post ('+sdg_featured_post+') NE post_id ('+post_id+')');
+				//console.log('setCookie sdg_featured_post');
 				setCookie('sdg_featured_post', post_id, 365);
 				show_msg_bar = true;
 			}
-			
+			//
 			if ( show_msg_bar == true ) {
-				console.log('show_msg_bar');
+				//console.log('show_msg_bar');
 				$("#msg_bar").show();
 				deleteCookie('sdg_user_closed_msg_bar');
-			}
-					
+			}					
 		} else {
-		
-			console.log('NO sdg_featured_post found ');
-			console.log('setCookie sdg_featured_post');
+			//console.log('NO sdg_featured_post found ');
+			//console.log('setCookie sdg_featured_post');
 			setCookie('sdg_featured_post', post_id, 365);
-	 
-		}
-    	
+		}    	
 	}
         
     $( ".msg_bar_close" ).click(function() {
         $("#msg_bar").hide();
         //$("#msg_bar").addClass('hidden');
         setCookie('sdg_user_closed_msg_bar', 'true', 365);
-        console.log('setCookie sdg_user_closed_msg_bar');
-    });
-	
+        //console.log('setCookie sdg_user_closed_msg_bar');
+    });	
 	
     // EM Datepicker -- Customizations
     
-    if($('.widget_em_calendar')) {
+    if ( $('.widget_em_calendar') ) {
         
         // When the Month/Year name classed as "monthyear_picker" is clicked, show the month/year select form.
         $('body').on('click','.monthyear_picker',function(){
             this.blur();
-            console.log('month/year picker clicked');
+            //console.log('month/year picker clicked');
 			$('#em-calendar-datepicker').show();
         });
         
@@ -296,9 +294,9 @@ jQuery(document).ready(function($) {
     
     $(document).on('submit', '.em-booking-form', function(){
       if($('div.em-booking-message-error')) {
-          console.log('found em-booking-message-error');
+          //console.log('found em-booking-message-error');
           var dialog_id = "#"+$(this).closest('div.dialog_content').attr('id');
-          console.log('dialog_id: '+dialog_id);
+          //console.log('dialog_id: '+dialog_id);
           $(dialog_id).scrollTop("0");
           /*setTimeout(function(){
               $(dialog_id).scrollTop("0");
@@ -344,8 +342,8 @@ jQuery(document).ready(function($) {
 		// Swap field values
         var new_p2 = $("#p1_id").val();
         var new_p1 = $("#p2_id").val();
-        console.log( "new_p1: "+new_p1 );
-        console.log( "new_p2: "+new_p2 );
+        //console.log( "new_p1: "+new_p1 );
+        //console.log( "new_p2: "+new_p2 );
         $("#p1_id").val(new_p1);
         $("#p2_id").val(new_p2);
         
@@ -356,7 +354,7 @@ jQuery(document).ready(function($) {
 
     function prepDialog( handle_id, dialog_id ) {
 
-		console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
+		//console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
 		
 		// Get modal dimensions
         var modalDimensions = getModalDimensions();
@@ -431,7 +429,7 @@ jQuery(document).ready(function($) {
 	//$("a.dialog_handle").on("click", function() {
 	$('body').on('click','.dialog_handle',function(){
 	
-		console.log('click registered on a dialog_handle link');
+		//console.log('click registered on a dialog_handle link');
 		
 		//var isOpen = false, dialogOpen = false;
 		
@@ -441,8 +439,8 @@ jQuery(document).ready(function($) {
 		//var item_id = handle_id.substr(14); // e.g. dialog_handle_35381
 		//var dialog_id = "#dialog_content_"+item_id;
 		//dialog_id = "#day_title_"+handle_id; // old
-		console.log('handle_id: '+handle_id);
-		console.log('dialog_id: '+dialog_id);
+		//console.log('handle_id: '+handle_id);
+		//console.log('dialog_id: '+dialog_id);
 		
 		var theDialog = prepDialog( handle_id, dialog_id );
 		
@@ -452,7 +450,7 @@ jQuery(document).ready(function($) {
 	
 	$(document.body).on("click", ".ui-widget-overlay", function() {
 	
-		console.log('click registered on a widget overlay element');
+		//console.log('click registered on a widget overlay element');
 		
 		$.each($(".ui-dialog"), function() {
 			var $dialog;
@@ -489,7 +487,7 @@ jQuery(document).ready(function($) {
 // Determine modal dimensions (width, height0 based on width and height of dinwo)
 function getModalDimensions() {
 
-	console.log('about to getModalDimensions'); // tft
+	//console.log('about to getModalDimensions'); // tft
 	
 	// TODO: build in option to set dimensions based on content?
 	
