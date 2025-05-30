@@ -10,10 +10,10 @@ function cs_sidebars_xfer ( $atts = array() ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: cs_sidebars_xfer", $do_log );
-    
+
     // Init vars
     $info = "";
-	
+
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'any',
@@ -24,7 +24,7 @@ function cs_sidebars_xfer ( $atts = array() ) {
 		'order'			=> 'ASC',
         'meta_key'		=> '_cs_replacements',
 	);
-	
+
 	// Meta query
 	$meta_query = array(
 		'_cs_replacements' => array(
@@ -34,18 +34,18 @@ function cs_sidebars_xfer ( $atts = array() ) {
 		),
 	);
 	$wp_args['meta_query'] = $meta_query;
-	
+
 	$arr_posts = new WP_Query( $wp_args );
 	$posts = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
     //$info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($posts)."] posts found.<br />";
-    
+
     // Determine which snippets should be displayed for the post in question
 	foreach ( $posts as $post_id ) {
-		
+
 		$info .= "post_id: ".$post_id."<br />";
-		
+
 		$cs = get_post_meta( $post_id, '_cs_replacements', true );
 		$sidebar_id = get_post_meta( $post_id, 'sidebar_id', true );
 		$info .= "current sidebar_id: ".print_r($sidebar_id, true)."<br />";
@@ -60,7 +60,7 @@ function cs_sidebars_xfer ( $atts = array() ) {
 		}
 		//$info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>";
 		$info .= "revised sidebar_id: ".$revised_sidebar_id."<br />";
-		
+
 		// Update postmeta with revised sidebar_id value
 		if ( !empty($revised_sidebar_id) && $revised_sidebar_id != $sidebar_id ) {
 			$info .= "sidebar_id field requires an update<br />";
@@ -73,11 +73,11 @@ function cs_sidebars_xfer ( $atts = array() ) {
 		} else {
 			$info .= "No update needed.<br />";
 		}
-		
+
 		$info .= "<br />";
-		
+
 	}
-	
+
 	return $info;
 
 }
@@ -87,16 +87,16 @@ add_shortcode('snippets', 'display_snippets');
 function display_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
-    
+
     // Init vars
     $info = "";
 	$ts_info = "";
 	$arr_ids = array(); // this array will containing snippets matched for display on the given post
-    
+
     $args = shortcode_atts( array(
     	'post_id' => null,
 		'limit'   => -1,
@@ -106,12 +106,12 @@ function display_snippets ( $atts = array() ) {
         'snippet_position' => 'side', // other option: 'bottom'
         'sidebar_id' => 'sidebar-1', // default -- phase out in favor of position(?)
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
 	//
-	if ( $devmode ) { 
+	if ( $devmode ) {
 		$ts_info .= '<h2>Snippets -- WIP</h2>';
 		//$ts_info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 	}
@@ -120,10 +120,10 @@ function display_snippets ( $atts = array() ) {
 	$arr_snippets = get_snippets ( $args );
 	$arr_ids = $arr_snippets['ids'];
 	$ts_info .= $arr_snippets['info'];
-	
+
 	// Compile info for the matching snippets for display
 	foreach ( $arr_ids as $snippet_id ) {
-	
+
 		$title = get_the_title( $snippet_id );
 		$snippet_content = get_the_content( null, false, $snippet_id );
 		//$snippet_content = apply_filters('the_content', $snippet_content); // causes error -- instead use apply_shortcodes in sidebar.php
@@ -155,7 +155,7 @@ function display_snippets ( $atts = array() ) {
 				//$snippet_content .= $caption_html;
 				if ( $link_url ) { $snippet_content .= '</a>'; }
 				$snippet_content .= '</div>';
-			}			
+			}
 		}
 		// Remove empty paragraphs
 		$snippet_content = sdg_remove_empty_p($snippet_content);
@@ -165,16 +165,16 @@ function display_snippets ( $atts = array() ) {
 		$info .= '<section id="snippet-'.$snippet_id.'" class="snippet widget widget_text widget_custom_html">';
 		$info .= '<h2 class="widget-title">'.$title.'</h2>';
 		$info .= '<div class="textwidget custom-html-widget">';
-		$info .= $snippet_content;		
+		$info .= $snippet_content;
 		if ( $sidebar_sortnum ) { $info .= '<!-- position: '.$sidebar_sortnum.'/widget_uid: $widget_uid -->'; }
 		$info .= '</div>';
 		$info .= '</section>';
 	}
-	// 
+	//
 	if ( $ts_info != "" && ( $do_ts === true || $do_ts == "snippets" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-	
+
 	return $info;
-	
+
 }
 
 // Get array of snippet IDs matching given attributes
@@ -185,14 +185,14 @@ function get_snippets ( $args = array() ) {
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_snippets", $do_log );
-    
+
     // Init vars
     $arr_result = array();
     $info = "";
     $ts_info = "";
     $post_type = null;
 	$active_snippets = array(); // this array will containing snippets matched for display on the given post
-    
+
     // Defaults
 	$defaults = array(
 		'post_id' => null,
@@ -208,18 +208,18 @@ function get_snippets ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	
-	/*if ( $devmode ) { 
+
+	/*if ( $devmode ) {
 		$info .= '<h2>Snippets -- WIP</h2>';
 		//$info .= '<p>show : Show everywhere<br />hide : Hide everywhere<br />selected : Show widget on selected<br />notselected : Hide widget on selected</p>';
 		$info .= "args: <pre>".print_r($args, true)."</pre>";
 	}*/
 	//if ( $do_ts && !empty($ts_info) ) { $info .= "get_snippets args: <pre>".print_r($args, true)."</pre>"; }
-    
+
     // Is this a single post of some kind, or another kind of page (e.g. taxonomy archive)
-    
+
     // is_singular, is_archive, is_tax, is_post_type_archive
-    
+
 	// Get post_type, if applicable
 	if ( is_singular() ) { // is_single
 		$info .= "is_singular<br />";
@@ -245,7 +245,7 @@ function get_snippets ( $args = array() ) {
 				$tax_obj = get_taxonomy($tax);
 				$tax_post_types = $tax_obj->object_type;
 				$info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
-				if ( count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
+				if ( is_array($tax_post_types) && count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
 			} else if ( is_post_type_archive() ) {
 				$info .= "is_post_type_archive: ";
 				$post_archive_title = post_type_archive_title("",false);
@@ -265,12 +265,12 @@ function get_snippets ( $args = array() ) {
 		}
 	}
 	$info .= "post_type: $post_type<br />";
-		
-	// Check for custom sidebars 
+
+	// Check for custom sidebars
 	$cs = get_post_meta( $post_id, '_cs_replacements', true );
 	//if ( $cs ) { $info .= "custom sidebar: <pre>".print_r($cs, true)."</pre>"; }
 	//e.g. Array( [sidebar-1] => cs-17 )
-	
+
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'snippet',
@@ -284,8 +284,8 @@ function get_snippets ( $args = array() ) {
 			'priority_clause' => 'ASC',
 			'sort_clause' => 'ASC',
 		),
-	);	
-	
+	);
+
 	// Meta query
 	$meta_query = array(
 		'relation' => 'AND',
@@ -323,17 +323,17 @@ function get_snippets ( $args = array() ) {
 		),*/
 	);
 	$wp_args['meta_query'] = $meta_query;
-	
+
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
     //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     //$info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
     $info .= "[".count($snippets)."] snippets found.<br />";
-    
+
     // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
-	
+
 		$snippet_info = "";
 		$snippet_logic_info = "";
 		//
@@ -349,31 +349,31 @@ function get_snippets ( $args = array() ) {
 		$snippet_info .= $title.' ['.$snippet_id.'/'.$widget_uid.'/'.$snippet_display;
 		if ( $sidebar_id ) { $snippet_info .= '/'.$sidebar_id; }
 		$snippet_info .= ']<br />';
-		
+
 		// Run updates?
 		if ( $run_updates ) { $snippet_info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id ) ).'</div>'; }
-		
+
 		// TMP during transition?
 		// TODO: add snippet status field?
 		if ( $sidebar_id == "wp_inactive_widgets" ) {
-		
+
 			$snippet_status = "inactive";
 			$snippet_logic_info .= "Snippet belongs to wp_inactive_widgets, i.e. status is inactive<br />";
 			// TODO: remove from active_snippets array, if it was previously added...
-			
+
 		} else if ( $snippet_display == "show" ) {
-		
+
 			$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 			$snippet_status = "active";
 			$snippet_logic_info .= "Snippet is set to show everywhere<br />";
 			//$snippet_logic_info .= "=> snippet_id added to active_snippets array<br />";
 			$snippet_logic_info .= ">> ADDED TO ARRAY<br />";
-			
+
 		} else {
-		
-			// Conditional display -- determine whether the given post should display this widget		
+
+			// Conditional display -- determine whether the given post should display this widget
 			$snippet_logic_info .= "<h3>Analysing display conditions...</h3>";
-			
+
 			// Set default snippet status for show on selected vs hide on selected
 			if ( $snippet_display == "selected" ) {
 				$snippet_status = "inactive";
@@ -382,22 +382,22 @@ function get_snippets ( $args = array() ) {
 				$snippet_logic_info .= "[>> ADDED TO ARRAY] (by default/notselected)<br />";
 				$snippet_status = "active";
 			}
-		
+
 			// Loop through meta_keys in order from most general to most specific
 			$meta_keys = array( 'target_by_location', 'target_by_post_type', 'target_by_post_type_archive', 'target_by_taxonomy_archive', 'target_by_taxonomy', 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url' );
 			//$meta_keys = array( 'target_by_post', 'exclude_by_post', 'target_by_url', 'exclude_by_url', 'target_by_taxonomy', 'target_by_taxonomy_archive', 'target_by_post_type', 'target_by_post_type_archive', 'target_by_location' );
 			foreach ( $meta_keys as $key ) {
-			
+
 				$$key = get_post_meta( $snippet_id, $key, true );
 				//$snippet_info .= "key: $key => ".$$key."<br />";
-				
+
 				if ( !empty($$key) ) { //  && is_array($$key) && count($$key) == 1 && !empty($$key[0])
-				
+
 					$snippet_logic_info .= "key: $key =><br />";//$snippet_logic_info .= "key: $key => [".print_r($$key, true)."]<br />"; // ." [count: ".count($$key)."]"
 					//$snippet_logic_info .= "[".print_r($$key, true)."]<br />";
-					
+
 					if ( ( $key == 'target_by_post_type' && $post_type != "N/A" ) || $key == 'target_by_post_type_archive') {
-						
+
 						if ( $key == 'target_by_post_type' ) {
 							// This condition applies to singular posts only
 							// Is the current page singular?
@@ -406,7 +406,7 @@ function get_snippets ( $args = array() ) {
 							} else {
 								$snippet_logic_info .= "current page NOT is_singular >> target_by_post_type does not apply<br /><br />";
 								continue;
-							}						
+							}
 						} else {
 							// This condition applies to archives only
 							// Is the current page some kind of archive?
@@ -418,7 +418,7 @@ function get_snippets ( $args = array() ) {
 							}
 							if ( is_post_type_archive() ) { $snippet_logic_info .= "current page is_post_type_archive<br />"; }
 						}
-						
+
 						// Is the given post of the matching type?
 						$target_post_types = get_field($key, $snippet_id, false);
 						//$snippet_logic_info .= "target_post_types: <pre>".print_r($target_post_types, true)."</pre><br />";
@@ -430,7 +430,7 @@ function get_snippets ( $args = array() ) {
 						//if ( $target_type && $post_type == $target_type ) {
 						if ( is_array($target_post_types) && in_array($post_type, $target_post_types) ) {
 							$snippet_logic_info .= "current post_type is in target post_types array<br />";//$snippet_logic_info .= "current post_type [".$post_type."] is in target post_types array<br />";//$snippet_logic_info .= "This post matches target post_type [$target_type].<br />";
-							// TODO: figure out whether to do the any/all check now, or 
+							// TODO: figure out whether to do the any/all check now, or
 							// just add the id to the array and remove it later if "all" AND another condition requires exclusion?
 							if ( $snippet_display == "selected" && $any_all == "any" ) { // WIP: this ignores the "exclude by post" and "exclude by url" fields
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
@@ -450,24 +450,24 @@ function get_snippets ( $args = array() ) {
 							$snippet_logic_info .= "This post does NOT match any of the array values.<br />";
 							$snippet_logic_info .= "=> continue<br />";
 						}
-					
+
 					} else if ( $key == 'target_by_post' || $key == 'exclude_by_post' ) {
-					
+
 						if ( is_singular() ) {
 							$snippet_logic_info .= "current page is_singular<br />";
 						} else {
 							$snippet_logic_info .= "current page NOT is_singular >> $key does not apply<br /><br />";
 							continue;
 						}
-							
+
 						// Is the given post targetted or excluded?
 						$target_posts = get_field($key, $snippet_id, false);
 						if ( is_array($target_posts) && !empty($target_posts) && in_array($post_id, $target_posts) ) {
-						
+
 							// Post is in the target array
 							$snippet_logic_info .= "This post is in the target_posts array<br />";
 							// If it's for inclusion, add it to the array
-							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" && 
+							if ( $key == 'target_by_post' && $snippet_display == "selected" ) { //$any_all == "any" &&
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= ">> ADDED TO ARRAY<br />";
@@ -475,7 +475,7 @@ function get_snippets ( $args = array() ) {
 								//$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
 								$snippet_logic_info .= "=> BREAK<br />";
 								break;
-							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" && 
+							} else if ( $key == 'exclude_by_post' && $snippet_display == "notselected" ) { //$any_all == "any" &&
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
 								$snippet_status = "active";
 								$snippet_logic_info .= ">> ADDED TO ARRAY<br />";
@@ -488,18 +488,18 @@ function get_snippets ( $args = array() ) {
 							$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 							$snippet_logic_info .= "=> snippet inactive due to key: ".$key."/".$snippet_display."<br />";
 							$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
-							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; } 
+							//if ( $snippet_display == "selected" ) { $snippet_status = "inactive"; }
 							$snippet_status = "inactive"; // ???
 							break;
-							
+
 						} else {
-						
+
 							if ( empty($target_posts) ) { // redundant?
 								$snippet_logic_info .= "The target_posts array is empty.<br />";
 							} else {
 								//???
 								$snippet_logic_info .= "This post is NOT in the target_posts array.<br />";
-								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->"; 
+								$snippet_logic_info .= "<!-- post_id: $post_id/target_posts: ".print_r($target_posts, true)." -->";
 								if ( $snippet_display == "selected" && $any_all == "all" ) {
 									$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 									$snippet_status = "inactive";
@@ -508,18 +508,18 @@ function get_snippets ( $args = array() ) {
 							}
 							$snippet_logic_info .= "=> continue<br />";
 						}
-						
+
 					} else if ( $key == 'target_by_url' || $key == 'exclude_by_url' ) {
-					
+
 						// Is the given post targetted or excluded?
 						$target_urls = get_field($key, $snippet_id, false);
-						
+
 						// Loop through target urls looking for matches
 						if ( is_array($target_urls) && !empty($target_urls) ) {
-						
+
 							//$snippet_logic_info .= "target_urls (<em>".$key."</em>): <br />";
 							//$snippet_logic_info .= $key." target_urls: ".print_r($target_urls, true)."<br /><hr />";
-						
+
 							// Get current page path and/or slug
 							global $wp;
 							$current_url = home_url( add_query_arg( array(), $wp->request ) );
@@ -530,12 +530,12 @@ function get_snippets ( $args = array() ) {
 							$current_path = parse_url($current_url, PHP_URL_PATH);
 							$snippet_logic_info .= "current_path: ".$current_path."<br />";
 							$snippet_logic_info .= "-----<br />";
-							
+
 							foreach ( $target_urls as $k => $v ) {
-								
+
 								$url_match = false; // init
 								//$snippet_logic_info .= "target_url (v): ".print_r($v, true)." (k: ".print_r($k, true).")<br />";
-								
+
 								// WIP/TODO: get field key from key name?
 								//$field_key = acf_maybe_get_field( 'field_name', false, false );
 								if ( $key == 'target_by_url' ) {
@@ -544,23 +544,23 @@ function get_snippets ( $args = array() ) {
 									$field_key = 'field_65306bc897806';
 								}
 								if ( isset($v[$field_key]) ) {
-								
-									$url = $v[$field_key];									
+
+									$url = $v[$field_key];
 									if ( substr($url, -1) == "/" ) { $url = substr($url, 0, -1); } // Trim trailing slash, if any
-									
+
 									//$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
 									//$snippet_logic_info .= "target_url: ".$url."<br />";
 									// compare url to current post path/slug
-									
+
 									if ( $url == $current_path ) {
 										// URL matches current path
 										$snippet_logic_info .= "target_url: ".$url." matches current_path<br />";
-										$url_match = true;										
+										$url_match = true;
 									} else if ( strpos($url, '*') !== false ) {
 										// Check for wildcard match
 										$snippet_logic_info .= "** Wildcard url<br />";
 										$snippet_logic_info .= "target_url: ".print_r($v, true)."<br />"; //$snippet_logic_info .= "target_url :: k: $k => v: ".print_r($v, true)."<br />";
-										
+
 										// Remove the asterisk to get the url_base
 										// TODO: build in option for asterisk mid-url, e.g. /events/2022-07-31/?category=webcasts >> /events/*/?category=webcasts
 										$url_base = trim( substr($url, 0, strpos($url, '*')) );
@@ -615,27 +615,27 @@ function get_snippets ( $args = array() ) {
 								}
 							} // foreach ( $target_urls as $k => $v ) {
 							if ( $snippet_status == "inactive" ) { $snippet_logic_info .= "current_path not targeted<br />"; }
-							
+
 						} // if ( is_array($target_urls) && !empty($target_urls) ) {
-						
+
 					} else if ( $key == 'target_by_taxonomy' ) {
-					
+
 						if ( is_search() && !is_category() && !is_archive() ) {
 							$snippet_logic_info .= "search results => $key does not apply<br /><br />";
 							continue;
 						}
-						
+
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						//$snippet_logic_info .= "target_taxonomies: <pre>".print_r($target_taxonomies, true)."</pre><br />";
 						$arr_post_taxonomies = get_post_taxonomies($post_id);
 						//$snippet_logic_info .= "arr_post_taxonomies: <pre>".print_r($arr_post_taxonomies, true)."</pre><br />";
 						//$arr_post_terms = wp_get_post_terms( $post->ID, 'my_taxonomy', array( 'fields' => 'names' ) );
-						
+
 						// TODO: simplify this logic
 						$arr_match = match_terms( $target_taxonomies, $post_id, $snippet_display );
 						$term_match = $arr_match['match'];
 						$snippet_logic_info .= $arr_match['info'];
-						if ( $term_match ) { // ! empty( $target_taxonomies ) && 
+						if ( $term_match ) { // ! empty( $target_taxonomies ) &&
 							$snippet_logic_info .= "This post matches the target taxonomy terms [".$term_match."/".$snippet_display."]<br />";
 							if ( $snippet_display == "selected" || $term_match === "exception") {
 								$active_snippets[] = $snippet_id; // add the item to the active_snippets array
@@ -664,14 +664,14 @@ function get_snippets ( $args = array() ) {
 								//$snippet_status = "active";
 								//$snippet_logic_info .= "...but because snippet_display == notselected, that means it should be shown<br />";
 							}
-							// break?							
+							// break?
 						}
-					
+
 					} else if ( $key == 'target_by_taxonomy_archive' ) {
-					
+
 						$target_taxonomies = get_field($key, $snippet_id, false);
 						//$snippet_logic_info .= "target_taxonomies (archives): <pre>".print_r($target_taxonomies, true)."</pre><br />";
-						
+
 						if ( is_tax() ) {
 							// If this is a taxonomy archive AND target_taxonomies are set, check for a match
 							$snippet_logic_info .= "current page is_tax<br />";
@@ -693,7 +693,7 @@ function get_snippets ( $args = array() ) {
 								}
 							}
 						}
-					
+
 					} else if ( $key == 'target_by_location' ) {
 						// Is the given post/page in the right site location?
 						$target_locations = get_field($key, $snippet_id, false);
@@ -741,14 +741,14 @@ function get_snippets ( $args = array() ) {
 						$snippet_logic_info .= "unmatched key: ".$key."<br />";
 					}
 					$snippet_logic_info .= "<br />";
-					
+
 				} else {
 					$snippet_logic_info .= "key: $key => [empty]<br /><br />";
 				}
 			}
-		
+
 		}
-		
+
 		// If snippet has been deemed active, but this is a search page we don't want to show the snippet on search pages, then remove it from the active array
 		if ( is_search() && !is_category() && !is_archive() && $snippet_status == "active" ) {
 			$snippet_logic_info .= " *** This is a search page *** <br />";
@@ -756,14 +756,14 @@ function get_snippets ( $args = array() ) {
 			if ( !isset($target_locations) ) { $target_locations = array(); }
 			if ( ( !in_array('is_search', $target_locations) && ( $snippet_display == "selected" ) ) || // && $any_all == "all"
 				 ( in_array('is_search', $target_locations) && ( $snippet_display == "notselected" )) // && $any_all == "all"
-				) {			
+				) {
 				$active_snippets = array_diff($active_snippets, array($snippet_id)); // remove the item from the active_snippets array
 				$snippet_status = "inactive";
 				$snippet_logic_info .= " *** This is a search page AND is_search is NOT a targeted location (or is an excluded location) ***<br />";
 				$snippet_logic_info .= ">> REMOVED FROM ARRAY<br />";
 			}
 		}
-		
+
 		$snippet_logic_info .= "<hr />";
 		$snippet_logic_info .= "snippet_status: ".$snippet_status;
 		$snippet_info .= '<div class="code '.$snippet_status.'">'.$snippet_logic_info.'</div>';
@@ -771,20 +771,20 @@ function get_snippets ( $args = array() ) {
 		if ( $ts_info != "" && ( $do_ts === true || $do_ts == "snippets" )  ) { $snippet_info = '<div class="troubleshooting">'.$snippet_info.'</div>'; }
 		$info .= $snippet_info;
     }
-    
+
     // Make sure there are no duplicates in the active_snippets array
     $active_snippets = array_unique($active_snippets); // SORT_REGULAR
-	
+
 	//$active_snippets[] = 330389; // tft
-	
+
 	// If returning array of IDs, finish here
 	if ( $return == "ids" ) { return $active_snippets; }
-	
+
 	$arr_result['info'] = $info;
 	$arr_result['ids'] = $active_snippets;
-	
+
 	return $arr_result;
-	
+
 }
 
 //
@@ -793,7 +793,7 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 	$snippet_id = null;
 	$info = "";
 	$snippets = array();
-	
+
 	if ( $widget_uid ) {
 		$wp_args = array(
 			'post_type'   => 'snippet',
@@ -801,10 +801,10 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 			'meta_key'    => 'widget_uid',
 			'meta_value'  => $widget_uid,
 			'fields'      => 'ids'
-		);	
+		);
 		$snippets = get_posts($wp_args);
 	}
-	
+
 	if ( $snippets ) {
 		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
 		// get existing post id
@@ -816,7 +816,7 @@ function get_snippet_by_widget_uid ( $widget_uid = null ) {
 		}
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	}
-	
+
 	return $snippet_id;
 
 }
@@ -827,9 +827,9 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 	$info = "";
 	$snippet_id = null;
 	$snippets = array();
-	
+
 	$info .= ">> get_snippet_by_post_id <<<br />";
-	
+
 	if ( $post_id ) {
 		$wp_args = array(
 			'post_type'   => 'snippet',
@@ -844,10 +844,10 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 					'value' 	=> $post_id,//'value' 	=> '"'.$post_id.'"', // matches exactly "123", not just 123. This prevents a match for "1234"
 				)
 			),
-		);	
+		);
 		$snippets = get_posts($wp_args);
 	}
-	
+
 	//$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
@@ -863,13 +863,13 @@ function get_snippet_by_post_id ( $post_id = null, $return = "id" ) {
 		global $wpdb;
 		//$info .= "wp_query: <pre>".print_r( $wpdb->last_query, true)."</pre>";
 	}
-	
+
 	// If returning id alone finish here
 	if ( $return == "id" ) { return $snippet_id; }
-	
+
 	$arr_result['info'] = $info;
 	$arr_result['id'] = $snippet_id;
-	
+
 	return $arr_result;
 
 }
@@ -880,9 +880,9 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 	$info = "";
 	$snippet_id = null;
 	$snippets = array();
-	
+
 	$info .= ">> get_snippet_by_content <<<br />";
-	
+
 	//$query = new WP_Query( array( 's' => 'keyword' ) );
 	if ( $snippet_title || $snippet_content ) {
 		$wp_args = array(
@@ -910,7 +910,7 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 		$wp_args['meta_query'] = $meta_query;*/
 		$snippets = get_posts($wp_args);
 	}
-	
+
 	//$info .= "wp_args: <pre>".print_r($wp_args,true)."</pre><hr />";
 	if ( $snippets ) {
 		//$info .= "snippets: <pre>".print_r($snippets,true)."</pre><hr />";
@@ -931,15 +931,15 @@ function get_snippet_by_content ( $snippet_title = null, $snippet_content = null
 		}
 		//$info .= "snippet_id: ".$snippet_id."<br />";
 	}
-	
+
 	// If returning id alone finish here
 	if ( $return == "id" ) { return $snippet_id; }
-	
+
 	$arr_result['info'] = $info;
 	$arr_result['id'] = $snippet_id;
-	
+
 	return $arr_result;
-	
+
 }
 
 // Display (and optionally convert/update) widgets and snippets
@@ -947,11 +947,11 @@ add_shortcode('widgets_and_snippets', 'widgets_and_snippets');
 function widgets_and_snippets ( $atts = array() ) { //function convert_widgets_to_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: widget_and_snippets", $do_log );
-    
+
     $args = shortcode_atts( array(
 		'limit'   => 1,
         'sidebar_id' => null, // which legacy sidebar to process
@@ -962,14 +962,14 @@ function widgets_and_snippets ( $atts = array() ) { //function convert_widgets_t
         'wtypes' => 'default',
         'verbose' => false,
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
 	$info = "";
 	$x = 0; // counter for widgets processed -- for comparison to $limit
 	$protected_sidebars = array('sidebar-4', 'bottom-widgets', 'mega-menu');
-	
+
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
 	$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
@@ -988,14 +988,14 @@ function widgets_and_snippets ( $atts = array() ) { //function convert_widgets_t
 	wtype: wcpbc_products_by_category => widget_wcpbc_products_by_category
 	*/
 	/*
-SELECT * FROM `wpstc_options` WHERE `option_name` 
+SELECT * FROM `wpstc_options` WHERE `option_name`
 LIKE '%widget_media_image%'
 OR `option_name` LIKE '%widget_media_gallery%'
 OR `option_name` LIKE '%widget_recent%'
 OR `option_name` LIKE '%widget_categories%'
 OR `option_name` LIKE '%widget_em_calendar%'
 OR `option_name` LIKE '%widget_ninja_forms_widget%'
-OR `option_name` LIKE '%widget_wcpbc_products_by_category%'  
+OR `option_name` LIKE '%widget_wcpbc_products_by_category%'
 ORDER BY `wpstc_options`.`option_name` ASC
 */
 	// Get widget options per type
@@ -1007,15 +1007,15 @@ ORDER BY `wpstc_options`.`option_name` ASC
 	}
 	////////
 	$info .= "<h3>action: ".$action."</h3>";
-	
+
 	// Get widgets and snippets for display/conversion
 	// If no post_id has been specified, show summary of all widgets (grouped by sidebar) and snippets
 	// TODO/WIP 240115
 	if ( $post_id ) {
 		$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
-		// Check for custom sidebars 
+		// Check for custom sidebars
 		$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
-		if ( $cs_replacements ) { 
+		if ( $cs_replacements ) {
 			$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
 			$first_key = array_key_first($cs_replacements);
 			if ($first_key !== null) {
@@ -1047,29 +1047,29 @@ ORDER BY `wpstc_options`.`option_name` ASC
 			$info .= "No widgets found for sidebar_id: ".$sidebar_id." in arr_sidebars_widgets or cs_sidebars<br />";
 		}
 	}
-	
+
 	// Loop through sidebars and convert widgets to snippets
-	
+
 	$info .= "<h2>Sidebars/Widgets</h2>";
 	$info .= "wtypes: <pre>".print_r($wtypes,true)."</pre><hr />";
 	$info .= "protected_sidebars: <pre>".print_r($protected_sidebars,true)."</pre><hr />";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar => $widgets ) {
-		
+
 		if ( $verbose ) { $info .= "sidebar: ".$sidebar."/sidebar_id: ".$sidebar_id."<br />"; }
-		
+
 		// If we're handling a specific sidebar and this isn't it, move on to the next
 		if ( $sidebar_id && $sidebar != $sidebar_id ) { continue; }
-		
+
 		// Skip wp_inactive_widgets -- tft
 		//if ( $sidebar == 'wp_inactive_widgets' ) { continue; }
 		//if ( $sidebar == "wp_inactive_widgets" || $sidebar == "mega-menu" || $sidebar == "array_version" || empty($widgets) ) { continue; }
-		
+
 		// Get the registered sidebar info -- name, id, description, before_widget, etc.
 		$sidebar_name = null; // init
 		$sidebar_info = wp_get_sidebar( $sidebar );
 		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
-		
+
 		// Is this a Custom Sidebar?
 		if ( strpos($sidebar, 'cs-') !== false ) {
 			$custom_sidebar = true;
@@ -1077,37 +1077,37 @@ ORDER BY `wpstc_options`.`option_name` ASC
 		} else {
 			$custom_sidebar = false;
 		}
-		
+
 		$info .= "<h3>sidebar: ";
 		$info .= $sidebar;
 		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
 		if ( $custom_sidebar ) { $info .= " [cs]"; }
 		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
 		$info .= "</h3>";
-		
+
 		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
-		
+
 		// TODO: Check to see if this widget is from a sidebar that we're including in conversions -- not in_array($sidebar, $protected_sidebars)-- exclude widgets from homepage features (sidebar-4), bottom-widgets, mega-menu, etc...
 		// additional "action" var per sidebar? e.g. $sidebar_action =null; convert; update etc....
-		
+
 		$info .= '<div class="code">';
-		
+
 		// Loop through widgets and create corresponding snippet records
 		if ( is_array($widgets) && !empty($widgets) ) {
-		
+
 			$info .= "<h4>Widgets</h4>";
 			foreach ( $widgets as $i => $widget_uid ) {
-			
+
 				$widget = null; // init
 				$info .= "<h5>widget ".$i.": ".$widget_uid."</h5>";
 
-				// Separate type and id from widget_uid				
+				// Separate type and id from widget_uid
 				$wtype = substr($widget_uid, 0, strpos($widget_uid, "-"));
 				$wid = substr($widget_uid, strpos($widget_uid, "-") + 1);
 				//
 				$wtype_option = "widget_".$wtype;
-				if ( $wtype == "recent" ) { 
+				if ( $wtype == "recent" ) {
 					$wtype_option .= "-posts";
 					$wid = substr($wid, strpos($wid, "-") + 1);
 				}
@@ -1122,14 +1122,14 @@ ORDER BY `wpstc_options`.`option_name` ASC
 				if ( !in_array($wtype, $wtypes) ) {
 					$info .= "We're not currently processing widgets of type: $wtype<br />";
 				}
-					
+
 				// If a widget was found, gather the info needed to create/update the corresponding snippet
 				if ( $widget ) {
-					
+
 					$postarr = array();
 					$meta_input = array();
 					$conditions = array();
-				
+
 					// Does a snippet already exist based on this widget?
 					$snippet_id = get_snippet_by_widget_uid ( $widget_uid );
 					if ( $snippet_id ) {
@@ -1138,28 +1138,28 @@ ORDER BY `wpstc_options`.`option_name` ASC
 					} else {
 						$info .= "No existing snippet found for widget_uid: ".$widget_uid."<br />";
 					}
-				
+
 					// Array fields for text widgets: title, text, filter, visual, csb_visibility, csb_clone...
 					// TODO: check if fields are same for e.g. custom_html
-					
+
 					// Defaults for title and content
 					$snippet_title = $widget_uid;
 					$snippet_content = null;
-					
+
 					// Get actual widget content etc
-					
+
 					// Title
 					if ( isset($widget['title']) && !empty($widget['title']) ) {
 						$snippet_title = $widget['title'];
 					}
-					
+
 					// Content
 					if ( isset($widget['text']) ) {
 						$snippet_content = $widget['text'];
 					} else if ( isset($widget['content']) ) {
 						$snippet_content = $widget['content'];
 					}
-					
+
 					// TODO: eliminate redundancy -- make relativize_urls function
 					// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
 					// e.g. <a href="https://stcnyclive.wpengine.com/theology/">Gain understanding by attending classes</a>
@@ -1171,7 +1171,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$snippet_content = str_replace('https://stcnycstg.wpengine.com/','/',$snippet_content);
 						$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
 					}
-					
+
 					// Recent Posts Widget?
 					if ( $wtype == "recent" ) {
 						// TODO/WIP 231129: create snippet_content based on the following settings -- use sdg display_posts fcn(?)
@@ -1185,7 +1185,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						$shortcode .= ' orderby="date"';
 						$shortcode .= ' order="DESC"';
 						$shortcode .= ' show_subtitles="false"';
-						
+
 						if ( isset($widget['number']) && !empty($widget['number']) ) {
 							//$meta_input['number'] = $widget['number'];
 							$post_args['limit'] = $widget['number'];
@@ -1201,10 +1201,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						//
 						if ( function_exists('birdhive_get_posts') ) {
 							//$snippet_content .= birdhive_display_posts($post_args);
-							$snippet_content .= $shortcode;						
+							$snippet_content .= $shortcode;
 						}
 					}
-					
+
 					// Image Widget?
 					if ( $wtype == "media_image" ) {
 						//
@@ -1225,13 +1225,13 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						[size] => grid_crop_square
 						[width] => 1500
 						[height] => 844
-						[caption] => 
-						[alt] => 
+						[caption] =>
+						[alt] =>
 						--[link_url] => /worship-and-pray/go-deeper/worship/choral-evensong/
-						[image_classes] => 
-						[link_classes] => 
-						[link_rel] => 
-						[link_target_blank] => 
+						[image_classes] =>
+						[link_classes] =>
+						[link_rel] =>
+						[link_target_blank] =>
 						--[image_title] => Purchase CDs
 						--[attachment_id] => 304791
 						[url] => https://stcnycstg.wpengine.com/wp-content/uploads/2022/08/The-Saint-Thomas-Choir-at-the-Queens-Service-600x600.jpg
@@ -1240,7 +1240,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						--[link_type] => custom
 						*/
 					}
-					
+
 					// Ninja Forms Widget?
 					if ( $wtype == "ninja_forms_widget" ) {
 						$form_id = $widget['form_id'];
@@ -1259,23 +1259,23 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						*/
 						$snippet_content = "[ninja_form id=".$form_id."]";
 					}
-					
+
 					//
 					if ( ! ( $wtype == "text" || $wtype == "custom_html" || $wtype == "media_image" || $wtype == "ninja_forms_widget" || $wtype == "recent" ) ) {
 						$info .= "<pre>".print_r($widget,true)."</pre>";
 					}
-					
+
 					//
 					if ( $verbose ) { $info .= "title: ".$snippet_title."<br />"; }
-					
+
 					// WIP: find if widget is included in one or more sidebars --> get sidebar_id(s)
 					$widget_sidebar_id = get_sidebar_id($widget_uid);
 					if ( $verbose ) { $info .= "widget_sidebar_id: ".$widget_sidebar_id."<br />"; }
-					
+
 					// TODO: check to see if snippet already exists with matching uid
 					// If no match, create new snippet post record with title and text as above
 					// If match, check for changes?
-					
+
 					// If title and content are set, then prep to save widget as snippet
 					//if ( $snippet_title && $snippet_content ) {
 					//if ( ( $wtype == "text" || $wtype == "custom_html" || $wtype == "ninja_forms_widget" ) && $snippet_title && $snippet_content ) { // tmp -- finish processing only for text and html widgets for now
@@ -1296,9 +1296,9 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							$meta_input['sidebar_sortnum'] = $i;
 						}
 						$meta_input['snippet_priority'] = 2; // Standard/default priority level
-						
+
 						// Proceed to processing widget display logic
-						
+
 						/*
 						// Get existing value for sidebar_id field, if any
 						$sidebars = get_post_meta( $snippet_id, 'sidebar_id', true );
@@ -1311,20 +1311,20 @@ ORDER BY `wpstc_options`.`option_name` ASC
 						}
 						$info .= "snippet sidebars_revised: ".$sidebars_revised."<br />";
 						*/
-						
+
 						// Is this a Custom Sidebar?
 						if ( $custom_sidebar ) {
-						
-							// This may be overridden later by the widget logic for this particular widget, 
+
+							// This may be overridden later by the widget logic for this particular widget,
 							// ... but if not, default to showing it only on selected posts which were set to use this custom sidebar
 							$meta_input['snippet_display'] = "selected";
-							
+
 							// NB/WIP only CS with sidebar location rules appears to be Sermons Sidebar => display on all individual sermon posts and sermon post archives
 
 							// Get array of ids for posts using this custom sidebar
 							global $wpdb;
-	
-							$sql = "SELECT `post_id` 
+
+							$sql = "SELECT `post_id`
 									FROM $wpdb->postmeta
 									WHERE `meta_key` = '_cs_replacements'
 									AND `meta_value` LIKE '%".'"'.$sidebar.'"'."%'";
@@ -1333,10 +1333,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							$cs_post_ids = array_column($arr_objs, 'post_id');
 							sort($cs_post_ids); // Sort the array -- TODO: sort instead by post title
 							if ( count($cs_post_ids) > 0 ) {
-							
+
 								$info .= count($cs_post_ids)." posts using this sidebar:<br />";
 								//$info .= count($cs_post_ids)." posts using this sidebar: ".print_r($cs_post_ids,true)."<br />";
-								
+
 								//
 								// Determine revised value based on new and existing values for field
 								$update_args = array( 'post_id' => $snippet_id, 'key' => 'cs_post_ids', 'arr_additions' => $cs_post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
@@ -1353,27 +1353,27 @@ ORDER BY `wpstc_options`.`option_name` ASC
 									//$info .= "=> <pre>".print_r($updated_field_value, true)."</pre>";
 									$meta_input['cs_post_ids'] = serialize($updated_field_value);
 								}*/
-								
+
 							} else {
 								$info .= "There are no posts using this custom sidebar<br />";
 								$meta_input['snippet_display'] = "hide";
 							}
 							$info .= "<hr />";
-							
+
 						} // END special handling for custom sidebars
-					
+
 						// Get widget logic -- WIP
 						if ( isset($widget_logic[$widget_uid]) ) {
 							if ( $verbose ) { $info .= "... found widget logic ...<br />"; }
 							//$info .= "logic: <pre>".print_r($widget_logic[$widget_uid],true)."</pre><br />";
 							$conditions = $widget_logic[$widget_uid];
 						}
-					
+
 						// Loop through the conditions and prepare to save them to the snippet ACF fields, as applicable
 						// NB: this is only step one; after the snippet has been created/updated,
 						// .. we'll update the snippet logic and translate the old widget logic to fit the new ACF fields
 						foreach ( $conditions as $condition => $subconditions ) {
-					
+
 							$condition_info = "";
 							$subs_info = "";
 							$subs_empty = true;
@@ -1382,35 +1382,35 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							//$info .= "condition: ".$condition."<br />";
 							//$info .= "subconditions: <br />";
 							if ( $condition == 'incexc' ) {
-								
+
 								if ( !$custom_sidebar || $subconditions['condition'] != "show" ) {
 									$meta_input['snippet_display'] = $subconditions['condition'];
 								}
-			
+
 							} else if ( $condition == "url" ) {
-		
+
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-								if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {					
+								if ( isset($subconditions['urls']) && !empty($subconditions['urls']) ) {
 									$meta_input['widget_logic_target_by_url'] = $subconditions['urls']; // backup/transitional field
-								}		
-				
-							} else if ( $condition == "urls_invert" ) {
-		
-								if ( isset($subconditions['urls_invert']) && !empty($subconditions['urls_invert']) ) {
-									$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup/transitional field					
 								}
-			
+
+							} else if ( $condition == "urls_invert" ) {
+
+								if ( isset($subconditions['urls_invert']) && !empty($subconditions['urls_invert']) ) {
+									$meta_input['widget_logic_exclude_by_url'] = $subconditions['urls_invert']; // backup/transitional field
+								}
+
 							} else if ( $condition == "location" || $condition == "custom_post_types_taxonomies" ) {
-			
+
 								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-			
+
 								// Init values array
 								$values = array();
-			
+
 								// location => array (is_front_page, is_home, etc) --> target_by_location
 								// custom_post_types_taxonomies => array of post types and custom taxonomy archives etc to target (or exclude)
-			
+
 								// Save only array elements where $v == 1
 								foreach ( $subconditions as $k => $v ) {
 									//$info .= "k: ".$k." => v: ".$v."<br />";
@@ -1419,31 +1419,31 @@ ORDER BY `wpstc_options`.`option_name` ASC
 										$values[$k] = $v;
 									}
 								}
-			
+
 								// Determine the appropriate meta_key
 								if ( $condition == "location" ) { $meta_key = 'widget_logic_location'; } else { $meta_key = 'widget_logic_custom_post_types_taxonomies'; }
-			
+
 								// Add the value(s) to the meta_input array
 								if ( !empty($values) ) { $meta_input[$meta_key] = serialize($values); }
-		
+
 							} else if ( $condition == "taxonomy" ) {
-			
+
 								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-			
-								if ( isset($subconditions['taxonomies']) ) { 
+
+								if ( isset($subconditions['taxonomies']) ) {
 									$taxonomies = $subconditions['taxonomies'];
 									if ( $verbose ) { $info .= "taxonomies: ".$taxonomies."<br />"; }
 									$meta_input['widget_logic_taxonomy'] = $taxonomies; // TODO: figure out why this isn't working
 									$meta_input['target_by_taxonomy'] = $taxonomies;
 								}
-		
+
 							} else if ( $condition == "word_count" ) {
-		
+
 								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								// WIP
 								//$info .= "subconditions: <pre>".print_r($subconditions,true)."</pre><br />";
-		
+
 							} else if ( is_array($subconditions) && !empty($subconditions) ) {
 								if ( $verbose ) { $info .= "condition: ".$condition."<br />"; }
 								if ( count($subconditions) == 1 && empty($subconditions[0]) ) {
@@ -1456,7 +1456,7 @@ ORDER BY `wpstc_options`.`option_name` ASC
 									//$info .= "k: ".$k." => v: ".$v."<br />";
 								}*/
 							} else {
-								if ( $verbose ) { 
+								if ( $verbose ) {
 									$info .= "condition: ".$condition."<br />";
 									$info .= $subconditions." [not an array]<br />";
 								}
@@ -1468,31 +1468,31 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							}
 							//
 							//$info .= $condition_info;
-		
+
 						} // END foreach ( $conditions as $condition => $subconditions )
-		
+
 						// WIP
 						$meta_input['widget_logic'] = print_r($conditions, true);
-						
-						// Finish setting up the post array for update/insert							
+
+						// Finish setting up the post array for update/insert
 						$postarr['meta_input'] = $meta_input;
-						
+
 						if ( $wtype == "media_image" ) {
 							//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 						}
 						//
 						if ( $action != "info" ) {
-						
+
 							// Init action var
 							$success = null;
-							
+
 							if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 								$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 								if ( $action == "convert" || $action == "update" ) {
 									// Update existing snippet
 									$snippet_id = wp_update_post($postarr);
 									if ( !is_wp_error($snippet_id) ) { $success = "updated"; }
-								}								
+								}
 							} else {
 								$info .= "&rarr; About to create a new snippet<br />";
 								if ( $action == "convert" || $action == "update" ) {
@@ -1509,10 +1509,10 @@ ORDER BY `wpstc_options`.`option_name` ASC
 									$info .= $error;
 								}
 							}
-							
+
 							//
 							if ( $success && $snippet_id ) {
-								$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";				
+								$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";
 								// Update snippet logic
 								$info .= "&rarr;&rarr; update_snippet_logic<br />";
 								$info .= update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'process_legacy_fields' => 'true', 'verbose' => $verbose ) ); //$info .= '<div class="code">'.'</div>';
@@ -1520,11 +1520,11 @@ ORDER BY `wpstc_options`.`option_name` ASC
 								$info .= "&rarr;&rarr; No insert/update completed [action: $action]<br />";
 								//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 							}
-						
+
 						}
-		
+
 					} else {
-					
+
 						if ( ! in_array($wtype, $wtypes) ) {
 							$info .= "wtype: $wtype<br />";
 							$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";
@@ -1533,67 +1533,67 @@ ORDER BY `wpstc_options`.`option_name` ASC
 							if ( !$snippet_title ) { $info .= "=> No title<br />"; }
 							if ( !$snippet_content ) { $info .= "=> No content<br />"; } else { $info .= "snippet_content: <pre>".$snippet_content."</pre><br />"; }
 						}
-						
+
 					}
-					
+
 					$x++;
-				
+
 				}
-				
+
 				//if ( $i > $limit ) { break; } // tft
-				
+
 				if ( $limit > 0 && $x > $limit ) { break; }
 				if ( count($widgets) > 1 ) { $info .= "<hr />"; }
-				
+
 			} // foreach ( $widgets...
-			
+
 		} else {
 			$info .= "[No widgets]<br />";
 		}
-		
+
 		//...
 		$info .= '</div>';
-		
+
 		if ( $limit > 0 && $x > $limit ) { break; }
-		
+
 	}
-	
+
 	////////
-	
+
 	return $info;
-	
+
 } // END function convert_widgets_to_snippets
 
 // WIP
 add_shortcode('convert_post_widgets', 'convert_post_widgets_to_snippets');
 function convert_post_widgets_to_snippets ( $atts = array() ) {
-	
+
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: convert_post_widgets_to_snippets", $do_log );
-    
+
     // Init vars
     $info = "";
 	$ts_info = "";
 	$arr_ids = array(); // this array will containing snippets matched for display on the given post
-    
+
     $args = shortcode_atts( array(
     	'ids' => null,
 		'limit'   => -1,
         'verbose' => false,
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
 	$info .= "<h2>Convert Post Widgets to Snippets</h2>";
 	$info .= "shortcode atts:<br />";
 	$info .= "ids: [".$ids."]<br />";
 	$info .= "limit: [".$limit."]<br />";
 	$info .= "<hr />";
-	
+
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'any',
@@ -1605,13 +1605,13 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
         //'meta_key'		=> '_cs_replacements',
         //post__in (array) – use post ids. WIP -- array ( $post_id )
 	);
-	
+
 	if ( !empty($ids) ) {
-		$info .= "Getting posts by IDs: ".$ids."<br />";				
+		$info .= "Getting posts by IDs: ".$ids."<br />";
 		$post_ids = array_map( 'intval', birdhive_att_explode( $ids ) );
 		$wp_args['post__in'] = $post_ids;
 	}
-	
+
 	// Meta query
 	$meta_query = array(
 		'post_widget' => array(
@@ -1622,53 +1622,53 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 		// WIP: add handling of legacy sidebar fields, e.g. sidebar_0, sidebar_1.... -- for Pages only
 	);
 	$wp_args['meta_query'] = $meta_query;
-	
+
 	$arr_posts = new WP_Query( $wp_args );
 	$posts = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
     //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     $info .= "[".count($posts)."] posts found.<br />";
     $info .= "<hr /><br />";
-    
+
     // Determine which snippets should be displayed for the post in question
 	foreach ( $posts as $i => $post_id ) {
-		
+
 		$info .= "post_id: ".$post_id."<br />";
-		
-		$post_title = get_the_title($post_id);		
+
+		$post_title = get_the_title($post_id);
 		$info .= "post_title: ".$post_title."<br />";
-		
+
 		$widget_title = get_post_meta( $post_id, 'post_sidebar_widget_title', true );
 		if ( empty($widget_title) ) { $widget_title = "More Resources"; }
 		$widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
 		$widget_content = wpautop($widget_content);
-		
+
 		$info .= "widget_title: ".$widget_title."<br />";
 		//$info .= "widget_content: <pre>".$widget_content."</pre><br />";
-		
+
 		$info .= "+++++++<br />"; //$info .= "<hr /><br />";
-		
+
 		// TODO: create/update widget
-		
+
 		$postarr = array();
 		$meta_input = array();
 		//
 		$snippet_title = $widget_title;
 		$snippet_content = $widget_content;
-		
+
 		$info .= "snippet_title: ".$snippet_title."<br />";
-		
+
 		// Modify generic titles
 		// "More Resources"/"About the Artist"
-		if ( strpos($snippet_title, 'More Resources') !== false 
-			|| strpos($snippet_title, 'About the Artist') !== false 
-			|| strpos($snippet_title, 'About Our Guest') !== false 
+		if ( strpos($snippet_title, 'More Resources') !== false
+			|| strpos($snippet_title, 'About the Artist') !== false
+			|| strpos($snippet_title, 'About Our Guest') !== false
 			|| strpos($snippet_title, 'About our Guest') !== false // About Our Guest Lecturer; About our Guest Teacher
 			|| empty($snippet_title) ) { //
 			// Append the post title
 			$snippet_title .= " [".trim($post_title)."]";
 		}
-		
+
 		// Clean up the content
 		// TODO: eliminate redundancy -- make relativize_urls function
 		// WIP: find STC absolute hyperlinks in snippet content and relativize them (i.e. more clean up after AG...)
@@ -1680,8 +1680,8 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 			$snippet_content = str_replace('https://stcnycstg.wpengine.com/','/',$snippet_content);
 			$snippet_content = str_replace('https://stcnyc.wpengine.com/','/',$snippet_content);
 		}
-		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";	
-		
+		//$info .= "snippet_content: <pre>".$snippet_content."</pre><br />";
+
 		// Does a snippet already exist based on this widget?
 		$snippet_match = get_snippet_by_post_id ( $post_id, "info" ); //
 		//$info .= $snippet_match['info'];
@@ -1706,47 +1706,47 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 			$info .= "<h5>&rarr; snippet_id: ".$snippet_id."/".get_the_title($snippet_id)."</h5>";
 		} else {
 			$info .= "No existing snippet found for post_id: ".$post_id."<br />";
-		}		
-		
+		}
+
 		$postarr['post_title'] = wp_strip_all_tags( $snippet_title );
 		$postarr['post_content'] = $snippet_content;
 		$postarr['post_type'] = 'snippet';
 		$postarr['post_status'] = 'publish';
 		$postarr['post_author'] = 1; // get_current_user_id()
-		
+
 		// Set up preliminary meta_input
 		$meta_input['widget_type'] = "post_widget";
 		$meta_input['snippet_display'] = "selected";
-		
+
 		//
 		$widget_position = get_post_meta( $post_id, 'post_sidebar_widget_position', true ); // options: top/bottom
 		if ( $widget_position == "top" ) { $snippet_priority = 1; } else { $snippet_priority = 3; }
 		$meta_input['snippet_priority'] = $snippet_priority;
-		
+
 		$post_ids = array( $post_id );
-		
+
 		// If snippet_id, get existing value for post_ids
 		if ( $snippet_id ) {
-			
+
 			// Determine revised value based on new and existing values for field
 			$update_args = array( 'post_id' => $snippet_id, 'key' => 'post_ids', 'arr_additions' => $post_ids, 'return'  => 'info', 'field_type' => 'serialized' );
 			$updates = get_updated_arr_field_value( $update_args );
 			$info .= $updates['info'];
 			$updated_value = $updates['updated_value'];
 			if ( $updated_value ) { $meta_input['post_ids'] = $updated_value; }
-			
+
 		} else {
 			$meta_input['post_ids'] = serialize($post_ids);
 		}
-		
+
 		// Init action var
 		$success = null;
-						
-		// Finish setting up the post array for update/insert							
+
+		// Finish setting up the post array for update/insert
 		$postarr['meta_input'] = $meta_input;
-		
+
 		//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
-		
+
 		if ( $snippet_id ) { //if ( isset($postarr['ID']) ) {
 			$info .= "&rarr; About to update existing snippet [$snippet_id]<br />";
 			// Update existing snippet
@@ -1769,13 +1769,13 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 
 		//
 		if ( $success && $snippet_id ) {
-		
-			$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";	
-						
+
+			$info .= "&rarr;&rarr; Success! -- snippet record ".$success." [".$snippet_id."]<br />";
+
 			// Update snippet logic to add post from which sidebar content this snippet was created
 			$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post', 'value' => array($post_id), 'return' => 'info', 'field_type' => 'relationship', );
 			$info .= sdg_update_custom_field( $update_args );
-			
+
 			/*
 			$update_key = 'target_by_post';
 			$update_value = array($post_id);
@@ -1801,15 +1801,15 @@ function convert_post_widgets_to_snippets ( $atts = array() ) {
 			$info .= "&rarr;&rarr; No action<br />";
 			//$info .= "snippet postarr: <pre>".print_r($postarr,true)."</pre>";
 		}
-		
+
 		$info .= "<hr /><br />";
-		
+
 		if ( $limit > 0 && $i > $limit ) { break; }
-		
-	}	
-    
+
+	}
+
     return $info;
-    
+
 }
 
 // WIP
@@ -1817,11 +1817,11 @@ add_shortcode('delete_widgets', 'delete_widgets');
 function delete_widgets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: delete_widgets", $do_log );
-    
+
     $args = shortcode_atts( array(
         'limit'   => 1,
         'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ), //
@@ -1830,25 +1830,25 @@ function delete_widgets ( $atts = array() ) {
         'action' => 'test',
         'verbose' => false,
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
 	$info = "";
 	$i = 0;
-	
+
 	// Sidebars to process
 	if ( !is_array($sidebars) ) { $sidebars = explode(',', $sidebars); }
 	$info .= "sidebars to process: <pre>".print_r($sidebars,true)."</pre><hr /><hr />";
 	$info .= "action: ".$action."<br />";
 	// TODO: further testing and adjustments to avoid deleting image widgets from mega menus!!!
-	
+
 	// Widget Types to process
 	if ( !is_array($widget_types) ) { $widget_types = explode(',', $widget_types); }
 	$info .= "widget_types: <pre>".print_r($widget_types,true)."</pre><hr /><hr />";
-	
+
 	$info .= "<h2>Delete Widgets</h2>";
-	
+
 	// Get wpstc_options data
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
 	//$widget_logic = get_option('widget_logic_options'); // widget display logic ( WidgetContext plugin -- being phased out )
@@ -1856,10 +1856,10 @@ function delete_widgets ( $atts = array() ) {
 	//
 	//
 	foreach ( $widget_types as $wtype ) {
-	
+
 		$option_name = "widget_".$wtype;
 		$info .= "option_name: ".$option_name."<br />";
-		
+
 		//$$option_name = get_option($option_name);
 		$widgets = get_option($option_name);
 		//
@@ -1867,21 +1867,21 @@ function delete_widgets ( $atts = array() ) {
 		//
 		$i = 0;
 		foreach ( $widgets as $key => $widget ) {
-			
+
 			$info .= "key: ".$key." / ";
 			if ( isset($widget['title']) ) { $info .= $widget['title']; }
 			$widget_uid = $wtype."-".$key;
 			$info .= " [".$widget_uid."]";
 			$info .= "<br />";
-			
+
 			// Which sidebar does this widget belong to?
 			//$sidebar_id = wp_find_widgets_sidebar( $widget_id ); // nope
 			$widget_sidebar = get_sidebar_id($widget_uid);
 			if ( strpos($widget_sidebar, 'cs-') !== false ) {
-				$widget_sidebar = "cs_sidebar"; 
+				$widget_sidebar = "cs_sidebar";
 			}
 			$info .= "&rarr; widget_sidebar: ".$widget_sidebar."<br />";
-			
+
 			// Delete widget -- by unsetting key?
 			//if ( $key == 3 ) { unset($widgets[$key]); }
 			if ( $widget_sidebar == "mega-menu" ) { continue; } // WIP -- TODO: instead, just make sure earlier in the fcn that "mega-menu" is NOT in the $sidebars array!
@@ -1894,13 +1894,13 @@ function delete_widgets ( $atts = array() ) {
 				}
 			} else {
 				$info .= "&rarr; Do NOT delete this widget!<br />";
-			}		
-			
+			}
+
 			if ( $i >= $limit && $limit > 0 ) { break; }
 		}
 		//
 		//$info .= "REVISED widgets: <pre>".print_r($widgets,true)."</pre><hr /><hr />";
-		
+
         // update DB option
         if ( $i > 0 ) {
         	$info .= "Preparing to delete ".$i." ".$wtype." widgets!<br />";
@@ -1914,37 +1914,37 @@ function delete_widgets ( $atts = array() ) {
 				}
 			}
         }
-        
+
         $info .= "<br /><hr /><br />";
-        
+
 	}
-	
+
 	return $info;
-	
+
 }
 
 add_shortcode('update_snippets', 'update_snippets');
 function update_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: update_snippets", $do_log );
-    
+
     $args = shortcode_atts( array(
         'limit'   => 1,
         'verbose' => false,
         //'widget_types' => array( 'text', 'custom_html', 'media_image', 'ninja_forms_widget' ),
         //'sidebars' => array( 'sidebar-1', 'wp_inactive_widgets', 'cs_sidebar' ),
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
 	$info = "";
 	$i = 0;
-	
+
 	// Set up basic query args for snippets retrieval
     $wp_args = array(
 		'post_type'		=> 'snippet',
@@ -1952,21 +1952,21 @@ function update_snippets ( $atts = array() ) {
 		'posts_per_page'=> $limit,
         'fields'		=> 'ids',
 	);
-	
+
 	$arr_posts = new WP_Query( $wp_args );
 	$snippets = $arr_posts->posts;
     //$info .= "WP_Query run as follows:";
     //$info .= "wp_args: <pre>".print_r($wp_args, true)."</pre>";
     //$info .= "wp_query: <pre>".$arr_posts->request."</pre>"; // print sql tft
     $info .= "[".count($snippets)."] snippets found.<br />";
-    
+
     // Determine which snippets should be displayed for the post in question
 	foreach ( $snippets as $snippet_id ) {
 		$info .= '<div class="code">'.update_snippet_logic ( array( 'snippet_id' => $snippet_id, 'verbose' => $verbose ) ).'</div>';
-	}	
-	
+	}
+
 	return $info;
-	
+
 }
 
 // Purpose: update new fields from legacy fields, e.g. target_by_url => target_by_post
@@ -1977,7 +1977,7 @@ function update_snippet_logic ( $atts = array() ) {
     $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
-    
+
     $args = shortcode_atts( array(
         'snippet_id' => null,
         'process_legacy_fields' => false,
@@ -1985,25 +1985,25 @@ function update_snippet_logic ( $atts = array() ) {
         'reverse' => false, // TODO/WIP: for old custom-sidebar widgets, add option to reverse all the logic for general use -- e.g. sermons sidebar cs-29
         'verbose' => false, // WIP
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
+
     // Init vars
     $info = "";
 	$ts_info = "";
-	
+
 	if ( $snippet_id === null ) { return false; }
-	
+
 	//if ( $snippet_id === null ) { $snippet_id = get_the_ID(); }
 	//$snippet = get_post ( $snippet_id );
 	//$widget_uid = get_post_meta( $snippet_id, 'widget_uid', true );
-	
+
 	//
 	$info .= '<div class="code">';
 	$info .= ">> update_snippet_logic for snippet_id: $snippet_id<br />";
 	//$info .= "widget_uid: $widget_uid<br />";
-	
+
 	// Get snippet logic
 	// -- WIP
 	if ( $meta_keys ) {
@@ -2017,7 +2017,7 @@ function update_snippet_logic ( $atts = array() ) {
 	$ts_info .= "meta_keys => <pre>".print_r($meta_keys, true)."</pre>";
 	//
 	foreach ( $meta_keys as $key ) {
-	
+
 		$key_ts_info = "";
 		$key_ts_info .= "<strong>key: $key</strong><br />";
 		//
@@ -2025,52 +2025,52 @@ function update_snippet_logic ( $atts = array() ) {
 		//$$key = get_post_meta( $snippet_id, $key, true );
 		//$key_ts_info .= "key: $key => ".$$key."<br />";
 		//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>";
-		
+
 		// If the key has a corresponding value, then proceed to process that value
 		if ( !empty($$key) ) {
-		
+
 			//$key_ts_info .= "<strong>key: $key</strong><br />";
 			//$key_ts_info .= "=> <pre>".print_r($$key, true)."</pre>"; // ." [count: ".count($$key)."]"
-			
+
 			// Unserialize as needed (legacy fields only, yes? -- perhaps consolidate with below)
 			if ( !is_array($$key) && strpos($$key, '{') !== false ) {
 				$key_ts_info .= "key: $key => ";//$key_ts_info .= "key: $key => ".$$key."<br />";
 				$key_ts_info .= "unserialize...<br >";
 				$$key = unserialize($$key);
 				//$key_ts_info .= "unserialized key: $key => ".print_r($$key,true)."<br />";
-			}	
-				
+			}
+
 			// Clean up legacy field values
 			if ( !is_array($$key) && strpos($key, 'widget_logic_') !== false ) {
-			
+
 				$key_ts_info .= "widget_logic field; not array => clean up, update, and explode<br />";
 				// Replace multiple (one or more) line breaks with a single one.
 				$$key = preg_replace("/[\r\n]+/", "\n", $$key);
 				// Update the legacy field with the cleaned-up version
 				update_field( $key, $$key, $snippet_id );
-			
+
 				// Turn the text into an array of conditions
 				$conditions = explode("\n",$$key);
-						
+
 			} else {
-			
+
 				$conditions = $$key;
-				
+
 			}
-			
+
 			//
 			//if ( !is_array($conditions) ) { continue; }
 			// TODO: fine-tune sorting in case of multidimensional or associative arrays(?)
-			// TODO: run the following ONLY for one-dimensional non-associative arrays 
+			// TODO: run the following ONLY for one-dimensional non-associative arrays
 			//if ( is_array($conditions) ) { sort($conditions); }
-			
+
 			//$key_ts_info .= count($conditions)." condition(s)<br />";
 			//$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
-			
+
 			// TODO: streamline! get rid of code redundancy -- WIP 231027
-			
+
 			if ( $key == 'cs_post_ids' ) {
-			
+
 				if ( is_array($$key) ) {
 					$$key = array_unique($$key);
 					$key_ts_info .= count($$key)." $key<br />";
@@ -2078,59 +2078,59 @@ function update_snippet_logic ( $atts = array() ) {
 					$key_ts_info .= "$key => ".print_r($$key,true)."<br />";
 					continue; // can't do much with a non-array... wip
 				}
-				
+
 				$matched_posts = array();
 				$matched_post_removals = array();
 				$update_limit = 250;
 				$key_ts_info .= "update_limit: ".$update_limit."<br />";
-				
+
 				$key_ts_info .= "-----------<br />";
 				// Prep for pattern matching
 				$wildcard_urls = array();
 				$slug_to_match = "";
-				
+
 				// WIP: order conditions (post_ids) by title
 				//$conditions = sort_post_ids_by_title($conditions); // TODO: figure out why this isn't working // WIP 231129
-				
+
 				foreach ( $conditions as $x => $condition ) {
-					
+
 					$post = null;
 					$p_id = intval($condition);
-					
+
 					//$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
 					//$key_ts_info .= $x.".) "."p_id: ".$p_id."<br />";
-					
+
 					// Check to see if p_id is a valid post id
 					$post = get_post( $p_id );
 					//$key_ts_info .= "post: <pre>".print_r($post, true)."</pre>";
-					
+
 					if ( !is_object($post) ) {
 						$key_ts_info .= $x.".) ";
 						//$key_ts_info .= $x.".) "."condition: ".$condition."<br />";
 						$key_ts_info .= "NO POST FOUND for condition: ".$condition."<br />";
-						
+
 					} else {
-						
+
 						$post_info = $x.".) ".$post->post_title." [$p_id]";
 						// Get post status -- we're only interested published posts
-						$post_status = $post->post_status; // get_post_status( $id );					
+						$post_status = $post->post_status; // get_post_status( $id );
 						$slug = $post->post_name;
 						$post_type = $post->post_type;
 						//
 						if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
 						$post_info .= " // ".$slug; //" // "
-						
+
 						// WIP 231117/231129/231130...
 						// TODO: separate this out into a new function -- we're doing this repeatedly
 						// args to include: slug, path, post_id, post_type, slug_to_match --
 						// -- OR -- fcn to process all URLs/slugs as big patch, returning revised array of repeater row values and post ids
-						
+
 						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
 						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
 						$base_slug = ""; // init
 						if ( $post_type == "event" ) {
-							$base_slug = substr($slug, 0, -11);							
+							$base_slug = substr($slug, 0, -11);
 							if ( $base_slug == $slug_to_match ) {
 								$post_info .= " // <strong>".$base_slug."</strong>";
 								// Add this to URLs to target *instead of* matched_posts -- WIP...
@@ -2144,7 +2144,7 @@ function update_snippet_logic ( $atts = array() ) {
 								$post_info .= " // ".$base_slug;
 							}
 						}
-					
+
 						// Is this an attached instance of a recurring event?
 						$recurrence_id = get_post_meta( $p_id, '_recurrence_id', true );
 						if ( $recurrence_id ) {
@@ -2159,45 +2159,45 @@ function update_snippet_logic ( $atts = array() ) {
 						}
 						$post_info .= "<br />";
 						//$key_ts_info .= $post_info;
-						$slug_to_match = $base_slug;						
-					}	
+						$slug_to_match = $base_slug;
+					}
 				}
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				$key_ts_info .= count($matched_post_removals)." matched_post_removals<br />";
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
 				if ( count($wildcard_urls) > 0 ) {
-					
+
 					if ( $reverse == "true" ) { $update_key = 'exclude_by_url';  } else { $update_key = 'target_by_url'; }
-					
+
 					// Run the update
 					$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				$key_ts_info .= "<hr />";
-				
+
 				// Save the matched posts to the 'cs_post_ids' snippet field -- this is largely for backup
 				//???
-				
+
 				// Also save those same matched_posts/updated_field_value to the target_by_post field -- this field determines actual snippet display
 				$key_ts_info .= "<br /><strong>Preparing for secondary snippet updates...</strong><br /><br />";
-				
+
 				// Update field with revised value based on new and existing values for field
 				if ( $reverse == "true" ) { $update_key = 'exclude_by_post';  } else { $update_key = 'target_by_post'; }
 				$update_args = array( 'post_id' => $snippet_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'arr_removals' => $matched_post_removals, 'return' => 'info', 'field_type' => 'relationship' );
 				$key_ts_info .= sdg_update_custom_field( $update_args );
-				
+
 				//
 				$sidebar_id = get_post_meta( $snippet_id, 'sidebar_id', true );
 				// Is this a Custom Sidebar? If so, update other snippets accordingly
 				if ( count($matched_posts) > 0 && strpos($sidebar_id, 'cs-') !== false ) {
-				
+
 					// Update other snippets to prevent display of these cs_post_ids
 					// Update matching snippets with arr_ids...
-					
+
 					// TODO: figure out how to edit widget logic for remaining widgets (not snippets) to add cs- posts to list of exclusions
-					// 
-	
+					//
+
 					// WIP 231113
 					$key_ts_info .= "<br /><strong>Preparing for tertiary snippet updates...</strong><br /><br />";
 					// add cs_posts_ids to widgets that are set to snippet_display == notselected
@@ -2249,11 +2249,11 @@ function update_snippet_logic ( $atts = array() ) {
 					if ( $snippets ) {
 						// This is tmp disabled because it resulted in way too many posts in the target_by_post field
 						// TODO/wip: figure out how to search for patterns, whether setting exclusions via wildcard URLs or taxonomies
-						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";						
+						$key_ts_info .= "Found ".count($snippets)." snippets eligible for tertiary updates based on CS data<br /><hr /><br />";
 						//$key_ts_info .= "=> <pre>".print_r($snippets, true)."</pre>";
 						//$key_ts_info .= "Found ".count($snippets)." snippets for args: ";
 						//$key_ts_info .= "=> <pre>".print_r($wp_args, true)."</pre>";
-						
+
 						foreach ( $snippets as $i => $snip_id ) {
 							$snippet_display = get_field('snippet_display', $snip_id, false);
 							$snip_sidebar_id = get_field('sidebar_id', $snip_id, false);
@@ -2268,16 +2268,16 @@ function update_snippet_logic ( $atts = array() ) {
 							$update_args = array( 'post_id' => $snip_id, 'key' => $update_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
 							//$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
-							
+
 							$key_ts_info .= "<br />";
 						}
-						
+
 					}
-					
+
 				}
-					
+
 			} else if ( $key == 'widget_logic_target_by_url' || $key == 'target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'exclude_by_url' || $key == 'target_by_post' || $key == 'exclude_by_post' ) {
-				
+
 				// Init arrays
 				$matched_posts = array();
 				$matched_post_removals = array();
@@ -2303,11 +2303,11 @@ function update_snippet_logic ( $atts = array() ) {
 				$key_ts_info .= "action: ".$action."<br />";
 				$key_ts_info .= "target_key: ".$target_key."<br />";
 				$key_ts_info .= "repeater_key: ".$repeater_key."<br />";
-				
+
 				//
 				// TODO: update to use fcn sdg_update_custom_field
 				$repeater_rows = get_field( $repeater_key, $snippet_id );
-				if ( empty($repeater_rows) ) { 
+				if ( empty($repeater_rows) ) {
 					$repeater_rows = array();
 					$repeater_values = array();
 				} else {
@@ -2320,7 +2320,7 @@ function update_snippet_logic ( $atts = array() ) {
 					//update_field( $repeater_key, $repeater_rows, $snippet_id );
 					//$key_ts_info .= "existing repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>";
 				}
-				
+
 				// TODO: (re-)check repeater_rows to see if updates are needed from target_by_url => target_by_post
 				//
 				// TODO/WIP: // Prep for pattern matching
@@ -2339,11 +2339,11 @@ function update_snippet_logic ( $atts = array() ) {
 					//
 					if ( is_array($condition) ) {
 						if ( isset($condition['url']) ) {
-							$url = $condition['url'];							
+							$url = $condition['url'];
 						} else {
 							$condition_info .= "condition: <pre>".print_r($condition, true)."</pre>";
 							continue;
-						}					
+						}
 					} /*else if ( gettype($condition) == "string" ) {
 						$p_id = intval($condition);
 						$condition_info .= "p_id: ".$p_id."<br />";
@@ -2357,18 +2357,18 @@ function update_snippet_logic ( $atts = array() ) {
 						} else if ( gettype($condition) == "integer" ) {
 							$tmp_post = get_post($condition);
 							if ( $tmp_post ) { $matched_post_id = $condition; }
-						}					
-					}					
+						}
+					}
 					//
-					// WIP/TODO: fold in $key == 'target_by_post' // $key == 'exclude_by_post' -- 
+					// WIP/TODO: fold in $key == 'target_by_post' // $key == 'exclude_by_post' --
 					// check posts from those relationship fields, look for patterns, remove posts and add wildcard urls to repeater fields as relevant
-					
-					
+
+
 					if ( $url ) {
-						
+
 						$condition_info .= "url: ".$url."<br />";
 						$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
-						
+
 						// Parse the url
 						$hostname = parse_url($url, PHP_URL_HOST);
 						if ( !empty($hostname) ) { $condition_info .= "&rarr; hostname: $hostname<br />"; }
@@ -2380,7 +2380,7 @@ function update_snippet_logic ( $atts = array() ) {
 							$querystring = "?".$querystring;
 							$condition_info .= "&rarr; querystring: $querystring<br />";
 						}
-						
+
 						// Does the URL contain a wildcard character? i.e. asterisk?
 						// e.g. /shop*, events/*
 						if ( strpos($url, '*') !== false ) {
@@ -2390,7 +2390,7 @@ function update_snippet_logic ( $atts = array() ) {
 						} else {
 							$wildcard = false;
 						}
-						
+
 						// TODO: eliminate redundancy -- make relativize_urls function
 						// Is this an STC absolute URL? If so, remove the first bit
 						if ( substr($url, 0, 4) == "http" ) {
@@ -2410,7 +2410,7 @@ function update_snippet_logic ( $atts = array() ) {
 							}
 						}
 						//
-						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+						$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/";
 						if ( strpos($url, "/sermons/") !== false || strpos($url, "/sermon/") !== false ) {
 							$post_type = "sermon";
 							// If url contains /sermon/ instead of /sermons/, then update it -- UNTESTED 231228
@@ -2441,7 +2441,7 @@ function update_snippet_logic ( $atts = array() ) {
 						} else {
 							$condition_info .= "path: $path<br />";
 							//$condition_info .= "url: $url<br />";
-						
+
 						}
 						// Look for matching post
 						if ( $wildcard == false ) {
@@ -2466,20 +2466,20 @@ function update_snippet_logic ( $atts = array() ) {
 									//$condition_info .= "get_page_by_path with p_type: $p_type; path: $p_type/$slug<br />";
 									//$matched_post = get_page_by_path($p_type."/".$slug, OBJECT, $p_type);
 									//if ( $matched_post ) { break; } // if post was matched, break out of loop and move on
-								}								
+								}
 							}
 							if ( $matched_post ) { $matched_post_id = $matched_post->ID; }
 						} else {
 							$condition_info .= "wildcard url => no attempt made to match post<br />";
 						}
-						
+
 					}
-					
+
 					//
 					if ( $matched_post_id ) {
-					
+
 						$condition_info .= "&rarr; matching post found with id: $matched_post_id<br />";
-						
+
 						// WIP pattern matching
 						$matched_post = get_post( $matched_post_id );
 						$slug = $matched_post->post_name;
@@ -2487,13 +2487,13 @@ function update_snippet_logic ( $atts = array() ) {
 						//
 						//if ( $post_status != "publish" ) { $condition_info .= " <em>*** ".$post_status." ***</em>"; }
 						$condition_info .= "&rarr; &rarr; slug: ".$slug;
-						
+
 						// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 						// TODO: expand beyond event posts? where else might url/slug patterns be found...?
 						// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
 						$base_slug = ""; // init
 						if ( $post_type == "event" ) {
-							$base_slug = substr($slug, 0, -11);							
+							$base_slug = substr($slug, 0, -11);
 							if ( $base_slug == $slug_to_match ) {
 								$condition_info .= "&rarr; &rarr; base_slug: <strong>".$base_slug."</strong>";
 								// Add this to URLs to target *instead of* matched_posts -- WIP...
@@ -2509,18 +2509,18 @@ function update_snippet_logic ( $atts = array() ) {
 								$condition_info .= "&rarr; &rarr; base_slug: ".$base_slug;
 							}
 						}
-						
+
 						$matched_posts[] = $matched_post_id;
 						//
 						if ( $url ) {
 							$condition_info .= "&rarr; remove from repeater_rows array: $url<br />";
 							$repeater_removals[] = $url;
 						}
-						
+
 						$slug_to_match = $base_slug;
-						
+
 					} else {
-					
+
 						$condition_info .= "&rarr; NO matching post found<br />";
 						if ( $url ) {
 							$tmp_urls = array_column($repeater_rows, 'url');
@@ -2534,47 +2534,47 @@ function update_snippet_logic ( $atts = array() ) {
 								$condition_info .= "&rarr; No match_key &rarr; Added url '".$url."' to repeater_additions array<br />";
 							}
 						}
-						
+
 					}
 					$condition_info .= "---<br />";
 					//
 					$key_ts_info .= $condition_info;
-					
+
 				} // END foreach $conditions
-				
+
 				/*
 				// WIP 231130
 				$matched_posts = array_unique($matched_posts);
 				$key_ts_info .= count($matched_posts)." matched_posts<br />";
 				$key_ts_info .= count($matched_post_removals)." matched_post_removals<br />";
 				$key_ts_info .= count($wildcard_urls)." wildcard_urls<br />";
-				if ( count($wildcard_urls) > 0 ) {				
+				if ( count($wildcard_urls) > 0 ) {
 					// Run the update
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_url', 'arr_additions' => $wildcard_urls, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 				}
 				*/
 				$key_ts_info .= "<hr />";
-				
+
 				$key_ts_info .= count($matched_posts)." matched_posts; ";
 				$key_ts_info .= count($matched_post_removals)." matched_post_removals; ";
 				$key_ts_info .= count($repeater_additions)." repeater_additions; ";
 				$key_ts_info .= count($repeater_removals)." repeater_removals<br /><br />";
-				
+
 				// Save the matched posts to the snippet field
 				if ( $matched_posts ) {
 					$update_args = array( 'post_id' => $snippet_id, 'key' => $target_key, 'arr_additions' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
 					$key_ts_info .= "update_args: <pre>".print_r($update_args, true)."</pre>";
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-					
+
 					// WIP Update the original $key field to clear it out, having xferred those values to the target_key field
 					if ( $reverse == "true" && ( $key == 'target_by_post' || $key == 'exclude_by_post' )  ) {
 						$update_args = array( 'post_id' => $snippet_id, 'key' => $key, 'arr_removals' => $matched_posts, 'return' => 'info', 'field_type' => 'relationship', 'verbose' => $verbose ); // , 'arr_removals' => $matched_post_removals
 						$key_ts_info .= "REVERSE update_args: <pre>".print_r($update_args, true)."</pre>";
 						$key_ts_info .= sdg_update_custom_field( $update_args );
 					}
-				}				
-				
+				}
+
 				// Update the associated repeater field as needed
 				if ( $repeater_additions || $repeater_removals ) {
 					$update_args = array( 'post_id' => $snippet_id, 'key' => $repeater_key, 'arr_additions' => $repeater_additions, 'arr_removals' => $repeater_removals, 'return' => 'info', 'field_type' => 'repeater', 'repeater_field' => 'url', 'verbose' => $verbose );
@@ -2587,12 +2587,12 @@ function update_snippet_logic ( $atts = array() ) {
 						$key_ts_info .= sdg_update_custom_field( $update_args );
 					}
 				}
-				
+
 			} else if ( $key == 'target_by_post_type' || $key == 'target_by_taxonomy_archive' || $key == 'widget_logic_custom_post_types_taxonomies' ) {
-			
+
 				// If this is the widget_logic version of the field, update our new target_by_post_type field
 				if ( $key == 'widget_logic_custom_post_types_taxonomies' ) {
-				
+
 					$key_ts_info .= "conditions: <pre>".print_r($conditions, true)."</pre>";
 					//
 					$cpt_conditions = array();
@@ -2601,7 +2601,7 @@ function update_snippet_logic ( $atts = array() ) {
 					$updated_cpt_conditions = array();
 					$updated_cpt_archive_conditions = array();
 					$updated_tax_conditions = array();
-					
+
 					foreach ( $conditions as $condition => $value ) {
 						$key_ts_info .= "condition: $condition => $value<br />";
 						if ( strpos($condition, 'is_tax') !== false ) {
@@ -2618,70 +2618,70 @@ function update_snippet_logic ( $atts = array() ) {
 							$cpt_conditions[] = $condition;
 						} else {
 							$key_ts_info .= "uncategorized condition: $condition [$value]<br />";
-						}			
+						}
 					}
 					$key_ts_info .= "tax_conditions: ".print_r($tax_conditions, true)."<br />";
 					$key_ts_info .= "cpt_archive_conditions: ".print_r($cpt_archive_conditions, true)."<br />";
 					$key_ts_info .= "cpt_conditions: ".print_r($cpt_conditions, true)."<br />";
-					
+
 					// CPT conditions
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => $cpt_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
-					
+
 					// CPT Archive conditions
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type_archive', 'arr_additions' => $cpt_archive_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
-					
+
 					// Taxonomy Archive Conditions
-					// Update field with revised value based on new and existing values for field				
+					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_taxonomy_archive', 'arr_additions' => $tax_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
 					$key_ts_info .= "<hr />";
 				}
-				
+
 			} else if ( $key == 'target_by_taxonomy' || $key == 'widget_logic_taxonomy' ) {
-			
+
 				//
-				if ( $conditions ) { $key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; } // tax_pairs => conditions			
+				if ( $conditions ) { $key_ts_info .= "tax_pairs => <pre>".print_r($conditions, true)."</pre>"; } // tax_pairs => conditions
 				// ... WIP ...
-					
+
 				// WIP -- TODO: use fcns copied from WidgetContext customizations to split pairs into array and compare/merge etc
 				//$target_taxonomies = get_field($key, $snippet_id, false);
-				
-			
+
+
 			} else if ( $key == 'target_by_location' || $key == 'widget_logic_location' ) {
-			
+
 				// If this is the widget_logic version of the field, update our new target_by_post_type field (???)
 				if ( $key == 'widget_logic_location' ) {
-				
+
 					$wll_conditions = array();
 					$updated_conditions = array();
-					
+
 					foreach ( $conditions as $condition => $value ) {
 						// TODO: if widget_logic condition is "is_single" => save instead as target_by_post_type = "post" // WIP 231115
 						if ( $condition == "is_single" ) {
 							$key_ts_info .= "special case: is_single<br />";
-							
-							// Update field with revised value based on new and existing values for field				
+
+							// Update field with revised value based on new and existing values for field
 							$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_post_type', 'arr_additions' => array( "post" ), 'return' => 'info', 'field_type' => 'array' );
 							$key_ts_info .= sdg_update_custom_field( $update_args );
-							$key_ts_info .= "<hr />";							
+							$key_ts_info .= "<hr />";
 							///
 						} else {
 							$wll_conditions[] = $condition;
-						}						
+						}
 					}
-					
+
 					// Update field with revised value based on new and existing values for field
 					$update_args = array( 'post_id' => $snippet_id, 'key' => 'target_by_location', 'arr_additions' => $wll_conditions, 'return' => 'info', 'field_type' => 'array' );
 					$key_ts_info .= sdg_update_custom_field( $update_args );
-					
+
 				}
-				
+
 				// WIP -- TODO: translate widget_logic_location to target_by_location options
 				/*
 				widget_logic e.g.:
@@ -2695,7 +2695,7 @@ function update_snippet_logic ( $atts = array() ) {
 				is_404
 				is_archive
 				is_category == All category archives
-				
+
 				// Related WP functions
 				is_archive(): bool == Archive pages include category, tag, author, date, custom post type, and custom taxonomy based archives.
 				See also
@@ -2708,9 +2708,9 @@ function update_snippet_logic ( $atts = array() ) {
 				//
 				is_singular( string|string[] $post_types = '' ): bool == Determines whether the query is for an existing single post of any post type (post, attachment, page, custom post types).
 				*/
-				
+
 			}
-			
+
 			//$meta_keys = array( 'cs_post_ids', 'widget_logic_target_by_url', 'target_by_url', 'exclude_by_url', 'widget_logic_exclude_by_url', 'target_by_post_type', 'widget_logic_custom_post_types_taxonomies', 'target_by_location', 'widget_logic_location', 'widget_logic_taxonomy', 'target_by_taxonomy' );
 			/*if ( $key == 'cs_post_ids' || $key == 'widget_logic_target_by_url' || $key == 'widget_logic_exclude_by_url' || $key == 'target_by_url' || $key == 'exclude_by_url' ) {
 				$ts_info .= $key_ts_info;
@@ -2719,22 +2719,22 @@ function update_snippet_logic ( $atts = array() ) {
 			}*/
 			$ts_info .= $key_ts_info;
 			$ts_info .= "<hr /><hr />";
-			
+
 		} else { // if ( !empty($$key) ) {
 			$ts_info .= "No meta data found for key: $key<br /><hr /><hr />";
 		}
 	}
-	
+
 	// Check to make sure snippet_priority is set
 	$snippet_priority = get_field( 'snippet_priority', $snippet_id );
 	if ( empty($snippet_priority) ) { update_field( 'snippet_priority', 2, $snippet_id ); }
-	
+
 	if ( $do_ts && !empty($ts_info) ) { $info .= $ts_info; }
-	
+
 	$info .= '</div>';
-	
+
 	return $info;
-	
+
 }
 
 // TODO/WIP: separate out widget_logic fields and convert those separately from updating/processing snippet-native fields
@@ -2753,9 +2753,9 @@ function match_url_patterns ( $args = array () ) {
 	$arr_wildcard_urls = array();
 	$arr_posts = array();
 	$slug_to_match = "";
-	
+
 	$info .= ">> match_url_patterns <<<br />";
-	
+
 	// Defaults
 	$defaults = array(
         'urls' => array(),
@@ -2766,50 +2766,50 @@ function match_url_patterns ( $args = array () ) {
 	$args = wp_parse_args( $args, $defaults );
 	//$info .= "args: <pre>".print_r($args, true)."</pre>";
 	extract( $args );
-	
+
 	///
 	// WIP 231130
 	// 1. Compile one master array of URLs & post_ids -- $array_wip -- merging content of both urls and posts arrays as transmitted in args
 	// 2. Sort the $array_wip by URL, post_title
 	// 3. Loop through, look for patterns and create wildcards urls accordingly
-	// 4. If a url can't be replaced by a wildcard, check to see if a matching post_id can be found (if there isn't one already); 
+	// 4. If a url can't be replaced by a wildcard, check to see if a matching post_id can be found (if there isn't one already);
 	// 4a. if so, add it to the posts array
 	// 4b. if not, add it to the urls array
 	// 5. Clean up urls array to add wildcards, remove urls replaced by wildcards
 	// 6. Similarly, clean up posts array to remove posts replaced by wildcards
-	
-	
+
+
 	foreach ( $arr_posts as $post_id) {
-	
+
 		$info .= "post_id: ".$post_id."<br />";
-		
+
 		// Check to verify that post_id is a valid post id
 		$post = get_post( $post_id );
 		if ( $post ) {
-						
+
 			$post_info = $x.".) ".$post->post_title." [$p_id]";
 			// Get post status -- we're only interested published posts
-			$post_status = $post->post_status; // get_post_status( $id );					
+			$post_status = $post->post_status; // get_post_status( $id );
 			$slug = $post->post_name;
 			$post_type = $post->post_type;
 			//
 			// get path, add it to $arr_urls_updated? or just $arr_urls
-			
-			
+
+
 			if ( $post_status != "publish" ) { $post_info .= " <em>*** ".$post_status." ***</em>"; }
 			$post_info .= " // ".$slug; //" // "
-			
+
 			// WIP 231117/231129/231130...
 			// TODO: separate this out into a new function -- we're doing this repeatedly
 			// args to include: slug, path, post_id, post_type, slug_to_match --
 			// -- OR -- fcn to process all URLs/slugs as big patch, returning revised array of repeater row values and post ids
-			
+
 			// Look for patterns in title/slug/event categories... -- e.g. coffee-hour-following-the-9am-eucharist-*
 			// TODO: expand beyond event posts? where else might url/slug patterns be found...?
 			// If it's an event, separate the base slug from the slug plus date -- remove trailing 11 chars
 			$base_slug = ""; // init
 			if ( $post_type == "event" ) {
-				$base_slug = substr($slug, 0, -11);							
+				$base_slug = substr($slug, 0, -11);
 				if ( $base_slug == $slug_to_match ) {
 					$post_info .= " // <strong>".$base_slug."</strong>";
 					// Add this to URLs to target *instead of* matched_posts -- WIP...
@@ -2821,7 +2821,7 @@ function match_url_patterns ( $args = array () ) {
 					$post_info .= " // ".$base_slug;
 				}
 			}
-		
+
 			// Is this an attached instance of a recurring event?
 			$recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
 			if ( $recurrence_id ) {
@@ -2838,17 +2838,17 @@ function match_url_patterns ( $args = array () ) {
 			//
 			$info .= $post_info;
 			$slug_to_match = $base_slug;
-			
+
 		} else {
 			$key_ts_info .= "NO POST FOUND for post_id: ".$post_id."<br />";
-		}		
+		}
 	}
-	
+
 	foreach ( $arr_urls as $url) {
-	
+
 		$info .= "url: ".$url."<br />";
 		$url_bk = $url; // in case we're relativizing and post is matched, so we can remove the url from the repeater array
-		
+
 		// Parse the url
 		$hostname = parse_url($url, PHP_URL_HOST);
 		if ( !empty($hostname) ) { $condition_info .= "&rarr; hostname: $hostname<br />"; }
@@ -2860,7 +2860,7 @@ function match_url_patterns ( $args = array () ) {
 			$querystring = "?".$querystring;
 			$info .= "&rarr; querystring: $querystring<br />";
 		}
-		
+
 		// Does the URL contain a wildcard character? i.e. asterisk?
 		// e.g. /shop*, events/*
 		if ( strpos($url, '*') !== false ) {
@@ -2870,7 +2870,7 @@ function match_url_patterns ( $args = array () ) {
 		} else {
 			$wildcard = false;
 		}
-		
+
 		// TODO: eliminate redundancy -- make relativize_urls function
 		// Is this an STC absolute URL? If so, remove the first bit
 		if ( substr($url, 0, 4) == "http" ) {
@@ -2885,7 +2885,7 @@ function match_url_patterns ( $args = array () ) {
 			}
 		}
 		//
-		$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/"; 
+		$date_validation_regex = "/\/[0-9]{4}\/[0-9]{1,2}\/[0-9]{1,2}/";
 		if ( substr($url, 5) == "event" || substr($url, 1, 5) == "event" ) {
 			$post_type = "event";
 		} else if ( preg_match($date_validation_regex, $url) ) {
@@ -2905,7 +2905,7 @@ function match_url_patterns ( $args = array () ) {
 		} else {
 			$info .= "path: $path<br />";
 			//$info .= "url: $url<br />";
-		
+
 		}
 		// Look for matching post
 		if ( $wildcard == false ) {
@@ -2920,20 +2920,20 @@ function match_url_patterns ( $args = array () ) {
 		} else {
 			$condition_info .= "wildcard url => no attempt made to match post<br />";
 		}
-		
-	
+
+
 		$slug_to_match = $base_slug;
-		
+
 	}
-	
+
 	///
-	
+
 	$arr_result['info'] = $info;
 	$arr_result['arr_urls'] = $arr_urls;
 	$arr_result['arr_post_ids'] = $arr_post_ids;
-	
+
 	return $arr_result;
-	
+
 }
 
 // Helper function -- TODO: move to common_functions or admin_functions?
@@ -2942,7 +2942,7 @@ function sdg_update_custom_field ( $args = array() ) {
 	$info = "";
 	$updated = false;
 	$info .= ">> sdg_update_custom_field <<<br />";
-	
+
 	// Defaults
 	$defaults = array(
 		'post_id' => null,
@@ -2961,7 +2961,7 @@ function sdg_update_custom_field ( $args = array() ) {
 	extract( $args );
 	//
 	$post_type = get_post_type($post_id);
-	
+
 	// Make sure we've got something to update
 	if ( !( $post_id && $key && ( $value || $arr_additions || $arr_removals ) ) ) {
 		$info .= "<strong>Insufficient data for update!</strong><br />";
@@ -2971,7 +2971,7 @@ function sdg_update_custom_field ( $args = array() ) {
 		// Return as directed
 		if ( $return == "bool" ) { return $updated; } else { return $info; }
 	}
-	
+
 	// Get updated value, as needed
 	if ( $arr_additions || $arr_removals ) {
 		$info .= "get updated value based on arr_additions/arr_removals<br /><br />";
@@ -2980,7 +2980,7 @@ function sdg_update_custom_field ( $args = array() ) {
 		$value = $updated['updated_value'];
 		$info .= "<hr /><br />";
 	}
-	
+
 	$info .= "about to update field '$key'<br />";
 	//$info .= "=> value: <pre>".print_r($value, true)."</pre>";
 	if ( is_array($value) ) {
@@ -2989,15 +2989,15 @@ function sdg_update_custom_field ( $args = array() ) {
 	} else {
 		$info .= "=> value: $value<br />";
 	}
-	
+
 	/*if ( $field_type == 'repeater' ) {
 		$info .= "Updated temporarily disabled for repeater fields!<br />";
 		if ( $return == "bool" ) { return $updated; } else { return $info; } // tft
 	}*/
-	
+
 	// TODO: check to see if $value is same as existing value for this field >> only attempt update if update is actually needed
 	//
-	
+
 	// Do the update
 	if ( update_field( $key, $value, $post_id ) ) {
 		$info .= "updated field: '".$key."' for post_id: $post_id ($post_type)<br />";
@@ -3006,10 +3006,10 @@ function sdg_update_custom_field ( $args = array() ) {
 		$info .= "update FAILED for field: '".$key."' for post_id: $post_id ($post_type)<br />";
 	}
 	$info .= "<hr /><br />";
-	
+
 	// Return as directed
 	if ( $return == "bool" ) { return $updated; } else { return $info; }
-						
+
 }
 
 // Helper function -- TODO: move to common_functions or admin_functions?
@@ -3020,7 +3020,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 	$info = "";
 	$updated_value = null;
 	$arr_updated = array();
-	
+
 	// Defaults
 	$defaults = array(
 		'post_id' => null,
@@ -3036,36 +3036,36 @@ function get_updated_arr_field_value ( $args = array() ) {
 	// Parse & Extract args
 	$args = wp_parse_args( $args, $defaults );
 	extract( $args );
-	
+
 	$info .= ">> get_updated_arr_field_value for key: $key <<<br />";
-	
+
 	if ( !( $post_id && $key && ( $arr_additions || $arr_removals ) ) ) {
 		$info .= "Insufficient data for update (post_id: [$post_id]; key: [$key]; arr_additions: [$arr_additions]; arr_removals: [$arr_removals]; post_id: [$post_id])<br />";
 	}
-	
+
 	$info .= "field_type: ".$field_type."<br />";
-	
+
 	// Init
 	$arr_current = array();
 	$arr_updated = array();
-	
+
 	//
 	if ( $field_type == 'repeater' ) {
-		
+
 		$info .= "repeater_field: ".$repeater_field."<br />";
-		
+
 		$repeater_rows = get_field( $key, $post_id );
 		$repeater_rows_revised = array();
-		
+
 		if ( empty($repeater_rows) ) {
-		
+
 			$repeater_rows = array();
 			$repeater_values = array();
-			
+
 		} else {
-		
+
 			if ( $verbose == 'true' ) { $info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>"; }
-			
+
 			// Sort the existing repeater_rows and save the sorted array
 			$repeater_values = array_column($repeater_rows, $repeater_field);
 			$info .= "About to sort existing repeater_rows...<br />";
@@ -3074,20 +3074,20 @@ function get_updated_arr_field_value ( $args = array() ) {
 			//update_field( $key, $repeater_rows, $post_id );
 			if ( $verbose == 'true' ) { $info .= "repeater_rows (sorted): <pre>".print_r($repeater_rows, true)."</pre>"; }
 			if ( $verbose == 'true' ) { $info .= "repeater_values: <pre>".print_r($repeater_values, true)."</pre>"; }
-		
+
 			// Remove duplicates and repeater_removals
-			
+
 			$info .= count($repeater_rows)." repeater_rows<br />"; //$key_ts_info .= "repeater_rows: <pre>".print_r($repeater_rows, true)."</pre>";//"<br />"; //<pre></pre>
 			$info .= count($repeater_values)." repeater_values<br />";
-			
+
 			// Remove duplicates?
 			//$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
-			
+
 			// Update repeater_rows array by removing removals
 			if ( !empty($arr_removals) ) {
-			
+
 				$info .= "<h4>About to clean up repeater_rows by removing arr_removals...</h4>";
-				
+
 				sort($arr_removals); //$repeater_removals = array_unique($repeater_removals, SORT_REGULAR);
 				if ( $verbose == 'true' ) { $info .= "arr_removals: <pre>".print_r($arr_removals, true)."</pre>"; }
 				foreach ( $repeater_rows as $k => $v ) {
@@ -3102,15 +3102,15 @@ function get_updated_arr_field_value ( $args = array() ) {
 						$repeater_rows_revised[] = array($repeater_field => $repeater_value); //$arr_updated[$k] = $repeater_rows[$k];
 					}
 				}
-				
+
 			} else {
-			
+
 				$info .= "arr_removals is empty >> repeater_rows_revised = repeater_rows<br />";
-				
+
 			}
-			
+
 		} // NOT empty($repeater_rows)
-		
+
 		// Add repeater_additions, making sure they're not duplicates...
 		if ( !empty($arr_additions) ) {
 			$info .= "<h4>About to add arr_additions to repeater_rows...</h4>";
@@ -3127,59 +3127,59 @@ function get_updated_arr_field_value ( $args = array() ) {
 		} else {
 			$info .= "arr_additions is empty<br />";
 		}
-		
+
 		// Sort the revised array
 		if ( !empty($repeater_rows_revised) ) {
-		
+
 			$info .= "About to sort repeater_rows_revised...<br />";
-			
+
 			// Remove duplicates
 			//$arr_updated = array_unique($arr_updated, SORT_REGULAR); // not working!
-			
+
 			// Sort by sortcol
 			$repeater_values = array_column($repeater_rows_revised, $repeater_field);
 			//$info .= "arr_updated repeater_values: <pre>".print_r($repeater_values, true)."</pre><br />";
 			array_multisort($repeater_values, SORT_ASC, $repeater_rows_revised);
-			// TODO: Fix the sorting!	
-			
+			// TODO: Fix the sorting!
+
 			$arr_updated = $repeater_rows_revised;
-		
+
 		} else {
-		
+
 			$info .= "repeater_rows_revised is empty<br />";
 			//$arr_updated = $repeater_rows;
 			if ( empty($arr_removals) ) {
 				$info .= " -- use pre-existing repeater_rows<br />"; // WIP 231228
 				$arr_updated = $repeater_rows;
 			}
-			
+
 		}
-		
+
 		if ( $verbose == 'true' ) { $info .= "repeater_rows_revised, aka arr_updated: <pre>".print_r($arr_updated, true)."</pre><br />"; }
-		
+
 	} else {
-	
+
 		// NOT a repeater field -- could be of field_type 'array', 'serialized', or 'relationship'
-	
+
 		// Get existing field value, if any
 		if ( $post_id ) {
 			$arr_current = get_field( $key, $post_id, false ); //get_field($selector, $post_id, $format_value); //$arr_current = get_post_meta( $post_id, $key, true );
 		} else {
-			
+
 		}
-		
+
 		// Unserialize as needed
 		if ( $field_type == 'serialized' && !is_array($arr_current) && strpos($arr_current, '{') !== false ) {
 			$info .= "unserialize arr_current...<br >";
 			$arr_current = unserialize($arr_current);
 			//$info .= "=> ".print_r($arr_current,true)."<br />";
 		}
-		
+
 		//if ( !is_array($arr_current) && !empty($arr_current) ) { $arr_current = json_decode($arr_current); }
-	
+
 		// Sort the existing values and save the sorted array
 		if ( is_array($arr_current) && !empty($arr_current) ) {
-	
+
 			$info .= count($arr_current)." items in arr_current array<br />";
 			$info .= "About to attempt sorting [disabled]<br />";
 			// WIP 231130
@@ -3193,30 +3193,30 @@ function get_updated_arr_field_value ( $args = array() ) {
 				//$info .= "arr_current (sorted): ".print_r($arr_current, true)."<br />"; //"<pre></pre>";
 			}
 			*/
-		
+
 		} else if ( empty($arr_current) ) {
-	
+
 			$info .= "arr_current is empty<br />";
-		
+
 		} else {
-	
+
 			$info .= "arr_current: ".print_r($arr_current, true)."<br />";
-		
+
 		}
-		
+
 		// Removals
 		if ( !empty($arr_removals) && !empty($arr_current) ) {
 			$arr_updated = array_diff($arr_current, $arr_removals);
 		} else {
 			$arr_updated = $arr_current;
 		}
-		
+
 		// Additions
 		if ( !empty($arr_additions) ) {
-	
+
 			$info .= count($arr_additions)." items in arr_additions<br />";
 			//$info .= "arr_additions: <pre>".print_r($arr_additions, true)."</pre>";
-		
+
 			// If we're dealing w/ an array of post ids, sort them by post title
 			if ( $key == "target_by_post" || $key == "exclude_by_post" ) {
 				$arr_additions_sorted = sort_post_ids_by_title($arr_additions);
@@ -3226,7 +3226,7 @@ function get_updated_arr_field_value ( $args = array() ) {
 					$info .= "arr_additions sorted (sort_post_ids_by_title)<br />";
 					//$info .= "arr_additions (sorted): ".print_r($arr_additions, true)."<br />"; //"<pre></pre>";
 				}
-			}			
+			}
 			// TODO, maybe: look for patterns in post types, categories, if there are many similar posts? (e.g. instances of recurring events)
 			// Determine whether an update is needed
 			if ( empty($arr_updated) ) {
@@ -3241,25 +3241,25 @@ function get_updated_arr_field_value ( $args = array() ) {
 				sort($arr_updated); // Sort the array -- TODO: sort instead by post title
 				$info .= count($arr_updated)." items in arr_updated array<br />";
 			}
-	
+
 		} else {
-	
+
 			$info .= "arr_additions is empty<br />"; //  ==> no update needed
-		
+
 		}
-		
+
 	}
-	
+
 	if ( $verbose == 'true' ) { $info .= "arr_updated: ".print_r($arr_updated, true)."<br />"; } //"<pre></pre>";
-	
+
 	if ( $field_type == "serialized" ) { $updated_value = serialize($arr_updated); } else { $updated_value = $arr_updated; }
-	
+
 	$arr_result['info'] = $info;
 	$arr_result['updated_value'] = $updated_value;
 	//$arr_result['arr_updated'] = $arr_updated;
-	
+
 	return $arr_result;
-	
+
 }
 
 // **************************
@@ -3267,29 +3267,29 @@ function get_updated_arr_field_value ( $args = array() ) {
 /*** Copied from mods to WidgetContext ***/
 //
 function match_terms( $rules, $post_id, $snippet_display ) {
-    
+
     // Init vars
     $arr_result = array();
     $match = null; // return true, false, or exception (??? wip)
     $ts_info = "";
     $num_matches = 0;
-    
+
 	if ( $post_id == null ) { $post_id = get_the_ID(); }
 	$ts_info .= "match_terms post_id: ".$post_id." for snippet_display: ".$snippet_display."<br />";
-	
-	if ( function_exists('sdg_log') ) { 
+
+	if ( function_exists('sdg_log') ) {
 		//sdg_log("divline2");
 		//sdg_log("function called: match_terms");
 		//sdg_log("post_id: ".$post_id);
 	}
-	
+
 	// Determine the match_type
 	if ( (strpos($rules, '||') !== false && strpos($rules, '&&') !== false )  // String includes both 'and' AND 'or' operators
 		|| preg_match("/\s*\:\s*-\s*/", $rules) != 0 // has_exclusions
 		//|| preg_match("/(\\()*(\\))/", $x) !== false // String contains something (enclosed within parens)
-		) { 
+		) {
 		$match_type = 'complex';
-	} else if ( 
+	} else if (
 		strpos($rules, '&&') !== false // If string contains "and" but no or operator, and no parens
 		|| preg_match("/match_type\s*\:\s*all/", $rules) != 0 // Match if string contains "match_type:all" (with or without whitespace around colon)
 		|| preg_match("/\s*\:\s*-\s*/", $rules) != 0 // has_exclusions
@@ -3300,64 +3300,64 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 	}
 	$ts_info .= "match_type: ".$match_type."<br />----<br />";
 	//$ts_info .= "rules (str): ".$rules."<br />";
-	
-	if ( function_exists('sdg_log') ) { 
+
+	if ( function_exists('sdg_log') ) {
 		//sdg_log("rules (str): '".$rules."'");
 		//sdg_log("match_type: ".$match_type); // ."; has_exclusions: ".$has_exclusions
 	}
-	
+
 	// Explode the rules string into an array, items separated by line breaks
 	$pairs = explode( "\n", $rules );
 	//if ( function_exists('sdg_log') ) { sdg_log("pairs: ".print_r($pairs,true)); }
-	
+
 	// Build an associative array of the given rules
 	//$arr_rules = array_map('process_tax_pair', $pairs); // why doesn't this work???
 	$arr_rules = array();
 	foreach ( $pairs as $pair ) {
 		$arr_rules[] = process_tax_pair($pair);
 	}
-	
-	if ( function_exists('sdg_log') ) { 
+
+	if ( function_exists('sdg_log') ) {
 		if ( !empty($arr_rules) ) {
 			//sdg_log"arr_rules: ".print_r($arr_rules,true));
 		} else {
 			//sdg_log"arr_rules is empty.");
 		}
 	}
-			
+
 	/*
 	// TODO: deal w/ possibility of combinations of terms -- allow e.g. has term AND term (+); has term OR term; has term NOT term (-)?
 
-	e.g. 
+	e.g.
 	match_type:complex
 	(event-categories:worship-services
 	|| event-categories:video-webcasts)
 	&&
 	sermon_topic:abraham
-	
+
 	e.g.
-	(event-categories:worship-services && category:music) 
-	|| sermon_topic:abraham 
-	
+	(event-categories:worship-services && category:music)
+	|| sermon_topic:abraham
+
 	*/
-	
+
 	$num_rules = count($arr_rules);
-	
+
 	if ( $arr_rules ) {
 		foreach ( $arr_rules as $rule ) {
-			
+
 			if ( empty($rule) ) { continue; }
-			
+
 			$taxonomy = $rule['taxonomy'];
 			$term = $rule['term'];
 			if ( isset($rule['operator']) ) { $operator = $rule['operator']; } else { $operator = null; }
 			$exclusion = $rule['exclusion'];
-			
+
 			if ( $taxonomy == 'match_type' || empty($taxonomy) ) {
 				//if ( function_exists('sdg_log') ) { sdg_log("match_type or empty >> continue"); }
 				continue; // This is not actually a taxonomy rule; move on to the next.
 			}
-			
+
 			// Check to see if taxonomy even APPLIES to the given post before worrying about whether it matches a specific term in that taxonomy
 			$arr_taxonomies = get_post_taxonomies(); // get_post_taxonomies( $post_id );
 			if ( !in_array( $taxonomy, $arr_taxonomies ) ) {
@@ -3365,17 +3365,17 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 				//$ts_info .= " => arr_taxonomies: ".print_r($arr_taxonomies,true)."<br />";
 				continue;
 			}
-			
+
 			//if ( function_exists('sdg_log') ) { sdg_log("term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion); }
 			//$ts_info .= "term: ".$term."; taxonomy: ".$taxonomy."; operator: ".$operator."; exclusion: ".$exclusion."<br />";
 			$term_info = "term: ".$term."; taxonomy: ".$taxonomy;
 			if ( $operator ) { $term_info .= "; operator: ".$operator; }
 			if ( $exclusion ) { $term_info .= "; exclusion: ".$exclusion; }
 			$term_info .= "<br />";
-			
+
 			// Handle the matching based on the number and complexity of the rules
 			if ( $num_rules == 1 ) {
-				
+
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'no' ) {
 						$ts_info .= "Match found (single rule; has_term ($term); exclusion false) >> return true<br />";
@@ -3390,7 +3390,7 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 						//return false;
 						$match = false;
 						break;
-					}                        
+					}
 				} else if ($exclusion == 'no') {
 					//$ts_info .= "NO match found (single rule; NOT has_term; exclusion false) >> return false<br />";
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (single rule; NOT has_term; exclusion false) >> return false"); }
@@ -3398,17 +3398,17 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 					$match = false;
 					break;
 				}
-				
-			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) { 
-				
+
+			} else if ( $match_type == 'any' && has_term( $term, $taxonomy, $post_id ) && $exclusion == 'no' ) {
+
 				$ts_info .= "Match found (match_type 'any'; has_term ($term); exclusion false) >> return true<br />";
 				//if ( function_exists('sdg_log') ) { sdg_log("match found (match_type 'any'; has_term; exclusion false) >> return true"); }
 				//return true; // Match any => match found (no need to check remaining rules, if any)
 				$match = true;
 				break;
-				
+
 			} else if ( $match_type == 'all' ) {
-				
+
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
 						$ts_info .= "Match found (match_type 'all'; has_term ($term); exclusion TRUE) >> return false<br />";
@@ -3431,18 +3431,18 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 					$match = false;
 					break;
 				}
-				
+
 			} else if ( $match_type == 'complex' ) {
-				
+
 				if ( has_term( $term, $taxonomy, $post_id ) ) {
 					if ( $exclusion == 'yes' ) {
 						if ( $snippet_display == "selected" ) {
 							$ts_info .= "Match found (match_type 'complex'; has_term ($term); exclusion TRUE) >> return false<br />";
-							$match = false; // post has the term but rules say it must NOT have this term	
+							$match = false; // post has the term but rules say it must NOT have this term
 						} else if ( $snippet_display == "notselected" ) {
 							$ts_info .= "Match found (match_type 'complex'; has_term ($term); exclusion TRUE; snippet_display NOTselected) >> return TRUE<br />";
 							$match = "exception"; // post has the term so it excluded from being hidden
-						}					
+						}
 						break;
 					} else {
 						$ts_info .= "Ok so far! (match_type 'complex'; has_term ($term); exclusion false) >> continue<br />";
@@ -3454,13 +3454,13 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 					//if ( function_exists('sdg_log') ) { sdg_log("NO match found (match_type 'complex'; NOT has_term; exclusion false) >> return false"); }
 					//return false; // post does not have the term and rules require it must match all
 				}
-				
+
 			}
-			
+
 			if ( $match == true ) { $ts_info .= $term_info."---<br />"; }
-			
+
 		} // end foreach $arr_rules
-		
+
 		// If we got through the entire list of rules and the post matched all the rules, return true
 		if ( $match_type == 'all' && $num_matches == count($arr_rules) ) {
 			$ts_info .= "match_type = all; num_matches [".$num_matches."] equal to count(arr_rules) [".count($arr_rules)."]<br />";
@@ -3472,36 +3472,36 @@ function match_terms( $rules, $post_id, $snippet_display ) {
 			//if ( function_exists('sdg_log') ) { sdg_log("Matched! (match_type 'complex') with at least one positive match (and no matches to excluded categories) >> return true"); }
 			//return true;
 			$match = true;
-		}		
-		
+		}
+
 	}
-	
+
 	$arr_result['match'] = $match;
 	$arr_result['info'] = $ts_info;
 	return $arr_result;
-	
+
 }
 
 //
 function process_tax_pair($rule) {
-	
+
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: process_tax_pair", $do_log );
     sdg_log( "rule: ".$rule, $do_log );
-	
+
 	$arr = array();
 
 	// If this is an empty line, i.e. doesn't actually contain a pair, then return false
 	if (strpos($rule, ':') === false) {
 		return $arr;
 	}
-	
+
 	// Remove all whitespace
 	$x = preg_replace('/\s+/', '', $rule);
-	
+
 	// Check for operator
 	if (strpos($x, '||') !== false) {
 		$arr['operator'] = 'OR';
@@ -3510,14 +3510,14 @@ function process_tax_pair($rule) {
 		$arr['operator'] = 'AND';
 		$x = str_replace('&&','',$x);
 	}
-	
+
 	// Check for minus sign to indicate EXclusion
 	if (strpos($x, ':-') !== false) {
 		$arr['exclusion'] = 'yes';
 	} else {
 		$arr['exclusion'] = 'no';
 	}
-	
+
 	$arr['taxonomy'] = trim(substr($x,0,stripos($x,":")));
 	//$arr['term'] = trim(substr($x,stripos($x,":")+1));
 	$term = trim(substr($x,stripos($x,":")+1));
@@ -3537,7 +3537,7 @@ function process_tax_pair($rule) {
 	*/
 
 	return $arr;
-	
+
 }
 
 //
@@ -3560,22 +3560,22 @@ Return
 string|null The found sidebar's ID, or null if it was not found.
 */
 function get_sidebar_id( $uid_to_match = null) {
-	
+
 	$info = "";
-	
+
 	$arr_sidebars_widgets = get_option('sidebars_widgets'); // array of sidebars and their widgets (per sidebar id, e.g. "wp_inactive_widgets", "cs-11" )
-	
+
 	// Loop through sidebars to look for match
-	
+
 	//$info .= "<h2>Sidebars/Widgets</h2>";
 	//$info .= "<pre>arr_sidebars_widgets: ".print_r($arr_sidebars_widgets,true)."</pre><hr /><hr />";
 	foreach ( $arr_sidebars_widgets as $sidebar_id => $widgets ) {
-		
+
 		// Get the registered sidebar info -- name, id, description, before_widget, etc.
 		$sidebar_name = null; // init
 		$sidebar_info = wp_get_sidebar( $sidebar_id );
 		if ( $sidebar_info ) { $sidebar_name = $sidebar_info['name']; }
-		
+
 		// Is this a Custom Sidebar?
 		if ( strpos($sidebar_id, 'cs-') !== false ) {
 			$custom_sidebar = true;
@@ -3583,24 +3583,24 @@ function get_sidebar_id( $uid_to_match = null) {
 		} else {
 			$custom_sidebar = false;
 		}
-		
+
 		$info .= "<h3>sidebar: ";
 		$info .= $sidebar_id;
 		if ( $sidebar_name ) { $info .= ' => "'.$sidebar_name.'"'; }
 		if ( $custom_sidebar ) { $info .= " [cs]"; }
 		//$info .= " => sidebar_info: <pre>".print_r($sidebar_info,true)."</pre>";
 		$info .= "</h3>";
-		
+
 		//$info .= "sidebar: ".$sidebar." => widgets: <pre>".print_r($widgets,true)."</pre><hr />";
 		//$info .= "widgets: <pre>".print_r($widgets,true)."</pre><hr />";
-		
+
 		$info .= '<div class="code">';
-		
+
 		// Loop through widgets and create corresponding snippet records
 		if ( is_array($widgets) ) {
-		
+
 			//$info .= "<h4>Widgets</h4>";
-			foreach ( $widgets as $i => $widget_uid ) {			
+			foreach ( $widgets as $i => $widget_uid ) {
 				if ( $widget_uid == $uid_to_match ) {
 					$info .= "Matching widget found in sidebar: ".$sidebar_id."<br />";
 					return $sidebar_id;
@@ -3610,7 +3610,7 @@ function get_sidebar_id( $uid_to_match = null) {
 		$info .= "&rarr; NO Matching widget found in sidebar: ".$sidebar_id." (".$sidebar_name.")<br />";
 		$info .= '</div>';
 	}
-	
+
 	//return $info;
 	return null;
 
@@ -3621,24 +3621,24 @@ add_shortcode('show_widgets_and_snippets', 'show_widgets_and_snippets');
 function show_widgets_and_snippets ( $atts = array() ) {
 
 	// TS/logging setup
-    $do_ts = devmode_active( array("sdg", "snippets") ); 
+    $do_ts = devmode_active( array("sdg", "snippets") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: show_widgets_and_snippets", $do_log );
-    
+
     $info = "";
     $ts_info = "";
-    
+
     $args = shortcode_atts( array(
 		'limit'   => 1,
 		'post_id' => null,
 		'sidebar_id' => null,
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-	
-	// Get widgets and snippets set to display	
+
+	// Get widgets and snippets set to display
 	// If no post_id has been specified, show summary of all widgets (grouped by sidebar) and snippets
 	// TODO/WIP 240115
 	//if ( $post_id === null ) { return "No post_id; "; } // tft
@@ -3647,12 +3647,12 @@ function show_widgets_and_snippets ( $atts = array() ) {
 	$cs_sidebars = get_option('cs_sidebars');
 	//
 	$info .= '<div class="code">';
-	
+
 	if ( $post_id ) {
 		$info .= "<h3>post_id: ".$post_id." -- ".get_the_title($post_id)."</h3>";
-		// Check for custom sidebars 
+		// Check for custom sidebars
 		$cs_replacements = get_post_meta( $post_id, '_cs_replacements', true );
-		if ( $cs_replacements ) { 
+		if ( $cs_replacements ) {
 			$info .= "cs_replacement: ".print_r($cs_replacements, true)."<br />";
 			$first_key = array_key_first($cs_replacements);
 			if ($first_key !== null) {
@@ -3671,7 +3671,7 @@ function show_widgets_and_snippets ( $atts = array() ) {
 		//$info .= "sidebar: ".print_r($sidebar, true)."<br />";
 		$info .= '=> "'.$sidebar['name'].'"<br />';
 	}
-	
+
 	// Get widgets
 	// -------
 	$widgets = array(); // init
@@ -3681,7 +3681,7 @@ function show_widgets_and_snippets ( $atts = array() ) {
 		$widgets = $cs_sidebars[$sidebar_id];
 	}
 	//$info .= "widgets: <pre>".print_r($widgets, true)."</pre>";
-	
+
 	// WIP --  // TODO: fix this -- not working because it's not filtering according to post_id passed to fcn, but rather according to current URL
 	/*
 	$sidebars_widgets = array( $sidebar_id => $widgets );
@@ -3727,7 +3727,7 @@ function show_widgets_and_snippets ( $atts = array() ) {
 	// Get snippets
 	// -------
 	$snippets = get_snippets ( array( 'post_id' => $post_id, 'return' => 'ids', 'sidebar_id' => $sidebar_id ) );
-	
+
 	if ( $snippets ) {
 		$info .= '<div class="code">'; // float-left" style="width: 49%;
 		$info .= "snippets:<br />";
@@ -3747,18 +3747,18 @@ function show_widgets_and_snippets ( $atts = array() ) {
 			$info .= $snippet_info;
 			$details .= $snippet_info;
 			// Check/update widget/snippet logic
-			//$details .= 
+			//$details .=
 		}
 		//$info .= "</pre>";
 		$info .= '</div>';
 	}
-	
+
 	$info .= "</div>";
-	
+
 	$info .= '<hr class="clear" />';
-	
+
 	return $info;
-	
+
 }
 
 // TODO: write fcn to to delete (inactive) html and text widgets that have been already converted — per sidebar ID
