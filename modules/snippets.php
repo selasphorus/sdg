@@ -237,29 +237,30 @@ function get_snippets ( $args = array() ) {
             if ( is_object($object) ) {
                 $object_class = get_class($object);
                 $info .= "object_class: ".$object_class."<br />";
-            }
-            //$info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
-            if ( is_tax() ) {
-                $tax = $object->taxonomy;
-                $info .= "tax: ".$tax."<br />";
-                $tax_obj = get_taxonomy($tax);
-                $tax_post_types = $tax_obj->object_type;
-                $info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
-                if ( is_array($tax_post_types) && count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
-            } else if ( is_post_type_archive() ) {
-                $info .= "is_post_type_archive: ";
-                $post_archive_title = post_type_archive_title("",false);
-                $info .= $post_archive_title."<br />";
-                if ( $object && $object->name ) {
-                    $object_name = $object->name;
+                //
+                //$info .= "get_queried_object: <pre>".print_r($object,true)."</pre>";
+                if ( is_tax() ) {
+                    $tax = $object->taxonomy;
+                    $info .= "tax: ".$tax."<br />";
+                    $tax_obj = get_taxonomy($tax);
+                    $tax_post_types = $tax_obj->object_type;
+                    $info .= "tax_post_types: ".print_r($tax_post_types,true)."<br />";
+                    if ( is_array($tax_post_types) && count($tax_post_types) == 1 ) { $post_type = $tax_post_types[0]; }
+                } else if ( is_post_type_archive() ) {
+                    $info .= "is_post_type_archive: ";
+                    $post_archive_title = post_type_archive_title("",false);
+                    $info .= $post_archive_title."<br />";
+                    if ( $object && $object->name ) {
+                        $object_name = $object->name;
+                    } else {
+                        $object_name = strtolower($post_archive_title);
+                    }
+                    $info .= "object_name: ".$object_name."<br />";
+                    $post_type = $object_name;
                 } else {
-                    $object_name = strtolower($post_archive_title);
+                    //$info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
+                    //$info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
                 }
-                $info .= "object_name: ".$object_name."<br />";
-                $post_type = $object_name;
-            } else {
-                //$info .= "get_the_archive_title: ".get_the_archive_title()."<br />";
-                //$info .= "post_type_archive_title: ".post_type_archive_title()."<br />";
             }
             // WIP
         }
