@@ -699,7 +699,9 @@ function sdg_body_class( $classes ) {
         if ( is_array($snippets) && count($snippets) > 0 ) {
             if ( !is_page_template( 'page-homepage.php' ) &&
                  !is_page_template( 'page-centered.php' ) &&
-                 !is_page_template( 'page-fullwidth.php' ) ) {
+                 !is_page_template( 'page-fullwidth.php' ) &&
+                 !is_product_category()
+                  ) {
                  $classes[] = 'snippets';
             }
             //if ( array_search('no-sidebar', $classes) == false ) { $classes[] = 'snippets'; }
