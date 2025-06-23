@@ -230,7 +230,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'exclusive' => true,
         'debug'     => false,
         'return'    => 'formatted',
-        'show_content' => true;
+        'show_content' => true,
     ], $atts );
     extract( $args );
 
@@ -595,9 +595,10 @@ function getLitDateData( array $args = [] ): array|string
     if ( $args['return'] === 'simple' || $args['return'] === 'formatted' ) {
         $output = "";
         if ( $args['return'] === 'simple' ) {
-            if ( $primaryPost ) { $output .= get_the_title($primaryPost); }
+            $output .= "return: simple => ";
+            if ( $primaryPost ) { $output .= get_the_title($primaryPost); } else { $output .= "NO primaryPost found."; }
             if ( $primaryPost && $secondaryPost ) { $output .= "<br />"; }
-            if ( $secondaryPost ) { $output .= get_the_title($secondaryPost); }
+            if ( $secondaryPost ) { $output .= get_the_title($secondaryPost); } else { $output .= "NO secondaryPost found."; }
         } else if ( $args['return'] === 'formatted' ) {
             $output = "";
             $data = formatLitDateData( $litdateData, $args );
