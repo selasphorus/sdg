@@ -291,7 +291,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
         $the_time = date_format($date,"g:i a");
         if ( function_exists('getDayTitle') ) {
             //$dayTitle = getDayTitle( array ('the_date' => $sermon_date ) );
-            $dayTitleArgs = array ('the_date' => $sermon_date, 'exclusive' => true );
+            $dayTitleArgs = array ('the_date' => $sermon_date, 'exclusive' => true, 'return' => 'formatted' );
             $the_date .= '<br />'.getDayTitle( $dayTitleArgs );
             $dayTitleArgs['formatted'] = false;
             $the_date_print .= '<br />'.getDayTitle( $dayTitleArgs );
