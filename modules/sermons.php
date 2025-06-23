@@ -293,7 +293,7 @@ function get_cpt_sermon_meta( $post_id = null ) {
             //$dayTitle = getDayTitle( array ('the_date' => $sermon_date ) );
             $dayTitleArgs = array ('the_date' => $sermon_date, 'exclusive' => true, 'return' => 'formatted' );
             $the_date .= '<br />'.getDayTitle( $dayTitleArgs );
-            $dayTitleArgs['return'] = 'title';
+            $dayTitleArgs['return'] = 'simple';
             $the_date_print .= '<br />'.getDayTitle( $dayTitleArgs );
         }
         $info .= '<div class="sermon-date calendar-date">';

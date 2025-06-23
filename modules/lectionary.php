@@ -229,6 +229,8 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'the_date'  => null, // deprecated -- to be removed as soon as changes are pushed live and plugin-templates/events-list.php has been updated on live site
         'exclusive' => true,
         'debug'     => false,
+        'return'    => 'formatted',
+        'show_content' => true;
     ], $atts );
     extract( $args );
 
@@ -272,9 +274,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If hideDayTitles is false, go ahead and get litdates for the date
     if ( !$hideDayTitles ) { // == 0
         $args[ 'date' ] = $date;
-        $args[ 'show_content' ] = true;
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
-        $args[ 'return' ] = 'formatted'; // force formatted output (instead of data array)
         //$args[ 'debug' ] = true; // tft
         //
         $ts_info .= "About to getLitDateData for date: $date<br />";
@@ -592,13 +592,18 @@ function getLitDateData( array $args = [] ): array|string
 
     // If formatted output was requested...
     // TODO: revise to include options to show/hide date; to show collect or not... etc.
-    if ( $args['return'] === 'title' && $primaryPost ) {
-        return get_the_title($primaryPost);
-    } else if ( $args['return'] === 'formatted' ) {
+    if ( $args['return'] === 'simple' || $args['return'] === 'formatted' ) {
         $output = "";
-        $data = formatLitDateData( $litdateData, $args );
-        if ( $debug ) { $output .= $info; }
-        $output .= $data;
+        if ( $args['return'] === 'simple' ) {
+            if ( $primaryPost ) { $output .= get_the_title($primaryPost); }
+            if ( $primaryPost && $secondaryPost ) { $output .= "<br />"; }
+            if ( $secondaryPost ) { $output .= get_the_title($secondaryPost); }
+        } else if ( $args['return'] === 'formatted' ) {
+            $output = "";
+            $data = formatLitDateData( $litdateData, $args );
+            if ( $debug ) { $output .= $info; }
+            $output .= $data;
+        }
         return $output;
     }
 
