@@ -44,22 +44,22 @@ function normalizeMonthToInt( string $month ): ?int
  * @return array|string Array with 'startDate' and 'endDate' or single string if same
  */
 function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
-{    
+{
     $args = wp_parse_args( $args, [
         'date'          => null,
         'scope'         => null,
         'year'          => null,
         'month'         => null,
-        //'returnSingle'  => true, // WIP return a single date, as opposed 
+        //'returnSingle'  => true, // WIP return a single date, as opposed
         'asDateObjects' => false,
     ] );
     extract( $args );
-        
+
     $now = new DateTimeImmutable();
-    
+
     if ( is_string( $scope ) ) {
         $scope_key = strtolower( str_replace( ' ', '_', $scope ) );
-        
+
         switch ( $scope_key ) {
             case 'today':
                 return $now->format( 'Y-m-d' );
@@ -179,7 +179,7 @@ function calculateEasterDate( int $year ): DateTimeImmutable
 add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
 function renderLitDatesShortcode( $atts = [] ): string
 {
-    // Extract args    
+    // Extract args
     $args = shortcode_atts( [
         'date'        => null,
         'scope'       => null,
@@ -198,7 +198,7 @@ function renderLitDatesShortcode( $atts = [] ): string
     if ( !empty( $atts['filter_types'] ) ) {
         $atts['filter_types'] = array_map( 'trim', explode( ',', strtolower( $atts['filter_types'] ) ) );
     }
-    
+
     $output = getLitDateData( $atts );
     if ( !is_string( $output ) ) { $output = print_r( $output, true ); }
     return $output;
@@ -211,7 +211,7 @@ add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
 {
     $output = '';
-    
+
     // TS/logging setup
     $ts_info = "";
     $do_ts = devmode_active( array("sdg", "lectionary") );
@@ -221,7 +221,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
 
-    // Extract args    
+    // Extract args
     $args = shortcode_atts( [
         'post_id'   => get_the_ID(),
         'series_id' => null,
@@ -231,9 +231,9 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'debug'     => false,
     ], $atts );
     extract( $args );
-    
+
     $postID = $post_id;
-    
+
     // Show or Hide Day Titles for this series/event/post?
     // +~+~+~+~+~+~+~+~+~+~+
     $hideDayTitles = 0; // default
@@ -241,12 +241,12 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( $series_id ) {  $hideDayTitles = get_post_meta( $series_id, 'hide_day_titles', true ); }
     // If there is no series-wide ban on displaying the titles, then should we display them for this particular post?
     if ( $hideDayTitles == 0 ) { $hideDayTitles = get_post_meta( $postID, 'hide_day_titles', true ); }
-    /*if ( $hideDayTitles == 1 ) { 
+    /*if ( $hideDayTitles == 1 ) {
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
         if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }*/
-    
+
     // If no date has yet been set, try to find one
     if ( $the_date ) { $date = $the_date; }
     if ( $date == null ) {
@@ -268,7 +268,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }
-    
+
     // If hideDayTitles is false, go ahead and get litdates for the date
     if ( !$hideDayTitles ) { // == 0
         $args[ 'date' ] = $date;
@@ -282,7 +282,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     } else {
         $ts_info .= "hideDayTitles is set to true for this post/event<br />";
     }
-    
+
     // Show or Hide Special Notices?
     // +~+~+~+~+~+~+~+~+~+~+
     $hideSpecialNotices = 0; // default
@@ -294,13 +294,13 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // Append Event Special Notices content, as applicable
     if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
     //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $date ); }
-    
+
     // TS Info
     $output .= "\n<!-- /getDayTitle -->\n";
     if ( $ts_info != ""&& ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-    
+
     return $output;
-    
+
 }
 
 // WIP
@@ -318,7 +318,7 @@ function getLitDateData( array $args = [] ): array|string
         'day_titles_only'  => false,
         'exclusive'        => false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
         //
-        'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted'
+        'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted' | 'title'
         'formatted'        => false,
         'show_date'        => false, // we'll only display the date if returning formatted in non-events context
         'show_meta'        => false,
@@ -342,7 +342,7 @@ function getLitDateData( array $args = [] ): array|string
     $litdateData = [];
     $startDate = null;
     $endDate = null;
-    
+
     // WIP -- translate from WP-style atts to PSR-12 var names
     $postID = $post_id;
 
@@ -350,7 +350,7 @@ function getLitDateData( array $args = [] ): array|string
     // $filter_types = ['primary','secondary'];
     $info .= "args: <pre>".print_r($args,true)."</pre>";
     //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
-    
+
     // Normalize date input
     if ( $date ) {
         $dateStr = normalizeDateInput( [ 'date' => $date ] );
@@ -361,7 +361,7 @@ function getLitDateData( array $args = [] ): array|string
             $month = substr( $dateStr, 5, 2 );
         } else {
             $info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
-        }    
+        }
     } elseif ( $scope ) {
         $dates = normalizeDateInput( [ 'scope' => $scope ] );
         if ( is_string( $dates ) ) {
@@ -372,7 +372,7 @@ function getLitDateData( array $args = [] ): array|string
             $startDate = $dates[ 'startDate' ];
             $endDate = $dates[ 'endDate' ];
             //$info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
-        }    
+        }
     } else {
         if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
         if ( empty( $month ) ) {
@@ -434,7 +434,7 @@ function getLitDateData( array $args = [] ): array|string
         ];
 
         //$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
-        
+
         $qFixed = new WP_Query( $fixedQueryArgs );
         if ( $qFixed->have_posts() ) {
             $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
@@ -475,7 +475,7 @@ function getLitDateData( array $args = [] ): array|string
         ];
 
         //$info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
-        
+
         $qVar = new WP_Query($variableQueryArgs);
         if ( $qVar->have_posts() ) {
             if ( isset( $litdatePostsByDate[ $dateStr ] ) ) {
@@ -497,14 +497,14 @@ function getLitDateData( array $args = [] ): array|string
         $defaultPriority = 999;
         $year  = substr( $dateStr, 0, 4 );
         $info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
-        
+
         foreach ( $posts as $post ) {
             $postID = $post->ID;
             $postPriority = $defaultPriority;
             $dateGroup = 'other';
             $info .= "postID: " . $postID . " (" . $post->post_title . ")<br />";
-            
-            // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden            
+
+            // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
             //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
@@ -517,7 +517,7 @@ function getLitDateData( array $args = [] ): array|string
 
             // Get category/priority
             $terms = get_the_terms( $postID, 'liturgical_date_category' );
-            
+
             // Looping through all the post's terms, set the post priority equal to the term priority with the lowest integer value
             if ( $terms && !is_wp_error( $terms ) ) {
                 foreach ( $terms as $term ) {
@@ -544,12 +544,12 @@ function getLitDateData( array $args = [] ): array|string
                 'post'     => $post,
                 'priority' => $postPriority,
             ];
-            
+
             //$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$dateGroup."<br />";
         }
 
         //$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
-        
+
         // Sort primaries by priority, lowest first
         $sorted = [];
         foreach ( $unsorted as $dateGroup => $posts ) {
@@ -558,9 +558,9 @@ function getLitDateData( array $args = [] ): array|string
                 return $a[ 'priority' ] <=> $b[ 'priority' ];
             } );
         }
-        
+
         //$info .= "sorted array of posts and priorities: <pre>".print_r($sorted,true)."</pre>"; // ok
-        
+
         // wip...
         if ( $exclusive ) {
             //$info .= "exclusive => get only the single most important matching primary post for date: ".$dateStr."<br />";
@@ -592,7 +592,9 @@ function getLitDateData( array $args = [] ): array|string
 
     // If formatted output was requested...
     // TODO: revise to include options to show/hide date; to show collect or not... etc.
-    if ( $args['return'] === 'formatted' ) {
+    if ( $args['return'] === 'title' && $primaryPost ) {
+        return get_the_title($primaryPost);
+    } else if ( $args['return'] === 'formatted' ) {
         $output = "";
         $data = formatLitDateData( $litdateData, $args );
         if ( $debug ) { $output .= $info; }
@@ -615,13 +617,13 @@ function formatLitDateData( $litDateData = [], $args = [] )
     $output = '';
     $ts_info = '';
     $modal = "";
-    
+
     if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
     if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
     //
     //if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
-    
-    foreach ( $litDateData as $dateStr => $typeGroups ) {    
+
+    foreach ( $litDateData as $dateStr => $typeGroups ) {
         $output .= "<div class='liturgical-date-block'>";
         if ( $admin || $args[ 'show_date' ] ) {
             $output .= '<a href="/events/' . date( 'Y-m-d', strtotime( $dateStr ) ) . '/" class="subtle" target="_blank">';
@@ -630,13 +632,13 @@ function formatLitDateData( $litDateData = [], $args = [] )
         }
 
         $groupsToDisplay = [ 'primary', 'secondary', 'other' ];
-        
+
         foreach ( $groupsToDisplay as $groupKey ) {
             if ( $debug ) { $output .= "groupKey: $groupKey<br />"; }
             if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
                 continue;
             }
-            
+
             if ( !empty( $typeGroups[ $groupKey ] ) ) {
                 //if ( $args[ 'show_meta' ] ) { //if ( $groupKey !== 'primary' ) {
                     //$label = $args[ 'type_labels' ][ $groupKey ] ?? ucfirst( $groupKey );
@@ -645,7 +647,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 
                 foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
                     //if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
-                    
+
                     $post = $groupItem[ 'post' ];
                     $postPriority = $groupItem[ 'priority' ];
                     $post = get_post( $post );
@@ -663,10 +665,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
                     $link = get_permalink( $post );
                     $class = $groupKey;
                     if ( $debug ) { $output .= "postID: $postID; title: $title<br />"; }
-                    
+
                     // TODO: option to return UN-linked version of title(s)?
                     if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
-                    
+
                     // Optional meta info
                     if ( $args[ 'show_meta' ] || $admin ) {
                         $terms = get_the_terms( $post, 'liturgical_date_category' );
@@ -683,24 +685,24 @@ function formatLitDateData( $litDateData = [], $args = [] )
                         $output .= ' | Priority: ' . esc_html( $postPriority );
                         $output .= '</small>';
                     }
-                    
+
                     // Edit post link, for admin use
                     if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $postID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
-                        
-                    // Content and collect?                
+
+                    // Content and collect?
                     if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
                         //$ts_info .= "about to look for content and collect<br />";
-                        
+
                         $litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
                         $collect_text = get_collect_text( $postID, $dateStr );
-        
+
                         // TODO/atcwip: if no match by postID, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
-                
+
                         // If there's something other than the title available to display, then display the popup link
                         // TODO: set width and height dynamically based on browser window dimensions
                         $width = '650';
                         $height = '450';
-                    
+
                         if ( !empty($collect_text) ) {
                             // TODO: modify title in case of Propers?
                             if ( !$admin ) { $output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">' . $title . '</a>'; }
@@ -715,9 +717,9 @@ function formatLitDateData( $litDateData = [], $args = [] )
                                 $modal .= '</div>';
                             }
                             $modal .= '</div>'; ///calendar-day-desc<br />
-        
+
                         } else {
-                            $ts_info .= "no collect_text found<br />";                            
+                            $ts_info .= "no collect_text found<br />";
                             // If no content or collect, just show the day title
                             $output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
                         }
@@ -734,10 +736,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
         $output .= $modal;
         $output .= "</div><br />";
     }
-    
+
     if ( $args[ 'debug' ] && !empty( $ts_info ) ) { $output = '<div class="debug-info">'.$ts_info.'</div>' . $output; } // info first
     //if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
-    
+
     return $output;
 }
 
@@ -754,15 +756,15 @@ function getDisplayDates ( $postID = null, $year = null )
     $arr_info = array();
     $fixedDateStr = "";
     if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
-    
+
     // Get date_type (fixed, calculated, assigned)
     $date_type = get_post_meta( $postID, 'date_type', true );
     $info .= "--- getDisplayDates ---<br />";
     $info .= "litdate post_id: ".$postID."; date_type: ".$date_type."; year: ".$year."<br />";
-         
+
     // Get calculated or fixed date for designated year
     if ( $date_type == "fixed" ) {
-        if ( !$fixedDateStr = get_field( 'fixed_date_str', $postID ) ) { 
+        if ( !$fixedDateStr = get_field( 'fixed_date_str', $postID ) ) {
             $info .= "No fixed_date_str found.<br />";
         } else {
             $info .= "fixed_date_str: ".$fixedDateStr."<br />";
@@ -773,7 +775,7 @@ function getDisplayDates ( $postID = null, $year = null )
             $formattedFixedDateStr = date("Y-m-d",strtotime($fixedDateStr));
             $info .= "formattedFixedDateStr: ".$formattedFixedDateStr."<br />";
             $dates[] = $formattedFixedDateStr;
-        }        
+        }
     } else {
         // For variable dates, get calculated dates
         // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
@@ -787,18 +789,18 @@ function getDisplayDates ( $postID = null, $year = null )
             endwhile;
         } // end if
     }
-    
+
     // get date assignments to see if there is a replacement_date to override the fixed_date_str
     // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
     if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
         while ( have_rows('date_assignments', $postID) ) : the_row();
             $dateAssigned = get_sub_field('date_assigned');
-            $dateException = get_sub_field('date_exception'); 
+            $dateException = get_sub_field('date_exception');
             $replacementDate = get_sub_field('replacement_date'); // deprecated
-            //$info .= "<!-- date_exception: ".$dateException." -->";            
+            //$info .= "<!-- date_exception: ".$dateException." -->";
             $yearAssigned = substr($dateAssigned, 0, 4);
             $info .= "dateAssigned: ".$dateAssigned." (".$yearAssigned.")<br />";
-            
+
             // Check the date assignments against our array of dates[]
             // Only bother if the assigned date fall in the applicable calendar year
             if ( $yearAssigned == $year ) {
@@ -821,7 +823,7 @@ function getDisplayDates ( $postID = null, $year = null )
             }
         endwhile;
     } // end if
-    
+
     $arr_info['info'] = $info;
     $arr_info['dates'] = $dates;
     return $arr_info;
@@ -836,13 +838,13 @@ function get_collect_text( $postID = null, $dateStr = null )
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_collect_text", $do_log );
-    
+
     // Init
     $collect = null;
     $collect_text = "";
     $propers = false;
     $ts_info = "";
-    
+
     $ts_info .= ">>> get_collect_text <<<<br />";
     $ts_info .= "postID: ".$postID."<br />";
     $ts_info .= "date_str: ".$dateStr."<br />";
@@ -851,25 +853,25 @@ function get_collect_text( $postID = null, $dateStr = null )
     // Get the month and year of the date_str for use in matching by date, as needed
     $month = date('F',$date);
     $year = date('Y',$date);
-            
+
     if ( $postID ) {
-    
+
         $collect_args = array(
             'post_type'   => 'collect',
             'post_status' => 'publish',
             //'posts_per_page' => 1,
             );
-            
+
         $litdate_title = get_the_title( $postID );
         $ts_info .= "litdate_title: ".$litdate_title."<br />";
-        
+
         if ( strpos(strtolower($litdate_title), 'sunday after pentecost') !== false ) {
-            
+
             $propers = true;
             $ts_info .= "propers...<br />";
-            
+
             // For season after pentecost, match by date
-            
+
             $collect_args['meta_query'] = array(
                 'relation' => 'AND',
                 'first_clause' => array(
@@ -882,11 +884,11 @@ function get_collect_text( $postID = null, $dateStr = null )
                     'compare'     => 'EXISTS',
                 ),
             );
-                        
+
         } else {
-        
+
             $ts_info .= "NOT propers...<br />";
-            
+
             // All other collects match by litdate
             $collect_args['meta_query'] = array(
                 'relation' => 'AND',
@@ -900,73 +902,73 @@ function get_collect_text( $postID = null, $dateStr = null )
                     'compare'     => 'EXISTS',
                 ),
             );
-            
+
         }
-        
+
         $ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
-        
+
         $collects = new WP_Query( $collect_args );
-        $collect_posts = $collects->posts;    
-        
+        $collect_posts = $collects->posts;
+
         if ( count($collect_posts) == 1 ) {
-        
+
             $ts_info .= "single matching collect post found<br />";
             $collect = $collect_posts[0];
-            
+
         } elseif ( count($collect_posts) > 1 ) {
-            
+
             $ts_info .= "multiple matching collect posts found<br />";
-            
+
             foreach ( $collect_posts as $post ) {
-                
+
                 if ( $propers ) {
-                    
+
                     $date_calc = get_post_meta( $post->ID, 'date_calc', true );
                     $ts_info .= "date_calc: ".$date_calc."<br />";
-                    
+
                     $date_calc = str_replace("Week of the Sunday closest to ","",$date_calc)." ".$year;
                     $ts_info .= "date_calc mod: ".$date_calc."<br />";
-                    
-                    $ref_date = strtotime($date_calc);                
+
+                    $ref_date = strtotime($date_calc);
                     $ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
-                    
+
                     if ( $ref_date == $date ) {
                         $ts_info .= "date matches ref_date<br />";
                         $collect = $post;
                         break;
                     }
-                    
+
                     // Get dates for Sundays preceding and following collect reference date
                     $prev_sunday = strtotime('previous sunday',$ref_date);
                     $next_sunday = strtotime('next sunday',$ref_date);
-                    
+
                     // Which Sunday is closest to the ref_date?
                     $closest_sunday = min($prev_sunday,$next_sunday);
                     $ts_info .= "closest_sunday Y-m-d: ".date('Y-m-d',$closest_sunday)."<br />";
-                    
+
                     // Does that closest Sunday date match our litdate date?
                     if ( $closest_sunday == $date ) {
                         $ts_info .= "date matches closest_sunday<br />";
                         $collect = $post;
                         break;
                     }
-                    
+
                 } else {
-                
+
                     $ts_info .= "collect post ID: ".$post->ID."<br />";
-                
+
                 }
-                
+
             }
         } else {
-            
+
             // No matching collects found
             // ...
-            
+
         }
-        
+
     }
-    
+
     if ( $collect ) {
         $ts_info .= "collect id: ".$collect->ID."<br />";
         $collect_text = $collect->post_content;
@@ -974,11 +976,11 @@ function get_collect_text( $postID = null, $dateStr = null )
             $collect_text .= "&nbsp;<em>(".$collect->post_title.")</em>";
         }
     }
-    
+
     // TS Info
     //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
     if ( $do_ts ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
-    
+
     return $collect_text;
 
 }
@@ -988,19 +990,19 @@ function get_collect_text( $postID = null, $dateStr = null )
 function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null ) {
 
     //if ( empty($calcBasis) ) { return null; }
-    
+
     $info = "";
     $basisDateStr = null;
     $basis_date = null;
-    
+
     $info .= ">>> getBasisDate <<<<br />";
-    
+
     if ( $calcBasis == 'christmas' ) {
-        $basisDateStr = $year."-12-25";          
-    } elseif ( $calcBasis == 'epiphany' ) {                
+        $basisDateStr = $year."-12-25";
+    } elseif ( $calcBasis == 'epiphany' ) {
         $basisDateStr = $year."-01-06";
     } elseif ( $calcBasisID ) {
-    
+
         // If the $calcBasis is a post_id, get the corresponding date_calculation for the given year
         // TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
         if ( have_rows('date_calculations', $calcBasisID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
@@ -1012,12 +1014,12 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
                 }
             endwhile;
         } // end if
-    
-    } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis 
-                || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis) 
-                || strtolower(date('F d Y',strtotime($calcBasis))) == strtolower($calcBasis) 
+
+    } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis
+                || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis)
+                || strtolower(date('F d Y',strtotime($calcBasis))) == strtolower($calcBasis)
         ) {
-        
+
         // WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
         // If the calc_basis date includes month/day only, then add the year
         if ( strtolower(date('F d',strtotime($calcBasis))) == $calcBasis ) {
@@ -1026,7 +1028,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
             $calcBasis = date('Y-m-d',strtotime($calcBasis));
         }
         $basisDateStr = $calcBasis;
-        
+
     } elseif ( $litdateCalcID && $calcBasisField ) {
         $basisDateStr = get_post_meta( $litdateCalcID, $calcBasisField, true);
     } else {
@@ -1047,21 +1049,21 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     if ( $basisDateStr ) {
         // Get the basis_date from the string version
         $basis_date = strtotime($basisDateStr);
-        //$basis_date_weekday = strtolower( date('l', $basis_date) );    
+        //$basis_date_weekday = strtolower( date('l', $basis_date) );
         //if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr ($basis_date_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
     }
-    
+
     return $basis_date;
 
 }
 
 function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array() ) {
-    
+
     // Init vars
     $arr_info = array();
     $calc_bases = array();
     $info = "";
-    
+
     // litdate found in $date_calc_str?
     // query titles of  litdates to see if any are found in $date_calc_str (complete)
     // hm as it currently is, it's looking for entire $date_calc_str in title -- but what we need is to look for titles within date_calc_str...
@@ -1076,12 +1078,12 @@ function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array(
         //'return_fields' => 'ids',
         '_search_title'    => $date_calc_str,
     );
-    
+
     if ( !empty($ids_to_exclude) ) { $wp_args['post__not_in'] = $ids_to_exclude; }
 
     // Run the query
     $arr_posts = new WP_Query( $wp_args );
-    
+
     $info .= "WP_Query run as follows:";
     $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
     $info .= "[".count($arr_posts->posts)."] posts found matching date_calc_str.<br />";
@@ -1100,7 +1102,7 @@ function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array(
         // if not...
         // lit basis found in $date_calc_str?
         $liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
-        
+
         // Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calc_str)
         foreach ( $liturgical_bases AS $basis => $basis_field ) {
             if (stripos($date_calc_str, $basis) !== false) {
@@ -1109,30 +1111,30 @@ function get_calc_bases_from_str ( $date_calc_str = "", $ids_to_exclude = array(
             }
         }
     }
-    
+
     //return $calc_bases;
-    
+
     $arr_info['info'] = $info;
     $arr_info['calc_bases'] = $calc_bases;
     //
-    
+
     return $arr_info;
-    
+
 }
 
 function get_calc_boias_from_str ( $date_calc_str = "" ) {
-    
+
     $calc_boias = array();
-    
-    $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season? 
-    
+
+    $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season?
+
     // can we do this without the loop -- match str against array of substr?
     foreach ( $boias AS $boia ) {
         if ( preg_match_all('/\s*'.$boia.'\s*/', $date_calc_str, $matches, PREG_OFFSET_CAPTURE) ) {
-            //$info .= "&rarr; "."boia '$boia' found in date_calc_str<br />"; // 
+            //$info .= "&rarr; "."boia '$boia' found in date_calc_str<br />"; //
             //$calc_boia = strtolower($boia);
             $calc_boias[] = strtolower($boia);
-            if ( count($matches) > 1 ) { 
+            if ( count($matches) > 1 ) {
                 $complex_formula = true;
                 //$info .= count($matches)." boia matches for '$boia'<br />";
                 //foreach ( $matches as $match ) { }
@@ -1140,17 +1142,17 @@ function get_calc_boias_from_str ( $date_calc_str = "" ) {
             //if ( $verbose == "true" ) { $info .= "boia matches: ".print_r($matches, true)."<br />"; } //<pre></pre>
         }
     }
-    
+
     return $calc_boias;
-    
+
 }
 
 function get_calc_weekdays_from_str ( $date_calc_str = "" ) {
-    
+
     $calc_weekdays = array();
-    
+
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
-    
+
     // What's the weekday for the date to be calculated?
     $calc_weekdays = array();
     foreach ( $weekdays AS $weekday ) {
@@ -1158,14 +1160,14 @@ function get_calc_weekdays_from_str ( $date_calc_str = "" ) {
             //$info .= "&rarr; "."weekday '$weekday' found in date_calc_str<br />";
             $calc_weekdays[] = strtolower($weekday);
         }
-    }    
-    
+    }
+
     return $calc_weekdays;
-    
+
 }
 
 function parse_date_str ( $args = array() ) {
-    
+
     //
     $arr_info = array();
     $arr_elements = array();
@@ -1174,7 +1176,7 @@ function parse_date_str ( $args = array() ) {
     $info = "";
     $info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
-    
+
     // Defaults
     $defaults = array(
         'year'                => null,
@@ -1205,13 +1207,13 @@ function parse_date_str ( $args = array() ) {
     $calc_weekday = null;
     $calc_interval = null;
     //
-    
+
     // Loop through all the components of the exploded date_calc_str and determine component type
-    // WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas... 
+    // WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas...
     // "after the", "before the", "in the"(?)
     // e.g. Corpus Christi: "thursday after the 1st sunday after pentecost"
     // if str contains either multiple calc_bases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
-    
+
     $calc_components = explode(" ", $date_calc_str);
     if ( $verbose == "true" ) { $info .= "[".count($calc_components)."] calc_components: ".print_r($calc_components,true)."<br />"; }
     $component_info = "";
@@ -1219,9 +1221,9 @@ function parse_date_str ( $args = array() ) {
     $previous_component_type = null;
     $i = 1;
     foreach ( $calc_components as $component ) {
-        
+
         $component = strtolower($component);
-        
+
         // First check to see if the component is a straight-up date! // date('Y-m-d', $calc_date) // (YYYY-MM-DD) //$calc_date_str = date('Y-m-d', $calc_date);
         if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
             $component_info .= $indent."component '".$component."' is a date<br />";
@@ -1282,11 +1284,11 @@ function parse_date_str ( $args = array() ) {
         $i++;
     }
     if ( $verbose == "true" ) { $info .= "component_info (FYI): <br />".$component_info."<br /><hr />"; }
-    
+
     // Determine the calc components
     // WIP!!!
     // TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
-    
+
     // 1. Liturgical calc basis (calc_basis)
     //if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
     if ( $calcBasis ) {
@@ -1300,7 +1302,7 @@ function parse_date_str ( $args = array() ) {
         } else {
             if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calcBasis<br />"; }
             $calc_bases_info = get_calc_bases_from_str($calcBasis, $ids_to_exclude);
-        }        
+        }
     } else {
         if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str date_calc_str: $date_calc_str<br />"; }
         $calc_bases_info = get_calc_bases_from_str($date_calc_str, $ids_to_exclude);
@@ -1342,23 +1344,23 @@ function parse_date_str ( $args = array() ) {
         } else {
             $calcBasis = $cb;
         }
-        
+
         // clean up the calc_basis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
         // Remove anything in parentheses or brackets
         if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calc_basis.<br />"; }
         $calcBasis = remove_bracketed_info($calcBasis,true);
         $info .= "calc_basis: $calcBasis<br />";
     }
-            
+
     if ( $calcBasis ) { $components['calc_basis'] = $calcBasis; }
     if ( $calcBasisID ) { $components['calc_basis_id'] = $calcBasisID; }
     if ( $calcBasisField ) { $components['calc_basis_field'] = $calcBasisField; }
     if ( $verbose == "true" ) { $info .= "calc_basis: $calcBasis // calc_basis_id: $calcBasisID // calc_basis_field: $calcBasisField<br />"; }
-    
+
     // 2. BOIAs
     // Does the date to be calculated fall before/after/of/in the basis_date/season?
     if ( $calcBasis ) {
-        
+
         // get the calc_str without the already determined calc_basis
         if ( $verbose == "true" ) { $info .= "About to replace calc_basis '$calcBasis' in date_calc_str '$date_calc_str'<br />"; }
         $date_calc_str = trim(str_ireplace($calcBasis,"",$date_calc_str));
@@ -1383,7 +1385,7 @@ function parse_date_str ( $args = array() ) {
         $components['calc_boia'] = $calc_boia;
         if ( $verbose == "true" ) { $info .= "calc_boia: $calc_boia<br />"; }
     }
-    
+
     // 3. Weekdays
     $calc_weekdays = get_calc_weekdays_from_str($date_calc_str);
     if ( empty($calc_weekdays) ) {
@@ -1401,26 +1403,26 @@ function parse_date_str ( $args = array() ) {
         if ( $verbose == "true" ) { $info .= "calc_weekday: $calc_weekday<br />"; }
     }
     //
-    
+
     // 4. Calc interval(s)
     // WIP 240903
     // translate words to digits etc -- move some functionality from calc_date_from_components
     // $calc_interval
     // in combo with calc_boia and calc_weekday, translate date_calc_str into something that can be handled by php strtotime
     // e.g. two sundays before >> 2 sundays previous >> previous sunday - 6 days >>> previous sunday - X weeks + 1 day
-    
+
     // phase this out? or generalize?
     // If it's a complex formula, extract the sub_formula upon which the final calc will be based
     if ( $complex_formula ) {
         if ( $verbose == "true" ) { $info .= "This is a complex_formula => extract the sub_formula<br />"; }
-        
+
         if ( strpos(strtolower($date_calc_str), 'after the ') !== false ) {
             $sub_calc_str = trim(substr( $date_calc_str, strpos($date_calc_str, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
         } else {
             $sub_calc_str = ""; // ???
         }
         $info .= "sub_calc_str: $sub_calc_str<br />";
-        
+
         $components['date_calc_str'] = $sub_calc_str;
         //if ( count($calc_weekdays) > 1 ) { $components['calc_weekday'] = $calc_weekdays[1]; }
         //
@@ -1436,7 +1438,7 @@ function parse_date_str ( $args = array() ) {
         } else {
             $super_calc_str = ""; // ???
         }
-        
+
         $components['date_calc_str'] = $super_calc_str;
         //
         $calc_weekdays = get_calc_weekdays_from_str($super_calc_str);
@@ -1459,14 +1461,14 @@ function parse_date_str ( $args = array() ) {
     $arr_info['info'] = $info;
     $arr_info['elements'] = $arr_elements;
     //
-    
+
     return $arr_info;
-    
+
 }
 
 // WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
 function calc_date_from_str( $args = array() ) {
-    
+
     // Defaults
     $defaults = array(
         'year'                => null,
@@ -1478,23 +1480,23 @@ function calc_date_from_str( $args = array() ) {
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
-    
+
     // Abort if date_calc_str or year is empty
     if ( empty($date_calc_str) || empty($year) ) { return false; }
-    
+
     // Init vars
     $arr_info = array();
     $info = "";
     $calc_date = null;
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
-    
+
     $info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
     if ( $verbose == "true" ) { $info .= "date_calc_str: ".$date_calc_str."<br />"; }
-    
+
     // Find the liturgical_date_calc post for the selected year
     // TODO: *maybe* -- phase this out in favor of simply using php easter_date function. ( easter_date(year); )
-    //$litdateCalcID = get_liturgical_date_calc_id ( $year ); // WIP    
+    //$litdateCalcID = get_liturgical_date_calc_id ( $year ); // WIP
     // (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
     // TODO: make this a separate function?
     $wp_args = array(
@@ -1510,7 +1512,7 @@ function calc_date_from_str( $args = array() ) {
         )
     );
     $query = new WP_Query( $wp_args );
-    $posts = $query->posts;    
+    $posts = $query->posts;
     if ( count($posts) > 0 ) {
         $litdateCalcID = $posts[0];
         if ( $verbose == "true" ) { $info .= "liturgical_date_calc_id: $litdateCalcID<br />"; }
@@ -1519,7 +1521,7 @@ function calc_date_from_str( $args = array() ) {
         $litdateCalcID = null;
         // TBD: abort?
     }
-    
+
     // Parse the date string
     $args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => $ids_to_exclude );
     $date_elements_info = parse_date_str ( $args );
@@ -1528,20 +1530,20 @@ function calc_date_from_str( $args = array() ) {
     $calc_date = null;
     $new_basis_date_str = null;
     //
-    
+
     // >> loop through elements foreach $elements as $element => $components
     foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
-    
+
         $info .= "element: [".$element."]<br />";
         //
         if ( isset($components['date_calc_str']) ) { $date_calc_str = $components['date_calc_str']; }
         //
-        if ( isset($components['calc_basis']) && strtolower($date_calc_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=        
+        if ( isset($components['calc_basis']) && strtolower($date_calc_str) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
             $calc_date = getBasisDate( $year, $litdateCalcID, $components['calc_basis'], $components['calc_basis_field'] );
-            $info .= "date to be calculated is same as basis_date.<br />";        
+            $info .= "date to be calculated is same as basis_date.<br />";
         } else {
             //
-            if ( $new_basis_date_str ) { 
+            if ( $new_basis_date_str ) {
                 $info .= "new_basis_date_str: ".$new_basis_date_str."<br />";
                 // TODO: str_replace "the sub_calc_str" in date_calc_str
                 $date_calc_str = str_replace("the sub_calc_str", $new_basis_date_str, $date_calc_str );
@@ -1557,7 +1559,7 @@ function calc_date_from_str( $args = array() ) {
             $components['verbose'] = $verbose;
             //
             //$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
-        
+
             $calc = calc_date_from_components( $components );
             $info .= $calc['info'];
             $calc_date = $calc['date'];
@@ -1571,12 +1573,12 @@ function calc_date_from_str( $args = array() ) {
                     $info .= '<span class="notice">'."Cannot create new_basis_date_str -- calc_date is empty</span>".'<br />';
                 } else {
                     $info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calc_date." because it's a string</span>".'<br />';
-                }                
+                }
             }
         }
     }
-    
-    
+
+
     if ( $calc_date ) {
         if ( $verbose == "true" ) { $info .= 'calc_date: '.$calc_date.'<br />'; } //'<span class="notice">'.'</span>'.
         if ( is_int($calc_date) ) {
@@ -1585,11 +1587,11 @@ function calc_date_from_str( $args = array() ) {
             $info .= '<span class="notice">'."calc_date not a valid date: ".$calc_date." (string)</span>".'<br />'; //if ( $verbose == "true" ) { }
             $calc_date = null;
         }
-    } 
-        
+    }
+
     $arr_info['calc_date'] = $calc_date;
     $arr_info['calc_info'] = $info;
-    
+
     return $arr_info;
 
 }
@@ -1597,14 +1599,14 @@ function calc_date_from_str( $args = array() ) {
 function calc_date_from_components ( $args = array() ) {
 
     // WIP
-    
+
     // Init vars
     $arr_info = array();
     $info = "";
     $calc_date = null;
     //
-    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions 
-    
+    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
+
     // Defaults
     $defaults = array(
         'year'                => null,
@@ -1624,53 +1626,53 @@ function calc_date_from_components ( $args = array() ) {
     //
     $info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
-      
+
     // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
     $basis_date = getBasisDate( $year, $litdateCalcID, $calcBasis, $calcBasisID, $calcBasisField );
     if ( $calcBasis == "epiphany" ) {
         $num_sundays_after_epiphany = get_post_meta( $litdateCalcID, 'num_sundays_after_epiphany', true);
     }
-    if ( $verbose == "true" && !empty($basis_date) ) { 
+    if ( $verbose == "true" && !empty($basis_date) ) {
         $info .= "basis_date: $basis_date (".date('Y-m-d (l)', $basis_date).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calc_basis: $calcBasis, calc_basis_id: $calcBasisID, calc_basis_field: $calcBasisField<br />";
     }
-    
+
     // Check to see if the date to be calculated is in fact the same as the base date
     if ( strtolower($date_calc_str) == $calcBasis ) { // Easter, Christmas, Ash Wednesday", &c.=
-        
+
         $calc_date = $basis_date;
         $info .= "date to be calculated is same as basis_date.<br />";
-        
+
     } else {
-        
+
         $calc_formula = null;
         $calc_interval = null;
         // TODO: deal w/ propers -- e.g. "Week of the Sunday closest to May 11"
-        
+
         // Take a closer look at the basis_date
         if ( is_numeric($basis_date) && $verbose == "true" ) { $info .= "basis_date is a timestamp.<br />"; }
-        
+
         // Check to see if the basis_date is a Sunday
         $basis_date_weekday = strtolower( date('l', $basis_date) );
         if ( $basis_date_weekday != "" && $basis_date_weekday != 'sunday' ) {
-            
-            // If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season                 
+
+            // If the basis_date is NOT a Sunday, then get the date of the first_sunday of the basis season
             $first_sunday = strtotime("next Sunday", $basis_date);
             if ( $verbose == "true" ) { $info .= "first_sunday after basis_date is ".date("Y-m-d", $first_sunday)."<br />"; }
-        
+
         } elseif ( $basis_date ) {
-            
+
             $first_sunday = $basis_date;
             if ( $verbose == "true" ) { $info .= "first_sunday is equal to basis_date.<br />"; }
-            
+
         }
-                
+
         // ** Extract components of date_calc_str & calculate date for $year
         // ** Determine the calc_interval -- number of days/weeks...
         if ( contains_numbers($date_calc_str) ) {
-            
+
             // TODO/wip: also check for "two" etc
             if ( $verbose == "true" ) { $info .= "date_calc_str contains numbers.<br />"; }
-            
+
             // Determine the calc_interval
             // WIP deal w/ multiple value possibilities for weekday, boia
             if ( !is_array($calc_weekday) && !is_array($calc_boia) ) { //&& !empty($calc_weekday) && !empty($calc_boia)
@@ -1687,25 +1689,25 @@ function calc_date_from_components ( $args = array() ) {
                 $calc_interval = trim( $calc_interval );
             }
             if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval: $calc_interval<br />"; }
-            
+
             //if ( $calc_boia == ("in" || "of") ) { // Advent, Easter, Lent
-            if ( !empty($calc_interval) && ( 
-                ( $calcBasis == "advent" && $calc_boia != "before" ) 
+            if ( !empty($calc_interval) && (
+                ( $calcBasis == "advent" && $calc_boia != "before" )
                 || ( $calcBasis == "easter" && $calc_boia == "of" )
                 || ( strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis) )
                 ) ) {
-                
+
                 $calc_interval = (int) $calc_interval - 1; // Because Advent Sunday is first Sunday of Advent, so 2nd Sunday is basis_date + 1 week, not 2
-            
+
             } elseif ( $first_sunday == $basis_date && $date_calc_str == "first sunday of"  ) {
-            
+
                 if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of && first_sunday == basis_date &#8756; calc_date = first_sunday<br />"; }
                 $calc_date = $first_sunday;
-            
+
             } elseif ( $first_sunday != $basis_date ) {
-            
+
                 if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
-                
+
                 if ( $calc_interval ) { // && is_int($calc_interval)
                     if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calc_interval - 1)<br />"; }
                     $calc_interval = $calc_interval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
@@ -1715,13 +1717,13 @@ function calc_date_from_components ( $args = array() ) {
                     $calc_date = $first_sunday;
                     if ( $verbose == "true" ) { $info .= "Set calc_date = first_sunday ($first_sunday)<br />"; }
                 }
-                
+
             }
-            
+
             if ( $verbose == "true" && !empty($calc_interval) ) { $info .= "calc_interval (final): $calc_interval<br />"; }
-            
+
         } elseif ( strpos(strtolower($date_calc_str), 'last') !== false ) {
-            
+
             // e.g. "Last Sunday after the Epiphany"; "Last Sunday before Advent"; "Last Sunday before Easter"
             //$info .= $indent."LAST<br />"; // tft
             if ( $calcBasis == "epiphany" ) {
@@ -1731,27 +1733,27 @@ function calc_date_from_components ( $args = array() ) {
             } elseif ( $date_calc_str == "last sunday before advent" ) {
                 $calc_formula = "previous Sunday"; //$calc_formula = "Sunday before";
             }
-            
+
         }
-            
+
         // If the calc_formula hasn't already been determined, build it
         if ( empty($calc_date) && $calc_formula == "" ) {
-            
+
             if ( $verbose == "true" ) { $info .= "About to build calc_formula...<br />"; }
-            
+
             if ( !empty($calc_interval) && strpos(strtolower($calc_interval), 'days') !== false ) {
-            
+
                 if ( $verbose == "true" ) { $info .= "Calc by days +/-...<br />"; }
-                
+
                 //
                 if ( $calc_interval && $calc_boia == "before" ) {
                     $calc_formula = "-".$calc_interval;
                 } elseif ( $calc_interval && $calc_boia == "after" ) {
-                    $calc_formula = "+".$calc_interval;        
+                    $calc_formula = "+".$calc_interval;
                 }
-                
+
             } else {
-            
+
                 if ( $calcBasis != "" && $calc_weekday == "sunday" ) {
 
                     if ( ($calc_interval > 1 && $calc_boia != "before") || ($calc_interval == 1 && $calc_boia == ("after" || "in") ) ) {
@@ -1760,55 +1762,55 @@ function calc_date_from_components ( $args = array() ) {
                     } elseif ( ($calc_interval > 1 && $calc_boia == "before" ) ) {
                         $calc_formula = "-".$calc_interval." weeks";
                         $basis_date = $first_sunday;
-                    } elseif ( $calc_boia == "before" ) { 
+                    } elseif ( $calc_boia == "before" ) {
                         $calc_formula = "previous Sunday";
                     } elseif ( $calc_boia == "after" ) {
                         $calc_formula = "next Sunday";
                     } elseif ( $first_sunday ) {
                         $calc_date = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
-                    } 
+                    }
 
                 } elseif ( $calcBasis != "" && $calc_boia == ( "before" || "after") ) {
-                
+
                     //$info .= $indent."setting prev/next<br />"; // tft
-                
+
                     // e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
                     if ( $calc_boia == "before" ) { $prev_next = "previous"; } else { $prev_next = "next"; } // could also use "last" instead of "previous"
                     if ( !empty($calc_weekday) ) {
                         $calc_formula = $prev_next." ".$calc_weekday; // e.g. "previous Friday";
                     } else {
                         $calc_formula = $prev_next." day"; // e.g. "previous day";
-                    }                
-                
+                    }
+
                 }
-            
+
             }
-            
+
         }
-        
+
         // If there's no $calc_formula yet, use the date_calc_str directly
         if ( empty($calc_formula) && empty($calc_date) ) {
             $info .= '<span class="notice">'."calc based directly on date_calc_str</span><br />"; // .'</span>'
             if ( $calc_boia != "after" ) {
-                $calc_formula = $date_calc_str;               
+                $calc_formula = $date_calc_str;
             } else {
                 if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calc_boia\"; calc_date: $calc_date</span><br />"; }
             }
         }
-        
+
         //$info .= $indent.">> date_calc_str: $date_calc_str<br />"; // tft
         //$info .= $indent.">> [$calc_interval] -- [$calc_weekday] -- [$calc_boia] -- [$calcBasisField]<br />"; // tft
         //$info .= $indent.'>> basis_date unformatted: "'.$basis_date.'<br />'; // tft
         //
         // calc_date not yet determined >> do the actual calculation using the formula and basis_date
         if ( empty($calc_date) ) {
-        
+
             $info .= '>> calc_formula: "'.$calc_formula.'"; basis_date: '.date('Y-m-d',$basis_date).'<br />'; // tft
-            
+
             // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
             // Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
             //
-            
+
             if ( $calc_formula != "" && $basis_date != "" ) {
                 $calc_date = strtotime("$calc_formula", $basis_date);
             } else {
@@ -1819,18 +1821,18 @@ function calc_date_from_components ( $args = array() ) {
             // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
             // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
         }
-        
-        
+
+
         // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
         if ( $calcBasis == "epiphany" ) {
-            
+
             $ash_wednesday_date = get_post_meta( $litdateCalcID, 'ash_wednesday_date', true);
-            if ( empty($ash_wednesday_date) ) { 
+            if ( empty($ash_wednesday_date) ) {
                 $info .= $indent."No ash_wednesday_date found for liturgical_date_calc_id: $litdateCalcID<br />";
                 // TBD: abort?
             }
             if ( $verbose == "true" ) { $info .= "ash_wednesday_date: ".$ash_wednesday_date."<br />"; }
-            
+
             // Make sure this supposed date in the Epiphany season doesn't run into Lent
             $info .= "There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
             if ( $calc_date > strtotime($ash_wednesday_date) ) { //if ( (int) $calc_interval > (int) $num_sundays_after_epiphany ) {
@@ -1838,24 +1840,24 @@ function calc_date_from_components ( $args = array() ) {
                 $info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calc_date).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
                 $calc_date = "N/A";
             }
-            
+
         } elseif ( $calcBasis == "lent" ) {
-        
+
             // TODO: make sure date doesn't overlap w/ holy week
-            
+
         } elseif ( $calcBasis == "pentecost" ) {
-            
+
             // Make sure this supposed date in Ordinary Time/Pentecost season isn't actually in Advent
-            // Pentecost: "This season ends on the Saturday before the First Sunday of Advent."                
+            // Pentecost: "This season ends on the Saturday before the First Sunday of Advent."
             // TODO -- figure out if this is the LAST Sunday of Pentecost?
-            
+
             $advent_sunday_date = get_post_meta( $litdateCalcID, 'advent_sunday_date', true);
             if ( $verbose == "true" ) { $info .= "advent_sunday_date: ".$advent_sunday_date."<br />"; }
-            
+
             // WIP
             //$pentecost_date = get_post_meta( $litdateCalcID, 'pentecost_date', true);
             //if ( $verbose == "true" ) { $info .= "pentecost_date: ".$pentecost_date."<br />"; }
-            
+
             //if ( $calc_date > strtotime($advent_sunday_date) ) {
             if ( $calc_date > strtotime("previous Saturday", strtotime($advent_sunday_date) ) ) {
                 //$info .= $indent.date( 'Y-m-d', strtotime("previous Saturday", strtotime($advent_sunday_date)) );
@@ -1868,13 +1870,13 @@ function calc_date_from_components ( $args = array() ) {
 
     }
     $info .= "<br />"; // <hr /><br />
-    
+
     $arr_info['date'] = $calc_date;
     $arr_info['info'] = $info;
-    
+
     return $arr_info;
-    
-    
+
+
 }
 
 
@@ -1883,7 +1885,7 @@ function calc_litdates( $atts = array() ) {
 
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !sdg_queenbee() ) { return "You are not authorized to run this operation.<br />"; }
-    
+
     $info = "";
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -1898,16 +1900,16 @@ function calc_litdates( $atts = array() ) {
         'order' => 'ASC',
         'meta_key' => null
     ), $atts );
-    
+
     // Extract
     extract( $args );
 
     // WIP
     //if ( empty($year) && get_query_var('y') ) { $year = get_query_var('y'); }
-    
+
     $info .= "&gt;&gt;&gt; calc_litdates &lt;&lt;&lt;<br />";
     $info .= "testing: $testing; verbose: $verbose; orderby: $orderby; order: $order; meta_key: $meta_key; ids: $ids; years: $years<br />";
-    
+
     // Turn years var into array, in case of multiple years
     $arr_years = array(); // init
     if ( strpos($years, ',') !== false ) {
@@ -1930,7 +1932,7 @@ function calc_litdates( $atts = array() ) {
         $arr_years[] = $years;
     }
     if ( $verbose == "true" ) { $info .= "arr_years: <pre>".print_r($arr_years,true)."</pre>"; }
-    
+
     // Set up the WP query args
     $wp_args = array(
         'post_type' => 'liturgical_date',
@@ -1939,13 +1941,13 @@ function calc_litdates( $atts = array() ) {
         'orderby' => $orderby,
         'order'    => $order,
     );
-    
+
     // If ids and/or a meta_key (for ordering) have been specified, add those to the query args
     if ( !empty($ids) && strlen($ids) > 0 ) {
         $wp_args['post__in'] = explode(', ', $ids);
         $wp_args['meta_query'] = array(
             array(
-                'key'   => "date_type", 
+                'key'   => "date_type",
                 'value' => 'variable',
             ),
         );
@@ -1953,7 +1955,7 @@ function calc_litdates( $atts = array() ) {
         $wp_args['meta_query'] = array(
             'relation' => 'AND',
             array(
-                'key'   => "date_type", 
+                'key'   => "date_type",
                 'value' => 'variable',
             ),
             array(
@@ -1963,7 +1965,7 @@ function calc_litdates( $atts = array() ) {
         );
     }
     if ( !empty($meta_key) ) { $wp_args['meta_key'] = $meta_key; }
-    
+
     // Run the query
     $arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
@@ -1972,34 +1974,34 @@ function calc_litdates( $atts = array() ) {
     if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
     $info .= "<br />";
-    
+
     // Loop through the posts and calculate the variable dates for the given year
     foreach ( $posts AS $post ) {
-        
+
         setup_postdata( $post );
         $postID = $post->ID;
         $post_title = $post->post_title;
         $slug = $post->post_name;
         $info .= '<span class="label">['.$postID.'] "'.$post_title.'"</span><br />';
         $info .= '<div class="code indent">';
-        
+
         // init
         $calc_info = "";
         $calc_date = null;
         $calc_date_str = "";
-        
+
         $changes_made = false;
         $complex_formula = false;
-        
+
         // Get date_calculation info & break it down
         $date_calc_str = strtolower(get_post_meta( $postID, 'date_calculation', true ));
-        
+
         // Is this an "Eve of" litdate? Check to see if post_title begins with "Eve of" or "The Eve of"
         if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
             if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate ($post_title)<br />"; }
             if ( empty($date_calc_str) ) {
                 if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
-                if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = str_replace("The Eve of ", "", $post_title); } else { $post_title_mod = str_replace("Eve of ", "", $post_title); }    // TODO make more efficient w/ regexp?        
+                if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = str_replace("The Eve of ", "", $post_title); } else { $post_title_mod = str_replace("Eve of ", "", $post_title); }    // TODO make more efficient w/ regexp?
                 $date_calc_str = "Day before ".$post_title_mod;
             }
         } else {
@@ -2010,9 +2012,9 @@ function calc_litdates( $atts = array() ) {
         }
 
         foreach ( $arr_years as $year ) {
-        
+
             $calc_info .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
-            
+
             if ( !empty($date_calc_str) ) {
                 $calc_info .= "date_calc_str: $date_calc_str<br />";
                 $calc_args = array( 'year' => $year, 'date_calc_str' => $date_calc_str, 'verbose' => $verbose, 'ids_to_exclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
@@ -2026,23 +2028,23 @@ function calc_litdates( $atts = array() ) {
             } else {
                 $calc_info .= "date_calc_str is empty<br />";
                 //$calc = null;
-            }   
-            
+            }
+
             if ( !empty($calc_date) && $calc_date != "N/A" ) {
                 $calc_date_str = date('Y-m-d', $calc_date);
                 //$calc_date_str = date('Ymd', $calc_date); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
                 $calc_info .= "calc_date_str: <strong>$calc_date_str</strong> (".date('l, F d, Y',$calc_date).")<br />"; // tft
             } else {
-                $calc_info .= "calc_date N/A<br />";         
+                $calc_info .= "calc_date N/A<br />";
             }
-            
+
             // 3. Save dates to ACF repeater field row for date_calculatedday_
             // DB: date_calculations >> date_calculated -- date_calculations_[#]_date_calculated
-            
+
             if ( $calc_date_str != "" ) {
-                
+
                 $newrow = true;
-                
+
                 if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
                     while ( have_rows('date_calculations', $postID) ) : the_row();
                         $dateCalculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
@@ -2055,13 +2057,13 @@ function calc_litdates( $atts = array() ) {
                         }
                     endwhile;
                 } // end if
-    
+
                 if ( $newrow == true ) {
-    
+
                     $row = array(
                         'date_calculated' => $calc_date_str
                     );
-    
+
                     $calc_info .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
                     if ( $testing != "true" ) {
                         if ( add_row('date_calculations', $row, $postID) ) { // ACF function syntax: add_row($selector, $value, [$postID])
@@ -2070,23 +2072,23 @@ function calc_litdates( $atts = array() ) {
                             $calc_info .= "ACF add row FAILED for post_id: $postID<br />";
                         }
                     }
-    
+
                 }
             } else {
                 $calc_info .= "calc_date_str is empty.<br />";
             }
-            
+
             if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
-        
+
         } // END foreach arr_years
-        
-        $info .= $calc_info;    
+
+        $info .= $calc_info;
         $info .= '</div>';
-             
+
     } // END foreach post
-    
+
     return $info;
-    
+
 }
 
 /**
@@ -2106,41 +2108,41 @@ function calc_litdates( $atts = array() ) {
 
 /**
  * Prints the box content.
- * 
+ *
  * @param WP_Post $post The object for the current post/page.
  */
 function liturgical_date_meta_box_callback( $post ) {
 
     // TODO: replace the following with a relative URL
     //echo '<h4><a href="/edit.php?post_type=XXX" target="_blank">Click to Edit XXX</a></h4>';
-    
+
     // Add a nonce field so we can check for it later.
     wp_nonce_field( 'sdg_save_meta_box_data', 'sdg_meta_box_nonce' );
-    
+
     // get all ACF date_calculations for this post // date_calculations_0_date_calculated
-    
+
     echo "testing meta_box_callback.";
-    
+
 }
 
 
 /*********** CPT: READING ***********/
 function get_cpt_reading_content( $postID = null ) {
-    
+
     // TS/logging setup
-    $do_ts = devmode_active( array("sdg", "lectionary") ); 
+    $do_ts = devmode_active( array("sdg", "lectionary") );
     $do_log = false;
     //$fcn_id = "[sdg-pt] ";
     sdg_log( "divline2", $do_log );
-    
+
     // Init vars
     $info = "";
     $ts_info = "";
     if ($postID === null) { $postID = get_the_ID(); }
-    
+
     // Get the CPT object
     $post = get_post($postID);
-    
+
     // Link to text of Bible Verses -- WIP
     $bible_book_id = get_post_meta( $postID, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $postID );
     if ( is_array($bible_book_id) ) {
@@ -2150,14 +2152,14 @@ function get_cpt_reading_content( $postID = null ) {
         $bible_corpus_id = get_post_meta( $bible_book_id, 'bible_corpus_id', true );
         $ts_info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
     }
-    
+
     $chapterverses = get_field( 'chapterverses', $postID );
-    
+
     // Get book num from book name
     $book_num = "tmp";
     // Construct BC-style ID: BBCCCVVV
     // Sub-divide chapterverses
-    // e.g. 
+    // e.g.
     // 1:1-2:3
     // 11:1-9
     // 14:(1-7)8-24
@@ -2169,7 +2171,7 @@ function get_cpt_reading_content( $postID = null ) {
     // If the string contains one or more hyphens, or more than one colon, then multiple chapters are involved
     if ( ( strpos($chapterverses,"-") && substr_count($chapterverses, ':') > 1 ) || strpos($chapterverses,"-") && substr_count($chapterverses, ':') == 0 ) {
         $ts_info .= "The string '".$chapterverses."' contains information about more than one chapter.<br />";
-        
+
         $first = substr( $chapterverses, 0, strpos($chapterverses,"-") );
         if ( substr_count($chapterverses, '-') == 1 ) {
             $last = substr( $chapterverses, strpos($chapterverses,"-")+1 );
@@ -2181,13 +2183,13 @@ function get_cpt_reading_content( $postID = null ) {
         //
     }
     // Determine all individual chapterverses contained w/in range
-    // In case of range across chapters: 
+    // In case of range across chapters:
     // 1) determine number of chapters (chapter_max - chapter_min);
     // 2) Count/fetch number of verses in chapter? Or simply construct verse IDs in loop and check for existence of each, stop when no match found?
     // $ch_max = ??
     // $ch_min = ??
     // $num_ch = $ch_max - $ch_min;
-    // 
+    //
     // If the string contains one or more commas, then multiple verses or verse ranges are present for an individual chapter
     /*if ( strpos($chapterverses,",") ) {
         $info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
@@ -2195,79 +2197,79 @@ function get_cpt_reading_content( $postID = null ) {
     }*/
     $ts_info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
     $ts_info .= "<br />";
-    
+
     //$pieces = explode("-", $chapterverses);
     //$chapter = substr( $chapterverses,0,strpos($chapterverses,":") );
     //$verses = substr( $chapterverses,strpos($chapterverses,":") );
     //$row_info .= "<!-- chapter: '$chapter'; verses: 'verses' -->"; // tft
-    
+
     //$info .= "chapter: '".$chapter."'; verses: '".$verses."'"; // tft
-    
+
     if ( $ts_info != "" && ( $do_ts === true || $do_ts == "lectionary" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-    
+
     return $info;
-    
+
 }
 
 
 /*********** CPT: PSALMS OF THE DAY ***********/
 function get_cpt_psalms_of_the_day_content() {
-    
+
 }
 
 // att service: "morning_prayer" or "evening_prayer"
 add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
 function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
-    
+
     // init vars
     $info = "";
     $day_num = null;
     $post_type = null;
-    
+
     $args = shortcode_atts( array(
         'post_id'       => get_the_ID(),
         'event_id' => null,
         'service'  => 'morning_prayer',
     ), $atts );
-    
+
     // Extract
     extract( $args );
-    
+
     $post = get_post( $postID );
     if ( $post ) { $post_type = $post->post_type; }
     if ( $post_type == 'event' ) { $event_id = $postID; }
-    
+
     if ( is_dev_site() ) {
         //$info .= "post_id: $postID; post_type: $post_type; event_id: $event_id; <br />";
     }
-    
+
     if ($event_id === null) {
-        
+
         // If no event has been designated, get the day number for today's date
         $day_num = date('j');
         $info .= "No event specified (post_type: $post_type).<br />";
-        
+
     } else {
-        
+
         // Get the event start date
         $event_post_obj   = get_post( $event_id );
-        
+
         // EM Event
-        $event_date = get_post_meta( $event_id, '_event_start_date', true ); 
-        
+        $event_date = get_post_meta( $event_id, '_event_start_date', true );
+
         // Extract day number from date @ time string
         $day_num = date( 'j', strtotime($event_date) ); // or 'd'? (w/ leading zeros)
         //$day_num = (int) substr( $event_date, strpos($event_date, " "), strpos($event_date, "@") - strpos($event_date, " ") -1 ); // tribe events version
-        
+
         if ( is_dev_site() ) {
             //$info .= "<!-- day_num: $day_num; event_date: $event_date -->"; // tft
         }
     }
-    
+
     if (! (1 <= $day_num) && ($day_num <= 31) ) { return $info; }
-    
+
     //$info .= "Psalms for Day ".$day_num.": ";
-    
+
     // Find post with day_num = event day or today's day, if no event has been selected
     $wp_args = array(
         'post_type'   => 'psalms_of_the_day',
@@ -2284,7 +2286,7 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
     $potd_id = $psalms_of_the_day->ID;
     $mp_psalms = the_field( 'mp_psalms', $potd_id );
     $ep_psalms = the_field( 'ep_psalms', $potd_id );
-    
+
     if ($service === "morning_prayer") {
         $info .= $mp_psalms; // return Psalms for Morning Prayer
     } elseif ($service === "evening_prayer") {
@@ -2292,9 +2294,9 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
     } else {
         $info .= $mp_psalms.", ".$ep_psalms; // return ALL Psalms of the Day
     }
-    
+
     return $info;
-    
+
 }
 
 
