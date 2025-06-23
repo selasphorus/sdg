@@ -596,9 +596,9 @@ function getLitDateData( array $args = [] ): array|string
         $output = "";
         if ( $args['return'] === 'simple' ) {
             $output .= "return: simple => ";
-            if ( $primaryPost ) { $output .= print_r($primaryPost, true); $output .= get_the_title($primaryPost); } else { $output .= "NO primaryPost found."; }
+            if ( $primaryPost ) { $output .= $primaryPost->post_title; }
             if ( $primaryPost && $secondaryPost ) { $output .= "<br />"; }
-            if ( $secondaryPost ) { $output .= get_the_title($secondaryPost); } else { $output .= "NO secondaryPost found."; }
+            if ( $secondaryPost ) { $output .= $secondaryPost->post_title; }
         } else if ( $args['return'] === 'formatted' ) {
             $output = "";
             $data = formatLitDateData( $litdateData, $args );
