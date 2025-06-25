@@ -507,6 +507,7 @@ function getLitDateData( array $args = [] ): array|string
             // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
+            $info .= $displayDatesInfo['info'];
             //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
                 $info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
