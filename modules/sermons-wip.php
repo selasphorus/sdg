@@ -290,8 +290,16 @@ function get_cpt_sermon_meta( $post_id = null ) {
         $the_date_print = '<strong>'.date_format($date,"l, F d, Y").'</strong>';
         $the_time = date_format($date,"g:i a");
         if ( function_exists('getDayTitle') ) {
+<<<<<<< HEAD
             $the_date .= '<br />'.getDayTitle( array ('the_date' => $sermon_date ) );
             $the_date_print .= '<br />'.getDayTitle( array ('the_date' => $sermon_date, 'formatted' => false ) );
+=======
+            //$dayTitle = getDayTitle( array ('the_date' => $sermon_date ) );
+            $dayTitleArgs = array ('the_date' => $sermon_date, 'exclusive' => true, 'return' => 'formatted' );
+            $the_date .= '<br />'.getDayTitle( $dayTitleArgs );
+            $dayTitleArgs['return'] = 'simple';
+            $the_date_print .= '<br />'.getDayTitle( $dayTitleArgs );
+>>>>>>> main
         }
         $info .= '<div class="sermon-date calendar-date">';
         $info .= '<span class="screen-only">'.$the_date."</span>";
