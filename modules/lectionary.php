@@ -785,6 +785,7 @@ function getDisplayDates ( $postID = null, $year = null )
         }
     } else {
         // For variable dates, get calculated dates
+        $info .= "Variable date => check date_calculations.<br />";
         // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
         if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
             while ( have_rows('date_calculations', $postID) ) : the_row();
@@ -799,6 +800,7 @@ function getDisplayDates ( $postID = null, $year = null )
 
     // get date assignments to see if there is a replacement_date to override the fixed_date_str
     // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
+    $info .= "=> check date_assignments.<br />";
     if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
         while ( have_rows('date_assignments', $postID) ) : the_row();
             $dateAssigned = get_sub_field('date_assigned');
@@ -829,7 +831,9 @@ function getDisplayDates ( $postID = null, $year = null )
                 }
             }
         endwhile;
-    } // end if
+    } else {
+        $info .= "=> NO date_assignments found.<br />";
+    }
 
     $arr_info['info'] = $info;
     $arr_info['dates'] = $dates;
