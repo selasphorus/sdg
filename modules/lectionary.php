@@ -832,7 +832,7 @@ function getDisplayDates ( $postID = null, $year = null )
             }
         endwhile;
     } else {
-        $info .= "=> NO date_assignments found.<br />";
+        $info .= "=> NO date_assignments found for postID: $postID.<br />";
     }
 
     $arr_info['info'] = $info;
