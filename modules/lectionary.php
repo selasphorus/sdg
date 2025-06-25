@@ -275,7 +275,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( !$hideDayTitles ) { // == 0
         $args[ 'date' ] = $date;
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
-        //$args[ 'debug' ] = true; // tft
+        $args[ 'debug' ] = $do_ts; // tft
         //
         $ts_info .= "About to getLitDateData for date: $date<br />";
         $output .= getLitDateData( $args );
@@ -602,9 +602,9 @@ function getLitDateData( array $args = [] ): array|string
         } else if ( $args['return'] === 'formatted' ) {
             $output = "";
             $data = formatLitDateData( $litdateData, $args );
-            if ( $debug ) { $output .= $info; }
             $output .= $data;
         }
+        if ( $debug ) { $output .= $info; }
         return $output;
     }
 
