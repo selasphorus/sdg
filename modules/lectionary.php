@@ -802,8 +802,10 @@ function getDisplayDates ( $postID = null, $year = null )
     // get date assignments to see if there is a replacement_date to override the fixed_date_str
     // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
     $info .= "=> check date_assignments.<br />";
-    //$date_assignments = get_field('date_assignments', $postID );
-    if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+    $date_assignments = get_field('date_assignments', $postID );
+    if ( $date_assignments ) {
+        $info .= "date_assignments: <pre>" . print_r( $date_assignments, true ) . "</pre>";
+    //if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
         while ( have_rows('date_assignments', $postID) ) : the_row();
             $dateAssigned = get_sub_field('date_assigned');
             $dateException = get_sub_field('date_exception');
