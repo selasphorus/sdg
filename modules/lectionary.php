@@ -672,7 +672,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
                     $title = get_the_title( $post );
                     $link = get_permalink( $post );
                     $class = $groupKey;
-                    $ts_info .= "postID: $postID; title: $title<br />"
+                    $ts_info .= "postID: $postID; title: $title<br />";
 
                     // TODO: option to return UN-linked version of title(s)?
                     if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
