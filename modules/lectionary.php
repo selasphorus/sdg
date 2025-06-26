@@ -803,7 +803,7 @@ function getDisplayDates ( $postID = null, $year = null )
     // TODO: run a query instead to find rows relevant by $year -- it will be more efficient than retrieving all the rows
     $info .= "=> check date_assignments.<br />";
     $date_assignments = get_field('date_assignments', $postID );
-    $info .= "date_assignments: <pre>" . print_r( $date_assignments, true ) . "</pre>";
+    if ( $postID == 6998 ) { $info .= "date_assignments: <pre>" . print_r( $date_assignments, true ) . "</pre>"; }
     if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
         while ( have_rows('date_assignments', $postID) ) : the_row();
             $dateAssigned = get_sub_field('date_assigned');
@@ -836,7 +836,7 @@ function getDisplayDates ( $postID = null, $year = null )
         endwhile;
     } else {
         $info .= "=> NO date_assignments found for postID: $postID -- or rather, have_rows('date_assignments', $postID) is FALSE.<br />";
-        $info .= "X-check via get_field: <pre>" . print_r( get_field('date_assignments', $postID ), true ) . "</pre>";
+        if ( $postID == 6998 ) { $info .= "X-check via get_field: <pre>" . print_r( get_field('date_assignments', $postID ), true ) . "</pre>"; }
         //$info .= "X-check via get_post_meta: <pre>" . print_r( get_post_meta( $postID ), true ) . "</pre>";
     }
 
