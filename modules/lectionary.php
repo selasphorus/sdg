@@ -745,7 +745,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
         $output .= "</div><br />";
     }
 
-    if ( $args[ 'debug' ] && !empty( $ts_info ) ) { $output = '<div class="debug-info">'.$ts_info.'</div>' . $output; } // info first
+    if ( $args[ 'debug' ] && !empty( $ts_info ) ) { $output = '<div class="troubleshooting">'.$ts_info.'</div>' . $output; } // info first
     //if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
 
     return $output;
