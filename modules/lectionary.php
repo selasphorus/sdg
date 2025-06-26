@@ -297,7 +297,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // TS Info
     $output .= "\n<!-- /getDayTitle -->\n";
-    if ( $ts_info != ""&& ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $output;
 
@@ -336,8 +336,8 @@ function getLitDateData( array $args = [] ): array|string
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
 
-    $info = '';
-    //$ts_info = '';
+    //$info = '';
+    $ts_info = '';
     $litdatePostsByDate = [];
     $litdateData = [];
     $startDate = null;
@@ -348,7 +348,7 @@ function getLitDateData( array $args = [] ): array|string
 
     if ( $exclusive ) { $day_titles_only = true; }
     // $filter_types = ['primary','secondary'];
-    $info .= "args: <pre>".print_r($args,true)."</pre>";
+    $ts_info .= "args: <pre>".print_r($args,true)."</pre>";
     //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
 
     // Normalize date input
@@ -360,7 +360,7 @@ function getLitDateData( array $args = [] ): array|string
             $year  = substr( $dateStr, 0, 4 );
             $month = substr( $dateStr, 5, 2 );
         } else {
-            $info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+            $ts_info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }
     } elseif ( $scope ) {
         $dates = normalizeDateInput( [ 'scope' => $scope ] );
@@ -371,7 +371,7 @@ function getLitDateData( array $args = [] ): array|string
         } else {
             $startDate = $dates[ 'startDate' ];
             $endDate = $dates[ 'endDate' ];
-            //$info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+            //$ts_info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }
     } else {
         if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
@@ -396,7 +396,7 @@ function getLitDateData( array $args = [] ): array|string
         }
     }
 
-    //$info .= "startDate: $startDate; endDate: $endDate<br />";
+    //$ts_info .= "startDate: $startDate; endDate: $endDate<br />";
 
     $start = strtotime( $startDate );
     $end   = strtotime( $endDate );
@@ -433,12 +433,12 @@ function getLitDateData( array $args = [] ): array|string
             'posts_per_page' => -1,
         ];
 
-        //$info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
+        //$ts_info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
 
         $qFixed = new WP_Query( $fixedQueryArgs );
         if ( $qFixed->have_posts() ) {
             $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
-            //if ( count($qFixed->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
+            //if ( count($qFixed->posts) != 1 ) { $ts_info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
         }
 
         // === Variable Date Matching ===
@@ -474,7 +474,7 @@ function getLitDateData( array $args = [] ): array|string
             'posts_per_page' => -1,
         ];
 
-        //$info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
+        //$ts_info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
 
         $qVar = new WP_Query($variableQueryArgs);
         if ( $qVar->have_posts() ) {
@@ -483,7 +483,7 @@ function getLitDateData( array $args = [] ): array|string
             } else {
                 $litdatePostsByDate[ $dateStr ] = $qVar->posts;
             }
-            //if ( count($qVar->posts) != 1 ) { $info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
+            //if ( count($qVar->posts) != 1 ) { $ts_info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
         }
 
         $start = strtotime( '+1 day', $start );
@@ -496,21 +496,21 @@ function getLitDateData( array $args = [] ): array|string
         $secondaryPost = null;
         $defaultPriority = 999;
         $year  = substr( $dateStr, 0, 4 );
-        $info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
+        $ts_info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
 
         foreach ( $posts as $post ) {
             $postID = $post->ID;
             $postPriority = $defaultPriority;
             $dateGroup = 'other';
-            $info .= "postID: " . $postID . " (" . $post->post_title . ")<br />";
+            $ts_info .= "postID: " . $postID . " (" . $post->post_title . ")<br />";
 
             // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
-            $info .= $displayDatesInfo['info'];
+            $ts_info .= $displayDatesInfo['info'];
             //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
-                $info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
+                $ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
                 // Therefore don't show it.
                 //$postID = null;
                 continue;
@@ -529,7 +529,7 @@ function getLitDateData( array $args = [] ): array|string
                     }
                 }
             }
-            $info .= "postPriority: ".$postPriority."<br />";
+            $ts_info .= "postPriority: ".$postPriority."<br />";
 
             // Check if litdate post has been designated as secondary
             $is_secondary = get_post_meta( $postID, 'secondary', true );
@@ -546,10 +546,10 @@ function getLitDateData( array $args = [] ): array|string
                 'priority' => $postPriority,
             ];
 
-            //$info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$dateGroup."<br />";
+            //$ts_info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$dateGroup."<br />";
         }
 
-        //$info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
+        //$ts_info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
 
         // Sort primaries by priority, lowest first
         $sorted = [];
@@ -573,7 +573,7 @@ function getLitDateData( array $args = [] ): array|string
             }
             if ( $primaryPost ) {
                 //$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-                $info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID." (" . $primaryPost['post']->post_title . ")<br />";
+                $ts_info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID." (" . $primaryPost['post']->post_title . ")<br />";
                 $litdateData[ $dateStr ][ 'primary' ][] = $primaryPost;
             } else {
                 //$info .= "No primaryPost found!<br />";
@@ -583,7 +583,7 @@ function getLitDateData( array $args = [] ): array|string
                 $secondaryPost = $sorted[ 'secondary' ][0];
             }
             if ( $secondaryPost ) {
-                $info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
+                $ts_info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
                 $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
         } else {
@@ -605,7 +605,8 @@ function getLitDateData( array $args = [] ): array|string
             $data = formatLitDateData( $litdateData, $args );
             $output .= $data;
         }
-        if ( $debug ) { $output .= $info; }
+        //if ( $debug ) { $output .= $info; }
+        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }
 
@@ -615,7 +616,7 @@ function getLitDateData( array $args = [] ): array|string
         'startDate'  => $startDate,
         'endDate'    => $endDate,
         'litdateData'=> $litdateData,
-        'info'       => $info,
+        'info'       => $ts_info,
     ];
 }
 
