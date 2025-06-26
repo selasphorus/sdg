@@ -834,6 +834,8 @@ function getDisplayDates ( $postID = null, $year = null )
         endwhile;
     } else {
         $info .= "=> NO date_assignments found for postID: $postID.<br />";
+        //$date_assignments = get_field('date_assignments', $postID );
+        $info .= "X-check via get_field: <pre>" . print_r( get_field('date_assignments', $postID ), true ) . "</pre>";
         $info .= "X-check via get_post_meta: <pre>" . print_r( get_post_meta( $postID ), true ) . "</pre>";
     }
 
