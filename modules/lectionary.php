@@ -804,11 +804,17 @@ function getDisplayDates ( $postID = null, $year = null )
     $info .= "=> check date_assignments.<br />";
     $date_assignments = get_field('date_assignments', $postID );
     if ( $postID == 6998 ) { $info .= "date_assignments: <pre>" . print_r( $date_assignments, true ) . "</pre>"; }
-    if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
-        while ( have_rows('date_assignments', $postID) ) : the_row();
-            $dateAssigned = get_sub_field('date_assigned');
-            $dateException = get_sub_field('date_exception');
-            $replacementDate = get_sub_field('replacement_date'); // deprecated
+    // have_rows/while_rows should work, but doesn't, always
+    //if ( have_rows('date_assignments', $postID) ) { // ACF fcn: https://www.advancedcustomfields.com/resources/have_rows/
+        //while ( have_rows('date_assignments', $postID) ) : the_row();
+    if ( $date_assignments ) {
+        foreach ( $date_assignments as $row ) {
+            $dateAssigned = $row['date_assigned'];
+            $dateException = $row['date_assigned'];
+            $replacementDate = $row['replacement_date'];
+            //$dateAssigned = get_sub_field('date_assigned');
+            //$dateException = get_sub_field('date_exception');
+            //$replacementDate = get_sub_field('replacement_date'); // deprecated
             //$info .= "<!-- date_exception: ".$dateException." -->";
             $yearAssigned = substr($dateAssigned, 0, 4);
             $info .= "dateAssigned: ".$dateAssigned." (".$yearAssigned.")<br />";
@@ -833,10 +839,11 @@ function getDisplayDates ( $postID = null, $year = null )
                     $dates[] = $dateAssigned;
                 }
             }
-        endwhile;
+        }
+        //endwhile;
     } else {
-        $info .= "=> NO date_assignments found for postID: $postID -- or rather, have_rows('date_assignments', $postID) is FALSE.<br />";
-        if ( $postID == 6998 ) { $info .= "X-check via get_field: <pre>" . print_r( get_field('date_assignments', $postID ), true ) . "</pre>"; }
+        $info .= "=> NO date_assignments found for postID: $postID<br />"; //-- or rather, have_rows('date_assignments', $postID) is FALSE.
+        //if ( $postID == 6998 ) { $info .= "X-check via get_field: <pre>" . print_r( get_field('date_assignments', $postID ), true ) . "</pre>"; }
         //$info .= "X-check via get_post_meta: <pre>" . print_r( get_post_meta( $postID ), true ) . "</pre>";
     }
 
