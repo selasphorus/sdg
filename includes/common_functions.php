@@ -1205,7 +1205,7 @@ function get_media_player( $args = array() ) {
                 //$cta .= '<a href="https://www.saintthomaschurch.org/product/annual-appeal-pledge/" target="_blank" class="button">Pledge to our Annual Appeal</a>&nbsp;';
                 //$cta .= '<a href="https://www.saintthomaschurch.org/product/one-time-donation/" target="_blank" class="button">Make a Donation</a>';
                 //$cta .= '<a href="https://www.saintthomaschurch.org/product/make-a-payment-on-your-annual-appeal-pledge/" target="_blank" class="button">Make an Annual Appeal Pledge Payment</a>';
-                $cta .= '<a href="https://www.saintthomaschurch.org/give/" target="_blank" class="button">Pledge to the 2025 Annual Appeal</a>&nbsp;';
+                $cta .= '<a href="https://www.saintthomaschurch.org/give/" target="_blank" class="button">Support Saint Thomas</a>&nbsp;';
                 $cta .= '<br />';
                 $cta .= '<h3>You can also text "give" to <a href="sms://+18559382085">(855) 938-2085</a></h3>';
                 //$cta .= '<h3><a href="sms://+18559382085?body=give">You can also text "give" to (855) 938-2085</a></h3>';
