@@ -700,7 +700,7 @@ function sdg_body_class( $classes ) {
             if ( !is_page_template( 'page-homepage.php' ) &&
                  !is_page_template( 'page-centered.php' ) &&
                  !is_page_template( 'page-fullwidth.php' ) &&
-                 !is_tax( 'product_cat' )()
+                 !is_tax( 'product_cat' )
                   ) {
                  $classes[] = 'snippets';
             }
