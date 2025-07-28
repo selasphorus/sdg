@@ -1020,7 +1020,6 @@ function get_collect_text( $postID = null, $dateStr = null )
 // Function(s) to calculate variable liturgical_dates
 
 function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null ) {
-
     //if ( empty($calcBasis) ) { return null; }
 
     $info = "";
@@ -1034,7 +1033,6 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     } elseif ( $calcBasis == 'epiphany' ) {
         $basisDateStr = $year."-01-06";
     } elseif ( $calcBasisID ) {
-
         // If the $calcBasis is a post_id, get the corresponding date_calculation for the given year
         // TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
         if ( have_rows('date_calculations', $calcBasisID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
@@ -1046,12 +1044,10 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
                 }
             endwhile;
         } // end if
-
     } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis
                 || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis)
                 || strtolower(date('F d Y',strtotime($calcBasis))) == strtolower($calcBasis)
         ) {
-
         // WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
         // If the calc_basis date includes month/day only, then add the year
         if ( strtolower(date('F d',strtotime($calcBasis))) == $calcBasis ) {
@@ -1060,7 +1056,6 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
             $calcBasis = date('Y-m-d',strtotime($calcBasis));
         }
         $basisDateStr = $calcBasis;
-
     } elseif ( $litdateCalcID && $calcBasisField ) {
         $basisDateStr = get_post_meta( $litdateCalcID, $calcBasisField, true);
     } else {
