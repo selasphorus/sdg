@@ -624,7 +624,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
 {
     $output = '';
     $ts_info = '';
-    $modal = "";
+    $modal = '';
+    $primaryShown = false; // track whether a primary date is being displayed, so as to properly format secondary date, if any
 
     if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
     if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
@@ -669,6 +670,9 @@ function formatLitDateData( $litDateData = [], $args = [] )
                         continue;
                     }
                     $postID = $post->ID;
+                    if ( $postID && $goupKey == "primary" ) {
+                        $primaryShown = true;
+                    }
                     $title = get_the_title( $post );
                     $link = get_permalink( $post );
                     $class = $groupKey;
@@ -732,7 +736,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
                             $output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
                         }
                     } elseif ( $groupKey == "secondary" && !$admin ) {
-                        $output .= '<br /><span class="calendar-day secondary">' . $title . '</span>';
+                        if ( $primaryShown ) { $output .= "<br />"; }
+                        $output .= '<span class="calendar-day secondary">' . $title . '</span>';
                     } else {
                         $output .= '<br />';
                         //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
