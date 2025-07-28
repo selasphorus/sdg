@@ -2048,9 +2048,10 @@ function calc_litdates( $atts = array() ) {
                     $calc_info .= $calc['calc_info'];
                 } else {
                     $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
+                    if ( $verbose == "true" ) { $info .= "$calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
                 }
             } else {
-                $calc_info .= "date_calc_str is empty<br />";
+                $calc_info .= "dateCalcStr is empty<br />";
                 //$calc = null;
             }
 
