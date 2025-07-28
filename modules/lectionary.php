@@ -824,6 +824,7 @@ function getDisplayDates ( $postID = null, $year = null )
             if ( $yearAssigned == $year ) {
                 $info .= "yearAssigned matches year<br />";
                 if ( $dateException != "default" ) { // Are we dealing with a date exception?
+                    $info .= "dateException: $dateException<br />";
                     // If this is a replacement_date assignment, then check to see if it matches the event calendar display date
                     if ( $dateAssigned != $fixedDateStr && ( $dateException == "replacement_date" || $replacementDate == "1" ) ) {
                         $info .= "replacement_date date_assigned: ".$dateAssigned." overrides fixed_date_str ".$fixedDateStr." for year ".$year."<br />";
