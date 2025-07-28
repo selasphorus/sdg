@@ -508,7 +508,7 @@ function getLitDateData( array $args = [] ): array|string
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
             $ts_info .= $displayDatesInfo['info'];
-            $ts_info .= "displayDates: <pre>".print_r($displayDates, true)."</pre>";
+            $ts_info .= "displayDates for postID: $postID/year: $year <pre>".print_r($displayDates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
                 $ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
                 // Therefore don't show it.
@@ -822,6 +822,7 @@ function getDisplayDates ( $postID = null, $year = null )
             // Check the date assignments against our array of dates[]
             // Only bother if the assigned date fall in the applicable calendar year
             if ( $yearAssigned == $year ) {
+                $info .= "yearAssigned matches year<br />";
                 if ( $dateException != "default" ) { // Are we dealing with a date exception?
                     // If this is a replacement_date assignment, then check to see if it matches the event calendar display date
                     if ( $dateAssigned != $fixedDateStr && ( $dateException == "replacement_date" || $replacementDate == "1" ) ) {
@@ -838,6 +839,8 @@ function getDisplayDates ( $postID = null, $year = null )
                     // Date is not exceptional, so add it to the array with no further checks
                     $dates[] = $dateAssigned;
                 }
+            } else {
+                $info .= "yearAssigned ($yearAssigned) does NOT match year ($year)<br />";
             }
         }
         //endwhile;
