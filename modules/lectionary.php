@@ -508,7 +508,7 @@ function getLitDateData( array $args = [] ): array|string
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
             $ts_info .= $displayDatesInfo['info'];
-            //$ts_info .= "display_dates: <pre>".print_r($display_dates, true)."</pre>";
+            $ts_info .= "displayDates: <pre>".print_r($displayDates, true)."</pre>";
             if ( !in_array($dateStr, $displayDates) ) {
                 $ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
                 // Therefore don't show it.
