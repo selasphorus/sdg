@@ -670,7 +670,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
                         continue;
                     }
                     $postID = $post->ID;
-                    if ( $postID && $goupKey == "primary" ) {
+                    if ( $postID && $groupKey == "primary" ) {
                         $primaryShown = true;
                     }
                     $title = get_the_title( $post );
