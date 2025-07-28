@@ -1494,7 +1494,7 @@ function parse_date_str ( $args = array() ) {
 }
 
 // WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
-function calc_date_from_str( $args = array() ) {
+function calcDateFromStr( $args = array() ) {
 
     // Defaults
     $defaults = array(
@@ -1517,7 +1517,7 @@ function calc_date_from_str( $args = array() ) {
     $calcDate = null;
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 
-    $info .= '<strong>&gt;&gt;&gt; calc_date_from_str &lt;&lt;&lt;</strong><br />';
+    $info .= '<strong>&gt;&gt;&gt; calcDateFromStr &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
     if ( $verbose == "true" ) { $info .= "date_calc_str: ".$dateCalcStr."<br />"; }
 
@@ -2042,12 +2042,12 @@ function calc_litdates( $atts = array() ) {
             if ( !empty($dateCalcStr) ) {
                 $calc_info .= "date_calc_str: $dateCalcStr<br />";
                 $calc_args = array( 'year' => $year, 'date_calc_str' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
-                $calc = calc_date_from_str( $calc_args ); //$calc = calc_date_from_str( $year, $dateCalcStr, $verbose );
+                $calc = calcDateFromStr( $calc_args ); //$calc = calcDateFromStr( $year, $dateCalcStr, $verbose );
                 if ( $calc ) {
                     $calcDate = $calc['calc_date'];
                     $calc_info .= $calc['calc_info'];
                 } else {
-                    $calc_info .= '<span class="error">calc_date_from_str failed</span><br />';
+                    $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
                 }
             } else {
                 $calc_info .= "date_calc_str is empty<br />";
