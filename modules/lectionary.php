@@ -810,7 +810,7 @@ function getDisplayDates ( $postID = null, $year = null )
     if ( $date_assignments ) {
         foreach ( $date_assignments as $row ) {
             $dateAssigned = $row['date_assigned'];
-            $dateException = $row['date_assigned'];
+            $dateException = $row['date_exception'];
             $replacementDate = $row['replacement_date'];
             //$dateAssigned = get_sub_field('date_assigned');
             //$dateException = get_sub_field('date_exception');
