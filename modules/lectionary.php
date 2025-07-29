@@ -1511,6 +1511,7 @@ function calcDateFromStr( $args = array() ) {
     $year = $args['year'];
     $dateCalcStr = $args['date_calc_str'];
     $idsToExclude = $args['ids_to_exclude'];
+    $verbose = $args['verbose'];
 
     // Init vars
     $arr_info = array();
