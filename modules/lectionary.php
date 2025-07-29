@@ -1033,17 +1033,35 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     } elseif ( $calcBasis == 'epiphany' ) {
         $basisDateStr = $year."-01-06";
     } elseif ( $calcBasisID ) {
-        // If the $calcBasis is a post_id, get the corresponding date_calculation for the given year
-        // TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
-        if ( have_rows('date_calculations', $calcBasisID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
-            while ( have_rows('date_calculations', $calcBasisID) ) : the_row();
-                $dateCalculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-                $year_calculated = substr($dateCalculated, 0, 4);
-                if ( $year_calculated == $year ) {
-                    $basisDateStr = $dateCalculated;
+        // If the $calcBasis is a postID, first check to see if it's a fixed or variable date
+        $basisDateType = get_post_meta( $calcBasisID, 'date_type', true );
+        if ( $basisDateType == "fixed" ) {
+            // NB: this code block is copied from the getDisplayDates method. That redundancy should be eliminated, but is being temporarily tolerated in the name of expediency
+            if ( !$fixedDateStr = get_field( 'fixed_date_str', $calcBasisID ) ) { // this line diverges from the getDisplayDates version, using calcBasisID instead of postID
+                $info .= "No fixed_date_str found.<br />";
+            } else {
+                $info .= "fixed_date_str: ".$fixedDateStr."<br />";
+                if ( $year ) {
+                    $fixedDateStr .= " ".$year;
+                    $info .= "fixed_date_str (mod): ".$fixedDateStr."<br />";
                 }
-            endwhile;
-        } // end if
+                $formattedFixedDateStr = date("Y-m-d",strtotime($fixedDateStr));
+                $info .= "formattedFixedDateStr: ".$formattedFixedDateStr."<br />";
+                $basisDateStr = $formattedFixedDateStr; // this line diverges from the getDisplayDates version
+            }
+        } else {
+            // If variable, get the corresponding date_calculation for the given year
+            // TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
+            if ( have_rows('date_calculations', $calcBasisID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
+                while ( have_rows('date_calculations', $calcBasisID) ) : the_row();
+                    $dateCalculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
+                    $year_calculated = substr($dateCalculated, 0, 4);
+                    if ( $year_calculated == $year ) {
+                        $basisDateStr = $dateCalculated;
+                    }
+                endwhile;
+            } // end if
+        }
     } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis
                 || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis)
                 || strtolower(date('F d Y',strtotime($calcBasis))) == strtolower($calcBasis)
@@ -1637,7 +1655,6 @@ function calcDateFromStr( $args = array() ) {
 }
 
 function calc_date_from_components ( $args = array() ) {
-
     // WIP
 
     // Init vars
