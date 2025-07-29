@@ -1493,6 +1493,7 @@ function parse_date_str ( $args = array() ) {
 
 }
 
+// WIP 250728
 // WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
 function calcDateFromStr( $args = array() ) {
 
@@ -1506,16 +1507,24 @@ function calcDateFromStr( $args = array() ) {
 
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
-    extract( $args );
-
-    // Abort if date_calc_str or year is empty
-    if ( empty($dateCalcStr) || empty($year) ) { return false; }
+    //extract( $args );
+    $year = $args['year'];
+    $dateCalcStr = $args['date_calc_str'];
+    $idsToExclude = $args['ids_to_exclude'];
 
     // Init vars
     $arr_info = array();
     $info = "";
     $calcDate = null;
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
+
+    // Abort if date_calc_str or year is empty
+    if ( empty($dateCalcStr) || empty($year) ) {
+        $info .= "Insufficient data provided<br />";
+        $info .= "dateCalcStr: $dateCalcStr; year: $year<br />";
+        $arr_info['calc_info'] = $info;
+        return $arr_info;
+    }
 
     $info .= '<strong>&gt;&gt;&gt; calcDateFromStr &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
@@ -1550,7 +1559,7 @@ function calcDateFromStr( $args = array() ) {
     }
 
     // Parse the date string
-    $args = array( 'year' => $year, 'date_calc_str' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => $ids_to_exclude );
+    $args = array( 'year' => $year, 'date_calc_str' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => $idsToExclude );
     $date_elements_info = parse_date_str ( $args );
     $info .= $date_elements_info['info'];
     $date_elements = $date_elements_info['elements'];
@@ -1604,7 +1613,6 @@ function calcDateFromStr( $args = array() ) {
             }
         }
     }
-
 
     if ( $calcDate ) {
         if ( $verbose == "true" ) { $info .= 'calc_date: '.$calcDate.'<br />'; } //'<span class="notice">'.'</span>'.
@@ -2049,6 +2057,7 @@ function calc_litdates( $atts = array() ) {
                 } else {
                     $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
                     if ( $verbose == "true" ) { $calc_info .= "calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
+                    if ( $verbose == "true" ) { $calc_info .= "calc: <pre>".print_r($calc,true)."</pre>"; }
                 }
             } else {
                 $calc_info .= "dateCalcStr is empty<br />";
