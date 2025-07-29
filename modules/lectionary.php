@@ -1084,7 +1084,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
 
 }
 
-function get_calc_bases_from_str ( $dateCalcStr = "", $ids_to_exclude = array() ) {
+function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() ) {
 
     // Init vars
     $arr_info = array();
@@ -1106,7 +1106,7 @@ function get_calc_bases_from_str ( $dateCalcStr = "", $ids_to_exclude = array() 
         '_search_title'    => $dateCalcStr,
     );
 
-    if ( !empty($ids_to_exclude) ) { $wp_args['post__not_in'] = $ids_to_exclude; }
+    if ( !empty($idsToExclude) ) { $wp_args['post__not_in'] = $idsToExclude; }
 
     // Run the query
     $arr_posts = new WP_Query( $wp_args );
@@ -1332,11 +1332,11 @@ function parse_date_str ( $args = array() ) {
             $calc_bases_info = array( 'info' => "calc_basis: $calcBasis is a liturgical_base<br />", 'calc_bases' => $calc_bases );
         } else {
             if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calcBasis<br />"; }
-            $calc_bases_info = get_calc_bases_from_str($calcBasis, $ids_to_exclude);
+            $calc_bases_info = get_calc_bases_from_str($calcBasis, $idsToExclude);
         }
     } else {
         if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str date_calc_str: $dateCalcStr<br />"; }
-        $calc_bases_info = get_calc_bases_from_str($dateCalcStr, $ids_to_exclude);
+        $calc_bases_info = get_calc_bases_from_str($dateCalcStr, $idsToExclude);
     }
     //$calc_bases_info = get_calc_bases_from_str($dateCalcStr);
     $calc_bases = $calc_bases_info['calc_bases'];
