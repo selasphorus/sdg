@@ -1663,12 +1663,15 @@ function calc_date_from_components ( $args = array() ) {
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
     //extract( $args );
-    $year = $args[ 'year' ];
-    $litdateCalcID = $args[ 'liturgical_date_calc_id' ];
-    $dateCalcStr = $args[ 'date_calc_str' ];
-    $calcBasis = $args[ 'calc_basis' ];
-    $calcBasisID = $args[ 'calc_basis_id' ];
-    $calcBasisField = $args[ 'calc_basis_field' ];
+    $verbose = $args['verbose'];
+    $year = $args['year'];
+    $litdateCalcID = $args['liturgical_date_calc_id'];
+    $dateCalcStr = $args['date_calc_str'];
+    $calcBasis = $args['calc_basis'];
+    $calcBasisID = $args['calc_basis_id'];
+    $calcBasisField = $args['calc_basis_field'];
+    $calcBoia = $args['calc_boia'];
+    $calcWeekday = $args['calc_weekday'];
     //
     $info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
