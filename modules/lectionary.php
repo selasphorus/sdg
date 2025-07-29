@@ -1398,7 +1398,9 @@ function parse_date_str ( $args = array() ) {
         // Remove anything in parentheses or brackets
         if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calc_basis.<br />"; }
         $calcBasis = remove_bracketed_info($calcBasis,true);
-        $info .= "calc_basis: $calcBasis<br />";
+        $info .= "calcBasis: $calcBasis<br />";
+        // Clean up the calcBasis a bit more, in case it's one of those long litdate titles, like "Saint Lucy, Martyr at Syracuse"
+        $calcBasis = trim(explode(',', $calcBasis)[0]); // remove everything after the comma, if there is one
     }
 
     if ( $calcBasis ) { $components['calc_basis'] = $calcBasis; }
@@ -1409,7 +1411,6 @@ function parse_date_str ( $args = array() ) {
     // 2. BOIAs
     // Does the date to be calculated fall before/after/of/in the basis_date/season?
     if ( $calcBasis ) {
-
         // get the calc_str without the already determined calc_basis
         if ( $verbose == "true" ) { $info .= "About to replace calc_basis '$calcBasis' in date_calc_str '$dateCalcStr'<br />"; }
         $dateCalcStr = trim(str_ireplace($calcBasis,"",$dateCalcStr));
