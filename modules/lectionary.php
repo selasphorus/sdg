@@ -1840,7 +1840,7 @@ function calc_date_from_components ( $args = array() ) {
                     }
                     $info .= "calc_formula: $calcFormula<br />";
                 } else {
-                     $info .= $indent."no action taken to determine date/formula based on calcBasis: $calBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
+                     $info .= $indent."no action taken to determine date/formula based on calcBasis: $calcBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
                 }
             }
         }
