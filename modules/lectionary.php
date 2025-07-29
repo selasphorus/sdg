@@ -1214,7 +1214,11 @@ function parse_date_str ( $args = array() ) {
 
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
-    extract( $args );
+    //extract( $args );
+    $year = $args['year'];
+    $dateCalcStr = $args['date_calc_str'];
+    $idsToExclude = $args['ids_to_exclude'];
+    $verbose = $args['verbose'];
     //
     if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
     $dateCalcStr_bk = $dateCalcStr; // copy the $dateCalcStr to a new variable so we can preserve the original while making mods as needed
