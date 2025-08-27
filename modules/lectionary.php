@@ -10,6 +10,17 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+// TODO: move the following to WHx4 -- some utility class
+add_action('acf/input/admin_enqueue_scripts', function() {
+    wp_enqueue_script(
+        'acf-repeater-clear-all',
+        get_stylesheet_directory_uri() . '/js/acf-repeater-clear-all.js',
+        ['jquery'],
+        null,
+        true
+    );
+});
+
 // TODO: move the following functions to WHx4 > \Util\DateHelper.php
 
 function normalizeMonthToInt( string $month ): ?int
