@@ -10,6 +10,10 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+<<<<<<< HEAD:modules/lectionary-wip.php
+<<<<<<< HEAD
+=======
+=======
 // TODO: move the following to WHx4 -- some utility class
 add_action('acf/input/admin_enqueue_scripts', function() {
     wp_enqueue_script(
@@ -21,6 +25,7 @@ add_action('acf/input/admin_enqueue_scripts', function() {
     );
 });
 
+>>>>>>> main:modules/lectionary.php
 // TODO: move the following functions to WHx4 > \Util\DateHelper.php
 
 function normalizeMonthToInt( string $month ): ?int
@@ -187,6 +192,7 @@ function calculateEasterDate( int $year ): DateTimeImmutable
 /* END Date Normalization */
 
 
+>>>>>>> main
 add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
 function renderLitDatesShortcode( $atts = [] ): string
 {

@@ -8973,4 +8973,3 @@ function sdg_register_field_groups() {
 
 }
 
-?>
