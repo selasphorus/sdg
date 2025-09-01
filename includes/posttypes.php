@@ -39,7 +39,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 
         //if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
         if ( sdg_custom_caps() ) { $caps = "admin_note"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Admin Notes', 'sdg' ),
             'singular_name' => __( 'Admin Note', 'sdg' ),
@@ -52,7 +52,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
             'not_found' =>  __( 'No Admin Notes Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Admin Notes found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -67,13 +67,13 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'           => 'dashicons-groups',
             'menu_position'     => null,
-            'supports'            => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), // 
+            'supports'            => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
             'taxonomies'         => array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
-            'show_in_rest'        => false,    
+            'show_in_rest'        => false,
         );
 
         register_post_type( 'admin_note', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_admin_note' );
 }
@@ -82,7 +82,7 @@ if ( in_array('admin_notes', $sdg_modules ) ) {
 function register_post_type_db_query() {
 
     if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-    
+
     $labels = array(
         'name' => __( 'DB Queries', 'sdg' ),
         'singular_name' => __( 'DB Query', 'sdg' ),
@@ -95,7 +95,7 @@ function register_post_type_db_query() {
         'not_found' =>  __( 'No DB Queries Found', 'sdg' ),
         'not_found_in_trash' => __( 'No DB Queries found in Trash', 'sdg' ),
     );
-    
+
     $args = array(
         'labels' => $labels,
          'public' => true,
@@ -112,11 +112,11 @@ function register_post_type_db_query() {
         'menu_position'        => null,
         'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
         'taxonomies'        => array( 'data_table', 'query_tag', 'admin_tag' ),
-        'show_in_rest'        => true,    
+        'show_in_rest'        => true,
     );
 
     register_post_type( 'db_query', $args );
-    
+
 }
 //add_action( 'init', 'register_post_type_db_query' );
 
@@ -125,7 +125,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
     function register_post_type_data_table() {
 
         if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Data Tables', 'sdg' ),
             'singular_name' => __( 'Data Table', 'sdg' ),
@@ -138,7 +138,7 @@ if ( in_array('data_tables', $sdg_modules ) ) {
             'not_found' =>  __( 'No Data Tables Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Data Tables found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -155,11 +155,11 @@ if ( in_array('data_tables', $sdg_modules ) ) {
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ),
             'taxonomies'        => array( 'admin_tag' ),
-            'show_in_rest'        => true,    
+            'show_in_rest'        => true,
         );
 
         register_post_type( 'data_table', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_data_table' );
 }
@@ -169,7 +169,7 @@ if ( in_array('snippets', $sdg_modules ) ) {
     function register_post_type_snippet() {
 
         if ( sdg_custom_caps() ) { $caps = "snippet"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Snippets', 'sdg' ),
             'singular_name' => __( 'Snippet', 'sdg' ),
@@ -182,7 +182,7 @@ if ( in_array('snippets', $sdg_modules ) ) {
             'not_found' =>  __( 'No Snippets Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Snippets found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -199,11 +199,11 @@ if ( in_array('snippets', $sdg_modules ) ) {
             'menu_position'     => null,
             'supports'            => array( 'title', 'author', 'editor', 'thumbnail', 'revisions', 'page-attributes' ), // , 'excerpt', 'custom-fields'
             'taxonomies'         => array( 'category', 'tag', 'admin_tag' ),
-            'show_in_rest'        => true,    
+            'show_in_rest'        => true,
         );
 
         register_post_type( 'snippet', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_snippet' );
 }
@@ -218,7 +218,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
     function register_post_type_ensemble() {
 
         if ( sdg_custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Ensembles', 'sdg' ),
             'singular_name' => __( 'Ensemble', 'sdg' ),
@@ -231,7 +231,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
             'not_found' =>  __( 'No Ensembles Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Ensemble found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -246,13 +246,13 @@ if ( in_array('ensembles', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-groups',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
-            'show_in_rest'        => true,    
+            'show_in_rest'        => true,
         );
 
         register_post_type( 'ensemble', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_ensemble' );
 }
@@ -262,7 +262,7 @@ if ( in_array('organizations', $sdg_modules ) ) {
     function register_post_type_organization() {
 
         if ( sdg_custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Organizations', 'sdg' ),
             'singular_name' => __( 'Organization', 'sdg' ),
@@ -275,7 +275,7 @@ if ( in_array('organizations', $sdg_modules ) ) {
             'not_found' =>  __( 'No Organizations Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Organizations found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -290,13 +290,13 @@ if ( in_array('organizations', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-groups',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
             'taxonomies'        => array( 'admin_tag' ),
-            'show_in_rest'        => true,    
+            'show_in_rest'        => true,
         );
 
         register_post_type( 'organization', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_organization' );
 }
@@ -309,7 +309,7 @@ if ( in_array('projects', $sdg_modules ) ) {
     function register_post_type_project() {
 
         if ( sdg_custom_caps() ) { $caps = "project"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Projects', 'sdg' ),
             'singular_name' => __( 'Project', 'sdg' ),
@@ -322,7 +322,7 @@ if ( in_array('projects', $sdg_modules ) ) {
             'not_found' =>  __( 'No Projects Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Projects found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -343,15 +343,15 @@ if ( in_array('projects', $sdg_modules ) ) {
         );
 
         register_post_type( 'project', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_project' );
-    
+
     // Recording (Discography)
     function register_post_type_recording() {
 
         if ( sdg_custom_caps() ) { $caps = "project"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Recordings', 'sdg' ),
             'singular_name' => __( 'Recording', 'sdg' ),
@@ -364,7 +364,7 @@ if ( in_array('projects', $sdg_modules ) ) {
             'not_found' =>  __( 'No Recordings Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Recordings found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -385,7 +385,7 @@ if ( in_array('projects', $sdg_modules ) ) {
         );
 
         register_post_type( 'recording', $args );
-    
+
     }
     //add_action( 'init', 'register_post_type_recording' );
 
@@ -398,7 +398,7 @@ if ( in_array('press', $sdg_modules ) ) {
     function sdg_register_post_type_press() {
 
         if ( sdg_custom_caps() ) { $caps = "project"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Press', 'sdg' ),
             'singular_name' => __( 'Press', 'sdg' ),
@@ -411,7 +411,7 @@ if ( in_array('press', $sdg_modules ) ) {
             'not_found' =>  __( 'No Press Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Press found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -428,23 +428,23 @@ if ( in_array('press', $sdg_modules ) ) {
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
             'taxonomies'        => array( 'admin_tag', 'press_category' ),
-            'show_in_rest'        => true,    
+            'show_in_rest'        => true,
         );
 
         register_post_type( 'press', $args );
-    
+
     }
     add_action( 'init', 'sdg_register_post_type_press' );
 }
 
-/*** NEWSLETTER ***/
+/*** NEWSLETTERS ***/
 
 if ( in_array('newsletters', $sdg_modules ) ) {
     // Newsletter
     function sdg_register_post_type_newsletter() {
 
         if ( sdg_custom_caps() ) { $caps = "newsletter"; } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Newsletters', 'sdg' ),
             'singular_name' => __( 'Newsletter', 'sdg' ),
@@ -457,7 +457,7 @@ if ( in_array('newsletters', $sdg_modules ) ) {
             'not_found' =>  __( 'No Newsletter Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Newsletters found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -474,11 +474,11 @@ if ( in_array('newsletters', $sdg_modules ) ) {
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
             //'taxonomies'        => array( 'admin_tag', 'press_category' ),
-            'show_in_rest'        => false, // no block editor option    
+            'show_in_rest'        => false, // no block editor option
         );
 
         register_post_type( 'newsletter', $args );
-    
+
     }
     add_action( 'init', 'sdg_register_post_type_newsletter' );
 }
@@ -496,7 +496,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
         //if ( sdg_custom_caps() ) { $caps = "bible_book"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('bible_book', 'bible_books'); } else { $caps = "post"; }
         if ( sdg_custom_caps() ) { $caps = array('scripture', 'scripture'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Books of the Bible', 'sdg' ),
             'singular_name' => __( 'Bible Book', 'sdg' ),
@@ -509,7 +509,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Books of the Bible Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Books of the Bible found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -524,21 +524,21 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'bible_book', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_bible_book' );
-    
+
     // Verse -- WIP
     function register_post_type_verse() {
 
         if ( sdg_custom_caps() ) { $caps = array('scripture', 'scripture'); } else { $caps = "post"; } // TODO: modify caps to prevent editing?
-        
+
         $labels = array(
             'name' => __( 'Bible Verses', 'sdg' ),
             'singular_name' => __( 'Bible Verse', 'sdg' ),
@@ -551,7 +551,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Bible Verses Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Bible Verses found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -566,22 +566,22 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'verse', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_verse' );
-    
+
     // Reading (chapter:verse pairs or ranges of pairs)
     function register_post_type_reading() {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Readings', 'sdg' ),
             'singular_name' => __( 'Reading', 'sdg' ),
@@ -594,7 +594,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Readings Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Readings found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -609,13 +609,13 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'reading', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_reading' );
 
@@ -624,7 +624,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Lectionary', 'sdg' ),
             'singular_name' => __( 'Lectionary Day', 'sdg' ),
@@ -637,7 +637,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Lectionary Days Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Lectionary Days found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -652,13 +652,13 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'        => false,
             'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'lectionary', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_lectionary' );
 
@@ -667,7 +667,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Liturgical Calendar', 'sdg' ),
             'singular_name' => __( 'Liturgical Date', 'sdg' ),
@@ -680,7 +680,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Liturgical Dates Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Liturgical Dates found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -695,13 +695,13 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'        => false,
             //'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'liturgical_date', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_liturgical_date' );
 
@@ -710,7 +710,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Liturgical Date Calculations', 'sdg' ),
             'singular_name' => __( 'Liturgical Date Calculation', 'sdg' ),
@@ -723,7 +723,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Liturgical Date Calculations Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Liturgical Date Calculations found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -738,13 +738,13 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'         => false,
             //'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'liturgical_date_calc', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_liturgical_date_calc' );
 
@@ -753,7 +753,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Collects', 'sdg' ),
             'singular_name' => __( 'Collect', 'sdg' ),
@@ -766,7 +766,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Collects Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Collects found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -782,12 +782,12 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             //'menu_icon'            => 'dashicons-welcome-write-blog',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-            'taxonomies'        => array( 'admin_tag' ), //'season', 
+            'taxonomies'        => array( 'admin_tag' ), //'season',
             'show_in_rest'        => true,
         );
 
         register_post_type( 'collect', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_collect' );
 
@@ -796,7 +796,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
         if ( sdg_custom_caps() ) { $caps = "lectionary_item"; } else { $caps = "post"; }
         //if ( sdg_custom_caps() ) { $caps = array('lectionary_item', 'lectionary'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Psalms of the Day', 'sdg' ),
             'singular_name' => __( 'Psalms of the Day', 'sdg' ),
@@ -809,7 +809,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'not_found' =>  __( 'No Psalms of the Day Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Psalms of the Day found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -824,13 +824,13 @@ if ( in_array('lectionary', $sdg_modules ) ) {
             'hierarchical'         => false,
             //'menu_icon'            => 'dashicons-welcome-write-blog',
             'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
+            'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor',
             'taxonomies'        => array( 'admin_tag' ),
             'show_in_rest'        => true,
         );
 
         register_post_type( 'psalms_of_the_day', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_psalms_of_the_day' );
 
@@ -844,7 +844,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
     function register_post_type_sermon() {
 
         if ( sdg_custom_caps() ) { $caps = array('sermon', 'sermons'); } else { $caps = "post"; }
-                
+
         $labels = array(
             'name' => __( 'Sermons', 'sdg' ),
             'singular_name' => __( 'Sermon', 'sdg' ),
@@ -857,7 +857,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
             'not_found' =>  __( 'No Sermons Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Sermons found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -879,7 +879,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
         );
 
         register_post_type( 'sermon', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_sermon' );
 
@@ -887,7 +887,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
     function register_post_type_sermon_series() {
 
         if ( sdg_custom_caps() ) { $caps = array('sermon', 'sermons'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Sermon Series', 'sdg' ),
             'singular_name' => __( 'Sermon Series', 'sdg' ),
@@ -900,7 +900,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
             'not_found' =>  __( 'No Sermon Series Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Sermon Series found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -921,7 +921,7 @@ if ( in_array('sermons', $sdg_modules ) ) {
         );
 
         register_post_type( 'sermon_series', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_sermon_series' );
 
@@ -947,7 +947,7 @@ if ( in_array('sources', $sdg_modules ) ) {
     function register_post_type_source() {
 
         if ( sdg_custom_caps() ) { $caps = array('source', 'sources'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Sources', 'sdg' ),
             'singular_name' => __( 'Source', 'sdg' ),
@@ -960,7 +960,7 @@ if ( in_array('sources', $sdg_modules ) ) {
             'not_found' =>  __( 'No Sources Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Sources found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -981,7 +981,7 @@ if ( in_array('sources', $sdg_modules ) ) {
         );
 
         register_post_type( 'source', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_source' );
 
@@ -995,7 +995,7 @@ if ( in_array('links', $sdg_modules ) ) {
     function register_post_type_link() {
 
         if ( sdg_custom_caps() ) { $caps = array('resource', 'resources'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Links', 'sdg' ),
             'singular_name' => __( 'Link', 'sdg' ),
@@ -1008,7 +1008,7 @@ if ( in_array('links', $sdg_modules ) ) {
             'not_found' =>  __( 'No Links Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Links found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -1029,7 +1029,7 @@ if ( in_array('links', $sdg_modules ) ) {
         );
 
         register_post_type( 'link', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_link' );
 
@@ -1043,7 +1043,7 @@ if ( in_array('resources', $sdg_modules ) ) {
     function register_post_type_resource() {
 
         if ( sdg_custom_caps() ) { $caps = array('resource', 'resources'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Resources', 'sdg' ),
             'singular_name' => __( 'Resource', 'sdg' ),
@@ -1056,7 +1056,7 @@ if ( in_array('resources', $sdg_modules ) ) {
             'not_found' =>  __( 'No Resources Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Resources found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -1077,7 +1077,7 @@ if ( in_array('resources', $sdg_modules ) ) {
         );
 
         register_post_type( 'resource', $args );
-    
+
     }
     add_action( 'init', 'register_post_type_resource' );
 
@@ -1090,13 +1090,13 @@ if ( in_array('resources', $sdg_modules ) ) {
 
 /*** LOGBOOK ***/
 // WIP -- consider log entries model vs calendar events -- see ATCHQ ACF field group "Logbook (Library)" >> log_entries repeater.
-// Is there any need for a special post type -- or instead a Logbook/Log Entries field group applied to multiple post types? 
+// Is there any need for a special post type -- or instead a Logbook/Log Entries field group applied to multiple post types?
 if ( in_array('logbook', $sdg_modules ) ) {
     // Log Entry
     function sdg_register_post_type_log_entry() {
 
         if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Logbook', 'sdg' ),
             'singular_name' => __( 'Log Entry', 'sdg' ),
@@ -1109,7 +1109,7 @@ if ( in_array('logbook', $sdg_modules ) ) {
             'not_found' =>  __( 'No Log Entries Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Log Entries found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -1130,7 +1130,7 @@ if ( in_array('logbook', $sdg_modules ) ) {
         );
 
         register_post_type( 'log_entry', $args );
-    
+
     }
     add_action( 'init', 'sdg_register_post_type_log_entry' );
 }
@@ -1143,7 +1143,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
     function sdg_register_post_type_thing() {
 
         if ( sdg_custom_caps() ) { $caps = array('thing', 'things'); } else { $caps = "post"; }
-        
+
         $labels = array(
             'name' => __( 'Things', 'sdg' ),
             'singular_name' => __( 'Thing', 'sdg' ),
@@ -1156,7 +1156,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
             'not_found' =>  __( 'No Things Found', 'sdg' ),
             'not_found_in_trash' => __( 'No Things found in Trash', 'sdg' ),
         );
-    
+
         $args = array(
             'labels' => $labels,
             'public' => true,
@@ -1177,7 +1177,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
         );
 
         register_post_type( 'thing', $args );
-    
+
     }
     add_action( 'init', 'sdg_register_post_type_thing' );
 }
@@ -1189,99 +1189,99 @@ if ( in_array('inventory', $sdg_modules ) ) {
 // ACF Bi-directional fields
 // WIP!
 // https://www.advancedcustomfields.com/resources/bidirectional-relationships/
-if ( !function_exists( 'bidirectional_acf_update_value' ) 
+if ( !function_exists( 'bidirectional_acf_update_value' )
  && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) ) {
-    function bidirectional_acf_update_value( $value, $post_id, $field  ) {    
-    
+    function bidirectional_acf_update_value( $value, $post_id, $field  ) {
+
         // vars
         $field_name = $field['name'];
         $field_key = $field['key'];
         $global_name = 'is_updating_' . $field_name;
-        
+
         // bail early if this filter was triggered from the update_field() function called within the loop below
         // - this prevents an infinite loop
         if( !empty($GLOBALS[ $global_name ]) ) return $value;
-        
-        
+
+
         // set global variable to avoid inifite loop
         // - could also remove_filter() then add_filter() again, but this is simpler
         $GLOBALS[ $global_name ] = 1;
-        
-        
+
+
         // loop over selected posts and add this $post_id
         if( is_array($value) ) {
-        
+
             foreach( $value as $post_id2 ) {
-                
+
                 // load existing related posts
                 $value2 = get_field($field_name, $post_id2, false);
-                
+
                 // allow for selected posts to not contain a value
                 if( empty($value2) ) {
                     $value2 = array();
                 }
-                
+
                 // bail early if the current $post_id is already found in selected post's $value2
                 if( in_array($post_id, $value2) ) continue;
-                
+
                 // append the current $post_id to the selected post's 'related_posts' value
                 $value2[] = $post_id;
-                
+
                 // update the selected post's value (use field's key for performance)
                 update_field($field_key, $value2, $post_id2);
-                
+
             }
-        
+
         }
-        
+
         // find posts which have been removed
         $old_value = get_field($field_name, $post_id, false);
-        
+
         if ( is_array($old_value) ) {
-            
+
             foreach( $old_value as $post_id2 ) {
-                
+
                 // bail early if this value has not been removed
                 if( is_array($value) && in_array($post_id2, $value) ) continue;
-                
+
                 // load existing related posts
                 $value2 = get_field($field_name, $post_id2, false);
-                
+
                 // bail early if no value
                 if( empty($value2) ) continue;
-                
+
                 // find the position of $post_id within $value2 so we can remove it
                 $pos = array_search($post_id, $value2);
-                
+
                 // remove
                 unset( $value2[ $pos] );
-                
+
                 // update the un-selected post's value (use field's key for performance)
                 update_field($field_key, $value2, $post_id2);
-                
+
             }
-            
+
         }
-        
+
         // reset global varibale to allow this filter to function as per normal
-        $GLOBALS[ $global_name ] = 0;    
-        
+        $GLOBALS[ $global_name ] = 0;
+
         // return
         return $value;
-        
+
     }
 }
 
 // WIP!
-if ( !function_exists( 'acf_update_related_field_on_save' ) 
+if ( !function_exists( 'acf_update_related_field_on_save' )
  && !in_array( trailingslashit( WP_PLUGIN_DIR ) . 'whx4/whx4.php', wp_get_active_and_valid_plugins() ) ) {
-    function acf_update_related_field_on_save ( $post_id ) {    
-    
+    function acf_update_related_field_on_save ( $post_id ) {
+
         // TODO: figure out how to handle repeater field sub_fields -- e.g. repertoire_events << event program_items
-        
+
         // Get newly saved values -- all fields
         //$values = get_fields( $post_id );
-    
+
         // Check the current (updated) value of a specific field.
         $rows = get_field('program_items', $post_id);
         if ( $rows ) {
@@ -1297,12 +1297,12 @@ if ( !function_exists( 'acf_update_related_field_on_save' )
                                 // No related_events set yet, so add the post_id
                                 //update_field('related_events', $post_id, $program_item_obj_id );
                             }
-                        }    
+                        }
                     }
                 }
             }
         }
-        
+
     }
 }
 
@@ -1318,24 +1318,24 @@ if ( in_array('sermons', $sdg_modules ) ) {
 // function to copy data from old ACF one-way to new ACF bidirectional relationship fields
 add_shortcode('convert_bidirectional_fields', 'convert_bidirectional_fields');
 function convert_bidirectional_fields ( $post_id = null, $post_type = "", $old_field_name = "", $new_field_name = "", $verbose = false ) {
-    
+
     $info = "";
     $ts_info = "";
     $new_vals = false;
-    
+
     $info .= ">> convert_bidirectional_fields >><br />";
     $info .= "post_id: $post_id<br />";
     $info .= "post_type: $post_type<br />";
     $info .= "old_field_name: $old_field_name<br />";
     $info .= "new_field_name: $new_field_name<br />";
-    
+
     // Get current ACF values, if any
     $arr_acf_values = get_field( $old_field_name, $post_id );
     if( !is_array($arr_acf_values) ) {
         $arr_acf_values = array();
     }
     if( !empty($arr_acf_values) ) { $info .= "[1] arr_acf_values: <pre>".print_r($arr_acf_values, true)."</pre>"; } else { $info .= "[1] arr_acf_values is empty.<br />"; }
-    
+
 }
 
 
