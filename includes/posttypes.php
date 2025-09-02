@@ -34,48 +34,7 @@ function sdg_custom_caps() {
 /*** GENERAL/ADMIN POST TYPES ***/
 
 if ( in_array('admin_notes', $sdg_modules ) ) {
-    // Admin Note
-    function register_post_type_admin_note() {
-
-        //if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-        if ( sdg_custom_caps() ) { $caps = "admin_note"; } else { $caps = "post"; }
-
-        $labels = array(
-            'name' => __( 'Admin Notes', 'sdg' ),
-            'singular_name' => __( 'Admin Note', 'sdg' ),
-            'add_new' => __( 'New Admin Note', 'sdg' ),
-            'add_new_item' => __( 'Add New Admin Note', 'sdg' ),
-            'edit_item' => __( 'Edit Admin Note', 'sdg' ),
-            'new_item' => __( 'New Admin Note', 'sdg' ),
-            'view_item' => __( 'View Admin Note', 'sdg' ),
-            'search_items' => __( 'Search Admin Notes', 'sdg' ),
-            'not_found' =>  __( 'No Admin Notes Found', 'sdg' ),
-            'not_found_in_trash' => __( 'No Admin Notes found in Trash', 'sdg' ),
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
-            'publicly_queryable'=> true,
-            'show_ui'             => true,
-            'show_in_menu'         => true,
-            'query_var'            => true,
-            'rewrite'             => array( 'slug' => 'admin_notes' ), // permalink structure slug
-            'capability_type'     => $caps,
-            'map_meta_cap'        => true,
-            'has_archive'         => true,
-            'hierarchical'        => false,
-            //'menu_icon'           => 'dashicons-groups',
-            'menu_position'     => null,
-            'supports'            => array( 'title', 'author', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-            'taxonomies'         => array( 'adminnote_category', 'admin_tag', 'data_table', 'query_tag', 'admin_tag' ),
-            'show_in_rest'        => false,
-        );
-
-        register_post_type( 'admin_note', $args );
-
-    }
-    add_action( 'init', 'register_post_type_admin_note' );
+    // Admin Note ==> WHx4/Admin Module
 }
 
 // DB Query -- deprecated -- merged with Admin Notes
@@ -214,7 +173,7 @@ if ( in_array('snippets', $sdg_modules ) ) {
 // TODO/WIP: merge Ensemble/Organization/Group into a single post type
 
 if ( in_array('ensembles', $sdg_modules ) ) {
-    // Ensemble
+    // Ensemble -- DEPRECATED -- possibly worth recreating as Subtype?
     function register_post_type_ensemble() {
 
         if ( sdg_custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
@@ -258,7 +217,7 @@ if ( in_array('ensembles', $sdg_modules ) ) {
 }
 
 if ( in_array('organizations', $sdg_modules ) ) {
-    // Organization
+    // Organization -- DEPRECATED
     function register_post_type_organization() {
 
         if ( sdg_custom_caps() ) { $caps = "group"; } else { $caps = "post"; }
@@ -305,49 +264,9 @@ if ( in_array('organizations', $sdg_modules ) ) {
 
 if ( in_array('projects', $sdg_modules ) ) {
 
-    // Project
-    function register_post_type_project() {
+    // Project ==> Ok WHx4
 
-        if ( sdg_custom_caps() ) { $caps = "project"; } else { $caps = "post"; }
-
-        $labels = array(
-            'name' => __( 'Projects', 'sdg' ),
-            'singular_name' => __( 'Project', 'sdg' ),
-            'add_new' => __( 'New Project', 'sdg' ),
-            'add_new_item' => __( 'Add New Project', 'sdg' ),
-            'edit_item' => __( 'Edit Project', 'sdg' ),
-            'new_item' => __( 'New Project', 'sdg' ),
-            'view_item' => __( 'View Project', 'sdg' ),
-            'search_items' => __( 'Search Projects', 'sdg' ),
-            'not_found' =>  __( 'No Projects Found', 'sdg' ),
-            'not_found_in_trash' => __( 'No Projects found in Trash', 'sdg' ),
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
-            'publicly_queryable'=> true,
-            'show_ui'             => true,
-            'show_in_menu'         => true,
-            'query_var'            => true,
-            'rewrite'            => array( 'slug' => 'projects' ), // permalink structure slug
-            'capability_type'    => $caps,
-            'map_meta_cap'        => true,
-            'has_archive'         => true,
-            'hierarchical'        => false,
-            'menu_icon'            => 'dashicons-welcome-write-blog',
-            'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-            'taxonomies'        => array( 'admin_tag', 'project_category' ),
-            'show_in_rest'        => true, // false = use classic, not block editor
-        );
-
-        register_post_type( 'project', $args );
-
-    }
-    add_action( 'init', 'register_post_type_project' );
-
-    // Recording (Discography)
+    // Recording (Discography) -- Set this up as a Project Subtype in MLib Plugin(?)
     function register_post_type_recording() {
 
         if ( sdg_custom_caps() ) { $caps = "project"; } else { $caps = "post"; }
@@ -388,7 +307,6 @@ if ( in_array('projects', $sdg_modules ) ) {
 
     }
     //add_action( 'init', 'register_post_type_recording' );
-
 }
 
 /*** PRESS ***/
@@ -938,11 +856,9 @@ if ( in_array('sermons', $sdg_modules ) ) {
 /*** ADDRESSES ***/
 // >>>> See WHX4 for venue, address, building CPTs <<<< //
 
-
 /*** SOURCES ***/
 // TODO: phase this out, replace w/ RESOURCES(?)
 if ( in_array('sources', $sdg_modules ) ) {
-
     // Source
     function register_post_type_source() {
 
@@ -984,55 +900,12 @@ if ( in_array('sources', $sdg_modules ) ) {
 
     }
     add_action( 'init', 'register_post_type_source' );
-
 }
 
 /*** LINKS ***/
 // TODO: phase this out, replace w/ RESOURCES(?)
 if ( in_array('links', $sdg_modules ) ) {
-
-    // Links
-    function register_post_type_link() {
-
-        if ( sdg_custom_caps() ) { $caps = array('resource', 'resources'); } else { $caps = "post"; }
-
-        $labels = array(
-            'name' => __( 'Links', 'sdg' ),
-            'singular_name' => __( 'Link', 'sdg' ),
-            'add_new' => __( 'New Link', 'sdg' ),
-            'add_new_item' => __( 'Add New Link', 'sdg' ),
-            'edit_item' => __( 'Edit Link', 'sdg' ),
-            'new_item' => __( 'New Link', 'sdg' ),
-            'view_item' => __( 'View Link', 'sdg' ),
-            'search_items' => __( 'Search Links', 'sdg' ),
-            'not_found' =>  __( 'No Links Found', 'sdg' ),
-            'not_found_in_trash' => __( 'No Links found in Trash', 'sdg' ),
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
-            'publicly_queryable'=> true,
-            'show_ui'             => true,
-            'show_in_menu'         => true,
-            'query_var'            => true,
-            'rewrite'            => array( 'slug' => 'links' ), // permalink structure slug
-            'capability_type'    => $caps,
-            'map_meta_cap'        => true,
-            'has_archive'         => true,
-            'hierarchical'        => false,
-            //'menu_icon'            => 'dashicons-welcome-write-blog',
-            'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'custom-fields', 'revisions', 'page-attributes' ), //, 'excerpt' , 'editor'
-            'taxonomies'        => array( 'admin_tag' ),
-            'show_in_rest'        => false, // i.e. false = use classic, not block editor
-        );
-
-        register_post_type( 'link', $args );
-
-    }
-    add_action( 'init', 'register_post_type_link' );
-
+    // Links ==> WHX4/Places
 }
 
 /*** RESOURCES ***/
@@ -1083,56 +956,13 @@ if ( in_array('resources', $sdg_modules ) ) {
 
 }
 
-
 /*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
-
-// TODO: Move Logbook, Documents, Inventory, Ledger to a separate plugin or plugins?
 
 /*** LOGBOOK ***/
 // WIP -- consider log entries model vs calendar events -- see ATCHQ ACF field group "Logbook (Library)" >> log_entries repeater.
 // Is there any need for a special post type -- or instead a Logbook/Log Entries field group applied to multiple post types?
 if ( in_array('logbook', $sdg_modules ) ) {
-    // Log Entry
-    function sdg_register_post_type_log_entry() {
-
-        if ( sdg_custom_caps() ) { $caps = array('admin_note', 'admin_notes'); } else { $caps = "post"; }
-
-        $labels = array(
-            'name' => __( 'Logbook', 'sdg' ),
-            'singular_name' => __( 'Log Entry', 'sdg' ),
-            'add_new' => __( 'New Log Entry', 'sdg' ),
-            'add_new_item' => __( 'Add New Log Entry', 'sdg' ),
-            'edit_item' => __( 'Edit Log Entry', 'sdg' ),
-            'new_item' => __( 'New Log Entry', 'sdg' ),
-            'view_item' => __( 'View Log Entry', 'sdg' ),
-            'search_items' => __( 'Search Log Entries', 'sdg' ),
-            'not_found' =>  __( 'No Log Entries Found', 'sdg' ),
-            'not_found_in_trash' => __( 'No Log Entries found in Trash', 'sdg' ),
-        );
-
-        $args = array(
-            'labels' => $labels,
-            'public' => true,
-            'publicly_queryable'=> true,
-            'show_ui'             => true,
-            'show_in_menu'         => true,
-            'query_var'            => true,
-            'rewrite'             => array( 'slug' => 'logbook' ), // permalink structure slug
-            'capability_type'     => $caps,
-            'map_meta_cap'        => true,
-            'has_archive'         => true,
-            'hierarchical'        => false,
-            //'menu_icon'            => 'dashicons-welcome-write-blog',
-            'menu_position'        => null,
-            'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ),
-            //'taxonomies'         => array( 'admin_tag', 'press_category' ),
-            'show_in_rest'        => false, // false = use classic, not block editor
-        );
-
-        register_post_type( 'log_entry', $args );
-
-    }
-    add_action( 'init', 'sdg_register_post_type_log_entry' );
+    // Log Entry ==> WHX4/Logbook
 }
 
 /*** INVENTORY ***/
@@ -1182,9 +1012,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
     add_action( 'init', 'sdg_register_post_type_thing' );
 }
 
-
 /*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
-
 
 // ACF Bi-directional fields
 // WIP!
@@ -1310,7 +1138,6 @@ if ( in_array('sermons', $sdg_modules ) ) {
     add_filter('acf/update_value/name=sermons_series', 'bidirectional_acf_update_value', 10, 3);
 }
 
-//
 //add_filter('acf/update_value/name=related_compositions', 'bidirectional_acf_update_value', 10, 3);
 //add_filter('acf/update_value/type=relationship', array($this, 'update_relationship_field'), 11, 3);
 ///
@@ -1337,6 +1164,3 @@ function convert_bidirectional_fields ( $post_id = null, $post_type = "", $old_f
     if( !empty($arr_acf_values) ) { $info .= "[1] arr_acf_values: <pre>".print_r($arr_acf_values, true)."</pre>"; } else { $info .= "[1] arr_acf_values is empty.<br />"; }
 
 }
-
-
-?>
