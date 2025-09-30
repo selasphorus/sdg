@@ -1860,12 +1860,11 @@ function calc_date_from_components ( $args = array() ) {
         // If there's no $calcFormula yet, use the dateCalcStr directly
         if ( empty($calcFormula) && empty($calcDate) ) {
             $info .= '<span class="notice">'."calc based directly on dateCalcStr</span><br />"; // .'</span>'
-            /*if ( $dateCalcStr == $calcBasis ) {
+            if ( $dateCalcStr == $calcBasis ) {
                 $snakeBasis = strtolower(str_replace(' ', '_', trim($dateCalcStr)))
                 $meta_key = $snakeBasis . '_date'; // e.g. 'ash_wednesday_date'
                 $calcDate = get_post_meta( $litdateCalcID, $meta_key, true);
-            }*/
-            if ( $calcBoia != "after" ) {
+            } elseif ( $calcBoia != "after" ) {
                 $calcFormula = $dateCalcStr;
             } else {
                 if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calcBoia\"; calc_date: $calcDate</span><br />"; }
@@ -1873,13 +1872,13 @@ function calc_date_from_components ( $args = array() ) {
         }
 
         //$info .= $indent.">> dateCalcStr: $dateCalcStr<br />"; // tft
-        //$info .= $indent.">> [$calcInterval] -- [$calcWeekday] -- [$calcBoia] -- [$calcBasisField]<br />"; // tft
+        //$info .= $indent.">> [$calcInterval] -- [$calcWeekday] -- [$calcBoia] -- [$calcBasisField]<br />";
         //$info .= $indent.'>> basis_date unformatted: "'.$basisDate.'<br />'; // tft
         //
         // calc_date not yet determined >> do the actual calculation using the formula and basis_date
         if ( empty($calcDate) ) {
 
-            $info .= '>> calc_formula: "'.$calcFormula.'"; basis_date: '.date('Y-m-d',$basisDate).'<br />'; // tft
+            $info .= '>> calc_formula: "'.$calcFormula.'"; basis_date: '.date('Y-m-d',$basisDate).'<br />';
 
             // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
             // Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
@@ -1895,7 +1894,6 @@ function calc_date_from_components ( $args = array() ) {
             // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
             // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
         }
-
 
         // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
         if ( $calcBasis == "epiphany" ) {
