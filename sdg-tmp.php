@@ -712,18 +712,6 @@ function sdg_body_class( $classes ) {
     return $classes;
 }
 
-// Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
-add_filter( 'get_edit_post_link', 'sdg_add_post_type_query_var', 10, 3 );
-function sdg_add_post_type_query_var( $url, $post_id, $context ) {
-
-    $post_type = get_post_type( $post_id );
-
-    // TODO: consider whether to add query_arg only for certain CPTS?
-    if ( $post_type && !empty($post_type) ) { $url = add_query_arg( 'post_type', $post_type, $url ); }
-
-    return $url;
-}
-
 add_action('wp_head', 'sdg_meta_tags');
 function sdg_meta_tags() {
 
@@ -2363,21 +2351,6 @@ function restore_html( $info ) {
         $info = str_replace($search,$replace,$info);
     }
     return $info;
-}
-
-// Make hyperlink
-function make_link( $url, $text, $title = null, $class = null, $target = null) {
-
-    // TODO: sanitize URL?
-    $link = '<a href="'.$url.'"';
-    if ( $text && empty($title) ) { $title = $text; } // Use text as title if title is empty
-    if ( $title ) { $link .= ' title="'.$title.'"'; }
-    if ( $target ) { $link .= ' target="'.$target.'"'; }
-    if ( $class ) { $link .= ' class="'.$class.'"'; }
-    $link .= '>'.$text.'</a>';
-    //return '<a href="'.$url.'">'.$linktext.'</a>';
-
-    return $link;
 }
 
 // Check to see if a postmeta record already exists for the specified post_type, meta_key, and meta_value.
