@@ -1861,7 +1861,7 @@ function calc_date_from_components ( $args = array() ) {
         if ( empty($calcFormula) && empty($calcDate) ) {
             $info .= '<span class="notice">'."calc based directly on dateCalcStr</span><br />"; // .'</span>'
             if ( $dateCalcStr == $calcBasis ) {
-                $snakeBasis = strtolower(str_replace(' ', '_', trim($dateCalcStr)))
+                $snakeBasis = strtolower(str_replace(' ', '_', trim($dateCalcStr)));
                 $meta_key = $snakeBasis . '_date'; // e.g. 'ash_wednesday_date'
                 $calcDate = get_post_meta( $litdateCalcID, $meta_key, true);
             } elseif ( $calcBoia != "after" ) {
