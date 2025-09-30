@@ -1852,7 +1852,7 @@ function calc_date_from_components ( $args = array() ) {
                     }
                     $info .= "calc_formula: $calcFormula<br />";
                 } else {
-                     $info .= $indent."no action taken to determine date/formula based on calcBasis: $calcBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
+                    $info .= $indent."no action taken to determine date/formula based on calcBasis: $calcBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
                 }
             }
         }
@@ -1860,6 +1860,7 @@ function calc_date_from_components ( $args = array() ) {
         // If there's no $calcFormula yet, use the dateCalcStr directly
         if ( empty($calcFormula) && empty($calcDate) ) {
             $info .= '<span class="notice">'."calc based directly on dateCalcStr</span><br />"; // .'</span>'
+            $info .= "dateCalcStr: '$dateCalcStr' // calcBasis: '$calcBasis'<br />";
             if ( $dateCalcStr == $calcBasis ) {
                 $snakeBasis = strtolower(str_replace(' ', '_', trim($dateCalcStr)));
                 $meta_key = $snakeBasis . '_date'; // e.g. 'ash_wednesday_date'
