@@ -757,67 +757,6 @@ function sdg_featured_image_caption ( $post_id = null, $attachment_id = null ) {
 
 /*********** POST RELATIONSHIPS ***********/
 
-// The following function is the replacement for the old get_related_podposts fcn
-function get_related_posts( $post_id = null, $related_post_type = null, $related_field_name = null, $single = false ) {
-
-    $info = null; // init
-
-    // If we don't have actual values for all parameters, there's not enough info to proceed
-    if ($post_id === null || $related_field_name === null || $related_post_type === null) { return null; }
-
-    $related_id = null; // init
-    if ( $single ) {
-        $limit = 1;
-    } else {
-        $limit = -1;
-    }
-
-    // Set args
-    $wp_args = array(
-        'post_type'   => $related_post_type,
-        'post_status' => 'publish',
-        'posts_per_page' => $limit,
-        'meta_query' => array(
-            array(
-                'key'     => $related_field_name,
-                'value'   => $post_id
-            )
-        ),
-        'orderby'        => 'title',
-        'order'            => 'ASC',
-    );
-    // Run query
-    $related_posts = new WP_Query( $wp_args );
-
-    // Loop through the records returned
-    if ( $related_posts ) {
-
-        if ( $single ) {
-            // TODO: simplify -- shouldn't really need a loop here...
-            while ( $related_posts->have_posts() ) {
-                $related_posts->the_post();
-                $related_id = get_the_ID();
-            }
-            $info = $related_id;
-        } else {
-            $info = $related_posts->posts;
-        }
-
-        /*
-        $info .= "<br />";
-        //$info .= "related_posts: ".print_r($related_posts,true);
-        $info .= "related_posts->posts:<pre>".print_r($related_posts->posts,true)."</pre>";
-        $info .= "wp_args:<pre>".print_r($wp_args,true)."</pre>";
-        */
-
-    } else {
-        $info = "No matching posts found for wp_args: ".print_r($wp_args,true);
-    }
-
-    return $info;
-
-}
-
 function display_postmeta( $args = array() ) {
 
     // TS/logging setup
