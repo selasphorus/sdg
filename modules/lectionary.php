@@ -1310,6 +1310,9 @@ function parseDateStr ( $args = array() )
         } elseif ( array_key_exists($component, $liturgical_bases) ) {
             $component_info .= $indent."component '".$component."' is a liturgical_base<br />";
             $previous_component_type = "liturgical_base";
+            if ( $component == $dateCalcStr ) {
+                $calcBasis = $dateCalcStr;
+            }
             // >> save as calcBasis, replacing loop below?
             // WIP
             // if multiple bases are found, proceed with the core subclause and then repeat calc...
