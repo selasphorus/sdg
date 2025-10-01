@@ -1725,7 +1725,9 @@ function calcDateFromComponents ( $args = array() ) {
     if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 
     // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-    $basisDate = getBasisDate( $year, $litdateCalcID, $calcBasis, $calcBasisID, $calcBasisField );
+    $arrBasisDate = getBasisDate( $year, $litdateCalcID, $calcBasis, $calcBasisID, $calcBasisField );
+    $basisDate = $arrBasisDate['date'];
+    $info .= $arrBasisDate['info'];
     if ( $calcBasis == "epiphany" ) {
         $num_sundays_after_epiphany = get_post_meta( $litdateCalcID, 'num_sundays_after_epiphany', true);
     }
