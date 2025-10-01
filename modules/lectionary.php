@@ -1128,7 +1128,6 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
 
 function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() )
 {
-
     // Init vars
     $arr_info = array();
     $calc_bases = array();
@@ -1154,12 +1153,12 @@ function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() )
     // Run the query
     $arr_posts = new WP_Query( $wp_args );
 
-    if ( $verbose == "true" ) {
+    //if ( $verbose == "true" ) {
         $info .= "WP_Query run as follows:";
         $info .= "<pre>query args: ".print_r($wp_args, true)."</pre>";
         $info .= "[".count($arr_posts->posts)."] posts found matching dateCalcStr.<br />";
         //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
-    }
+    //}
     if ( count($arr_posts->posts) > 0 ) {
         foreach ( $arr_posts->posts AS $post ) {
             // Check to make sure this isn't an "Eve of" or "Week of" date before adding it to the array
