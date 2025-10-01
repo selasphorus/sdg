@@ -1777,7 +1777,7 @@ function calcDateFromComponents ( $args = array() ) {
         if ( contains_numbers($dateCalcStr) ) {
 
             // TODO/wip: also check for "two" etc
-            if ( $verbose == "true" ) { $info .= "dateCalcStr contains numbers.<br />"; }
+            if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; } else { $info .= "dateCalcStr {$dateCalcStr} does NOT contain numbers.<br />"; }
 
             // Determine the calcInterval
             // WIP deal w/ multiple value possibilities for weekday, boia
