@@ -646,7 +646,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
     if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
     if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
     //
-    //if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
+    if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
 
     foreach ( $litDateData as $dateStr => $typeGroups ) {
         $output .= "<div class='liturgical-date-block'>";
