@@ -1373,11 +1373,11 @@ function parseDateStr ( $args = array() )
     if ( $calcBasis ) {
         $calcBasis = strtolower($calcBasis);
         if ( array_key_exists($calcBasis, $liturgical_bases) ) {
-            //if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; }
+            $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; //if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; }
             $arrCalcBases = array();  // calcBases array needs to be array of arrays to match getCalcBasesFromStr results
             $basisField = $liturgical_bases[$calcBasis];
             $arrCalcBases[] = array('basis' => $calcBasis, 'basisField' => $basisField );
-            $calcBasesInfo = array( 'info' => "calcBasis: $calcBasis is a liturgical_base<br />", 'calcBases' => $calcBases );
+            $calcBasesInfo = array( 'info' => "calcBasis: $calcBasis is a liturgical_base<br />", 'calcBases' => $arrCalcBases );
         } else {
             if ( $verbose == "true" ) { $info .= ">> getCalcBasesFromStr using str calcBasis: $calcBasis<br />"; }
             $calcBasesInfo = getCalcBasesFromStr($calcBasis, $idsToExclude);
