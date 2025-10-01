@@ -1046,6 +1046,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     $basisDate = null;
 
     $info .= ">>> getBasisDate <<<<br />";
+    $info .= "year: ".$year." // litdateCalcID: " . $litdateCalcID . " // calcBasis: " . $calcBasis . " // calcBasisID: " . $calcBasisID . " // calcBasisField: " . $calcBasisField . "<br />";
 
     if ( $calcBasis == 'christmas' ) {
         $basisDateStr = $year."-12-25";
