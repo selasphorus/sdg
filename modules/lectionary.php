@@ -26,7 +26,7 @@ add_action('acf/input/admin_enqueue_scripts', function() {
 // TMP -- see WHx4\src\Utils\Text
 function snake ( $string = "")
 {
-    strtolower( str_replace( ' ', '_', $string ) )
+    strtolower( str_replace( ' ', '_', $string ) );
 }
 
 function normalizeMonthToInt( string $month ): ?int
