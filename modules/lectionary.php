@@ -1308,9 +1308,10 @@ function parseDateStr ( $args = array() )
             $component_info .= $indent."component '".$component."' is a date<br />";
             $previous_component_type = "date";
         } elseif ( array_key_exists($component, $liturgical_bases) ) {
-            $component_info .= $indent."component '".$component."' is a liturgical_base<br />";
+            //$component_info .= $indent."component '".$component."' is a liturgical_base<br />";
             $previous_component_type = "liturgical_base";
             if ( $component == $dateCalcStr ) {
+                $component_info .= $indent."component '".$component."', a liturgical_base, is equal to the complete dateCalcStr: $dateCalcStr<br />";
                 $calcBasis = $dateCalcStr;
             }
             // >> save as calcBasis, replacing loop below?
