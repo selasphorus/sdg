@@ -1,4 +1,4 @@
-<?php
+containsNumbers<?php
 
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
@@ -1333,7 +1333,7 @@ function parseDateStr ( $args = array() )
                 $calcBasis = trim(substr($dateCalcStr,strpos($dateCalcStr,$component)+strlen($component)));
                 $component_info .= $indent.'calcBasis: '.$calcBasis."<br />";
             }
-        } elseif ( contains_numbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
+        } elseif ( containsNumbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
             $component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
             //$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
             // WIP...
@@ -1774,7 +1774,7 @@ function calcDateFromComponents ( $args = array() ) {
 
         // ** Extract components of dateCalcStr & calculate date for $year
         // ** Determine the calcInterval -- number of days/weeks...
-        if ( contains_numbers($dateCalcStr) ) {
+        if ( containsNumbers($dateCalcStr) ) {
 
             // TODO/wip: also check for "two" etc
             if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; }
@@ -1783,7 +1783,7 @@ function calcDateFromComponents ( $args = array() ) {
             // WIP deal w/ multiple value possibilities for weekday, boia
             if ( !is_array($calcWeekday) && !is_array($calcBoia) ) { //&& !empty($calcWeekday) && !empty($calcBoia)
                 // TODO: fix this
-                $numbers = extract_numbers($dateCalcStr);
+                $numbers = extractNumbers($dateCalcStr);
                 if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; } //<pre></pre>
                 if ( count($numbers) == 1 ) {
                     $calcInterval = $numbers[0];
@@ -1841,7 +1841,7 @@ function calcDateFromComponents ( $args = array() ) {
             }
 
         } else {
-            $info .= "dateCalcStr {$dateCalcStr} does NOT contain numbers nor the substr 'last'.<br />";
+            $info .= "dateCalcStr '$dateCalcStr' does NOT contain numbers nor the substr 'last'.<br />";
         }
 
         // If the calcFormula hasn't already been determined, build it
