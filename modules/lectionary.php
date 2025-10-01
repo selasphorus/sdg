@@ -1628,7 +1628,7 @@ function calcDateFromStr( $args = array() )
         if ( isset($components['dateCalcStr']) ) { $dateCalcStr = $components['dateCalcStr']; }
         //
         if ( isset($components['calcBasis']) && strtolower($dateCalcStr) == $components['calcBasis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
-            if ( $verbose == "true" ) { $info .= "calcBasis: $components['calcBasis'] same as dateCalcStr: $dateCalcStr. About to getBasisDate.<br />"; }
+            if ( $verbose == "true" ) { $info .= "calcBasis: " . $components['calcBasis'] . "same as dateCalcStr: $dateCalcStr. About to getBasisDate.<br />"; }
             $arrBasisDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], $components['calc_basis_field'] );
             $calcDate = $arrBasisDate['date'];
             $info .= $arrBasisDate['info'];
