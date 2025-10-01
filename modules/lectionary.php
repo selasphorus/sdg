@@ -1377,7 +1377,7 @@ function parseDateStr ( $args = array() )
     if ( $calcBasis ) {
         $calcBasis = strtolower($calcBasis);
         if ( array_key_exists($calcBasis, $liturgical_bases) ) {
-            $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; //if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; }
+            if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; }
             $arrCalcBases = array();  // calcBases array needs to be array of arrays to match getCalcBasesFromStr results
             $basisField = $liturgical_bases[$calcBasis];
             $arrCalcBases[] = array('basis' => $calcBasis, 'basisField' => $basisField );
@@ -2073,7 +2073,7 @@ function calc_litdates( $atts = array() ) {
     $posts = $arr_posts->posts;
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
-    if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
+    //if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
     $info .= "<br />";
 
