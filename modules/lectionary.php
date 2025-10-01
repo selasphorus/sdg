@@ -1035,7 +1035,7 @@ function get_collect_text( $postID = null, $dateStr = null )
 
 // Function(s) to calculate variable liturgical_dates
 
-function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
+function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
 {
     //if ( empty($calcBasis) ) { return null; }
 
@@ -1631,7 +1631,8 @@ function calcDateFromStr( $args = array() )
         //
         if ( isset($components['calcBasis']) && strtolower($dateCalcStr) == $components['calcBasis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
             if ( $verbose == "true" ) { $info .= "calcBasis: " . $components['calcBasis'] . "same as dateCalcStr: $dateCalcStr. About to getBasisDate.<br />"; }
-            $arrBasisDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], $components['calcBasisField'] );
+            //getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
+            $arrBasisDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], null, $components['calcBasisField'] );
             $calcDate = $arrBasisDate['date'];
             $info .= $arrBasisDate['info'];
             $info .= "date to be calculated is same as basis_date => calcDate = getBasisDate: $calcDate<br />";
