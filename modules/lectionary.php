@@ -1040,6 +1040,8 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
 {
     //if ( empty($calcBasis) ) { return null; }
 
+    $arr_info = array();
+
     $info = "";
     $basisDateStr = null;
     $basisDate = null;
@@ -1116,7 +1118,11 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
         //if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr ($basisDate_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
     }
 
-    return $basisDate;
+    $arr_info['date'] = $basisDate;
+    $arr_info['info'] = $info;
+
+    //return $basisDate;
+    return $arr_info;
 
 }
 
@@ -1625,7 +1631,9 @@ function calcDateFromStr( $args = array() )
         //
         if ( isset($components['calcBasis']) && strtolower($dateCalcStr) == $components['calcBasis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
             if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis same as dateCalcStr: $dateCalcStr. About to getBasisDate.<br />"; }
-            $calcDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], $components['calc_basis_field'] );
+            $arrBasisDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], $components['calc_basis_field'] );
+            $calcDate = $arrBasisDate['date'];
+            $info .= $arrBasisDate['info'];
             $info .= "date to be calculated is same as basis_date => calcDate = getBasisDate: $calcDate<br />";
         } else {
             //
@@ -1655,9 +1663,9 @@ function calcDateFromStr( $args = array() )
             $new_basis_date_str = date("Y-m-d", $calcDate );
         } else if ( $verbose == "true" ) {
             if ( empty($calcDate) ) {
-                $info .= '<span class="notice">'."Cannot create new_basis_date_str -- calc_date is empty</span>".'<br />';
+                $info .= '<span class="notice">'."Cannot create new_basis_date_str -- calcDate is empty</span>".'<br />';
             } else {
-                $info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calcDate." because it's a string</span>".'<br />';
+                $info .= '<span class="notice">'."Cannot create new_basis_date_str from calcDate: ".$calcDate." because it's a string</span>".'<br />';
             }
         }
     }
@@ -1665,14 +1673,14 @@ function calcDateFromStr( $args = array() )
     if ( $calcDate ) {
         if ( $verbose == "true" ) { $info .= 'calcDate: '.$calcDate.'<br />'; } //'<span class="notice">'.'</span>'.
         if ( is_int($calcDate) ) {
-            $info .= '<span class="notice">'.'calc_date (timestamp >> formatted): '.date('Y-m-d', $calcDate).'</span>'.'<br />';
+            $info .= '<span class="notice">'.'calcDate (timestamp >> formatted): '.date('Y-m-d', $calcDate).'</span>'.'<br />';
         } else {
-            $info .= '<span class="notice">'."calc_date not a valid date: ".$calcDate." (string)</span>".'<br />'; //if ( $verbose == "true" ) { }
+            $info .= '<span class="notice">'."calcDate not a valid date: ".$calcDate." (string)</span>".'<br />'; //if ( $verbose == "true" ) { }
             $calcDate = null;
         }
     }
 
-    $arr_info['calc_date'] = $calcDate;
+    $arr_info['calcDate'] = $calcDate;
     $arr_info['calc_info'] = $info;
 
     return $arr_info;
@@ -1792,7 +1800,7 @@ function calcDateFromComponents ( $args = array() ) {
 
             } elseif ( $first_sunday == $basisDate && $dateCalcStr == "first sunday of"  ) {
 
-                if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of && first_sunday == basis_date &#8756; calc_date = first_sunday<br />"; }
+                if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of && first_sunday == basis_date &#8756; calcDate = first_sunday<br />"; }
                 $calcDate = $first_sunday;
 
             } elseif ( $first_sunday != $basisDate ) {
@@ -1806,7 +1814,7 @@ function calcDateFromComponents ( $args = array() ) {
                 // ???
                 if ( $calcInterval === 0 ) {
                     $calcDate = $first_sunday;
-                    if ( $verbose == "true" ) { $info .= "Set calc_date = first_sunday ($first_sunday)<br />"; }
+                    if ( $verbose == "true" ) { $info .= "Set calcDate = first_sunday ($first_sunday)<br />"; }
                 }
 
             }
@@ -1882,7 +1890,7 @@ function calcDateFromComponents ( $args = array() ) {
             } elseif ( $calcBoia != "after" ) {
                 $calcFormula = $dateCalcStr;
             } else {
-                if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calcBoia\"; calc_date: $calcDate</span><br />"; }
+                if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calcBoia\"; calcDate: $calcDate</span><br />"; }
             }
         }
 
@@ -1890,7 +1898,7 @@ function calcDateFromComponents ( $args = array() ) {
         //$info .= $indent.">> [$calcInterval] -- [$calcWeekday] -- [$calcBoia] -- [$calcBasisField]<br />";
         //$info .= $indent.'>> basis_date unformatted: "'.$basisDate.'<br />'; // tft
         //
-        // calc_date not yet determined >> do the actual calculation using the formula and basis_date
+        // calcDate not yet determined >> do the actual calculation using the formula and basis_date
         if ( empty($calcDate) ) {
 
             $info .= '>> calc_formula: "'.$calcFormula.'"; basis_date: '.date('Y-m-d',$basisDate).'<br />';
@@ -1905,7 +1913,7 @@ function calcDateFromComponents ( $args = array() ) {
                 $info .= "Can't do calc -- calc_formula or basis_date is empty.<br />";
             }
             //$info .= $indent.'strtotime("'.$calcFormula.'",$basisDate)<br />';
-            //$info .= $indent."calc_date -- ".$calcDate.' = strtotime("'.$calcFormula.'", '.$basisDate.')<br />'; // tft
+            //$info .= $indent."calcDate -- ".$calcDate.' = strtotime("'.$calcFormula.'", '.$basisDate.')<br />'; // tft
             // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
             // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
         }
@@ -1924,7 +1932,7 @@ function calcDateFromComponents ( $args = array() ) {
             $info .= "There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
             if ( $calcDate > strtotime($ash_wednesday_date) ) { //if ( (int) $calcInterval > (int) $num_sundays_after_epiphany ) {
                 $info .= $indent.'<span class="warning">Uh oh! That\'s too many Sundays.</span><br />'; // tft
-                $info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calcDate).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
+                $info .= $indent.'<span class="warning">calcDate: ['.date('Y-m-d', $calcDate).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
                 $calcDate = "N/A";
             }
 
@@ -2107,7 +2115,7 @@ function calc_litdates( $atts = array() ) {
                 $calc_args = array( 'year' => $year, 'dateCalcStr' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
                 $calc = calcDateFromStr( $calc_args ); //$calc = calcDateFromStr( $year, $dateCalcStr, $verbose );
                 if ( $calc ) {
-                    $calcDate = $calc['calc_date'];
+                    $calcDate = $calc['calcDate'];
                     $calc_info .= $calc['calc_info'];
                 } else {
                     $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
@@ -2122,9 +2130,9 @@ function calc_litdates( $atts = array() ) {
             if ( !empty($calcDate) && $calcDate != "N/A" ) {
                 $calcDate_str = date('Y-m-d', $calcDate);
                 //$calcDate_str = date('Ymd', $calcDate); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
-                $calc_info .= "calc_date_str: <strong>$calcDate_str</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
+                $calc_info .= "calcDateStr: <strong>$calcDate_str</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
             } else {
-                $calc_info .= "calc_date N/A<br />";
+                $calc_info .= "calcDate N/A<br />";
             }
 
             // 3. Save dates to ACF repeater field row for date_calculatedday_
@@ -2164,7 +2172,7 @@ function calc_litdates( $atts = array() ) {
 
                 }
             } else {
-                $calc_info .= "calc_date_str is empty.<br />";
+                $calc_info .= "calcDateStr is empty.<br />";
             }
 
             if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
