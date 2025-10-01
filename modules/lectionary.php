@@ -1,4 +1,4 @@
-containsNumbers<?php
+<?php
 
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
