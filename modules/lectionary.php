@@ -364,7 +364,7 @@ function getLitDateData( array $args = [] ): array|string
 
     if ( $exclusive ) { $day_titles_only = true; }
     // $filter_types = ['primary','secondary'];
-    if ( $verbose == "true" ) { $ts_info .= "getLitDateData args: <pre>".print_r($args,true)."</pre>"; }
+    if ( $debug == "true" ) { $ts_info .= "getLitDateData args: <pre>".print_r($args,true)."</pre>"; }
     //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
 
     // Normalize date input
