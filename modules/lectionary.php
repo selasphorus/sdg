@@ -1777,7 +1777,7 @@ function calcDateFromComponents ( $args = array() ) {
         if ( contains_numbers($dateCalcStr) ) {
 
             // TODO/wip: also check for "two" etc
-            if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; } else { $info .= "dateCalcStr {$dateCalcStr} does NOT contain numbers.<br />"; }
+            if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; }
 
             // Determine the calcInterval
             // WIP deal w/ multiple value possibilities for weekday, boia
@@ -1840,6 +1840,8 @@ function calcDateFromComponents ( $args = array() ) {
                 $calcFormula = "previous Sunday"; //$calcFormula = "Sunday before";
             }
 
+        } else {
+            $info .= "dateCalcStr {$dateCalcStr} does NOT contain numbers nor the substr 'last'.<br />";
         }
 
         // If the calcFormula hasn't already been determined, build it
