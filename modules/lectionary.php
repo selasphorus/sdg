@@ -1303,7 +1303,7 @@ function parseDateStr ( $args = array() )
 
         $component = strtolower($component);
 
-        // First check to see if the component is a straight-up date! // date('Y-m-d', $calcDate) // (YYYY-MM-DD) //$calcDate_str = date('Y-m-d', $calcDate);
+        // First check to see if the component is a straight-up date! // date('Y-m-d', $calcDate) // (YYYY-MM-DD) //$calcDateStr = date('Y-m-d', $calcDate);
         if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
             $component_info .= $indent."component '".$component."' is a date<br />";
             $previous_component_type = "date";
@@ -1399,7 +1399,7 @@ function parseDateStr ( $args = array() )
         $info .= '<span class="notice">More than one calcBasis found!</span><br />';
         $info .= "calcBases: <pre>".print_r($calcBases, true)."</pre>";
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
+        //$calc['calcInfo'] = $info;
         //return $calc; // abort early -- we don't know what to do with this dateCalcStr
         foreach ( $calcBases as $cb_tmp ) {
             if ( $cb_tmp['basis'] == $calcBasis ) {
@@ -1460,7 +1460,7 @@ function parseDateStr ( $args = array() )
         $info .= '<span class="notice">More than one calcBoia found!</span><br />';
         $info .= "calcBoias: ".print_r($calcBoias, true)."<br />"; //<pre></pre>
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
+        //$calc['calcInfo'] = $info;
         //return $calc; // abort early -- we don't know what to do with this dateCalcStr
     } elseif ( count($calcBoias) == 1 ) {
         $calcBoia = $calcBoias[0];
@@ -1477,7 +1477,7 @@ function parseDateStr ( $args = array() )
         $info .= '<span class="notice">More than one calcWeekday found!</span><br />';
         $info .= "calcWeekdays: ".print_r($calcWeekdays, true)."<br />"; //<pre></pre>
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
+        //$calc['calcInfo'] = $info;
         //return $calc; // abort early -- we don't know what to do with this dateCalcStr
     } elseif ( count($calcWeekdays) == 1 ) {
         $calcWeekday = $calcWeekdays[0];
@@ -1578,7 +1578,7 @@ function calcDateFromStr( $args = array() )
     if ( empty($dateCalcStr) || empty($year) ) {
         $info .= "Insufficient data provided<br />";
         $info .= "dateCalcStr: $dateCalcStr; year: $year<br />";
-        $arr_info['calc_info'] = $info;
+        $arr_info['calcInfo'] = $info;
         return $arr_info;
     }
 
@@ -1588,7 +1588,7 @@ function calcDateFromStr( $args = array() )
 
     // Find the liturgical_date_calc post for the selected year
     // TODO: *maybe* -- phase this out in favor of simply using php easter_date function. ( easter_date(year); )
-    //$litdateCalcID = get_liturgical_date_calc_id ( $year ); // WIP
+    //$litdateCalcID = getLiturgicalDateCalcID ( $year ); // WIP
     // (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
     // TODO: make this a separate function?
     $wp_args = array(
@@ -1682,7 +1682,7 @@ function calcDateFromStr( $args = array() )
     }
 
     $arr_info['calcDate'] = $calcDate;
-    $arr_info['calc_info'] = $info;
+    $arr_info['calcInfo'] = $info;
 
     return $arr_info;
 
@@ -2084,9 +2084,9 @@ function calc_litdates( $atts = array() ) {
         $info .= '<div class="code indent">';
 
         // init
-        $calc_info = "";
+        $calcInfo = "";
         $calcDate = null;
-        $calcDate_str = "";
+        $calcDateStr = "";
 
         $changes_made = false;
         $complex_formula = false;
@@ -2111,49 +2111,49 @@ function calc_litdates( $atts = array() ) {
 
         foreach ( $arr_years as $year ) {
 
-            $calc_info .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
+            $calcInfo .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
 
             if ( !empty($dateCalcStr) ) {
-                $calc_info .= "dateCalcStr: $dateCalcStr<br />";
+                $calcInfo .= "dateCalcStr: $dateCalcStr<br />";
                 $calc_args = array( 'year' => $year, 'dateCalcStr' => $dateCalcStr, 'verbose' => $verbose, 'idsToExclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
                 $calc = calcDateFromStr( $calc_args ); //$calc = calcDateFromStr( $year, $dateCalcStr, $verbose );
                 if ( $calc ) {
                     $calcDate = $calc['calcDate'];
-                    $calc_info .= $calc['calc_info'];
+                    $calcInfo .= $calc['calcInfo'];
                 } else {
-                    $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
-                    if ( $verbose == "true" ) { $calc_info .= "calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
-                    if ( $verbose == "true" ) { $calc_info .= "calc: <pre>".print_r($calc,true)."</pre>"; }
+                    $calcInfo .= '<span class="error">calcDateFromStr failed</span><br />';
+                    if ( $verbose == "true" ) { $calcInfo .= "calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
+                    if ( $verbose == "true" ) { $calcInfo .= "calc: <pre>".print_r($calc,true)."</pre>"; }
                 }
             } else {
-                $calc_info .= "dateCalcStr is empty<br />";
+                $calcInfo .= "dateCalcStr is empty<br />";
                 //$calc = null;
             }
 
             if ( !empty($calcDate) && $calcDate != "N/A" ) {
-                $calcDate_str = date('Y-m-d', $calcDate);
-                //$calcDate_str = date('Ymd', $calcDate); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
-                $calc_info .= "calcDateStr: <strong>$calcDate_str</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
+                $calcDateStr = date('Y-m-d', $calcDate);
+                //$calcDateStr = date('Ymd', $calcDate); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
+                $calcInfo .= "calcDateStr: <strong>$calcDateStr</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
             } else {
-                $calc_info .= "calcDate N/A<br />";
+                $calcInfo .= "calcDate N/A<br />";
             }
 
             // 3. Save dates to ACF repeater field row for date_calculatedday_
             // DB: date_calculations >> date_calculated -- date_calculations_[#]_date_calculated
 
-            if ( $calcDate_str != "" ) {
+            if ( $calcDateStr != "" ) {
 
                 $newrow = true;
 
                 if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
                     while ( have_rows('date_calculations', $postID) ) : the_row();
                         $dateCalculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-                        if ( $dateCalculated == $calcDate_str ) {
+                        if ( $dateCalculated == $calcDateStr ) {
                             // Already in there
                             $newrow = false;
-                            $calc_info .= "+++ Old news. This date_calculated ($calcDate_str) is already in the database. +++<br />"; // tft
+                            $calcInfo .= "+++ Old news. This date_calculated ($calcDateStr) is already in the database. +++<br />"; // tft
                         } else {
-                            //$calc_info .= "Old date_calculated: $dateCalculated.<br />"; // tft
+                            //$calcInfo .= "Old date_calculated: $dateCalculated.<br />"; // tft
                         }
                     endwhile;
                 } // end if
@@ -2161,28 +2161,28 @@ function calc_litdates( $atts = array() ) {
                 if ( $newrow == true ) {
 
                     $row = array(
-                        'date_calculated' => $calcDate_str
+                        'date_calculated' => $calcDateStr
                     );
 
-                    $calc_info .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
+                    $calcInfo .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
                     if ( $testing != "true" ) {
                         if ( add_row('date_calculations', $row, $postID) ) { // ACF function syntax: add_row($selector, $value, [$postID])
-                            $calc_info .= "ACF row added for post_id: $postID<br />";
+                            $calcInfo .= "ACF row added for post_id: $postID<br />";
                         } else {
-                            $calc_info .= "ACF add row FAILED for post_id: $postID<br />";
+                            $calcInfo .= "ACF add row FAILED for post_id: $postID<br />";
                         }
                     }
 
                 }
             } else {
-                $calc_info .= "calcDateStr is empty.<br />";
+                $calcInfo .= "calcDateStr is empty.<br />";
             }
 
-            if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
+            if ( count($arr_years) > 1 ) { $calcInfo .= "<br />"; }
 
         } // END foreach arr_years
 
-        $info .= $calc_info;
+        $info .= $calcInfo;
         $info .= '</div>';
 
     } // END foreach post
