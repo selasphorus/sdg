@@ -710,6 +710,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
                         $output .= '<small>'; //<br />
                         $output .= 'ID: ' . $post->ID;
                         $output .= ' | Date type: ' . esc_html( $date_type );
+                        if ( $date_type == "variable" ) {
+                            $date_calc = get_post_meta( $post->ID, 'date_calculation', true );
+                            if ( $date_calc ) { $output .= ' | Date calc: ' . esc_html( $date_calc );}
+                        }
                         if ( !empty( $term_names ) ) {
                             $output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
                         }
