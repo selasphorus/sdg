@@ -2407,6 +2407,3 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
     return $info;
 
 }
-
-
-?>
