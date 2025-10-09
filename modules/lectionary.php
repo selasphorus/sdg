@@ -613,11 +613,14 @@ function getLitDateData( array $args = [] ): array|string
             if ( $secondaryPost ) { $output .= $secondaryPost['post']->post_title; }
         } else if ( $args['return'] === 'formatted' ) {
             $output = "";
+            $output .= "debug: [$debug]<br />";
             $data = formatLitDateData( $litdateData, $args );
             $output .= $data;
         }
         //if ( $debug ) { $output .= $info; }
-        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) {
+            $output .= '<div class="troubleshooting">'.$ts_info.'</div>';
+        }
         return $output;
     }
 
