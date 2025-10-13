@@ -1341,7 +1341,12 @@ function parseDateStr ( $args = array() )
             // Potential calcBasis?
             if ( empty($calcBasis)) {
                 $calcBasis = trim(substr($dateCalcStr,strpos($dateCalcStr,$component)+strlen($component)));
-                $component_info .= $indent.'calcBasis: '.$calcBasis."<br />";
+                if ( in_array($calcBasis, $months) ) {
+                    $component_info .= $indent.'calcBasis "'.$calcBasis.'" is a month. Therefore we must use Jan. 1 of the given year as basis instead.<br />';
+                    $calcBasis = $year."-01-01";
+                } else {
+                    $component_info .= $indent.'calcBasis: '.$calcBasis."<br />";
+                }
             }
         } elseif ( containsNumbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
             $component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
