@@ -1751,6 +1751,8 @@ function calcDateFromComponents ( $args = array() ) {
     if ( $verbose == "true" ) {
         if ( empty($basisDate) ) {
             $info .= "NO VALID basisDate FOUND!<br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
+            // Abort!
+            return ['date' => null, 'info' => $info];
         } else {
             $info .= "basisDate: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
         }
