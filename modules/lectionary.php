@@ -1049,8 +1049,9 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
     $arr_info = array();
 
     $info = "";
-    $basisDateStr = null;
+    $basisDateStr = "";
     $basisDate = null;
+    $abort = false;
 
     $info .= ">>> getBasisDate <<<<br />";
     $info .= "year: ".$year." // litdateCalcID: " . $litdateCalcID . " // calcBasis: " . $calcBasis . " // calcBasisID: " . $calcBasisID . " // calcBasisField: " . $calcBasisField . "<br />";
@@ -1090,6 +1091,7 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
                     }
                 endwhile;
             } // end if
+            if ( !empty($basisDateStr) ) { $info .= "basisDateStr found: ".$basisDateStr."<br />"; } else { $info .= "NO basisDateStr found for the given year.<br />"; $abort = true; }
         }
     } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis
                 || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis)
@@ -1115,13 +1117,14 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
     }
 
     // If no basis date string has yet been established, then default to January first of the designated year
-    if ( $basisDateStr == "" ) {
+    // Careful! -- this can mess things up for variable dates that are dependent on other variable dates
+    if ( empty($basisDateStr) && $abort !== true ) {
         $basisDateStr = $year."-01-01";
-        //if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+        if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
     }
     //if ( $verbose == "true" ) { $info .= "basisDateStr: $basisDateStr ($calcBasis)<br />"; } // '<span class="notice">'.</span> // ($calcBasis // $calcBasisField)
 
-    if ( $basisDateStr ) {
+    if ( !empty($basisDateStr) ) {
         // Get the basis_date from the string version
         $basisDate = strtotime($basisDateStr);
         //$basisDate_weekday = strtolower( date('l', $basisDate) );
@@ -1253,7 +1256,7 @@ function parseDateStr ( $args = array() )
 {
     $arr_info = array();
     $arr_elements = array();
-    $complex_formula = false;
+    $complex_formula = false; // TODO: deal w/ subset of dates that are dependent on other variable dates which must be calculated first.
     //
     $info = "";
     $info .= '<strong>&gt;&gt;&gt; parseDateStr &lt;&lt;&lt;</strong><br />';
@@ -1745,8 +1748,12 @@ function calcDateFromComponents ( $args = array() ) {
     if ( $calcBasis == "epiphany" ) {
         $num_sundays_after_epiphany = get_post_meta( $litdateCalcID, 'num_sundays_after_epiphany', true);
     }
-    if ( $verbose == "true" && !empty($basisDate) ) {
-        $info .= "basis_date: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
+    if ( $verbose == "true" ) {
+        if ( empty($basisDate) ) {
+            $info .= "NO VALID basisDate FOUND!<br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
+        } else {
+            $info .= "basisDate: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
+        }
     }
 
     // Check to see if the date to be calculated is in fact the same as the base date
