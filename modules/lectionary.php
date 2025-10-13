@@ -1120,7 +1120,7 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
     // Careful! -- this can mess things up for variable dates that are dependent on other variable dates
     if ( empty($basisDateStr) && $abort === false ) {
         $basisDateStr = $year."-01-01";
-        if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
+        //if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
     }
     //if ( $verbose == "true" ) { $info .= "basisDateStr: $basisDateStr ($calcBasis)<br />"; } // '<span class="notice">'.</span> // ($calcBasis // $calcBasisField)
 
@@ -1128,7 +1128,7 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
         // Get the basis_date from the string version
         $basisDate = strtotime($basisDateStr);
         //$basisDate_weekday = strtolower( date('l', $basisDate) );
-        if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr<br />"; } // ($basisDate_weekday) .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
+        //if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr<br />"; } // ($basisDate_weekday) .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
     }
 
     $arr_info['date'] = $basisDate;
