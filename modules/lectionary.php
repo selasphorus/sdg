@@ -1342,8 +1342,8 @@ function parseDateStr ( $args = array() )
             if ( empty($calcBasis)) {
                 $calcBasis = trim(substr($dateCalcStr,strpos($dateCalcStr,$component)+strlen($component)));
                 if ( in_array($calcBasis, $months) ) {
-                    $component_info .= $indent.'calcBasis "'.$calcBasis.'" is a month. Therefore we must use Jan. 1 of the given year as basis instead.<br />';
-                    $calcBasis = $year."-01-01";
+                    $component_info .= $indent.'calcBasis "'.$calcBasis.'" is a month. Therefore we must use first of that month in the given year as basis.<br />';
+                    $calcBasis = "first day of ".$calcBasis;
                 } else {
                     $component_info .= $indent.'calcBasis: '.$calcBasis."<br />";
                 }
