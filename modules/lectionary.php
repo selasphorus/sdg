@@ -1759,7 +1759,7 @@ function calcDateFromComponents ( $args = array() )
         return ['date' => null, 'info' => $info];
     }
     if ( $verbose == "true" ) {
-        $info .= "basisDate: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";\
+        $info .= "basisDate: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
     }
 
     // Check to see if the date to be calculated is in fact the same as the base date
