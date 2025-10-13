@@ -1877,7 +1877,7 @@ function calcDateFromComponents ( $args = array() ) {
                     } elseif ( $first_sunday ) {
                         $calcDate = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
                     }
-                } elseif ( $calcBasis != "" && $calcBoia == ( "before" || "after") ) {
+                } elseif ( $calcBasis != "" && ( $calcBoia == "before" || $calcBoia == "after" ) ) {
                     $info .= $indent."setting prev/next<br />"; // tft
 
                     // e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
