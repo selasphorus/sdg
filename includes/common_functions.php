@@ -1414,7 +1414,7 @@ function sdg_list_media_items ( $atts = array() ) {
     $mime_types = array();
 
     $args = shortcode_atts( array(
-          'type'        => null,
+        'type'        => null,
         'category'    => null,
         'grouped_by'  => null,
     ), $atts );
