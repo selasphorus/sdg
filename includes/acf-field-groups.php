@@ -1671,7 +1671,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1689,6 +1689,26 @@ function sdg_register_field_groups() {
                 'placeholder' => '',
             ),
             array(
+                'key' => 'field_627428852ef4a',
+                'label' => 'Date Calculation',
+                'name' => 'date_calculation',
+                'aria-label' => '',
+                'type' => 'text',
+                'instructions' => '',
+                'required' => 0,
+                'conditional_logic' => 0,
+                'wrapper' => array(
+                    'width' => '30',
+                    'class' => '',
+                    'id' => '',
+                ),
+                'default_value' => '',
+                'placeholder' => '',
+                'prepend' => '',
+                'append' => '',
+                'maxlength' => '',
+            ),
+            array(
                 'key' => 'field_627428762ef49',
                 'label' => 'Show Day Title',
                 'name' => 'day_title',
@@ -1698,7 +1718,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '15',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1718,7 +1738,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '15',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1730,26 +1750,6 @@ function sdg_register_field_groups() {
                 'ui_off_text' => '',
             ),
             array(
-                'key' => 'field_627428852ef4a',
-                'label' => 'Date Calculation',
-                'name' => 'date_calculation',
-                'aria-label' => '',
-                'type' => 'text',
-                'instructions' => '',
-                'required' => 0,
-                'conditional_logic' => 0,
-                'wrapper' => array(
-                    'width' => '20',
-                    'class' => '',
-                    'id' => '',
-                ),
-                'default_value' => '',
-                'placeholder' => '',
-                'prepend' => '',
-                'append' => '',
-                'maxlength' => '',
-            ),
-            array(
                 'key' => 'field_627428922ef4b',
                 'label' => 'Fixed Date(s) of Observance (TXT)',
                 'name' => 'fixed_date_str',
@@ -1759,7 +1759,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1779,7 +1779,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1797,7 +1797,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1817,7 +1817,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1837,7 +1837,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1857,7 +1857,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1877,7 +1877,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1897,7 +1897,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1917,7 +1917,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1939,7 +1939,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1961,7 +1961,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),
@@ -1981,7 +1981,7 @@ function sdg_register_field_groups() {
                 'required' => 0,
                 'conditional_logic' => 0,
                 'wrapper' => array(
-                    'width' => '20',
+                    'width' => '25',
                     'class' => '',
                     'id' => '',
                 ),

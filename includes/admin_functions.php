@@ -65,60 +65,56 @@ function sdg_word_to_digit ( $word ) {
     return isset($words_to_digits[$word]) ? $words_to_digits[$word] : null;
 }
 
-function contains_numbers ( $string ) {
-
-	if ( preg_match('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $string) ) {
-		return true;
-	}
-	
-	return false;
-	
+function containsNumbers ( $string )
+{
+    if ( preg_match('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+/', $string) ) {
+        return true;
+    }
+    return false;
 }
 
-function extract_numbers ( $string ) {
+function extractNumbers ( $string ) {
 
-	$numbers = array();
-	
-	preg_match_all('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten[0-9]+/', $string, $matches); //PREG_OFFSET_CAPTURE
-	
-	// Make sure the numbers are digits -- convert them as needed
-	foreach ( $matches as $match ) {
-		$word = $match[0];
-		$num = sdg_word_to_digit ( $word );
-		if ( $num ) { $numbers[]= $num; } else { $numbers[]= $word; }
-	}
-	return $numbers;
-	
-} 
+    $numbers = array();
+    preg_match_all('/first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|one|two|three|four|five|six|seven|eight|nine|ten|[0-9]+/', $string, $matches); //PREG_OFFSET_CAPTURE
+
+    // Make sure the numbers are digits -- convert them as needed
+    foreach ( $matches as $match ) {
+        $word = $match[0];
+        $num = sdg_word_to_digit ( $word );
+        if ( $num ) { $numbers[]= $num; } else { $numbers[]= $word; }
+    }
+    return $numbers;
+}
 
 /*** POST TITLE/SLUG FUNCTIONS ***/
 
 /*function remove_accents ( $str ) {
-    
+
     $a = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Æ', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ð', 'Ñ', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ø', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'ß', 'à', 'á', 'â', 'ã', 'ä', 'å', 'æ', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ñ', 'ò', 'ó', 'ô', 'õ', 'ö', 'ø', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ', 'Ā', 'ā', 'Ă', 'ă', 'Ą', 'ą', 'Ć', 'ć', 'Ĉ', 'ĉ', 'Ċ', 'ċ', 'Č', 'č', 'Ď', 'ď', 'Đ', 'đ', 'Ē', 'ē', 'Ĕ', 'ĕ', 'Ė', 'ė', 'Ę', 'ę', 'Ě', 'ě', 'Ĝ', 'ĝ', 'Ğ', 'ğ', 'Ġ', 'ġ', 'Ģ', 'ģ', 'Ĥ', 'ĥ', 'Ħ', 'ħ', 'Ĩ', 'ĩ', 'Ī', 'ī', 'Ĭ', 'ĭ', 'Į', 'į', 'İ', 'ı', 'Ĳ', 'ĳ', 'Ĵ', 'ĵ', 'Ķ', 'ķ', 'Ĺ', 'ĺ', 'Ļ', 'ļ', 'Ľ', 'ľ', 'Ŀ', 'ŀ', 'Ł', 'ł', 'Ń', 'ń', 'Ņ', 'ņ', 'Ň', 'ň', 'ŉ', 'Ō', 'ō', 'Ŏ', 'ŏ', 'Ő', 'ő', 'Œ', 'œ', 'Ŕ', 'ŕ', 'Ŗ', 'ŗ', 'Ř', 'ř', 'Ś', 'ś', 'Ŝ', 'ŝ', 'Ş', 'ş', 'Š', 'š', 'Ţ', 'ţ', 'Ť', 'ť', 'Ŧ', 'ŧ', 'Ũ', 'ũ', 'Ū', 'ū', 'Ŭ', 'ŭ', 'Ů', 'ů', 'Ű', 'ű', 'Ų', 'ų', 'Ŵ', 'ŵ', 'Ŷ', 'ŷ', 'Ÿ', 'Ź', 'ź', 'Ż', 'ż', 'Ž', 'ž', 'ſ', 'ƒ', 'Ơ', 'ơ', 'Ư', 'ư', 'Ǎ', 'ǎ', 'Ǐ', 'ǐ', 'Ǒ', 'ǒ', 'Ǔ', 'ǔ', 'Ǖ', 'ǖ', 'Ǘ', 'ǘ', 'Ǚ', 'ǚ', 'Ǜ', 'ǜ', 'Ǻ', 'ǻ', 'Ǽ', 'ǽ', 'Ǿ', 'ǿ');
-    
+
     $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 'ss', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o');
-    
+
     return str_replace($a, $b, $str);
-    
+
 }*/
 
 function super_sanitize_title ( $str = null ) {
-    
+
     if ( $str === null ) { return null; }
-    
+
     $str = strtolower($str); // Make it lowercase
     $str = str_replace('ß', 'ss', $str); // Do this before remove_accents, because that WP fcn replaces ß with a single 's'
     $str = remove_accents($str); // Remove accents &c.
-    
+
     $str = str_replace(' & ', '_and_', $str);
     $str = str_replace(' – ', '_', $str);
-    
+
     $str = str_replace('&#8211;', '_', $str); // &#8211; is Unicode for dash
     $str = str_replace('&#8212;', '_', $str); // &#8211; is Unicode for em-dash
-    
+
     $str = strip_tags($str); // Remove HTML formatting
-    
+
     // Remove unnecessary formatting and punctuation
     //
     //$patterns = array('/[^a-zA-Z0-9 -]/', '/[ -]+/', '/^-|-$/');
@@ -126,43 +122,43 @@ function super_sanitize_title ( $str = null ) {
     //
     $patterns = array();
     $replacements = array();
-    
+
     $patterns[1] = '/[^\w]&amp;[^\w]/';
     $replacements[1] = '_and_';
-    
+
     $patterns[2] = '/&lsquo;/';
     $replacements[2] = '';
-    
+
     $patterns[3] = '/&rsquo/';
     $replacements[3] = '';
-    
+
     $patterns[4] = '/[^\w]&ndash;[^\w]/'; // en-dash -- with surrounding spaces
     $replacements[4] = '_';
-    
+
     $patterns[5] = '/[^\w]&mdash;[^\w]/'; // em-dash -- with surrounding spaces
     $replacements[5] = '_';
-    
+
     $patterns[6] = '/&ndash;/'; // en-dash -- no spaces
     $replacements[6] = '_';
-    
+
     $patterns[7] = '/&mdash;/'; // em-dash -- no spaces
     $replacements[7] = '_';
-    
+
     //$patterns[8] = '/[^\w]&[^\w]/'; // ampersand surrounded by spaces
     //$replacements[8] = '_and_';
-    
+
     $patterns[9] = '/[^\w]\+[^\w]/'; // ampersand surrounded by spaces
     $replacements[9] = '_and_';
-    
-    $str = preg_replace($patterns, $replacements, $str); 
-    
+
+    $str = preg_replace($patterns, $replacements, $str);
+
     ///
-    
+
     // Punctuation
     $str = str_replace("'", '', $str); // single straight quote
     $str = str_replace('‘', '', $str); // single left curly quote
     $str = str_replace('’', '', $str); // single right curly quote
-    
+
     $str = str_replace(' (', '_', $str); // open parens preceded by a space
     $str = str_replace(') ', '_', $str); // close parens followed by a space
     $str = str_replace('(', '', $str); // open parens
@@ -171,7 +167,7 @@ function super_sanitize_title ( $str = null ) {
     $str = str_replace('] ', '_', $str);
     $str = str_replace('[', '', $str);
     $str = str_replace(']', '', $str);
-    
+
     $str = str_replace('. ', '_', $str); // period + space
     $str = str_replace('.', '_', $str); // period
     $str = str_replace(', ', '_', $str); // comma + space
@@ -187,11 +183,11 @@ function super_sanitize_title ( $str = null ) {
     $str = str_replace(' - ', '_', $str); // spaced single hyphen
     $str = str_replace(' -- ', '_', $str); // spaced double hyphen
     $str = str_replace('--', '_', $str); // un-spaced double hyphen
-    
+
     $str = str_replace('  ', ' ', $str); // double space -- replace with single
     $str = str_replace(' ', '_', $str); // single space -- replace with underscore
     // TODO: look for other types of whitespace, via regex \s\w -- ??
-    
+
     $str = str_replace('/', '_', $str); // forward slash
     $str = str_replace('!', '', $str);
     $str = str_replace('?', '', $str);
@@ -204,9 +200,9 @@ function super_sanitize_title ( $str = null ) {
     $str = str_replace('__', '_', $str); // double underscore
     // Again...
     //$str = str_replace('__', '_', $str); // double underscore
-    
+
     $str = sanitize_title($str);
-    
+
     //$str = ucwords($str, "_");
     // Trim off trailing underscore
     if ( substr($str, -1) == '_' ) {
@@ -214,7 +210,7 @@ function super_sanitize_title ( $str = null ) {
         $str = substr($str, 0, -1);
     }
     return $str;
-    
+
 }
 
 // WIP to replace pods_sanitize
@@ -225,66 +221,66 @@ function sanitize ( $str = null ) {
 // WIP-NOW
 // Build title_for_matching UID based on... ???
 function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: get_title_uid", $do_log );
-    
+
     sdg_log( "[gtu] post_id: ".$post_id."; post_type: ".$post_type, $do_log );
     sdg_log( "[gtu] post_title: ".$post_title, $do_log );
     sdg_log( "[gtu] uid_field: ".$uid_field, $do_log );
-    
+
     if ( empty($post_id) && empty($post_title) ) { return false; }
-    
-    $new_t4m = ""; // init 
-    
+
+    $new_t4m = ""; // init
+
     if ( !$post_title ) { $post_title = get_the_title( $post_id ); }
     if ( !$post_type ) { $post_type = get_post_type( $post_id ); }
-    
+
     // Abort if error
     if ( strpos($post_title, 'Error! Abort!') !== false ) { return false; } // TODO: test!
-    
+
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
     $new_t4m = super_sanitize_title ( $post_title );
-    
-    sdg_log( "[gtu] old_t4m: ".$old_t4m, $do_log );    
-    
+
+    sdg_log( "[gtu] old_t4m: ".$old_t4m, $do_log );
+
     // Check to see if new_t4m is in fact unique to this post
     $t4m_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); // meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
     if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
-        
+
         // not unique! fix it...
         sdg_log( "[gtu] new_t4m not unique! Fix it.", $do_log);
-        
+
         if ( $old_t4m != $new_t4m ) {
             $i = $t4m_posts+1;
         } else {
             $i = $t4m_posts;
         }
         $new_t4m = $new_t4m."-v".$i;
-        
+
     }
     if ( $new_t4m == $old_t4m ) {
         sdg_log( "[gtu] new_t4m same as old_t4m.", $do_log );
     } else {
         sdg_log( "[gtu] new_t4m: ".$new_t4m, $do_log );
     }
-    
+
     return $new_t4m;
 }
 
 function update_title_for_matching ( $post_id ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
-    sdg_log( "divline2", $do_log ); 
+    sdg_log( "divline2", $do_log );
     sdg_log( "function: sdg_update_title_for_matching", $do_log );
-    
+
     if ( empty($post_id) ) { return false; }
-    
+
     // Init vars
     $post = get_post( $post_id );
     $post_title = $post->post_title;
@@ -293,18 +289,18 @@ function update_title_for_matching ( $post_id ) {
     $new_t4m = "";
     $ts_info = "";
     $revised = false;
-    
+
     $t4m = get_post_meta( $post_id, 'title_for_matching', true ); // get_post_meta( int $post_id, string $key = '', bool $single = false ) -- Return val will be an array if $single is false. Will be value of the meta field if $single is true.
     $title_clean = get_post_meta( $post_id, 'title_clean', true );
-    
+
     if ( ! $title_clean || $title_clean == "" ) {
         sdg_log( "No title_clean stored in post_meta for this post -> use make_clean_title", $do_log );
         $title_clean = make_clean_title( $post_id );
     }
     $ts_info .= "<!-- post_title: $post_title // title_clean: $title_clean // t4m: $t4m -->";
- 
+
     if ( !empty($t4m) ) {
-        
+
         $ts_info .= "<!-- t4m already in DB: $t4m -->";
         // TODO: clean up existing T4Ms -- get rid of all spaces and other punctuation
         if (strpos($t4m, ' ') === false) {
@@ -312,11 +308,11 @@ function update_title_for_matching ( $post_id ) {
             // TODO: figure out how/when to force updates...
             return true;
         }
-        // t4m contains spaces and must be updated        
+        // t4m contains spaces and must be updated
     }
-        
+
     // Build a new clean t4m
-    
+
     $new_t4m = ""; // init
     $ts_info .= "<!-- t4m is empty -> build one -->"; //$info .= '<span class="label">title_for_matching is empty >> build one</span><br />';
 
@@ -330,7 +326,7 @@ function update_title_for_matching ( $post_id ) {
         if ( !$legacy_event_id || $legacy_event_id == "" || $legacy_event_id == "0" ) {
             // Check to see if the legacy_event_id is contained in the existing slug, even if it somehow got erased from post_meta
             $new_legacy_event_id = substr( $slug, 0, strpos($slug, "_") ); //(int)
-            if ( $new_legacy_event_id && $new_legacy_event_id != "" ) { 
+            if ( $new_legacy_event_id && $new_legacy_event_id != "" ) {
                 $info .= "<!-- Extracted legacy_event_id from old slug: $new_legacy_event_id. -->";
                 if ( $legacy_event_id == "" || $legacy_event_id == "0" ) {
                     update_post_meta( $post_id, 'legacy_event_id', $new_legacy_event_id );
@@ -351,9 +347,9 @@ function update_title_for_matching ( $post_id ) {
         }
 
     } else if ( $post_type == 'repertoire' ) {
-        
+
         $new_title = build_the_title( $post_id, 'title_for_matching', null );
-        
+
         // Abort if error
         if ( strpos($new_title, 'Error! Abort!') !== false ) {
             //return null; // ???
@@ -367,7 +363,7 @@ function update_title_for_matching ( $post_id ) {
         //$new_t4m = "test";
 
     } // END post type variations
-    
+
     // If revisions have been made, then update the postmeta
     //if ( $revised === true ) {
     if ( !empty($new_t4m) ) {
@@ -378,88 +374,88 @@ function update_title_for_matching ( $post_id ) {
         }
 
     }
-    
+
     if ( $title_clean != $post_title ) {
         // Now that the title_for_matching is confirmed/updated: if the post_title isn't the clean one, update the post_title -- ???
     }
-    
+
     $arr_info['title_for_matching'] = $new_t4m;
     //$arr_info['title_clean'] = $new_title_clean;
-    
+
     if ( $do_ts ) { $arr_info['ts_info'] = $ts_info; } else { $arr_info['ts_info'] = null; }
-    
+
     return $arr_info;
     // TODO: change to return true/false depending on outcome of add/update?
-    
+
 }
 
 // Build proper title for rep/edition records, based on metadata components
-// TODO: 
+// TODO:
 // 1) separate out the title building bit so that it can be used independently of wp_insert_post_data
 // 2) bind this with a t4m update function
 // 3) create separate build_the_title functions per CPT
 
 function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = devmode_active( array("sdg", "titles") );
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: build_the_title", $do_log );
-    
+
     if ( $post_id == null ) { return false; }
-    
+
     // Init vars
     $ts_info = "";
     $new_title = "";
     $authorship_arr = array();
-    
+
     sdg_log( "[btt] post_id: ".$post_id, $do_log );
     sdg_log( "[btt] abbr: ".(int)$abbr, $do_log );
     $post_type = get_post_type( $post_id );
-    
+
     // Get current (old) post_title and t4m (or uid?)
     $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
     $old_t4m = get_post_meta( $post_id, $uid_field, true ); //get_post_meta( $post_id, 'title_for_matching', true );
-    
+
     // Check for CPT-specific build_the_title function
     // WIP
     $function_name = "build_".$post_type."_title";
     if ( function_exists($function_name) ) {
-    
+
     }
     //build_POSTTYPE_title
     //build_repertoire_title
     //build_edition_title
-    
+
     // If this is a repertoire record, check for a title_clean value
     // If there is no title_clean, abort -- there's a problem! -- except for Hymns (etc?) -- WIP! 240513
     if ( $post_type == 'repertoire' ) {
     	if ( isset($arr['title_clean']) ) { $title_clean = $arr['title_clean']; } else { $title_clean = get_field('title_clean', $post_id); }
-    	if ( empty($title_clean) ) { 
+    	if ( empty($title_clean) ) {
     		sdg_log( "[btt] Problem! title_clean is empty for repertoire record ID: ".$post_id, $do_log );
     		//return null;
     	}
     }
-    
+
     // Set var values
     if ( !empty($arr) ) {
-        
+
         sdg_log( "[btt] running btt using array derived from _POST.", $do_log );
-        
+
         if ( $post_type == 'repertoire' ) {
-            
+
             $title_clean = $arr['title_clean'];
             $excerpted_from_id = $arr['excerpted_from'];
             $excerpted_from = get_post_meta( $excerpted_from_id, 'title_clean', true );
-            if ( empty($excerpted_from) && !empty($excerpted_from_id) ) { 
+            if ( empty($excerpted_from) && !empty($excerpted_from_id) ) {
                 $excerpted_from = get_post_field( 'post_title', $excerpted_from_id, 'raw' );
             }
             $excerpted_from_txt = $arr['excerpted_from_txt'];
             if ( empty($excerpted_from) ) { $excerpted_from = $excerpted_from_txt; }
             $catalog_num = $arr['catalog_number'];
             $opus_num = $arr['opus_number'];
-            
+
             // Authorship
             $authorship_arr['rep_title'] = $title_clean; //$authorship_arr['rep_title'] = $arr['title_clean'];
             $authorship_arr['composers'] = $arr['composers'];
@@ -467,12 +463,12 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $authorship_arr['transcribers'] = $arr['transcribers'];
             $authorship_arr['anon_info'] = $arr['anon_info'];
             //$authorship_arr['rep_categories'] = $arr['rep_categories'];
-            
+
             $authorship_args = array( 'data' => $authorship_arr, 'format' => 'post_title', 'abbr' => $abbr ); //, 'is_single_work' => false, 'show_title' => false, 'links' => false
             $arr_authorship_info = get_authorship_info ( $authorship_args );
             $authorship_info = $arr_authorship_info['info'];
             $ts_info .= $arr_authorship_info['ts_info'];
-            
+
             //$key_ids = $arr['keys']; // array of ids
             $first_line = $arr['first_line'];
             $tune_name = $arr['tune_name'];
@@ -480,9 +476,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $year_completed = $arr['year_completed'];
             $old_t4m = $arr['t4m'];
             $rep_categories = $arr['rep_categories'];
-            
+
         } else if ( $post_type == 'edition' ) {
-            
+
             if ( $arr['repertoire_editions'] ) {
                 $musical_works = $arr['repertoire_editions'];
             } else if ( $arr['musical_work'] ) {
@@ -495,10 +491,10 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 // WIP -- TBD: how to deal w/ case of multiple works associated with one edition
                 sdg_log( "[btt/edition] multiple musical_works found: ".print_r($musical_works, true), $do_log );
                 foreach ( $musical_works AS $musical_work_id ) {
-                    //$musical_work_id = 
+                    //$musical_work_id =
                 }
             }
-            
+
             // TODO: turn this array into a string!
             $choir_forces = $arr['choir_forces'];
             if ( is_array($choir_forces) ) {
@@ -520,7 +516,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $ts_info .= $ts_editors;
             //sdg_log( "editors_str: ".$editors_str, $do_log );
             sdg_log( "-----", $do_log );
-            
+
             $publication_id = $arr['publication']; // single id
             //sdg_log( "[btt/arr] publication_id: ".$publication_id, $do_log );
             if ( $publication_id ) {
@@ -541,12 +537,12 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             //
             $publication_date = $arr['publication_date'];
             $box_num = $arr['box_num'];
-        
+
             // Taxonomies
             $voicings        = $arr['voicings']; // array of ids
             $soloists        = $arr['soloists']; // array of ids
             $instruments     = $arr['instruments']; // array of ids
-            
+
             $voicings_str = get_arr_str($voicings, "terms");
             if ( $voicings_str == "" ) {
                 //sdg_log( "[btt/arr] voicings_str is empty.", $do_log );
@@ -557,22 +553,22 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else {
                 //sdg_log( "[btt/arr] voicings_str: ".$voicings_str, $do_log );
             }
-            
+
             $soloists_str = get_arr_str($soloists, "terms");
             if ( $soloists_str == "" && $arr['soloists_txt'] != "" ) {
                 $soloists_str = $arr['soloists_txt'];
                 sdg_log( "[btt/arr] using backup txt field for soloists_str", $do_log );
             }
-            
+
             $instruments_str = get_arr_str($instruments, "terms");
             if ( $instruments_str == "" && $arr['instrumentation_txt'] != "" ) {
                 $instruments_str = $arr['instrumentation_txt'];
                 sdg_log( "[btt/arr] using backup txt field for instruments_str: ".$instruments_str, $do_log );
             }
-            
-            
+
+
         }
-        
+
         // For both rep & editions, handle key names
         $keys = $arr['keys']; // array of ids
         $keys_str = get_arr_str($keys, "terms");
@@ -580,19 +576,19 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $keys_str = $arr['key_name_txt'];
             sdg_log( "[btt/arr] using backup txt field for keys_str", $do_log );
         }
-        
+
     } else if ( $post_id ) {
-        
+
         // If no array of data was submitted, get info via the post_id
-        
+
         sdg_log( "[btt] running btt based on post_id.", $do_log );
-        
+
         $authorship_arr['post_id'] = $post_id;
-        
+
         if ( $post_type == 'repertoire' ) {
-            
+
             // Get info via ACF get_field fcn rather than get_post_meta -- because the latter may return: Array( [0] => )
-            
+
             $title_clean = get_field('title_clean', $post_id);
             $arr_excerpted_from = get_excerpted_from( $post_id );
     		$excerpted_from = $arr_excerpted_from['info'];
@@ -613,9 +609,9 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
             $year_completed = get_field('year_completed', $post_id);
             $old_t4m = get_field('title_for_matching', $post_id);
-            
+
         } else if ( $post_type == 'edition' ) {
-            
+
             // ACF -- WIP
             $musical_works = get_field('repertoire_editions', $post_id, false);
             if ( empty($musical_works) ) {
@@ -626,10 +622,10 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else {
                 // WIP -- TBD: how to deal w/ case of multiple works associated with one edition
                 foreach ( $musical_works AS $musical_work_id ) {
-                    //$musical_work_id = 
+                    //$musical_work_id =
                 }
             }
-            
+
             //
             $editors_str = "";
             $editors = get_field('editor', $post_id);
@@ -637,7 +633,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 $editor_id = $editor->ID;
                 if ( $editor_id ) {
                     $last_name = get_field('last_name', $editor_id);
-                    if ($last_name) { 
+                    if ($last_name) {
                         $editors_str .= $last_name;
                     } else {
                         $editors_str .= get_the_title($editor_id);
@@ -649,7 +645,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             if ( substr($editors_str, -2) == ', ' ) {
                 $editors_str = substr($editors_str, 0, -2); // trim off trailing comma
             }
-            
+
             // get ACF fields
             // use the_field instead?
             $publisher = get_arr_str(get_field('publisher', $post_id));
@@ -657,22 +653,22 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $publication_date = get_field('publication_date', $post_id);
             $box_num = get_field('box_num', $post_id);
             $old_t4m = get_field('title_for_matching', $post_id);
-            $choir_forces_str = get_arr_str(get_field('choir_forces', $post_id));       
+            $choir_forces_str = get_arr_str(get_field('choir_forces', $post_id));
             $voicing_txt = get_field('voicing_txt', $post_id);
             $soloists_txt = get_field('soloists_txt', $post_id);
             $instrumentation_txt = get_field('instrumentation_txt', $post_id);
-            
+
         }
     } else {
     	sdg_log( "[btt] No POST data arr or post_id!", $do_log );
     }
-    
+
     // Taxonomies
     if ( empty($arr) && $post_id && ( $post_type == 'repertoire' || $post_type == 'edition' ) ) {
 
         sdg_log( "[btt] get taxonomy info from post_id: ".$post_id, $do_log );
-        
-        // Keys    
+
+        // Keys
         // Get term names for "key".
         $keys = wp_get_post_terms( $post_id, 'key', array( 'fields' => 'names' ) );
         if ( $keys ) { $keys_str = implode(", ",$keys); } else { $keys_str = ""; }
@@ -684,11 +680,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }*/
         }
         sdg_log( "[btt] keys_str: ".$keys_str, $do_log );
-        
+
         if ( $post_type == 'repertoire' ) {
             $rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'ids' ) );
         }
-        
+
         if ( $post_type == 'edition' ) {
 
             // Get term names for "voicing".
@@ -704,19 +700,19 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             $instruments = wp_get_post_terms( $post_id, 'instrument', array( 'fields' => 'names' ) );
             if ( $instruments ) { $instruments_str = implode(", ", $instruments); } else { $instruments_str = ""; }
         }
-        
+
     }
-    
+
     // Build the title
     if ( $post_type == 'repertoire' ) {
-        
+
         // Hymns:
         // CATALOG_NUM -- FIRST_LINE -- TUNE_NAME
-        
+
         // Not Hymns:
         // TITLE_CLEAN, from EXCERPTED_FROM, CATALOG_NUMBER, OPUS_NUMBER -- COMPOSER (COMPOSER DATES) *OR* (ANON_INFO) / arr. ARRANGER / transcr. TRANSCRIBER -- in KEY_NAME
         // In case of Psalms, prepend "Psalm"/"Psalms" as needed
-        
+
         // TODO: get these IDs dynamically for portability
         // Check if tax term "Hymns" exists, e.g., and get get id... 240513
         $hymn_cat = term_exists( "hymns", "repertoire_category" );
@@ -731,53 +727,53 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 		if ( $chant_cat ) {
 			$chant_cat_id = $chant_cat['term_id'];
 		}
-        
+
         sdg_log( "[btt] title_clean: ".$title_clean, $do_log );
-        
+
         if ( in_array($hymn_cat_id, $rep_categories) ) {
 
             // Hymns
-            
+
             sdg_log( "[btt] This is a hymn.", $do_log );
-            // TODO: deal w/ miscategorizations -- e.g. 
+            // TODO: deal w/ miscategorizations -- e.g.
             // Blest are the pure in heart (Ten Orisons) -- M. Searle Wright (1918-2004)
-            
+
             // Hymn number
             $pattern = "/^[0-9]/i"; // starts w/ numeral -- e.g. "90 -- It came upon the midnight clear -- NOEL"
-            if ( $catalog_num != "" ) { 
+            if ( $catalog_num != "" ) {
                 $new_title = "Hymn ". $catalog_num;
             } else if ( preg_match($pattern, $title_clean) ) {
                 // starts w/ numeral
                 $new_title = "Hymn "; // . $title_clean
             }
-            
+
             // First line or title_clean
-            if ( $first_line != "" ) { 
+            if ( $first_line != "" ) {
                 if ( $new_title != "" ) { $new_title .= " -- "; }
-                $new_title .= $first_line; 
-            } else if ( $title_clean != "" ) { 
+                $new_title .= $first_line;
+            } else if ( $title_clean != "" ) {
                 if ( $new_title != "" ) { $new_title .= " -- "; }
-                $new_title .= $title_clean; 
+                $new_title .= $title_clean;
             }
-            
+
             // Tune name
-            if ( $tune_name != "" ) { 
+            if ( $tune_name != "" ) {
                 if ( $new_title != "" ) { $new_title .= " -- "; }
-                $new_title .= strtoupper($tune_name); 
+                $new_title .= strtoupper($tune_name);
             }
-            
+
             // Authorship info... -- TODO
 
         } else {
 
             // NOT Hymns
-            
+
             // 1. Title (title_clean)
             if ( $title_clean != "" ) { $new_title = $title_clean; }
-            
+
             // For Psalms, makes sure the title isn't just a number -- prepend "Psalm" or "Psalms" as needed
             if ( in_array($psalm_cat_id, $rep_categories) || in_array($chant_cat_id, $rep_categories ) ) { // Psalms & Anglican Chant
-                
+
                 // Check to see if title starts with numeral(s)
                 // If so, prepend "Psalm" or "Psalms" to new_title
                 $pattern1 = "/^[0-9]+(,\s*)[0-9]+/i"; // starts w/ sequence of commma-separated numbers >> multiple psalms -- e.g. "59, 60, 61 Anglican Chant (Atkins, Webb, Martin, Filsell)"
@@ -786,22 +782,22 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                     // starts w/ sequence of commma-separated numbers
                     $new_title = "Psalms ". $new_title;
                 } else if ( preg_match($pattern2, $new_title) ) {
-                    // starts w/ numeral >> single psalm 
+                    // starts w/ numeral >> single psalm
                     $new_title = "Psalm ". $new_title;
                 } else if ( strpos($new_title, "Psalm") == 0 && ( strpos($psalm_num, ",") !== false || strpos($old_t4m, "psalms") !== false || strpos($old_title, "Psalms") !== false ) ) {
                     // starts w/ "Psalm" but this is actually a multi-psalm record
                     $new_title = str_replace('Psalm ', 'Psalms ', $new_title);
                 }
-                
+
             }
 
         }
-        
+
         // 2. Excerpted From
-        if ( !empty( $excerpted_from ) ) { 
+        if ( !empty( $excerpted_from ) ) {
             $new_title .= ", from ".$excerpted_from;
         }
-        
+
         // 3/4. Catalog/Opus nums
         if ( $catalog_num != "" && !in_array($hymn_cat_id, $rep_categories) ) { $new_title .= ", ". $catalog_num; } // NOT for Hymns
         if ( $opus_num != "" ) { $new_title .= ", ". $opus_num; }
@@ -811,54 +807,54 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
         // 6. Key(s)
         // TODO -- rethink this? tmp disabled -- don't really need it for rep titles.
-        //if ( $keys_str != "" ) { $new_title .= " -- in ".$keys_str; } 
-        
+        //if ( $keys_str != "" ) { $new_title .= " -- in ".$keys_str; }
+
         // 7. year_completed
         if ( !empty($year_completed) ) { $new_title .= " [comp. ".$year_completed."]"; }
 
     } else if ( $post_type == 'edition' ) {
-        
+
         // musical_work: title_clean -- musical_work: composer (composer_dates) -- in key_name / ed. editor / publication / publisher / for voicing + soloists with instrumentation [in box_num]
-        
+
         // 1. Musical Work
         if ( $musical_work_id != null ) {
             sdg_log( "[btt] musical_work_id: ".$musical_work_id, $do_log );
-            
+
             $musical_work_title = get_the_title($musical_work_id);
             //$musical_work_title = get_field('post_title', $musical_work_id);
-            
+
             // WIP: Get abbreviated version of work title w/ lastnames only
-            
+
             // MW Authorship
-            
+
             // A. Short version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => true );
             $arr_authorship_info = get_authorship_info ( $authorship_args );
             $rep_authorship_short = $arr_authorship_info['info'];
             $ts_info .= $arr_authorship_info['ts_info'];
-            
+
             // ltrim punctuation so as to avoid failed replacement if work, e.g., has no arranger but no composer listed -- TODO: integrate this into get_authorship_info fcn?
             $rep_authorship_short = ltrim( $rep_authorship_short, ', ' );
             $rep_authorship_short = ltrim( $rep_authorship_short, '-- ' );
             //$rep_authorship_short = trim( $rep_authorship_short, '()' ); // nope
             sdg_log( "[btt/edition] rep_authorship_short: ".$rep_authorship_short, $do_log );
-            
+
             // B. Long version
             $authorship_args = array( 'data' => array( 'post_id' => $musical_work_id ), 'format' => 'edition_title', 'abbr' => false );
             $arr_authorship_info = get_authorship_info ( $authorship_args );
             $rep_authorship_long = $arr_authorship_info['info'];
             $ts_info .= $arr_authorship_info['ts_info'];
-            
+
             // remove punctuation for purposes of string replacement
             $rep_authorship_long = ltrim( $rep_authorship_long, ', ' );
             $rep_authorship_long = ltrim( $rep_authorship_long, '-- ' );
             // authorship info will have been put in parens for psalms -- remove them for purposes of string replacement
             $rep_authorship_long = ltrim( $rep_authorship_long, '(' ); // left enclosing paren
             $rep_authorship_long = str_replace( "))", ")", $rep_authorship_long ); // get rid of final left enclosing paren but not closing paren for author dates
-            
+
             sdg_log( "[btt/edition] rep_authorship_long: ".$rep_authorship_long, $do_log );
             sdg_log( "[btt/edition] musical_work_title: ".$musical_work_title, $do_log );
-            
+
             // Compare short/long authorship; replace as needed
             if ( $rep_authorship_long != $rep_authorship_short ) {
                 sdg_log( "[btt/edition] replace long with short authorship info.", $do_log );
@@ -881,27 +877,27 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             return "<pre>*** Error! Abort! No musical_work found upon which to build the title for Edition with post_id: $post_id. ***</pre>";
             //return null; // no musical work for building edition title.
         }
-        
+
         // 2. Key(s)
         if ( $keys_str != "" && $uid_field == 'title_for_matching' ) { $new_title .= " -- in ".$keys_str; }
-        
+
         // Publication info
-        
+
         // 3. Editor
         if ( $editors_str != "" ) { $new_title .= " / ed. ".$editors_str; }
         //sdg_log( "[btt/edition] new_title (after editors_str): ".$new_title, $do_log );
-        
+
         // 4. Publication
         if ( $publication != "" ) { $new_title .= " / ".$publication; }
         //sdg_log( "[btt/edition] new_title (after publication): ".$new_title, $do_log );
-        
+
         // 5. Publisher
         if ( $publisher != "" ) { $new_title .= " / ".$publisher; }
         //sdg_log( "[btt/edition] new_title (after publisher): ".$new_title, $do_log );
-        
+
         // 6. Voicings
         //sdg_log( "[btt/edition] voicings_str: ".$voicings_str, $do_log );
-        if ( $voicings_str == "" ) { 
+        if ( $voicings_str == "" ) {
             //sdg_log( "[btt/edition] voicings_str is empty >> try voicing_txt.", $do_log );
             if ( $voicing_txt != "" ) {
                 $voicings_str = $voicing_txt;
@@ -910,7 +906,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
                 //sdg_log( "[btt/edition] no luck w/ voicing_txt >> voicings_str still empty: [".$voicings_str."]", $do_log );
             }
         }
-        if ( $voicings_str != "" && $uid_field == 'title_for_matching' ) { 
+        if ( $voicings_str != "" && $uid_field == 'title_for_matching' ) {
             //sdg_log( "[btt/edition] add voicings_str to new_title.", $do_log );
             if ( is_array($voicings_str) ) {
             	$voicings_str = print_r($voicings_str, true);
@@ -921,15 +917,15 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             //$new_title .= " / for [voicings] ".$voicings_str; // tft
         }
         //sdg_log( "[btt/edition] new_title (after voicings_str): ".$new_title, $do_log );
-        
+
         // (if no voicing, but yes soloists, then "for soloists")
         // multiple voicings &c. -- connect w/ ampersand?
-        
+
         // 7. Soloists
         //sdg_log( "[btt/edition] soloists_str: ".$soloists_str, $do_log );
         if ( $soloists_str == "" && $soloists_txt != "" ) { $soloists_str = $soloists_txt; }
-        if ( $soloists_str != "" && $uid_field == 'title_for_matching' ) { 
-            if ( $voicings_str != "" ) { 
+        if ( $soloists_str != "" && $uid_field == 'title_for_matching' ) {
+            if ( $voicings_str != "" ) {
                 $new_title .= " + ".$soloists_str;
             } else {
                 $new_title .= " / for ".$soloists_str;
@@ -937,7 +933,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             }
         }
         //sdg_log( "[btt/edition] new_title (after soloists_str): ".$new_title, $do_log );
-        
+
         // Choir Forces -- if no Voicings or Soloists
         if ( $choir_forces_str != "" & $voicings_str == "" && $soloists_str == "" && $uid_field == 'title_for_matching' ) {
             sdg_log( "[btt/edition] no voicings or soloists info >> use choir_forces_str: ".$choir_forces_str, $do_log );
@@ -946,11 +942,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
         } else {
             sdg_log( "[btt/edition] choir_forces: ".$choir_forces_str, $do_log );
         }
-        
+
         // 8. Instrumentation
         //sdg_log( "[btt/edition] instruments_str: ".$instruments_str, $do_log );
         if ( $instruments_str == "" && $instrumentation_txt != "" ) { $instruments_str = $instrumentation_txt; }
-        if ( $instruments_str != "" && $uid_field == 'title_for_matching' ) { 
+        if ( $instruments_str != "" && $uid_field == 'title_for_matching' ) {
             if ( $voicings_str == "" && $soloists_str == "" ){
                 $new_title .= " /";
             }
@@ -959,22 +955,22 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
             } else if ( $voicings_str != "" || $soloists_str != "" || $choir_forces_str != "" ) {
                 $new_title .= " with ".$instruments_str;
             } else {
-                $new_title .= " for ".$instruments_str; 
+                $new_title .= " for ".$instruments_str;
                 //$new_title .= " for [instr] ".$instruments_str; // tft
             }
         }
         //sdg_log( "[btt/edition] new_title (after instruments_str): ".$new_title, $do_log );
-        
+
         // 9. Box num
         if ( $box_num != "" ) { $new_title .= " [in ".$box_num."]"; }
         //sdg_log( "[btt/edition] new_title (after box_num): ".$new_title, $do_log );
-        
+
     }
-    
+
     sdg_log( "[btt] new_title (final): ".$new_title, $do_log );
-    
+
     return $new_title;
-    
+
 }
 
 // https://developer.wordpress.org/reference/hooks/updated_(meta_type)_meta/
@@ -988,11 +984,11 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 // TODO update for ACF -- get field_ids
 add_filter( 'wp_insert_post_data' , 'modify_post_title' , '99', 2 );
 function modify_post_title( $data ) {
-    
+
 	if ($data['post_type'] == 'reading') {
-		
+
 		$title = $data['post_title'];
-		if ($title == '') { 
+		if ($title == '') {
 			//if ( isset($_POST['acf']['field_abc123']) ) { // // Check if book value was updated.
             //$arr['title_clean']     = $_POST['acf']['field_624615e7eca6f'];
 			if ( isset( $_REQUEST['acf']['field_62718b8b97a1c'] ) ) {
@@ -1007,15 +1003,15 @@ function modify_post_title( $data ) {
 			if ($title == '') { $title = 'Unnamed Reading Record'; }
 		}
 		$data['post_title'] = $title;
-		
+
 	} else if ($data['post_type'] == 'lectionary') {
-		
+
 		$title = $data['post_title'];
 		if ( isset( $_REQUEST['acf']['field_62742fcbdac58'] ) ) {
 			$year = $_REQUEST['acf']['field_62742fcbdac58'];
-			
+
 			if (strpos($title,'(Year '.ucfirst($year).')') === false) {
-				
+
 				if (strpos($title,'Year ') !== false) {
 					$pattern = '/Year [A-C]/';
 					$replacement = 'Year '.ucfirst($year);
@@ -1027,9 +1023,9 @@ function modify_post_title( $data ) {
 		}
 		if ($title == '') { $title = 'Unnamed Lectionary Record'; }
 		$data['post_title'] = $title;
-		
+
 	}
-    
+
 	return $data;
 }
 
@@ -1037,141 +1033,141 @@ function modify_post_title( $data ) {
 // TMP(?) disabled 02/02/23 -- will need to test to determine whether it's necessary when first saving/publishing a NEW post...
 //add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
 function build_the_title_on_insert( $data, $postarr ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     sdg_log( "divline1", $do_log );
     sdg_log( "function called: build_the_title_on_insert", $do_log );
     sdg_log( ">> filter: wp_insert_post_data", $do_log );
-    
+
     // $data: (array) An array of slashed, sanitized, and processed post data.
     // $postarr: (array) An array of sanitized (and slashed) but otherwise unmodified post data.
-    
+
     $post_id = $postarr['ID'];
     $post_type = $data['post_type'];
     $new_title = null;
-    
+
     sdg_log( "[bttoi] post_id: ".$post_id."; post_type: ".$post_type, $do_log );
-    
+
     if ( $post_id == 0 || ( $post_type != 'repertoire' && $post_type != 'edition' ) ) {
         return $data;
     }
-    
+
     /*
     // ids for testing
     $dev_rep_ids = array ('16679', '31020', '23070');
     $live_rep_ids = array ('167740');
     $dev_edition_ids = array();
     $live_edition_ids = array();
-    if ( is_dev_site() ) { 
+    if ( is_dev_site() ) {
         //$test_ids = $dev_rep_ids;
         //$test_ids = $dev_edition_ids;
         $test_ids = array_merge($dev_rep_ids, $dev_edition_ids);
-    } else { 
+    } else {
         //$test_ids = $live_rep_ids;
         //$test_ids = $live_edition_ids;
         $test_ids = array_merge($live_rep_ids, $live_edition_ids);
     }
     //if ( !in_array($post_id, $test_ids) ) { return $data; }
     */
-    
+
     //sdg_log( "data: ".print_r($data, true), $do_log );
     //sdg_log( "postarr: ".print_r($postarr, true), $do_log );
     //sdg_log( "_POST array: ".print_r($_POST, true), $do_log );
-    
+
     // TODO: figure out how to run this ONLY if the post is being saved for the first time... Or is it not needed at all? Only run btt via sspc?
     /*
     if ( $post_type == 'repertoire' && isset($_POST['acf']['field_624615e7eca6f']) ) {
-        
+
         sdg_log( "[bttoi] build the array of repertoire _POST data for submission to fcn build_the_title.", $do_log );
-        
+
         // Get custom field data from $_POST array
         $arr = array(); // init
-        
+
         //$field = get_field_object('XXX');
         //$field_key = $field['key'];
         //$arr['XXX'] = $_POST['acf']['field_XXX'];
-        
+
         $arr['title_clean']     = $_POST['acf']['field_624615e7eca6f'];
         $arr['excerpted_from']  = $_POST['acf']['field_624616c9c8dc6']; // id
         $arr['excerpted_from_txt'] = $_POST['acf']['field_624616e0c8dc7']; // text
         $arr['catalog_number']  = $_POST['acf']['field_6240a7037b239'];
         $arr['opus_number']     = $_POST['acf']['field_6240a7037b272'];
-        
+
         $arr['composers']       = $_POST['acf']['field_6240a74946dae']; // field name: composer ==> array of ids
         $arr['anon_info']       = $_POST['acf']['field_624616aac8dc5'];
         $arr['arrangers']       = $_POST['acf']['field_6246160deca70']; // field name: arranger ==> array of ids
         $arr['transcribers']    = $_POST['acf']['field_6246163ceca71']; // field name: transcriber ==> array of ids
         $arr['key_name']        = $_POST['acf']['field_604947ec970c0']; // group: legacy & admin fields
         $arr['year_completed']  = $_POST['acf']['field_6240a7037b2ab'];
-        
+
         $arr['first_line']      = $_POST['acf']['field_6240a7037b445'];
         $arr['tune_name']       = $_POST['acf']['field_6240a7037b35b'];
         $arr['psalm_num']       = $_POST['acf']['field_5eed36b4593d3'];
-        
+
         // Rep Categories
         $arr['rep_categories'] = $_POST['tax_input']['repertoire_category']; // array of ids
         $arr['keys'] = $_POST['tax_input']['key']; // array of ids
-        
+
         $new_title = build_the_title( $post_id, 'title_for_matching', $arr ); // btt( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false )
-        
+
     } else if ( $data['post_type'] == 'edition' && ( isset($_POST['acf']['field_6244d279cde53']) || isset($_POST['acf']['field_626811b538d8e']) ) ) { //  field_626811b538d8e
-        
+
         sdg_log( "[bttoi] build the array of edition _POST data for submission to fcn build_the_title.", $do_log );
-        
+
         //sdg_log( "_POST array: ".print_r($_POST, true), $do_log );
-        
+
         // Get custom field data from $_POST array
         $arr = array(); // init
-        
+
         $arr['repertoire_editions'] = $_POST['acf']['field_6244d279cde53'];
         $arr['musical_work']    = $_POST['acf']['field_626811b538d8e'];
-        
+
         $arr['choir_forces']    = $_POST['acf']['field_626817165f103'];
-        
+
         $arr['editor']          = $_POST['acf']['field_6268174ef7f13']; // array of ids
         $arr['publication']     = $_POST['acf']['field_626817a097838']; // single id
         $arr['publisher']       = $_POST['acf']['field_6268177797837']; // single id
         $arr['publication_date']= $_POST['acf']['field_626818039783a'];
         $arr['box_num']         = $_POST['acf']['field_626818291431d'];
-        
+
         // Taxonomies
         $arr['voicings']        = $_POST['tax_input']['voicing']; // array of ids
         $arr['soloists']        = $_POST['tax_input']['soloist']; // array of ids
         $arr['instruments']     = $_POST['tax_input']['instrument']; // array of ids
         $arr['keys']            = $_POST['tax_input']['key']; // array of ids
-        
+
         // Legacy fields
         // dev site
         $arr['voicing_txt'] = $_POST['acf']['field_6040f76ca740b'];
         $arr['soloists_txt'] = $_POST['acf']['field_6040f8f9ed577'];
         $arr['instrumentation_txt'] = $_POST['acf']['field_6040f901ed578'];
         $arr['key_name_txt'] = $_POST['acf']['field_60429a952e6be'];
-        
+
         $new_title = build_the_title( $post_id, 'title_for_matching', $arr, true ); // btt( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false )
-        
+
     } else if ( $data['post_type'] == 'repertoire' || $data['post_type'] == 'edition' ) {
-        
+
         $new_title = build_the_title( $post_id ); // btt( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false )
-        
+
     } else {
-        
+
         sdg_log( "[bttoi] Insufficient data for building the array of _POST data for submission to fcn build_the_title." );
-        
+
     }*/
-    
+
     if ( $new_title ) {
-        
+
         // Abort if error
         if ( strpos($new_title, 'Error! Abort!') !== false ) {
-            
+
             sdg_log( $new_title, $do_log );
-            
+
         } else if ( $new_title == $data['post_title'] ) {
-            
+
             sdg_log( "[bttoi] new_title same as old_title.", $do_log );
-            
+
         } else {
 
             sdg_log( "[bttoi] old_title: ".$data['post_title'], $do_log );
@@ -1187,7 +1183,7 @@ function build_the_title_on_insert( $data, $postarr ) {
         }
 
     }
-    
+
     return $data;
     //return $postarr;
 }
@@ -1208,7 +1204,7 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
         //Prefix only if it is not already prefixed
         preg_match ('/^\d\d\d\d\d\d/', $slug, $matches, PREG_OFFSET_CAPTURE);
         if(empty($matches)){
-            return $prefix.'-'.$slug;                       
+            return $prefix.'-'.$slug;
         }
     }
     return $slug;
@@ -1223,63 +1219,63 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 
 	//sdg_log( "function: remove_bracketed_info", $do_log );
 
-	if ( strpos($str, '[') !== false ) { 
+	if ( strpos($str, '[') !== false ) {
 		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str); // Bracketed info at end of string
 		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str); // Bracketed info at start of string?
 	}
-	
+
 	// Optionally, also remove everything within and includes parentheses
-	if ( $remove_parens && strpos($str, '(') !== false ) { 
+	if ( $remove_parens && strpos($str, '(') !== false ) {
 		$str = preg_replace('/\([^\)]*\)([^\)]*)/', trim('$1'), $str);
 		//$str = preg_replace('/([^\)]*)\([^\)]*\)/', trim('$1'), $str);
 	}
-	
+
 	$str = trim($str);
-	
+
 	return $str;
 }
 
 // Function: clean up titles for creation of slugs and for front-end display
 add_filter( 'the_title', 'filter_the_title', 100, 2 );
 function filter_the_title( $post_title, $post_id = null ) {
- 
+
     //sdg_log( "function: filter_the_title", $do_log );
     $post_type = ""; // init
-    
+
     if ( !is_admin() ) {
-        
+
         if ( $post_id ) {
             $post = get_post( $post_id );
             $post_type = $post->post_type;
         }
-        
+
         $return_revised = true;
         $post_title = make_clean_title( $post_id, $post_title, $return_revised );
-        
+
         $post_title = sdg_format_title($post_title);
- 
-    }   
-    
+
+    }
+
     return $post_title;
 }
 
 // TODO/WIP: Troubleshoot
 function make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function: make_clean_title", $do_log );
-    
+
     //if ( $post_id === null ) { $post_id = get_the_ID(); }
-    
+
     $clean_title = null; // init
     $post_type = null; // init
-    
+
     //if ( empty($post_id ) { return false; } // WIP
     if ( $post_id === null && $post_title === null ) { return null; }
-    
+
     if ( $post_id ) {
         $post = get_post( $post_id );
         $post_type = $post->post_type;
@@ -1287,31 +1283,31 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
             $post_title = $post->post_title;
         }
     }
-    
+
     //sdg_log( "[smct] post_id: ".$post_id."; post_title: ".$post_title, $do_log );
-    
+
     if ( $return_revised == true ) {
         //sdg_log( "[smct] >> return_revised", $do_log );
     }
-    
+
 	if ( is_admin() && $return_revised == true ) {
-        
+
         if ( $post_type === 'event' ) {
-        
+
             $clean_title = remove_bracketed_info($post_title);
-            
-			// Check to see if this is a legacy record with an ugly title; 
+
+			// Check to see if this is a legacy record with an ugly title;
 			// If so, then modify display accordingly AND add the missing title_clean postmeta record
-            
+
 			if ( preg_match('/([0-9]+)_(.*)/', $clean_title) ) {
 				$clean_title = preg_replace('/([0-9]+)_(.*)/', '$2', $clean_title);
 				$clean_title = str_replace("_", " ", $clean_title);
 			}
-		
+
 		} else if ( $post_type === 'repertoire' ) {
-		
+
             $first_line = get_field( 'first_line', $post_id );
-		
+
 			// Hymns -- use first line
 			if ( has_term( 'hymns', 'repertoire_category', $post_id ) && !empty($first_line != "") ) {
 				$clean_title = $first_line;
@@ -1320,81 +1316,81 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
 				// WIP
 				$clean_title = null;
 			}
-		
+
 		}
-        
+
         // WIP/TS
         /*if ( !empty($clean_title) && $post_type == 'repertoire' ) { // 230220 added post_type check -- TODO: re-expand application, but make sure to update this field if post_title is updated! e.g. for events
 			if ( ! add_post_meta( $post_id, 'title_clean', $clean_title, true ) ) {
 				update_post_meta ( $post_id, 'title_clean', $clean_title );
 			}
 		}*/
-        
+
     } else if ( !is_admin() ) {
-        
+
         // On the front end, display clean event titles for imported legacy events
-        
+
         if ( $post_type == 'event' ) {
-            
+
             $title_clean = get_post_meta( $post_id, 'title_clean', true );
-            
-            if ( $title_clean ) { 
-                
+
+            if ( $title_clean ) {
+
                 $clean_title = $title_clean;
-                
+
             } else {
-                
-                // Check to see if this is a legacy record with an ugly title; 
+
+                // Check to see if this is a legacy record with an ugly title;
                 // If so, then modify display accordingly AND add the missing title_clean postmeta record
                 if ( preg_match('/([0-9]+)_(.*)/', $post_title) ) {
                     $clean_title = preg_replace('/([0-9]+)_(.*)/', '$2', $clean_title);
                     $clean_title = str_replace("_", " ", $clean_title);
                     //add_post_meta( $post_id, 'title_clean', $post_title, true );
                 }
-                
+
             }
-            
+
             // Hide everything after and including the colon for events with titles matching the pattern "{Whatever} Eucharist: {xxx}"
-			if ( $clean_title && strpos($clean_title, 'Eucharist:') !== false ) { 
+			if ( $clean_title && strpos($clean_title, 'Eucharist:') !== false ) {
 				$clean_title = preg_replace('/(.*) Eucharist: (.*)/', '$1 Eucharist', $clean_title);
 			}
-            
+
         }
-		
-		//$clean_title = str_replace("--", "&mdash;", $clean_title);		
-		
+
+		//$clean_title = str_replace("--", "&mdash;", $clean_title);
+
 	}
-	
+
 	// If no clean_title has been made, default to the original post_title
 	if ( empty($clean_title) ) {
 		$clean_title = $post_title;
 	}
-    
+
 	if ( !is_admin() ) {
     	$clean_title = remove_bracketed_info($clean_title);
     	$clean_title = str_replace("|", "<br />", $clean_title);
     }
-	
+
 	return $clean_title;
-	
+
 }
 
-// TODO: fix this for event posts being saved for the first time 
+// TODO: fix this for event posts being saved for the first time
 // -- in that case, event_date not stored as metadata so must figure out how to retrieve it from the _POST array and pass it to this fcn.
 function clean_slug( $post_id ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function: clean_slug", $do_log );
-    
+
     // TODO check for empty post_id
     $post = get_post( $post_id );
-    
+
     $info = "";
     $changes_made = false;
-    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";    
+    $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
     $legacy_event_id = null; // init
     $title_for_matching = null; // init
     $append_date = true;
@@ -1409,9 +1405,9 @@ function clean_slug( $post_id ) {
     // Clean title
     $title_clean = get_post_meta( $post_id, 'title_clean', true );
     //sdg_log( "title_clean (get_post_meta): ".$title_clean, $do_log );
-    if ( empty ($title_clean) || strpos($title_clean, '[') !== false ) { 
+    if ( empty ($title_clean) || strpos($title_clean, '[') !== false ) {
         $title_clean = make_clean_title( $post_id );
-        //sdg_log( "title_clean (make_clean_title): ".$title_clean, $do_log );    
+        //sdg_log( "title_clean (make_clean_title): ".$title_clean, $do_log );
     }
     sdg_log( "title_clean: ".$title_clean);
 
@@ -1429,20 +1425,20 @@ function clean_slug( $post_id ) {
         //$info .= $indent."title_clean does NOT contain date info.<br />";
     }
     //$info .= "title_clean: $title_clean<br />";
-    
+
     // **** First step in new slug
 
     // Get the "clean" permalink based on the post title
     $new_slug = sanitize_title( $title_clean, $post_id );
     //$info .= $indent.'<span class="label">new_slug: </span>'.$new_slug.'<br />'; //$info .= "new_slug: $new_slug<br />";
-    
+
     // WIP: if a custom permalink has been created post 07-01-2020, then use it as the basis...
     /*if ( $slug != $clean_permalink ) {
         $new_slug = $slug;
     } else {
-        
+
     }*/
-    
+
     // ***
     // If title contains "-cancelled", move that to the end of the slug -- WIP
     $match_pattern = "/cancelled/";
@@ -1454,7 +1450,7 @@ function clean_slug( $post_id ) {
         $cancelled = true;
     } else {
         //$info .= $indent."new_slug does NOT contain '-cancelled'.<br />"; // tft
-    }                
+    }
 
     // Clean up special characters
     // e.g. "Christoph Schl√ºtter" >>> new_slug: christoph-schl%e2%88%9aotter-2012-09-23
@@ -1487,22 +1483,22 @@ function clean_slug( $post_id ) {
     if ( $cancelled == true ) {
         $new_slug .= "-cancelled";
     }
-    
+
     //$info .= "<!-- old slug: $slug -->";
     //$info .= "<!-- new_slug: $new_slug -->";
     //$info .= $indent.'<span class="label">old slug: </span>'.$slug.'<br />';
     //$info .= $indent.'<span class="label">new slug: </span>'.$new_slug.'<br />';
-    
+
     //$info .= '</div>';
-    
+
     // TODO: check to see if new_slug is unique. If not, append a v2?
-    
+
     $arr_info['info'] = $info;
     $arr_info['new_slug'] = $new_slug;
     $arr_info['old_slug'] = $slug;
-    
+
     return $arr_info;
-    
+
 }
 
 /*
@@ -1515,7 +1511,7 @@ function clean_slug( $post_id ) {
 */
 add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
 function sdg_save_post_callback( $post_id, $post, $update ) {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "updates") );
     $do_log = devmode_active( array("sdg", "updates") );
@@ -1523,11 +1519,11 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     //sdg_log( "action: save_post", $do_log );
     //sdg_log( "action: save_post_event", $do_log );
     sdg_log( "function called: sdg_save_post_callback", $do_log );
-    
+
     if ( is_dev_site() ) {
         sdg_add_post_term( $post_id, 'dev-test-tmp', 'admin_tag', true ); // tft
     }
-    
+
     // Don't run if this is an auto-draft
     if ( isset($post->post_status) && 'auto-draft' == $post->post_status ) {
         return;
@@ -1537,21 +1533,21 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
     if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
         return;
     }
-    
+
     // If this is a post revision, then abort
-    if ( wp_is_post_revision( $post_id ) ) { 
+    if ( wp_is_post_revision( $post_id ) ) {
         sdg_log( "[sspc] is post revision >> abort.", $do_log );
         return;
     }
-    
+
     $post_type = $post->post_type;
     //$post_type = get_post_type( $post_id );
     // get custom fields from $_POST var?
     sdg_log( "[sspc] post_type: ".$post_type, $do_log );
- 
+
     // ***WIP***
     if ( $post_type == "event" ) {
-        
+
         // Is this part of a recurring event series?
         if ( $update ) {
             $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
@@ -1560,7 +1556,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         }
 
         // If this event is part of a recurring event series, then abort
-        if ( $recurrence_id ) { 
+        if ( $recurrence_id ) {
             sdg_log( "[sspc] is part of recurring event series ($recurrence_id) >> abort.", $do_log );
             return;
         }
@@ -1601,7 +1597,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             );
 
             // Update the post into the database
-            wp_update_post( $update_args, true );    
+            wp_update_post( $update_args, true );
 
             if ( ! is_wp_error($post_id) ) {
                 // If update was successful, add admin tag to note that slug has been updated
@@ -1614,16 +1610,16 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             //add_action( 'save_post_event', 'sdg_save_event_post_callback' );
 
         }
-        
+
     } else if ( $post_type == "repertoire" || $post_type == "edition" ) {
-        
+
         // TODO: check to see if this save is happening via WP All Import and if so, skip t4m changes
-        
+
         // Get post obj, post_title, $old_t4m
         $the_post = get_post( $post_id );
         $post_title = $the_post->post_title;
         $title_clean = get_post_meta( $post_id, 'title_clean', true ); // or use get_field?
-        
+
         // Get title/slug based on post field values
         // TODO: create separate build_the_title functions per CPT(?)
         $new_title = build_the_title( $post_id );
@@ -1632,7 +1628,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
         sdg_log( "[sspc] about to call function: get_title_uid", $do_log );
         $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
-        
+
         sdg_log( "divline2", $do_log );
 
         sdg_log( "[sspc] post_id: ".$post_id, $do_log );
@@ -1668,17 +1664,17 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             } else {
                 //(int|bool) Meta ID if the key didn't exist, true on successful update, false on failure or if the value passed to the function is the same as the one that is already in the database.
             }
-            
+
 
         }
-    
+
     	// Check to see if new_slug is really new. If it's identical to the existing slug, skip the update process.
         if ( $new_title != $post_title ) {
 
 			sdg_log( "[sspc] update the post_title", $do_log );
-			
+
 			// TODO: figure out how NOT to trigger wp_insert_post_data when running this update...
-			
+
             // unhook this function to prevent infinite looping
             remove_action( 'save_post', 'sdg_save_post_callback' );
             //remove_action( 'save_post_event', 'sdg_save_event_post_callback' );
@@ -1691,7 +1687,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             );
 
             // Update the post into the database
-            wp_update_post( $update_args, true );    
+            wp_update_post( $update_args, true );
 
             if ( ! is_wp_error($post_id) ) {
                 // If update was successful, add admin tag to note that slug has been updated
@@ -1704,7 +1700,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
             //add_action( 'save_post_event', 'sdg_save_event_post_callback' );
 
         }
-        
+
         /*** TITLE POSTMETA ***/
         /*
         // Get the title_for_matching. If none is set, or if it's empty, run the update function.
@@ -1723,16 +1719,16 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
         /*if ( $new_title_clean = make_clean_title( $post_id ) ) {
             $display_title = $new_title_clean;
         }*/
-      
+
     } else if ( $post_type == "sermon" ) {
-    
+
     	sdg_log( "[sspc] update the sermon_bbooks", $do_log );
     	if ( update_sermon_bbooks( $post_id ) ) {
     		sdg_log( "[sspc] Success! Updated the sermon_bbooks", $do_log );
     	} else {
     		sdg_log( "[sspc] ERROR! Failed to update the sermon_bbooks", $do_log );
     	}
-    	
+
     } // end post_type check
 
 }
@@ -1744,15 +1740,15 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
 add_shortcode('title_updates', 'run_title_updates');
 function run_title_updates ($atts = array(), $content = null, $tag = '') {
-    
+
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     sdg_log( "divline2", $do_log );
     sdg_log( "function called: run_title_updates", $do_log );
-    
+
     $info = "";
-    
+
     $args = shortcode_atts( array(
 		'post_type'   => 'repertoire',
         //'meta_key'  => null,
@@ -1765,13 +1761,13 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
         'date_query' => 'before',
         'date_str'  => '1 week ago',
         'verbose'  => 'false',
-        
+
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-    
-    /*if ( strpos($tax_terms,",")) { 
+
+    /*if ( strpos($tax_terms,",")) {
         $tax_terms = sdg_att_explode( $tax_terms );
         $tax_terms = "array('".implode("','",$tax_terms)."')"; // wrap each item in single quotes
     }*/
@@ -1783,27 +1779,27 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
     }
     //$meta_values = sdg_att_explode( $meta_values );
     //$meta_values = "array('".implode("','",$meta_values)."')"; // wrap each item in single quotes
-    
+
     $info .= "<p>";
     $info .= "About to run title/t4m updates for post_type: $post_type (batch size: $num_posts)."; //, meta_key: $meta_key
     if ( $post_id ) { $info .= "<br />post_id specified: $post_id."; }
     $info .= "</p>";
-    
+
     // Update in batches to fix title/t4m fields.
     $wp_args = array(
 		'post_type'   => $post_type,
 		'post_status' => 'publish'
     );
-    
+
     if ( $post_id ) {
-        
+
         // If ID has been specified, get that specific single post
         $wp_args['p'] = $post_id;
-        
+
     } else {
-        
+
         // Otherwise, get posts not updated recently
-        
+
         $wp_args['orderby'] = 'post_title';
         $wp_args['order'] = 'ASC';
         $wp_args['posts_per_page'] = $num_posts;
@@ -1817,11 +1813,11 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                 $date_query  => $date_str,
             ),
         );
-        
+
         if ( $post_type == "repertoire" || $post_type == "edition" ) {
-            
+
             if ( $taxonomy && $tax_terms ) {
-                
+
                 $wp_args['tax_query'] = array(
                     array(
                         'taxonomy'  => $taxonomy,
@@ -1830,9 +1826,9 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                         'operator'  => $tax_operator,
                     )
                 );
-                
+
             } else if ( $meta_key && $meta_value ) {
-                
+
                 $wp_args['meta_query'] = array(
                     array(
                         'key'     => $meta_key,
@@ -1841,9 +1837,9 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                         //'compare' => 'EXISTS',
                     )
                 );
-                
+
             } else if ( $post_type == "repertoire" ) {
-                
+
                 $wp_args['meta_query'] = array(
                     array(
                         'key'     => 'title_clean',
@@ -1851,11 +1847,11 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                         'value'   => '',
                     )
                 );
-                
+
             }
-        
+
         }
-        
+
     }
         /*'tax_query' => array(
             //'relation' => 'OR', //tft
@@ -1874,27 +1870,27 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
             ),
         )*/
 
-    
-    //$info .= 'wp_args: <pre>'.print_r($wp_args, true).'</pre>';    
+
+    //$info .= 'wp_args: <pre>'.print_r($wp_args, true).'</pre>';
     $arr_posts = new WP_Query( $wp_args );
     //$posts = $arr_posts->posts;
     $info .= "Found ".count($arr_posts->posts)." posts.<br /><br />";
     if ( count($arr_posts->posts) == 0 ) {
         $info .= "<pre>Last SQL-Query (query): {$arr_posts->request}</pre>";
     }
- 
+
 	if ( $arr_posts->have_posts() ) {
 		while ( $arr_posts->have_posts() ) {
-            
+
 			$arr_posts->the_post();
-            
+
             $post_id = get_the_ID();
-            
+
             // init
             $update_title = false;
             $update_t4m = false;
             $cpt_info = "";
-            
+
             //https://dev.saintthomaschurch.org/wp-admin/post.php?post=178180&action=edit&post_type=repertoire&classic-editor
             //$edit_url = "/wp-admin/post.php?post=$post_id&action=edit&post_type=$post_type&classic-editor";
             $edit_url = "/wp-admin/post.php?post=$post_id&action=edit&classic-editor";
@@ -1904,15 +1900,15 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
             $edit_link = '<a href="'.$edit_url.'" target="_new">'.$post_id.'</a>&nbsp;';
             $old_t4m = get_post_meta( $post_id, 'title_for_matching', true );
             $old_title = get_post_field( 'post_title', $post_id, 'raw' ); //get_the_title($post_id);
-            
+
             if ( $post_type == "repertoire" ) {
-                
+
                 // Get info for X-check
                 $title_clean = get_post_meta( $post_id, 'title_clean', true );
                 $cpt_info .= '-- title_clean: '.$title_clean.'<br />';
                 $rep_categories = wp_get_post_terms( $post_id, 'repertoire_category', array( 'fields' => 'names' ) );
                 $cpt_info .= '-- rep_categories: '.implode(", ",$rep_categories).'<br />';
-                
+
                 $title_clean = get_field('title_clean', $post_id);
                 $first_line = get_field('first_line', $post_id);
                 $composer = get_field('composer', $post_id);
@@ -1928,35 +1924,35 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                     $cpt_info .= '-- composer not set >> save as "Unknown"<br />';
                     $unknown_id = "60511";
                     update_field('composer', $unknown_id, $post_id);
-                }                    
-                
+                }
+
             }
-            
-            $new_title = build_the_title( $post_id, 'title_for_matching', null ); // 
+
+            $new_title = build_the_title( $post_id, 'title_for_matching', null ); //
             $new_t4m = get_title_uid( $post_id, $post_type, $new_title ); // ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
-            
+
             sdg_log( "[run_title_updates] old_title: ".$old_title, $do_log );
             sdg_log( "[run_title_updates] old_t4m: ".$old_t4m, $do_log );
             sdg_log( "[run_title_updates] new_title: ".$new_title, $do_log );
             sdg_log( "[run_title_updates] new_t4m: ".$new_t4m, $do_log );
-            
+
             if ( strpos($new_title, 'Error! Abort!') !== false || strpos($new_title, 'Problem!') !== false ) {
-                
+
                 $info .= $new_title.'<br />';
-                
+
             } else if ( strpos($new_title, 'Array') !== false ) {
-                
+
                 $info .= 'uh oh! new title contains "Array"<br />';
-                
+
             } else {
-                
+
                 $info .= '<pre>';
                 $info .= 'post_id: '.$edit_link;
                 $update_info = "";
-                
+
                 if ( $cpt_info != "" && $single_post_id) { $info .= '<br />'.$cpt_info; }
-                
-                if ( $new_title != "" && $new_title != $old_title ) {                    
+
+                if ( $new_title != "" && $new_title != $old_title ) {
                     $update_title = true;
                     $update_info .= 'old_title: '.$old_title.'<br />';
                     $update_info .= 'new_title: '.$new_title.'<br />';
@@ -1964,7 +1960,7 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                 } else {
                     $info .= "<!-- old_title: ".$old_title." (unchanged) -->";
                 }
-                
+
                 if ( $new_t4m != "" && $new_t4m != $old_t4m ) {
                     $update_t4m = true;
                     $update_info .= 'old_t4m: '.$old_t4m.'<br />';
@@ -1980,7 +1976,7 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                 } else {
                     $info .= "<!-- old_t4m: ".$old_t4m." (unchanged) -->";
                 }
-                
+
                 if ( $update_title == false && $update_t4m == false ) {
                     if ( $cpt_info != "" && $single_post_id) { $info .= ''; } else { $info .= '&nbsp;&nbsp;'; }
                     $info .= '>> No changes.<br />'; //(but update anyway for mod date)
@@ -1992,28 +1988,28 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
                     $info .= '<br />'.$update_info;
                     $info .= '>> Update the post<br />';
                 }
-                                
+
                 $info .= '</pre>'; // <br />
-                
+
                 // If either the title or t4m needs to change, update the post. If this is a rep item, the save_post callback will be triggered to update the title and t4m as needed.
                 // On second thoughts, run the update no matter what, so that the modification date is updated and we can move on to other records for batch processing.
                 wp_update_post( array( 'ID' => $post_id ) );//if ( $update_title == true || $update_t4m == true ) {}
-                
+
             }
-            
+
         }
-        
+
     }
-    
+
     $info .= 'wp_args: <pre>'.print_r($wp_args, true).'</pre>';
-    
+
     return $info;
-    
+
 }
 
 
 // Function(s) to clean up titles/slugs/UIDs
-///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'posts_cleanup'); } 
+///if ( is_dev_site() ) { add_shortcode('run_posts_cleanup', 'posts_cleanup'); }
 //add_shortcode('run_posts_cleanup', 'posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
 function posts_cleanup( $atts = array() ) {
 
@@ -2029,10 +2025,10 @@ function posts_cleanup( $atts = array() ) {
         'order' => null,
         'meta_key' => null
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-    
+
 	$wp_args = array(
 		'post_type' => $post_type,
 		'post_status' => 'publish',
@@ -2050,58 +2046,58 @@ function posts_cleanup( $atts = array() ) {
                 'taxonomy' => 'event-categories',
                 'field'    => 'slug',
                 'terms'    => 'choral-services',//'terms'    => 'worship-services',
-                
+
             )*/
         ),
         /*'meta_query' => array(
             //'relation' => 'AND',
             array(
-                'key'	  => "legacy_event_id", 
+                'key'	  => "legacy_event_id",
                 'compare' => 'NOT EXISTS',
             )
         ),*/
         'orderby'	=> $orderby,
 	);
-    
+
     if ( $order !== null ) {
         $wp_args['order'] = $order;
     }
-    
+
     if ( $meta_key !== null ) {
         $wp_args['meta_key'] = $meta_key;
     }
-    
-    
+
+
 	$arr_posts = new WP_Query( $wp_args );
     $posts = $arr_posts->posts;
-    
+
     $info .= "testing: ".$testing."<br /><br />";
     $info .= "<!-- wp_args: <pre>".print_r( $wp_args, true )."</pre> -->";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     $info .= "[num posts: ".count($posts)."]<br /><br />";
-    
+
     foreach ( $posts AS $post ) {
-    
+
         $changes_made = false;
-        
+
         setup_postdata( $post );
         $post_id = $post->ID;
         $slug = $post->post_name;
         //$post_id = $post->ID;
         $info .= '<span class="label">post_id: </span>'.$post_id.'<br />';
-            
+
         if ( $post->post_type == 'event' ) {
-            
+
             $new_slug_info = clean_slug( $post_id );
             $new_slug = $new_slug_info['new_slug'];
-            
+
             // TODO: check to see if new slug is unique! If not, append a digit to make it so...
-            
+
             //wp_unique_post_slug( string $slug, int $post_ID, string $post_status, string $post_type, int $post_parent )
             //Computes a unique slug for the post, when given the desired slug and some post details.
-            
+
             //$new_slug = wp_unique_post_slug( string $slug, int $post_ID, string $post_status, string $post_type, int $post_parent );
-            
+
             // Check to see if new_slug is in fact unique to this post
             /*$slug_posts = meta_value_exists( $post_type, $post_id, $uid_field, $new_t4m ); //meta_value_exists( $post_type, $post_id, 'title_for_matching', $new_t4m );
             if ( $t4m_posts && $t4m_posts > 0 ) { // meta_value_exists( $post_type, $meta_key, $meta_value )
@@ -2117,15 +2113,15 @@ function posts_cleanup( $atts = array() ) {
                 $new_t4m = $new_t4m."-v".$i;
 
             }*/
-            
+
             $info .= $new_slug_info['info'];
             $info .= '<span class="label">>>> new_slug: </span>'.$new_slug.'<br />';
-            
+
             //$changes_made = true; // tmp disabled until unique-check is active and tested
         }
-        
+
         if ( $changes_made == true ) {
-            
+
             // Update the post
             $update_args = array(
                 'ID'           => $post_id,
@@ -2138,7 +2134,7 @@ function posts_cleanup( $atts = array() ) {
             // TODO fix/check clean_slug fcn and then set this live for both sites again.
             if ( is_dev_site() ) {
             //if ( $testing == 'false' ) {
-                wp_update_post( $update_args, true );                        
+                wp_update_post( $update_args, true );
                 if ( is_wp_error($post_id) ) {
 
                     /*
@@ -2153,17 +2149,17 @@ function posts_cleanup( $atts = array() ) {
                     $info .= sdg_add_post_term( $post_id, 'slug-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
                 }
             }
-            
+
         } else {
             $info .= $indent."No changes made.<br />";
         }
-        
+
         $info .= "<br />";
-               
+
     } // END foreach post
-    
+
     return $info;
-    
+
 }
 
 
@@ -2176,53 +2172,53 @@ function run_post_updates( $atts = array() ) {
 	$args = shortcode_atts( array(
         'post_id' => get_the_ID()
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-    
+
 	$info = ""; // init
     $admin_terms = array();
     if ( is_dev_site() ) { $admin_terms[] = 1960; } else { $admin_terms[] = 2203; } // Admin tag: slug-updated
     $update_args = array( 'ID' => $post_id);
     $changes_made = false;
-    
+
     //if ($post_id === null) { $post_id = get_the_ID(); }
     $info .= "<!-- sdg_run_post_updates -- post_id: $post_id -->";
-    
+
     // verify post is not a revision
     if ( ! wp_is_post_revision( $post_id ) ) {
-        
+
         $post = get_post( $post_id );
-            
+
         // Is this a recurring event?
         $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
-        
+
         // If this is an EVENT post, and not a recurrence, then run the updates.
         if ( $post->post_type == 'event' && ! $recurrence_id ) {
-        
+
             // ** update_title_for_matching ** /
             // If title_for_matching has NOT already been updated, then get a new and better title_for_matching and update the post accordingly.
             if ( ! has_term( 't4m-updated', 'admin_tag', $post_id ) ) { // change tag to t4m-updated? formerly uid-updated
                 // Get the title_for_matching. If none is set, or if it's empty, run the update function.
                 $title_for_matching = get_post_meta( $post_id, 'title_for_matching', true );
                 if ( ! $title_for_matching || $title_for_matching == "" ) {
-                    
+
                     $t4m_info = update_title_for_matching( $post_id ); // sdg custom function
                     $new_t4m = $t4m_info['title_for_matching'];
                     $info .= $t4m_info['info'];
-                    
+
                     if ( $new_t4m ) {
                         $info .= "<!-- new_t4m: $new_t4m -->";
                     }  else {
                         $info .= "<!-- no new_t4m  -->";
                     }
-                    
+
                 } else {
-                    
-                    // TODO: decide what to do if the title_for_matching is already set but not the post is not tagged as uid-updated -- check to see if current uid needs improvement?                    
+
+                    // TODO: decide what to do if the title_for_matching is already set but not the post is not tagged as uid-updated -- check to see if current uid needs improvement?
                     $info .= "<!-- new_t4m already in DB; no update required: $title_for_matching -->";
                     //$info .= sdg_add_post_term( $post_id, 't4m-updated', 'admin_tag', true ); // $post_id, $arr_term_slugs, $taxonomy, $return_info
-                    
+
                 }
             } else {
                 $info .= "<!-- post has_term 't4m-updated' -->";
@@ -2235,9 +2231,9 @@ function run_post_updates( $atts = array() ) {
                 $slug = $post->post_name;
                 $new_slug_info = clean_slug( $post_id );
                 $new_slug = $new_slug_info['new_slug'];
-            
+
                 // TODO: check to see if new slug is unique! If not, append a digit to make it so...
-                
+
                 $info .= $new_slug_info['info'];
                 //$info .= "<!-- ".$new_slug_info['info']." -->";
 
@@ -2260,11 +2256,11 @@ function run_post_updates( $atts = array() ) {
             //} else {
             //    $info .= "<!-- post does not qualify for slug update. -->";
             //}
-            
+
             // If changes have been made, then update the post
             if ( $changes_made == true ) { // && $testing == 'false'
-                
-                wp_update_post( $update_args, true );    
+
+                wp_update_post( $update_args, true );
 
                 if ( ! is_wp_error($post_id) ) {
                     $info .= "<!-- post updated -->";
@@ -2274,19 +2270,19 @@ function run_post_updates( $atts = array() ) {
                     $info .= "<!-- post updated FAILED -->";
                 }
             }
-            
-        } else { // if is EVENT --> not event           
-            $info .= "<!-- post_type: $post->post_type; recurrence_id: $recurrence_id  -->";            
+
+        } else { // if is EVENT --> not event
+            $info .= "<!-- post_type: $post->post_type; recurrence_id: $recurrence_id  -->";
         }
 
     }
-    
+
     if ( devmode_active( array("sdg", "updates") ) ) {
         $info = str_replace('<!-- ','<code>',$info);
         $info = str_replace(' -->','</code><br />',$info);
         $info = str_replace("\n",'<br />',$info);
     }
-    
+
     return $info;
 }
 
@@ -2307,12 +2303,12 @@ function sermon_updates ( $atts = array() ) {
         'num_posts' => 10,
         //'header' => 'false',
     ), $atts );
-    
+
     // Extract
 	extract( $args );
-    
+
     $info = ""; // init
-    
+
     $wp_args = array(
         'post_type' => 'sermon',
         'post_status' => 'publish',
@@ -2320,70 +2316,70 @@ function sermon_updates ( $atts = array() ) {
         'orderby' => 'ID',
         'order'   => 'ASC'
     );
-    
+
     if ( $legacy == 'true' ) {
-        
+
         // Legacy Events
-        $wp_args['meta_query'] = 
+        $wp_args['meta_query'] =
             array(
                 'relation' => 'AND',
                 array(
-                    'key'	  => "legacy_event_id", 
+                    'key'	  => "legacy_event_id",
                     'compare' => 'EXISTS',
                 ),
                 array(
-                    'key'	  => "related_event", 
+                    'key'	  => "related_event",
                     'compare' => 'NOT EXISTS',
                 )
             );
-        
+
     } else {
-        
+
         // NON-Legacy Events
         $wp_args['meta_query'] =
             array(
                 'relation' => 'AND',
                 array(
-                    'key'	  => "legacy_event_id", 
+                    'key'	  => "legacy_event_id",
                     'compare' => 'NOT EXISTS', // TODO: figure out how to check if NOT EXISTS *OR* is empty or zero...
                 ),
                 array(
-                    'key'	  => "related_event", 
+                    'key'	  => "related_event",
                     'compare' => 'NOT EXISTS',
                 ),
                 array(
-                    'key'	  => "sermon_date", 
+                    'key'	  => "sermon_date",
                     'compare' => 'EXISTS',
                 )
             );
-        
+
     }
-    
+
 	$arr_posts = new WP_Query( $wp_args );
     $sermon_posts = $arr_posts->posts;
-    
+
     $info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre><br />"; // tft
     //$info .= "arr_posts->posts: <pre>".print_r( $arr_posts->posts, true )."</pre>";
     $info .= "[num sermon_posts: ".count($sermon_posts)."]<br /><br />";
-    
+
     foreach ( $sermon_posts AS $sermon_post ) {
-        
+
         setup_postdata( $sermon_post );
-        
+
         $sermon_post_id = $sermon_post->ID;
         $sermon_title = get_the_title( $sermon_post_id );
         //$info .= "sermon_post_id: $sermon_post_id // ";
         $info .= make_link( get_the_permalink( $sermon_post_id ), '<em>'.$sermon_title.'</em>', $sermon_title );
         $info .= '&nbsp;[id:'.$sermon_post_id.'] // ';
-        
+
         if ( $legacy == 'true' ) {
-            
+
             // Legacy Events
             // ADD related_event record by retrieving event post ID based on legacy_event_id
-            
+
             $legacy_event_id = get_field( 'legacy_event_id', $sermon_post_id );
-            
+
             if ($legacy_event_id) {
 
                 $info .= "legacy_event_id: $legacy_event_id<br />";
@@ -2400,21 +2396,21 @@ function sermon_updates ( $atts = array() ) {
 
                 }
             }
-            
+
         } else {
-        
+
             // NON-Legacy Events
             // ADD related_event record by retrieving event post ID based on sermon_date
-            
+
             $sermon_date = get_field( 'sermon_date', $sermon_post_id );
-            
+
             if ($sermon_date) {
 
                 $info .= "sermon_date: $sermon_date<br />";
 
                 if ( $sermon_date != "" ) {
 
-                    // Get event(s) based on sermon_date -- in Worship Services events-category only                
+                    // Get event(s) based on sermon_date -- in Worship Services events-category only
                     $wp_args2 = array(
                         'post_type'     => 'event',
                         'post_status'   => 'publish',
@@ -2422,11 +2418,11 @@ function sermon_updates ( $atts = array() ) {
                         'meta_query'	=> array(
                             //'relation' => 'OR',
                             array(
-                                'key'	=> "_event_start_local", 
+                                'key'	=> "_event_start_local",
                                 'value' => $sermon_date,
                             ),
                             /*array(
-                                'key'	=> "_event_start", 
+                                'key'	=> "_event_start",
                                 'value' => $sermon_date,
                             )*/
                         ),
@@ -2444,30 +2440,30 @@ function sermon_updates ( $atts = array() ) {
                     //$info .= "wp_args2: <pre>".print_r( $wp_args2, true )."</pre>"; // tft
                     //$info .= "Last SQL-Query: <pre>{$arr_posts2->request}</pre><br />"; // tft
                 }
-                
+
             } else {
                 $info .= '<span class="warning">No sermon_date.</span><br />';
             }
         }
-        
+
         if ( $event_posts ) {
-            
+
             if ( count($event_posts) > 1 ) {
                $info .= '<span class="warning">Found >1 event_posts!: '.count($event_posts).' posts</span><br />';
             }/* else if ( count($event_posts) < 1 ) {
                $info .= '<span class="warning">No related event_posts found.</span><br />';
             }*/
-            
+
             foreach( $event_posts as $event_post ) {
-                
+
                 setup_postdata( $event_post );
                 $event_id = $event_post->ID;
                 $event_title = get_the_title( $event_id );
-                
+
                 //$info .= "&nbsp&nbsp&nbsp&nbsp[".$event_id."] ".$event_post->post_title."<br />";
                 $info .= make_link( get_the_permalink( $event_id ), '&nbsp&nbsp&nbsp&nbsp'.$event_title, $event_title );
                 $info .= '&nbsp;[id:'.$event_id.']<br />';
-                
+
                 // Add postmeta for the sermon with this info
                 if ( $event_id && $testing == 'false' ) {
                     add_post_meta( $sermon_post_id, 'related_event', $event_id, true );
@@ -2475,22 +2471,22 @@ function sermon_updates ( $atts = array() ) {
                     $info .= "test mode: add_post_meta is disabled.<br />";
                 }
             }
-            
+
         } else {
-            
+
             if ( $legacy == 'true' ) {
                 $info .= "No live events matching legacy_event_id $legacy_event_id.<br />";
             } else {
                 $info .= "No matching events for sermon_date '$sermon_date'.<br />";
             }
-            
+
         }
 
         $info .= "<br />";
     }
-    
+
     return $info;
-    
+
 }
 
 /*** ACF Related Events ***/
@@ -2510,7 +2506,7 @@ function my_acf_fields_relationship_query( $args, $field, $post_id ) {
         $args['orderby'] = 'meta_value';
         $args['order'] = 'DESC';
         $args['meta_key'] = '_event_start_date';
-    }    
+    }
 
     return $args;
 }
@@ -2541,7 +2537,7 @@ function sdg_include_slug_in_search( $search, $query ) {
 				$search .= $wpdb->prepare( "{$searchand}(($wpdb->posts.post_title LIKE %s) OR ($wpdb->posts.post_content LIKE %s) OR ($wpdb->posts.post_name LIKE %s))", $like, $like, $like );
 				$searchand = ' AND ';
 			}
-		}		
+		}
 		//
 		if ( ! empty( $search ) ) {
 			$search = " AND ({$search}) ";
@@ -2552,7 +2548,7 @@ function sdg_include_slug_in_search( $search, $query ) {
 	}
 
 	return $search;
-	
+
 }
 
 /*
@@ -2597,7 +2593,7 @@ acf/fields/post_object/result/key={$key} Applies to all fields of a specific key
 */
 
 function my_acf_render_field( $field ) {
-    //echo "field: <pre>".print_r($field,true)."</pre>"; // this simply adds HTML after the field is rendered -- no use for effecting display of relationship field options, alas 
+    //echo "field: <pre>".print_r($field,true)."</pre>"; // this simply adds HTML after the field is rendered -- no use for effecting display of relationship field options, alas
 }
 
 // Apply to all fields.

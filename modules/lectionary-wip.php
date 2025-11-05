@@ -20,7 +20,6 @@ add_action('acf/input/admin_enqueue_scripts', function() {
     );
 });
 
-//
 add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
 function renderLitDatesShortcode( $atts = [] ): string
 {
@@ -192,7 +191,7 @@ function getLitDateData( array $args = [] ): array|string
 
     if ( $exclusive ) { $day_titles_only = true; }
     // $filter_types = ['primary','secondary'];
-    $ts_info .= "args: <pre>".print_r($args,true)."</pre>";
+    if ( $debug == "true" ) { $ts_info .= "getLitDateData args: <pre>".print_r($args,true)."</pre>"; }
     //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
 
     // Normalize date input
@@ -446,11 +445,14 @@ function getLitDateData( array $args = [] ): array|string
             if ( $secondaryPost ) { $output .= $secondaryPost['post']->post_title; }
         } else if ( $args['return'] === 'formatted' ) {
             $output = "";
+            //$output .= "debug: [$debug]<br />";
             $data = formatLitDateData( $litdateData, $args );
             $output .= $data;
         }
         //if ( $debug ) { $output .= $info; }
-        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) {
+            $output .= '<div class="troubleshooting">'.$ts_info.'</div>';
+        }
         return $output;
     }
 
@@ -535,6 +537,10 @@ function formatLitDateData( $litDateData = [], $args = [] )
                         $output .= '<small>'; //<br />
                         $output .= 'ID: ' . $post->ID;
                         $output .= ' | Date type: ' . esc_html( $date_type );
+                        if ( $date_type == "variable" ) {
+                            $date_calc = get_post_meta( $post->ID, 'date_calculation', true );
+                            if ( $date_calc ) { $output .= ' | Date calc: "' . esc_html( $date_calc ) . '"';}
+                        }
                         if ( !empty( $term_names ) ) {
                             $output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
                         }
@@ -861,16 +867,19 @@ function get_collect_text( $postID = null, $dateStr = null )
 }
 
 // Function(s) to calculate variable liturgical_dates
-
 function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
 {
     //if ( empty($calcBasis) ) { return null; }
 
+    $arr_info = array();
+
     $info = "";
-    $basisDateStr = null;
+    $basisDateStr = "";
     $basisDate = null;
+    $abort = false;
 
     $info .= ">>> getBasisDate <<<<br />";
+    $info .= "year: ".$year." // litdateCalcID: " . $litdateCalcID . " // calcBasis: " . $calcBasis . " // calcBasisID: " . $calcBasisID . " // calcBasisField: " . $calcBasisField . "<br />";
 
     if ( $calcBasis == 'christmas' ) {
         $basisDateStr = $year."-12-25";
@@ -879,6 +888,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     } elseif ( $calcBasisID ) {
         // If the $calcBasis is a postID, first check to see if it's a fixed or variable date
         $basisDateType = get_post_meta( $calcBasisID, 'date_type', true );
+        $info .= "basisDateType: ".$basisDateType."<br />";
         if ( $basisDateType == "fixed" ) {
             // NB: this code block is copied from the getDisplayDates method. That redundancy should be eliminated, but is being temporarily tolerated in the name of expediency
             if ( !$fixedDateStr = get_field( 'fixed_date_str', $calcBasisID ) ) { // this line diverges from the getDisplayDates version, using calcBasisID instead of postID
@@ -895,6 +905,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
             }
         } else {
             // If variable, get the corresponding date_calculation for the given year
+            $info .= "looking for a variable date match for year: ".$year."<br />";
             // TODO: run a DB query instead to find rows relevant by $year? -- maybe more efficient than retrieving all the rows
             if ( have_rows('date_calculations', $calcBasisID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
                 while ( have_rows('date_calculations', $calcBasisID) ) : the_row();
@@ -905,13 +916,15 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
                     }
                 endwhile;
             } // end if
+            if ( !empty($basisDateStr) ) { $info .= "basisDateStr found: ".$basisDateStr."<br />"; } else { $info .= "NO basisDateStr found for the given year.<br />"; $abort = true; }
         }
     } elseif ( date('Y-m-d', strtotime($calcBasis)) == $calcBasis
                 || strtolower(date('F d',strtotime($calcBasis))) == strtolower($calcBasis)
                 || strtolower(date('F d Y',strtotime($calcBasis))) == strtolower($calcBasis)
         ) {
-        // WIP: deal w/ possibilty that calc_basis is a date (str) -- in which case should be translated as the basis_date
-        // If the calc_basis date includes month/day only, then add the year
+        // WIP: deal w/ possibilty that calcBasis is a date (str) -- in which case should be translated as the basisDate
+        $info .= "calcBasis is a date: ".$calcBasis."<br />";
+        // If the calcBasis date includes month/day only, then add the year
         if ( strtolower(date('F d',strtotime($calcBasis))) == $calcBasis ) {
             $calcBasis = $calcBasis." ". $year;
             // Then convert it to Y-m-d format
@@ -921,7 +934,7 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     } elseif ( $litdateCalcID && $calcBasisField ) {
         $basisDateStr = get_post_meta( $litdateCalcID, $calcBasisField, true);
     } else {
-        // If the calc_basis starts with a "the ", trim that off
+        // If the calcBasis starts with a "the ", trim that off
         if ( substr($calcBasis,0,4) == "the ") { $calcBasis = substr($calcBasis,4); }
         // Append four-digit year (TODO: check first to see if it's already there? though when would that be the case...)
         $calcBasis .= " ".$year;
@@ -929,33 +942,38 @@ function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, 
     }
 
     // If no basis date string has yet been established, then default to January first of the designated year
-    if ( $basisDateStr == "" ) {
+    // Careful! -- this can mess things up for variable dates that are dependent on other variable dates
+    if ( empty($basisDateStr) && $abort === false ) {
         $basisDateStr = $year."-01-01";
         //if ( $verbose == "true" ) { $info .= "(basis date defaults to first of the year)<br />"; }
     }
-    //if ( $verbose == "true" ) { $info .= "basis_date_str: $basisDateStr ($calcBasis)<br />"; } // '<span class="notice">'.</span> // ($calcBasis // $calcBasisField)
+    //if ( $verbose == "true" ) { $info .= "basisDateStr: $basisDateStr ($calcBasis)<br />"; } // '<span class="notice">'.</span> // ($calcBasis // $calcBasisField)
 
-    if ( $basisDateStr ) {
+    if ( !empty($basisDateStr) ) {
         // Get the basis_date from the string version
         $basisDate = strtotime($basisDateStr);
         //$basisDate_weekday = strtolower( date('l', $basisDate) );
-        //if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr ($basisDate_weekday)<br />"; } // .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
+        //if ( $verbose == "true" ) { $info .= "basis_date: $basisDateStr<br />"; } // ($basisDate_weekday) .'<span class="notice">'.'</span>' //  ($calcBasis // $calcBasisField)
     }
 
-    return $basisDate;
+    $arr_info['date'] = $basisDate;
+    $arr_info['info'] = $info;
+
+    //return $basisDate;
+    return $arr_info;
 
 }
 
-function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() )
+function getCalcBasesFromStr ( $dateCalcStr = "", $idsToExclude = array() )
 {
     // Init vars
     $arr_info = array();
-    $calc_bases = array();
+    $arrCalcBases = array();
     $info = "";
 
     // litdate found in $dateCalcStr?
     // query titles of  litdates to see if any are found in $dateCalcStr (complete)
-    // hm as it currently is, it's looking for entire $dateCalcStr in title -- but what we need is to look for titles within date_calc_str...
+    // hm as it currently is, it's looking for entire $dateCalcStr in title -- but what we need is to look for titles within dateCalcStr...
     // wip
     // Set up query args
     $wp_args = array(
@@ -973,16 +991,18 @@ function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() )
     // Run the query
     $arr_posts = new WP_Query( $wp_args );
 
-    $info .= "WP_Query run as follows:";
-    $info .= "<pre>args: ".print_r($wp_args, true)."</pre>";
-    $info .= "[".count($arr_posts->posts)."] posts found matching date_calc_str.<br />";
-    //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
+    //if ( $verbose == "true" ) {
+        $info .= "WP_Query run as follows:";
+        $info .= "<pre>query args: ".print_r($wp_args, true)."</pre>";
+        $info .= "[".count($arr_posts->posts)."] posts found matching dateCalcStr.<br />";
+        //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
+    //}
     if ( count($arr_posts->posts) > 0 ) {
         foreach ( $arr_posts->posts AS $post ) {
             // Check to make sure this isn't an "Eve of" or "Week of" date before adding it to the array
             $calcBasis = strtolower($post->post_title);
             if ( strpos($calcBasis, 'eve of ') == false && strpos($calcBasis, 'week of ') == false ) {
-                $calc_bases[] = array( 'post_id' => $post->ID, 'basis' => $calcBasis );
+                $arrCalcBases[] = array( 'post_id' => $post->ID, 'basis' => $calcBasis );
             } else {
                 //
             }
@@ -992,26 +1012,26 @@ function get_calc_bases_from_str ( $dateCalcStr = "", $idsToExclude = array() )
         // lit basis found in $dateCalcStr?
         $liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' );
 
-        // Get the liturgical date info upon which the calculation should be based (basis extracted from the date_calc_str)
-        foreach ( $liturgical_bases AS $basis => $basis_field ) {
+        // Get the liturgical date info upon which the calculation should be based (basis extracted from the dateCalcStr)
+        foreach ( $liturgical_bases AS $basis => $basisField ) {
             if (stripos($dateCalcStr, $basis) !== false) {
-                $calc_bases[] = array( 'basis' => $basis, 'basis_field' => $basis_field );
-                //if ( $verbose == "true" ) { $info .= "&rarr; "."calc_basis ".$basis." (".$basis_field.") found in date_calc_str.<br />"; }
+                $arrCalcBases[] = array( 'basis' => $basis, 'basisField' => $basisField );
+                //if ( $verbose == "true" ) { $info .= "&rarr; "."calcBasis ".$basis." (".$basisField.") found in dateCalcStr.<br />"; }
             }
         }
     }
 
-    //return $calc_bases;
+    //return $arrCalcBases;
 
     $arr_info['info'] = $info;
-    $arr_info['calc_bases'] = $calc_bases;
+    $arr_info['calcBases'] = $arrCalcBases;
     //
 
     return $arr_info;
 
 }
 
-function get_calc_boias_from_str ( $dateCalcStr = "" )
+function getCalcBoiasFromStr ( $dateCalcStr = "" )
 {
     $calcBoias = array();
 
@@ -1020,7 +1040,7 @@ function get_calc_boias_from_str ( $dateCalcStr = "" )
     // can we do this without the loop -- match str against array of substr?
     foreach ( $boias AS $boia ) {
         if ( preg_match_all('/\s*'.$boia.'\s*/', $dateCalcStr, $matches, PREG_OFFSET_CAPTURE) ) {
-            //$info .= "&rarr; "."boia '$boia' found in date_calc_str<br />"; //
+            //$info .= "&rarr; "."boia '$boia' found in dateCalcStr<br />"; //
             //$calcBoia = strtolower($boia);
             $calcBoias[] = strtolower($boia);
             if ( count($matches) > 1 ) {
@@ -1036,7 +1056,7 @@ function get_calc_boias_from_str ( $dateCalcStr = "" )
 
 }
 
-function get_calc_weekdays_from_str ( $dateCalcStr = "" )
+function getCalcWeekdaysFromStr ( $dateCalcStr = "" )
 {
     $calcWeekdays = array();
 
@@ -1046,7 +1066,7 @@ function get_calc_weekdays_from_str ( $dateCalcStr = "" )
     $calcWeekdays = array();
     foreach ( $weekdays AS $weekday ) {
         if (stripos($dateCalcStr, $weekday) !== false) {
-            //$info .= "&rarr; "."weekday '$weekday' found in date_calc_str<br />";
+            //$info .= "&rarr; "."weekday '$weekday' found in dateCalcStr<br />";
             $calcWeekdays[] = strtolower($weekday);
         }
     }
@@ -1055,33 +1075,33 @@ function get_calc_weekdays_from_str ( $dateCalcStr = "" )
 
 }
 
-function parse_date_str ( $args = array() )
+function parseDateStr ( $args = array() )
 {
     $arr_info = array();
     $arr_elements = array();
-    $complex_formula = false;
+    $complex_formula = false; // TODO: deal w/ subset of dates that are dependent on other variable dates which must be calculated first.
     //
     $info = "";
-    $info .= '<strong>&gt;&gt;&gt; parse_date_str &lt;&lt;&lt;</strong><br />';
+    $info .= '<strong>&gt;&gt;&gt; parseDateStr &lt;&lt;&lt;</strong><br />';
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 
     // Defaults
     $defaults = array(
         'year'                => null,
-        'date_calc_str'        => null,
+        'dateCalcStr'        => null,
         'verbose'            => true,
-        'ids_to_exclude'    => array(), // IDs to exclude -- e.g. when dealing w/ "Eve of" dates -- so that "eve of" post doesn't find itself as a possible basis
+        'idsToExclude'    => array(), // IDs to exclude -- e.g. when dealing w/ "Eve of" dates -- so that "eve of" post doesn't find itself as a possible basis
     );
 
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
     //extract( $args );
     $year = $args['year'];
-    $dateCalcStr = $args['date_calc_str'];
-    $idsToExclude = $args['ids_to_exclude'];
+    $dateCalcStr = $args['dateCalcStr'];
+    $idsToExclude = $args['idsToExclude'];
     $verbose = $args['verbose'];
     //
-    if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
+    //if ( $verbose == "true" ) { $info .= "parseDateStr args: <pre>".print_r($args, true)."</pre>"; }
     $dateCalcStr_bk = $dateCalcStr; // copy the $dateCalcStr to a new variable so we can preserve the original while making mods as needed
     //
     $liturgical_bases = array('advent' => 'advent_sunday_date', 'christmas' => 'December 25', 'epiphany' => 'January 6', 'ash wednesday' => 'ash_wednesday_date', 'lent' => 'ash_wednesday_date', 'easter' => 'easter_date', 'ascension day' => 'ascension_date', 'pentecost' => 'pentecost_date' ); // get rid of this here? only needed in this function for FYI components info -- not really functional
@@ -1100,11 +1120,11 @@ function parse_date_str ( $args = array() )
     $calcInterval = null;
     //
 
-    // Loop through all the components of the exploded date_calc_str and determine component type
+    // Loop through all the components of the exploded dateCalcStr and determine component type
     // WIP -- why do this? -- maybe to determine early on if this is a complex formula that must be broken down into sub-formulas...
     // "after the", "before the", "in the"(?)
     // e.g. Corpus Christi: "thursday after the 1st sunday after pentecost"
-    // if str contains either multiple calc_bases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
+    // if str contains either multiple calcBases OR multiple boias, then break it into parts (nested) and process core first, then final based on calc core date
 
     $calc_components = explode(" ", $dateCalcStr);
     if ( $verbose == "true" ) { $info .= "[".count($calc_components)."] calc_components: ".print_r($calc_components,true)."<br />"; }
@@ -1116,14 +1136,18 @@ function parse_date_str ( $args = array() )
 
         $component = strtolower($component);
 
-        // First check to see if the component is a straight-up date! // date('Y-m-d', $calcDate) // (YYYY-MM-DD) //$calcDate_str = date('Y-m-d', $calcDate);
+        // First check to see if the component is a straight-up date! // date('Y-m-d', $calcDate) // (YYYY-MM-DD) //$calcDateStr = date('Y-m-d', $calcDate);
         if ( preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $component) ) {
             $component_info .= $indent."component '".$component."' is a date<br />";
             $previous_component_type = "date";
         } elseif ( array_key_exists($component, $liturgical_bases) ) {
-            $component_info .= $indent."component '".$component."' is a liturgical_base<br />";
+            //$component_info .= $indent."component '".$component."' is a liturgical_base<br />";
             $previous_component_type = "liturgical_base";
-            // >> save as calc_basis, replacing loop below?
+            if ( $component == $dateCalcStr ) {
+                $component_info .= $indent."component '".$component."', a liturgical_base, is equal to the complete dateCalcStr: $dateCalcStr<br />";
+                $calcBasis = $dateCalcStr;
+            }
+            // >> save as calcBasis, replacing loop below?
             // WIP
             // if multiple bases are found, proceed with the core subclause and then repeat calc...
             //
@@ -1137,12 +1161,17 @@ function parse_date_str ( $args = array() )
         } elseif ( in_array($component, $boias) ) {
             $component_info .= $indent."component '".$component."' is a boia<br />";
             $previous_component_type = "boia";
-            // Potential calc_basis?
+            // Potential calcBasis?
             if ( empty($calcBasis)) {
                 $calcBasis = trim(substr($dateCalcStr,strpos($dateCalcStr,$component)+strlen($component)));
-                $component_info .= $indent.'calc_basis: '.$calcBasis."<br />";
+                if ( in_array($calcBasis, $months) ) {
+                    $component_info .= $indent.'calcBasis "'.$calcBasis.'" is a month. Therefore we must use first of that month in the given year as basis.<br />';
+                    $calcBasis = "first day of ".$calcBasis;
+                } else {
+                    $component_info .= $indent.'calcBasis: '.$calcBasis."<br />";
+                }
             }
-        } elseif ( contains_numbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
+        } elseif ( containsNumbers($component) ) { // what about "last"? do we need to deal with that here? or third? fourth? etc?
             $component_info .= $indent."component '".$component."' is numeric/intervalic<br />";
             //$component_info .= $indent."component '".$component."' is numeric/intervalic --> matches: ".print_r($matches,true)."<br />";
             // WIP...
@@ -1181,127 +1210,129 @@ function parse_date_str ( $args = array() )
     // WIP!!!
     // TODO: check to see if multiple components come after the boia -- e.g. 1st sunday after august 15 -- and/or see if there's a sequence of components consisting of MONTH INT
 
-    // 1. Liturgical calc basis (calc_basis)
-    //if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str<br />"; }
+    // 1. Liturgical calc basis (calcBasis)
+    //if ( $verbose == "true" ) { $info .= ">> getCalcBasesFromStr<br />"; }
     if ( $calcBasis ) {
         $calcBasis = strtolower($calcBasis);
         if ( array_key_exists($calcBasis, $liturgical_bases) ) {
-            //if ( $verbose == "true" ) { $info .= "calc_basis: $calcBasis is a liturgical_base<br />"; }
-            $calc_bases = array();  // calc_bases array needs to be array of arrays to match get_calc_bases_from_str results
-            $basis_field = $liturgical_bases[$calcBasis];
-            $calc_bases[] = array('basis' => $calcBasis, 'basis_field' => $basis_field );
-            $calc_bases_info = array( 'info' => "calc_basis: $calcBasis is a liturgical_base<br />", 'calc_bases' => $calc_bases );
+            if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis is a liturgical_base<br />"; }
+            $arrCalcBases = array();  // calcBases array needs to be array of arrays to match getCalcBasesFromStr results
+            $basisField = $liturgical_bases[$calcBasis];
+            $arrCalcBases[] = array('basis' => $calcBasis, 'basisField' => $basisField );
+            $calcBasesInfo = array( 'info' => "calcBasis: $calcBasis is a liturgical_base<br />", 'calcBases' => $arrCalcBases );
         } else {
-            if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str calc_basis: $calcBasis<br />"; }
-            $calc_bases_info = get_calc_bases_from_str($calcBasis, $idsToExclude);
+            if ( $verbose == "true" ) { $info .= ">> getCalcBasesFromStr using str calcBasis: $calcBasis<br />"; }
+            $calcBasesInfo = getCalcBasesFromStr($calcBasis, $idsToExclude);
         }
     } else {
-        if ( $verbose == "true" ) { $info .= ">> get_calc_bases_from_str using str date_calc_str: $dateCalcStr<br />"; }
-        $calc_bases_info = get_calc_bases_from_str($dateCalcStr, $idsToExclude);
+        if ( $verbose == "true" ) { $info .= ">> getCalcBasesFromStr using str dateCalcStr: $dateCalcStr<br />"; }
+        $calcBasesInfo = getCalcBasesFromStr($dateCalcStr, $idsToExclude);
     }
-    //$calc_bases_info = get_calc_bases_from_str($dateCalcStr);
-    $calc_bases = $calc_bases_info['calc_bases'];
+    //$calcBasesInfo = getCalcBasesFromStr($dateCalcStr);
+    $calcBases = $calcBasesInfo['calcBases'];
     if ( $verbose == "true" ) {
-        //$info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
-        $info .= $calc_bases_info['info']."<br />";
+        //$info .= "calcBases: <pre>".print_r($calcBases, true)."</pre>";
+        $info .= $calcBasesInfo['info']."<br />";
     }
-    if ( empty($calc_bases) ) {
-        if ( $verbose == "true" ) { $info .= "No calc_basis found.<br />"; }
-    } elseif ( count($calc_bases) > 1 ) {
+    if ( empty($calcBases) ) {
+        if ( $verbose == "true" ) { $info .= "No calcBasis found.<br />"; }
+    } elseif ( count($calcBases) > 1 ) {
         $complex_formula = true;
-        $info .= '<span class="notice">More than one calc_basis found!</span><br />';
-        $info .= "calc_bases: <pre>".print_r($calc_bases, true)."</pre>";
+        $info .= '<span class="notice">More than one calcBasis found!</span><br />';
+        $info .= "calcBases: <pre>".print_r($calcBases, true)."</pre>";
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
-        //return $calc; // abort early -- we don't know what to do with this date_calc_str
-        foreach ( $calc_bases as $cb_tmp ) {
+        //$calc['calcInfo'] = $info;
+        //return $calc; // abort early -- we don't know what to do with this dateCalcStr
+        foreach ( $calcBases as $cb_tmp ) {
             if ( $cb_tmp['basis'] == $calcBasis ) {
-                $info .= "cb_tmp basis: ".$cb_tmp['basis']." is identical to calc_basis<br />";
+                $info .= "cb_tmp basis: ".$cb_tmp['basis']." is identical to calcBasis<br />";
                 $calcBasis = $cb_tmp['basis'];
                 $calcBasisID = $cb_tmp['post_id'];
             }
         }
         //
-    } elseif ( count($calc_bases) == 1 ) {
-        if ( $verbose == "true" ) { $info .= "Single calc_basis found.<br />"; }
-        $cb = $calc_bases[0];
+    } elseif ( count($calcBases) == 1 ) {
+        if ( $verbose == "true" ) { $info .= "Single calcBasis found.<br />"; }
+        $cb = $calcBases[0];
         if ( is_array($cb) ) {
             $calcBasis = $cb['basis'];
             if ( isset($cb['post_id']) ) {
                 $calcBasisID = $cb['post_id'];
-            } elseif ( isset($cb['basis_field']) ) {
-                $calcBasisField = $cb['basis_field'];
+            } elseif ( isset($cb['basisField']) ) {
+                $calcBasisField = $cb['basisField'];
             }
             //$info .= "cb: <pre>".print_r($cb, true)."</pre>";
         } else {
             $calcBasis = $cb;
         }
 
-        // clean up the calc_basis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
+        // clean up the calcBasis -- e.g. if we were looking for "the third sunday of advent" and got "the third sunday of advent (gaudete)"
         // Remove anything in parentheses or brackets
-        if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calc_basis.<br />"; }
+        if ( $verbose == "true" ) { $info .= "About to remove bracketed info from calcBasis.<br />"; }
         $calcBasis = remove_bracketed_info($calcBasis,true);
         $info .= "calcBasis: $calcBasis<br />";
         // Clean up the calcBasis a bit more, in case it's one of those long litdate titles, like "Saint Lucy, Martyr at Syracuse"
         $calcBasis = trim(explode(',', $calcBasis)[0]); // remove everything after the comma, if there is one
     }
 
-    if ( $calcBasis ) { $components['calc_basis'] = $calcBasis; }
-    if ( $calcBasisID ) { $components['calc_basis_id'] = $calcBasisID; }
-    if ( $calcBasisField ) { $components['calc_basis_field'] = $calcBasisField; }
-    if ( $verbose == "true" ) { $info .= "calc_basis: $calcBasis // calc_basis_id: $calcBasisID // calc_basis_field: $calcBasisField<br />"; }
+    if ( $calcBasis ) { $components['calcBasis'] = $calcBasis; }
+    if ( $calcBasisID ) { $components['calcBasisID'] = $calcBasisID; }
+    if ( $calcBasisField ) { $components['calcBasisField'] = $calcBasisField; }
+    if ( $verbose == "true" ) { $info .= "calcBasis: $calcBasis // calcBasisID: $calcBasisID // calcBasisField: $calcBasisField<br />"; }
 
     // 2. BOIAs
     // Does the date to be calculated fall before/after/of/in the basis_date/season?
     if ( $calcBasis ) {
-        // get the calc_str without the already determined calc_basis
-        if ( $verbose == "true" ) { $info .= "About to replace calc_basis '$calcBasis' in date_calc_str '$dateCalcStr'<br />"; }
-        $dateCalcStr = trim(str_ireplace($calcBasis,"",$dateCalcStr));
-        if ( strtotime($dateCalcStr) ) { $info .= 'date_calc_str: "'.$dateCalcStr.'" is parseable by strtotime<br />'; } //else { $info .= 'date_calc_str: "'.$dateCalcStr.'" is NOT parseable by strtotime<br />'; }
-        if ( strtotime($dateCalcStr."today") ) { $info .= 'date_calc_str: "'.$dateCalcStr.'" is parseable by strtotime with the addition of the word "today"<br />'; } //else { $info .= 'date_calc_str: "'.$dateCalcStr.'" is NOT parseable by strtotime with the addition of the word "today"<br />'; }
-        if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from modified date_calc_str: $dateCalcStr<br />"; }
+        // If they're not already identical, then get the dateCalcStr minus the already determined calcBasis
+        if ( $dateCalcStr != $calcBasis ) {
+            if ( $verbose == "true" ) { $info .= "About to replace calcBasis '$calcBasis' in dateCalcStr '$dateCalcStr'<br />"; }
+            $dateCalcStr = trim(str_ireplace($calcBasis,"",$dateCalcStr));
+        }
+        if ( strtotime($dateCalcStr) ) { $info .= 'dateCalcStr: "'.$dateCalcStr.'" is parseable by strtotime<br />'; } //else { $info .= 'dateCalcStr: "'.$dateCalcStr.'" is NOT parseable by strtotime<br />'; }
+        if ( strtotime($dateCalcStr."today") ) { $info .= 'dateCalcStr: "'.$dateCalcStr.'" is parseable by strtotime with the addition of the word "today"<br />'; } //else { $info .= 'dateCalcStr: "'.$dateCalcStr.'" is NOT parseable by strtotime with the addition of the word "today"<br />'; }
+        if ( $verbose == "true" ) { $info .= "getCalcBoiasFromStr from modified dateCalcStr: $dateCalcStr<br />"; }
     } else {
-        if ( $verbose == "true" ) { $info .= "get_calc_boias_from_str from unmodified date_calc_str<br />"; }
+        if ( $verbose == "true" ) { $info .= "getCalcBoiasFromStr from unmodified dateCalcStr<br />"; }
     }
-    $calcBoias = get_calc_boias_from_str($dateCalcStr);
+    $calcBoias = getCalcBoiasFromStr($dateCalcStr);
     if ( empty($calcBoias) ) {
         if ( $verbose == "true" ) { $info .= "No boias found.<br />"; }
     } elseif ( count($calcBoias) > 1 ) {
         $complex_formula = true;
-        $info .= '<span class="notice">More than one calc_boia found!</span><br />';
-        $info .= "calc_boias: ".print_r($calcBoias, true)."<br />"; //<pre></pre>
+        $info .= '<span class="notice">More than one calcBoia found!</span><br />';
+        $info .= "calcBoias: ".print_r($calcBoias, true)."<br />"; //<pre></pre>
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
-        //return $calc; // abort early -- we don't know what to do with this date_calc_str
+        //$calc['calcInfo'] = $info;
+        //return $calc; // abort early -- we don't know what to do with this dateCalcStr
     } elseif ( count($calcBoias) == 1 ) {
         $calcBoia = $calcBoias[0];
-        $components['calc_boia'] = $calcBoia;
-        if ( $verbose == "true" ) { $info .= "calc_boia: $calcBoia<br />"; }
+        $components['calcBoia'] = $calcBoia;
+        if ( $verbose == "true" ) { $info .= "calcBoia: $calcBoia<br />"; }
     }
 
     // 3. Weekdays
-    $calcWeekdays = get_calc_weekdays_from_str($dateCalcStr);
+    $calcWeekdays = getCalcWeekdaysFromStr($dateCalcStr);
     if ( empty($calcWeekdays) ) {
-        if ( $verbose == "true" ) { $info .= "No calc_weekday found.<br />"; }
+        if ( $verbose == "true" ) { $info .= "No calcWeekday found.<br />"; }
     } elseif ( count($calcWeekdays) > 1 ) {
         $complex_formula = true;
-        $info .= '<span class="notice">More than one calc_weekday found!</span><br />';
-        $info .= "calc_weekdays: ".print_r($calcWeekdays, true)."<br />"; //<pre></pre>
+        $info .= '<span class="notice">More than one calcWeekday found!</span><br />';
+        $info .= "calcWeekdays: ".print_r($calcWeekdays, true)."<br />"; //<pre></pre>
         //$info .= '</div>';
-        //$calc['calc_info'] = $info;
-        //return $calc; // abort early -- we don't know what to do with this date_calc_str
+        //$calc['calcInfo'] = $info;
+        //return $calc; // abort early -- we don't know what to do with this dateCalcStr
     } elseif ( count($calcWeekdays) == 1 ) {
         $calcWeekday = $calcWeekdays[0];
-        $components['calc_weekday'] = $calcWeekday;
-        if ( $verbose == "true" ) { $info .= "calc_weekday: $calcWeekday<br />"; }
+        $components['calcWeekday'] = $calcWeekday;
+        if ( $verbose == "true" ) { $info .= "calcWeekday: $calcWeekday<br />"; }
     }
     //
 
     // 4. Calc interval(s)
     // WIP 240903
-    // translate words to digits etc -- move some functionality from calc_date_from_components
+    // translate words to digits etc -- move some functionality from calcDateFromComponents
     // $calcInterval
-    // in combo with calc_boia and calc_weekday, translate date_calc_str into something that can be handled by php strtotime
+    // in combo with calcBoia and calcWeekday, translate dateCalcStr into something that can be handled by php strtotime
     // e.g. two sundays before >> 2 sundays previous >> previous sunday - 6 days >>> previous sunday - X weeks + 1 day
 
     // phase this out? or generalize?
@@ -1310,40 +1341,40 @@ function parse_date_str ( $args = array() )
         if ( $verbose == "true" ) { $info .= "This is a complex_formula => extract the sub_formula<br />"; }
 
         if ( strpos(strtolower($dateCalcStr), 'after the ') !== false ) {
-            $sub_calc_str = trim(substr( $dateCalcStr, strpos($dateCalcStr, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
+            $subCalcStr = trim(substr( $dateCalcStr, strpos($dateCalcStr, "after the ")+9 )); // WIP 231204 -- generalize beyond Corpus Christi?
         } else {
-            $sub_calc_str = ""; // ???
+            $subCalcStr = ""; // ???
         }
-        $info .= "sub_calc_str: $sub_calc_str<br />";
+        $info .= "subCalcStr: $subCalcStr<br />";
 
-        $components['date_calc_str'] = $sub_calc_str;
-        //if ( count($calcWeekdays) > 1 ) { $components['calc_weekday'] = $calcWeekdays[1]; }
+        $components['dateCalcStr'] = $subCalcStr;
+        //if ( count($calcWeekdays) > 1 ) { $components['calcWeekday'] = $calcWeekdays[1]; }
         //
-        $calcWeekdays = get_calc_weekdays_from_str($sub_calc_str);
+        $calcWeekdays = getCalcWeekdaysFromStr($subCalcStr);
         if ( count($calcWeekdays) == 1 ) {
-            $components['calc_weekday'] = $calcWeekdays[0];
+            $components['calcWeekday'] = $calcWeekdays[0];
         }
         //
-        $arr_elements['sub_calc_str'] = $components;
+        $arr_elements['subCalcStr'] = $components;
         //
         if ( strpos(strtolower($dateCalcStr), 'after the ') !== false ) {
-            $super_calc_str = trim(substr( $dateCalcStr, 0, strpos($dateCalcStr, "after the")+9 ))." sub_calc_str"; // WIP 231204
+            $superCalcStr = trim(substr( $dateCalcStr, 0, strpos($dateCalcStr, "after the")+9 ))." subCalcStr"; // WIP 231204
         } else {
-            $super_calc_str = ""; // ???
+            $superCalcStr = ""; // ???
         }
 
-        $components['date_calc_str'] = $super_calc_str;
+        $components['dateCalcStr'] = $superCalcStr;
         //
-        $calcWeekdays = get_calc_weekdays_from_str($super_calc_str);
+        $calcWeekdays = getCalcWeekdaysFromStr($superCalcStr);
         if ( count($calcWeekdays) == 1 ) {
-            $components['calc_weekday'] = $calcWeekdays[0];
+            $components['calcWeekday'] = $calcWeekdays[0];
         }
         //
-        $arr_elements['super_calc_str'] = $components;
-        $info .= "super_calc_str: $super_calc_str<br />";
+        $arr_elements['superCalcStr'] = $components;
+        $info .= "superCalcStr: $superCalcStr<br />";
     } else {
-        $components['date_calc_str'] = $dateCalcStr;
-        $arr_elements['calc_str'] = $components;
+        $components['dateCalcStr'] = $dateCalcStr;
+        $arr_elements['calcStr'] = $components;
     }
     // get core sub-formula...
     // "after the", "before the", "in the"(?)
@@ -1366,17 +1397,17 @@ function calcDateFromStr( $args = array() )
     // Defaults
     $defaults = array(
         'year'                => null,
-        'date_calc_str'        => null,
+        'dateCalcStr'        => null,
         'verbose'            => false,
-        'ids_to_exclude'        => array(),
+        'idsToExclude'        => array(),
     );
 
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
     //extract( $args );
     $year = $args['year'];
-    $dateCalcStr = $args['date_calc_str'];
-    $idsToExclude = $args['ids_to_exclude'];
+    $dateCalcStr = $args['dateCalcStr'];
+    $idsToExclude = $args['idsToExclude'];
     $verbose = $args['verbose'];
 
     // Init vars
@@ -1385,21 +1416,21 @@ function calcDateFromStr( $args = array() )
     $calcDate = null;
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;"; // TODO: define this with global scope for all plugin functions
 
-    // Abort if date_calc_str or year is empty
+    // Abort if dateCalcStr or year is empty
     if ( empty($dateCalcStr) || empty($year) ) {
         $info .= "Insufficient data provided<br />";
         $info .= "dateCalcStr: $dateCalcStr; year: $year<br />";
-        $arr_info['calc_info'] = $info;
+        $arr_info['calcInfo'] = $info;
         return $arr_info;
     }
 
     $info .= '<strong>&gt;&gt;&gt; calcDateFromStr &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "year: ".$year."<br />"; }
-    if ( $verbose == "true" ) { $info .= "date_calc_str: ".$dateCalcStr."<br />"; }
+    if ( $verbose == "true" ) { $info .= "dateCalcStr: ".$dateCalcStr."<br />"; }
 
     // Find the liturgical_date_calc post for the selected year
     // TODO: *maybe* -- phase this out in favor of simply using php easter_date function. ( easter_date(year); )
-    //$litdateCalcID = get_liturgical_date_calc_id ( $year ); // WIP
+    //$litdateCalcID = getLiturgicalDateCalcID ( $year ); // WIP
     // (liturgical_date_calc records contain the dates for Easter, Ash Wednesday, &c. per year)
     // TODO: make this a separate function?
     $wp_args = array(
@@ -1426,82 +1457,81 @@ function calcDateFromStr( $args = array() )
     }
 
     // Parse the date string
-    $args = array( 'year' => $year, 'date_calc_str' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => $idsToExclude );
-    $date_elements_info = parse_date_str ( $args );
+    $args = array( 'year' => $year, 'dateCalcStr' => $dateCalcStr, 'verbose' => $verbose, 'idsToExclude' => $idsToExclude );
+    $date_elements_info = parseDateStr ( $args );
     $info .= $date_elements_info['info'];
     $date_elements = $date_elements_info['elements'];
     $calcDate = null;
-    $new_basis_date_str = null;
+    $newBasisDateStr = null;
     //
-
     // >> loop through elements foreach $elements as $element => $components
     foreach ( $date_elements as $element => $components ) { //foreach ( $date_elements as $components ) {
 
         $info .= "element: [".$element."]<br />";
         //
-        if ( isset($components['date_calc_str']) ) { $dateCalcStr = $components['date_calc_str']; }
+        if ( isset($components['dateCalcStr']) ) { $dateCalcStr = $components['dateCalcStr']; }
         //
-        if ( isset($components['calc_basis']) && strtolower($dateCalcStr) == $components['calc_basis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
-            $calcDate = getBasisDate( $year, $litdateCalcID, $components['calc_basis'], $components['calc_basis_field'] );
-            $info .= "date to be calculated is same as basis_date.<br />";
+        if ( isset($components['calcBasis']) && strtolower($dateCalcStr) == $components['calcBasis'] ) { // Easter, Christmas, Ash Wednesday, Pentecost", &c.=
+            if ( $verbose == "true" ) { $info .= "calcBasis: " . $components['calcBasis'] . "same as dateCalcStr: $dateCalcStr. About to getBasisDate.<br />"; }
+            //getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
+            $arrBasisDate = getBasisDate( $year, $litdateCalcID, $components['calcBasis'], null, $components['calcBasisField'] );
+            $calcDate = $arrBasisDate['date'];
+            $info .= $arrBasisDate['info'];
+            $info .= "date to be calculated is same as basis_date => calcDate = getBasisDate: $calcDate<br />";
         } else {
             //
-            if ( $new_basis_date_str ) {
-                $info .= "new_basis_date_str: ".$new_basis_date_str."<br />";
-                // TODO: str_replace "the sub_calc_str" in date_calc_str
-                $dateCalcStr = str_replace("the sub_calc_str", $new_basis_date_str, $dateCalcStr );
-                //$dateCalcStr = str_replace("sub_calc_str", $new_basis_date_str, $dateCalcStr );
-                $components['calc_basis'] = $new_basis_date_str;
-                $components['calc_basis_field'] = null;
-                $components['date_calc_str'] = $dateCalcStr;
+            if ( $newBasisDateStr ) {
+                $info .= "newBasisDateStr: ".$newBasisDateStr."<br />";
+                // TODO: str_replace "the subCalcStr" in dateCalcStr
+                $dateCalcStr = str_replace("the subCalcStr", $newBasisDateStr, $dateCalcStr );
+                //$dateCalcStr = str_replace("subCalcStr", $newBasisDateStr, $dateCalcStr );
+                $components['calcBasis'] = $newBasisDateStr;
+                $components['calcBasisField'] = null;
+                $components['dateCalcStr'] = $dateCalcStr;
             }
             //
             $components['year'] = $year;
             $components['liturgical_date_calc_id'] = $litdateCalcID;
-            //$components['date_calc_str'] = $dateCalcStr;
+            //$components['dateCalcStr'] = $dateCalcStr;
             $components['verbose'] = $verbose;
             //
             //$info .= "[".$element."] components: <pre>".print_r($components, true)."</pre>";
 
-            $calc = calc_date_from_components( $components );
+            $calc = calcDateFromComponents( $components );
             $info .= $calc['info'];
             $calcDate = $calc['date'];
         }
         // WIP -- if more than one element, get $calcDate as $new_basis_date from first calc and pass it to second in loop
         if ( is_int($calcDate) ) {
-            $new_basis_date_str = date("Y-m-d", $calcDate );
-        } else {
-            if ( $verbose == "true" ) {
-                if ( empty($calcDate) ) {
-                    $info .= '<span class="notice">'."Cannot create new_basis_date_str -- calc_date is empty</span>".'<br />';
-                } else {
-                    $info .= '<span class="notice">'."Cannot create new_basis_date_str from calc_date: ".$calcDate." because it's a string</span>".'<br />';
-                }
+            $newBasisDateStr = date("Y-m-d", $calcDate );
+        } else if ( $verbose == "true" ) {
+            if ( empty($calcDate) ) {
+                $info .= '<span class="notice">'."Cannot create newBasisDateStr -- calcDate is empty</span>".'<br />';
+            } else {
+                $info .= '<span class="notice">'."Cannot create newBasisDateStr from calcDate: ".$calcDate." because it's a string</span>".'<br />';
             }
         }
     }
 
     if ( $calcDate ) {
-        if ( $verbose == "true" ) { $info .= 'calc_date: '.$calcDate.'<br />'; } //'<span class="notice">'.'</span>'.
+        if ( $verbose == "true" ) { $info .= 'calcDate: '.$calcDate.'<br />'; } //'<span class="notice">'.'</span>'.
         if ( is_int($calcDate) ) {
-            $info .= '<span class="notice">'.'calc_date (timestamp >> formatted): '.date('Y-m-d', $calcDate).'</span>'.'<br />';
+            $info .= '<span class="notice">'.'calcDate (timestamp >> formatted): '.date('Y-m-d', $calcDate).'</span>'.'<br />';
         } else {
-            $info .= '<span class="notice">'."calc_date not a valid date: ".$calcDate." (string)</span>".'<br />'; //if ( $verbose == "true" ) { }
+            $info .= '<span class="notice">'."calcDate not a valid date: ".$calcDate." (string)</span>".'<br />';
             $calcDate = null;
         }
     }
 
-    $arr_info['calc_date'] = $calcDate;
-    $arr_info['calc_info'] = $info;
+    $arr_info['calcDate'] = $calcDate;
+    $arr_info['calcInfo'] = $info;
 
     return $arr_info;
 
 }
 
-function calc_date_from_components ( $args = array() )
+function calcDateFromComponents ( $args = array() )
 {
-    // WIP
-
     // Init vars
     $arr_info = array();
     $info = "";
@@ -1511,15 +1541,15 @@ function calc_date_from_components ( $args = array() )
 
     // Defaults
     $defaults = array(
-        'year'                => null,
+        'year'           => null,
         'liturgical_date_calc_id'=> null,
-        'date_calc_str'=> null,
-        'calc_basis'        => null,
-        'calc_basis_id'        => null,
-        'calc_basis_field'    => null,
-        'calc_boia'            => null,
-        'calc_weekday'        => null,
-        'verbose'            => false,
+        'dateCalcStr'    => null,
+        'calcBasis'      => null,
+        'calcBasisID'    => null,
+        'calcBasisField' => null,
+        'calcBoia'       => null,
+        'calcWeekday'    => null,
+        'verbose'        => false,
     );
 
     // Parse & Extract args
@@ -1528,23 +1558,31 @@ function calc_date_from_components ( $args = array() )
     $verbose = $args['verbose'];
     $year = $args['year'];
     $litdateCalcID = $args['liturgical_date_calc_id'];
-    $dateCalcStr = $args['date_calc_str'];
-    $calcBasis = $args['calc_basis'];
-    $calcBasisID = $args['calc_basis_id'];
-    $calcBasisField = $args['calc_basis_field'];
-    $calcBoia = $args['calc_boia'];
-    $calcWeekday = $args['calc_weekday'];
+    $dateCalcStr = $args['dateCalcStr'];
+    $calcBasis = $args['calcBasis'];
+    $calcBasisID = $args['calcBasisID'];
+    $calcBasisField = $args['calcBasisField'];
+    $calcBoia = $args['calcBoia'];
+    $calcWeekday = $args['calcWeekday'];
     //
-    $info .= '<strong>&gt;&gt;&gt; calc_date_from_components &lt;&lt;&lt;</strong><br />';
+    $info .= '<strong>&gt;&gt;&gt; calcDateFromComponents &lt;&lt;&lt;</strong><br />';
     if ( $verbose == "true" ) { $info .= "args: <pre>".print_r($args, true)."</pre>"; }
 
     // Get the basis date in the given year, from the Liturgical Date Calculations CPT (liturgical_date_calc)
-    $basisDate = getBasisDate( $year, $litdateCalcID, $calcBasis, $calcBasisID, $calcBasisField );
+    $arrBasisDate = getBasisDate( $year, $litdateCalcID, $calcBasis, $calcBasisID, $calcBasisField );
+    $basisDate = $arrBasisDate['date'];
+    $info .= $arrBasisDate['info'];
     if ( $calcBasis == "epiphany" ) {
         $num_sundays_after_epiphany = get_post_meta( $litdateCalcID, 'num_sundays_after_epiphany', true);
     }
-    if ( $verbose == "true" && !empty($basisDate) ) {
-        $info .= "basis_date: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calc_basis: $calcBasis, calc_basis_id: $calcBasisID, calc_basis_field: $calcBasisField<br />";
+    // Return early if no basisDate has been found
+    if ( empty($basisDate) ) {
+        if ( $verbose == "true" ) { $info .= "NO VALID basisDate FOUND!<br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />"; }        
+        // Abort!
+        return ['date' => null, 'info' => $info];
+    }
+    if ( $verbose == "true" ) {
+        $info .= "basisDate: $basisDate (".date('Y-m-d (l)', $basisDate).") <br />-- via getBasisDate for year: $year, liturgical_date_calc_id: $litdateCalcID, calcBasis: $calcBasis, calcBasisID: $calcBasisID, calcBasisField: $calcBasisField<br />";
     }
 
     // Check to see if the date to be calculated is in fact the same as the base date
@@ -1577,18 +1615,18 @@ function calc_date_from_components ( $args = array() )
 
         }
 
-        // ** Extract components of date_calc_str & calculate date for $year
-        // ** Determine the calc_interval -- number of days/weeks...
-        if ( contains_numbers($dateCalcStr) ) {
+        // ** Extract components of dateCalcStr & calculate date for $year
+        // ** Determine the calcInterval -- number of days/weeks...
+        if ( containsNumbers($dateCalcStr) ) {
 
             // TODO/wip: also check for "two" etc
-            if ( $verbose == "true" ) { $info .= "date_calc_str contains numbers.<br />"; }
+            if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; }
 
-            // Determine the calc_interval
+            // Determine the calcInterval
             // WIP deal w/ multiple value possibilities for weekday, boia
             if ( !is_array($calcWeekday) && !is_array($calcBoia) ) { //&& !empty($calcWeekday) && !empty($calcBoia)
                 // TODO: fix this
-                $numbers = extract_numbers($dateCalcStr);
+                $numbers = extractNumbers($dateCalcStr);
                 if ( $verbose == "true" ) { $info .= "numbers: ".print_r($numbers,true)."<br />"; } //<pre></pre>
                 if ( count($numbers) == 1 ) {
                     $calcInterval = $numbers[0];
@@ -1599,7 +1637,7 @@ function calc_date_from_components ( $args = array() )
                 }
                 $calcInterval = trim( $calcInterval );
             }
-            if ( $verbose == "true" && !empty($calcInterval) ) { $info .= "calc_interval: $calcInterval<br />"; }
+            if ( $verbose == "true" && !empty($calcInterval) ) { $info .= "calcInterval: $calcInterval<br />"; }
 
             //if ( $calcBoia == ("in" || "of") ) { // Advent, Easter, Lent
             if ( !empty($calcInterval) && (
@@ -1612,7 +1650,7 @@ function calc_date_from_components ( $args = array() )
 
             } elseif ( $first_sunday == $basisDate && $dateCalcStr == "first sunday of"  ) {
 
-                if ( $verbose == "true" ) { $info .= "data_calc_str == first sunday of && first_sunday == basis_date &#8756; calc_date = first_sunday<br />"; }
+                if ( $verbose == "true" ) { $info .= "dateCalcStr == first sunday of && first_sunday == basis_date &#8756; calcDate = first_sunday<br />"; }
                 $calcDate = $first_sunday;
 
             } elseif ( $first_sunday != $basisDate ) {
@@ -1620,18 +1658,18 @@ function calc_date_from_components ( $args = array() )
                 if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
 
                 if ( $calcInterval ) { // && is_int($calcInterval)
-                    if ( $verbose == "true" ) { $info .= "Subtracting one from calc_interval ($calcInterval - 1)<br />"; }
-                    $calcInterval = $calcInterval - 1; // because math is based on first_sunday + X weeks. -- but only if calc_weekday is also Sunday? WIP
+                    if ( $verbose == "true" ) { $info .= "Subtracting one from calcInterval ($calcInterval - 1)<br />"; }
+                    $calcInterval = $calcInterval - 1; // because math is based on first_sunday + X weeks. -- but only if calcWeekday is also Sunday? WIP
                 }
                 // ???
                 if ( $calcInterval === 0 ) {
                     $calcDate = $first_sunday;
-                    if ( $verbose == "true" ) { $info .= "Set calc_date = first_sunday ($first_sunday)<br />"; }
+                    if ( $verbose == "true" ) { $info .= "Set calcDate = first_sunday ($first_sunday)<br />"; }
                 }
 
             }
 
-            if ( $verbose == "true" && !empty($calcInterval) ) { $info .= "calc_interval (final): $calcInterval<br />"; }
+            if ( $verbose == "true" && !empty($calcInterval) ) { $info .= "calcInterval (final): $calcInterval<br />"; }
 
         } elseif ( strpos(strtolower($dateCalcStr), 'last') !== false ) {
 
@@ -1645,11 +1683,13 @@ function calc_date_from_components ( $args = array() )
                 $calcFormula = "previous Sunday"; //$calcFormula = "Sunday before";
             }
 
+        } else {
+            $info .= "dateCalcStr '$dateCalcStr' does NOT contain numbers nor the substr 'last'.<br />";
         }
 
-        // If the calc_formula hasn't already been determined, build it
+        // If the calcFormula hasn't already been determined, build it
         if ( empty($calcDate) && $calcFormula == "" ) {
-            if ( $verbose == "true" ) { $info .= "About to build calc_formula...<br />"; }
+            if ( $verbose == "true" ) { $info .= "About to build calcFormula...<br />"; }
             if ( !empty($calcInterval) && strpos(strtolower($calcInterval), 'days') !== false ) {
                 if ( $verbose == "true" ) { $info .= "Calc by days +/-...<br />"; }
                 //
@@ -1673,7 +1713,7 @@ function calc_date_from_components ( $args = array() )
                     } elseif ( $first_sunday ) {
                         $calcDate = $first_sunday; // e.g. "First Sunday of Advent"; "The First Sunday In Lent"
                     }
-                } elseif ( $calcBasis != "" && $calcBoia == ( "before" || "after") ) {
+                } elseif ( $calcBasis != "" && ( $calcBoia == "before" || $calcBoia == "after" ) ) {
                     $info .= $indent."setting prev/next<br />"; // tft
 
                     // e.g. Thursday before Easter; Saturday after Easter -- BUT NOT for First Monday in September; Fourth Thursday in November -- those work fine as they are via simple strtotime
@@ -1683,31 +1723,37 @@ function calc_date_from_components ( $args = array() )
                     } else {
                         $calcFormula = $prev_next." day"; // e.g. "previous day";
                     }
-                    $info .= "calc_formula: $calcFormula<br />";
+                    $info .= "calcFormula: $calcFormula<br />";
                 } else {
-                     $info .= $indent."no action taken to determine date/formula based on calcBasis: $calcBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
+                    $info .= $indent."no action taken to determine date/formula based on calcBasis: $calcBasis / calcWeekday: $calcWeekday / calcBoia: $calcBoia<br />";
                 }
             }
         }
 
-        // If there's no $calcFormula yet, use the date_calc_str directly
+        // If there's no $calcFormula yet, use the dateCalcStr directly
         if ( empty($calcFormula) && empty($calcDate) ) {
-            $info .= '<span class="notice">'."calc based directly on date_calc_str</span><br />"; // .'</span>'
-            if ( $calcBoia != "after" ) {
+            $info .= '<span class="notice">'."calc based directly on dateCalcStr</span><br />"; // .'</span>'
+            $info .= "dateCalcStr: '$dateCalcStr' // calcBasis: '$calcBasis'<br />";
+            if ( $dateCalcStr == $calcBasis ) {
+                $snakeBasis = snake($calcBasis); //$snakeBasis = strtolower(str_replace(' ', '_', trim($dateCalcStr)));
+                $meta_key = $snakeBasis . '_date'; // e.g. 'ash_wednesday_date'
+                $calcDate = get_post_meta( $litdateCalcID, $meta_key, true);
+                $info .= "calcDate found via meta_key: '$meta_key': $calcDate<br />";
+            } elseif ( $calcBoia != "after" ) {
                 $calcFormula = $dateCalcStr;
             } else {
-                if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calc_formula -- calc_boia: \"$calcBoia\"; calc_date: $calcDate</span><br />"; }
+                if ( $verbose == "true" ) { $info .= '<span class="notice">'."Unable to determine calcFormula -- calcBoia: \"$calcBoia\"; calcDate: $calcDate</span><br />"; }
             }
         }
 
-        //$info .= $indent.">> date_calc_str: $dateCalcStr<br />"; // tft
-        //$info .= $indent.">> [$calcInterval] -- [$calcWeekday] -- [$calcBoia] -- [$calcBasisField]<br />"; // tft
+        //$info .= $indent.">> dateCalcStr: $dateCalcStr<br />"; // tft
+        //$info .= $indent.">> [$calcInterval] -- [$calcWeekday] -- [$calcBoia] -- [$calcBasisField]<br />";
         //$info .= $indent.'>> basis_date unformatted: "'.$basisDate.'<br />'; // tft
         //
-        // calc_date not yet determined >> do the actual calculation using the formula and basis_date
+        // calcDate not yet determined >> do the actual calculation using the formula and basis_date
         if ( empty($calcDate) ) {
 
-            $info .= '>> calc_formula: "'.$calcFormula.'"; basis_date: '.date('Y-m-d',$basisDate).'<br />'; // tft
+            $info .= '>> calcFormula: "'.$calcFormula.'"; basis_date: '.date('Y-m-d',$basisDate).'<br />';
 
             // WIP/TODO: deal w/ complex cases like Corpus Christi: "thursday after the 1st sunday after pentecost"
             // Must check to see if Pentecost is a Sunday, and if so, the basis_date must be set to the next Sunday after that.
@@ -1716,14 +1762,13 @@ function calc_date_from_components ( $args = array() )
             if ( $calcFormula != "" && $basisDate != "" ) {
                 $calcDate = strtotime("$calcFormula", $basisDate);
             } else {
-                $info .= "Can't do calc -- calc_formula or basis_date is empty.<br />";
+                $info .= "Can't do calc -- calcFormula or basis_date is empty.<br />";
             }
             //$info .= $indent.'strtotime("'.$calcFormula.'",$basisDate)<br />';
-            //$info .= $indent."calc_date -- ".$calcDate.' = strtotime("'.$calcFormula.'", '.$basisDate.')<br />'; // tft
+            //$info .= $indent."calcDate -- ".$calcDate.' = strtotime("'.$calcFormula.'", '.$basisDate.')<br />'; // tft
             // X-check with https://www.w3schools.com/php/phptryit.asp?filename=tryphp_func_strtotime
-            // calc_formula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
+            // calcFormula examples: '-6 months' // '+2 year' // "last Sunday" // "+4 weeks" // "next Sunday" // '+1 week'
         }
-
 
         // Make sure the calculated date doesn't conflict with the subsequent church season -- this applies to only Epiphany (into Lent) and Pentecost (into Advent)
         if ( $calcBasis == "epiphany" ) {
@@ -1739,7 +1784,7 @@ function calc_date_from_components ( $args = array() )
             $info .= "There are $num_sundays_after_epiphany Sundays after Epiphany in $year.<br />"; // tft
             if ( $calcDate > strtotime($ash_wednesday_date) ) { //if ( (int) $calcInterval > (int) $num_sundays_after_epiphany ) {
                 $info .= $indent.'<span class="warning">Uh oh! That\'s too many Sundays.</span><br />'; // tft
-                $info .= $indent.'<span class="warning">calc_date: ['.date('Y-m-d', $calcDate).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
+                $info .= $indent.'<span class="warning">calcDate: ['.date('Y-m-d', $calcDate).']; ash_wednesday_date: '.$ash_wednesday_date.'</span><br />'; // tft
                 $calcDate = "N/A";
             }
 
@@ -1872,7 +1917,7 @@ function calc_litdates( $atts = array() )
     $posts = $arr_posts->posts;
     $info .= "[num posts: ".count($posts)."]<br />";
     //$info .= "wp_args: <pre>".print_r( $wp_args, true )."</pre>";
-    if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
+    //if ( $verbose == "true" ) { $info .= "wp_args: <pre>".print_r( $wp_args, true )."<br />"; }
     //$info .= "Last SQL-Query: <pre>{$arr_posts->request}</pre>";
     $info .= "<br />";
 
@@ -1887,9 +1932,9 @@ function calc_litdates( $atts = array() )
         $info .= '<div class="code indent">';
 
         // init
-        $calc_info = "";
+        $calcInfo = "";
         $calcDate = null;
-        $calcDate_str = "";
+        $calcDateStr = "";
 
         $changes_made = false;
         $complex_formula = false;
@@ -1901,7 +1946,7 @@ function calc_litdates( $atts = array() )
         if ( strpos($post_title, "Eve of") === 0 || strpos($post_title, "The Eve of") === 0 ) {
             if ( $verbose == "true" ) { $info .= "Special case: 'Eve of' litdate ($post_title)<br />"; }
             if ( empty($dateCalcStr) ) {
-                if ( $verbose == "true" ) { $info .= "date_calc_str is empty => build it based on post_title<br />"; }
+                if ( $verbose == "true" ) { $info .= "dateCalcStr is empty => build it based on post_title<br />"; }
                 if ( strpos($post_title, "The Eve of") === 0 ) { $post_title_mod = str_replace("The Eve of ", "", $post_title); } else { $post_title_mod = str_replace("Eve of ", "", $post_title); }    // TODO make more efficient w/ regexp?
                 $dateCalcStr = "Day before ".$post_title_mod;
             }
@@ -1914,49 +1959,49 @@ function calc_litdates( $atts = array() )
 
         foreach ( $arr_years as $year ) {
 
-            $calc_info .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
+            $calcInfo .= "<hr />About to do calc for year: $year<br />+~+~+~+~+<br />";
 
             if ( !empty($dateCalcStr) ) {
-                $calc_info .= "date_calc_str: $dateCalcStr<br />";
-                $calc_args = array( 'year' => $year, 'date_calc_str' => $dateCalcStr, 'verbose' => $verbose, 'ids_to_exclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
+                $calcInfo .= "dateCalcStr: $dateCalcStr<br />";
+                $calc_args = array( 'year' => $year, 'dateCalcStr' => $dateCalcStr, 'verbose' => $verbose, 'idsToExclude' => array($postID) ); // exclude post's own id from calc basis determinations etc. --TODO/TBD: just past post_id, not array. Not sure when we'd need to exclude more than one post by id...
                 $calc = calcDateFromStr( $calc_args ); //$calc = calcDateFromStr( $year, $dateCalcStr, $verbose );
                 if ( $calc ) {
-                    $calcDate = $calc['calc_date'];
-                    $calc_info .= $calc['calc_info'];
+                    $calcDate = $calc['calcDate'];
+                    $calcInfo .= $calc['calcInfo'];
                 } else {
-                    $calc_info .= '<span class="error">calcDateFromStr failed</span><br />';
-                    if ( $verbose == "true" ) { $calc_info .= "calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
-                    if ( $verbose == "true" ) { $calc_info .= "calc: <pre>".print_r($calc,true)."</pre>"; }
+                    $calcInfo .= '<span class="error">calcDateFromStr failed</span><br />';
+                    if ( $verbose == "true" ) { $calcInfo .= "calc_args: <pre>".print_r($calc_args,true)."</pre>"; }
+                    if ( $verbose == "true" ) { $calcInfo .= "calc: <pre>".print_r($calc,true)."</pre>"; }
                 }
             } else {
-                $calc_info .= "dateCalcStr is empty<br />";
+                $calcInfo .= "dateCalcStr is empty<br />";
                 //$calc = null;
             }
 
             if ( !empty($calcDate) && $calcDate != "N/A" ) {
-                $calcDate_str = date('Y-m-d', $calcDate);
-                //$calcDate_str = date('Ymd', $calcDate); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
-                $calc_info .= "calc_date_str: <strong>$calcDate_str</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
+                $calcDateStr = date('Y-m-d', $calcDate);
+                //$calcDateStr = date('Ymd', $calcDate); // was originally 'Y-m-d' format, which is more readable in DB, but ACF stores values edited via CMS *without* hyphens, despite field setting -- bug? or am I missing something?
+                $calcInfo .= "calcDateStr: <strong>$calcDateStr</strong> (".date('l, F d, Y',$calcDate).")<br />"; // tft
             } else {
-                $calc_info .= "calc_date N/A<br />";
+                $calcInfo .= "calcDate N/A<br />";
             }
 
             // 3. Save dates to ACF repeater field row for date_calculatedday_
             // DB: date_calculations >> date_calculated -- date_calculations_[#]_date_calculated
 
-            if ( $calcDate_str != "" ) {
+            if ( $calcDateStr != "" ) {
 
                 $newrow = true;
 
                 if ( have_rows('date_calculations', $postID) ) { // ACF function: https://www.advancedcustomfields.com/resources/have_rows/
                     while ( have_rows('date_calculations', $postID) ) : the_row();
                         $dateCalculated = get_sub_field('date_calculated'); // ACF function: https://www.advancedcustomfields.com/resources/get_sub_field/
-                        if ( $dateCalculated == $calcDate_str ) {
+                        if ( $dateCalculated == $calcDateStr ) {
                             // Already in there
                             $newrow = false;
-                            $calc_info .= "+++ Old news. This date_calculated ($calcDate_str) is already in the database. +++<br />"; // tft
+                            $calcInfo .= "+++ Old news. This date_calculated ($calcDateStr) is already in the database. +++<br />"; // tft
                         } else {
-                            //$calc_info .= "Old date_calculated: $dateCalculated.<br />"; // tft
+                            //$calcInfo .= "Old date_calculated: $dateCalculated.<br />"; // tft
                         }
                     endwhile;
                 } // end if
@@ -1964,28 +2009,28 @@ function calc_litdates( $atts = array() )
                 if ( $newrow == true ) {
 
                     $row = array(
-                        'date_calculated' => $calcDate_str
+                        'date_calculated' => $calcDateStr
                     );
 
-                    $calc_info .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
+                    $calcInfo .= "About to add row to post_id $postID: ".print_r( $row, true )."<br />"; // <pre></pre>
                     if ( $testing != "true" ) {
                         if ( add_row('date_calculations', $row, $postID) ) { // ACF function syntax: add_row($selector, $value, [$postID])
-                            $calc_info .= "ACF row added for post_id: $postID<br />";
+                            $calcInfo .= "ACF row added for post_id: $postID<br />";
                         } else {
-                            $calc_info .= "ACF add row FAILED for post_id: $postID<br />";
+                            $calcInfo .= "ACF add row FAILED for post_id: $postID<br />";
                         }
                     }
 
                 }
             } else {
-                $calc_info .= "calc_date_str is empty.<br />";
+                $calcInfo .= "calcDateStr is empty.<br />";
             }
 
-            if ( count($arr_years) > 1 ) { $calc_info .= "<br />"; }
+            if ( count($arr_years) > 1 ) { $calcInfo .= "<br />"; }
 
         } // END foreach arr_years
 
-        $info .= $calc_info;
+        $info .= $calcInfo;
         $info .= '</div>';
 
     } // END foreach post
@@ -2200,6 +2245,3 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
     return $info;
 
 }
-
-
-?>
