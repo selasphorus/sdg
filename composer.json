@@ -1,16 +1,22 @@
 {
     "name": "atc/sdg",
     "description": "SDG WordPress Plugin",
+    "type": "wordpress-plugin",
     "autoload": {
         "psr-4": {
-            "Atc\\Sdg\\": "src/"
+            "atc\\sdg\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "atc-mba25",
+            "name": "atc",
             "email": "birdhive@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }
