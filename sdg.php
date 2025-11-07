@@ -78,12 +78,12 @@ add_action('whx4_pre_boot', function() {
     // Register Assets
     add_filter('whx4_assets', static function (array $assets): array {
         // CSS
-        /*$relCss = 'assets/css/bkkp.css';
+        $relCss = 'assets/css/sdg.css';
         $srcCss = plugins_url($relCss, __FILE__);
         $pathCss = plugin_dir_path(__FILE__) . $relCss;
     
         $assets['styles'][] = [
-            'handle'   => 'bkkp',
+            'handle'   => 'sdg',
             'src'      => $srcCss,
             'path'     => $pathCss,
             'deps'     => [],
@@ -94,7 +94,7 @@ add_action('whx4_pre_boot', function() {
         ];
     
         // JS
-        $relJs = 'assets/js/bkkp.js';
+        /*$relJs = 'assets/js/bkkp.js';
         $srcJs = plugins_url($relJs, __FILE__);
         $pathJs = plugin_dir_path(__FILE__) . $relJs;
     
@@ -107,9 +107,9 @@ add_action('whx4_pre_boot', function() {
             'in_footer' => true,
             'where'     => 'front',
             'autoload'  => true,
-        ];
+        ];*/
     
-        return $assets;*/
+        return $assets;
     });
     
 }, 15); // Priority < 20 to run before WHx4 boot()
