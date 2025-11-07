@@ -238,7 +238,7 @@ function register_taxonomy_media_category() {
             'delete_terms'  =>   'delete_'.$cap.'_terms',
             'assign_terms'  =>   'assign_'.$cap.'_terms',
         );
-    }*/    
+    }*/
     register_taxonomy( 'media_category', [ 'attachment' ], $args );
 }
 add_action( 'init', 'register_taxonomy_media_category' );
@@ -277,11 +277,10 @@ function register_taxonomy_media_tag() {
             'delete_terms'  =>   'delete_'.$cap.'_terms',
             'assign_terms'  =>   'assign_'.$cap.'_terms',
         );
-    }*/    
+    }*/
     register_taxonomy( 'media_tag', [ 'attachment' ], $args );
 }
 add_action( 'init', 'register_taxonomy_media_tag' );
-
 
 // Custom Taxonomy: Page Tag
 function register_taxonomy_page_tag() {
@@ -321,17 +320,15 @@ function register_taxonomy_page_tag() {
 add_action( 'init', 'register_taxonomy_page_tag' );
 
 
-
 /*** Taxonomies for PEOPLE ***/
 /*** Taxonomies for GROUPS (ORGS/ENSEMBLES) ***/
 /*** Taxonomies for EVENT PROGRAMS ***/
 // >>>> See WHX4 for person, group, event-program-related taxonomies <<<< //
 
-
 /*** Taxonomies for PROJECTS ***/
-
+// ==> Ok WHx4
 if ( in_array('projects', $sdg_modules ) ) {
-    // Custom Taxonomy: Project Category
+    // Custom Taxonomy: Project Category ==> Ok WHx4
     function register_taxonomy_project_category() {
         $labels = array(
             'name'              => _x( 'Project Categories', 'taxonomy general name' ),
@@ -365,7 +362,7 @@ if ( in_array('projects', $sdg_modules ) ) {
                 'delete_terms'  =>   'delete_'.$cap.'_terms',
                 'assign_terms'  =>   'assign_'.$cap.'_terms',
             );
-        }*/    
+        }*/
         register_taxonomy( 'project_category', [ 'project' ], $args );
     }
     add_action( 'init', 'register_taxonomy_project_category' );
@@ -611,7 +608,7 @@ if ( in_array('music', $sdg_modules ) ) {
     add_action( 'init', 'register_taxonomy_voicing' );
 
     // Custom Taxonomy: Library Tag
-    function register_taxonomy_library_tag() {    
+    function register_taxonomy_library_tag() {
         $labels = array(
             'name'              => _x( 'Library Tags', 'taxonomy general name' ),
             'singular_name'     => _x( 'Library Tag', 'taxonomy singular name' ),
@@ -644,7 +641,7 @@ if ( in_array('music', $sdg_modules ) ) {
                 'delete_terms'  =>   'delete_'.$cap.'_terms',
                 'assign_terms'  =>   'assign_'.$cap.'_terms',
             );
-        }    
+        }
         register_taxonomy( 'library_tag', [ 'edition' ], $args );
     }
     add_action( 'init', 'register_taxonomy_library_tag' );
@@ -732,7 +729,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
                 'assign_terms'  =>   'assign_'.$cap.'_terms',
             );
         }
-        register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args ); // 'lectionary', 
+        register_taxonomy( 'liturgical_date_category', [ 'liturgical_date' ], $args ); // 'lectionary',
     }
     add_action( 'init', 'register_taxonomy_liturgical_date_category' );
 
@@ -773,7 +770,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
         register_taxonomy( 'service_type', [ 'lectionary' ], $args );
     }
     add_action( 'init', 'register_taxonomy_service_type' );
-    
+
     // Custom Taxonomy: Season -- DISABLED! Obsolete?
     /*function egister_taxonomy_season() {
         $labels = array(
@@ -905,7 +902,7 @@ if ( in_array('organs', $sdg_modules ) ) {
         register_taxonomy( 'action_type', [ 'organ' ], $args );
     }
     add_action( 'init', 'register_taxonomy_action_type' );
-    
+
     // Custom Taxonomy: Organ Tag
     function register_taxonomy_organ_tag() {
         $cap = 'organ';
@@ -941,14 +938,14 @@ if ( in_array('organs', $sdg_modules ) ) {
         register_taxonomy( 'organ_tag', [ 'organ' ], $args );
     }
     add_action( 'init', 'register_taxonomy_organ_tag' );
-    
+
 }
 */
 /*** Taxonomies for LINKS ***/
 
 if ( in_array('links', $sdg_modules ) ) {
 
-    // Custom Taxonomy: Link Category WIP
+    // Custom Taxonomy: Link Category WIP ==> WIP WHx4/Places
     function register_taxonomy_link_category() {
         $labels = array(
             'name'              => _x( 'Link Categories', 'taxonomy general name' ),
@@ -986,7 +983,7 @@ if ( in_array('links', $sdg_modules ) ) {
         register_taxonomy( 'link_category', [ 'link' ], $args );
     }
     add_action( 'init', 'register_taxonomy_link_category' );
-    
+
     // Custom Taxonomy: Link Tag (WIP ??? does it need to be that specific, or would generic tags do just as well?)
     function register_taxonomy_link_tag() {
         $labels = array(
@@ -1024,7 +1021,7 @@ if ( in_array('links', $sdg_modules ) ) {
         register_taxonomy( 'link_tag', [ 'link' ], $args );
     }
     add_action( 'init', 'register_taxonomy_link_tag' );
-    
+
 }
 
 ?>

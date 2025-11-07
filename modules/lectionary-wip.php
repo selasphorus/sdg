@@ -1,5 +1,4 @@
 <?php
-
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
 // Make sure we don't expose any info if called directly
@@ -20,177 +19,6 @@ add_action('acf/input/admin_enqueue_scripts', function() {
         true
     );
 });
-
-// TODO: move the following functions to WHx4 > \Util\DateHelper.php
-
-// TMP -- see WHx4\src\Utils\Text
-function snake ( $string = "")
-{
-    strtolower( str_replace( ' ', '_', $string ) );
-}
-
-function normalizeMonthToInt( string $month ): ?int
-{
-    $month = strtolower( trim( $month ) );
-
-    $map = [
-        'jan' => 1, 'january'   => 1,
-        'feb' => 2, 'february'  => 2,
-        'mar' => 3, 'march'     => 3,
-        'apr' => 4, 'april'     => 4,
-        'may' => 5,
-        'jun' => 6, 'june'      => 6,
-        'jul' => 7, 'july'      => 7,
-        'aug' => 8, 'august'    => 8,
-        'sep' => 9, 'sept' => 9, 'september' => 9,
-        'oct' => 10, 'october'  => 10,
-        'nov' => 11, 'november' => 11,
-        'dec' => 12, 'december' => 12,
-    ];
-
-    return $map[ $month ] ?? null;
-}
-
-/**
- * Normalize date input to standardized Y-m-d start/end values.
- *
- * @param string|null $scope Optional keyword like 'this_month' or 'Easter 2025'
- * @param string|DateTimeInterface|null $date A date string, range, or DateTime object
- * @param int|null $year Fallback year if needed
- * @param int|string|null $month Fallback month if needed
- * @return array|string Array with 'startDate' and 'endDate' or single string if same
- */
-function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
-{
-    $args = wp_parse_args( $args, [
-        'date'          => null,
-        'scope'         => null,
-        'year'          => null,
-        'month'         => null,
-        //'returnSingle'  => true, // WIP return a single date, as opposed
-        'asDateObjects' => false,
-    ] );
-    extract( $args );
-
-    $now = new DateTimeImmutable();
-
-    if ( is_string( $scope ) ) {
-        $scope_key = snake($scope);
-
-        switch ( $scope_key ) {
-            case 'today':
-                return $now->format( 'Y-m-d' );
-
-            case 'this_week':
-                $start = $now->modify( 'monday this week' )->format( 'Y-m-d' );
-                $end   = $now->modify( 'sunday this week' )->format( 'Y-m-d' );
-                return [ 'startDate' => $start, 'endDate' => $end ];
-
-            case 'this_month':
-                $start = $now->modify( 'first day of this month' )->format( 'Y-m-d' );
-                $end   = $now->modify( 'last day of this month' )->format( 'Y-m-d' );
-                return [ 'startDate' => $start, 'endDate' => $end ];
-
-            case 'next_month':
-                $start = $now->modify( 'first day of next month' )->format( 'Y-m-d' );
-                $end   = $now->modify( 'last day of next month' )->format( 'Y-m-d' );
-                return [ 'startDate' => $start, 'endDate' => $end ];
-
-            case 'last_year':
-                $start = ( new DateTimeImmutable( 'first day of January last year' ) )->format( 'Y-m-d' );
-                $end   = ( new DateTimeImmutable( 'last day of December last year' ) )->format( 'Y-m-d' );
-                return [ 'startDate' => $start, 'endDate' => $end ];
-
-            case 'next_year':
-                $start = ( new DateTimeImmutable( 'first day of January next year' ) )->format( 'Y-m-d' );
-                $end   = ( new DateTimeImmutable( 'last day of December next year' ) )->format( 'Y-m-d' );
-                return [ 'startDate' => $start, 'endDate' => $end ];
-
-            case 'this_season':
-                $month_now = (int) $now->format( 'n' );
-                $year_now  = (int) $now->format( 'Y' );
-
-                if ( $month_now >= 9 ) {
-                    $start = new DateTimeImmutable( "$year_now-09-01" );
-                    $end   = new DateTimeImmutable( ($year_now + 1) . "-05-31" );
-                } else {
-                    $start = new DateTimeImmutable( ($year_now - 1) . "-09-01" );
-                    $end   = new DateTimeImmutable( "$year_now-05-31" );
-                }
-
-                return [
-                    'startDate' => $start->format( 'Y-m-d' ),
-                    'endDate'   => $end->format( 'Y-m-d' ),
-                ];
-        }
-
-        // Check for Easter YEAR pattern
-        if ( preg_match( '/^easter\s+(\d{4})$/i', $scope, $matches ) ) {
-            $easter = calculateEasterDate( (int) $matches[1] );
-            return $easter->format( 'Y-m-d' );
-        }
-    }
-
-    if ( $date instanceof DateTimeInterface ) {
-        return $date->format( 'Y-m-d' );
-    }
-
-    // Date range in format "YYYY-mm-dd, YYYY-mm-dd"? Then set start, end dates
-    //if ( is_string( $date ) && strpos( $date, ',' ) !== false ) {
-    if ( preg_match( '/^\d{4}-\d{2}-\d{2},\s?\d{4}-\d{2}-\d{2}$/', $date ) ) {
-        [ $raw_start, $raw_end ] = explode( ',', $date, 2 );
-        $start = parseFlexibleDate( trim( $raw_start ) );
-        $end   = parseFlexibleDate( trim( $raw_end ) );
-        return [ 'startDate' => $start, 'endDate' => $end ];
-    }
-
-    if ( is_string( $date ) ) {
-        return parseFlexibleDate( $date );
-    }
-
-    if ( $month ) {
-        $month = str_pad( (string)(int) $month, 2, '0', STR_PAD_LEFT );
-        $year  = $year ?? (int) $now->format( 'Y' );
-        $start = DateTimeImmutable::createFromFormat( 'Y-m-d', "{$year}-{$month}-01" );
-        $end   = $start->modify( 'last day of this month' );
-        return [
-            'startDate' => $start->format( 'Y-m-d' ),
-            'endDate'   => $end->format( 'Y-m-d' ),
-        ];
-    }
-
-    return $now->format( 'Y-m-d' );
-}
-
-/**
- * Parses a flexible natural-language date string.
- *
- * @param string $input
- * @return string
- */
-function parseFlexibleDate( string $input ): string
-{
-    try {
-        $dt = new DateTimeImmutable( $input );
-        return $dt->format( 'Y-m-d' );
-    } catch ( Exception $e ) {
-        return '';
-    }
-}
-
-/**
- * Calculates the Easter date for a given year.
- *
- * @param int $year
- * @return DateTimeImmutable
- */
-function calculateEasterDate( int $year ): DateTimeImmutable
-{
-    $timestamp = easter_date( $year );
-    return ( new DateTimeImmutable() )->setTimestamp( $timestamp );
-}
-
-/* END Date Normalization */
 
 add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
 function renderLitDatesShortcode( $atts = [] ): string
@@ -219,7 +47,6 @@ function renderLitDatesShortcode( $atts = [] ): string
     if ( !is_string( $output ) ) { $output = print_r( $output, true ); }
     return $output;
 }
-
 
 // Day Titles
 // TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
@@ -887,7 +714,6 @@ function getDisplayDates ( $postID = null, $year = null )
 // Collects -- get collect to match litdate (or calendar date? wip)
 function get_collect_text( $postID = null, $dateStr = null )
 {
-
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "lectionary") );
     $do_log = false;
@@ -1041,8 +867,7 @@ function get_collect_text( $postID = null, $dateStr = null )
 }
 
 // Function(s) to calculate variable liturgical_dates
-
-function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
+function getBasisDate ( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
 {
     //if ( empty($calcBasis) ) { return null; }
 
@@ -1208,7 +1033,6 @@ function getCalcBasesFromStr ( $dateCalcStr = "", $idsToExclude = array() )
 
 function getCalcBoiasFromStr ( $dateCalcStr = "" )
 {
-
     $calcBoias = array();
 
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season?
@@ -1234,7 +1058,6 @@ function getCalcBoiasFromStr ( $dateCalcStr = "" )
 
 function getCalcWeekdaysFromStr ( $dateCalcStr = "" )
 {
-
     $calcWeekdays = array();
 
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
@@ -2003,10 +1826,9 @@ function calcDateFromComponents ( $args = array() )
 
 }
 
-
 add_shortcode('calculate_variable_dates', 'calc_litdates');
-function calc_litdates( $atts = array() ) {
-
+function calc_litdates( $atts = array() )
+{
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !sdg_queenbee() ) { return "You are not authorized to run this operation.<br />"; }
 
@@ -2237,8 +2059,8 @@ function calc_litdates( $atts = array() ) {
  *
  * @param WP_Post $post The object for the current post/page.
  */
-function liturgical_date_meta_box_callback( $post ) {
-
+function liturgical_date_meta_box_callback( $post )
+{
     // TODO: replace the following with a relative URL
     //echo '<h4><a href="/edit.php?post_type=XXX" target="_blank">Click to Edit XXX</a></h4>';
 
@@ -2253,8 +2075,8 @@ function liturgical_date_meta_box_callback( $post ) {
 
 
 /*********** CPT: READING ***********/
-function get_cpt_reading_content( $postID = null ) {
-
+function get_cpt_reading_content( $postID = null )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "lectionary") );
     $do_log = false;
@@ -2337,16 +2159,15 @@ function get_cpt_reading_content( $postID = null ) {
 
 }
 
-
 /*********** CPT: PSALMS OF THE DAY ***********/
-function get_cpt_psalms_of_the_day_content() {
-
+function get_cpt_psalms_of_the_day_content()
+{
 }
 
 // att service: "morning_prayer" or "evening_prayer"
 add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
-function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
-
+function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
+{
     // init vars
     $info = "";
     $day_num = null;
