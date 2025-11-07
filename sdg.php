@@ -38,7 +38,7 @@ use atc\WHx4\Plugin;
 
 // WHx4 Add-on Modules
 use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
-use atc\SDG\Modules\Lectionary\LectionaryModule as Lectionary;
+//use atc\SDG\Modules\Lectionary\LectionaryModule as Lectionary; // WIP
 // Other modules TBD
 // Old version modules: lectionary, newsletters, sermons, snippets, webcasts, // ninjaforms, slider, ensembles
 // TODO: move snippets, newletters to separate add-on mini-plugins? Move webcasts to WHx4 as part of Events
@@ -53,9 +53,9 @@ add_action('whx4_pre_boot', function() {
     // Register the modules with WHx4
     add_filter('whx4_register_modules', function(array $modules): array {
         $modules['worship'] = Worship::class;
-        $modules['lectionary'] = Lectionary::class;
+        //$modules['lectionary'] = Lectionary::class;
 		return $modules;
-	} );
+	});
 	
 	// Register Field Keys
     add_filter('whx4_registered_field_keys', function() {
