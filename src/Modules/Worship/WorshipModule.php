@@ -1,14 +1,16 @@
 <?php
 
-namespace atc\SDG\Modules\XXX;
+namespace atc\SDG\Modules\Worship;
 
 use atc\WHx4\Core\Module as BaseModule;
+use atc\WHx4\Core\Query\PostQuery;
+use atc\WHx4\Core\Shortcodes\ShortcodeManager;
 //
-use atc\SDG\Modules\XXX\PostTypes\XXX;
-use atc\SDG\Modules\XXX\PostTypes\XXX;
+use atc\SDG\Modules\Worship\PostTypes\Sermon;
+#use atc\SDG\Modules\Worship\PostTypes\SermonSeries;
 
 // Define the module class
-final class XXXModule extends BaseModule
+final class WorshipModule extends BaseModule
 {
     public function boot(): void
     {
@@ -19,8 +21,8 @@ final class XXXModule extends BaseModule
     public function getPostTypeHandlerClasses(): array
     {
         return [
-            XXX::class,
-            XXX::class,
+            Sermon::class,
+            //XXX::class,
         ];
     }
 }
