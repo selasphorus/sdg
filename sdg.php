@@ -15,6 +15,8 @@
 
 declare(strict_types=1);
 
+namespace atc\SDG;
+
 // Prevent direct access
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -26,8 +28,6 @@ if ( !function_exists( 'add_action' ) ) {
 
 // v1 designed using ACF PRO Blocks, Post Types, Options Pages, Taxonomies and more.
 // v2 OOP version WIP
-
-namespace atc\SDG;
 
 // Require Composer autoloader
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
