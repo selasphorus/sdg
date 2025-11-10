@@ -504,6 +504,10 @@ function getLitDateData( array $args = [] ): array|string
 
         $start = strtotime( '+1 day', $start );
     }
+    
+    // init
+    $primaryPost = null;
+    $secondaryPost = null;
 
     // Loop through litdate posts and sort them by priority
     foreach ( $litdatePostsByDate as $dateStr => $posts ) {
