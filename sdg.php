@@ -94,12 +94,12 @@ add_action('bhwp_pre_boot', function() {
         ];
     
         // JS
-        /*$relJs = 'assets/js/bkkp.js';
+        /*$relJs = 'assets/js/sdg.js';
         $srcJs = plugins_url($relJs, __FILE__);
         $pathJs = plugin_dir_path(__FILE__) . $relJs;
     
         $assets['scripts'][] = [
-            'handle'    => 'bkkp',
+            'handle'    => 'sdg',
             'src'       => $srcJs,
             'path'      => $pathJs,
             'deps'      => [],        // e.g., ['jquery']
