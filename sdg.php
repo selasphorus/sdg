@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SDG
  * Description:       A WordPress plugin for godly matters
- * Dependencies:      Requires WHx4
- * Requires Plugins:  whx4
+ * Dependencies:      Requires BhWP, WHx4
+ * Requires Plugins:  bhwp, whx4
  * Version:           2.0
  * Author:            atc
  * License:           GPL-2.0-or-later
@@ -34,9 +34,9 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-use atc\WHx4\Plugin;
+use atc\BhWP\Plugin;
 
-// WHx4 Add-on Modules
+// BhWP Add-on Modules
 use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
 //use atc\SDG\Modules\Lectionary\LectionaryModule as Lectionary; // WIP
 // Other modules TBD
@@ -44,21 +44,21 @@ use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Serm
 // TODO: move snippets, newletters to separate add-on mini-plugins? Move webcasts to WHx4 as part of Events
 
 // Once plugins are loaded, boot everything up
-add_action('whx4_pre_boot', function() {
-    // Wait until WHx4 is loaded, but BEFORE it boots
+add_action('bhwp_pre_boot', function() {
+    // Wait until BhWP is loaded, but BEFORE it boots
     if (!class_exists(Plugin::class)) {
         return;
     }
 
-    // Register the modules with WHx4
-    add_filter('whx4_register_modules', function(array $modules): array {
+    // Register the modules with BhWP
+    add_filter('bhwp_register_modules', function(array $modules): array {
         $modules['worship'] = Worship::class;
         //$modules['lectionary'] = Lectionary::class;
 		return $modules;
 	});
 	
 	// Register Field Keys
-    add_filter('whx4_registered_field_keys', function() {
+    add_filter('bhwp_registered_field_keys', function() {
         if (!function_exists('acf_get_local_fields')) {
             return [];
         }
@@ -76,7 +76,7 @@ add_action('whx4_pre_boot', function() {
     });
     
     // Register Assets
-    add_filter('whx4_assets', static function (array $assets): array {
+    add_filter('bhwp_assets', static function (array $assets): array {
         // CSS
         $relCss = 'assets/css/sdg.css';
         $srcCss = plugins_url($relCss, __FILE__);
@@ -112,5 +112,5 @@ add_action('whx4_pre_boot', function() {
         return $assets;
     });
     
-}, 15); // Priority < 20 to run before WHx4 boot()
+}, 15); // Priority < 20 to run before BhWP boot()
 

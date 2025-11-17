@@ -1,14 +1,14 @@
 <?php
 
-namespace atc\SDG\Modules\XXX;
+namespace atc\SDG\Modules\Lectionary;
 
-use atc\WHx4\Core\Module as BaseModule;
-//
-use atc\SDG\Modules\XXX\PostTypes\XXX;
-use atc\SDG\Modules\XXX\PostTypes\XXX;
+use atc\BhWP\Core\Module as BaseModule;
+// PostTypes still WIP! Maybe these will actually be subtypes of Library plugin core types?
+use atc\SDG\Modules\Lectionary\PostTypes\BibleBook;
+use atc\SDG\Modules\Lectionary\PostTypes\Verse;
 
 // Define the module class
-final class XXXModule extends BaseModule
+final class LectionaryModule extends BaseModule
 {
     public function boot(): void
     {
@@ -19,8 +19,8 @@ final class XXXModule extends BaseModule
     public function getPostTypeHandlerClasses(): array
     {
         return [
-            XXX::class,
-            XXX::class,
+            BibleBook::class,
+            Verse::class,
         ];
     }
 }
