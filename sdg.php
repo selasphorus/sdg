@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       SDG
  * Description:       A WordPress plugin for godly matters
- * Dependencies:      Requires BhWP, WHx4
- * Requires Plugins:  bhwp, whx4
+ * Dependencies:      Requires WHx4-Core, WHx4
+ * Requires Plugins:  whx4-core, whx4
  * Version:           2.0
  * Author:            atc
  * License:           GPL-2.0-or-later
