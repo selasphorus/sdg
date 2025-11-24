@@ -2,7 +2,7 @@
 
 namespace atc\SDG\Modules\Worship\Fields;
 
-use atc\WXC\Core\Contracts\FieldGroupInterface;
+use atc\WXC\Contracts\FieldGroupInterface;
 
 final class SermonFields implements FieldGroupInterface
 {

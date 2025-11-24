@@ -2,7 +2,7 @@
 
 namespace atc\SDG\Modules\Worship\PostTypes;
 
-use atc\WXC\Core\PostTypeHandler;
+use atc\WXC\PostTypes\PostTypeHandler;
 
 class Sermon extends PostTypeHandler
 {

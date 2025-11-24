@@ -2,7 +2,7 @@
 
 namespace atc\SDG\Modules\Lectionary;
 
-use atc\WXC\Core\Module as BaseModule;
+use atc\WXC\Module as BaseModule;
 // PostTypes still WIP! Maybe these will actually be subtypes of Library plugin core types?
 use atc\SDG\Modules\Lectionary\PostTypes\BibleBook;
 use atc\SDG\Modules\Lectionary\PostTypes\Verse;
