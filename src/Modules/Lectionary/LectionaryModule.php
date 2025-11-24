@@ -1,11 +1,11 @@
 <?php
 
-namespace atc\SDG\Modules\Lectionary;
+namespace SDG\Modules\Lectionary;
 
 use WXC\Core\Module as BaseModule;
 // PostTypes still WIP! Maybe these will actually be subtypes of Library plugin core types?
-use atc\SDG\Modules\Lectionary\PostTypes\BibleBook;
-use atc\SDG\Modules\Lectionary\PostTypes\Verse;
+use SDG\Modules\Lectionary\PostTypes\BibleBook;
+use SDG\Modules\Lectionary\PostTypes\Verse;
 
 // Define the module class
 final class LectionaryModule extends BaseModule

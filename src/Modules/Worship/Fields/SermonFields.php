@@ -1,6 +1,6 @@
 <?php
 
-namespace atc\SDG\Modules\Worship\Fields;
+namespace SDG\Modules\Worship\Fields;
 
 use WXC\Core\Contracts\FieldGroupInterface;
 

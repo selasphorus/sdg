@@ -37,8 +37,8 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 use WXC\Plugin;
 
 // WXC Add-on Modules
-use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
-//use atc\SDG\Modules\Lectionary\LectionaryModule as Lectionary; // WIP
+use SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
+//use SDG\Modules\Lectionary\LectionaryModule as Lectionary; // WIP
 // Other modules TBD
 // Old version modules: lectionary, newsletters, sermons, snippets, webcasts, // ninjaforms, slider, ensembles
 // TODO: move snippets, newletters to separate add-on mini-plugins? Move webcasts to WHx4 as part of Events

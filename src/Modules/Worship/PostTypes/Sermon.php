@@ -1,6 +1,6 @@
 <?php
 
-namespace atc\SDG\Modules\Worship\PostTypes;
+namespace SDG\Modules\Worship\PostTypes;
 
 use WXC\Core\PostTypeHandler;
 
