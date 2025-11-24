@@ -34,9 +34,9 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-use atc\BhWP\Plugin;
+use WXC\Plugin;
 
-// BhWP Add-on Modules
+// WXC Add-on Modules
 use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
 //use atc\SDG\Modules\Lectionary\LectionaryModule as Lectionary; // WIP
 // Other modules TBD
@@ -44,21 +44,21 @@ use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Serm
 // TODO: move snippets, newletters to separate add-on mini-plugins? Move webcasts to WHx4 as part of Events
 
 // Once plugins are loaded, boot everything up
-add_action('bhwp_pre_boot', function() {
-    // Wait until BhWP is loaded, but BEFORE it boots
+add_action('wxc_pre_boot', function() {
+    // Wait until WXC is loaded, but BEFORE it boots
     if (!class_exists(Plugin::class)) {
         return;
     }
 
-    // Register the modules with BhWP
-    add_filter('bhwp_register_modules', function(array $modules): array {
+    // Register the modules with WXC
+    add_filter('wxc_register_modules', function(array $modules): array {
         $modules['worship'] = Worship::class;
         //$modules['lectionary'] = Lectionary::class;
 		return $modules;
 	});
 	
 	// Register Field Keys
-    add_filter('bhwp_registered_field_keys', function() {
+    add_filter('wxc_registered_field_keys', function() {
         if (!function_exists('acf_get_local_fields')) {
             return [];
         }
@@ -76,7 +76,7 @@ add_action('bhwp_pre_boot', function() {
     });
     
     // Register Assets
-    add_filter('bhwp_assets', static function (array $assets): array {
+    add_filter('wxc_assets', static function (array $assets): array {
         // CSS
         $relCss = 'assets/css/sdg.css';
         $srcCss = plugins_url($relCss, __FILE__);
@@ -112,5 +112,5 @@ add_action('bhwp_pre_boot', function() {
         return $assets;
     });
     
-}, 15); // Priority < 20 to run before BhWP boot()
+}, 15); // Priority < 20 to run before WXC boot()
 

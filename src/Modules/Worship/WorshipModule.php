@@ -2,9 +2,9 @@
 
 namespace atc\SDG\Modules\Worship;
 
-use atc\BhWP\Core\Module as BaseModule;
-use atc\BhWP\Core\Query\PostQuery;
-use atc\BhWP\Core\Shortcodes\ShortcodeManager;
+use WXC\Core\Module as BaseModule;
+use WXC\Core\Query\PostQuery;
+use WXC\Core\Shortcodes\ShortcodeManager;
 //
 use atc\SDG\Modules\Worship\PostTypes\Sermon;
 #use atc\SDG\Modules\Worship\PostTypes\SermonSeries;
