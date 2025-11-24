@@ -1,8 +1,8 @@
 <?php
 
-namespace SDG\Modules\Worship\PostTypes;
+namespace atc\SDG\Modules\Worship\PostTypes;
 
-use WXC\Core\PostTypeHandler;
+use atc\WXC\Core\PostTypeHandler;
 
 class Sermon extends PostTypeHandler
 {
