@@ -34,6 +34,13 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
+// WIP
+$admin_functions_filepath = $plugin_path . 'includes/'.'admin_functions.php';
+$common_functions_filepath = $plugin_path . 'includes/'.'common_functions.php';
+if ( file_exists($admin_functions_filepath) ) { include_once( $admin_functions_filepath ); } else { echo "file $admin_functions_filepath not found"; }
+if ( file_exists($common_functions_filepath) ) { include_once( $common_functions_filepath ); } else { echo "file $common_functions_filepath not found"; }
+
+
 use atc\WXC\Plugin;
 
 // WXC Add-on Modules
