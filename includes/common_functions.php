@@ -36,6 +36,60 @@ function devmode_active( $arr_qvar_vals = array() ) {
     return false;
 }
 
+function sdg_log( $log_msg, $do_log = true ) {
+
+    // Set do_ts to true for active troubleshooting; false for cleaner source & logs
+    if ( $do_log === false ) { return; } // Abort if logging is turned off (set per calling fcn)
+
+    // Create directory for storage of log files, if it doesn't exist already
+    $log_filename = $_SERVER['DOCUMENT_ROOT']."/_sdg-devlog";
+    if (!file_exists($log_filename)) {
+        // create directory/folder uploads.
+        mkdir($log_filename, 0777, true);
+    }
+
+    $timestamp = current_time('mysql'); // use WordPress function instead of straight PHP so that timezone is correct -- see https://codex.wordpress.org/Function_Reference/current_time
+    //sdg_log( "loop_item_divider", $do_log );
+    if ($log_msg == "divline1") {
+        $log_msg = "\n=================================================================================\n";
+    } else if ($log_msg == "divline2") {
+        $log_msg = "-----------";
+    } else {
+        $log_msg = "[sdg_log ".$timestamp."] ".$log_msg;
+        //$log_msg = "[sdg_log ".$timestamp."] ".$log_msg."\n";
+    }
+
+    // Generate a new log file name based on the date
+    //$datestamp = current_time('Ymd'); // date('d-M-Y') // Old version -- daily logs
+    // New version -- monthly logs
+    $this_month = current_time('Ym');
+    $log_file = $log_filename.'/'.$this_month.'-sdg_dev.log';
+
+    // TODO/WIP: check server for past months' logs and delete them if they're more than one month old
+    $last_month = date("Ym", strtotime("first day of previous month"));
+    //$two_months_ago = $this_month-2;
+    $two_months_ago = date("Ym", strtotime("-2 months"));
+    if ( $last_month != $two_months_ago ) {
+        $stale_log_file = $log_filename.'/'.$two_months_ago.'-sdg_dev.log';
+    } else {
+        $two_months_ago = date("Ym", strtotime("-3 months"));
+        // wip deal w/ possible issue with date math if month has 31 days...
+        $stale_log_file = $log_filename.'/'.$two_months_ago.'-sdg_dev.log';
+    }
+    if (file_exists($stale_log_file)) {
+        $log_msg .= "\n>>>sdg_log<<< unlinked stale_log_file: $stale_log_file";
+        unlink($stale_log_file);
+    } else {
+        //$log_msg .= "\n>>>sdg_log<<< No match found for stale_log_file: $stale_log_file"; // tft
+    }
+
+    // Syntax: file_put_contents(filename, data, mode, context)
+    // (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
+    file_put_contents($log_file, $log_msg . "\n", FILE_APPEND);
+
+}
+
+
 /*********** POST BASICS ***********/
 
 function sdg_post_title ( $args = array() ) {
