@@ -613,8 +613,8 @@ function getLitDateData( array $args = [] ): array|string
                 $secondaryPosts = $sorted[ 'secondary' ];
             }
             if ( $secondaryPosts ) {
-                $ts_info .= "$secondaryPosts found: ".print_r($secondaryPosts,true)."<br />";
-                $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPosts;
+                $ts_info .= "secondaryPosts found: ".print_r($secondaryPosts,true)."<br />";
+                $litdateData[ $dateStr ][ 'secondary' ] = $secondaryPosts;
             }
             
         } else {
@@ -688,98 +688,100 @@ function formatLitDateData( $litDateData = [], $args = [] )
                     //$output .= "<em>$label</em><br />";
                 //}
 
-                foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
-                    //if ( $debug ) { $output .= "groupItem: <pre>".print_r($groupItem,true)."</pre>"; }
-
-                    $post = $groupItem[ 'post' ];
-                    $postPriority = $groupItem[ 'priority' ];
-                    $post = get_post( $post );
-                    // Make sure we've got the right type of post object
-                    if ( !$post instanceof WP_Post ) {
-                        if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
-                        continue;
+                foreach ( $typeGroups[ $groupKey ] as $groupItems ) {
+                    //if ( $debug ) { $output .= "groupItems: <pre>".print_r($groupItems,true)."</pre>"; }
+                    foreach ( $groupItems as $groupItem ) {
+                        $post = $groupItem[ 'post' ];
+						$postPriority = $groupItem[ 'priority' ];
+						$post = get_post( $post );
+						// Make sure we've got the right type of post object
+						if ( !$post instanceof WP_Post ) {
+							if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
+							continue;
+						}
+						if ( $post->post_type != "liturgical_date" ) {
+							if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
+							continue;
+						}
+						$postID = $post->ID;
+						if ( $postID && $groupKey == "primary" ) {
+							$primaryShown = true;
+						}
+						$title = get_the_title( $post );
+						$link = get_permalink( $post );
+						$class = $groupKey;
+						$ts_info .= "postID: $postID; title: $title<br />";
+	
+						// TODO: option to return UN-linked version of title(s)?
+						if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
+	
+						// Optional meta info
+						if ( $args[ 'show_meta' ] || $admin ) {
+							$terms = get_the_terms( $post, 'liturgical_date_category' );
+							$term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
+							$date_type = get_post_meta( $post->ID, 'date_type', true );
+							if (!$date_type) { $date_type = "UNKNOWN"; }
+							//
+							$output .= '<small>'; //<br />
+							$output .= 'ID: ' . $post->ID;
+							$output .= ' | Date type: ' . esc_html( $date_type );
+							if ( $date_type == "variable" ) {
+								$date_calc = get_post_meta( $post->ID, 'date_calculation', true );
+								if ( $date_calc ) { $output .= ' | Date calc: "' . esc_html( $date_calc ) . '"';}
+							}
+							if ( !empty( $term_names ) ) {
+								$output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
+							}
+							$output .= ' | Priority: ' . esc_html( $postPriority );
+							$output .= '</small>';
+						}
+	
+						// Edit post link, for admin use
+						if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $postID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
+	
+						// Content and collect?
+						if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
+							//$ts_info .= "about to look for content and collect<br />";
+	
+							$litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
+							$collect_text = get_collect_text( $postID, $dateStr );
+	
+							// TODO/atcwip: if no match by postID, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
+	
+							// If there's something other than the title available to display, then display the popup link
+							// TODO: set width and height dynamically based on browser window dimensions
+							$width = '650';
+							$height = '450';
+	
+							if ( !empty($collect_text) ) {
+								// TODO: modify title in case of Propers?
+								if ( !$admin ) { $output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">' . $title . '</a>'; }
+								// Put together the collect modal
+								$modal .= '<div id="dialog_content_'.$postID.'" class="calendar-day-desc dialog">';
+								$modal .= '<h2 autofocus>'.$title.'</h2>';
+								//if ( is_dev_site() ) { $output .= $litdate_content; }
+								if ( $collect_text !== null ) {
+									$modal .= '<div class="calendar-day-collect">';
+									//$output .= '<h3>Collect:</h3>';
+									$modal .= '<p>'.$collect_text.'</p>';
+									$modal .= '</div>';
+								}
+								$modal .= '</div>'; ///calendar-day-desc<br />
+	
+							} else {
+								$ts_info .= "no collect_text found<br />";
+								// If no content or collect, just show the day title
+								$output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
+							}
+						} elseif ( $groupKey == "secondary" && !$admin ) {
+							if ( $primaryShown ) { $output .= "<br />"; }
+							$output .= '<span class="calendar-day secondary">' . $title . '</span>';
+						} else {
+							$output .= '<br />';
+							//$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
+						}
                     }
-                    if ( $post->post_type != "liturgical_date" ) {
-                        if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
-                        continue;
-                    }
-                    $postID = $post->ID;
-                    if ( $postID && $groupKey == "primary" ) {
-                        $primaryShown = true;
-                    }
-                    $title = get_the_title( $post );
-                    $link = get_permalink( $post );
-                    $class = $groupKey;
-                    $ts_info .= "postID: $postID; title: $title<br />";
-
-                    // TODO: option to return UN-linked version of title(s)?
-                    if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
-
-                    // Optional meta info
-                    if ( $args[ 'show_meta' ] || $admin ) {
-                        $terms = get_the_terms( $post, 'liturgical_date_category' );
-                        $term_names = $terms && !is_wp_error( $terms ) ? wp_list_pluck( $terms, 'name' ) : [];
-                        $date_type = get_post_meta( $post->ID, 'date_type', true );
-                        if (!$date_type) { $date_type = "UNKNOWN"; }
-                        //
-                        $output .= '<small>'; //<br />
-                        $output .= 'ID: ' . $post->ID;
-                        $output .= ' | Date type: ' . esc_html( $date_type );
-                        if ( $date_type == "variable" ) {
-                            $date_calc = get_post_meta( $post->ID, 'date_calculation', true );
-                            if ( $date_calc ) { $output .= ' | Date calc: "' . esc_html( $date_calc ) . '"';}
-                        }
-                        if ( !empty( $term_names ) ) {
-                            $output .= ' | Terms: ' . esc_html( implode( ', ', $term_names ) );
-                        }
-                        $output .= ' | Priority: ' . esc_html( $postPriority );
-                        $output .= '</small>';
-                    }
-
-                    // Edit post link, for admin use
-                    if ( $admin ) { $output .= '&nbsp;>> <a href="' . get_edit_post_link( $postID ) . '" class="subtle" target="_blank">Edit</a> <<'; }
-
-                    // Content and collect?
-                    if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
-                        //$ts_info .= "about to look for content and collect<br />";
-
-                        $litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
-                        $collect_text = get_collect_text( $postID, $dateStr );
-
-                        // TODO/atcwip: if no match by postID, then check propers 1-29 by date (e.g. Proper 21: "Week of the Sunday closest to September 28")
-
-                        // If there's something other than the title available to display, then display the popup link
-                        // TODO: set width and height dynamically based on browser window dimensions
-                        $width = '650';
-                        $height = '450';
-
-                        if ( !empty($collect_text) ) {
-                            // TODO: modify title in case of Propers?
-                            if ( !$admin ) { $output .= '<a href="#!" id="dialog_handle_'.$postID.'" class="calendar-day dialog_handle">' . $title . '</a>'; }
-                            // Put together the collect modal
-                            $modal .= '<div id="dialog_content_'.$postID.'" class="calendar-day-desc dialog">';
-                            $modal .= '<h2 autofocus>'.$title.'</h2>';
-                            //if ( is_dev_site() ) { $output .= $litdate_content; }
-                            if ( $collect_text !== null ) {
-                                $modal .= '<div class="calendar-day-collect">';
-                                //$output .= '<h3>Collect:</h3>';
-                                $modal .= '<p>'.$collect_text.'</p>';
-                                $modal .= '</div>';
-                            }
-                            $modal .= '</div>'; ///calendar-day-desc<br />
-
-                        } else {
-                            $ts_info .= "no collect_text found<br />";
-                            // If no content or collect, just show the day title
-                            $output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
-                        }
-                    } elseif ( $groupKey == "secondary" && !$admin ) {
-                        if ( $primaryShown ) { $output .= "<br />"; }
-                        $output .= '<span class="calendar-day secondary">' . $title . '</span>';
-                    } else {
-                        $output .= '<br />';
-                        //$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
-                    }
+                    
                 }
                 if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
             }
