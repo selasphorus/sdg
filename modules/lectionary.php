@@ -689,8 +689,8 @@ function formatLitDateData( $litDateData = [], $args = [] )
                 //}
 
                 foreach ( $typeGroups[ $groupKey ] as $groupItems ) {
-                    //if ( $debug ) { $output .= "groupItems: <pre>".print_r($groupItems,true)."</pre>"; }
-                    foreach ( $groupItems as $groupItem ) {
+                    if ( $debug ) { $output .= "groupItems: <pre>".print_r($groupItems,true)."</pre>"; }
+                    /*foreach ( $groupItems as $groupItem ) {
                         $post = $groupItem[ 'post' ];
 						$postPriority = $groupItem[ 'priority' ];
 						$post = get_post( $post );
@@ -780,8 +780,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$output .= '<br />';
 							//$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 						}
-                    }
-                    
+                    }*/
                 }
                 if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
             }
