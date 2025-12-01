@@ -332,7 +332,7 @@ function getLitDateData( array $args = [] ): array|string
         'series_id' => null,
         //
         'day_titles_only'  => false,
-        'exclusive'        => false, // set to true to display only one primary (and possibly on secondary) litdate per calendar date. TODO: better arg name
+        'exclusive'        => false, // set to true to display only one primary (and possibly one or more secondary) litdate per calendar date. TODO: better arg name
         //
         'return'           => 'posts', // 'posts' | 'prioritized' | 'formatted' | 'title'
         'formatted'        => false,
@@ -599,6 +599,7 @@ function getLitDateData( array $args = [] ): array|string
                 //$info .= "No primaryPost found!<br />";
             }
             // Get the most important secondary litdate post, if any
+            /*
             if ( !empty( $sorted[ 'secondary' ] ) ) {
                 $secondaryPost = $sorted[ 'secondary' ][0];
             }
@@ -606,6 +607,16 @@ function getLitDateData( array $args = [] ): array|string
                 $ts_info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
                 $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
+            */
+            // Show ALL secondary litdate posts (usually only one, but sometimes multiple -- e.g. Ember Days/O Antiphons)
+            if ( !empty( $sorted[ 'secondary' ] ) ) {
+                $secondaryPosts = $sorted[ 'secondary' ];
+            }
+            if ( $secondaryPosts ) {
+                $ts_info .= "$secondaryPosts found: ".print_r($secondaryPosts,true)."<br />";
+                $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPosts;
+            }
+            
         } else {
             $litdateData[ $dateStr ] = $sorted;
         }
