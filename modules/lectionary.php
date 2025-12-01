@@ -776,7 +776,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					} elseif ( $groupKey == "secondary" && !$admin ) {
 						if ( $primaryShown ) { $output .= "<br />"; }
 						$output .= '<span class="calendar-day secondary">' . $title . '</span>';
-						if ( count($typeGroups[ $groupKey ] > 1 ) ) { $output .= "<br />"; }
+						if ( is_array( $typeGroups[ $groupKey ] ) && count($typeGroups[ $groupKey ] > 1 ) ) { $output .= "<br />"; }
 					} else {
 						$output .= '<br />';
 						//$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
