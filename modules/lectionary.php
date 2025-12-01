@@ -692,9 +692,14 @@ function formatLitDateData( $litDateData = [], $args = [] )
                     $ts_info .= "groupItems: <pre>".print_r($groupItems,true)."</pre>";
                     foreach ( $groupItems as $groupItem ) {
                         $ts_info .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
-                        $post = $groupItem[ 'post' ];
-						$postPriority = $groupItem[ 'priority' ];
+                        if ( is_array($groupItem) ) {
+                            $post = $groupItem[ 'post' ];
+                            $postPriority = $groupItem[ 'priority' ];
+                        } elseif ( $groupItem instanceof WP_Post ) {
+                            $post = $groupItem;
+                        }
 						$post = get_post( $post );
+						
 						// Make sure we've got the right type of post object
 						if ( !$post instanceof WP_Post ) {
 							if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
