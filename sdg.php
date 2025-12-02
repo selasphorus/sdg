@@ -4,7 +4,7 @@
  */
 
 /*
-Plugin Name: SDG
+Plugin Name: SDG-OG
 Plugin URI:
 Description: Custom post types, taxonomies and functions for music and more
 Version: 1.070324.1
