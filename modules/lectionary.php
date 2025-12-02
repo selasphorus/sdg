@@ -611,8 +611,6 @@ function getLitDateData( array $args = [] ): array|string
             // Show ALL secondary litdate posts (usually only one, but sometimes multiple -- e.g. Ember Days/O Antiphons)
             if ( !empty( $sorted[ 'secondary' ] ) ) {
                 $secondaryPosts = $sorted[ 'secondary' ];
-            }
-            if ( $secondaryPosts ) {
                 $ts_info .= "secondaryPosts found: ".print_r($secondaryPosts,true)."<br />";
                 $litdateData[ $dateStr ][ 'secondary' ] = $secondaryPosts;
             }
