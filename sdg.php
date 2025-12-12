@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       SDG
+ * Plugin Name:       SDG (OOP)
  * Description:       A WordPress plugin for godly matters
  * Dependencies:      Requires WHx4-Core, WHx4
  * Requires Plugins:  whx4-core, whx4
