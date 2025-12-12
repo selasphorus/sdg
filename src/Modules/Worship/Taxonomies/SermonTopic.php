@@ -2,7 +2,7 @@
 
 namespace atc\SDG\Modules\Worship\Taxonomies;
 
-use atc\WHx4\Core\TaxonomyHandler;
+use atc\WXC\Taxonomies\TaxonomyHandler;
 
 class SermonTopic extends TaxonomyHandler
 {
