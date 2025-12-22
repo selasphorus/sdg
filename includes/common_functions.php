@@ -564,6 +564,7 @@ function sdg_post_thumbnail ( $args = array() ) {
                 }
 
                 $classes .= " is_singular";
+                $ts_info .= "get image via get_the_post_thumbnail<br />";
 
                 $img_html .= '<div class="'.$classes.'">';
                 $img_html .= get_the_post_thumbnail( $post_id, $img_size );
@@ -576,6 +577,7 @@ function sdg_post_thumbnail ( $args = array() ) {
                 // TODO: streamline this
                 if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
                     $ts_info .= $fcn_id."image_gallery image<br />";
+                    $ts_info .= "get image via wp_get_attachment_image<br />";
                     $img_html .= '<div class="'.$classes.'">';
                     $img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
                     $img_html .= $caption_html;
@@ -592,17 +594,14 @@ function sdg_post_thumbnail ( $args = array() ) {
             $img_tag = "";
 
             if ( $img_id ) {
-
                 // display attachment via thumbnail_id
+                $ts_info .= "get image via wp_get_attachment_image<br />";
                 $img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
 
                 $ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
                 if ( isset($images)) { $ts_info .= $fcn_id.'<pre>'.print_r($images,true).'</pre>'; }
-
             } else {
-
                 $ts_info .= 'Use placeholder img';
-
                 if ( function_exists( 'get_placeholder_img' ) ) {
                     $img_tag = get_placeholder_img();
                 }
