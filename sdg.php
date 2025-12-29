@@ -1026,7 +1026,7 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 /* 220223 moved from apostle/functions.php */
 
 // TODO update for ACF -- get field_ids
-add_filter( 'wp_insert_post_data' , 'modify_post_title' , '99', 2 );
+///add_filter( 'wp_insert_post_data' , 'modify_post_title' , '99', 2 );
 function modify_post_title( $data ) {
 
 	if ($data['post_type'] == 'reading') {
@@ -1280,7 +1280,7 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 }
 
 // Function: clean up titles for creation of slugs and for front-end display
-add_filter( 'the_title', 'filter_the_title', 100, 2 );
+///add_filter( 'the_title', 'filter_the_title', 100, 2 );
 function filter_the_title( $post_title, $post_id = null ) {
 
     //sdg_log( "function: filter_the_title", $do_log );
@@ -1782,7 +1782,7 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
 // Bulk updates to titles and title_for_matching postmeta values
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
-add_shortcode('title_updates', 'run_title_updates');
+///add_shortcode('title_updates', 'run_title_updates');
 function run_title_updates ($atts = array(), $content = null, $tag = '') {
 
     // TS/logging setup
@@ -2334,7 +2334,7 @@ function run_post_updates( $atts = array() )
 
 
 /*** ACF Related Events ***/
-add_filter('acf/fields/relationship/result/name=related_event', 'my_acf_fields_relationship_result', 10, 4);
+///add_filter('acf/fields/relationship/result/name=related_event', 'my_acf_fields_relationship_result', 10, 4);
 function my_acf_fields_relationship_result( $text, $post, $field, $post_id )
 {
     $text = $post->post_name;
@@ -2343,7 +2343,7 @@ function my_acf_fields_relationship_result( $text, $post, $field, $post_id )
 }
 
 //add_filter('acf/fields/relationship/query/name=related_event', 'my_acf_fields_relationship_query', 10, 3);
-add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
+///add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
 function my_acf_fields_relationship_query( $args, $field, $post_id )
 {
 
@@ -3003,7 +3003,7 @@ function sdg_scope_dates( $scope = null )
 
 /*** SEARCH FORM ETC WIP ***/
 
-add_shortcode('sdg_search_form', 'sdg_search_form');
+///add_shortcode('sdg_search_form', 'sdg_search_form');
 function sdg_search_form ( $atts = array(), $content = null, $tag = '' )
 {
 
@@ -4207,7 +4207,7 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' )
 // TODO: revise to eliminate complex query -- make fastest possible initial query that can be stored in object cache
 // ... e.g. match by title, or if no title field being searched, then get ids of all posts of certain type; or maybe limit by one criterion such as only choral works? TBD
 // ... then loop through returned ids based on search criteria
-add_shortcode('sdg_search_form_v2', 'sdg_search_form_v2');
+///add_shortcode('sdg_search_form_v2', 'sdg_search_form_v2');
 function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' )
 {
 
@@ -5449,5 +5449,5 @@ function decode_ninja_forms_display_form_settings( $settings, $form_id )
     $settings[ 'fieldsMarkedRequired' ] = html_entity_decode( $settings[ 'fieldsMarkedRequired' ] );
     return $settings;
 }
-add_filter( 'ninja_forms_display_form_settings', 'decode_ninja_forms_display_form_settings', 10, 2 );
+///add_filter( 'ninja_forms_display_form_settings', 'decode_ninja_forms_display_form_settings', 10, 2 );
 
