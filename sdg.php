@@ -1553,7 +1553,7 @@ function clean_slug( $post_id ) {
 // TODO: figure this out!
 
 */
-add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
+///add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
 function sdg_save_post_callback( $post_id, $post, $update ) {
 
     // TS/logging setup
