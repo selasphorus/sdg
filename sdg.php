@@ -2368,7 +2368,8 @@ function my_acf_fields_relationship_query( $args, $field, $post_id )
  * @param  WP_Query $query
  * @return string
  */
-add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
+// WIP 251229
+///add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
 function sdg_include_slug_in_search( $search, $query )
 {
 
