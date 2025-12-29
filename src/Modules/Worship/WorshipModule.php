@@ -16,6 +16,9 @@ final class WorshipModule extends BaseModule
     {
         $this->registerDefaultViewRoot();
         parent::boot();
+        
+        //
+        ShortcodeManager::add(\WHx4\Modules\Worship\Shortcodes\SermonsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array
