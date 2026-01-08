@@ -115,21 +115,9 @@ add_action('wxc_pre_boot', function() {
 }, 15); // Priority < 20 to run before WXC boot()
 
 // WIP
+// TODO: figure out which of these functions belong in WXC instead
 
 /* ************************************ admin_functions *************************************************************** */
-
-/**
- * Explode list using "," and ", ".
- *
- * @param string $string String to split up.
- * @return array Array of string parts.
- */
-function birdhive_att_explode ( $string = '' ) 
-{
-	$string = str_replace( ', ', ',', $string );
-	return explode( ',', $string );
-}
-
 
 /*** POST TITLE/SLUG FUNCTIONS ***/
 
@@ -2406,7 +2394,6 @@ function sdg_include_slug_in_search( $search, $query )
 
 function sdg_log( $log_msg, $do_log = true )
 {
-
     // Set do_ts to true for active troubleshooting; false for cleaner source & logs
     if ( $do_log === false ) { return; } // Abort if logging is turned off (set per calling fcn)
 
@@ -2455,17 +2442,13 @@ function sdg_log( $log_msg, $do_log = true )
     // Syntax: file_put_contents(filename, data, mode, context)
     // (If filename does not exist, the file is created. Otherwise, the existing file is overwritten, unless the FILE_APPEND flag is set.)
     file_put_contents($log_file, $log_msg . "\n", FILE_APPEND);
-
 }
-
 
 /*********** POST BASICS ***********/
 
 function sdg_post_title ( $args = array() )
 {
-
     // TS/logging setup
-    $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
     $fcn_id = "[sdg-pt]&nbsp;";
     sdg_log( "divline2", $do_log );
@@ -2497,6 +2480,7 @@ function sdg_post_title ( $args = array() )
     );
 
     // Parse & Extract args
+    // TODO: set args individually instead of less secure extract?
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
 
@@ -2671,8 +2655,6 @@ function sdg_post_title ( $args = array() )
     if ( $series_title && $show_series_title != 'prepend' && $show_series_title !== false) {
         $info .= $series_title;
     }
-
-    //$ts_info .= "END sdg_post_title<br />";
 
     if ( $ts_info != "" && ( $do_ts === true || $do_ts == "basics" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
