@@ -131,8 +131,8 @@ add_action('wxc_pre_boot', function() {
 
 }*/
 
-function super_sanitize_title ( $str = null ) {
-
+function super_sanitize_title ( $str = null )
+{
     if ( $str === null ) { return null; }
 
     $str = strtolower($str); // Make it lowercase
@@ -246,14 +246,15 @@ function super_sanitize_title ( $str = null ) {
 }
 
 // WIP to replace pods_sanitize
-function sanitize ( $str = null ) {
+function sanitize ( $str = null )
+{
     return $str;
 }
 
 // WIP-NOW
 // Build title_for_matching UID based on... ???
-function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' ) {
-
+function get_title_uid ( $post_id = null, $post_type = null, $post_title = null, $uid_field = 'title_for_matching' )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -303,8 +304,8 @@ function get_title_uid ( $post_id = null, $post_type = null, $post_title = null,
     return $new_t4m;
 }
 
-function update_title_for_matching ( $post_id ) {
-
+function update_title_for_matching ( $post_id )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -427,8 +428,8 @@ function update_title_for_matching ( $post_id ) {
 // 2) bind this with a t4m update function
 // 3) create separate build_the_title functions per CPT
 
-function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false ) {
-
+function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $arr = array(), $abbr = false )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = devmode_active( array("sdg", "titles") );
@@ -1015,8 +1016,8 @@ function build_the_title( $post_id = null, $uid_field = 'title_for_matching', $a
 
 // TODO update for ACF -- get field_ids
 ///add_filter( 'wp_insert_post_data' , 'modify_post_title' , '99', 2 );
-function modify_post_title( $data ) {
-
+function modify_post_title( $data )
+{
 	if ($data['post_type'] == 'reading') {
 
 		$title = $data['post_title'];
@@ -1064,8 +1065,8 @@ function modify_post_title( $data ) {
 
 // TMP(?) disabled 02/02/23 -- will need to test to determine whether it's necessary when first saving/publishing a NEW post...
 //add_filter('wp_insert_post_data', 'build_the_title_on_insert', 10, 2);
-function build_the_title_on_insert( $data, $postarr ) {
-
+function build_the_title_on_insert( $data, $postarr )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -1247,10 +1248,8 @@ function prefix_the_slug($slug, $post_ID, $post_status, $post_type, $post_parent
 
 // Hide everything within and including the square brackets
 // e.g. for titles matching the pattern "{Whatever} [xxx]" or "[xxx] {Whatever}"
-function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg_remove_bracketed_info ( $str ) {
-
-	//sdg_log( "function: remove_bracketed_info", $do_log );
-
+function remove_bracketed_info ( $str, $remove_parens = false )
+{
 	if ( strpos($str, '[') !== false ) {
 		$str = preg_replace('/\[[^\]]*\]([^\]]*)/', trim('$1'), $str); // Bracketed info at end of string
 		$str = preg_replace('/([^\]]*)\[[^\]]*\]/', trim('$1'), $str); // Bracketed info at start of string?
@@ -1269,8 +1268,8 @@ function remove_bracketed_info ( $str, $remove_parens = false ) { //function sdg
 
 // Function: clean up titles for creation of slugs and for front-end display
 ///add_filter( 'the_title', 'filter_the_title', 100, 2 );
-function filter_the_title( $post_title, $post_id = null ) {
-
+function filter_the_title( $post_title, $post_id = null )
+{
     //sdg_log( "function: filter_the_title", $do_log );
     $post_type = ""; // init
 
@@ -1292,8 +1291,8 @@ function filter_the_title( $post_title, $post_id = null ) {
 }
 
 // TODO/WIP: Troubleshoot
-function make_clean_title( $post_id = null, $post_title = null, $return_revised = true ) {
-
+function make_clean_title( $post_id = null, $post_title = null, $return_revised = true )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -1409,8 +1408,8 @@ function make_clean_title( $post_id = null, $post_title = null, $return_revised 
 
 // TODO: fix this for event posts being saved for the first time
 // -- in that case, event_date not stored as metadata so must figure out how to retrieve it from the _POST array and pass it to this fcn.
-function clean_slug( $post_id ) {
-
+function clean_slug( $post_id )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -1542,8 +1541,8 @@ function clean_slug( $post_id ) {
 
 */
 ///add_action( 'save_post', 'sdg_save_post_callback', 10, 3 );
-function sdg_save_post_callback( $post_id, $post, $update ) {
-
+function sdg_save_post_callback( $post_id, $post, $update )
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "updates") );
     $do_log = devmode_active( array("sdg", "updates") );
@@ -1765,14 +1764,13 @@ function sdg_save_post_callback( $post_id, $post, $update ) {
 
 }
 
-
 /*********** DEV/CLEANUP FUNCTIONS ***********/
 
 // Bulk updates to titles and title_for_matching postmeta values
 // This fcn will be used primarily (exclusively?) for repertoire and edition records
 ///add_shortcode('title_updates', 'run_title_updates');
-function run_title_updates ($atts = array(), $content = null, $tag = '') {
-
+function run_title_updates ($atts = array(), $content = null, $tag = '')
+{
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "titles") );
     $do_log = false;
@@ -2045,7 +2043,6 @@ function run_title_updates ($atts = array(), $content = null, $tag = '') {
 //add_shortcode('run_posts_cleanup', 'posts_cleanup'); // tmp disabled on live site while troubleshooting EM issues.
 function posts_cleanup( $atts = array() )
 {
-
 	$info = ""; // init
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -2202,7 +2199,6 @@ function posts_cleanup( $atts = array() )
 //add_shortcode('run_post_updates', 'run_post_updates');
 function run_post_updates( $atts = array() )
 {
-
 	$args = shortcode_atts( array(
         'post_id' => get_the_ID()
     ), $atts );
@@ -2334,7 +2330,6 @@ function my_acf_fields_relationship_result( $text, $post, $field, $post_id )
 ///add_filter('acf/fields/relationship/query', 'my_acf_fields_relationship_query', 10, 3);
 function my_acf_fields_relationship_query( $args, $field, $post_id )
 {
-
     // TODO: check to see if args['post_type'] is event
     if ( $args['post_type'] == 'event' ) {
         $args['orderby'] = 'meta_value';
@@ -2360,7 +2355,6 @@ function my_acf_fields_relationship_query( $args, $field, $post_id )
 ///add_filter( 'posts_search', 'sdg_include_slug_in_search', 10, 2 );
 function sdg_include_slug_in_search( $search, $query )
 {
-
 	global $wpdb;
 
 	// Only run if we're in the admin and searching our specific post type
@@ -2670,7 +2664,6 @@ function sdg_post_title ( $args = array() )
 // TODO: generalize for non-title text
 function sdg_format_title ( $str = null, $line_breaks = false )
 {
-
     // Return if empty
     if ( empty($str) ) {
         return $str;
@@ -2715,7 +2708,6 @@ function sdg_format_title ( $str = null, $line_breaks = false )
 
 function sort_post_ids_by_title ( $arr_ids = array() )
 {
-
     $arr_info = array();
     $info = "";
 
@@ -2746,7 +2738,6 @@ function sort_post_ids_by_title ( $arr_ids = array() )
 
 function display_postmeta( $args = array() )
 {
-
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "meta") );
     $do_log = false;
@@ -2831,7 +2822,6 @@ function display_postmeta( $args = array() )
 // NB: these scope definitions can be used for any post type with date fields -- other than EM events, which are handled separately through events module and EM plugin
 function sdg_scope_dates( $scope = null )
 {
-
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "events") );
     $do_log = false;
@@ -2988,7 +2978,6 @@ function sdg_scope_dates( $scope = null )
 ///add_shortcode('sdg_search_form', 'sdg_search_form');
 function sdg_search_form ( $atts = array(), $content = null, $tag = '' )
 {
-
     // TS/logging setup
     $do_ts = devmode_active( array("sdg") );
     $do_log = false;
@@ -4192,7 +4181,6 @@ function sdg_search_form ( $atts = array(), $content = null, $tag = '' )
 ///add_shortcode('sdg_search_form_v2', 'sdg_search_form_v2');
 function sdg_search_form_v2 ( $atts = array(), $content = null, $tag = '' )
 {
-
     $info = "";
     $ts_info = "";
     $search_values = array(); // var to track whether any search values have been submitted and to which post_types they apply
