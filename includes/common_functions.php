@@ -568,15 +568,18 @@ function sdg_post_thumbnail ( $args = array() ) {
 		if ($event && $event->event_id) {
 			$event_id = $event->event_id;
 		    $ts_info .= "event_id: [" . $event_id . "]<br />";
-		    $parent_id = $event->get_recurrence_set()->event_id;
-		    $ts_info .= "event parent_id: [" . $parent_id . "]<br />";
+		    $parent_event_id = $event->get_recurrence_set()->event_id;
+		    $ts_info .= "parent_event_id: [" . $parent_event_id . "]<br />";
+		    $parent_event = em_get_event($parent_event_id, 'event_id');
+		    $parent_post_id = $parent_event->post_id;
+		    $ts_info .= "parent_post_id: [" . $parent_post_id . "]<br />";
 		}
 		
 		$event_type = get_post_meta( $post_id, '_event_type', true );
 		$ts_info .= "event_type: [" . $event_type . "]<br />";
 		
-		if ( $parent_id ) {
-			$img = getPostImage( $parent_id, $format, $sources );
+		if ( $parent_post_id ) {
+			$img = getPostImage( $parent_post_id, $format, $sources );
 			$ts_info .= $img['info'];
 		}
     }
