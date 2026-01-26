@@ -349,7 +349,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
     }
     
     // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
-    if ( !$imgID ) {
+    if ( empty($imgID) ) {
 
         // Check to see if the given post has a featured image
         if ( has_post_thumbnail( $postID ) ) {
@@ -420,6 +420,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
 
             // Image(s) in post content?
             if ( empty($imgID) && in_array("content", $sources ) && function_exists('get_first_image_from_post_content') ) {
+                $ts_info .= $fcn_id."About to get_first_image_from_post_content<br />";
                 $contentImg = get_first_image_from_post_content( $postID );
                 if ( $contentImg ) {
                     $imgID = $contentImg['id'];
@@ -428,13 +429,13 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
 
             // Image attachment(s)?
             if ( empty($imgID) ) {
-
+                $ts_info .= $fcn_id."About to get_attached_media<br />";
                 // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
                 // Also, images uploaded to a post remain "attached" according to the Media Library even after they're deleted from the post.
                 $images = get_attached_media( 'image', $postID );
                 //$images = get_children( "post_parent=".$post_id."&post_type=attachment&post_mime_type=image&numberposts=1" );
                 if ($images) {
-                    //$img_id = $images[0];
+                    //$imgID = $images[0];
                     foreach ($images as $attachment_id => $attachment) {
                         $imgID = $attachment_id;
                     }
@@ -445,10 +446,10 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
             // If there's STILL no image, use a placeholder
             // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
             // TODO: designate placeholders *per category*?? via category/taxonomy ui?
-            if ( empty($imgID) ) {
-                //if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
+            /*if ( empty($imgID) ) {
+                //if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $imgID = 121560; } else { $imgID = 121560; } // Fifth Avenue Entrance
                 $imgID = null;
-            }
+            }*/
         }
     }
     
@@ -551,14 +552,15 @@ function sdg_post_thumbnail ( $args = array() ) {
     //
     
     // Find an image for this post
-    $img_id = null;
+    $imgID = null;
     $img = getPostImage( $post_id, $format, $sources );
     if ( $img ) {
         $ts_info .= $img['info'];
+        $imgID = $img['imgID'];
     }
     
     // If no image was found, try the parent post, if any
-    if ( !$img || !$img['imgID'] ) {        
+    if ( empty($imgID) ) {      
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         //$parent_id = wp_get_post_parent_id( $post_id );
         
@@ -585,25 +587,24 @@ function sdg_post_thumbnail ( $args = array() ) {
     }
     //
     if ( $img ) {
-        $img_id = $img['imgID'];
+        $imgID = $img['imgID'];
         $img_type = $img['imgType'];
         $classes .= $img['imgClass'];
-		$ts_info .= $img['info'];
     }
     ////// WIP
 
-    if ( $return_value == "html" && !empty($img_id ) ) {
+    if ( $return_value == "html" && !empty($imgID ) ) {
 
         // For html return format, add caption, if there is one
 
         // Retrieve the caption
-        if ( get_post( $img_id ) ) { $caption = get_post( $img_id )->post_excerpt; } else { $caption = null; }
+        if ( get_post( $imgID ) ) { $caption = get_post( $imgID )->post_excerpt; } else { $caption = null; }
         if ( !empty($caption) && $format == "singular" && !is_singular('person') ) {
             $classes .= " has-caption";
-            $ts_info .= $fcn_id."Caption found for img_id $img_id: '$caption'<br />";
+            $ts_info .= $fcn_id."Caption found for imgID $imgID: '$caption'<br />";
         } else {
             $classes .= " no-caption";
-            $ts_info .= $fcn_id."No caption found for img_id $img_id<br />";
+            $ts_info .= $fcn_id."No caption found for imgID $imgID<br />";
         }
 
         if ( $caption != "" ) {
@@ -636,11 +637,11 @@ function sdg_post_thumbnail ( $args = array() ) {
 
                 // If an image_gallery was found, show one image as the featured image
                 // TODO: streamline this
-                if ( $img_id && is_array($image_gallery) && count($image_gallery) > 0 ) {
+                if ( $imgID && is_array($image_gallery) && count($image_gallery) > 0 ) {
                     $ts_info .= $fcn_id."image_gallery image<br />";
                     $ts_info .= "get image via wp_get_attachment_image<br />";
                     $img_html .= '<div class="'.$classes.'">';
-                    $img_html .= wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+                    $img_html .= wp_get_attachment_image( $imgID, $img_size, false, array( "class" => "featured_attachment" ) );
                     $img_html .= $caption_html;
                     $img_html .= '</div><!-- .post-thumbnail -->';
                 }
@@ -654,12 +655,12 @@ function sdg_post_thumbnail ( $args = array() ) {
             // NOT singular -- aka archives, search results, &c.
             $img_tag = "";
 
-            if ( $img_id ) {
+            if ( $imgID ) {
                 // display attachment via thumbnail_id
                 $ts_info .= "get image via wp_get_attachment_image<br />";
-                $img_tag = wp_get_attachment_image( $img_id, $img_size, false, array( "class" => "featured_attachment" ) );
+                $img_tag = wp_get_attachment_image( $imgID, $img_size, false, array( "class" => "featured_attachment" ) );
 
-                $ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$img_id;
+                $ts_info .= $fcn_id.'post_id: '.$post_id.'; thumbnail_id: '.$imgID;
                 if ( isset($images)) { $ts_info .= $fcn_id.'<pre>'.print_r($images,true).'</pre>'; }
             } else {
                 $ts_info .= 'Use placeholder img';
@@ -676,12 +677,12 @@ function sdg_post_thumbnail ( $args = array() ) {
             }
 
         } // END if is_singular()
-    } // END if ( $return_value == "html" && !empty($img_id )
+    } // END if ( $return_value == "html" && !empty($imgID )
 
     if ( $return_value == "html" ) {
         $info .= $img_html;
     } else { // $return_value == "id"
-        $info = $img_id;
+        $info = $imgID;
     }
 
     if ( $ts_info != "" && ( $do_ts === true || $do_ts == "images" || $do_ts == "media" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
