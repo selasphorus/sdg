@@ -316,7 +316,8 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
     // Init
     $arrInfo = array();
     $imgID = null;
-    $img_type = "post_image"; // other option: attachment_image
+    $imgType = "post_image"; // other option: attachment_image
+    $imgClass = "";
     $ts_info = "";
     
     if ( $sources == "all" ) {
@@ -340,7 +341,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
     if ( $format != "singular" && $post_type == "sermon" && !is_singular('sermon') ) {
         if ( get_field('author_image_for_archive') ) {
             $imgID = get_author_img_id ( $postID );
-            $classes .= " author_img_for_archive";
+            $imgClass .= " author_img_for_archive";
         } else {
             $ts_info .= $fcn_id."author_image_for_archive set to false<br />";
         }
@@ -409,7 +410,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
                     }
                     */
                     $imgID = $image_gallery[$i];
-                    $img_type = $fcn_id."attachment_image";
+                    $imgType = $fcn_id."attachment_image";
                     $ts_info .= $fcn_id."Random thumbnail ID: $imgID<br />";
                 } else {
                     $ts_info .= $fcn_id."No image_gallery found.<br />";
@@ -453,6 +454,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
     $arrInfo['imgID'] = $imgID;
     $arrInfo['imgType'] = $imgType;
     $arrInfo['imgClass'] = $imgClass;
+    $arrInfo['info'] = $ts_info;
     return $arrInfo;
 }
 
@@ -551,23 +553,21 @@ function sdg_post_thumbnail ( $args = array() ) {
     // Find an image for this post
     $img_id = null;
     $img = getPostImage( $post_id, $format, $sources );
-    if ( $img ) {
-        $img_id = $img['imgID'];
-    } else {
-        // If no image was found, try the parent post, if any
+    // If no image was found, try the parent post, if any
+    if ( !$img ) {
         $parent_id = wp_get_post_parent_id( $post_id );
 		if ( !empty($parent_id) ) {
 			$img = getPostImage( $parent_id, $format, $sources );
-			$img_id = $img['imgID'];
 		}
     }
     //
     if ( $img ) {
+        $img_id = $img['imgID'];
         $img_type = $img['imgType'];
         $classes .= $img['imgClass'];
+		$ts_info .= $img['info'];
     }
     ////// WIP
-
 
     if ( $return_value == "html" && !empty($img_id ) ) {
 
