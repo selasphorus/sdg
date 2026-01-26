@@ -563,9 +563,10 @@ function sdg_post_thumbnail ( $args = array() ) {
         //$parent_id = wp_get_post_parent_id( $post_id );
         
         $event = em_get_event($post_id, 'post_id');
-		/*if ($event && $event->event_id) {
+		if ($event && $event->event_id) {
 			$event_id = $event->event_id;
-		}*/
+		    $ts_info .= "event_id: [" . $event_id . "]<br />";
+		}
         // Check if this is a recurrence/instance
 		if ($event->is_recurrence()) {
 			// Get the parent recurring event ID
