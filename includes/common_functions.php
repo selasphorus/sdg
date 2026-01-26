@@ -553,12 +553,17 @@ function sdg_post_thumbnail ( $args = array() ) {
     // Find an image for this post
     $img_id = null;
     $img = getPostImage( $post_id, $format, $sources );
+    if ( $img ) {
+        $ts_info .= $img['info'];
+    }
+    
     // If no image was found, try the parent post, if any
-    if ( !$img || !$img['imgID'] ) {
-        $ts_info .= "No image found; try the parent post, if any.<br />";
+    if ( !$img || !$img['imgID'] ) {        
+        $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         $parent_id = wp_get_post_parent_id( $post_id );
 		if ( !empty($parent_id) ) {
 			$img = getPostImage( $parent_id, $format, $sources );
+			$ts_info .= $img['info'];
 		}
     }
     //
