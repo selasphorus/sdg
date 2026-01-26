@@ -560,8 +560,10 @@ function sdg_post_thumbnail ( $args = array() ) {
     // If no image was found, try the parent post, if any
     if ( !$img || !$img['imgID'] ) {        
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
-        $parent_id = wp_get_post_parent_id( $post_id );
+        //$parent_id = wp_get_post_parent_id( $post_id );
+        $parent_id = get_post_meta( $post_id, '_recurrence_id', true );
 		if ( !empty($parent_id) ) {
+		    $ts_info .= "parent_id: " . $parent_id . "<br />";
 			$img = getPostImage( $parent_id, $format, $sources );
 			$ts_info .= $img['info'];
 		}
