@@ -562,53 +562,19 @@ function sdg_post_thumbnail ( $args = array() ) {
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         //$parent_id = wp_get_post_parent_id( $post_id );
         
+        $parent_id = null;
+        
         $event = em_get_event($post_id, 'post_id');
 		if ($event && $event->event_id) {
 			$event_id = $event->event_id;
 		    $ts_info .= "event_id: [" . $event_id . "]<br />";
+		    $parent_id = $event->get_recurrence_set()->event_id;
+		    $ts_info .= "event parent_id: [" . $parent_id . "]<br />";
 		}
 		
 		$event_type = get_post_meta( $post_id, '_event_type', true );
 		$ts_info .= "event_type: [" . $event_type . "]<br />";
 		
-		// Check what type of event this is
-		if ($event->is_repeated()) {  // Note: is_repeated() not is_recurrence() for v7 repeating events
-			// For repeating events, check if there's a recurrence_set
-			if (isset($event->recurrence_set_id) && $event->recurrence_set_id) {
-				// Load the recurrence set to find the parent
-				// You may need to query wp_em_recurrences table
-				
-				// Or try accessing the post_id directly - it might reference parent due to magic getter
-				$parent_id = $event->post_id;
-				$ts_info .= "parent_id: [" . $parent_id . "]<br />";
-			}
-		} else {
-		    $parent_id = null;
-		}
-		/*
-        // Check if this is a recurrence/instance
-		if ($event->is_recurrence()) {
-			// Get the parent recurring event ID
-			$parent_event_id = $event->recurrence_id;
-			
-			// You can then get the parent event's post ID
-			$parent_event = new EM_Event($parent_event_id);
-			$parent_post_id = $parent_event->post_id;
-			$ts_info .= "parent_post_id: [" . $parent_post_id . "]<br />";
-		} else {
-		    $ts_info .= "event with post_id $post_id NOT is_recurrence<br />";
-		}*/
-		/*if ($event->is_recurrence()) {
-			// The post_id property should now automatically reference 
-			// the parent's post_id for post-less recurrences
-			$parent_post_id = $event->post_id;
-			
-			// Or if you need the recurrence_id specifically
-			$parent_event_id = $event->recurrence_id;
-		}*/
-
-        //$parent_id = get_post_meta( $post_id, '_recurrence_id', true );
-		//$ts_info .= "parent_id (recurrence_id): [" . $parent_id . "]<br />";
 		if ( $parent_id ) {
 			$img = getPostImage( $parent_id, $format, $sources );
 			$ts_info .= $img['info'];
