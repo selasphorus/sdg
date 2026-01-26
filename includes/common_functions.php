@@ -310,6 +310,7 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 
 function getPostImage ( $postID = null, $format = 'singular', $sources = ['featured_image', 'gallery'] ) {
     if ( !$postID ) { return null; }
+    $post_type = get_post_type( $post_id );
     
     $fcn_id = "[sdg-getPostImage] ";
     
@@ -490,7 +491,6 @@ function sdg_post_thumbnail ( $args = array() ) {
     $ts_info .= $fcn_id."sdg_post_thumbnail parsed/extracted args: <pre>".print_r($args, true)."</pre>";
 
     if ( $post_id == null ) { $post_id = get_the_ID(); }
-    $post_type = get_post_type( $post_id );
     //
     if ( $return_value == "html" ) {
         $img_html = "";
@@ -562,7 +562,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         //$parent_id = wp_get_post_parent_id( $post_id );
         $parent_id = get_post_meta( $post_id, '_recurrence_id', true );
-		$ts_info .= "parent_id (recurrence_id): " . $parent_id . "<br />";
+		$ts_info .= "parent_id (recurrence_id): [" . $parent_id . "]<br />";
 		if ( $parent_id ) {
 			$img = getPostImage( $parent_id, $format, $sources );
 			$ts_info .= $img['info'];
