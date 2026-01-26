@@ -2440,6 +2440,9 @@ function sdg_log( $log_msg, $do_log = true )
 
 /*********** POST BASICS ***********/
 
+// Method to customize the front-end display of post titles, per post type, context, etc.
+// Args for both styling and content (subtitles, etc.)
+// WIP! Move to WHx4(?)
 function sdg_post_title ( $args = array() )
 {
     // TS/logging setup
