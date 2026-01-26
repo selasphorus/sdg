@@ -310,7 +310,7 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 
 function getPostImage ( $postID = null, $format = 'singular', $sources = ['featured_image', 'gallery'] ) {
     if ( !$postID ) { return null; }
-    $post_type = get_post_type( $post_id );
+    $post_type = get_post_type( $postID );
     
     $fcn_id = "[sdg-getPostImage] ";
     
@@ -562,7 +562,10 @@ function sdg_post_thumbnail ( $args = array() ) {
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         //$parent_id = wp_get_post_parent_id( $post_id );
         
-        $event = new EM_Event($post_id);
+        $event = em_get_event($post_id, 'post_id');
+		/*if ($event && $event->event_id) {
+			$event_id = $event->event_id;
+		}*/
         // Check if this is a recurrence/instance
 		if ($event->is_recurrence()) {
 			// Get the parent recurring event ID
@@ -572,6 +575,8 @@ function sdg_post_thumbnail ( $args = array() ) {
 			$parent_event = new EM_Event($parent_event_id);
 			$parent_post_id = $parent_event->post_id;
 			$ts_info .= "parent_post_id: [" . $parent_post_id . "]<br />";
+		} else {
+		    $ts_info .= "event with post_id $post_id NOT is_recurrence<br />";
 		}
 		/*if ($event->is_recurrence()) {
 			// The post_id property should now automatically reference 
