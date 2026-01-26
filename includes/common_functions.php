@@ -358,7 +358,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
 
         } else {
 
-            $ts_info .= $fcn_id."post has NO featured image.<br />";
+            $ts_info .= $fcn_id."post has NO featured image (postID: $postID).<br />";
 
             // If there's no featured image, see if there are any other images that we can use instead
 
@@ -413,7 +413,7 @@ function getPostImage ( $postID = null, $format = 'singular', $sources = ['featu
                     $imgType = $fcn_id."attachment_image";
                     $ts_info .= $fcn_id."Random thumbnail ID: $imgID<br />";
                 } else {
-                    $ts_info .= $fcn_id."No image_gallery found.<br />";
+                    $ts_info .= $fcn_id."No image_gallery found for postID: $postID.<br />";
                 }
             }
 
@@ -554,7 +554,8 @@ function sdg_post_thumbnail ( $args = array() ) {
     $img_id = null;
     $img = getPostImage( $post_id, $format, $sources );
     // If no image was found, try the parent post, if any
-    if ( !$img ) {
+    if ( !$img || !$img['imgID'] ) {
+        $ts_info .= "No image found; try the parent post, if any.<br />";
         $parent_id = wp_get_post_parent_id( $post_id );
 		if ( !empty($parent_id) ) {
 			$img = getPostImage( $parent_id, $format, $sources );
