@@ -561,6 +561,27 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( !$img || !$img['imgID'] ) {        
         $ts_info .= "No image found for post_id [$post_id]; try the parent post, if any.<br />";
         //$parent_id = wp_get_post_parent_id( $post_id );
+        
+        $event = new EM_Event($post_id);
+        // Check if this is a recurrence/instance
+		if ($event->is_recurrence()) {
+			// Get the parent recurring event ID
+			$parent_event_id = $event->recurrence_id;
+			
+			// You can then get the parent event's post ID
+			$parent_event = new EM_Event($parent_event_id);
+			$parent_post_id = $parent_event->post_id;
+			$ts_info .= "parent_post_id: [" . $parent_post_id . "]<br />";
+		}
+		/*if ($event->is_recurrence()) {
+			// The post_id property should now automatically reference 
+			// the parent's post_id for post-less recurrences
+			$parent_post_id = $event->post_id;
+			
+			// Or if you need the recurrence_id specifically
+			$parent_event_id = $event->recurrence_id;
+		}*/
+
         $parent_id = get_post_meta( $post_id, '_recurrence_id', true );
 		$ts_info .= "parent_id (recurrence_id): [" . $parent_id . "]<br />";
 		if ( $parent_id ) {
