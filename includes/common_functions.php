@@ -563,7 +563,7 @@ function sdg_post_thumbnail ( $args = array() ) {
         //$parent_id = wp_get_post_parent_id( $post_id );
         $parent_id = get_post_meta( $post_id, '_recurrence_id', true );
 		$ts_info .= "parent_id (recurrence_id): " . $parent_id . "<br />";
-		if ( !empty($parent_id) ) {
+		if ( $parent_id ) {
 			$img = getPostImage( $parent_id, $format, $sources );
 			$ts_info .= $img['info'];
 		}
