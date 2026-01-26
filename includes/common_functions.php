@@ -308,6 +308,154 @@ function sort_post_ids_by_title ( $arr_ids = array() ) {
 
 /************** IMAGE FUNCTIONS ***************/
 
+function getPostImage ( $postID = null, $format = 'singular', $sources = ['featured_image', 'gallery'] ) {
+    if ( !$postID ) { return null; }
+    
+    $fcn_id = "[sdg-getPostImage] ";
+    
+    // Init
+    $arrInfo = array();
+    $imgID = null;
+    $img_type = "post_image"; // other option: attachment_image
+    $ts_info = "";
+    
+    if ( $sources == "all" ) {
+        $sources = array("featured", "gallery", "custom_thumb", "content");
+    }
+    
+    // Are we using the custom image, if any is set?
+    // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
+    if ( $format != "singular" && in_array("custom_thumb", $sources ) ) {
+        $ts_info .= $fcn_id."Check for custom_thumb<br />";
+        // First, check to see if the post has a Custom Thumbnail
+        $custom_thumb_id = get_post_meta( $postID, 'custom_thumb', true );
+        if ( $custom_thumb_id ) {
+            $ts_info .= $fcn_id."custom_thumb_id found: $custom_thumb_id<br />";
+            $imgID = $custom_thumb_id;
+        }
+    }
+
+    // WIP: order?
+    // If this is a sermon, are we using the author image
+    if ( $format != "singular" && $post_type == "sermon" && !is_singular('sermon') ) {
+        if ( get_field('author_image_for_archive') ) {
+            $imgID = get_author_img_id ( $postID );
+            $classes .= " author_img_for_archive";
+        } else {
+            $ts_info .= $fcn_id."author_image_for_archive set to false<br />";
+        }
+    }
+    
+    // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
+    if ( !$imgID ) {
+
+        // Check to see if the given post has a featured image
+        if ( has_post_thumbnail( $postID ) ) {
+
+            $imgID = get_post_thumbnail_id( $postID );
+            $ts_info .= $fcn_id."post has a featured image.<br />";
+
+        } else {
+
+            $ts_info .= $fcn_id."post has NO featured image.<br />";
+
+            // If there's no featured image, see if there are any other images that we can use instead
+
+            // Image Gallery?
+            if ( in_array("gallery", $sources ) ) {
+                // get image gallery images and select one at random
+                $image_gallery = get_post_meta( $postID, 'image_gallery', true );
+                if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
+                    $ts_info .= $fcn_id."Found an image_gallery array.<br />";
+                    $ts_info .= $fcn_id."image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
+                    $i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
+                    // WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
+                    /*
+                    // Get number of items in array...
+                    $img_count = count($image_gallery);
+                    // Get event date and weekday
+                    if ( get_post_type($post_id) == 'event' ) {
+                        // Is this an instance of a recurring event? look for recurrent event id...
+                        $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
+                        if ( $recurrence_id ) {
+
+                            $meta = get_post_meta( $post_id );
+                            $ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
+
+                            // Get event object?
+                            //$ts_info .= print_r($XXX,true);
+
+                            // Get recurring event info
+                            $revent = get_post ( $recurrence_id );
+                            $ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
+                            $recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
+                            $recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
+                            $recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
+                            //'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
+                            $ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
+
+                            // Get event date
+                            $event_date = get_post_meta( $post_id, '_event_start_date', true );
+                            $ts_info .= "event_date: $event_date; <br />";
+
+
+                            $date = explode('-', $event_date);
+                            $year = $date[0];
+                            $month = $date[1];
+                            $day = $date[2];
+                            $weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
+                            $yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
+                        }
+                    }
+                    */
+                    $imgID = $image_gallery[$i];
+                    $img_type = $fcn_id."attachment_image";
+                    $ts_info .= $fcn_id."Random thumbnail ID: $imgID<br />";
+                } else {
+                    $ts_info .= $fcn_id."No image_gallery found.<br />";
+                }
+            }
+
+            // Image(s) in post content?
+            if ( empty($imgID) && in_array("content", $sources ) && function_exists('get_first_image_from_post_content') ) {
+                $contentImg = get_first_image_from_post_content( $postID );
+                if ( $contentImg ) {
+                    $imgID = $contentImg['id'];
+                }
+            }
+
+            // Image attachment(s)?
+            if ( empty($imgID) ) {
+
+                // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
+                // Also, images uploaded to a post remain "attached" according to the Media Library even after they're deleted from the post.
+                $images = get_attached_media( 'image', $postID );
+                //$images = get_children( "post_parent=".$post_id."&post_type=attachment&post_mime_type=image&numberposts=1" );
+                if ($images) {
+                    //$img_id = $images[0];
+                    foreach ($images as $attachment_id => $attachment) {
+                        $imgID = $attachment_id;
+                    }
+                }
+
+            }
+
+            // If there's STILL no image, use a placeholder
+            // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
+            // TODO: designate placeholders *per category*?? via category/taxonomy ui?
+            if ( empty($imgID) ) {
+                //if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
+                $imgID = null;
+            }
+        }
+    }
+    
+    $arrInfo['imgID'] = $imgID;
+    $arrInfo['imgType'] = $imgType;
+    $arrInfo['imgClass'] = $imgClass;
+    return $arrInfo;
+}
+
 // Custom fcn for thumbnail/featured image display
 function sdg_post_thumbnail ( $args = array() ) {
 
@@ -341,18 +489,14 @@ function sdg_post_thumbnail ( $args = array() ) {
 
     if ( $post_id == null ) { $post_id = get_the_ID(); }
     $post_type = get_post_type( $post_id );
-    $img_id = null;
+    //
     if ( $return_value == "html" ) {
         $img_html = "";
         $caption_html = "";
     }
 
-    $img_type = "post_image"; // other option: attachment_image
-
     $image_gallery = array();
-    if ( $sources == "all" ) {
-        $sources = array("featured", "gallery", "custom_thumb", "content");
-    }
+    
 
     if ( $format == "singular" && !is_page('events') ) {
         $img_size = "full";
@@ -403,133 +547,27 @@ function sdg_post_thumbnail ( $args = array() ) {
     if ( is_singular('event') ) { $classes .= " event-image"; }
     if ( $img_size != "full" && ( is_archive() || is_post_type_archive() ) ) { $classes .= " float-left"; }
     //
-
-    // Are we using the custom image, if any is set?
-    // Do this only for archive and grid display, not for singular posts of any kind (? people ?)
-    if ( $format != "singular" && in_array("custom_thumb", $sources ) ) {
-        $ts_info .= $fcn_id."Check for custom_thumb<br />";
-        // First, check to see if the post has a Custom Thumbnail
-        $custom_thumb_id = get_post_meta( $post_id, 'custom_thumb', true );
-        if ( $custom_thumb_id ) {
-            $ts_info .= $fcn_id."custom_thumb_id found: $custom_thumb_id<br />";
-            $img_id = $custom_thumb_id;
-        }
+    
+    // Find an image for this post
+    $img_id = null;
+    $img = getPostImage( $post_id, $format, $sources );
+    if ( $img ) {
+        $img_id = $img['imgID'];
+    } else {
+        // If no image was found, try the parent post, if any
+        $parent_id = wp_get_post_parent_id( $post_id );
+		if ( !empty($parent_id) ) {
+			$img = getPostImage( $parent_id, $format, $sources );
+			$img_id = $img['imgID'];
+		}
     }
-
-    // WIP: order?
-    // If this is a sermon, are we using the author image
-    if ( $format != "singular" && $post_type == "sermon" && !is_singular('sermon') ) {
-        if ( get_field('author_image_for_archive') ) {
-            $img_id = get_author_img_id ( $post_id );
-            $classes .= " author_img_for_archive";
-        } else {
-            $ts_info .= $fcn_id."author_image_for_archive set to false<br />";
-        }
+    //
+    if ( $img ) {
+        $img_type = $img['imgType'];
+        $classes .= $img['imgClass'];
     }
+    ////// WIP
 
-    // If we're not using the custom thumb, or if none was found, then proceed to look for other image options for the post
-    if ( !$img_id ) {
-
-        // Check to see if the given post has a featured image
-        if ( has_post_thumbnail( $post_id ) ) {
-
-            $img_id = get_post_thumbnail_id( $post_id );
-            $ts_info .= $fcn_id."post has a featured image.<br />";
-
-        } else {
-
-            $ts_info .= $fcn_id."post has NO featured image.<br />";
-
-            // If there's no featured image, see if there are any other images that we can use instead
-
-            // Image Gallery?
-            if ( in_array("gallery", $sources ) ) {
-                // get image gallery images and select one at random
-                $image_gallery = get_post_meta( $post_id, 'image_gallery', true );
-                if ( is_array($image_gallery) && count($image_gallery) > 0 ) {
-                    $ts_info .= $fcn_id."Found an image_gallery array.<br />";
-                    $ts_info .= $fcn_id."image_gallery: <pre>".print_r($image_gallery, true)."</pre>";
-                    $i = array_rand($image_gallery,1); // Get one random image ID -- tmp solution
-                    // WIP: figure out how to have a more controlled rotation -- based on event date? day? cookie?
-                    /*
-                    // Get number of items in array...
-                    $img_count = count($image_gallery);
-                    // Get event date and weekday
-                    if ( get_post_type($post_id) == 'event' ) {
-                        // Is this an instance of a recurring event? look for recurrent event id...
-                        $recurrence_id = get_post_meta( $post_id, '_recurrence_id', true );
-                        if ( $recurrence_id ) {
-
-                            $meta = get_post_meta( $post_id );
-                            $ts_info .= "meta: <pre>".print_r($meta, true)."</pre>";
-
-                            // Get event object?
-                            //$ts_info .= print_r($XXX,true);
-
-                            // Get recurring event info
-                            $revent = get_post ( $recurrence_id );
-                            $ts_info .= "revent: <pre>".print_r($revent, true)."</pre>";
-                            $recurrence_interval = get_post_meta( $recurrence_id, '_recurrence_interval', true ); //'recurrence_interval' => array( 'name'=>'interval', 'type'=>'%d', 'null'=>true ), //every x day(s)/week(s)/month(s)
-                            $recurrence_freq = get_post_meta( $recurrence_id, '_recurrence_freq', true ); //'recurrence_freq' => array( 'name'=>'freq', 'type'=>'%s', 'null'=>true ), //daily,weekly,monthly?
-                            $recurrence_byday = get_post_meta( $recurrence_id, '_recurrence_byday', true ); //'recurrence_byday' => array( 'name'=>'byday', 'type'=>'%s', 'null'=>true ), //if weekly or monthly, what days of the week?
-                            //'recurrence_days' => array( 'name'=>'days', 'type'=>'%d', 'null'=>true ), //each event spans x days
-                            $ts_info .= "recurrence_id: $recurrence_id; recurrence_interval: $recurrence_interval; recurrence_freq: $recurrence_freq; recurrence_byday: $recurrence_byday<br />";
-
-                            // Get event date
-                            $event_date = get_post_meta( $post_id, '_event_start_date', true );
-                            $ts_info .= "event_date: $event_date; <br />";
-
-
-                            $date = explode('-', $event_date);
-                            $year = $date[0];
-                            $month = $date[1];
-                            $day = $date[2];
-                            $weekday = date('w', strtotime($event_date)); // A numeric representation of the day (0 for Sunday, 6 for Saturday)
-                            $yearday = date('z', strtotime($event_date)); // z - The day of the year (from 0 through 365)
-                        }
-                    }
-                    */
-                    $img_id = $image_gallery[$i];
-                    $img_type = $fcn_id."attachment_image";
-                    $ts_info .= $fcn_id."Random thumbnail ID: $img_id<br />";
-                } else {
-                    $ts_info .= $fcn_id."No image_gallery found.<br />";
-                }
-            }
-
-            // Image(s) in post content?
-            if ( empty($img_id) && in_array("content", $sources ) && function_exists('get_first_image_from_post_content') ) {
-                $image_info = get_first_image_from_post_content( $post_id );
-                if ( $image_info ) {
-                    $img_id = $image_info['id'];
-                }
-            }
-
-            // Image attachment(s)?
-            if ( empty($img_id) ) {
-
-                // The following approach would be a good default except that images only seem to count as 'attached' if they were directly UPLOADED to the post
-                // Also, images uploaded to a post remain "attached" according to the Media Library even after they're deleted from the post.
-                $images = get_attached_media( 'image', $post_id );
-                //$images = get_children( "post_parent=".$post_id."&post_type=attachment&post_mime_type=image&numberposts=1" );
-                if ($images) {
-                    //$img_id = $images[0];
-                    foreach ($images as $attachment_id => $attachment) {
-                        $img_id = $attachment_id;
-                    }
-                }
-
-            }
-
-            // If there's STILL no image, use a placeholder
-            // TODO: make it possible to designate placeholder image(s) for archives via CMS and retrieve it using new version of get_placeholder_img fcn
-            // TODO: designate placeholders *per category*?? via category/taxonomy ui?
-            if ( empty($img_id) ) {
-                //if ( function_exists( 'is_dev_site' ) && is_dev_site() ) { $img_id = 121560; } else { $img_id = 121560; } // Fifth Avenue Entrance
-                $img_id = null;
-            }
-        }
-    }
 
     if ( $return_value == "html" && !empty($img_id ) ) {
 
