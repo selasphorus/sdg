@@ -716,9 +716,9 @@ function sdg_body_class( $classes ) {
 
 // Add post_type query var to edit_post_link so as to be able to selectively load plugins via plugins-corral MU plugin
 add_filter( 'get_edit_post_link', 'sdg_add_post_type_query_var', 10, 3 );
-function sdg_add_post_type_query_var( $url, $post_id, $context ) {
+function sdg_add_post_type_query_var( $url, $postID, $context ) {
 
-    $post_type = get_post_type( $post_id );
+    $post_type = get_post_type( $postID );
 
     // TODO: consider whether to add query_arg only for certain CPTS?
     if ( $post_type && !empty($post_type) ) { $url = add_query_arg( 'post_type', $post_type, $url ); }
@@ -738,22 +738,22 @@ function sdg_meta_tags() {
     if ( is_page() || is_single() || is_singular() ) {
 
         $og_type = "article";
-        $post_id = get_queried_object_id();
-        $og_url = get_the_permalink( $post_id );
+        $postID = get_queried_object_id();
+        $og_url = get_the_permalink( $postID );
 
         // Get title via post object to avoid filters
         $post = get_post();
         $og_title = $post->post_title;
-        //$og_title = get_the_title( $post_id );
+        //$og_title = get_the_title( $postID );
 
         // Clean up the title in case it's been formatted for italics etc.
 
         // Get the featured image URL, if there is one
         // TODO: get image from content if no featured image?
-        if ( get_the_post_thumbnail_url( $post_id ) ) { $og_image = get_the_post_thumbnail_url( $post_id ); }
+        if ( get_the_post_thumbnail_url( $postID ) ) { $og_image = get_the_post_thumbnail_url( $postID ); }
 
         // Get and clean up the excerpt for use in the description meta tag
-        $excerpt = get_the_excerpt( $post_id );
+        $excerpt = get_the_excerpt( $postID );
         if ( !empty($excerpt) ) {
             $excerpt = str_replace('&nbsp;Read more...','...',$excerpt); // Remove the "read more" tag from auto-excerpts
             $og_description = wp_strip_all_tags( $excerpt, true );
@@ -761,7 +761,7 @@ function sdg_meta_tags() {
 
         if ( empty($og_description) ) {
             if ( $og_title != "Saint Thomas Church" ) {
-                $post_type = ucfirst(get_post_type($post_id));
+                $post_type = ucfirst(get_post_type($postID));
                 $og_description = $og_title." (".$post_type.")";
             }
         }
@@ -892,7 +892,7 @@ function sdg_show_troubleshooting_info ( ) {
 
     if ( is_singular() ) {
         $info .= "is_singular()<br />";
-        $info .= "post_id: ".$post->ID."<br />";
+        $info .= "postID: ".$post->ID."<br />";
     }
     if ( is_archive() ) { $info .= "is_archive()<br />"; }
     if ( is_post_type_archive() ) { $info .= "is_post_type_archive()<br />"; }
@@ -1029,10 +1029,10 @@ function sdg_autocomplete_search() {
     // Run the search
     $posts = get_posts( $wp_args );
 
-    foreach ( $posts as $post_id ) {
+    foreach ( $posts as $postID ) {
         $suggestions[] = [
-            'id' => $post_id,
-            'label' => get_the_title($post_id),
+            'id' => $postID,
+            'label' => get_the_title($postID),
         ];
     }
 
@@ -1088,25 +1088,25 @@ function sdg_msg_bar( $args = array() ) {
 
     if ( $postID ) {
         $post_type = get_post_type( $postID );
-        $ts_info .= "<!-- post_id: $postID; post_type: $post_type -->";
+        $ts_info .= "<!-- postID: $postID; post_type: $post_type -->";
         $colorscheme = "";
 
         $info .= '<div id="msg_bar" class="msg_bar '.$post_type.$colorscheme.'">';
         $info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
 
-        /*if ( has_post_thumbnail($post_id) ) {
-            $img = get_the_post_thumbnail( $post_id, 'full' );
+        /*if ( has_post_thumbnail($postID) ) {
+            $img = get_the_post_thumbnail( $postID, 'full' );
             if ( !empty($img) ) {
                 $ts_info .= "<!-- img -->";
                 $info .= $img;
             }
         } else {
             $ts_info .= "<!-- content -->";
-            $post = get_post( $post_id );
+            $post = get_post( $postID );
             $the_content = apply_filters('the_content', $post->post_content);
             $info .= $the_content;
             //$info .= get_the_content();
-            //$info .= get_the_content($post_id);
+            //$info .= get_the_content($postID);
         }*/
         if ( $banner_type == "banner_content" ) {
             $msg = $banner_content;
@@ -1120,13 +1120,13 @@ function sdg_msg_bar( $args = array() ) {
             //$excerpt = $post->post_excerpt;
             if ( has_excerpt( $postID ) ) {
                 $msg = $post->post_excerpt; // custom excerpt
-                $msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>', $post_title );
+                $msg .= '&nbsp;'.make_link( get_permalink($postID), '<span class="readmore">Read More...</span>', $post_title );
             } else {
                 $msg = get_the_excerpt( $postID );
             }
             //$msg = $excerpt;
-            //$msg = get_the_excerpt( $post_id );
-            //$msg .= '&nbsp;'.make_link( get_permalink($post_id), '<span class="readmore">Read More...</span>' );
+            //$msg = get_the_excerpt( $postID );
+            //$msg .= '&nbsp;'.make_link( get_permalink($postID), '<span class="readmore">Read More...</span>' );
         }
 
         //$msg .= "<!-- ".date("l jS \of F Y h:i:s A e")." -->";
@@ -1231,8 +1231,8 @@ function get_default_category() {
         $default_cat = $category->name;
     } else if ( is_single() ) {
         $categories = get_the_category();
-        $post_id = get_the_ID();
-        $parent_id = wp_get_post_parent_id( $post_id );
+        $postID = get_the_ID();
+        $parent_id = wp_get_post_parent_id( $postID );
         //$parent = $post->post_parent;
     }
 
@@ -1455,7 +1455,7 @@ function sdg_get_terms_orderby( $orderby, $args ) {
 }
 
 // WIP -- add term to post programmatically
-function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonomy = "", $return_info = false ) {
+function sdg_add_post_term( $postID = null, $arr_term_slugs = array(), $taxonomy = "", $return_info = false ) {
 
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "updates") );
@@ -1467,11 +1467,11 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
     $ts_info = "";
     $result = "";
 
-    // If post_id is empty, abort
-    if ( empty($post_id) ) { return false; } // wip -- should this be null? or info msg?
+    // If postID is empty, abort
+    if ( empty($postID) ) { return false; } // wip -- should this be null? or info msg?
 
     // Get the post_type
-    $post_type = get_post_type( $post_id );
+    $post_type = get_post_type( $postID );
 
     // Get the available taxonomies for the given post_type
     $taxonomies = get_object_taxonomies( $post_type );
@@ -1485,9 +1485,9 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
         foreach ( $taxonomies as $taxonomy ) {
             $arr_term = term_exists( $term_slug, $taxonomy );
             if ( $arr_term ) {
-                if ( has_term( $term_slug, $taxonomy, $post_id ) ) {
-                    $ts_info .= "[sdg_add_post_term] post $post_id already has $taxonomy: '$term_slug'. No changes made.<br />";
-                    //$ts_info .= "<!-- [sdg_add_post_term] post $post_id already has $taxonomy: $term_slug. No changes made. -->";
+                if ( has_term( $term_slug, $taxonomy, $postID ) ) {
+                    $ts_info .= "[sdg_add_post_term] post $postID already has $taxonomy: '$term_slug'. No changes made.<br />";
+                    //$ts_info .= "<!-- [sdg_add_post_term] post $postID already has $taxonomy: $term_slug. No changes made. -->";
                     //return '<div class="troubleshooting">'.$ts_info.'</div>';
                     return $ts_info;
                 }
@@ -1496,12 +1496,12 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
                 if ( $return_info ) {
                     $ts_info .= "[sdg_add_post_term] ";
                     //$ts_info .= "<!-- [sdg_add_post_term] ";
-                    $ts_info .= "post_id: ".$post_id."; ";
+                    $ts_info .= "postID: ".$postID."; ";
                     $ts_info .= "taxonomy: ".$taxonomy."; ";
                     $ts_info .= "term_slug: ".$term_slug."; ";
                     $ts_info .= "term_id: ".$term_id;
                 }
-                $result = wp_set_post_terms( $post_id, $term_id, $taxonomy, true );
+                $result = wp_set_post_terms( $postID, $term_id, $taxonomy, true );
                 if ( $result ) {
                     $ts_info .= " >> success!";
                 } else {
@@ -1527,7 +1527,7 @@ function sdg_add_post_term( $post_id = null, $arr_term_slugs = array(), $taxonom
 
 }
 
-function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
+function sdg_remove_post_term( $postID = null, $term_slug = null, $taxonomy = "", $return_info = false ) {
 
     // TS/logging setup
     $do_ts = devmode_active( array("sdg", "updates") );
@@ -1539,12 +1539,12 @@ function sdg_remove_post_term( $post_id = null, $term_slug = null, $taxonomy = "
     $ts_info = "";
     $result = "";
 
-    // If post_id is empty, abort
-    if ( empty($post_id) ) { return false; } // wip -- should this be null? or info msg?
+    // If postID is empty, abort
+    if ( empty($postID) ) { return false; } // wip -- should this be null? or info msg?
 
     // TODO -- Cleanup: remove t4m-updated from all events -- it doesn't apply because events don't have a title_for_matching field -- they have title_uid instead
 
-    $result = wp_remove_object_terms( $post_id, $term_slug, $taxonomy ); // wp_remove_object_terms( int $object_id, string|int|array $terms, array|string $taxonomy )
+    $result = wp_remove_object_terms( $postID, $term_slug, $taxonomy ); // wp_remove_object_terms( int $object_id, string|int|array $terms, array|string $taxonomy )
 
     if ( $return_info == true ) {
         $info .= "<!-- wp_remove_object_terms -- ";
@@ -1686,8 +1686,8 @@ function sdg_postobj_info_meta_box_callback( $post ) {
     $post_type = get_post_type( $post );
     $obj = get_post_type_object( $post_type );
 
-    //$post_id = $post->ID;
-    //echo "post_id: $post_id<br />";
+    //$postID = $post->ID;
+    //echo "postID: $postID<br />";
 
     $info = '<pre>'.print_r( $obj, true ).'</pre>';
     echo $info;
@@ -1845,25 +1845,25 @@ function sdg_pre_get_posts( $query ) {
 
 // Category/Taxonomy Description as Widget
 add_shortcode('post_category_widget', 'sdg_get_category_widget');
-function sdg_get_category_widget ( $post_id = null ) { // or $term_id?
+function sdg_get_category_widget ( $postID = null ) { // or $term_id?
     //#_CATEGORYNOTES -- Events Manager
 }
 
 // Post Resources (ACF field)
 add_shortcode('post_sidebar_widget', 'get_post_sidebar_widget');
-function get_post_sidebar_widget ( $post_id = null ) {
+function get_post_sidebar_widget ( $postID = null ) {
 
-    if ($post_id == null) { $post_id = get_the_ID(); }
+    if ($postID == null) { $postID = get_the_ID(); }
     $info = "";
-    $info = "<!-- Post Sidebar Widget Content for post_id: $post_id -->";
+    $info = "<!-- Post Sidebar Widget Content for postID: $postID -->";
 
-    $widget_title = get_post_meta( $post_id, 'post_sidebar_widget_title', true );
+    $widget_title = get_post_meta( $postID, 'post_sidebar_widget_title', true );
     if ( empty($widget_title) ) { $widget_title = "More Resources"; }
 
-    $widget_content = get_post_meta( $post_id, 'post_sidebar_widget_content', true );
+    $widget_content = get_post_meta( $postID, 'post_sidebar_widget_content', true );
     $widget_content = wpautop($widget_content);
 
-    //$info .= "<!-- ACF post_sidebar_widget_content for post_id $post_id: ".print_r($sidebar_content,true)."-->";
+    //$info .= "<!-- ACF post_sidebar_widget_content for postID $postID: ".print_r($sidebar_content,true)."-->";
 
     if ( !empty($widget_content) ) {
         //$info .= $widget_content;
@@ -1884,23 +1884,23 @@ function get_post_sidebar_widget ( $post_id = null ) {
 
 // Post Resources (ACF field)
 add_shortcode('display_post_resources', 'get_post_resources');
-function get_post_resources ( $post_id = null ) {
+function get_post_resources ( $postID = null ) {
 
-    if ($post_id == null) { $post_id = get_the_ID(); }
-    $info = "<!-- Resources for post_id: $post_id -->";
+    if ($postID == null) { $postID = get_the_ID(); }
+    $info = "<!-- Resources for postID: $postID -->";
 
-    $post = get_post( $post_id );
+    $post = get_post( $postID );
     $post_type = $post->post_type;
 
-    $resources = get_post_meta( $post_id, 'post_resources', true );
-    $info .= "<!-- ACF resources for post_id $post_id: ".print_r($resources,true)."-->";
+    $resources = get_post_meta( $postID, 'post_resources', true );
+    $info .= "<!-- ACF resources for postID $postID: ".print_r($resources,true)."-->";
 
     if ( !empty($resources) ) {
 
         $info .= "<hr />";
-        $resources_header = get_post_meta( $post_id, 'resources_header', true );
+        $resources_header = get_post_meta( $postID, 'resources_header', true );
         if ( empty($resources_header) ) { $resources_header = "Resources"; }
-        $link_class = get_post_meta( $post_id, 'resource_link_styling', true );
+        $link_class = get_post_meta( $postID, 'resource_link_styling', true );
 
         $info .= '<h2 id="resources">'.$resources_header.'</h2>';
 
@@ -1996,6 +1996,8 @@ function match_placeholder( $args = array() ) {
     // Parse & Extract args
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
+    
+    $postID = $post_id;
 
     $i = $index; // tmp -- TODO: solve this better
 
@@ -2003,9 +2005,9 @@ function match_placeholder( $args = array() ) {
 
     // TODO: deal specially w/ junk placeholders like 'x'? Or just delete these directly via sql queries?
 
-    // Abort if no post_id. TODO: determine additional conditions for which to abort? e.g....?
-    if ( empty($post_id) ) {
-        $info .= "[match_placeholder] post_id is empty -> match process aborted<br />";
+    // Abort if no postID. TODO: determine additional conditions for which to abort? e.g....?
+    if ( empty($postID) ) {
+        $info .= "[match_placeholder] postID is empty -> match process aborted<br />";
         $arr_info['matches'] = $matches; // empty array
         $arr_info['info'] = $info;
         return $arr_info;
@@ -2020,20 +2022,20 @@ function match_placeholder( $args = array() ) {
     }
     $info .= "[match_placeholder] ".$arr_match_results['info']; // ."<br />"
 
-    if ( isset($arr_match_results['post_id']) || isset($arr_match_results['term_id']) ) {
+    if ( isset($arr_match_results['postID']) || isset($arr_match_results['term_id']) ) {
 
         // If a single match was found, update the repeater row accordingly
 
-        if ( isset($arr_match_results['post_id']) ) {
-            $match_id = $arr_match_results['post_id']; // A single matching POST was found
+        if ( isset($arr_match_results['postID']) ) {
+            $match_id = $arr_match_results['postID']; // A single matching POST was found
         } else if ( isset($arr_match_results['term_id']) ) {
             $match_id = $arr_match_results['term_id']; // A single matching TERM was found
         }
 
         $matches[] = $match_id; // populate the field for return -- is this really needed? maybe not...
 
-        //$info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: post_id ['.$match_id.']<br />';
-        //$info .= "<!-- match found for placeholder!: post_id [".$match_id."] -->";
+        //$info .= '[match_placeholder] <span class="nb">match found</span> for placeholder!: postID ['.$match_id.']<br />';
+        //$info .= "<!-- match found for placeholder!: postID [".$match_id."] -->";
 
         // TODO: ??? remove program-placeholders or program-personnel-placeholders or program-item-placeholders admin_tag, if applicable -- dev: 2176; live: 2547
 
@@ -2042,13 +2044,13 @@ function match_placeholder( $args = array() ) {
             // Update "field_name" within the $i-th row of "repeater_name"
             $sub_field_value = $match_id;
             // TODO: determine whether it's necessary to format value differently if updating a relationship field which accepts multiple values... format as array(?)
-            $info .= "[match_placeholder] update_sub_field ((row $i/$repeater_name/$field_name)) for post_id: $post_id with val: $sub_field_value >> ";
+            $info .= "[match_placeholder] update_sub_field ((row $i/$repeater_name/$field_name)) for postID: $postID with val: $sub_field_value >> ";
             //$info .= '[match_placeholder] <span class="nb">['.$i.'] update_sub_field ['.$repeater_name.'/'.$field_name.']: ';
             $info .= '<span class="nb">';
-            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $post_id ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
+            if ( update_sub_field( array($repeater_name, $i, $field_name), $sub_field_value, $postID ) ) { $info .= "SUCCESS!"; } else { $info .= "FAILED!"; }
             $info .= '</span><br />';
 
-            $info .= sdg_add_post_term( $post_id, 'placeholder-matched', 'admin_tag', true );
+            $info .= sdg_add_post_term( $postID, 'placeholder-matched', 'admin_tag', true );
 
         }
 
@@ -2062,14 +2064,14 @@ function match_placeholder( $args = array() ) {
         }
         $info .= count($matches)." match(es) found for placeholder!: <pre>".print_r($matches, true)."</pre><br />";
         // .... more than one item... what to do in terms of repeater row updates?
-        $info .= sdg_add_post_term( $post_id, 'multiple-placeholder-matches', 'admin_tag', true );
+        $info .= sdg_add_post_term( $postID, 'multiple-placeholder-matches', 'admin_tag', true );
 
     } else {
 
         // No match found
         // TODO: fine tune this to add program-personnel-placeholders or program-item-placeholders tag?
         //$info .= "No matches found.<br />";
-        $info .= sdg_add_post_term( $post_id, 'program-placeholders', 'admin_tag', true );
+        $info .= sdg_add_post_term( $postID, 'program-placeholders', 'admin_tag', true );
     }
 
     $arr_info['matches'] = $matches;
@@ -2176,7 +2178,7 @@ function find_matching_post( $title_str = null, $label_str = null, $field_name =
         } else {
 
             if ( count($posts) == 1 ) {
-                $arr_info['post_id'] = $posts[0]->ID;
+                $arr_info['postID'] = $posts[0]->ID;
                 $info .= "matching post found [id: ".$posts[0]->ID."]";
             } else if ( count($posts) > 1 ) {
                 $arr_info['posts'] = $posts;
@@ -2326,8 +2328,8 @@ add_filter( 'document_title_parts', function( $title_parts_array ) {
     sdg_log( "filter: document_title_parts", $do_log );
 
     if ( get_post_type( get_the_ID() ) == 'event' ) {
-        $post_id = get_the_ID();
-        $title_parts_array['title'] = make_clean_title( $post_id );
+        $postID = get_the_ID();
+        $title_parts_array['title'] = make_clean_title( $postID );
     }
 
     return $title_parts_array;
@@ -2383,8 +2385,8 @@ function make_link( $url, $text, $title = null, $class = null, $target = null) {
 }
 
 // Check to see if a postmeta record already exists for the specified post_type, meta_key, and meta_value.
-// Option to exclude a specific post_id from the search -- e.g. in searching to see if any *other* post has the same title_for_matching.
-function meta_value_exists( $post_type, $post_id, $meta_key, $meta_value ) { //, $num_posts
+// Option to exclude a specific postID from the search -- e.g. in searching to see if any *other* post has the same title_for_matching.
+function meta_value_exists( $post_type, $postID, $meta_key, $meta_value ) { //, $num_posts
 
     if ( ! ($post_type && $meta_key && $meta_value) ){
         return null;
@@ -2398,9 +2400,9 @@ function meta_value_exists( $post_type, $post_id, $meta_key, $meta_value ) { //,
         'meta_value'  => $meta_value,
         'fields'      => 'ids'
     );
-    // if post_id has been provided, then exclude that ID from the search
-    if ($post_id ) {
-        $wp_args['exclude'] = array( $post_id );
+    // if postID has been provided, then exclude that ID from the search
+    if ($postID ) {
+        $wp_args['exclude'] = array( $postID );
     }
 
     $matching_posts = get_posts($wp_args);
@@ -2549,7 +2551,7 @@ function sdg_selectmenu ( $args = array() ) {
                 $dropdown_menu .= '<optgroup label="'.$display_value.'">';
                 $count_optgroups++;
             } else {
-                //echo "post_id: $obj->post_id; post_name: $obj->post_name; post_title: $obj->post_title<br />";
+                //echo "postID: $obj->post_id; post_name: $obj->post_name; post_title: $obj->post_title<br />";
                 if ($selected == $value) { $selection = ' selected="selected"'; } else { $selection = ''; }
                 $dropdown_menu .= '<option class="level-0" value="'.$value.'"'.$selection.'>'.$display_value;
                 //$dropdown_menu .=' ['.$obj->post_id.']';
