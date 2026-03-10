@@ -2685,13 +2685,6 @@ function sdg_register_field_groups() {
                     'value' => 'sermon_series',
                 ),
             ),
-            array(
-                array(
-                    'param' => 'post_type',
-                    'operator' => '==',
-                    'value' => 'post',
-                ),
-            ),
         ),
         'menu_order' => 0,
         'position' => 'acf_after_title',
