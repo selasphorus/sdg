@@ -1122,7 +1122,16 @@ function sdg_msg_bar( $args = array() ) {
                 $msg = $post->post_excerpt; // custom excerpt
                 $msg .= '&nbsp;'.make_link( get_permalink($postID), '<span class="readmore">Read More...</span>', $post_title );
             } else {
-                $msg = get_the_excerpt( $postID );
+                // No custom excerpt? 
+                // First check to see if the format is standard or "aside"
+                $format = get_post_format() ? : 'standard';
+                if ( $format == "aside" ) {
+                    // Get the complete content
+                    $msg = apply_filters( 'the_content', get_the_content() );
+                } else {
+                    // Get the default/auto-excerpt
+                    $msg = get_the_excerpt( $postID );
+                }
             }
             //$msg = $excerpt;
             //$msg = get_the_excerpt( $postID );
