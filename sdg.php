@@ -1124,7 +1124,7 @@ function sdg_msg_bar( $args = array() ) {
             } else {
                 // No custom excerpt? 
                 // First check to see if the format is standard or "aside"
-                $format = get_post_format($post) : 'standard';
+                $format = get_post_format($post) ? : 'standard';
                 $ts_info .= "<!-- format: $format -->";
                 if ( $format == "aside" ) {
                     //$ts_info .= "<!-- format: aside -->";
