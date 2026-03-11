@@ -1126,6 +1126,7 @@ function sdg_msg_bar( $args = array() ) {
                 // First check to see if the format is standard or "aside"
                 $format = get_post_format() ? : 'standard';
                 if ( $format == "aside" ) {
+                    $ts_info .= "<!-- format: aside -->";
                     // Get the complete content
                     $msg = apply_filters( 'the_content', get_the_content() );
                 } else {
