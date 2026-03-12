@@ -1196,9 +1196,9 @@ function getFeaturedPostId( $post_type = 'post', $num_posts = 1) {
     // Get the (most recent) matching post
     if ( count($posts) > 0 ) {
         // Check to see if the post has any content (if it's an empty site banner aside, for instance, we want to skip it)
-        foreach ( $posts AS $post ) {
-            if ( $post->post_content != "" ) {
-                return $post->ID;
+        foreach ( $posts AS $postID ) {
+            if ( get_the_content( null, false, $postID ) != "" ) {
+                return $postID;
             }
         }
     }
