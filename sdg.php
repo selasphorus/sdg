@@ -2386,6 +2386,7 @@ function sdg_include_slug_in_search( $search, $query )
 
 /*********** MISC METHODS ***********/
 
+// OBSOLETE >> confirm and remove
 function sdg_log( $log_msg, $do_log = true )
 {
     // Set do_ts to true for active troubleshooting; false for cleaner source & logs
