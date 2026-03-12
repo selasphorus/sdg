@@ -1122,9 +1122,9 @@ function sdg_msg_bar( $args = array() ) {
                 // No custom excerpt? 
                 // First check to see if the format is standard or "aside"
                 $format = get_post_format( $post ) ? : 'standard';
-                //$ts_info .= "<!-- format: $format -->";
+                $ts_info .= "<!-- format: $format -->";
                 if ( $format == "aside" ) {
-                    //$ts_info .= "<!-- get_the_content for postID: $postID -->";
+                    $ts_info .= "<!-- get_the_content for postID: $postID -->";
                     // Get the complete content
                     $content = $post->post_content;
                     // Apply filters to make shortcodes and links work
@@ -1149,7 +1149,7 @@ function sdg_msg_bar( $args = array() ) {
 			$info .= '</div>';
 			$info .= '</div><!-- /banner -->';
 		} else {
-		    //
+		    $info .= $ts_info;
 		}
     } else {
         //$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A e")."] -->";
