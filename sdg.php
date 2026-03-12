@@ -1132,6 +1132,7 @@ function sdg_msg_bar( $args = array() ) {
                     //$msg = apply_filters('the_content', $content);
                     //$msg = get_the_content( null, false, $postID );
                     $msg = $content;
+                    $ts_info .= "<!-- msg: $msg -->";
                 } else {
                     // Get the default/auto-excerpt
                     $msg = get_the_excerpt( $postID );
@@ -1151,6 +1152,7 @@ function sdg_msg_bar( $args = array() ) {
 			$info .= '</div>';
 			$info .= '</div><!-- /banner -->';
 		} else {
+		    $ts_info .= "<!-- No msg -->";
 		    $info .= $ts_info;
 		}
     } else {
