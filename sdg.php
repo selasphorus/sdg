@@ -1127,8 +1127,9 @@ function sdg_msg_bar( $args = array() ) {
                     $ts_info .= "<!-- get_the_content for postID: $postID -->";
                     // Get the complete content
                     $content = $post->post_content;
+                    $ts_info .= "<!-- content: $content -->";
                     // Apply filters to make shortcodes and links work
-                    $msg = apply_filters('the_content', $content);
+                    //$msg = apply_filters('the_content', $content);
                     //$msg = get_the_content( null, false, $postID );
                 } else {
                     // Get the default/auto-excerpt
