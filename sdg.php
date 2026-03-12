@@ -1087,6 +1087,7 @@ function sdg_msg_bar( $args = array() ) {
     }
 
     if ( $postID ) {
+        $msg = "";
         $post_type = get_post_type( $postID );
         $ts_info .= "<!-- postID: $postID; post_type: $post_type -->";
         $colorscheme = "";
