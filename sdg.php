@@ -1091,9 +1091,6 @@ function sdg_msg_bar( $args = array() ) {
         $ts_info .= "<!-- postID: $postID; post_type: $post_type -->";
         $colorscheme = "";
 
-        $info .= '<div id="msg_bar" class="msg_bar '.$post_type.$colorscheme.'">';
-        $info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
-
         /*if ( has_post_thumbnail($postID) ) {
             $img = get_the_post_thumbnail( $postID, 'full' );
             if ( !empty($img) ) {
@@ -1125,9 +1122,9 @@ function sdg_msg_bar( $args = array() ) {
                 // No custom excerpt? 
                 // First check to see if the format is standard or "aside"
                 $format = get_post_format( $post ) ? : 'standard';
-                $ts_info .= "<!-- format: $format -->";
+                //$ts_info .= "<!-- format: $format -->";
                 if ( $format == "aside" ) {
-                    $ts_info .= "<!-- get_the_content for postID: $postID -->";
+                    //$ts_info .= "<!-- get_the_content for postID: $postID -->";
                     // Get the complete content
                     $content = $post->post_content;
                     // Apply filters to make shortcodes and links work
@@ -1138,35 +1135,30 @@ function sdg_msg_bar( $args = array() ) {
                     $msg = get_the_excerpt( $postID );
                 }
             }
-            //$msg = $excerpt;
-            //$msg = get_the_excerpt( $postID );
-            //$msg .= '&nbsp;'.make_link( get_permalink($postID), '<span class="readmore">Read More...</span>' );
         }
-
         //$msg .= "<!-- ".date("l jS \of F Y h:i:s A e")." -->";
         //
-
-        $info .= '<div id="post-'.$postID.'" class="'.$post_type.' featured-post">';
-        $info .= "<p>";
-        $info .= $msg;
-        $info .= $ts_info;
-        $info .= "</p>";
-        $info .= '</div>';
-        $info .= '</div><!-- /banner -->';
-
+        if ( $msg ) {
+            $info .= '<div id="msg_bar" class="msg_bar '.$post_type.$colorscheme.'">';
+            $info .= '<span class="msg_bar_close" tabindex="0" role="button" aria-label="Close Announcement"></span>';
+			$info .= '<div id="post-'.$postID.'" class="'.$post_type.' featured-post">';
+			$info .= "<p>";
+			$info .= $msg;
+			$info .= $ts_info;
+			$info .= "</p>";
+			$info .= '</div>';
+			$info .= '</div><!-- /banner -->';
+		} else {
+		    //
+		}
     } else {
-
         //$msg .= "<!-- sdg_msg_bar: no active post [".date("l jS \of F Y h:i:s A e")."] -->";
         //$info .= $msg;
-
     }
-
     //$info .= "testing: ".$testing."; orderby: $orderby; order: $order; meta_key: $meta_key; ";
     //$info .= "year: $year<br />";
     //$info .= "[num posts: ".count($webcasts_posts)."]<br />";
-
     return $info;
-
 }
 
 // Get ID of current featured post, if any
