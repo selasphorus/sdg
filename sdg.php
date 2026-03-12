@@ -1195,9 +1195,14 @@ function getFeaturedPostId( $post_type = 'post', $num_posts = 1) {
     $posts = $query->posts;
     // Get the (most recent) matching post
     if ( count($posts) > 0 ) {
-       $postID = $posts[0];
+        // Check to see if the post has any content (if it's an empty site banner aside, for instance, we want to skip it)
+        foreach ( $posts AS $post ) {
+            if ( $post->post_content != "" ) {
+                return $post->ID;
+            }
+        }
     }
-    return $postID;
+    return false;
 }
 
 add_shortcode('top','anchor_link_top');
