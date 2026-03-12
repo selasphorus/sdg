@@ -1131,6 +1131,7 @@ function sdg_msg_bar( $args = array() ) {
                     // Apply filters to make shortcodes and links work
                     //$msg = apply_filters('the_content', $content);
                     //$msg = get_the_content( null, false, $postID );
+                    $msg = $content;
                 } else {
                     // Get the default/auto-excerpt
                     $msg = get_the_excerpt( $postID );
