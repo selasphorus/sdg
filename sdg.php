@@ -1091,7 +1091,6 @@ function sdg_msg_bar( $args = array() ) {
         $post_type = get_post_type( $postID );
         $ts_info .= "<!-- postID: $postID; post_type: $post_type -->";
         $colorscheme = "";
-
         /*if ( has_post_thumbnail($postID) ) {
             $img = get_the_post_thumbnail( $postID, 'full' );
             if ( !empty($img) ) {
