@@ -1127,10 +1127,9 @@ function sdg_msg_bar( $args = array() ) {
                 $format = get_post_format( $post ) ? : 'standard';
                 $ts_info .= "<!-- format: $format -->";
                 if ( $format == "aside" ) {
-                    //$ts_info .= "<!-- format: aside -->";
+                    $ts_info .= "<!-- get_the_content for postID: $postID -->";
                     // Get the complete content
-                    //$msg = apply_filters( 'the_content', get_the_content() );
-                    $msg = get_the_content( $postID );
+                    $msg = get_the_content( null, false, $postID );
                 } else {
                     // Get the default/auto-excerpt
                     $msg = get_the_excerpt( $postID );
