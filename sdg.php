@@ -3,15 +3,17 @@
  * @package SDG
  */
 
-/*
-Plugin Name: SDG-OG
-Plugin URI:
-Description: Custom post types, taxonomies and functions for music and more
-Version: 1.032626.1
-Author: atc
-Author URI:
-License:
-Text Domain: sdg
+/**
+ * Plugin Name: SDG-OG
+ * Plugin URI:
+ * Description: Custom post types, taxonomies and functions for music and more
+ * Dependencies:	  Requires STC for various utility functions
+ * Requires Plugins:  stc
+ * Version: 1.032626.1
+ * Author: atc
+ * Author URI:
+ * License:
+ * Text Domain: sdg
 */
 
 // NB: this is a transitional version of the plugins, with all methods removed that don't pertain to the lectionary or worship
