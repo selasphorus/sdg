@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  stc
- * Version: 1.032626.1
+ * Version: 1.032726.1
  * Author: atc
  * Author URI:
  * License:
@@ -260,7 +260,6 @@ function sdg_modules_field_cb( $args )
         'press' => __( 'Press' ),
         //'recordings' => __( 'Recordings' ),
         'links' => __( 'Links' ),
-        'snippets' => __( 'Snippets' ),
         'newsletters' => __( 'Newsletters' ),
         //'sources' => __( 'Sources' ),
         //
@@ -364,7 +363,7 @@ foreach ( $includes as $inc ) {
 
 foreach ( $modules as $module ) {
     $filepath = $plugin_path . 'modules/'.$module.'.php';
-    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'press', 'projects', 'sources' ); // , 'groups', 'newsletters', 'snippets', 'logbook', 'venues', 'organs'
+    $arr_exclusions = array ( 'admin_notes', 'data_tables', 'links', 'organizations', 'ensembles', 'press', 'projects', 'sources' ); // 'newsletters', 'logbook', 'venues', 'organs'
     if ( !in_array( $module, $arr_exclusions) ) { // skip modules w/ no files
         if ( file_exists($filepath) ) { include_once( $filepath ); } //else { echo "module file $filepath not found"; }
     }
