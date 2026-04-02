@@ -226,14 +226,9 @@ function renderLitDatesShortcode( $atts = [] ): string
 add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
 {
-    $output = '';
-
-    // TS/logging setup
-    $ts_info = "";
-    $do_ts = devmode_active( array("sdg", "lectionary") );
-    $do_ts = true; // tft
-
-    $output .= "\n<!-- getDayTitle -->\n";
+    $logCtx = ['sdg', 'lectionary'];
+    
+    $output = "\n<!-- getDayTitle -->\n";
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
 
@@ -901,12 +896,7 @@ function getDisplayDates ( $postID = null, $year = null )
 // Collects -- get collect to match litdate (or calendar date? wip)
 function get_collect_text( $postID = null, $dateStr = null )
 {
-
-    // TS/logging setup
-    $do_ts = devmode_active( array("sdg", "lectionary") );
-    $do_log = false;
-    sdg_log( "divline2", $do_log );
-    sdg_log( "function called: get_collect_text", $do_log );
+    $logCtx = ['sdg', 'lectionary'];
 
     // Init
     $collect = null;
@@ -2267,13 +2257,9 @@ function liturgical_date_meta_box_callback( $post ) {
 
 
 /*********** CPT: READING ***********/
-function get_cpt_reading_content( $postID = null ) {
-
-    // TS/logging setup
-    $do_ts = devmode_active( array("sdg", "lectionary") );
-    $do_log = false;
-    //$fcn_id = "[sdg-pt] ";
-    sdg_log( "divline2", $do_log );
+function get_cpt_reading_content( $postID = null )
+{
+    $logCtx = ['sdg', 'lectionary'];
 
     // Init vars
     $info = "";
