@@ -308,7 +308,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // TS Info
     $output .= "\n<!-- /getDayTitle -->\n";
-    if ( $ts_info != "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $output;
 }
