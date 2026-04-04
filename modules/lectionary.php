@@ -256,7 +256,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( $hideDayTitles == 0 ) { $hideDayTitles = get_post_meta( $postID, 'hide_day_titles', true ); }
     /*if ( $hideDayTitles == 1 ) {
         $ts_info .= "hide_day_titles is set to true for this post/event<br />";
-        if ( $ts_info != "" && ( $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }*/
 
@@ -278,7 +278,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If the date is still null, give up and go
     if ( $date == null ) {
         $ts_info .= "no date available for which to find day_title<br />";
-        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
         return $output;
     }
 
@@ -286,7 +286,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( !$hideDayTitles ) { // == 0
         $args[ 'date' ] = $date;
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
-        $args[ 'debug' ] = $do_ts; // tft
+        $args[ 'debug' ] = $logCtx; // tft
         //
         $ts_info .= "About to getLitDateData for date: $date<br />";
         $output .= getLitDateData( $args );
@@ -308,10 +308,9 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // TS Info
     $output .= "\n<!-- /getDayTitle -->\n";
-    if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" ) ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $output;
-
 }
 
 // WIP
@@ -631,7 +630,7 @@ function getLitDateData( array $args = [] ): array|string
             $output .= $data;
         }
         //if ( $debug ) { $output .= $info; }
-        if ( $ts_info != "" && ( $debug == true || $do_ts === true || $do_ts == "day_titles" ) ) {
+        if ( $ts_info != "" ) {
             $output .= '<div class="troubleshooting">'.$ts_info.'</div>';
         }
         return $output;
@@ -1036,12 +1035,9 @@ function get_collect_text( $postID = null, $dateStr = null )
         }
     }
 
-    // TS Info
-    //if ( $ts_info != "" && ( $do_ts === true || $do_ts == "sdg" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
-    if ( $do_ts ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
+    if ( $ts_info != "" ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 
     return $collect_text;
-
 }
 
 // Function(s) to calculate variable liturgical_dates
@@ -1049,7 +1045,6 @@ function get_collect_text( $postID = null, $dateStr = null )
 function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
 {
     //if ( empty($calcBasis) ) { return null; }
-
     $arr_info = array();
 
     $info = "";
@@ -2009,7 +2004,8 @@ function calcDateFromComponents ( $args = array() )
 
 
 add_shortcode('calculate_variable_dates', 'calc_litdates');
-function calc_litdates( $atts = array() ) {
+function calc_litdates( $atts = array() )
+{
 
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !sdg_queenbee() ) { return "You are not authorized to run this operation.<br />"; }
@@ -2241,7 +2237,8 @@ function calc_litdates( $atts = array() ) {
  *
  * @param WP_Post $post The object for the current post/page.
  */
-function liturgical_date_meta_box_callback( $post ) {
+function liturgical_date_meta_box_callback( $post )
+{
 
     // TODO: replace the following with a relative URL
     //echo '<h4><a href="/edit.php?post_type=XXX" target="_blank">Click to Edit XXX</a></h4>';
@@ -2331,22 +2328,20 @@ function get_cpt_reading_content( $postID = null )
 
     //$info .= "chapter: '".$chapter."'; verses: '".$verses."'"; // tft
 
-    if ( $ts_info != "" && ( $do_ts === true || $do_ts == "lectionary" ) ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+    if ( $ts_info != "" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $info;
-
 }
 
-
 /*********** CPT: PSALMS OF THE DAY ***********/
-function get_cpt_psalms_of_the_day_content() {
-
+function get_cpt_psalms_of_the_day_content()
+{
 }
 
 // att service: "morning_prayer" or "evening_prayer"
 add_shortcode('psalms_of_the_day', 'get_psalms_of_the_day');
-function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' ) {
-
+function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
+{
     // init vars
     $info = "";
     $day_num = null;
