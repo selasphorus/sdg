@@ -277,8 +277,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // If the date is still null, give up and go
     if ( $date == null ) {
-        $ts_info .= "no date available for which to find day_title<br />";
-        if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        Logger::debug( 'No date available for which to find day_title', null, ['sdg','events'] );
         return $output;
     }
 
@@ -288,10 +287,10 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
         $args[ 'debug' ] = $logCtx; // tft
         //
-        $ts_info .= "About to getLitDateData for date: $date<br />";
+        Logger::debug( 'About to getLitDateData for date: $date', null, ['sdg','events'] );
         $output .= getLitDateData( $args );
     } else {
-        $ts_info .= "hideDayTitles is set to true for this post/event<br />";
+        Logger::debug( 'hideDayTitles is set to true for this post/event', null, ['sdg','events'] );
     }
 
     // Show or Hide Special Notices?
@@ -306,9 +305,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
     //if ( function_exists('getSpecialDateContent') && !$hideSpecialNotices ) { $output .= getSpecialDateContent( $date ); }
 
-    // TS Info
     $output .= "\n<!-- /getDayTitle -->\n";
-    if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $output;
 }
