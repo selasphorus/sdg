@@ -277,7 +277,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // If the date is still null, give up and go
     if ( $date == null ) {
-        Logger::debug( 'No date available for which to find day_title', null, ['sdg','events'] );
+        //Logger::debug( 'No date available for which to find day_title', null, ['sdg','events'] );
         return $output;
     }
 
@@ -287,10 +287,10 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
         $args[ 'debug' ] = $logCtx; // tft
         //
-        Logger::debug( 'About to getLitDateData for date: $date', null, ['sdg','events'] );
+        //Logger::debug( 'About to getLitDateData for date: $date', null, ['sdg','events'] );
         $output .= getLitDateData( $args );
     } else {
-        Logger::debug( 'hideDayTitles is set to true for this post/event', null, ['sdg','events'] );
+        //Logger::debug( 'hideDayTitles is set to true for this post/event', null, ['sdg','events'] );
     }
 
     // Show or Hide Special Notices?
