@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  stc
- * Version: 1.040126.1
+ * Version: 1.260409.1
  * Author: atc
  * Author URI:
  * License:
