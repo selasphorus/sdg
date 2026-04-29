@@ -58,7 +58,8 @@ add_action( 'admin_init', 'sdg_settings_init' );
 /**
  * Custom option and settings
  */
-function sdg_settings_init() {
+function sdg_settings_init()
+{
     // Register a new setting for "sdg" page.
     register_setting( 'sdg', 'sdg_settings' );
 
@@ -154,17 +155,19 @@ function sdg_settings_init() {
  *
  * @param array $args  The settings array, defining title, id, callback.
  */
-function sdg_settings_section_callback( $args ) {
+function sdg_settings_section_callback( $args )
+{
     $options = get_option( 'sdg_settings' );
 }
 
-function sdg_modules_section_callback( $args ) {
+function sdg_modules_section_callback( $args )
+{
     echo '<p id="'.esc_attr( $args['id'] ).'">'.esc_html_e( 'Select modules to activate.', 'sdg' ).'</p>';
 }
 
 // Render a text field
-function sdg_text_field_cb( $args ) {
-
+function sdg_text_field_cb( $args )
+{
     $options = get_option( 'sdg_settings' );
 
     //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
@@ -189,8 +192,8 @@ function sdg_text_field_cb( $args ) {
  * @input type checkbox
  */
 // TODO: make this a radio button instead?
-function sdg_devsite_field_cb( $args ) {
-
+function sdg_devsite_field_cb( $args )
+{
     //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 
     $checked = '';
@@ -211,8 +214,8 @@ function sdg_devsite_field_cb( $args ) {
         echo $html;
 }
 
-function sdg_ts_field_cb( $args ) {
-
+function sdg_ts_field_cb( $args )
+{
     //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
 
     $checked = '';
@@ -295,7 +298,8 @@ function sdg_modules_field_cb( $args )
 add_action( 'admin_menu', 'sdg_settings_page' );
 
 // Add the top level menu page.
-function sdg_settings_page() {
+function sdg_settings_page()
+{
     add_menu_page(
         'SDG',
         'SDG Options',
@@ -308,8 +312,8 @@ function sdg_settings_page() {
 /**
  * Top level menu callback function
  */
-function sdg_settings_page_html() {
-
+function sdg_settings_page_html()
+{
     // check user capabilities
     if ( ! current_user_can( 'manage_options' ) ) {
         return;
@@ -329,7 +333,6 @@ function sdg_settings_page_html() {
 
     // Include the form to display the setting fields
     //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/sdg-admin-settings.php';
-
     ?>
     <div class="wrap">
         <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
@@ -370,10 +373,9 @@ foreach ( $modules as $module ) {
 }
 
 // Loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
-if ( function_exists('acf_add_options_page') ) {
-
+if ( function_exists('acf_add_options_page') )
+{
     foreach ( $modules as $module ) {
-
         $cpt_names = array(); // array because some modules include multiple post types
 
         // Deal w/ modules whose names don't perfectly match their CPT names
@@ -437,7 +439,6 @@ if ( function_exists('acf_add_options_page') ) {
         }*/
 
     }
-
 }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
@@ -446,8 +447,8 @@ if ( function_exists('acf_add_options_page') ) {
  * Enqueue scripts and styles
  */
 add_action( 'wp_enqueue_scripts', 'sdg_scripts_method' );
-function sdg_scripts_method() {
-
+function sdg_scripts_method()
+{
     global $current_user;
     $current_user = wp_get_current_user();
 
@@ -480,13 +481,12 @@ function sdg_scripts_method() {
 
 }
 
-
 /* *** SERMONS *** */
 
 // Sermon updates - add related_event info
 add_shortcode( 'run_sermon_updates_fcn', 'sermon_updates' );
-function sermon_updates ( $atts = array() ) {
-
+function sermon_updates ( $atts = array() )
+{
 	$info = "";
 
 	$args = shortcode_atts( array(
