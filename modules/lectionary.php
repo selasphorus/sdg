@@ -2004,9 +2004,9 @@ function calcDateFromComponents ( $args = array() )
 add_shortcode('calculate_variable_dates', 'calc_litdates');
 function calc_litdates( $atts = array() )
 {
-
     // Failsafe -- run this fcn ONLY if logged in as webdev
-    if ( !sdg_queenbee() ) { return "You are not authorized to run this operation.<br />"; }
+    if ( !function_exists( 'queenbee' ) 
+        || ( function_exists( 'queenbee' ) && !sdg_queenbee() ) ) { return "You are not authorized to run this operation.<br />"; }
 
     $info = "";
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";
