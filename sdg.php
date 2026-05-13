@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  stc
- * Version: 1.260429.1
+ * Version: 1.260513.1
  * Author: atc
  * Author URI:
  * License:
@@ -203,15 +203,15 @@ function sdg_devsite_field_cb( $args )
     $value   = ( !isset( $options[$args['name']] ) )
                 ? null : $options[$args['name']];
     if ($value) { $checked = ' checked="checked" '; }
-        // Could use ob_start.
-        $html  = '';
-        $html .= '<input id="' . esc_attr( $args['name'] ) . '"
-        name="sdg_settings' . esc_attr('['.$args['name'].']') .'"
-        type="checkbox" ' . $checked . '/>';
-        $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
-        //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
+	// Could use ob_start.
+	$html  = '';
+	$html .= '<input id="' . esc_attr( $args['name'] ) . '"
+	name="sdg_settings' . esc_attr('['.$args['name'].']') .'"
+	type="checkbox" ' . $checked . '/>';
+	$html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
+	//$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
 
-        echo $html;
+	echo $html;
 }
 
 function sdg_ts_field_cb( $args )
@@ -225,15 +225,16 @@ function sdg_ts_field_cb( $args )
     $value   = ( !isset( $options[$args['name']] ) )
                 ? null : $options[$args['name']];
     if ($value) { $checked = ' checked="checked" '; }
-        // Could use ob_start.
-        $html  = '';
-        $html .= '<input id="' . esc_attr( $args['name'] ) . '"
-        name="sdg_settings' . esc_attr('['.$args['name'].']') .'"
-        type="checkbox" ' . $checked . '/>';
-        $html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
-        //$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
+    
+	// Could use ob_start.
+	$html  = '';
+	$html .= '<input id="' . esc_attr( $args['name'] ) . '"
+	name="sdg_settings' . esc_attr('['.$args['name'].']') .'"
+	type="checkbox" ' . $checked . '/>';
+	$html .= '<span class="">' . esc_html( $args['description'] ) .'</span>';
+	//$html .= '<b class="wntip" data-title="'. esc_attr( $args['tip'] ) .'"> ? </b>';
 
-        echo $html;
+	echo $html;
 }
 
 // TODO: make this a radio button instead?
@@ -319,9 +320,7 @@ function sdg_settings_page_html()
         return;
     }
 
-    // add error/update messages
-
-    // check if the user have submitted the settings
+    // check if the user has submitted the settings
     // WordPress will add the "settings-updated" $_GET parameter to the url
     if ( isset( $_GET['settings-updated'] ) ) {
         // add settings saved message with the class of "updated"
@@ -373,23 +372,12 @@ foreach ( $modules as $module ) {
 }
 
 // Loop through active modules and add options page per CPT for adding featured image, page-top content, &c.
-if ( function_exists('acf_add_options_page') )
-{
+if ( function_exists('acf_add_options_page') ) {
     foreach ( $modules as $module ) {
         $cpt_names = array(); // array because some modules include multiple post types
 
         // Deal w/ modules whose names don't perfectly match their CPT names
-        /*if ( $module == "people" ) {
-            $primary_cpt = "person";
-            $cpt_names[] = "person";
-        } else if ( $module == "music" ) {
-            $primary_cpt = "repertoire";
-            $cpt_names[] = "repertoire";
-            //$cpt_names[] = "edition";
-            //$cpt_names[] = "publisher";
-            //$cpt_names[] = "publication";
-            //$cpt_names[] = "music_list";
-        } else */if ( $module == "lectionary" ) {
+        if ( $module == "lectionary" ) {
             $primary_cpt = "lectionary";
             //$cpt_names[] = "bible_book";
             //$cpt_names[] = "reading";
@@ -402,15 +390,7 @@ if ( function_exists('acf_add_options_page') )
             $primary_cpt = "sermon";
             $cpt_names[] = "sermon";
             $cpt_names[] = "sermon_series";
-        }/* else if ( $module == "events" ) {
-            $primary_cpt = "event";
-            $cpt_names[] = "event";
-            $cpt_names[] = "event_series";
-        } else if ( $module == "organs" ) {
-            $primary_cpt = "organ";
-            $cpt_names[] = "organ";
-            //$cpt_names[] = "builder"; // division, manual, stop
-        } */else {
+        } else {
             $cpt_name = $module;
             // Make it singular -- remove trailing "s"
             if ( substr($cpt_name, -1) == "s" && $cpt_name != "press" ) { $cpt_name = substr($cpt_name, 0, -1); }
@@ -425,19 +405,6 @@ if ( function_exists('acf_add_options_page') )
             'menu_slug'     => $module.'-module-options',
             'parent_slug'   => 'edit.php?post_type='.$primary_cpt,
         ));
-
-        // Add options pages per cpt?
-        /*foreach ( $cpt_names as $cpt ) {
-
-            acf_add_options_sub_page(array(
-                'page_title'     => ucfirst($cpt).' CPT Options',
-                'menu_title'    => ucfirst($cpt_name).' Options',//'menu_title'    => 'Archive Options', //ucfirst($cpt_name).
-                'menu_slug'     => $cpt.'-cpt-options',
-                'parent_slug'    => 'edit.php?post_type='.$cpt,
-            ));
-
-        }*/
-
     }
 }
 
@@ -478,7 +445,6 @@ function sdg_scripts_method()
     //wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-autocomplete']->ver . '/themes/smoothness/jquery-ui.css', false, null, false );
 
     // Font Awesome 5 (Free)
-
 }
 
 /* *** SERMONS *** */
@@ -512,7 +478,6 @@ function sermon_updates ( $atts = array() )
     );
 
     if ( $legacy == 'true' ) {
-
         // Legacy Events
         $wp_args['meta_query'] =
             array(
@@ -528,7 +493,6 @@ function sermon_updates ( $atts = array() )
             );
 
     } else {
-
         // NON-Legacy Events
         $wp_args['meta_query'] =
             array(
@@ -546,7 +510,6 @@ function sermon_updates ( $atts = array() )
                     'compare' => 'EXISTS',
                 )
             );
-
     }
 
 	$arr_posts = new WP_Query( $wp_args );
@@ -558,7 +521,6 @@ function sermon_updates ( $atts = array() )
     $info .= "[num sermon_posts: ".count($sermon_posts)."]<br /><br />";
 
     foreach ( $sermon_posts AS $sermon_post ) {
-
         setup_postdata( $sermon_post );
 
         $sermon_post_id = $sermon_post->ID;
@@ -568,7 +530,6 @@ function sermon_updates ( $atts = array() )
         $info .= '&nbsp;[id:'.$sermon_post_id.'] // ';
 
         if ( $legacy == 'true' ) {
-
             // Legacy Events
             // ADD related_event record by retrieving event post ID based on legacy_event_id
 
@@ -590,20 +551,15 @@ function sermon_updates ( $atts = array() )
 
                 }
             }
-
         } else {
-
             // NON-Legacy Events
             // ADD related_event record by retrieving event post ID based on sermon_date
 
             $sermon_date = get_field( 'sermon_date', $sermon_post_id );
 
             if ($sermon_date) {
-
                 $info .= "sermon_date: $sermon_date<br />";
-
                 if ( $sermon_date != "" ) {
-
                     // Get event(s) based on sermon_date -- in Worship Services events-category only
                     $wp_args2 = array(
                         'post_type'     => 'event',
@@ -634,14 +590,12 @@ function sermon_updates ( $atts = array() )
                     //$info .= "wp_args2: <pre>".print_r( $wp_args2, true )."</pre>"; // tft
                     //$info .= "Last SQL-Query: <pre>{$arr_posts2->request}</pre><br />"; // tft
                 }
-
             } else {
                 $info .= '<span class="warning">No sermon_date.</span><br />';
             }
         }
 
         if ( $event_posts ) {
-
             if ( count($event_posts) > 1 ) {
                $info .= '<span class="warning">Found >1 event_posts!: '.count($event_posts).' posts</span><br />';
             }/* else if ( count($event_posts) < 1 ) {
@@ -649,7 +603,6 @@ function sermon_updates ( $atts = array() )
             }*/
 
             foreach( $event_posts as $event_post ) {
-
                 setup_postdata( $event_post );
                 $event_id = $event_post->ID;
                 $event_title = get_the_title( $event_id );
@@ -665,20 +618,16 @@ function sermon_updates ( $atts = array() )
                     $info .= "test mode: add_post_meta is disabled.<br />";
                 }
             }
-
         } else {
-
             if ( $legacy == 'true' ) {
                 $info .= "No live events matching legacy_event_id $legacy_event_id.<br />";
             } else {
                 $info .= "No matching events for sermon_date '$sermon_date'.<br />";
             }
-
         }
 
         $info .= "<br />";
     }
 
     return $info;
-
 }
