@@ -10,6 +10,8 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+$logCtx = ['stc', 'lectionary'];
+
 // TODO: move the following to WHx4 -- some utility class
 add_action('acf/input/admin_enqueue_scripts', function() {
     wp_enqueue_script(
@@ -226,8 +228,7 @@ function renderLitDatesShortcode( $atts = [] ): string
 add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
 {
-    $logCtx = ['sdg', 'lectionary'];
-    
+    //$logCtx = ['sdg', 'lectionary'];    
     $output = "\n<!-- getDayTitle -->\n";
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
@@ -255,8 +256,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If there is no series-wide ban on displaying the titles, then should we display them for this particular post?
     if ( $hideDayTitles == 0 ) { $hideDayTitles = get_post_meta( $postID, 'hide_day_titles', true ); }
     /*if ( $hideDayTitles == 1 ) {
-        $ts_info .= "hide_day_titles is set to true for this post/event<br />";
-        if ( $ts_info != "" ) { $output .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
+        wxc_log("hide_day_titles is set to true for this post/event", null, $logCtx);
         return $output;
     }*/
 
@@ -277,7 +277,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // If the date is still null, give up and go
     if ( $date == null ) {
-        //Logger::debug( 'No date available for which to find day_title', null, ['sdg','events'] );
+        //wxg_log( 'No date available for which to find day_title', null, $logCtx );
         return $output;
     }
 
@@ -287,10 +287,10 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
         $args[ 'debug' ] = $logCtx; // tft
         //
-        //Logger::debug( 'About to getLitDateData for date: $date', null, ['sdg','events'] );
+        //wxc_log( 'About to getLitDateData for date: $date', null, $logCtx );
         $output .= getLitDateData( $args );
     } else {
-        //Logger::debug( 'hideDayTitles is set to true for this post/event', null, ['sdg','events'] );
+        //wxc_log( 'hideDayTitles is set to true for this post/event', null, $logCtx );
     }
 
     // Show or Hide Special Notices?
@@ -301,7 +301,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If there is no series-wide ban on displaying the notices, then should we display them for this particular post?
     if ( $hideSpecialNotices == 0 ) { $hideSpecialNotices = get_post_meta( $postID, 'hide_special_notices', true ); }
     if ( $hideSpecialNotices == 1 ) {
-        //Logger::debug( 'hideSpecialNotices is set to true for this post/event', null, ['sdg','events'] );
+        //wxc_log( 'hideSpecialNotices is set to true for this post/event', null, $logCtx );
     }
     // Append Event Special Notices content, as applicable
     if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
@@ -344,8 +344,6 @@ function getLitDateData( array $args = [] ): array|string
     $args = wp_parse_args( $args, $defaults );
     extract( $args );
 
-    //$info = '';
-    $ts_info = '';
     $litdatePostsByDate = [];
     $litdateData = [];
     $startDate = null;
@@ -356,7 +354,7 @@ function getLitDateData( array $args = [] ): array|string
 
     if ( $exclusive ) { $day_titles_only = true; }
     // $filter_types = ['primary','secondary'];
-    if ( $debug == "true" ) { $ts_info .= "getLitDateData args: <pre>".print_r($args,true)."</pre>"; }
+    if ( $debug == "true" ) { wxc_log("getLitDateData args", $args, $logCtx); }
     //if ( $admin ) { $info .= "exclusive: $exclusive; day_titles_only: $day_titles_only<br />"; }
 
     // Normalize date input
@@ -368,7 +366,7 @@ function getLitDateData( array $args = [] ): array|string
             $year  = substr( $dateStr, 0, 4 );
             $month = substr( $dateStr, 5, 2 );
         } else {
-            $ts_info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
+            wxc_log("dateStr is not a string but a " . gettype( $dateStr ) . "!", null, $logCtx);
         }
     } elseif ( $scope ) {
         $dates = normalizeDateInput( [ 'scope' => $scope ] );
@@ -379,7 +377,6 @@ function getLitDateData( array $args = [] ): array|string
         } else {
             $startDate = $dates[ 'startDate' ];
             $endDate = $dates[ 'endDate' ];
-            //$ts_info .= "dateStr <pre>" . print_r( $dateStr, true) . " is not a string but a " . gettype( $dateStr ) . "!<br />";
         }
     } else {
         if ( empty( $year ) ) { $year = date( 'Y' ); } // default to current year if none is set
@@ -404,11 +401,8 @@ function getLitDateData( array $args = [] ): array|string
         }
     }
 
-    //$ts_info .= "startDate: $startDate; endDate: $endDate<br />";
-
     $start = strtotime( $startDate );
     $end   = strtotime( $endDate );
-
     ///
 
     while ( $start <= $end ) {
@@ -440,13 +434,13 @@ function getLitDateData( array $args = [] ): array|string
             'meta_key'       => 'day_title',
             'posts_per_page' => -1,
         ];
-
-        //$ts_info .= "<strong>Fixed Date query_args</strong>: <pre>".print_r($fixedQueryArgs,true)."</pre>";
+        
+        wxc_log("Fixed Date query_args", $fixedQueryArgs, $logCtx);
 
         $qFixed = new WP_Query( $fixedQueryArgs );
         if ( $qFixed->have_posts() ) {
             $litdatePostsByDate[ $dateStr ] = $qFixed->posts;
-            //if ( count($qFixed->posts) != 1 ) { $ts_info .= "<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)<br />"; }
+            //if ( count($qFixed->posts) != 1 ) { wxc_log("<strong>$dateStr</strong>: found ".count($qFixed->posts)." matching fixed-date post(s)", null, $logCtx); }
         }
 
         // === Variable Date Matching ===
@@ -482,7 +476,7 @@ function getLitDateData( array $args = [] ): array|string
             'posts_per_page' => -1,
         ];
 
-        //$ts_info .= "<strong>Variable Date query_args</strong>: <pre>".print_r($variableQueryArgs,true)."</pre>";
+        //wxc_log("Variable Date query_args", $variableQueryArgs, $logCtx);
 
         $qVar = new WP_Query($variableQueryArgs);
         if ( $qVar->have_posts() ) {
@@ -491,7 +485,7 @@ function getLitDateData( array $args = [] ): array|string
             } else {
                 $litdatePostsByDate[ $dateStr ] = $qVar->posts;
             }
-            //if ( count($qVar->posts) != 1 ) { $ts_info .= "<strong>$dateStr</strong>: found ".count($qVar->posts)." matching variable-date post(s)<br />"; }
+            //if ( count($qVar->posts) != 1 ) { wxc_log("$dateStr: found ".count($qVar->posts)." matching variable-date post(s)", null, $logCtx); }
         }
 
         $start = strtotime( '+1 day', $start );
@@ -508,21 +502,21 @@ function getLitDateData( array $args = [] ): array|string
         $secondaryPost = null;
         $defaultPriority = 999;
         $year  = substr( $dateStr, 0, 4 );
-        $ts_info .= count( $posts ) . " post(s) found for dateStr : ".$dateStr."<br />"; //.": ".print_r($posts,true)
+        wxc_log( count($posts)." post(s) found for dateStr : ".$dateStr, null, $logCtx);
 
         foreach ( $posts as $post ) {
             $postID = $post->ID;
             $postPriority = $defaultPriority;
             $dateGroup = 'other';
-            $ts_info .= "postID: " . $postID . " (" . $post->post_title . ")<br />";
+            wxc_log("postID: ".$postID." (" . $post->post_title . ")", null, $logCtx);
 
             // Get the actual displayDates for the given litdate, to make sure the dateStr in question hasn't been overridden
             $displayDatesInfo = getDisplayDates( $postID, $year );
             $displayDates = $displayDatesInfo[ 'dates' ];
-            $ts_info .= $displayDatesInfo['info'];
-            $ts_info .= "displayDates for postID: $postID/year: $year <pre>".print_r($displayDates, true)."</pre>";
+            //wxc_log($displayDatesInfo['info'], null, $logCtx);
+            wxc_log("displayDates for postID: $postID/year: $year", $displayDates, $logCtx);
             if ( !in_array($dateStr, $displayDates) ) {
-                $ts_info .= "date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.<br />";
+                wxc_log("date_str: ".$dateStr." is not one of the display_dates for this litdate for year $year.", null, $logCtx);
                 // Therefore don't show it.
                 //$postID = null;
                 continue;
@@ -541,7 +535,7 @@ function getLitDateData( array $args = [] ): array|string
                     }
                 }
             }
-            $ts_info .= "postPriority: ".$postPriority."<br />";
+            //wxc_log("postPriority: ".$postPriority, null, $logCtx);
 
             // Check if litdate post has been designated as secondary
             $is_secondary = get_post_meta( $postID, 'secondary', true );
@@ -557,11 +551,7 @@ function getLitDateData( array $args = [] ): array|string
                 'post'     => $post,
                 'priority' => $postPriority,
             ];
-
-            //$ts_info .= 'postID: '.$postID."; priority: ".$postPriority."; date_type: ".$dateGroup."<br />";
         }
-
-        //$ts_info .= "unsorted array of posts and priorities: <pre>".print_r($unsorted,true)."</pre>"; // ok
 
         // Sort primaries by priority, lowest first
         $sorted = [];
@@ -571,8 +561,6 @@ function getLitDateData( array $args = [] ): array|string
                 return $a[ 'priority' ] <=> $b[ 'priority' ];
             } );
         }
-
-        //$info .= "sorted array of posts and priorities: <pre>".print_r($sorted,true)."</pre>"; // ok
 
         // wip...
         if ( $exclusive ) {
@@ -584,8 +572,7 @@ function getLitDateData( array $args = [] ): array|string
                 $primaryPost = $sorted[ 'other' ][0];
             }
             if ( $primaryPost ) {
-                //$info .= "primaryPost found for date: ".$dateStr.": ".print_r($primaryPost,true)."<br />";
-                $ts_info .= "primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID." (" . $primaryPost['post']->post_title . ")<br />";
+                //wxc_log("primaryPost found for date: ".$dateStr." with ID: ".$primaryPost['post']->ID." (" . $primaryPost['post']->post_title . ")", null, $logCtx);
                 $litdateData[ $dateStr ][ 'primary' ][] = $primaryPost;
             } else {
                 //$info .= "No primaryPost found!<br />";
@@ -596,14 +583,14 @@ function getLitDateData( array $args = [] ): array|string
                 $secondaryPost = $sorted[ 'secondary' ][0];
             }
             if ( $secondaryPost ) {
-                $ts_info .= "secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")<br />";
+                wxc_log("secondaryPost found with ID: ".$secondaryPost['post']->ID." (" . $secondaryPost['post']->post_title . ")", null, $logCtx);
                 $litdateData[ $dateStr ][ 'secondary' ][] = $secondaryPost;
             }
             */
             // Show ALL secondary litdate posts (usually only one, but sometimes multiple -- e.g. Ember Days/O Antiphons)
             if ( !empty( $sorted[ 'secondary' ] ) ) {
                 $secondaryPosts = $sorted[ 'secondary' ];
-                $ts_info .= "secondaryPosts found: ".print_r($secondaryPosts,true)."<br />";
+                wxc_log("secondaryPosts found", $secondaryPosts, $logCtx);
                 $litdateData[ $dateStr ][ 'secondary' ] = $secondaryPosts;
             }
             
@@ -617,7 +604,7 @@ function getLitDateData( array $args = [] ): array|string
     if ( $args['return'] === 'simple' || $args['return'] === 'formatted' ) {
         $output = "";
         if ( $args['return'] === 'simple' ) {
-            //$output .= "litdateData: <pre>".print_r($litdateData, true)."</pre>";
+            //wxc_log("litdateData", $litdateData, $logCtx);
             if ( $primaryPost ) { $output .= $primaryPost['post']->post_title; }
             if ( $primaryPost && $secondaryPost ) { $output .= "<br />"; }
             if ( $secondaryPost ) { $output .= $secondaryPost['post']->post_title; }
@@ -626,10 +613,6 @@ function getLitDateData( array $args = [] ): array|string
             //$output .= "debug: [$debug]<br />";
             $data = formatLitDateData( $litdateData, $args );
             $output .= $data;
-        }
-        //if ( $debug ) { $output .= $info; }
-        if ( $ts_info != "" ) {
-            $output .= '<div class="troubleshooting">'.$ts_info.'</div>';
         }
         return $output;
     }
@@ -640,21 +623,16 @@ function getLitDateData( array $args = [] ): array|string
         'startDate'  => $startDate,
         'endDate'    => $endDate,
         'litdateData'=> $litdateData,
-        'info'       => $ts_info,
     ];
 }
 
 function formatLitDateData( $litDateData = [], $args = [] )
 {
     $output = '';
-    $ts_info = '';
     $modal = '';
     $primaryShown = false; // track whether a primary date is being displayed, so as to properly format secondary date, if any
 
     if ( $args[ 'admin' ] ) { $admin = $args[ 'admin' ]; } else { $admin = false; }
-    if ( $args[ 'debug' ] ) { $debug = $args[ 'debug' ]; } else { $debug = false; }
-    //
-    //if ( $debug ) { $output .= "args: <pre>".print_r($args,true)."</pre>"; }
 
     foreach ( $litDateData as $dateStr => $typeGroups ) {
         $output .= "<div class='liturgical-date-block'>";
@@ -667,7 +645,7 @@ function formatLitDateData( $litDateData = [], $args = [] )
         $groupsToDisplay = [ 'primary', 'secondary', 'other' ];
 
         foreach ( $groupsToDisplay as $groupKey ) {
-            $ts_info .= "groupKey: $groupKey<br />";
+            //wxc_log("groupKey: $groupKey", null, $logCtx);
             if ( !empty( $args[ 'filter_types' ] ) && !in_array( $groupKey, $args[ 'filter_types' ], true ) ) {
                 continue;
             }
@@ -679,18 +657,18 @@ function formatLitDateData( $litDateData = [], $args = [] )
                 //}
 
                 foreach ( $typeGroups[ $groupKey ] as $groupItem ) {
-                    //$ts_info .= "groupItem: <pre>".print_r($groupItem,true)."</pre>";
+                    //wxc_log("groupItem", $groupItem, $logCtx);
 					$post = $groupItem[ 'post' ];
 					$postPriority = $groupItem[ 'priority' ];
 					$post = get_post( $post );
 					
 					// Make sure we've got the right type of post object
 					if ( !$post instanceof WP_Post ) {
-						if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
+						//if ( $debug ) { $output .= "So-called post ".print_r($post,true)." is not a WP_Post object. Moving on to the next...<br />"; }
 						continue;
 					}
 					if ( $post->post_type != "liturgical_date" ) {
-						if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
+						//if ( $debug ) { $output .= "So-called litdate post with ID: ".$post->ID." is not the right type. It is a post of type '".$post->post_type."'. Moving on to the next...<br />"; }
 						continue;
 					}
 					$postID = $post->ID;
@@ -700,7 +678,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
 					$title = get_the_title( $post );
 					$link = get_permalink( $post );
 					$class = $groupKey;
-					$ts_info .= "postID: $postID; title: $title<br />";
 
 					// TODO: option to return UN-linked version of title(s)?
 					if ( $admin ) { $output .= '<a href="' . esc_url( $link ) . '" class="' . esc_html( $class ) . '">' . esc_html( $title ) . '</a>&nbsp;'; }
@@ -731,7 +708,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
 
 					// Content and collect?
 					if ( $args[ 'show_content' ] && $groupKey == "primary" ) {
-						//$ts_info .= "about to look for content and collect<br />";
 
 						$litdate_content = get_the_content( null, false, $postID ); // get_the_content( string $more_link_text = null, bool $strip_teaser = false, WP_Post|object|int $post = null )
 						$collect_text = get_collect_text( $postID, $dateStr );
@@ -759,7 +735,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
 							$modal .= '</div>'; ///calendar-day-desc<br />
 
 						} else {
-							$ts_info .= "no collect_text found<br />";
 							// If no content or collect, just show the day title
 							$output .= '<span id="'.$postID.'" class="calendar-day">'.$title.'</span>';
 						}
@@ -769,7 +744,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
 						if ( count($typeGroups[$groupKey]) > 1 ) { $output .= "<br />"; }
 					} else {
 						$output .= '<br />';
-						//$ts_info .= "show_content: " . $args[ 'show_content' ] . "; groupKey: $groupKey; postPriority: $postPriority<br />";
 					}
                 }
                 if ( !$args[ 'exclusive' ] ) { $output .= "<br />"; }
@@ -778,9 +752,6 @@ function formatLitDateData( $litDateData = [], $args = [] )
         $output .= $modal;
         $output .= "</div><br />";
     }
-
-    if ( $args[ 'debug' ] && !empty( $ts_info ) ) { $output = '<div class="troubleshooting">'.$ts_info.'</div>' . $output; } // info first
-    //if ( $args['debug'] && !empty( $info ) ) { $output .= '<div class="debug-info">'.$info.'</div>'; } // output first
 
     return $output;
 }
@@ -899,13 +870,10 @@ function get_collect_text( $postID = null, $dateStr = null )
     $collect = null;
     $collect_text = "";
     $propers = false;
-    $ts_info = "";
 
-    $ts_info .= ">>> get_collect_text <<<<br />";
-    $ts_info .= "postID: ".$postID."<br />";
-    $ts_info .= "date_str: ".$dateStr."<br />";
+    wxc_log("postID: ".$postID."; date_str: ".$dateStr, null, $logCtx);
     $date = strtotime($dateStr);
-    $ts_info .= "litdate date Y-m-d: ".date('Y-m-d',$date)."<br />";
+    wxc_log("litdate date Y-m-d: ".date('Y-m-d',$date), null, $logCtx);
     // Get the month and year of the date_str for use in matching by date, as needed
     $month = date('F',$date);
     $year = date('Y',$date);
@@ -919,12 +887,12 @@ function get_collect_text( $postID = null, $dateStr = null )
             );
 
         $litdate_title = get_the_title( $postID );
-        $ts_info .= "litdate_title: ".$litdate_title."<br />";
+        wxc_log("litdate_title: ".$litdate_title, null, $logCtx);
 
         if ( strpos(strtolower($litdate_title), 'sunday after pentecost') !== false ) {
 
             $propers = true;
-            $ts_info .= "propers...<br />";
+            wxc_log("propers...", null, $logCtx);
 
             // For season after pentecost, match by date
 
@@ -943,7 +911,7 @@ function get_collect_text( $postID = null, $dateStr = null )
 
         } else {
 
-            $ts_info .= "NOT propers...<br />";
+            wxc_log("NOT propers...", null, $logCtx);
 
             // All other collects match by litdate
             $collect_args['meta_query'] = array(
@@ -960,36 +928,29 @@ function get_collect_text( $postID = null, $dateStr = null )
             );
 
         }
-
-        $ts_info .= "collect_args: <pre>".print_r($collect_args, true)."</pre>";
+        wxc_log("collect_args", $collect_args, $logCtx);
 
         $collects = new WP_Query( $collect_args );
         $collect_posts = $collects->posts;
 
         if ( count($collect_posts) == 1 ) {
-
-            $ts_info .= "single matching collect post found<br />";
             $collect = $collect_posts[0];
-
         } elseif ( count($collect_posts) > 1 ) {
-
-            $ts_info .= "multiple matching collect posts found<br />";
+            wxc_log("multiple matching collect posts found", null, $logCtx);
 
             foreach ( $collect_posts as $post ) {
-
                 if ( $propers ) {
-
                     $date_calc = get_post_meta( $post->ID, 'date_calc', true );
-                    $ts_info .= "date_calc: ".$date_calc."<br />";
+                    wxc_log("date_calc", $date_calc, $logCtx);
 
                     $date_calc = str_replace("Week of the Sunday closest to ","",$date_calc)." ".$year;
-                    $ts_info .= "date_calc mod: ".$date_calc."<br />";
+                    wxc_log("date_calc mod", $date_calc, $logCtx);
 
                     $ref_date = strtotime($date_calc);
-                    $ts_info .= "ref_date Y-m-d: ".date('Y-m-d',$ref_date)."<br />";
+                    wxc_log("ref_date Y-m-d", date('Y-m-d',$ref_date), $logCtx);
 
                     if ( $ref_date == $date ) {
-                        $ts_info .= "date matches ref_date<br />";
+                        wxc_log("date matches ref_date", null, $logCtx);
                         $collect = $post;
                         break;
                     }
@@ -1000,40 +961,30 @@ function get_collect_text( $postID = null, $dateStr = null )
 
                     // Which Sunday is closest to the ref_date?
                     $closest_sunday = min($prev_sunday,$next_sunday);
-                    $ts_info .= "closest_sunday Y-m-d: ".date('Y-m-d',$closest_sunday)."<br />";
-
+                    wxc_log("closest_sunday Y-m-d", date('Y-m-d',$closest_sunday), $logCtx);
                     // Does that closest Sunday date match our litdate date?
                     if ( $closest_sunday == $date ) {
-                        $ts_info .= "date matches closest_sunday<br />";
+                        wxc_log("date matches closest_sunday", null, $logCtx);
                         $collect = $post;
                         break;
                     }
-
                 } else {
-
-                    $ts_info .= "collect post ID: ".$post->ID."<br />";
-
+                    wxc_log("collect post ID: ".$post->ID, null, $logCtx);
                 }
-
             }
         } else {
-
             // No matching collects found
             // ...
-
         }
-
     }
 
     if ( $collect ) {
-        $ts_info .= "collect id: ".$collect->ID."<br />";
+        wxc_log("collect id: ".$collect->ID, null, $logCtx);
         $collect_text = $collect->post_content;
         if ( $propers ) {
             $collect_text .= "&nbsp;<em>(".$collect->post_title.")</em>";
         }
     }
-
-    if ( $ts_info != "" ) { $collect_text .= '<div class="troubleshooting">'.$ts_info.'</div>'; } // tft
 
     return $collect_text;
 }
@@ -2258,7 +2209,6 @@ function get_cpt_reading_content( $postID = null )
 
     // Init vars
     $info = "";
-    $ts_info = "";
     if ($postID === null) { $postID = get_the_ID(); }
 
     // Get the CPT object
@@ -2267,11 +2217,11 @@ function get_cpt_reading_content( $postID = null )
     // Link to text of Bible Verses -- WIP
     $bible_book_id = get_post_meta( $postID, 'book', true ); // TODO: use get_field instead? Will this work to retrieve ID? $bible_book = get_field( 'book', $postID );
     if ( is_array($bible_book_id) ) {
-        $ts_info .= "bible_book_id is array: ".print_r($bible_book_id, true)."<br />";
+        wxc_log("bible_book_id is array", $bible_book_id, $logCtx);
     } else {
-        $ts_info .= "bible_book_id: '".$bible_book_id."'<br />";
+        wxc_log("bible_book_id", $bible_book_id, $logCtx);
         $bible_corpus_id = get_post_meta( $bible_book_id, 'bible_corpus_id', true );
-        $ts_info .= "bible_corpus_id: '".$bible_corpus_id."'<br />";
+        wxc_log("bible_corpus_id", $bible_corpus_id, $logCtx);
     }
 
     $chapterverses = get_field( 'chapterverses', $postID );
@@ -2291,7 +2241,7 @@ function get_cpt_reading_content( $postID = null )
     // 49:29-50:14
     // If the string contains one or more hyphens, or more than one colon, then multiple chapters are involved
     if ( ( strpos($chapterverses,"-") && substr_count($chapterverses, ':') > 1 ) || strpos($chapterverses,"-") && substr_count($chapterverses, ':') == 0 ) {
-        $ts_info .= "The string '".$chapterverses."' contains information about more than one chapter.<br />";
+        wxc_log("The string '".$chapterverses."' contains information about more than one chapter.", null, $logCtx);
 
         $first = substr( $chapterverses, 0, strpos($chapterverses,"-") );
         if ( substr_count($chapterverses, '-') == 1 ) {
@@ -2299,8 +2249,7 @@ function get_cpt_reading_content( $postID = null )
         } else {
             $last = "not sure!";
         }
-        $ts_info .= "first: ".$first."; last: ".$last;
-        $ts_info .= "<br />";
+        wxc_log("first: ".$first."; last: ".$last, null, $logCtx);
         //
     }
     // Determine all individual chapterverses contained w/in range
@@ -2316,17 +2265,13 @@ function get_cpt_reading_content( $postID = null )
         $info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
         $info .= "<br />";
     }*/
-    $ts_info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
-    $ts_info .= "<br />";
+    wxc_log("The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).", null, $logCtx);
 
     //$pieces = explode("-", $chapterverses);
     //$chapter = substr( $chapterverses,0,strpos($chapterverses,":") );
     //$verses = substr( $chapterverses,strpos($chapterverses,":") );
     //$row_info .= "<!-- chapter: '$chapter'; verses: 'verses' -->"; // tft
-
     //$info .= "chapter: '".$chapter."'; verses: '".$verses."'"; // tft
-
-    if ( $ts_info != "" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $info;
 }
@@ -2415,5 +2360,4 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
     }
 
     return $info;
-
 }
