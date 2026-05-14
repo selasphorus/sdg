@@ -10,6 +10,7 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
+global $logCtx;
 $logCtx = ['stc', 'lectionary'];
 
 // TODO: move the following to WHx4 -- some utility class
@@ -227,8 +228,7 @@ function renderLitDatesShortcode( $atts = [] ): string
 // TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
 add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
-{
-    //$logCtx = ['sdg', 'lectionary'];    
+{ 
     $output = "\n<!-- getDayTitle -->\n";
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
@@ -864,8 +864,6 @@ function getDisplayDates ( $postID = null, $year = null )
 // Collects -- get collect to match litdate (or calendar date? wip)
 function get_collect_text( $postID = null, $dateStr = null )
 {
-    $logCtx = ['sdg', 'lectionary'];
-
     // Init
     $collect = null;
     $collect_text = "";
@@ -2205,8 +2203,6 @@ function liturgical_date_meta_box_callback( $post )
 /*********** CPT: READING ***********/
 function get_cpt_reading_content( $postID = null )
 {
-    $logCtx = ['sdg', 'lectionary'];
-
     // Init vars
     $info = "";
     if ($postID === null) { $postID = get_the_ID(); }
