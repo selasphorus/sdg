@@ -10,7 +10,6 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: LITURGICAL DATE ***********/
 
-global $logCtx;
 $logCtx = ['stc', 'lectionary'];
 
 // TODO: move the following to WHx4 -- some utility class
@@ -229,6 +228,8 @@ function renderLitDatesShortcode( $atts = [] ): string
 add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
 { 
+    global $logCtx;
+    
     $output = "\n<!-- getDayTitle -->\n";
     // TODO: Optimize this function! Queries run very slowly. Maybe unavoidable given wildcard situation. Consider restructuring data?
     // TODO: add option to return day title only -- just the text, with no link or other formatting
@@ -314,6 +315,8 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 // WIP
 function getLitDateData( array $args = [] ): array|string
 {
+    global $logCtx;
+    
     $defaults = [
         'date'             => null,
         'scope'            => null,
@@ -628,6 +631,8 @@ function getLitDateData( array $args = [] ): array|string
 
 function formatLitDateData( $litDateData = [], $args = [] )
 {
+    global $logCtx;
+    
     $output = '';
     $modal = '';
     $primaryShown = false; // track whether a primary date is being displayed, so as to properly format secondary date, if any
@@ -864,6 +869,8 @@ function getDisplayDates ( $postID = null, $year = null )
 // Collects -- get collect to match litdate (or calendar date? wip)
 function get_collect_text( $postID = null, $dateStr = null )
 {
+    global $logCtx;
+    
     // Init
     $collect = null;
     $collect_text = "";
@@ -991,6 +998,8 @@ function get_collect_text( $postID = null, $dateStr = null )
 
 function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $calcBasisID = null, $calcBasisField = null )
 {
+    global $logCtx;
+    
     //if ( empty($calcBasis) ) { return null; }
     $arr_info = array();
 
@@ -1087,6 +1096,8 @@ function getBasisDate( $year = null, $litdateCalcID = null, $calcBasis = null, $
 
 function getCalcBasesFromStr ( $dateCalcStr = "", $idsToExclude = array() )
 {
+    global $logCtx;
+    
     // Init vars
     $arr_info = array();
     $arrCalcBases = array();
@@ -1149,12 +1160,12 @@ function getCalcBasesFromStr ( $dateCalcStr = "", $idsToExclude = array() )
     //
 
     return $arr_info;
-
 }
 
 function getCalcBoiasFromStr ( $dateCalcStr = "" )
 {
-
+    global $logCtx;
+    
     $calcBoias = array();
 
     $boias = array('before', 'of', 'in', 'after'); // before/of/in/after the basis_date/season?
@@ -1175,14 +1186,11 @@ function getCalcBoiasFromStr ( $dateCalcStr = "" )
     }
 
     return $calcBoias;
-
 }
 
 function getCalcWeekdaysFromStr ( $dateCalcStr = "" )
 {
-
     $calcWeekdays = array();
-
     $weekdays = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
 
     // What's the weekday for the date to be calculated?
@@ -1195,11 +1203,12 @@ function getCalcWeekdaysFromStr ( $dateCalcStr = "" )
     }
 
     return $calcWeekdays;
-
 }
 
 function parseDateStr ( $args = array() )
 {
+    global $logCtx;
+    
     $arr_info = array();
     $arr_elements = array();
     $complex_formula = false; // TODO: deal w/ subset of dates that are dependent on other variable dates which must be calculated first.
@@ -1517,6 +1526,8 @@ function parseDateStr ( $args = array() )
 // WIP: Translate the date calculation string into components that can be used to do date math, and then do that math to calculate the date
 function calcDateFromStr( $args = array() )
 {
+    global $logCtx;
+    
     // Defaults
     $defaults = array(
         'year'                => null,
@@ -1945,8 +1956,6 @@ function calcDateFromComponents ( $args = array() )
     $arr_info['info'] = $info;
 
     return $arr_info;
-
-
 }
 
 
