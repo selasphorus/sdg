@@ -747,13 +747,13 @@ span.box_num {
 
 /*** CHOIRPLANNER ***/
 
-.atc_search_form {
+.stc_search_form {
     margin-bottom: 1.5rem;
 }
 
-.atc_search_form input[type="text"],
-.atc_search_form select,
-.atc_search_form .custom-combobox input {
+.stc_search_form input[type="text"],
+.stc_search_form select,
+.stc_search_form .custom-combobox input {
     background: #f7f7f7;
     background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)) !important;
     border: 1px solid #d1d1d1;
@@ -765,12 +765,12 @@ span.box_num {
     width: 280px;
 }
 
-.atc_search_form input[type="submit"] {
+.stc_search_form input[type="submit"] {
     margin: 1rem 0.3rem 0 0;
 }
 
-.atc_search_form ui-button,
-.atc_search_form a.ui-button {
+.stc_search_form ui-button,
+.stc_search_form a.ui-button {
     height: 2rem;
 }
 
