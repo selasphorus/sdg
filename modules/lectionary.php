@@ -1666,6 +1666,8 @@ function calcDateFromStr( $args = array() )
 
 function calcDateFromComponents ( $args = array() )
 {
+    global $logCtx;
+    
     // Init vars
     $arr_info = array();
     $info = "";
@@ -2195,7 +2197,6 @@ function calc_litdates( $atts = array() )
  */
 function liturgical_date_meta_box_callback( $post )
 {
-
     // TODO: replace the following with a relative URL
     //echo '<h4><a href="/edit.php?post_type=XXX" target="_blank">Click to Edit XXX</a></h4>';
 
@@ -2212,6 +2213,8 @@ function liturgical_date_meta_box_callback( $post )
 /*********** CPT: READING ***********/
 function get_cpt_reading_content( $postID = null )
 {
+    global $logCtx;
+    
     // Init vars
     $info = "";
     if ($postID === null) { $postID = get_the_ID(); }
@@ -2313,13 +2316,10 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
     }
 
     if ($event_id === null) {
-
         // If no event has been designated, get the day number for today's date
         $day_num = date('j');
         $info .= "No event specified (post_type: $post_type).<br />";
-
     } else {
-
         // Get the event start date
         $event_post_obj   = get_post( $event_id );
 
@@ -2328,16 +2328,9 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
 
         // Extract day number from date @ time string
         $day_num = date( 'j', strtotime($event_date) ); // or 'd'? (w/ leading zeros)
-        //$day_num = (int) substr( $event_date, strpos($event_date, " "), strpos($event_date, "@") - strpos($event_date, " ") -1 ); // tribe events version
-
-        if ( is_dev_site() ) {
-            //$info .= "<!-- day_num: $day_num; event_date: $event_date -->"; // tft
-        }
     }
 
     if (! (1 <= $day_num) && ($day_num <= 31) ) { return $info; }
-
-    //$info .= "Psalms for Day ".$day_num.": ";
 
     // Find post with day_num = event day or today's day, if no event has been selected
     $wp_args = array(
