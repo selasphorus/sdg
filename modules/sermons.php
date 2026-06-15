@@ -9,56 +9,6 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: SERMON ***********/
 
-// WIP -- handle options via ACF instead -- see sdg.php
-
-// Register our sdg_settings_init to the admin_init action hook.
-//add_action( 'admin_init', 'sdg_sermons_settings_init' );
-
-/**
- * Custom option and settings
- */
-function sdg_sermons_settings_init() {
-
-    // Register a new setting for "sdg_sermons" page.
-    register_setting( 'sdg_sermons', 'sdg_sermons_settings' ); // register_setting( string $option_group, string $option_name, array $args = array() )
-
-    // Register a new section in the "sdg_sermons" page.
-    //add_settings_section( string $id, string $title, callable $callback, string $page, array $args = array() )
-    add_settings_section(
-        'sdg_sermons_settings',
-        __( 'SDG Sermons Module Settings', 'sdg' ),
-        'sdg_sermons_settings_section_callback',
-        'sdg_sermons'
-    );
-
-    // Register a new field in the "sdg_settings" section, inside the "sdg_sermons" page.
-    //add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
-    add_settings_field(
-        'sdg_sermons_archive_content',
-        __( 'Sermons Archive Content', 'sdg' ),
-        'sdg_archive_content_field_cb',
-        'sdg_sermons',
-        'sdg_sermons_settings',
-        ['id' => 'sdg_sermons_archive_content', 'name' => 'sdg_sermons_archive_content', 'placeholder' => __('Sermons Archive Content', 'sdg'), 'default_value' => '', 'class' => 'form-field form-required', 'style' => 'width:25rem']
-    );
-
-    // WIP/TODO: image field -- for archive featured image
-
-    // WIP/TODO: text area (WYSIWYG?) for top-of-page content
-}
-
-/**
- * Settings section callback function.
- *
- * @param array $args  The settings array, defining title, id, callback.
- */
-function sdg_sermons_settings_section_callback( $args )
-{
-    $options = get_option( 'sdg_sermons_settings' );
-}
-
-/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
-
 /**
  *
  */
@@ -91,7 +41,6 @@ function get_cpt_sermon_meta( $post_id = null )
     $post = get_post( $post_id ); // Is this necessary?
 
     $info .= '<!-- cpt_sermon_meta for sermon_id: '.$post_id.' -->';
-
     $info .= '<div id="cpt_sermon_meta" class="cpt_sermon_meta">';
     $info .= '<div id="letterhead-logo"><img src="/wp-content/themes/apostle/graphics/stc-letterhead.png" class="print-only" /></div>';
 
@@ -197,7 +146,6 @@ function get_cpt_sermon_meta( $post_id = null )
             $info .= '<br />'.$the_time;
             $info .= '</div>';
         }
-
     }
 
     // Sermon Audio (from Webcast)
@@ -301,10 +249,8 @@ function get_cpt_sermon_event ( $atts = array() )
     // Show the link to the Service at which the sermon was delivered
     $related_event = get_field('related_event', $post_id);
     if ($related_event) {
-
         $related_events = true;
         $info .= make_link( get_the_permalink( $related_event ), get_the_title( $related_event ) );
-
     }
 
     return $info;
@@ -419,9 +365,7 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
                     'compare'=> 'LIKE'
                 );
             }
-
         }
-
     }
 
     // Book of the Bible
@@ -459,7 +403,6 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
                 'compare'   => 'LIKE',
             )*/
         );
-
     }
 
     // Topic
@@ -605,7 +548,6 @@ function build_sermon_filters()
     return $info;
 }
 
-
 /* ~~~ Admin/Dev functions ~~~ */
 function update_sermon_bbooks( $sermon_id = null )
 {
@@ -749,7 +691,6 @@ function update_sermon_citations( $sermon_id = null )
                     } else {
                         $info .= $post_id->get_error_message();
                     }
-
                 }
             }
         }
