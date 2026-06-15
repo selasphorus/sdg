@@ -10,11 +10,10 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** Functions pertaining to CPT: NEWSLETTER ***********/
 
-function get_cpt_newsletter_content( $post_id = null ) {
-	
-	// This function retrieves supplementary info -- the regular content template (content.php) handles title, content, featured image
-	
-    $info = ""; // init
+// This function retrieves supplementary info -- the regular content template (content.php) handles title, content, featured image
+function get_cpt_newsletter_content( $post_id = null )
+{	
+	$info = ""; // init
     if ($post_id === null) { $post_id = get_the_ID(); }
     
     if ( $post_id === null ) { return false; }
@@ -28,7 +27,4 @@ function get_cpt_newsletter_content( $post_id = null ) {
 	}
     
     return $info;
-    
 }
-
-?>

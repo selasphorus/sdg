@@ -44,5 +44,3 @@ add_filter('metaslider_capability', 'metaslider_change_cap', 1, 0);
 function metaslider_change_cap() {
     return 'manage_options';
 }
-
-?>

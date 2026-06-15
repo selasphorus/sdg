@@ -19,8 +19,8 @@ if ( !function_exists( 'add_action' ) ) {
  * @param string $template_path Template path. (default: '').
  * @param string $default_path  Default path. (default: '').
  */
-function sdg_get_template( $template_name, $args = array(), $template_path = '') { // function wc_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' )
-    
+function sdg_get_template( $template_name, $args = array(), $template_path = '') // function wc_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' )
+{  
     global $plugin_path;
     $template_path = $plugin_path.$template_path.$template_name;
     //$plugins_url = plugins_url();
@@ -39,7 +39,6 @@ function sdg_get_template( $template_name, $args = array(), $template_path = '')
         stc_log("could not locate template file: ".$template_path);
         echo "[could not locate template file: $template_path]";
     }
-    
 }
 
 /**
@@ -52,15 +51,16 @@ function sdg_get_template( $template_name, $args = array(), $template_path = '')
  *
  * @return string
  */
-function sdg_get_template_html( $template_name, $args, $template_path = '' ) {
+function sdg_get_template_html( $template_name, $args, $template_path = '' )
+{
 	ob_start();
 	sdg_get_template( $template_name, $args, $template_path ); //wc_get_template( $template_name, $args, $template_path, $default_path );
 	return ob_get_clean();
 }
 
 add_filter('ninja_forms_action_email_message', 'custom_nf_email_message', 10, 3);
-function custom_nf_email_message($message, $data, $action_settings) {
-
+function custom_nf_email_message($message, $data, $action_settings)
+{
     // init vars
     $info = "";
     $args = array();
@@ -107,7 +107,6 @@ function custom_nf_email_message($message, $data, $action_settings) {
     
     // Return the modified HTML email body
     return $info;
-    
 }
 
 
@@ -116,69 +115,74 @@ function custom_nf_email_message($message, $data, $action_settings) {
  */
  
 // Ninja Forms
- add_filter('ninja_forms_menu_ninja-forms_capability', 'ninja_forms_menu_get_cap', 10, 1);
- function ninja_forms_menu_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_admin_menu';
-     return $cap;
- }
- 
+add_filter('ninja_forms_menu_ninja-forms_capability', 'ninja_forms_menu_get_cap', 10, 1);
+function ninja_forms_menu_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_admin_menu';
+	return $cap;
+}
+
 // Ninja Forms -> Dashboard 
- add_filter('ninja_forms_admin_all_forms_capabilities', 'ninja_forms_dashboard_get_cap', 10, 1);
- function ninja_forms_dashboard_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_admin_menu';
-     return $cap;
- }
- 
+add_filter('ninja_forms_admin_all_forms_capabilities', 'ninja_forms_dashboard_get_cap', 10, 1);
+function ninja_forms_dashboard_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_admin_menu';
+	return $cap;
+}
+
 // Ninja Forms -> Add New 
- add_filter('ninja_forms_admin_add_new_capabilities', 'ninja_forms_add_new_get_cap', 10, 1);
- function ninja_forms_add_new_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_add_new';
-     return $cap;
- }
- 
+add_filter('ninja_forms_admin_add_new_capabilities', 'ninja_forms_add_new_get_cap', 10, 1);
+function ninja_forms_add_new_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_add_new';
+	return $cap;
+}
+
 // Ninja Forms -> Submissions 
- add_filter('ninja_forms_admin_submissions_capabilities', 'ninja_forms_submissions_get_cap', 10, 1);
- function ninja_forms_submissions_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_submissions';
-     return $cap;
- }
- 
+add_filter('ninja_forms_admin_submissions_capabilities', 'ninja_forms_submissions_get_cap', 10, 1);
+function ninja_forms_submissions_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_submissions';
+	return $cap;
+}
+
 // Ninja Forms -> Settings
- add_filter('ninja_forms_admin_settings_capabilities', 'ninja_forms_settings_get_cap', 10, 1);
- function ninja_forms_settings_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_settings';
-     return $cap;
- }
- 
+add_filter('ninja_forms_admin_settings_capabilities', 'ninja_forms_settings_get_cap', 10, 1);
+function ninja_forms_settings_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_settings';
+	return $cap;
+}
+
 // Ninja Forms -> Get Help 
- add_filter('ninja_forms_admin_status_capabilities', 'ninja_forms_status_get_cap', 10, 1);
- function ninja_forms_status_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_status';
-     return $cap;
- }
- 
+add_filter('ninja_forms_admin_status_capabilities', 'ninja_forms_status_get_cap', 10, 1);
+function ninja_forms_status_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_status';
+	return $cap;
+}
+
 // Ninja Forms -> Add-Ons 
- add_filter('ninja_forms_admin_extend_capabilities', 'ninja_forms_extend_get_cap', 10, 1);
- function ninja_forms_extend_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_addons';
-     return $cap;
- }
+add_filter('ninja_forms_admin_extend_capabilities', 'ninja_forms_extend_get_cap', 10, 1);
+function ninja_forms_extend_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_addons';
+	return $cap;
+}
 
 // Ninja Forms -> Import/Export
 //'ninja_forms_admin_import_export_capabilities'
 add_filter('ninja_forms_admin_import_export_capabilities', 'ninja_forms_impexp_get_cap', 10, 1);
- function ninja_forms_impexp_get_cap( $cap ) {
-     $cap = 'nf_admin';
-     //$cap = 'nf_impexp';
-     return $cap;
- }
-
-
-?>
+function ninja_forms_impexp_get_cap( $cap )
+{
+	$cap = 'nf_admin';
+	//$cap = 'nf_impexp';
+	return $cap;
+}
