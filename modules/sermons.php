@@ -186,12 +186,10 @@ function get_cpt_sermon_meta( $post_id = null )
 
     // init
     $info = "";
-    $ts_info = "";
     $sermon_date = "";
     $arr_posts = array();
 
     if ($post_id === null) { $post_id = get_the_ID(); }
-    //$ts_info .= "sermon post_id: $post_id<br />";
 
     $post = get_post( $post_id ); // Is this necessary?
 
@@ -228,7 +226,6 @@ function get_cpt_sermon_meta( $post_id = null )
         $event_info_print = "";
         foreach( $related_events as $related_event ){
             $event_info .= make_link( get_the_permalink( $related_event->ID ), get_the_title( $related_event->ID ) );
-            $ts_info .= 'related_event->ID: '.$related_event->ID.'<br />';
             $event_info_print .= get_the_title( $related_event->ID );
         }
         // Screen version
@@ -249,7 +246,6 @@ function get_cpt_sermon_meta( $post_id = null )
     // TODO: Check to see if related_event field for sermon is populated; if not, try matching via program rows and then store the matching value(s) in that custom sermon field.
     $related_events = get_related_events ( "program_item", $post_id ); //
     $event_posts = $related_events['event_posts'];
-    $related_events_info = $related_events['ts_info'];
 
     if ( $event_posts ) {
         if ($authors) { $info .= " | "; }
@@ -315,7 +311,6 @@ function get_cpt_sermon_meta( $post_id = null )
         && get_post_meta( $post_id, 'audio_file', true ) != "" ) {
         $sermon_audio = true;
         $info .= '<a href="#sermon-audio" class="screen-only">Listen to the sermon</a>';
-        $ts_info .= "audio_file: ".get_post_meta( $post_id, 'audio_file', true )."<br />";
     } else {
         $sermon_audio = false;
     }
@@ -362,14 +357,9 @@ function get_cpt_sermon_meta( $post_id = null )
 
     $info .= sdg_post_title( $title_args );
     $info .= '</div>'; // END div id=sermon-basics
-
     $info .= '</div>'; // END div id=cpt_sermon_meta
-
     $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
-
     $info .= '<!-- /cpt_sermon_meta -->';
-
-    if ( $ts_info != "" ) { $info .= '<div class="troubleshooting">'.$ts_info.'</div>'; }
 
     return $info;
 }
