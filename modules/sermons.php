@@ -1,5 +1,4 @@
 <?php
-
 defined( 'ABSPATH' ) or die( 'Nope!' );
 
 // Make sure we don't expose any info if called directly
@@ -9,8 +8,6 @@ if ( !function_exists( 'add_action' ) ) {
 }
 
 /*********** CPT: SERMON ***********/
-
-/* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 // WIP -- handle options via ACF instead -- see sdg.php
 
@@ -48,8 +45,6 @@ function sdg_sermons_settings_init() {
     // WIP/TODO: image field -- for archive featured image
 
     // WIP/TODO: text area (WYSIWYG?) for top-of-page content
-
-
 }
 
 /**
@@ -57,108 +52,10 @@ function sdg_sermons_settings_init() {
  *
  * @param array $args  The settings array, defining title, id, callback.
  */
-function sdg_sermons_settings_section_callback( $args ) {
-
+function sdg_sermons_settings_section_callback( $args )
+{
     $options = get_option( 'sdg_sermons_settings' );
-    //echo "options: <pre>".print_r($options,true)."</pre>"; // tft
-    //echo '<!--p id="'.esc_attr( $args['id'] ).'">'.esc_html_e( 'Test Settings Section Header', 'sdg' ).'></p-->';
-
 }
-
-// Register our options page to the admin_menu action hook.
-//add_action( 'admin_menu', 'sermons_register_options_page' );
-
-/**
- * Adds a submenu page under a custom post type parent.
- */
-
-/*function sermons_register_options_page() {
-
-    // Fcn add_submenu_page is similar to add_options_page, but with control over placement in CMS as submenu of CPT instead of options-general.php
-    //add_submenu_page( string $parent_slug, string $page_title, string $menu_title, string $capability, string $menu_slug, callable $callback = '', int|float $position = null ): string|false
-    add_submenu_page(
-        'edit.php?post_type=sermon',
-        __( 'Sermons CPT Options', 'sdg' ),
-        __( 'Sermons Options', 'sdg' ),
-        'manage_options',
-        'sermons-cpt-options',
-        'sermons_options_page_callback'
-    );
-
-}*/
-
-/**
- * Display callback for the submenu page.
- */
-
-/*
-function sermons_options_page_callback() {
-
-    // check user capabilities
-    if ( ! current_user_can( 'manage_options' ) ) {
-        return;
-    }
-
-    // add error/update messages
-
-    // check if the user have submitted the settings
-    // WordPress will add the "settings-updated" $_GET parameter to the url
-    if ( isset( $_GET['settings-updated'] ) ) {
-        // add settings saved message with the class of "updated"
-        add_settings_error( 'sdg_messages', 'sdg_message', __( 'Settings Saved', 'sdg' ), 'updated' );
-    }
-
-    // show error/update messages
-    settings_errors( 'sdg_messages' );
-
-    // Include the form to display the setting fields
-    //require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/sdg-admin-settings.php';
-
-    ?>
-    <div class="wrap">
-        <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-        <form action="options.php" method="post">
-            <?php
-            // output security fields for the registered setting "sdg"
-            settings_fields( 'sdg_sermons' );
-
-            // output setting sections and their fields
-            // (sections are registered for "sdg", each field is registered to a specific section)
-            do_settings_sections( 'sdg_sermons' );
-
-            // output save settings button
-            submit_button( 'Save Settings' );
-            ?>
-        </form>
-    </div>
-    <?php
-
-}
-*/
-
-/*
-// Render a text field
-function sdg_archive_content_field_cb( $args ) {
-
-    $options = get_option( 'sdg_sermons_settings' );
-
-    //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-    //echo "options: <pre>".print_r($options,true)."</pre>"; // tft
-
-    $value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']);
-    $class = isset($args['class']) ? $args['class'] : '';
-    $style = isset($args['style']) ? $args['style']: '';
-
-    echo '<textarea
-        id="'.esc_attr( $args['id'] ).'"
-        name="sdg_settings['.esc_attr( $args['name'] ).']"
-        value="'.$value.'"
-        class="'.$class.'"
-        style="'.$style.'"
-        placeholder="'.esc_attr( $args['placeholder'] ).'"></textarea>';
-
-}
-*/
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
@@ -196,7 +93,6 @@ function get_cpt_sermon_meta( $post_id = null )
     $info .= '<!-- cpt_sermon_meta for sermon_id: '.$post_id.' -->';
 
     $info .= '<div id="cpt_sermon_meta" class="cpt_sermon_meta">';
-
     $info .= '<div id="letterhead-logo"><img src="/wp-content/themes/apostle/graphics/stc-letterhead.png" class="print-only" /></div>';
 
     // Display the sermon author
@@ -278,7 +174,6 @@ function get_cpt_sermon_meta( $post_id = null )
     // Show the sermon date/time -- for archives ONLY, moved to apostle/template-parts/content-sermon.php so as to display date ABOVE sermon title, a là event archives.
     $sermon_date = get_field('sermon_date', $post_id);
     if ( is_singular('sermon') && $sermon_date ) {
-
         //$info .= "<!-- sermon_date: ".print_r($sermon_date, true)."-->"; // tft
         $date = date_create($sermon_date);
         $the_date = date_format($date,"l, F d, Y \@ g:i a");
@@ -365,8 +260,8 @@ function get_cpt_sermon_meta( $post_id = null )
 }
 
 add_shortcode( 'sermon_transcript_pdf', 'get_cpt_sermon_transcript' );
-function get_cpt_sermon_transcript( $atts = array(), $content = null, $tag = '' ) {
-
+function get_cpt_sermon_transcript( $atts = array(), $content = null, $tag = '' )
+{
     $info = "";
 
     $args = shortcode_atts( array(
@@ -390,8 +285,8 @@ function get_cpt_sermon_transcript( $atts = array(), $content = null, $tag = '' 
 }
 
 add_shortcode( 'sermon_event_link', 'get_cpt_sermon_event' );
-function get_cpt_sermon_event ( $atts = array() ) {
-
+function get_cpt_sermon_event ( $atts = array() )
+{
     $info = ""; // init
 
     $args = shortcode_atts( array(
@@ -413,12 +308,11 @@ function get_cpt_sermon_event ( $atts = array() ) {
     }
 
     return $info;
-
 }
 
 // Sermons Search
-function find_matching_sermons( $year = null, $author = null, $bbook = null, $topic = null ) {
-
+function find_matching_sermons( $year = null, $author = null, $bbook = null, $topic = null )
+{
     // init
     $info = array();
     $msg = "<!-- find_matching_sermons -->";
@@ -460,7 +354,6 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     $author_id = null; // init
 
     if ( !empty($author) ) {
-
         if ( is_numeric($author) ) {
             $author_id = $author;
             //$msg .= "<!-- author ".$author." is_numeric -->";
@@ -533,7 +426,6 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 
     // Book of the Bible
     if ( isset( $bbook ) ) {
-
         //$msg .= "<p>bbook: $bbook</p>";
         //$msg .= "<!-- bbook: $bbook -->";
         //scripture_citations > relationship to Readings > reading.book > relationship to Bible book/ bible_book.post_title
@@ -572,7 +464,6 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 
     // Topic
     if ( is_numeric($topic) && $topic != 0 ) { // $topic !== null
-
         //$msg .= "topic: $topic<br />";
         $tax_query = array(
             array(
@@ -610,18 +501,16 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
 
     $msg .= "<!-- END find_matching_sermons -->";
 
-
     $info['args'] = $wp_args; // TODO: rename key to wp_args, for consistency?
     $info['msg'] = $msg;
     $info['posts'] = $arr_sermons; //$info['posts'] = $posts;
 
     return $info;
-
 }
 
 // Get Sermon Author image id
-function get_author_img_id ( $post_id ) {
-
+function get_author_img_id ( $post_id )
+{
     $img_id = null;
 
     // Get the sermon author(s)
@@ -633,19 +522,16 @@ function get_author_img_id ( $post_id ) {
             $img_id = get_post_thumbnail_id($author_id);
             if ( $img_id ) { break; }
         }
-    } else {
-        //
     }
 
     return $img_id;
-
 }
 
 // Add shortcode for display of sermon filters form
 add_shortcode('sermon_filters', 'build_sermon_filters');
 // TODO: eventually: create general function for sdg_filterform ( $menus = array() ) for creation of filter forms for other content tyeps
-function build_sermon_filters() {
-
+function build_sermon_filters()
+{
     $archive_url = "/sermon-archive"; // TODO: get url programmatically per site rather than hard-coding //esc_url( get_permalink() ) -- permalink approach doesn't work with snippets setup
     $info = '<form id="sermon_filters" class="category-select filter-form sermon_filters" action="'.$archive_url.'" method="get">';
 
@@ -681,7 +567,6 @@ function build_sermon_filters() {
     $bbook_results = new WP_Query( $bbook_args );
     //$info .= "Last SQL-Query: {$bbook_results->request}<br />"; // tft
     if ($bbook_results->have_posts()) {
-
         $bbook_values = array();
         $bbook_values["optgroup_label"] = "-- Old Testament --";
 
@@ -718,13 +603,12 @@ function build_sermon_filters() {
     $info .= '</form>';
 
     return $info;
-
 }
 
 
 /* ~~~ Admin/Dev functions ~~~ */
-function update_sermon_bbooks( $sermon_id = null ) {
-
+function update_sermon_bbooks( $sermon_id = null )
+{
     $info = "";
     $updates = false;
 
@@ -772,15 +656,12 @@ function update_sermon_bbooks( $sermon_id = null ) {
         $info .= "No update needed for sermon_bbooks.<br />";
     }
 
-    //$info .= "+++++<br /><br />";
-
     return $info;
-
 }
 
 // WIP: write FCN to Update scripture_citations from scripture_citations_txt
-function update_sermon_citations( $sermon_id = null ) {
-
+function update_sermon_citations( $sermon_id = null )
+{
     $info = "";
     $updates = false;
 
@@ -805,7 +686,6 @@ function update_sermon_citations( $sermon_id = null ) {
     // Check reading bbooks to see if they're already in the sermon_bbooks array and add them if not
     if ( $scripture_citations_txt ) {
         foreach( $scripture_citations_txt as $txt ) {
-
             $txt = trim($txt);
 
             // Try to match text to an existing reading record
@@ -887,10 +767,5 @@ function update_sermon_citations( $sermon_id = null ) {
         $info .= "No update needed.<br />";
     }
 
-    //$info .= "+++++<br /><br />";
-
     return $info;
-
 }
-
-?>
