@@ -170,9 +170,6 @@ function sdg_text_field_cb( $args )
 {
     $options = get_option( 'sdg_settings' );
 
-    //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-    //echo "options: <pre>".print_r($options,true)."</pre>"; // tft
-
     $value = isset( $options[ $args['name'] ] ) ? $options[ $args['name'] ] : esc_attr( $args['default_value']);
     $class = isset($args['class']) ? $args['class'] : '';
     $style = isset($args['style']) ? $args['style']: '';
@@ -249,15 +246,14 @@ function sdg_modules_field_cb( $args )
 {
     $options = get_option( 'sdg_settings' );
     $modules = array(
-        //'webcasts' => __( 'Webcasts' ),
         'sermons' => __( 'Sermons' ),
         'lectionary' => __( 'Lectionary' ),
         //
-        'organizations' => __( 'Organizations (deprecated)' ),
-        'projects' => __( 'Projects' ),
-        'press' => __( 'Press' ),
+        //'organizations' => __( 'Organizations (deprecated)' ),
+        //'projects' => __( 'Projects' ),
+        //'press' => __( 'Press' ),
         //'recordings' => __( 'Recordings' ),
-        'links' => __( 'Links' ),
+        //'links' => __( 'Links' ),
         'newsletters' => __( 'Newsletters' ),
         //'sources' => __( 'Sources' ),
         //

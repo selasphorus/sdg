@@ -23,14 +23,13 @@ add_action('acf/input/admin_enqueue_scripts', function() {
     );
 });
 
-// TODO: move the following functions to WHx4 > \Util\DateHelper.php
-
-// TMP -- see WHx4\src\Utils\Text
+// TMP -- see WXC\src\Utils\Text
 function snake ( $string = "")
 {
     strtolower( str_replace( ' ', '_', $string ) );
 }
 
+// TMP -- see \WXC\Utils\DateHelper
 function normalizeMonthToInt( string $month ): ?int
 {
     $month = strtolower( trim( $month ) );
@@ -62,6 +61,7 @@ function normalizeMonthToInt( string $month ): ?int
  * @param int|string|null $month Fallback month if needed
  * @return array|string Array with 'startDate' and 'endDate' or single string if same
  */
+// TMP -- see \WXC\Utils\DateHelper
 function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
 {
     $args = wp_parse_args( $args, [
@@ -170,6 +170,7 @@ function normalizeDateInput( array $args = [] ): array|DateTimeImmutable|string
  * @param string $input
  * @return string
  */
+// TMP -- see \WXC\Utils\DateHelper
 function parseFlexibleDate( string $input ): string
 {
     try {
@@ -186,6 +187,7 @@ function parseFlexibleDate( string $input ): string
  * @param int $year
  * @return DateTimeImmutable
  */
+// TMP -- see \WXC\Utils\DateHelper
 function calculateEasterDate( int $year ): DateTimeImmutable
 {
     $timestamp = easter_date( $year );
@@ -193,6 +195,7 @@ function calculateEasterDate( int $year ): DateTimeImmutable
 }
 
 /* END Date Normalization */
+
 
 add_shortcode( 'liturgical_dates', 'renderLitDatesShortcode' );
 function renderLitDatesShortcode( $atts = [] ): string
@@ -221,7 +224,6 @@ function renderLitDatesShortcode( $atts = [] ): string
     if ( !is_string( $output ) ) { $output = print_r( $output, true ); }
     return $output;
 }
-
 
 // Day Titles
 // TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
@@ -2206,7 +2208,6 @@ function liturgical_date_meta_box_callback( $post )
     // get all ACF date_calculations for this post // date_calculations_0_date_calculated
 
     echo "testing meta_box_callback.";
-
 }
 
 
