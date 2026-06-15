@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260615.1
+ * Version: 1.260615.2
  * Author: atc
  * Author URI:
  * License:
@@ -194,11 +194,8 @@ function sdg_text_field_cb( $args )
 // TODO: make this a radio button instead?
 function sdg_devsite_field_cb( $args )
 {
-    //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-
     $checked = '';
     $options = get_option( 'sdg_settings' );
-    //echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
 
     $value   = ( !isset( $options[$args['name']] ) )
                 ? null : $options[$args['name']];
@@ -216,11 +213,8 @@ function sdg_devsite_field_cb( $args )
 
 function sdg_ts_field_cb( $args )
 {
-    //echo "args: <pre>".print_r($args,true)."</pre>"; // tft
-
     $checked = '';
     $options = get_option( 'sdg_settings' );
-    //echo "value: <pre>[".print_r($value,true)."]</pre>"; // tft
 
     $value   = ( !isset( $options[$args['name']] ) )
                 ? null : $options[$args['name']];
@@ -450,6 +444,7 @@ function sdg_scripts_method()
 /* *** SERMONS *** */
 
 // Sermon updates - add related_event info
+// TBD: is this now entirely obsolete?
 add_shortcode( 'run_sermon_updates_fcn', 'sermon_updates' );
 function sermon_updates ( $atts = array() )
 {
