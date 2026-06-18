@@ -290,10 +290,10 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         $args[ 'filter_types' ] = [ 'primary', 'secondary' ];
         $args[ 'debug' ] = $logCtx; // tft
         //
-        //wxc_log( 'About to getLitDateData for date: $date', null, $logCtx );
+        //wxc_log('About to getLitDateData for date: $date', null, $logCtx );
         $output .= getLitDateData( $args );
     } else {
-        //wxc_log( 'hideDayTitles is set to true for this post/event', null, $logCtx );
+        //wxc_log('hideDayTitles is set to true for this post/event', null, $logCtx );
     }
 
     // Show or Hide Special Notices?
@@ -304,7 +304,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
     // If there is no series-wide ban on displaying the notices, then should we display them for this particular post?
     if ( $hideSpecialNotices == 0 ) { $hideSpecialNotices = get_post_meta( $postID, 'hide_special_notices', true ); }
     if ( $hideSpecialNotices == 1 ) {
-        //wxc_log( 'hideSpecialNotices is set to true for this post/event', null, $logCtx );
+        //wxc_log('hideSpecialNotices is set to true for this post/event', null, $logCtx );
     }
     // Append Event Special Notices content, as applicable
     if ( function_exists('get_special_date_content') && !$hideSpecialNotices ) { $output .= get_special_date_content( $date ); }
@@ -507,7 +507,7 @@ function getLitDateData( array $args = [] ): array|string
         $secondaryPost = null;
         $defaultPriority = 999;
         $year  = substr( $dateStr, 0, 4 );
-        wxc_log( count($posts)." post(s) found for dateStr : ".$dateStr, null, $logCtx);
+        wxc_log(count($posts)." post(s) found for dateStr : ".$dateStr, null, $logCtx);
 
         foreach ( $posts as $post ) {
             $postID = $post->ID;
