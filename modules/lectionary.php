@@ -1968,7 +1968,7 @@ function calc_litdates( $atts = array() )
 {
     // Failsafe -- run this fcn ONLY if logged in as webdev
     if ( !function_exists( 'queenbee' ) 
-        || ( function_exists( 'queenbee' ) && !sdg_queenbee() ) ) { return "You are not authorized to run this operation.<br />"; }
+        || ( function_exists( 'queenbee' ) && !queenbee() ) ) { return "You are not authorized to run this operation.<br />"; }
 
     $info = "";
     $indent = "&nbsp;&nbsp;&nbsp;&nbsp;";

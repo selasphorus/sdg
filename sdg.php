@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260615.2
+ * Version: 1.260618.2
  * Author: atc
  * Author URI:
  * License:
@@ -248,7 +248,7 @@ function sdg_modules_field_cb( $args )
     $modules = array(
         'sermons' => __( 'Sermons' ),
         'lectionary' => __( 'Lectionary' ),
-        //
+        // TODO: make sure all these modules have 
         //'organizations' => __( 'Organizations (deprecated)' ),
         //'projects' => __( 'Projects' ),
         //'press' => __( 'Press' ),
