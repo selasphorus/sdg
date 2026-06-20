@@ -1793,10 +1793,15 @@ function calcDateFromComponents ( $args = array() )
 
             } elseif ( $first_sunday != $basisDate ) {
 
-                if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
-
+                if ( $verbose == "true" ) {
+                    $info .= "first_sunday NE basis_date<br />";
+                    $info .= "calcWeekday: $calcWeekday<br />";
+                }
+                
                 if ( $calcInterval && $calcWeekday != 'Sunday' ) { // && is_int($calcInterval)
-                    if ( $verbose == "true" ) { $info .= "Subtracting one from calcInterval ($calcInterval - 1)<br />"; }
+                    if ( $verbose == "true" ) {
+                        $info .= "Subtracting one from calcInterval ($calcInterval - 1)<br />";
+                    }
                     $calcInterval = $calcInterval - 1; // because math is based on first_sunday + X weeks. -- but only if calcWeekday is also Sunday? WIP
                 }
                 // ???
