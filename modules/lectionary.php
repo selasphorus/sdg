@@ -1758,7 +1758,7 @@ function calcDateFromComponents ( $args = array() )
         if ( containsNumbers($dateCalcStr) ) {
 
             // TODO/wip: also check for "two" etc
-            if ( $verbose == "true" ) { $info .= "dateCalcStr {$dateCalcStr} contains numbers.<br />"; }
+            if ( $verbose == "true" ) { $info .= "dateCalcStr '{$dateCalcStr}' contains numbers.<br />"; }
 
             // Determine the calcInterval
             // WIP deal w/ multiple value possibilities for weekday, boia
@@ -1795,7 +1795,7 @@ function calcDateFromComponents ( $args = array() )
 
                 if ( $verbose == "true" ) { $info .= "first_sunday NE basis_date<br />"; }
 
-                if ( $calcInterval ) { // && is_int($calcInterval)
+                if ( $calcInterval && $calcWeekday != 'Sunday' ) { // && is_int($calcInterval)
                     if ( $verbose == "true" ) { $info .= "Subtracting one from calcInterval ($calcInterval - 1)<br />"; }
                     $calcInterval = $calcInterval - 1; // because math is based on first_sunday + X weeks. -- but only if calcWeekday is also Sunday? WIP
                 }
