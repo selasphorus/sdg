@@ -1798,7 +1798,7 @@ function calcDateFromComponents ( $args = array() )
                     $info .= "calcWeekday: $calcWeekday<br />";
                 }
                 
-                if ( $calcInterval && $calcWeekday != 'Sunday' ) { // && is_int($calcInterval)
+                if ( $calcInterval && $calcWeekday == 'sunday' ) { // && is_int($calcInterval)
                     if ( $verbose == "true" ) {
                         $info .= "Subtracting one from calcInterval ($calcInterval - 1)<br />";
                     }
