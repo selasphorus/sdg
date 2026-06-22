@@ -42,7 +42,7 @@ function get_cpt_sermon_meta( $post_id = null )
 
     $info .= '<!-- cpt_sermon_meta for sermon_id: '.$post_id.' -->';
     $info .= '<div id="cpt_sermon_meta" class="cpt_sermon_meta">';
-    $info .= '<div id="letterhead-logo"><img src="/wp-content/themes/apostle/graphics/stc-letterhead.png" class="print-only" /></div>';
+    $info .= '<div id="letterhead-logo" class="print-only"><img src="/wp-content/themes/apostle/graphics/stc-letterhead.png" /></div>';
 
     // Display the sermon author
     $authors = get_field('sermon_author', $post_id);
