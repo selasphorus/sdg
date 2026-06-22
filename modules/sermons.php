@@ -201,7 +201,7 @@ function get_cpt_sermon_meta( $post_id = null )
     $info .= sdg_post_title( $title_args );
     $info .= '</div>'; // END div id=sermon-basics
     $info .= '</div>'; // END div id=cpt_sermon_meta
-    $info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
+    //$info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons
     $info .= '<!-- /cpt_sermon_meta -->';
 
     return $info;
