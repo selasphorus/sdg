@@ -198,7 +198,7 @@ function get_cpt_sermon_meta( $post_id = null )
 
     $title_args = array( 'post' => $post_id, 'line_breaks' => true, 'show_subtitle' => true, 'show_series_title' => true, 'hlevel_sub' => 3, 'hclass' => 'entry-title sermon-title', 'hclass_sub' => 'subtitle sermon-title', 'echo' => false, 'do_ts' => false );
 
-    $info .= sdg_post_title( $title_args );
+    $info .= stc_post_title( $title_args );
     $info .= '</div>'; // END div id=sermon-basics
     $info .= '</div>'; // END div id=cpt_sermon_meta
     //$info .= '<div class="troubleshooting">'.update_sermon_bbooks( $post_id ).'</div>'; //if ( empty($sermon_bbooks) ) { } // This should be removed or commented out eventually, once the fcn has been run for all sermons

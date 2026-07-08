@@ -1311,7 +1311,7 @@ function parseDateStr ( $args = array() )
             // WIP...
             // Translate words to digits as needed
             /*if ( !is_int($component) ) {
-                $component_translated = sdg_word_to_digit($component);
+                $component_translated = stc_word_to_digit($component);
                 if ( !is_int($component_translated) ) {
                     // wip
                 }
