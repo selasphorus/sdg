@@ -480,7 +480,7 @@ function build_sermon_filters()
 
     // Years select menu
     $years = range( 2001, date('Y') );
-    $info .= sdg_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'yr' ) );
+    $info .= stc_selectmenu ( array( 'label' => 'Year', 'arr_values' => $years, 'select_name' => 'yr' ) );
     $info .= '<br />';
 
     // Preachers menu
@@ -495,7 +495,7 @@ function build_sermon_filters()
     $sermon_authors = get_posts($wp_args);
     //$info .= print_r($sermon_authors, true);
 
-    $info .= sdg_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true, 'display_formula' => 'person_title_form_medium' ) ) ;
+    $info .= stc_selectmenu ( array( 'label' => 'Preacher', 'arr_values' => $sermon_authors, 'select_name' => 'pr', 'show_other' => true, 'display_formula' => 'person_title_form_medium' ) ) ;
     $info .= '<br />';
 
     // Bible Books menu
@@ -531,12 +531,12 @@ function build_sermon_filters()
         endwhile;
 
         //$info .= 'bbook_values: <pre>'.print_r($bbook_values, true).'</pre>'; // tft
-        $info .= sdg_selectmenu ( array( 'label' => 'Text', 'arr_values' => $bbook_values, 'select_name' => 'txt' ) ) ;
+        $info .= stc_selectmenu ( array( 'label' => 'Text', 'arr_values' => $bbook_values, 'select_name' => 'txt' ) ) ;
         $info .= '<br />';
     }
 
     // Sermon Topics menu
-    $info .= sdg_selectmenu ( array( 'label' => 'Topic', 'orderby' => 'name', 'select_name' => 'topic', 'tax' => 'sermon_topic' ) ) ;
+    $info .= stc_selectmenu ( array( 'label' => 'Topic', 'orderby' => 'name', 'select_name' => 'topic', 'tax' => 'sermon_topic' ) ) ;
     $info .= '<br />';
 
     $info .= '<div class="centeralign padded">';
