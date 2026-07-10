@@ -6,9 +6,9 @@ use atc\WXC\PostTypes\PostTypeHandler;
 
 class BibleBook extends PostTypeHandler
 {
-	public function __construct(?\WP_Post $post = null)
+	protected static function defineConfig(): array
 	{
-		$config = [
+		return [
 			'slug'        => 'bible_book',
 			//'menu_icon'   => 'dashicons-megaphone',
 			//'taxonomies'   => [ 'sermon_topic', 'admin_tag' ],
@@ -17,8 +17,6 @@ class BibleBook extends PostTypeHandler
 			//'map_meta_cap'       => true,
 			//'rewrite'            => array( 'slug' => 'bible-books' ), // permalink structure slug
 		];
-
-        parent::__construct( $config, $post );
     }
 
     public function boot(): void
