@@ -4,7 +4,7 @@
  * Description:       A WordPress plugin for godly matters
  * Dependencies:      Requires WHx4-Core, WHx4
  * Requires Plugins:  whx4-core, whx4
- * Version:           2.0
+ * Version:           2.260710
  * Author:            atc
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,9 +13,10 @@
  * @package           sdg
  */
 
-declare(strict_types=1);
+// v1 (main) was designed using ACF PRO Blocks, Post Types, Options Pages, Taxonomies and more.
+// v2 OOP version -- this version (oopv1 branch) -- WIP
 
-namespace atc\SDG;
+declare(strict_types=1);
 
 // Prevent direct access
 if ( !defined( 'ABSPATH' ) ) exit;
@@ -26,8 +27,7 @@ if ( !function_exists( 'add_action' ) ) {
 	exit;
 }
 
-// v1 designed using ACF PRO Blocks, Post Types, Options Pages, Taxonomies and more.
-// v2 OOP version WIP
+define( 'SDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Require Composer autoloader
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
@@ -35,6 +35,7 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 }
 
 use atc\WXC\Plugin;
+use atc\WXC\App;
 
 // WXC Add-on Modules
 use atc\SDG\Modules\Worship\WorshipModule as Worship; // To include Clergy, Sermons, ?....
@@ -113,3 +114,6 @@ add_action('wxc_pre_boot', function() {
     });
     
 }, 15); // Priority < 20 to run before WXC boot()
+
+// Global Wrapper Functions for theme access
+// TBD
