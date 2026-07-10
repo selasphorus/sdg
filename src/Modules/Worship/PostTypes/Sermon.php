@@ -6,18 +6,16 @@ use atc\WXC\PostTypes\PostTypeHandler;
 
 class Sermon extends PostTypeHandler
 {
-	public function __construct(?\WP_Post $post = null)
+	protected static function defineConfig(): array
 	{
-		$config = [
+		return [
 			'slug'        => 'sermon',
 			'menu_icon'   => 'dashicons-megaphone',
-			'taxonomies'   => [ 'sermon_topic', 'admin_tag' ],
+			//'taxonomies'   => [ 'sermon_topic', 'admin_tag' ],
 			'supports' => ['title', 'author', 'thumbnail', 'editor', 'excerpt', 'revisions'],
 			//'capability_type' => ['sermon', 'sermons'],
 			//'map_meta_cap'       => true,
 		];
-
-        parent::__construct( $config, $post );
     }
 
     public function boot(): void
@@ -25,6 +23,7 @@ class Sermon extends PostTypeHandler
         parent::boot(); // Optional if you add shared logic later
     }
     
+    /*
     // Sermon updates - add related_event info
 	function sermon_updates ( $atts = array() ) {
 	
@@ -223,5 +222,5 @@ class Sermon extends PostTypeHandler
 		return $info;
 	
 	}
-
+	*/
 }

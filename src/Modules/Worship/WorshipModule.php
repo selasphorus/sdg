@@ -3,11 +3,14 @@
 namespace atc\SDG\Modules\Worship;
 
 use atc\WXC\Module as BaseModule;
-use atc\WXC\Query\PostQuery;
+//use atc\WXC\Query\PostQuery;
 use atc\WXC\Shortcodes\ShortcodeManager;
-//
+
+// Post Types
 use atc\SDG\Modules\Worship\PostTypes\Sermon;
-#use atc\SDG\Modules\Worship\PostTypes\SermonSeries;
+//use atc\SDG\Modules\Worship\PostTypes\SermonSeries;
+
+// Taxonomies
 
 // Define the module class
 final class WorshipModule extends BaseModule
@@ -18,7 +21,7 @@ final class WorshipModule extends BaseModule
         parent::boot();
         
         //
-        ShortcodeManager::add(\WHx4\Modules\Worship\Shortcodes\SermonsShortcode::class);
+        //ShortcodeManager::add(\WHx4\Modules\Worship\Shortcodes\SermonsShortcode::class);
     }
 
     public function getPostTypeHandlerClasses(): array
