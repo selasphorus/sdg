@@ -23,9 +23,8 @@ class Sermon extends PostTypeHandler
         parent::boot(); // Optional if you add shared logic later
     }
     
-    /*
     // Sermon updates - add related_event info
-	function sermon_updates ( $atts = array() ) {
+	private function sermon_updates ( $atts = array() ) {
 	
 		$info = "";
 	
@@ -222,5 +221,5 @@ class Sermon extends PostTypeHandler
 		return $info;
 	
 	}
-	*/
+
 }
