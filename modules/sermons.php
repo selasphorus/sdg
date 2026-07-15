@@ -451,25 +451,6 @@ function find_matching_sermons( $year = null, $author = null, $bbook = null, $to
     return $info;
 }
 
-// Get Sermon Author image id
-function get_author_img_id ( $post_id )
-{
-    $img_id = null;
-
-    // Get the sermon author(s)
-    $sermon_author_ids = get_post_meta( $post_id, 'sermon_author', true );
-
-    if ( is_array($sermon_author_ids) ) {
-        // Get the sermon author image for the first author with an image
-        foreach ( $sermon_author_ids as $author_id ) {
-            $img_id = get_post_thumbnail_id($author_id);
-            if ( $img_id ) { break; }
-        }
-    }
-
-    return $img_id;
-}
-
 // Add shortcode for display of sermon filters form
 add_shortcode('sermon_filters', 'build_sermon_filters');
 // TODO: eventually: create general function for sdg_filterform ( $menus = array() ) for creation of filter forms for other content tyeps
