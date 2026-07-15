@@ -9,9 +9,6 @@ if ( !function_exists( 'add_action' ) ) {
 
 /*********** CPT: SERMON ***********/
 
-/**
- *
- */
 function get_cpt_sermon_meta( $post_id = null )
 {
     $logCtx = ['sdg', 'sermons'];
