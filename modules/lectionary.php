@@ -29,7 +29,7 @@ function snake ( $string = "")
     strtolower( str_replace( ' ', '_', $string ) );
 }
 
-// TMP -- see \WXC\Utils\DateHelper
+// TMP -- see \WXC\Utils\DateHelper -- IDENTICAL
 function normalizeMonthToInt( string $month ): ?int
 {
     $month = strtolower( trim( $month ) );
@@ -187,7 +187,7 @@ function parseFlexibleDate( string $input ): string
  * @param int $year
  * @return DateTimeImmutable
  */
-// TMP -- see \WXC\Utils\DateHelper
+// TMP -- see \WXC\Utils\DateHelper -- this version superceded by that more complex version
 function calculateEasterDate( int $year ): DateTimeImmutable
 {
     $timestamp = easter_date( $year );
