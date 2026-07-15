@@ -23,6 +23,8 @@ class Sermon extends PostTypeHandler
         parent::boot(); // Optional if you add shared logic later
     }
     
+    // WIP transition from old procedural code
+    
     // Sermon updates - add related_event info
 	private function sermon_updates ( $atts = array() ) {
 	
