@@ -254,11 +254,11 @@ function sdg_modules_field_cb( $args )
         //'press' => __( 'Press' ),
         //'recordings' => __( 'Recordings' ),
         //'links' => __( 'Links' ),
-        'newsletters' => __( 'Newsletters' ),
+        //'newsletters' => __( 'Newsletters' ), // moved to STC (tmp)
         //'sources' => __( 'Sources' ),
         //
-        'slider' => __( 'Slider' ),
-        'ninjaforms' => __( 'Ninja Forms' ),
+        //'slider' => __( 'Slider' ), // moved to STC (tmp)
+        //'ninjaforms' => __( 'Ninja Forms' ), // moved to STC (tmp)
         //
         'admin_notes' => __( 'Admin Notes' ),
         'data_tables' => __( 'Data Tables' ),
