@@ -620,11 +620,11 @@ function update_sermon_citations( $sermon_id = null )
             } else {
                 $info .= "No post found matching title '".$txt."'<br />";
                 // Create a new reading record and link it to this sermon record
-                // Extract book; chapterverses from txt
+                // Extract book; chapter_verses from txt
                 if ( preg_match('/([I]+\s[A-Za-z\s]+)(.*)/', $txt, $matches) ) {
                     // Deal w/ books beginning w/ I/II/III or 1/2/3
                     $book = $matches[1];
-                    $chapterverses = trim(str_replace($book, "", $txt));
+                    $chapter_verses = trim(str_replace($book, "", $txt));
                     $book = str_replace("III", "3", $book);
                     $book = str_replace("II", "2", $book);
                     $book = str_replace("I", "1", $book);
@@ -641,10 +641,10 @@ function update_sermon_citations( $sermon_id = null )
                 } else {
                     $info .= "No book match found.<br />";
                 }
-                $chapterverses = trim(str_replace($book, "", $txt)); //$chapterverses = trim( substr( $txt, strpos($txt," ") ) );
-                $info .= "chapterverses extracted from txt: '".$chapterverses."'<br />";
+                $chapter_verses = trim(str_replace($book, "", $txt)); //$chapter_verses = trim( substr( $txt, strpos($txt," ") ) );
+                $info .= "chapter_verses extracted from txt: '".$chapter_verses."'<br />";
 
-                if ( $book_id && $chapterverses ) {
+                if ( $book_id && $chapter_verses ) {
 
                     // Create new reading post
                     $postarr = array(
@@ -654,7 +654,7 @@ function update_sermon_citations( $sermon_id = null )
                         'post_author'   => 1, // get_current_user_id()
                         'meta_input'   => array(
                             'book' => $book_id,
-                            'chapterverses' => $chapterverses,
+                            'chapter_verses' => $chapter_verses,
                         ),
                     );
 

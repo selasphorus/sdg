@@ -2153,7 +2153,7 @@ function sdg_register_field_groups() {
             array(
                 'key' => 'field_62718bc597a1d',
                 'label' => 'Chapter:Verses',
-                'name' => 'chapterverses',
+                'name' => 'chapter_verses',
                 'aria-label' => '',
                 'type' => 'text',
                 'instructions' => '',

@@ -2238,12 +2238,12 @@ function get_cpt_reading_content( $postID = null )
         wxc_log("bible_corpus_id", $bible_corpus_id, $logCtx);
     }
 
-    $chapterverses = get_field( 'chapterverses', $postID );
+    $chapter_verses = get_field( 'chapter_verses', $postID );
 
     // Get book num from book name
     $book_num = "tmp";
     // Construct BC-style ID: BBCCCVVV
-    // Sub-divide chapterverses
+    // Sub-divide chapter_verses
     // e.g.
     // 1:1-2:3
     // 11:1-9
@@ -2254,19 +2254,19 @@ function get_cpt_reading_content( $postID = null )
     // 27:46-28:4, 10-22
     // 49:29-50:14
     // If the string contains one or more hyphens, or more than one colon, then multiple chapters are involved
-    if ( ( strpos($chapterverses,"-") && substr_count($chapterverses, ':') > 1 ) || strpos($chapterverses,"-") && substr_count($chapterverses, ':') == 0 ) {
-        wxc_log("The string '".$chapterverses."' contains information about more than one chapter.", null, $logCtx);
+    if ( ( strpos($chapter_verses,"-") && substr_count($chapter_verses, ':') > 1 ) || strpos($chapter_verses,"-") && substr_count($chapter_verses, ':') == 0 ) {
+        wxc_log("The string '".$chapter_verses."' contains information about more than one chapter.", null, $logCtx);
 
-        $first = substr( $chapterverses, 0, strpos($chapterverses,"-") );
-        if ( substr_count($chapterverses, '-') == 1 ) {
-            $last = substr( $chapterverses, strpos($chapterverses,"-")+1 );
+        $first = substr( $chapter_verses, 0, strpos($chapter_verses,"-") );
+        if ( substr_count($chapter_verses, '-') == 1 ) {
+            $last = substr( $chapter_verses, strpos($chapter_verses,"-")+1 );
         } else {
             $last = "not sure!";
         }
         wxc_log("first: ".$first."; last: ".$last, null, $logCtx);
         //
     }
-    // Determine all individual chapterverses contained w/in range
+    // Determine all individual chapter_verses contained w/in range
     // In case of range across chapters:
     // 1) determine number of chapters (chapter_max - chapter_min);
     // 2) Count/fetch number of verses in chapter? Or simply construct verse IDs in loop and check for existence of each, stop when no match found?
@@ -2275,15 +2275,15 @@ function get_cpt_reading_content( $postID = null )
     // $num_ch = $ch_max - $ch_min;
     //
     // If the string contains one or more commas, then multiple verses or verse ranges are present for an individual chapter
-    /*if ( strpos($chapterverses,",") ) {
-        $info .= "The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).";
+    /*if ( strpos($chapter_verses,",") ) {
+        $info .= "The string '".$chapter_verses."' contains ".substr_count($chapter_verses, ',')." comma(s).";
         $info .= "<br />";
     }*/
-    wxc_log("The string '".$chapterverses."' contains ".substr_count($chapterverses, ',')." comma(s).", null, $logCtx);
+    wxc_log("The string '".$chapter_verses."' contains ".substr_count($chapter_verses, ',')." comma(s).", null, $logCtx);
 
-    //$pieces = explode("-", $chapterverses);
-    //$chapter = substr( $chapterverses,0,strpos($chapterverses,":") );
-    //$verses = substr( $chapterverses,strpos($chapterverses,":") );
+    //$pieces = explode("-", $chapter_verses);
+    //$chapter = substr( $chapter_verses,0,strpos($chapter_verses,":") );
+    //$verses = substr( $chapter_verses,strpos($chapter_verses,":") );
     //$row_info .= "<!-- chapter: '$chapter'; verses: 'verses' -->"; // tft
     //$info .= "chapter: '".$chapter."'; verses: '".$verses."'"; // tft
 
