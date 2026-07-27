@@ -217,46 +217,46 @@ jQuery(document).ready(function($) {
         }
 		
 		// Check cookie
-		var sdg_featured_post = getCookie('sdg_featured_post');
+		var stc_featured_post = getCookie('stc_featured_post');
 		
-		if (sdg_featured_post !== undefined) {	
-			//console.log('sdg_featured_post: '+sdg_featured_post);
+		if (stc_featured_post !== undefined) {	
+			//console.log('stc_featured_post: '+stc_featured_post);
 			//
-			var sdg_user_closed_msg_bar = getCookie('sdg_user_closed_msg_bar');
-			//console.log('sdg_user_closed_msg_bar: '+sdg_user_closed_msg_bar);
+			var stc_user_closed_msg_bar = getCookie('stc_user_closed_msg_bar');
+			//console.log('stc_user_closed_msg_bar: '+stc_user_closed_msg_bar);
 			//
-			if ( sdg_user_closed_msg_bar ) {
-				//console.log('sdg_user_closed_msg_bar');
+			if ( stc_user_closed_msg_bar ) {
+				//console.log('stc_user_closed_msg_bar');
 			} else {
 				show_msg_bar = true;
 			}			
 			// Compare cvalue with post_id
-			if ( sdg_featured_post == post_id ) {				
-				//console.log('sdg_featured_post == post_id');				
+			if ( stc_featured_post == post_id ) {				
+				//console.log('stc_featured_post == post_id');				
 			} else {
-				//console.log('sdg_featured_post ('+sdg_featured_post+') NE post_id ('+post_id+')');
-				//console.log('setCookie sdg_featured_post');
-				setCookie('sdg_featured_post', post_id, 365);
+				//console.log('stc_featured_post ('+stc_featured_post+') NE post_id ('+post_id+')');
+				//console.log('setCookie stc_featured_post');
+				setCookie('stc_featured_post', post_id, 365);
 				show_msg_bar = true;
 			}
 			//
 			if ( show_msg_bar == true ) {
 				//console.log('show_msg_bar');
 				$("#msg_bar").show();
-				deleteCookie('sdg_user_closed_msg_bar');
+				deleteCookie('stc_user_closed_msg_bar');
 			}					
 		} else {
-			//console.log('NO sdg_featured_post found ');
-			//console.log('setCookie sdg_featured_post');
-			setCookie('sdg_featured_post', post_id, 365);
+			//console.log('NO stc_featured_post found ');
+			//console.log('setCookie stc_featured_post');
+			setCookie('stc_featured_post', post_id, 365);
 		}    	
 	}
         
     $( ".msg_bar_close" ).click(function() {
         $("#msg_bar").hide();
         //$("#msg_bar").addClass('hidden');
-        setCookie('sdg_user_closed_msg_bar', 'true', 365);
-        //console.log('setCookie sdg_user_closed_msg_bar');
+        setCookie('stc_user_closed_msg_bar', 'true', 365);
+        //console.log('setCookie stc_user_closed_msg_bar');
     });	
 	
     // EM Datepicker -- Customizations
