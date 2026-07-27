@@ -351,6 +351,7 @@ jQuery(document).ready(function($) {
 	
     /**** Modal PopUp Windows ***/
 
+    // Modal/Dialog
     function prepDialog( handle_id, dialog_id ) {
 
 		//console.log('about to prepDialog for dialog_id: '+dialog_id+' with handle_id: '+handle_id);
@@ -373,28 +374,9 @@ jQuery(document).ready(function($) {
 		var winwidth = window.innerWidth; //$(window).width();
         var winheight = window.innerHeight; //$(window).height();
         var emwidth = winwidth/parseFloat($("body").css("font-size"));
-        var scroll = $(window).scrollTop(); //var scroll = window.scrollTop();
-        var offset = $(handle_id).offset(); //var offset = handle_id.offset();
+        var scroll = $(window).scrollTop(); //var scroll = window.scrollTop(); // non-jQ version yields error
+        var offset = $(handle_id).offset(); //var offset = handle_id.offset(); // non-jQ version yields error
         //if ( winheight < 400) { modal_at = "center bottom+10%"; }
-        
-        // Adjust defaults as needed based on screen size, scroll position, etc.
-        /*if ( emwidth < 56  ) { // For mobile devices, effectively, where sticky header isn't sticky
-        	if ( handle_id == dialog_id ) { // Is handle_id same as dialog_id? (as w/ nf_dialog)
-        		// tbd
-        	} else {
-        		target_element = handle_id;
-        	}        	
-        	//modal_anchor = "center center";
-        	
-        } else {
-        
-        	if ( scroll > 100 ) {
-				//modal_at = "center top+"+offset.top;
-				//target_element = handle_id;
-				//modal_anchor = "center center";
-			}
-        
-        }*/
         
         //
         //console.log('emwidth: '+emwidth);
@@ -461,7 +443,6 @@ jQuery(document).ready(function($) {
 	});
 	
 	$(window).resize(function() {
-		
 		var modalDimensions = getModalDimensions();
 		var modalwidth = modalDimensions["width"];
 		var modalheight = modalDimensions["height"];
@@ -476,7 +457,6 @@ jQuery(document).ready(function($) {
 				//$dialog.dialog("close");
 			}
 		});
-		
 	});
 	
 });
@@ -544,5 +524,4 @@ function getModalDimensions() {
 	//var dimensions = { height:modalheight, width:modalwidth, modal_at:modal_at };
 	
 	return dimensions;
-
 }

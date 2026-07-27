@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260726
+ * Version: 1.260727
  * Author: atc
  * Author URI:
  * License:
@@ -412,16 +412,11 @@ function sdg_scripts_method()
     $fpath = WP_PLUGIN_DIR . '/sdg/sdg.css';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "240823"; }
     wp_enqueue_style( 'sdg-style', plugins_url( 'sdg.css', __FILE__ ), $ver );
-    //wp_enqueue_style( 'sdg-style', plugin_dir_url( __FILE__ ) . 'sdg.css', $ver );
 
     $fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = date('Ymd.hi'); }
-    wp_enqueue_script( 'sdg', plugins_url( 'js/sdg.js', __FILE__ ), array( 'jquery-ui-dialog' ), $ver  );
-    //wp_enqueue_script( 'sdg-js', plugins_url( 'sdg.js', __FILE__ ), array( 'jquery', 'jquery-ui-dialog' ), $ver  );
-    //wp_enqueue_script( 'sdg-js', plugins_url( 'sdg.js', __FILE__ ), array( 'jquery', 'jquery-ui-dialog' ), '2.0', true );
+    /*wp_enqueue_script( 'sdg', plugins_url( 'js/sdg.js', __FILE__ ), array( 'jquery-ui-dialog' ), $ver  );
     wp_localize_script( 'sdg', 'theUser', array (
-        //'current_user' => $current_user,
-        //'current_user' => wp_get_current_user()
         'username' => $current_user->user_login,
     ) );
 
@@ -429,7 +424,8 @@ function sdg_scripts_method()
     $fpath = WP_PLUGIN_DIR . '/sdg/js/cookies.js';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "201209"; }
     wp_enqueue_script( 'cookies', plugins_url( 'js/cookies.js', __FILE__ ), array(), $ver  );
-
+    */
+    
     // Enqueue styles for jQuery UI
     //$wp_scripts = wp_scripts();
     //wp_enqueue_style('jquery-ui-css', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-autocomplete']->ver . '/themes/smoothness/jquery-ui.css', false, null, false );
