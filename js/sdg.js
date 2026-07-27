@@ -200,9 +200,8 @@ jQuery(document).ready(function($) {
     // TBD: how and when to re-open it once the user has closed it?
     // >> check to see if post_id cookie is set and current post_id matches. If not, show msg_bar and set cookie with current post_id
     
-    if ( $('#msg_bar') ) {
-    	
-    	//console.log('>> msg_bar <<<');
+    if ( $('#msg_bar') ) {	
+    	console.log('>> msg_bar <<<');
     	
     	var show_msg_bar = false;
     	$("#msg_bar").hide();
@@ -210,10 +209,10 @@ jQuery(document).ready(function($) {
 		// Get the msg_bar post_id
 		var post_id = $('#msg_bar div.featured-post').attr('id');	
     	if (post_id !== undefined) {
-    	    //console.log('post_id: '+post_id);
+    	    console.log('post_id: '+post_id);
     	} else {
     	    post_id = null;
-    	    //console.log('no post_id defined');
+    	    console.log('no post_id defined');
         }
 		
 		// Check cookie
