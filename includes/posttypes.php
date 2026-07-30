@@ -1182,9 +1182,7 @@ if ( in_array('inventory', $sdg_modules ) ) {
     add_action( 'init', 'sdg_register_post_type_thing' );
 }
 
-
 /*** +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ ***/
-
 
 // ACF Bi-directional fields
 // WIP!

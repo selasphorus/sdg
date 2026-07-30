@@ -321,7 +321,6 @@ function register_taxonomy_page_tag() {
 add_action( 'init', 'register_taxonomy_page_tag' );
 
 
-
 /*** Taxonomies for PEOPLE ***/
 /*** Taxonomies for GROUPS (ORGS/ENSEMBLES) ***/
 /*** Taxonomies for EVENT PROGRAMS ***/
@@ -1026,5 +1025,3 @@ if ( in_array('links', $sdg_modules ) ) {
     add_action( 'init', 'register_taxonomy_link_tag' );
     
 }
-
-?>
