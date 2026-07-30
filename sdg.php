@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  Requires STC for various utility functions
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260727
+ * Version: 1.260730
  * Author: atc
  * Author URI:
  * License:
@@ -240,20 +240,6 @@ function sdg_modules_field_cb( $args )
     $modules = array(
         'sermons' => __( 'Sermons' ),
         'lectionary' => __( 'Lectionary' ),
-        // TODO: make sure all these modules have 
-        //'organizations' => __( 'Organizations (deprecated)' ),
-        //'projects' => __( 'Projects' ),
-        //'press' => __( 'Press' ),
-        //'recordings' => __( 'Recordings' ),
-        //'links' => __( 'Links' ),
-        //'newsletters' => __( 'Newsletters' ), // moved to STC (tmp)
-        //'sources' => __( 'Sources' ),
-        //
-        //'slider' => __( 'Slider' ), // moved to STC (tmp)
-        //'ninjaforms' => __( 'Ninja Forms' ), // moved to STC (tmp)
-        //
-        'admin_notes' => __( 'Admin Notes' ),
-        'data_tables' => __( 'Data Tables' ),
     );
 
     $value   = ( !isset( $options[$args['label_for']] ) ) ? array() : $options[$args['label_for']];
