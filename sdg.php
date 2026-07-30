@@ -394,17 +394,12 @@ function sdg_scripts_method()
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "240823"; }
     wp_enqueue_style( 'sdg-style', plugins_url( 'sdg.css', __FILE__ ), $ver );
 
-    $fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
+    /*$fpath = WP_PLUGIN_DIR . '/sdg/js/sdg.js';
     if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = date('Ymd.hi'); }
-    /*wp_enqueue_script( 'sdg', plugins_url( 'js/sdg.js', __FILE__ ), array( 'jquery-ui-dialog' ), $ver  );
+    wp_enqueue_script( 'sdg', plugins_url( 'js/sdg.js', __FILE__ ), array( 'jquery-ui-dialog' ), $ver  );
     wp_localize_script( 'sdg', 'theUser', array (
         'username' => $current_user->user_login,
     ) );
-
-    // Cookie utility functions
-    $fpath = WP_PLUGIN_DIR . '/sdg/js/cookies.js';
-    if (file_exists($fpath)) { $ver = filemtime($fpath); } else { $ver = "201209"; }
-    wp_enqueue_script( 'cookies', plugins_url( 'js/cookies.js', __FILE__ ), array(), $ver  );
     */
     
     // Enqueue styles for jQuery UI
