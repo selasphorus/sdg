@@ -41,12 +41,6 @@ $plugin_path = plugin_dir_path( __FILE__ );
 // Set custom load & save JSON points for ACF sync
 require 'includes/acf-json.php';
 
-// Restrict access to ACF Admin screens
-require 'includes/acf-restrict-access.php';
-
-// Display and template helpers
-require 'includes/template-tags.php';
-
 // Load ACF field groups hard-coded as PHP
 require 'includes/acf-field-groups.php';
 
