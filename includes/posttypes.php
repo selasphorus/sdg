@@ -16,7 +16,7 @@ function sdg_flush_rewrite_rules() {
 
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
-if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
+if ( isset($options['sdg_modules']) ) { $active_modules = $options['sdg_modules']; } else { $active_modules = array(); }
 
 function sdg_custom_caps() {
     $use_custom_caps = false;
@@ -28,7 +28,7 @@ function sdg_custom_caps() {
 
 /*** LECTIONARY ***/
 
-if ( in_array('lectionary', $sdg_modules ) ) {
+if ( in_array('lectionary', $active_modules ) ) {
 
     // Bible Book
     function register_post_type_bible_book() {
@@ -378,7 +378,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
 /*** SERMONS ***/
 
-if ( in_array('sermons', $sdg_modules ) ) {
+if ( in_array('sermons', $active_modules ) ) {
 
     // Sermon
     function register_post_type_sermon() {
@@ -588,7 +588,7 @@ if ( !function_exists( 'acf_update_related_field_on_save' )
     }
 }
 
-if ( in_array('sermons', $sdg_modules ) ) {
+if ( in_array('sermons', $active_modules ) ) {
     add_filter('acf/update_value/name=sermons_series', 'bidirectional_acf_update_value', 10, 3);
 }
 

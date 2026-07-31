@@ -10,11 +10,11 @@ if ( !function_exists( 'add_action' ) ) {
 
 // Get plugin options to determine which modules are active
 $options = get_option( 'sdg_settings' );
-if ( isset($options['sdg_modules']) ) { $sdg_modules = $options['sdg_modules']; } else { $sdg_modules = array(); }
+if ( isset($options['sdg_modules']) ) { $active_modules = $options['sdg_modules']; } else { $active_modules = array(); }
 
 /*** Taxonomies for LECTIONARY ***/
 
-if ( in_array('lectionary', $sdg_modules ) ) {
+if ( in_array('lectionary', $active_modules ) ) {
 
     // Custom Taxonomy: Liturgical Date Category
     function register_taxonomy_liturgical_date_category() {
@@ -137,7 +137,7 @@ if ( in_array('lectionary', $sdg_modules ) ) {
 
 /*** Taxonomies for SERMONS ***/
 
-if ( in_array('sermons', $sdg_modules ) ) {
+if ( in_array('sermons', $active_modules ) ) {
 
     // Custom Taxonomy: Sermon Topic
     function register_taxonomy_sermon_topic() {
