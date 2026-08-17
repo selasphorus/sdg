@@ -414,7 +414,7 @@ if ( in_array('sermons', $active_modules ) ) {
             'menu_icon'            => 'dashicons-welcome-write-blog',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-            'taxonomies'        => array( 'sermon_topic', 'admin_tag' ),
+            'taxonomies'        => array( 'sermon_topic' ),
             'show_in_rest'        => false, // i.e. false = use classic, not block editor
         );
 
