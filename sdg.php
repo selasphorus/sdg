@@ -38,7 +38,7 @@ $plugin_path = plugin_dir_path( __FILE__ );
 /* +~+~+ ACF +~+~+ */
 
 // Set custom load & save JSON points for ACF sync
-require 'includes/acf-json.php';
+//require 'includes/acf-json.php';
 
 // Load ACF field groups hard-coded as PHP
 require 'includes/acf-field-groups.php';
@@ -72,7 +72,7 @@ function sdg_contribute_active_post_types(array $postTypes): array
         'sermon', 'sermon_series',
     ]);
 }
-//wxc_log('SDG about to register wxc_active_post_types filter');
+wxc_log('SDG about to register wxc_active_post_types filter', null, 'sdg');
 //error_log('SDG about to register wxc_active_post_types filter');
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
