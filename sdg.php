@@ -72,6 +72,7 @@ function sdg_contribute_active_post_types(array $postTypes): array
         'sermon', 'sermon_series',
     ]);
 }
+wxc_log('SDG about to register wxc_active_post_types filter');
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
