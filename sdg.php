@@ -65,8 +65,8 @@ function sdg_contribute_active_post_types(array $postTypes): array
     ]);
 }
 
-if ( function_exists('wxc_log') ) { wxc_log('SDG about to register wxc_active_post_types filter', null, 'sdg'); }
-error_log('SDG about to register wxc_active_post_types filter');
+if ( function_exists('wxc_log') ) { wxc_log('SDG about to register wxc_active_post_types filter [wxc_log]'); }
+error_log('SDG about to register wxc_active_post_types filter [error_log]');
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
