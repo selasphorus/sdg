@@ -7,7 +7,7 @@
  * Plugin Name: SDG-OG (main)
  * Plugin URI:
  * Description: Custom post types, taxonomies and functions for music and more
- * Dependencies:	  Requires STC for various utility functions
+ * Dependencies:	  
  * Requires Plugins:  whx4-core, stc
  * Version: 1.260818
  * Author: atc
@@ -49,7 +49,7 @@ require 'includes/acf-field-groups.php';
 $includes = array( 'posttypes', 'taxonomies' );
 foreach ( $includes as $inc ) {
     $filepath = $plugin_path . 'includes/'.$inc.'.php';
-    if ( file_exists($filepath) ) { include_once( $filepath ); } else { echo "inc file $filepath not found"; }
+    if ( file_exists($filepath) ) { include_once( $filepath ); } //else { echo "inc file $filepath not found"; }
 }
 
 $modules = [ 'lectionary', 'sermons' ];
@@ -72,7 +72,8 @@ function sdg_contribute_active_post_types(array $postTypes): array
         'sermon', 'sermon_series',
     ]);
 }
-error_log('SDG about to register wxc_active_post_types filter');
+//wxc_log('SDG about to register wxc_active_post_types filter');
+//error_log('SDG about to register wxc_active_post_types filter');
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
