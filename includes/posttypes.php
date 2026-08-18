@@ -65,7 +65,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -107,7 +107,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -150,7 +150,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -193,7 +193,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -236,7 +236,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -279,7 +279,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-calendar-alt',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -322,7 +322,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-welcome-write-blog',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-            'taxonomies'        => array( 'admin_tag' ), //'season', 
+            'taxonomies'        => array( ), //'season', 
             'show_in_rest'        => true,
         );
 
@@ -365,7 +365,7 @@ if ( in_array('lectionary', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-welcome-write-blog',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //'editor', 
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
@@ -456,7 +456,7 @@ if ( in_array('sermons', $active_modules ) ) {
             //'menu_icon'            => 'dashicons-book',
             'menu_position'        => null,
             'supports'             => array( 'title', 'author', 'thumbnail', 'editor', 'excerpt', 'custom-fields', 'revisions', 'page-attributes' ), //
-            'taxonomies'        => array( 'admin_tag' ),
+            'taxonomies'        => array( ),
             'show_in_rest'        => true,
         );
 
