@@ -26,19 +26,12 @@ if ( !function_exists( 'add_action' ) ) {
 }
 
 // Define our handy constants.
-define( 'SDG_VERSION', '0.1.5' );
-define( 'SDG_PLUGIN_DIR', __DIR__ );
-define( 'SDG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'SDG_PLUGIN_BLOCKS', SDG_PLUGIN_DIR . '/blocks/' );
-//
 $plugin_path = plugin_dir_path( __FILE__ );
+if ( function_exists('wxc_log') ) { wxc_log('SDG test', null, 'sdg'); }
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 /* +~+~+ ACF +~+~+ */
-
-// Set custom load & save JSON points for ACF sync
-//require 'includes/acf-json.php';
 
 // Load ACF field groups hard-coded as PHP
 require 'includes/acf-field-groups.php';
@@ -72,7 +65,9 @@ function sdg_contribute_active_post_types(array $postTypes): array
         'sermon', 'sermon_series',
     ]);
 }
-wxc_log('SDG about to register wxc_active_post_types filter', null, 'sdg');
+
+if ( function_exists('wxc_log') ) { wxc_log('SDG about to register wxc_active_post_types filter', null, 'sdg'); }
+
 //error_log('SDG about to register wxc_active_post_types filter');
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
