@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260818
+ * Version: 1.260824
  * Author: atc
  * Author URI:
  * License:
@@ -65,8 +65,8 @@ function sdg_contribute_active_post_types(array $postTypes): array
     ]);
 }
 
-if ( function_exists('wxc_log') ) { wxc_log('SDG about to register wxc_active_post_types filter [wxc_log]'); }
-error_log('SDG about to register wxc_active_post_types filter [error_log]');
+//if ( function_exists('wxc_log') ) { wxc_log('SDG about to register wxc_active_post_types filter [wxc_log]'); } // tft
+//error_log('SDG about to register wxc_active_post_types filter [error_log]'); //tft
 add_filter('wxc_active_post_types', 'sdg_contribute_active_post_types');
 
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
