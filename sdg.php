@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260824
+ * Version: 1.260828
  * Author: atc
  * Author URI:
  * License:
