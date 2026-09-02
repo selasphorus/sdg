@@ -51,8 +51,7 @@ foreach ( $modules as $module ) {
 }
 
 /**
- * Temporarily exposes SDG's procedurally-registered post types to WXC's
- * TaxonomyRegistrar, until the OOP SDG rewrite registers them natively.
+ * Temporarily exposes SDG's procedurally-registered post types to WXC until the OOP version is up and running and registers them natively.
  *
  * @param array $postTypes Active post type slugs already contributed.
  * @return array
