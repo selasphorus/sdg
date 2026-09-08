@@ -247,6 +247,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         'return'    => 'formatted',
         'show_content' => true,
     ], $atts );
+    wxc_log( 'args', $args, $logCtx );
     extract( $args );
 
     $postID = $post_id;
@@ -280,7 +281,7 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
 
     // If the date is still null, give up and go
     if ( $date == null ) {
-        //wxg_log( 'No date available for which to find day_title', null, $logCtx );
+        wxc_log( 'No date available for which to find day_title', null, $logCtx );
         return $output;
     }
 
