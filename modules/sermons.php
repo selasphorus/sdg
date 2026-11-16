@@ -86,8 +86,7 @@ function get_cpt_sermon_meta( $post_id = null )
     /*
     // This approach, retrieving related events by checking program rows, is terribly, terribly slow. Also it's dumb to have to do this every time.
     // TODO: Check to see if related_event field for sermon is populated; if not, try matching via program rows and then store the matching value(s) in that custom sermon field.
-    $related_events = get_related_events ( "program_item", $post_id ); //
-    $event_posts = $related_events['event_posts'];
+    $event_posts = get_related_events ( "program_item", $post_id );
 
     if ( $event_posts ) {
         if ($authors) { $info .= " | "; }

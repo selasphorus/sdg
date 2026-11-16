@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  
  * Requires Plugins:  whx4-core, stc
- * Version: 1.260908
+ * Version: 1.261116
  * Author: atc
  * Author URI:
  * License:
@@ -181,7 +181,7 @@ function sermon_updates ( $atts = array() )
                     //get event based on legacy_id stored in ACF group 'Event Legacy Fields'
                     $event_posts = get_posts(array(
                         //'numberposts'	=> -1,
-                        'post_type'		=> 'event',
+                        'post_type'		=> ['event', 'whx4_event'],
                         'meta_key'		=> 'legacy_id',
                         'meta_value'	=> $legacy_event_id
                     ));
@@ -199,7 +199,7 @@ function sermon_updates ( $atts = array() )
                 if ( $sermon_date != "" ) {
                     // Get event(s) based on sermon_date -- in Worship Services events-category only
                     $wp_args2 = array(
-                        'post_type'     => 'event',
+                        'post_type'     => ['event', 'whx4_event'],
                         'post_status'   => 'publish',
                         'posts_per_page' => 10,
                         'meta_query'	=> array(

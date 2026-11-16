@@ -229,7 +229,7 @@ function renderLitDatesShortcode( $atts = [] ): string
 // TODO/WIP: separate day title functionality from special notice functionality and/or create umbrella function to allow option of displaying both together
 add_shortcode('day_title', 'getDayTitle');
 function getDayTitle( $atts = [], $content = null, $tag = '' )
-{ 
+{
     global $logCtx;
     
     $output = "\n<!-- getDayTitle -->\n";
@@ -270,11 +270,13 @@ function getDayTitle( $atts = [], $content = null, $tag = '' )
         if ( $postID ) {
             $post = get_post( $postID );
             $post_type = $post->post_type;
+            //
             if ( $post_type == 'event' ) {
-                $dateStr = get_post_meta( $postID, '_event_start_date', true );
-                $date = strtotime($dateStr);
-            } elseif ( $post_type == 'sermon' ) {
-                $date = the_field( 'sermon_date', $postID );
+                $date = strtotime( get_post_meta( $postID, '_event_start_date', true ) );
+            } elseif ( $post_type == 'whx4_event' ) {
+			   $date = strtotime( get_post_meta( $postID, 'whx4_events_start_date', true ) );
+			} elseif ( $post_type == 'sermon' ) {
+                $date = get_field( 'sermon_date', $postID );
             }
         }
     }
@@ -2316,7 +2318,7 @@ function get_psalms_of_the_day( $atts = array(), $content = null, $tag = '' )
 
     $post = get_post( $postID );
     if ( $post ) { $post_type = $post->post_type; }
-    if ( $post_type == 'event' ) { $event_id = $postID; }
+    if ( $post_type == 'event' || $post_type == 'whx4_event' ) { $event_id = $postID; }
 
     if ( is_dev_site() ) {
         //$info .= "post_id: $postID; post_type: $post_type; event_id: $event_id; <br />";
