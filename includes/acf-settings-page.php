@@ -9,7 +9,7 @@
  * Check if ACF PRO is active and function exists
  */
 if ( function_exists( 'acf_add_options_page' ) ) {
-	//add_action( 'acf/init', 'sdg_register_options_page' );
+	add_action( 'acf/init', 'sdg_register_options_page' );
 }
 
 function sdg_register_options_page() {
@@ -22,17 +22,6 @@ function sdg_register_options_page() {
 			'redirect'   => false,
 		)
 	);
-
-	// Add the sub-page
-	/*
-	acf_add_options_sub_page(
-		array(
-			'page_title'  => 'Contact Information',
-			'menu_slug'   => 'contact-information',
-			'parent_slug' => 'site-settings',
-		)
-	);
-	*/
 
 	// Add 'Modules & Settings' field group
 	acf_add_local_field_group(
