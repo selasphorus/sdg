@@ -9,7 +9,7 @@
  * Description: Custom post types, taxonomies and functions for music and more
  * Dependencies:	  
  * Requires Plugins:  whx4-core, stc
- * Version: 1.261116
+ * Version: 1.261123
  * Author: atc
  * Author URI:
  * License:
@@ -31,6 +31,9 @@ $plugin_path = plugin_dir_path( __FILE__ );
 /* +~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+~+ */
 
 /* +~+~+ ACF +~+~+ */
+
+// Register an Options Page
+require 'includes/acf-settings-page.php';
 
 // Load ACF field groups hard-coded as PHP
 require 'includes/acf-field-groups.php';
